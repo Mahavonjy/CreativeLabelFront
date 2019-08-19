@@ -1,0 +1,11 @@
+.playlist{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.playlist:hover{
+    color: aqua;
+    transition: 0.5s;
+    cursor: pointer;
+    background-color: #00000063;
+}

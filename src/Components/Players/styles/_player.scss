@@ -1,0 +1,244 @@
+@import "./variables";
+
+#player{
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    background-color: $player-bg;
+    padding: 1rem;
+    color: $main-color;
+    .middle-part{
+        display: flex;
+        width: 50%;
+        .progress, .controls{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+        }
+        .controls{
+            width: 10rem;
+            margin: 0 auto .5rem;
+            button{
+                width: 2rem;
+                height: 2rem;
+                line-height: 2rem;
+                text-align: center;
+                font-size: 1.1rem;
+                &.play{
+                    width: 3rem;
+                    height: 3rem;
+                    line-height: 3rem;
+                    font-size: 2rem;
+                }
+                &.loop, &.shuffle{
+                    &.active{
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+        .progress{
+            background-color: black;
+            color: white!important;
+            .bar{
+                background-color: $progress-bg;
+                border-radius: 2px;
+                display: flex;
+                height: 4px;
+                width: 100%;
+                flex: 1 100%;
+                cursor: pointer;
+                div {
+                    border-radius: 2px;
+                    height: 4px;
+                    width: 50%;
+                    background: $current-progress-color;
+                }
+            }
+            .progress-time{
+                font-size: 11px;
+                line-height: 16px;
+                letter-spacing: .015em;
+                min-width: 40px;
+                text-align: center;
+            }
+        }
+    }
+    .IconMedia {
+        display: flex;
+        height: 15px;
+        margin-left: 8%;
+    }
+.PlayListPlayer {
+    .PlayList_information {
+        display: flex !important;
+        margin: 10px 3%;
+        background-image: linear-gradient(to right, #0099b2, #127894, #195974, #183c53, #112233);
+        border-radius: 10px;
+
+        .Playlist-img {
+            margin-top: 6px;
+            margin-bottom: 4px;
+            width: 95px;
+            height: 95px;
+            border-radius: 10px;
+        }
+
+        .PlayListMore-info {
+            margin: 6px auto;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            .Artist-Playlist {
+                color: wheat;
+                font-weight: lighter;
+                font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
+            }
+        }
+    }
+    #list-music::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: transparent;
+        border-radius: 10px;
+    }
+
+    #list-music::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent;
+    }
+
+    #list-music::-webkit-scrollbar-thumb {
+        background-image: linear-gradient(to right, #0099b2, #127894, #195974, #183c53, #112233);
+        border-radius: 10px;
+    }
+   .music-list {
+       scroll-behavior: auto;
+       max-height: 400px;
+       overflow: auto;
+
+       .miniMusic {
+           display: flex !important;
+           margin: 5px 3%;
+           height: 35px;
+
+           .song-info {
+               display: flex;
+               margin-top: auto;
+               margin-bottom: auto;
+
+               .artist {
+                   margin-left: 5px;
+                   font-family: 'Josefin Sans', sans-serif;
+                   font-size: revert;
+                   color: wheat;
+               }
+
+               .pipe {
+                   margin-left: 2px;
+                   margin-right: 2px;
+                   font-family: "Courier New", Courier, monospace;
+               }
+
+               .Title {
+                   font-family: AppleMyungjo, fantasy;
+               }
+           }
+
+           .song-img {
+               width: 28px;
+               height: 28px;
+               border-radius: 3px;
+               margin-left: auto;
+           }
+       }
+   }
+}
+    .now-playing, .volume-bar{
+        display: flex;
+        width: 20%;
+    }
+    .now-playing{
+        justify-content: flex-start;
+        align-items: center;
+        img{
+            display: block;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 10px;
+            object-fit: contain;
+            margin-right: 1rem;
+        }
+        .meta{
+            display: flex;
+            flex-direction: column;
+            flex: 1 100%;
+            margin-right: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            .title{
+                color: $title-color;
+                font-size: .95rem;
+
+                -moz-transform:translateX(50%);
+                -webkit-transform:translateX(50%);
+                transform:translateX(50%);
+                /* Apply animation to this element */
+                -moz-animation: horizontally 8s linear infinite alternate;
+                -webkit-animation: horizontally 8s linear infinite alternate;
+                animation: horizontally 8s linear infinite alternate;
+            }
+            @-moz-keyframes horizontally {
+                0%   { -moz-transform: translateX(50%); }
+                100% { -moz-transform: translateX(-50%); }
+            }
+            @-webkit-keyframes horizontally {
+                0%   { -webkit-transform: translateX(50%); }
+                100% { -webkit-transform: translateX(-50%); }
+            }
+            @keyframes horizontally {
+                0% {
+                    -moz-transform: translateX(50%); /* Browser bug fix */
+                    -webkit-transform: translateX(50%); /* Browser bug fix */
+                    transform: translateX(50%);
+                }
+                100% {
+                    -moz-transform: translateX(-50%); /* Browser bug fix */
+                    -webkit-transform: translateX(-50%); /* Browser bug fix */
+                    transform: translateX(-50%);
+                }
+            }
+            .artist-name{
+                font-size: .8rem;
+            }
+        }
+    }
+    .volume-bar{
+        justify-content: flex-end;
+        align-items: center;
+        button{
+            margin-right: .5rem;
+            width: 1rem;
+            i{
+                float: left;
+            }
+        }
+        .fill{
+            background-color: $progress-bg;
+            border-radius: 2px;
+            display: flex;
+            height: 4px;
+            width: 8rem;
+            cursor: pointer;
+            div {
+                border-radius: 2px;
+                height: 4px;
+                width: 50%;
+                background: $current-progress-color;
+            }
+        }
+    }
+}

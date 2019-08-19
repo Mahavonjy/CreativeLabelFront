@@ -1,0 +1,95 @@
+.send-genre:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.send-genre {
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    position: fixed;
+    background-color: #3bc8e7;
+    border-radius: 30px;
+    width: 10%;
+    height: 40px;
+    margin: 40vh 20px auto;
+    display: block;
+}
+
+.loader {
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.row-genre {
+    width: 80%;
+    margin: 10px auto;
+    position: relative;
+    text-align:center;
+}
+
+.ChoiceTitle h1 {
+    text-align: center;
+    color: floralwhite;
+    display: block;
+    font-size: 35px;
+}
+
+.music-genre {
+    transition-property: background-color;
+    transition-duration: 0.4s;
+    transition-delay: 0.1s;
+    border-radius: 25px;
+    display:inline-block;
+    margin: 10px 10px;
+    width: 250px;
+    box-shadow: 0 1px 38px rgba(0, 0, 0, 0.15), 0 5px 12px hsla(0, 100%, 90%, 0.3);
+}
+
+.music-genre:hover {
+    box-shadow: 0 0 11px rgba(380, 33, 33, .2);
+    -webkit-transition-duration: 0.5s;
+    width: 310px;
+}
+
+.music-genre .top {
+    border-radius: 25px;
+    position: relative;
+    height: 200px;
+    width: 92%;
+    float: left;
+    overflow: hidden;
+    text-align: center;
+}
+
+.music-genre .top .music-wrapper {
+    padding: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.MusicChoiceTitle h1 {
+    text-align: center;
+    color: floralwhite;
+    display: block;
+    font-size: 35px;
+}
+
+.music-genre .top:after {
+    content: "";
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width:1200px){
+    .MusicChoiceTitle h1 {
+        text-align: center;
+        color: floralwhite;
+        display: block;
+        font-size: 20px;
+    }
+}
