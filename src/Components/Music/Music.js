@@ -27,22 +27,48 @@ class Music extends Component {
         };
     }
 
-    componentDidMount() {
+    MediaSuggestion = () => {
         let cookies = new Cookies();
-        let new_headers = {
+        let headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': "*",
             'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
         };
-        axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-            cookies.set("Isl_Creative_licenses", {"licenses":resp.data.licenses});
-            if (this.props.albums_array.length === 0) {
-                this.setState({loading: false});
-                this.albumSuggestion();
-            }
-        }).catch(err => {
-            // this.props.IfToken()
+        axios.get(Conf.configs.ServerApi + "api/medias/medias_suggestion", {headers:headers}).then(response =>{
+            // this.props.addTopSong(response.data['top_songs']);
+            console.log(response.data);
+            this.setState({loading : false});
+        }).catch(error => {
+            console.log(error.response);
         })
+    };
+
+    componentDidMount() {
+        let cookies = new Cookies();
+        try {
+            if (!cookies.get("Isl_Creative_pass")["Isl_Token"]) {
+                this.props.Redirect();
+            }
+            let new_headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+            };
+            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
+                cookies.set("Isl_Creative_licenses", {"licenses":resp.data.licenses});
+                if (this.props.albums_array.length === 0) {
+                    this.setState({loading: false});
+                    this.albumSuggestion();
+                    this.MediaSuggestion();
+                }
+            }).catch(err => {
+                if (err.response.data === "token invalid") {
+                    this.props.Redirect();
+                }
+            })
+        } catch (e) {
+            this.props.Redirect();
+        }
     }
 
     addForPlay = (music_list) => {
@@ -126,26 +152,6 @@ class Music extends Component {
 
     };
 
-    // PlayOrNo = (album_id) => {
-    //     if (!this.props.album_name_list[album_id]) {
-    //         return (
-    //             <ScaleLoader
-    //                 css={LongAlbum}
-    //                 sizeUnit={"px"}
-    //                 size={120}
-    //                 color={'#00FAFF'}
-    //                 loading={true}
-    //             />
-    //         )
-    //     } else {
-    //         return (
-    //             <img className="play_or_pause" alt="play_or_pause" src={this.state.IfPlayed[album_id] ?
-    //                 this.state.Paused : this.state.Played}
-    //             />
-    //         )
-    //     }
-    // };
-
     render() {
         return (
             <div>
@@ -204,7 +210,7 @@ class Music extends Component {
                                                         <div className="m-1 my-4" key={index}>
                                                             <div className="d-flex align-items-center">
                                                                 <div className="col-1">
-                                                                    <a className="no-ajaxy media-url" href="" data-wave="assets/media/track1.json">
+                                                                    <a className="no-ajaxy media-url" data-wave="" onClick={() => {this.PlayedAlbum(album_info['id'])}}>
                                                                         <i className="icon-play s-28" />
                                                                     </a>
                                                                 </div>
@@ -306,7 +312,7 @@ class Music extends Component {
                                     <li className="list-group-item">
                                         <div className="d-flex align-items-center">
                                             <div>
-                                                <a className="no-ajaxy media-url" href="assets/media/track2.mp3" data-wave="assets/media/track2.json">
+                                                <a className="no-ajaxy media-url" href="" data-wave="">
                                                     <i className="icon-play s-28" />
                                                 </a>
                                             </div>
@@ -323,7 +329,7 @@ class Music extends Component {
                                     <li className="list-group-item">
                                         <div className="d-flex align-items-center">
                                             <div>
-                                                <a className="no-ajaxy media-url" href="assets/media/track2.mp3" data-wave="assets/media/track2.json">
+                                                <a className="no-ajaxy media-url" href="" data-wave="">
                                                     <i className="icon-play s-28" />
                                                 </a>
                                             </div>
@@ -372,6 +378,7 @@ const mapStateToProps = state => {
         albums_songs: state.albums_songs,
         shortAlbum: state.shortAlbum,
         longAlbum: state.longAlbum,
+        top_song: state.top_song
     };
 };
 
@@ -383,8 +390,8 @@ const mapDispatchToProps = dispatch => {
         addAlbumSongs: (data) => {
             dispatch({type: "ADD_SONG_ALBUM", data: data})
         },
-        boolShortAlbum: () => {
-            dispatch({type: "EDIT_SHORT_ALBUM"})
+        addTopSong: (data) => {
+            dispatch({type: "ADD_TOP_SONG_INFO", data: data})
         },
         boolLongAlbum: () => {
             dispatch({type: "EDIT_LONG_ALBUM"})

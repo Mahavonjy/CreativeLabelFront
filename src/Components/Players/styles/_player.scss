@@ -1,6 +1,7 @@
 @import "./variables";
 
 #player{
+    width: 100%;
     display: flex;
     justify-content: space-between;
     height: 50px;
@@ -242,3 +243,10 @@
         }
     }
 }
+
+@media screen and (max-width:990px){
+    .progress {
+        width: 100% !important;
+    }
+}
+

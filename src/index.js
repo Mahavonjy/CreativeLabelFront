@@ -5,11 +5,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import {combineReducers, createStore} from 'redux';
-import rootReducer from './reducer/reducer';
-import playerReducer from './reducer/Player';
+import profileReducer from './reducer/Profile';
+import beatsReducer from './reducer/Beats';
+import PlaylistHomeReducer from "./reducer/Home";
+
+const Reducers = combineReducers({
+    "beats": beatsReducer,
+    "profile": profileReducer,
+    "Home": PlaylistHomeReducer
+});
 
 ReactDOM.render(
-    <Provider store={createStore(rootReducer)} >
+    <Provider store={createStore(Reducers)} >
         <App />
     </Provider>
     , document.getElementById('app')

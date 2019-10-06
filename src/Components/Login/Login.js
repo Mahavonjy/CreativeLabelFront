@@ -5,12 +5,13 @@ import axios from 'axios';
 import Modal from "react-awesome-modal";
 import Conf from "../../Config/tsconfig";
 import { ToastContainer, toast } from 'react-toastify';
+import {connect} from "react-redux";
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            to_route: '/',
+            to_route: '/home',
             keys: '',
             loading : false,
             changePass: false,
@@ -325,8 +326,9 @@ class Login extends Component {
                                             <div className="pt-3 mb-5">
                                                 <small>Welcome, register to benefit from all the offers of ISL</small>
                                             </div>
-                                            <NavLink to="/register" activeClassName="PageSwitcher__Item--Active"
-                                                         className="PageSwitcher__Item"><button className="btn btn-outline-primary btn-sm pl-4 pr-4"> Register </button></NavLink>
+                                            <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">
+                                                <button className="btn btn-outline-primary btn-sm pl-4 pr-4"> Register </button>
+                                            </NavLink>
                                         </div>
                                     </div>
                                 </div>

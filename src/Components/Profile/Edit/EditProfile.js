@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Modal from 'react-awesome-modal';
 import { connect } from 'react-redux';
 import Cookies from "universal-cookie";
-import Conf from "../../Config/tsconfig";
+import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -52,9 +52,10 @@ class EditProfile extends Component {
         this.setState({photo : file});
     };
 
-    handleSubmit = () => {
+    handleSubmit = (e) => {
+        document.getElementById(e.target.id).setAttribute("disabled", "disabled");
+        this.setState({loading: true});
         let cookies = new Cookies();
-
         const bodyFormData = new FormData();
         bodyFormData.append('name', this.state.name);
         bodyFormData.append('email', this.state.email);
@@ -75,15 +76,14 @@ class EditProfile extends Component {
         };
 
         axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-            this.setState({loading: true});
             axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: new_headers}).then(resp => {
                 this.setState({loading: false});
                 this.props.profile_initialisation(resp.data);
-                this.props.closePopup();
             }).catch(err => {
                 this.setState({loading: false});
                 toast.error(err.response.data)
-            })
+            });
+            this.props.closePopup(1);
         }).catch(err => {
             console.log(err.response);
         })
@@ -105,10 +105,12 @@ class EditProfile extends Component {
                         </div>
                     </div>: null}
                 <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
-                    <button className="ModalClose" onClick={(e) => this.props.closePopup()}>
+
+                    <button className="ModalClose" onClick={(e) => this.props.closePopup(0)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
                     <div className="col text-center">
+                        <h4 className="text-green text-monospace">Edit Profile</h4>
                         <div className="body">
                             <div className="custom-float">
                                 <div className="input-group-prepend">
@@ -192,7 +194,7 @@ class EditProfile extends Component {
                                     <input onChange={this.uploadFile} id="picture" name="picture" className="form-control" type="file" />
                                 </div>
                             </div>
-                            <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.handleSubmit}>Update</button>
+                            <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e) => this.handleSubmit(e)}>Update</button>
                         </div>
                     </div>
                 </div>

@@ -23,6 +23,7 @@ class Register extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        document.getElementById("register").setAttribute("disabled", "disabled");
         if (this.state.password.length < 8) {
             toast.error("Password too short");
         } else {
@@ -168,7 +169,7 @@ class Register extends Component {
                                                                        onChange={this.changeConfirmPassword} required/>
                                                             </div>
                                                         </div>
-                                                        <input type="submit"
+                                                        <input type="submit" id="register"
                                                                className="btn btn-outline-primary btn-sm pl-4 pr-4"
                                                                value="Register"/>
                                                     </div>
