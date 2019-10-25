@@ -6,19 +6,33 @@ import Conf from "../../Config/tsconfig";
 import Modal from 'react-awesome-modal';
 import {ToastContainer, toast} from "react-toastify";
 import LoadingOverlay from 'react-loading-overlay';
+import LoginGoogle from "../Google/Google";
+import LoginFacebook from "../Facebook/Facebook";
 
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
             keys: '', isActive: false, visible: false, redirect: false,
-            email: '', password: '', confirm_password: '', name: '',
+            email: '', password: '', confirm_password: '', name: '', usingAdBlock: false
         };
     }
+
+    componentDidMount() {
+        this.setState({ usingAdBlock: this.fakeAdBanner.offsetHeight === 0 }, () => {
+            if (this.state.usingAdBlock)
+                toast.error("registering with a social network is blocked by your adblocker", {"autoClose": false});
+        });
+    }
+
     changeKeys = (e) => {this.setState({keys : e.target.value});};
+
     changeEmail = (e) => {this.setState({email : e.target.value});};
+
     changeConfirmPassword = (e) => {this.setState({confirm_password: e.target.value});};
+
     changePassword = (e) => {this.setState({password: e.target.value});};
+
     changeName = (e) => {this.setState({name: e.target.value});};
 
     handleSubmit = (e) => {
@@ -72,12 +86,16 @@ class Register extends Component {
         })
     };
 
+
     render() {
         if (this.state.redirect === true) {
             return <Redirect to="/preference" />
         } else {
             return (
                 <main>
+                    <div ref={r => (this.fakeAdBanner = r)}
+                         style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
+                         className="adBanner"/>
                     {!this.state.visible? <ToastContainer/>: null}
                     <LoadingOverlay active={this.state.isActive}
                                     spinner text="I'm sending you confirmation mail ..."
@@ -92,33 +110,33 @@ class Register extends Component {
                                         })
                                     }}
                     />
-                        <Modal visible={this.state.visible} width="400" height="200" animationType='slide'>
-                            <ToastContainer position="top-center"
-                                            autoClose={5000}
-                                            hideProgressBar={false}
-                                            newestOnTop
-                                            closeOnClick
-                                            rtl={false}
-                                            pauseOnVisibilityChange
-                                            draggable
-                                            pauseOnHover/>
-                            <form onSubmit={this.verifyKeysSubmit} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
-                                <div className="col text-center">
-                                <div className="body">
-                                    <label className="form-label" htmlFor="password" style={{paddingTop: "10px", color:"black"}}>Confirm your Email for activate your acount</label>
-                                    <div className="custom-float">
-                                        <div className="form-line">
-                                            <input type="text" id="keys" className="form-control"
-                                                   placeholder="Keys"
-                                                   name="keys" value={this.state.keys}
-                                                   onChange={this.changeKeys} required/>
-                                        </div>
+                    <Modal visible={this.state.visible} width="400" height="150" animationType='slide'>
+                        <ToastContainer position="top-center"
+                                        autoClose={5000}
+                                        hideProgressBar={false}
+                                        newestOnTop
+                                        closeOnClick
+                                        rtl={false}
+                                        pauseOnVisibilityChange
+                                        draggable
+                                        pauseOnHover/>
+                        <form onSubmit={this.verifyKeysSubmit} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                            <div className="col text-center">
+                            <div className="body">
+                                <label className="form-label" htmlFor="password" style={{paddingTop: "10px", color:"black"}}>Confirm your Email for activate your acount</label>
+                                <div className="center p-10">
+                                    <div className="form-line">
+                                        <input type="text" id="keys" className="form-control"
+                                               placeholder="Keys"
+                                               name="keys" value={this.state.keys}
+                                               onChange={this.changeKeys} required/>
                                     </div>
                                 </div>
-                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4">Send</button>
-                                </div>
-                            </form>
-                        </Modal>
+                            </div>
+                                <button className="btn btn-outline-success btn-sm pl-4 pr-4">Send</button>
+                            </div>
+                        </form>
+                    </Modal>
                     <div id="primary" className="p-t-b-100 height-full">
                         <div className="container">
                             <div className="text-center s-14 l-s-2 my-5">
@@ -169,9 +187,13 @@ class Register extends Component {
                                                                        onChange={this.changeConfirmPassword} required/>
                                                             </div>
                                                         </div>
-                                                        <input type="submit" id="register"
-                                                               className="btn btn-outline-primary btn-sm pl-4 pr-4"
-                                                               value="Register"/>
+                                                        <div className="row ml-1">
+                                                            <button type="submit" id="register"
+                                                                   className="btn btn-outline-primary btn-sm pl-4 pr-4"
+                                                            >Register</button>
+                                                            <LoginFacebook/>
+                                                            <LoginGoogle/>
+                                                        </div>
                                                     </div>
                                                     {/* #END# Input */}
                                                 </form>

@@ -64,6 +64,7 @@ class EditProfile extends Component {
         bodyFormData.append('country', this.state.country);
         bodyFormData.append('region', this.state.region);
         bodyFormData.append('city', this.state.city);
+        bodyFormData.append('social_id', this.props.profile_info['social_id']);
         bodyFormData.append('description', this.state.description);
         bodyFormData.append('photo', this.state.photo);
         bodyFormData.append('phone', this.state.phone ? this.state.phone: 0);
@@ -79,6 +80,7 @@ class EditProfile extends Component {
             axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: new_headers}).then(resp => {
                 this.setState({loading: false});
                 this.props.profile_initialisation(resp.data);
+                console.log(resp.data)
             }).catch(err => {
                 this.setState({loading: false});
                 toast.error(err.response.data)
@@ -205,7 +207,7 @@ class EditProfile extends Component {
 
 const mapStateToProps = state => {
     return {
-        profile_info: state.profile_info
+        profile_info: state.profile.profile_info
     };
 };
 

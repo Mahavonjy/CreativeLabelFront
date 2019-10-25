@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import axios from 'axios';
 import EditProfile from './Edit/EditProfile';
 import AddSingle from './AddMedia/AddSingle';
@@ -12,6 +12,8 @@ import PhotoD from '../../images/socials/profile.png';
 import { ToastContainer, toast } from 'react-toastify';
 import RequestToArtist from './Request/RequestToArtist';
 import IslPlayer from "../Players/Players";
+import EditBeats from "./ContractBeats/EditBeats";
+
 const cookies = new Cookies();
 const date = new Date();
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -23,7 +25,7 @@ class Profile extends Component {
         this.state = {
             wait: false, decline: false, loading: false, PopupEditProfile: false, PopupAddSingle: false,
             PopupAddAlbum: false, PopupAddEditSingle: -1, PopupAddEditAlbum: -1, PopupRequestToArtist: -1,
-            isMounted: false, role: '', follower: '', following: '', song: "", type_: "", index: null, tmp: null
+            isMounted: false, song: "", type_: "", index: null, tmp: null
         };
         _this = this;
     }
@@ -73,35 +75,11 @@ class Profile extends Component {
 
     componentDidMount() {
         this.setState({ isMounted: true });
-        this.getIfToken();
         this.getMedia();
         this.IfRequest();
     }
 
     componentWillUnmount() {this.setState({ isMounted: false });}
-
-    getIfToken = () => {
-        let data = cookies.get("Isl_Creative_pass");
-        if (data) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: new_headers}).then(resp =>{
-                    this.props.profile_initialisation(resp.data['my_profile']);
-                    this.setState({role : resp.data.role});
-                    this.setState({follower : resp.data.my_followers});
-                    this.setState({following : resp.data.my_followings});
-                }).catch(err => {
-                    console.log(err.response)
-                })
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
-    };
 
     getMedia = () => {
         let data = cookies.get("Isl_Creative_pass");
@@ -196,7 +174,7 @@ class Profile extends Component {
         return (
             <div className="Base">
                 {this.state.PopupAddAlbum ? <AddAlbum closePopup={(e) => this.togglePopupAddAlbum(e)}/> : <ToastContainer/>}
-                {this.state.PopupAddSingle ? <AddSingle closePopup={(e) => this.togglePopupAddSingle(e)}/> : <ToastContainer/>}
+                {this.state.PopupAddSingle ? <AddSingle Type={"beats"} closePopup={(e) => this.togglePopupAddSingle(e)}/> : <ToastContainer/>}
                 {this.state.PopupEditProfile ? <EditProfile closePopup={(e) => this.togglePopupEditProfile(e)}/> : <ToastContainer/>}
                 {this.state.PopupAddEditSingle !== -1 ? <EditSingle Song={this.state.song} Type={this.state.type_} Success={() => {
                     this.getMedia();
@@ -215,7 +193,7 @@ class Profile extends Component {
                     toast.success("Request Send");
                 }} CloseRequest={() => this.setState({PopupRequestToArtist: -1})}
                 />: <ToastContainer/>}
-                <div className="container-fluid relative animatedParent animateOnce p-lg-5">
+                <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                     <div className="card no-b shadow no-r">
                         <div className="row no-gutters">
                             <div className="col-md-4 b-r">
@@ -226,15 +204,15 @@ class Profile extends Component {
                                         <i className="icon-more-1"/>
                                     </button>
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {this.state.role !== "Artist" && this.state.role !== "Manager" ?
+                                        {this.props.role !== "Artist" && this.props.role !== "Manager" ?
                                             <div>
-                                                <a className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an artist</a>
-                                                <a className="dropdown-item" href="#"><i className="icon-user-4 mr-3"/>Become an manager</a>
+                                                <p className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an artist</p>
+                                                <p className="dropdown-item"><i className="icon-user-4 mr-3"/>Become an manager</p>
                                             </div> : null }
-                                        <a className="dropdown-item" href="#"><i className="icon-settings-6 mr-3"/>settings</a>
+                                        <p className="dropdown-item" ><i className="icon-settings-6 mr-3"/>settings</p>
                                     </div>
                                 </div>
-                                {this.state.role === 'Artist' ?
+                                {this.props.role === 'Artist' ?
                                     <div className="text-center" style={{paddingTop: "10px"}}>
                                             {/*<button className="btn btn-outline-info btn-sm pl-2 pr-2"*/}
                                             {/*    onClick={() => this.togglePopupAddAlbum(0)}>Add Album*/}
@@ -324,8 +302,8 @@ class Profile extends Component {
                             </div>
                         </div>
                     </div>
-                    {this.state.role === 'Artist' ?
-                        <div className="container-fluid relative animatedParent animateOnce p-lg-5">
+                    {this.props.role === 'Artist' ?
+                        <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                             <div className="row row-eq-height">
                                 <div className="col-lg-12">
                                     <div className="card no-b mb-md-3 p-2">
@@ -508,7 +486,7 @@ class Profile extends Component {
                                                 {/*</div>*/}
                                                 <div className="tab-pane fade  show active" id="w2-tab3" role="tabpanel"
                                                      aria-labelledby="w2-tab3">
-                                                    {this.props.beats.length !== 0 ?
+                                                    {this.props.beats ?
                                                         <div className="playlist pl-lg-3 pr-lg-3">
                                                             {this.props.beats.map((val, index) =>
                                                                 <div className="m-1 my-4" key={index}>
@@ -631,6 +609,7 @@ class Profile extends Component {
                         </div>
                     </div>
                     :null}
+                    <EditBeats/>
                 </div>
             );
     }
@@ -650,17 +629,13 @@ class Profile extends Component {
 const mapStateToProps = state => {
     return {
         profile_info: state.profile.profile_info,
-        albums: state.profile.albums,
         beats: state.profile.beats,
-        single: state.profile.single
+        role: state.profile.role,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        profile_initialisation: (data) => {
-            dispatch({type: "ADD_PROFILE_INFO", data: data})
-        },
         profile_add_albums: (data) => {
             dispatch({type: "ADD_ALBUMS", data: data})
         },

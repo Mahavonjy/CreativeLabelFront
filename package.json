@@ -27,19 +27,30 @@
     "gulp-uglify": "^1.5.4",
     "gulp-uglifycss": "^1.1.0",
     "gulp-zip": "^4.0.0",
+    "local-ipv4-address": "0.0.2",
     "moment": "^2.24.0",
+    "public-ip": "^3.2.0",
     "react": "^16.9.0",
+    "react-ad-block-detect": "^1.0.1",
     "react-awesome-modal": "^2.0.5",
     "react-background-slideshow": "^1.0.4",
     "react-bootstrap": "^1.0.0-beta.11",
     "react-dom": "^16.9.0",
+    "react-facebook": "^8.0.4",
+    "react-facebook-login-component": "^0.9.2",
+    "react-google-login-component": "^0.9.3",
     "react-icons": "^2.2.7",
+    "react-loader-spinner": "^3.1.4",
     "react-loading-overlay": "^1.0.1",
     "react-notification-system": "^0.2.17",
+    "react-public-ip": "^1.0.0",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
+    "react-share": "^3.0.1",
     "react-toastify": "^5.3.2",
+    "react-tooltip": "^3.11.1",
+    "react-twitter-share-link": "^1.2.1",
     "redux": "^4.0.4",
     "universal-cookie": "^4.0.2",
     "vinyl-ftp": "^0.6.0",
@@ -66,5 +77,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "homepage": "https://192.168.1.19"
 }

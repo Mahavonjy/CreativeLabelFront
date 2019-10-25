@@ -31,8 +31,10 @@ class Players extends Component {
     }
 
     toStartPlayer = (songId) => {
+        console.log(this.state.songId, songId);
         if (this.state.songId === songId) {
-            this.PlayOrPause()
+            this.PlayOrPause();
+            console.log("i am paused here");
         } else {
             if (this.state.component === "beats") {
                 for (let row in this.props.beats) {
@@ -71,9 +73,10 @@ class Players extends Component {
         if (this.player.paused && this.state.songId) {
             this.setState({IsPlaying: true}, () => {
                 if (run) {
-                    beats.playPlayer(this.state.currentIndex , "beats");
+                    this.player.play();
                 } else {
-                    this.player.play()
+                    beats.playPlayer(this.state.currentIndex , "beats");
+
                 }
             })
         } else if (this.state.songId) {
@@ -156,7 +159,6 @@ class Players extends Component {
     };
 
     onBarClick = (e) => {
-        console.log("i am here");
         const offsetX = e.nativeEvent.offsetX;
         const offsetWidth = e.nativeEvent.target.offsetWidth;
         const percent = offsetX / offsetWidth;
@@ -273,22 +275,22 @@ class Players extends Component {
                         <div className="p-3">
                             <ul id="playlist" className="playlist">
                                 {this.state.songId ? this.props.beats.map((val, index) =>
-                                <li className="list-group-item my-1" key={index}>
-                                    <div className="no-ajaxy media-url">
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            {this.state.songId === val['id'] && this.state.IsPlaying ?
-                                                <i className="icon-pause s-28" onClick={() => this.toStartPlayer(val['id'])} /> :
-                                                <i className="icon-play s-28" onClick={() => this.toStartPlayer(val['id'])} />}
-                                            <figure className="avatar-md float-left mr-3 mt-1">
-                                                <img className="r-5" src={val['photo']} alt="" />
-                                            </figure>
-                                            <div>
-                                                <h6>{val['artist']}</h6>{val['title']}
+                                    <li className="list-group-item my-1" key={index}>
+                                        <div className="no-ajaxy media-url">
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                {this.state.songId === val['id'] && this.state.IsPlaying ?
+                                                    <i className="icon-pause s-28" onClick={() => this.toStartPlayer(val['id'])} /> :
+                                                    <i className="icon-play s-28" onClick={() => this.toStartPlayer(val['id'])} />}
+                                                <figure className="avatar-md float-left mr-3 mt-1">
+                                                    <img className="r-5" src={val['photo']} alt="" />
+                                                </figure>
+                                                <div>
+                                                    <h6>{val['artist']}</h6>{val['title']}
+                                                </div>
+                                                <span className="badge badge-primary badge-pill">{val.time}</span>
                                             </div>
-                                            <span className="badge badge-primary badge-pill">{val.time}</span>
                                         </div>
-                                    </div>
-                                </li>): <h4 className="text-center">Playlist Empty</h4>}
+                                    </li>): <h4 className="text-center">Playlist Empty</h4>}
                             </ul>
                         </div>
                     </div>

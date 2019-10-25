@@ -1,5 +1,5 @@
 const initState = {
-    beats: []
+    beats: [],
 };
 
 const beatsReducer = (state = initState, action) => {

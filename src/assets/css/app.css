@@ -30,8 +30,7 @@
     border-radius: 10px!important;
 }
 .custom-float {
-    width: 60%!important;
-    margin: 0 auto;
+    display: flex;
     padding-top: 10px;
     padding-bottom: 10px;
 }

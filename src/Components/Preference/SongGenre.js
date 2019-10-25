@@ -47,7 +47,7 @@ class SongGenre extends Component {
         }
     };
 
-    BooleenToChange = (index) => {
+    BooleanToChange = (index) => {
         if (this.state.first_array[index][0] === "#9DA6B1") {
             this.state.first_array[index][0] = "darkolivegreen";
             this.state.first_array[index][1] = true;
@@ -182,7 +182,7 @@ class SongGenre extends Component {
                             <div className="music-genre" key={index} style={{background: `${all_music_genres[0]}`}}>
                                 <div className="top"
                                      onClick={() => {
-                                         this.BooleenToChange(index)
+                                         this.BooleanToChange(index)
                                      }}
                                      style={{backgroundImage: `url(${all_music_genres[2].image})`}}
                                 >

@@ -8,19 +8,22 @@ import {ToastContainer, toast} from "react-toastify";
 import {connect} from "react-redux";
 import logo from "../../images/Logo/ISL_logo.png"
 import IslPlayer from '../Players/Players'
+import ReactTooltip from 'react-tooltip';
+import Modal from "react-awesome-modal";
+import {FacebookLogin} from "react-facebook-login-component";
+import { FacebookProvider, Feed } from 'react-facebook';
 
 let token = "";
 let _this;
 
 class Beats extends Component {
     ToPlay;
-    abortController = new AbortController();
     constructor(props) {
         super(props);
         this.state = {
-            genre:'', genre_info: [], beats: [], song_id: '', price: 0, licenses: '', samples: false,
+            genre:'', genre_info: [], beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
             placeHolder: "Search", sort_by: ["Latest", "Oldest"], sort_placeHolder: "Sort", sort: '',
-            link_beats : [], index: null, tmp: null
+            link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null
         };
         _this = this
     }
@@ -76,6 +79,15 @@ class Beats extends Component {
 
     getBeats = (type_) => {
         this.props.resetBeats({"key": true});
+        // const publicIp = require('public-ip');
+        //
+        // (async () => {
+        //     console.log(await publicIp.v4());
+        //     //=> '46.5.21.123'
+        //
+        //     console.log(await publicIp.v6());
+        //     //=> 'fe80::200:f8ff:fe21:67cf'
+        // }) ();
         if (token) {
             let url_ = "";
             let key = "";
@@ -138,8 +150,7 @@ class Beats extends Component {
         let data = {
             "song_id": this.state.song_id,
             "price": this.state.price,
-            "licenses": this.state.licenses,
-            "samples": this.state.samples
+            "licenses_name": this.state.licenses_name
         };
         let new_headers = {
             'Content-Type': 'application/json',
@@ -154,9 +165,10 @@ class Beats extends Component {
     };
 
     componentDidMount() {
-        let signal = this.abortController.signal;
-        if (signal) {
+        this.setState({ isMounted: true, usingAdBlock: this.fakeAdBanner.offsetHeight === 0 }, () => {
             try {
+                if (this.state.usingAdBlock)
+                    toast.error("disables your adblocker please");
                 let cookies = new Cookies();
                 token = cookies.get("Isl_Creative_pass")["Isl_Token"];
                 this.getGenre();
@@ -164,18 +176,21 @@ class Beats extends Component {
             } catch (e) {
                 this.props.Redirect();
             }
-        }
-
+        });
     }
 
     componentWillUnmount() {
-        this.abortController.abort()
+        this.setState({ isMounted: false });
     }
 
     render() {
         return (
             <div>
+                <div ref={r => (this.fakeAdBanner = r)}
+                     style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
+                     className="adBanner"/>
                 <ToastContainer/>
+                <ReactTooltip/>
                 <section>
                     <div className="text-white">
                         <div className="xv-slide" data-bg-possition="top" style={{backgroundImage: 'url('+TestImg1+')'}}>
@@ -215,29 +230,125 @@ class Beats extends Component {
                                                                     aria-expanded="false">
                                                                 <i className="icon-hand-peace-o"/>Offers
                                                             </button>
-                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <div className="row" style={{marginLeft: 0}}>
-                                                                    <div className="text-light text-center special-color" style={{marginLeft: 0, width: 266}}>
-                                                                        <h6>Silver</h6>
-                                                                        <small>Non Exclusive</small>
-                                                                        <br/>
-                                                                        <h1>54.99$</h1>
+                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{width: "300px"}}>
+                                                                <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
+                                                                    <h5 className="text-center text-green"> Basic Lease (MP3) </h5>
+                                                                    <small>• Receive untagged MP3 file</small><br/>
+                                                                    <small>• Non-profit & promotional use only</small><br/>
+                                                                    <small>• Upload to Soundcloud</small><br/>
+                                                                    <small>• Use for non-profit Album + Performances</small><br/>
+                                                                    <small>• Limited to 10,000 non-profitable streams</small><br/>
+                                                                    <small>• Instant delivery</small><br/>
+                                                                    <small>• Must credits : Prod. by [Name of Producer] / ISL Creative</small>
+                                                                </ReactTooltip>
+                                                                <ReactTooltip className="special-color-dark" id='silver_price' aria-haspopup='true'>
+                                                                    <h5 className="text-center text-green"> Silver Lease (MP3 + WAVE) </h5>
+
+                                                                    <small>• Receive untagged MP3 + WAV files</small><br/>
+                                                                    <small>• Profitable – Sell up to 10,000 unit sales</small><br/>
+                                                                    <small>• Upload to Soundcloud, Apple Music, iTunes , Spotify</small><br/>
+                                                                    <small>• Use for profit Album + Performances + Music Video</small><br/>
+                                                                    <small>• Limited to 100,000 streams</small><br/>
+                                                                    <small>• Radio & TV airplays on 3 stations</small><br/>
+                                                                    <small>• Instant delivery</small><br/>
+                                                                    <small>• Must credits : Prod. by [Name of Producer] / ISL Creative</small>
+                                                                </ReactTooltip>
+                                                                <ReactTooltip className="special-color-dark" id='gold_price' aria-haspopup='true'>
+                                                                    <h5 className="text-center text-green"> Gold Lease (MP3 + WAVE + STEMS) </h5>
+
+                                                                    <small>• Receive untagged MP3 + WAV files+ Tracked-Out files/Stems</small><br/>
+                                                                    <small>• Possibility to mix and re-arrange with stems (trackouts)</small><br/>
+                                                                    <small>• Includes the Silver Lease  features</small><br/>
+                                                                    <small>• Limited to 200,000 streams</small><br/>
+                                                                    <small>• Unlimited Radio & TV airplays</small><br/>
+                                                                    <small>• Instant Delivery</small><br/>
+                                                                    <small>• Must credits : Prod.by [Name of Producer] / ISL Creative</small>
+                                                                </ReactTooltip>
+                                                                <ReactTooltip className="special-color-dark" id='platinum_price' aria-haspopup='true'>
+                                                                    <h5 className="text-center text-green"> Platinum Lease (Unlimited + Exclusive) </h5>
+
+                                                                    <small>• Receive untagged MP3 + WAV files + Tracked-Out files/Stems</small><br/>
+                                                                    <small>• Possibility to mix and re-arrange with stems (trackouts)</small><br/>
+                                                                    <small>• Unlimited profitable sales + streams (iTunes, Spotify  etc.)</small><br/>
+                                                                    <small>• Use for unlimited profit Album + Performances + Music Video</small><br/>
+                                                                    <small>• Unlimited TV broadcast + Radio airplay</small><br/>
+                                                                    <small>• Credits : Prod. by [Name of Producer] / Beats Avenue</small>
+                                                                </ReactTooltip>
+                                                                <div className="card">
+                                                                    <div className="card-header text-center text-green b-b">
+                                                                        <strong>Price by beatmaker</strong>
                                                                     </div>
-                                                                    <div className="text-center text-dark warning-color" style={{width: 266, height: 86}}>
-                                                                        <h6 className="text-dark">Gold</h6>
-                                                                        <small>Exclusive</small>
-                                                                        <br/>
-                                                                        <h1>74.99$</h1>
-                                                                    </div>
+                                                                    <ul className="playlist list-group list-group-flush ">
+                                                                        <li className="list-group-item" data-tip data-for='basic_price'>
+                                                                            <div className="align-items-center text-center text-blue">
+                                                                                <div className="col">
+                                                                                    <h6>Basic Lease</h6>
+                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                    Mp3 Only
+                                                                                    </small>
+                                                                                </div>
+                                                                                {/*<div className="ml-auto">*/}
+                                                                                {/*    <div*/}
+                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
+                                                                                {/*        <div className="s-12">14.99 $</div>*/}
+                                                                                {/*        <small>24.99 $</small>*/}
+                                                                                {/*    </div>*/}
+                                                                                {/*</div>*/}
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className="list-group-item" data-tip data-for='silver_price'>
+                                                                            <div className="d-flex align-items-center text-blue ">
+                                                                                <div className="col">
+                                                                                    <h6>Silver Lease</h6>
+                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                        Mp3 + Wave
+                                                                                    </small>
+                                                                                </div>
+                                                                                {/*<div className="ml-auto">*/}
+                                                                                {/*    <div*/}
+                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
+                                                                                {/*        <div className="s-12">34.99 $</div>*/}
+                                                                                {/*        <small>49.99 $</small>*/}
+                                                                                {/*    </div>*/}
+                                                                                {/*</div>*/}
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className="list-group-item" data-tip data-for='gold_price'>
+                                                                            <div className="d-flex align-items-center text-blue ">
+                                                                                <div className="col">
+                                                                                    <h6>Gold Lease</h6>
+                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                        Mp3 + Wave + Stems
+                                                                                    </small>
+                                                                                </div>
+                                                                                {/*<div className="ml-auto">*/}
+                                                                                {/*    <div*/}
+                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
+                                                                                {/*        <div className="s-12">74.99 $</div>*/}
+                                                                                {/*        <small>99.99 $</small>*/}
+                                                                                {/*    </div>*/}
+                                                                                {/*</div>*/}
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className="list-group-item" data-tip data-for='platinum_price'>
+                                                                            <div className="d-flex align-items-center text-blue ">
+                                                                                <div className="col">
+                                                                                    <h6>Platinum Lease</h6>
+                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                        Unlimited+ Exclusive
+                                                                                    </small>
+                                                                                </div>
+                                                                                {/*<div className="ml-auto">*/}
+                                                                                {/*    <div*/}
+                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
+                                                                                {/*        <div className="s-12">74.99 $</div>*/}
+                                                                                {/*        <small>99.99 $</small>*/}
+                                                                                {/*    </div>*/}
+                                                                                {/*</div>*/}
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
-                                                                <small className="dropdown-item text-center unique-color">All offers include:</small>
-                                                                <small className="dropdown-item "><i className="icon-music-player-1 mr-3"/>Online publishing(Spotify, Apple music, itunes...)</small>
-                                                                <small className="dropdown-item "><i className="icon-hand-rock-o mr-3"/>100% royalty free</small>
-                                                                <small className="dropdown-item "><i className="icon-child mr-3"/>credits: prod. by [name of producer]/ISL Creative</small>
-                                                                <small className="dropdown-item "><i className="icon-hand-rock-o mr-3"/>100% royalty free</small>
-                                                                <small className="dropdown-item "><i className="icon-slideshare mr-3"/>unlimited business use (use for profit album,performances,music video, etc...)</small>
-                                                                <small className="dropdown-item "><i className="icon-infinity mr-3"/>unlimited streaming</small>
-                                                                <h6 className="text-center unique-color">add Stems 29.99$</h6>
                                                             </div>
                                                         </div>
                                                         <div className="dropdown">
@@ -279,133 +390,206 @@ class Beats extends Component {
                                 <div className="card-body no-p">
                                     <div className="tab-content" id="v-pills-tabContent1">
                                         <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
-                                            <div className="playlist pl-lg-3 pr-lg-3">
-                                                {this.props.beats.map((val, index) =>
-                                                <div className="m-1 my-4" key={index}>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="col-1">
-                                                            {this.state.link_beats[index] ?
-                                                                <div>
-                                                                    {this.state.index === index ?
-                                                                        <i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>:
-                                                                        <i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, "beats")}}/>}
+                                            {this.props.beats ?
+                                                <div className="playlist pl-lg-3 pr-lg-3">
+                                                    {this.props.beats.map((val, index) =>
+                                                        <div className="m-1 my-4" key={index}>
+                                                            <div className="d-flex align-items-center">
+                                                                <div className="col-1">
+                                                                    {this.state.link_beats[index] ?
+                                                                        <div>
+                                                                            {this.state.index === index ?
+                                                                                <i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>:
+                                                                                <i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, "beats")}}/>}
+                                                                        </div>
+                                                                        :
+                                                                        <div className="preloader-wrapper small active">
+                                                                            <div className="spinner-layer spinner-red-only">
+                                                                                <div className="circle-clipper left">
+                                                                                    <div className="circle"/>
+                                                                                </div>
+                                                                                <div className="gap-patch">
+                                                                                    <div className="circle"/>
+                                                                                </div>
+                                                                                <div className="circle-clipper right">
+                                                                                    <div className="circle"/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
                                                                 </div>
-                                                                :
-                                                                <div className="preloader-wrapper small active">
-                                                                    <div className="spinner-layer spinner-red-only">
-                                                                        <div className="circle-clipper left">
-                                                                            <div className="circle"/>
-                                                                        </div>
-                                                                        <div className="gap-patch">
-                                                                            <div className="circle"/>
-                                                                        </div>
-                                                                        <div className="circle-clipper right">
-                                                                            <div className="circle"/>
+                                                                <div className="col-md-3">
+                                                                    <figure className="avatar-md float-left  mr-2">
+                                                                        <img className="r-3" src={val.photo} alt="" />
+                                                                    </figure>
+                                                                    <h6>{val.title}</h6><small>{val.artist}</small>
+                                                                </div>
+                                                                <ReactTooltip/>
+                                                                <div className="col-md-5 d-none d-sm-block">
+                                                                    <div className="d-flex">
+                                                                        <small className="ml-auto">{val.silver_price}$</small>
+                                                                        <small className="ml-auto">{val.bpm}/bpm</small>
+                                                                        <FacebookProvider appId="423325871770542">
+                                                                            <Feed link="https://www.tests.com/">
+                                                                                {({ handleClick }) => (
+                                                                                    <div className="ml-auto transparent border-0">
+                                                                                        <i className="icon-share-1 text-red" onClick={handleClick}/>
+                                                                                    </div>
+                                                                                )}
+                                                                            </Feed>
+                                                                        </FacebookProvider>
+                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-sm-2 d-none d-sm-block">
+                                                                    <div className="d-flex">
+                                                                        <div className="ml-auto">
+                                                                            <button className="btn btn-outline-primary btn-sm" type="button" data-toggle="modal"
+                                                                                    data-target={"#trackModal" + val.id}><i className="icon-opencart"/>
+                                                                            </button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            }
-                                                        </div>
-                                                        <div className="col-md-3">
-                                                            <figure className="avatar-md float-left  mr-2">
-                                                                <img className="r-3" src={val.photo} alt="" />
-                                                            </figure>
-                                                            <h6>{val.title}</h6><small>{val.artist}</small>
-                                                        </div>
-                                                        <div className="col-sm-2">
-                                                            <small className="ml-auto">{val.price}$</small>
-                                                        </div>
-                                                        <div className="col-sm-2">
-                                                            <small className="ml-auto">{val.time}</small>
-                                                        </div>
-                                                        <div className="col-sm-2">
-                                                            <small className="ml-auto">{val.bpm}/bpm</small>
-                                                        </div>
-                                                        <div className="col-sm-2 d-none d-lg-block">
-                                                            <div className="d-flex">
-                                                                <div className="ml-auto">
-                                                                    <button className="btn btn-outline-primary btn-sm" type="button" data-toggle="modal"
-                                                                            data-target={"#trackModal" + val.id}><i className="icon-opencart"/>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-1 ml-auto d-lg-none">
-                                                            <a href="#" data-toggle="dropdown"
-                                                               aria-haspopup="true"
-                                                               aria-expanded="false">
-                                                                <i className="icon-more-1"/></a>
-                                                            <div
-                                                                className="dropdown-menu dropdown-menu-right">
-                                                                <button className="dropdown-item"
-                                                                        type="button" data-toggle="modal"
-                                                                        data-target={"#trackModal" + val.id}><i
-                                                                    className="icon-shopping-bag mr-3"/>Add To Cart
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div className="modal custom show" id={"trackModal"+val.id} tabIndex="-1" role="dialog"
-                                                             aria-labelledby="trackModalLabel" aria-hidden="true">
-                                                            <div className="modal-dialog">
-                                                                <div className="modal-content" style={{height: "100%"}}>
-
-                                                                    <div className="modal-header">
-                                                                        <h3 className="getlaid text-dark" id="trackModalLabel">Add To Cart</h3>
-                                                                        <button id={"closeOne" + val.id} type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
+                                                                <div className="col-1 ml-auto d-sm-none" >
+                                                                    <a href="#" data-toggle="dropdown"
+                                                                       aria-haspopup="true"
+                                                                       aria-expanded="false">
+                                                                        <i className="icon-more-1"/></a>
+                                                                    <div className="dropdown-menu dropdown-menu-right">
+                                                                        <button className="dropdown-item"
+                                                                                type="button" data-toggle="modal"
+                                                                                data-target={"#trackModal" + val.id}><i
+                                                                            className="icon-shopping-bag mr-3"/>Add To Cart
                                                                         </button>
+                                                                        <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
                                                                     </div>
+                                                                </div>
+                                                                <div className="modal custom show" id={"trackModal"+val.id} tabIndex="-1" role="dialog"
+                                                                     aria-labelledby="trackModalLabel" aria-hidden="true">
+                                                                    <div className="modal-dialog">
+                                                                        <div className="modal-content" style={{height: "100%"}}>
 
-                                                                    <div className="modal-body" style={{overflow:"auto"}}>
-                                                                        <section className="relative" style={{margin:"0 auto"}}>
-                                                                            <div className="has-bottom-gradient">
-                                                                                <div className="row">
-                                                                                    <div className="col-md-10 offset-sm-1">
-                                                                                        <div className="row" style={{width:"300px", margin: "0 auto"}}>
-                                                                                            <img src={val.photo} alt="/" style={{width:"300px", margin:"0 auto"}}/>
-                                                                                            <h1 className="my-3 text-white" style={{margin: "0 auto"}}>{val.title}</h1>
-                                                                                            <div className="col-md-9">
-                                                                                                <div className="d-md-flex align-items-center justify-content-between">
-                                                                                                    <div className="ml-auto mb-2">
-                                                                                                        <a href="#" className="snackbar" data-text="Bookmark clicked" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-bookmark s-24" /></a>
-                                                                                                        <a href="#" className="snackbar ml-3" data-text="You like this song" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-heart s-24" /></a>
-                                                                                                        <a href="#" className="snackbar ml-3" data-text="Thanks for sharing" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-share-1 s-24" /></a>
+                                                                            <div className="modal-header">
+                                                                                <h3 className="getlaid text-dark" id="trackModalLabel">Add To Cart</h3>
+                                                                                <button id={"closeOne" + val.id} type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+
+                                                                            <div className="modal-body" style={{overflow:"auto"}}>
+                                                                                <section className="relative" style={{margin:"0 auto"}}>
+                                                                                    <div className="has-bottom-gradient">
+                                                                                        <div className="row">
+                                                                                            <div className="col-md-10 offset-sm-1">
+                                                                                                <div className="row" style={{width:"300px", margin: "0 auto"}}>
+                                                                                                    <img src={val.photo} alt="/" style={{width:"300px", margin:"0 auto"}}/>
+                                                                                                    <h1 className="my-3 text-white" style={{margin: "0 auto"}}>{val.title}</h1>
+                                                                                                    <div className="col-md-9">
+                                                                                                        <div className="d-md-flex align-items-center justify-content-between">
+                                                                                                            <div className="ml-auto mb-2">
+                                                                                                                <a href="#" className="snackbar" data-text="Bookmark clicked" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-bookmark s-24" /></a>
+                                                                                                                <a href="#" className="snackbar ml-3" data-text="You like this song" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-heart s-24" /></a>
+                                                                                                                <a href="#" className="snackbar ml-3" data-text="Thanks for sharing" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-share-1 s-24" /></a>
+                                                                                                            </div>
+                                                                                                        </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="bottom-gradient " />
-                                                                        </section>
-                                                                        <div className="p-lg-5" style={{background:"black", height:"400px"}}>
-                                                                            <div className="mb-3 card no-b p-3">
-                                                                                <div className="row" style={{margin:"0 auto"}}>
-                                                                                    <div style={{margin: "0 auto", paddingRight:"10px", paddingLeft:"10px"}}>
-                                                                                        <button className="pricingTable orange" type="button" data-toggle="modal"
-                                                                                                data-target={"#trackModal1" + val.id} onClick={() => {this.setState({song_id: val.id, price: 15, licenses: 1})}}>
-                                                                                            <div className="pricingTable-header">
-                                                                                                <small className="price-value">$15<small className="month">Silver</small></small>
-                                                                                            </div>
-                                                                                            <div className="pricingTable-sign-up">
-                                                                                                <small>Non exclusive</small>
-                                                                                                <a href="#" className="btn btn-block">mp3 + wave</a>
-                                                                                            </div>
-                                                                                        </button>
-                                                                                    </div>
-
-                                                                                    <div style={{margin: "0 auto", paddingRight:"10px", paddingLeft:"10px"}}>
-                                                                                        <button className="pricingTable blue" type="button" data-toggle="modal"
-                                                                                                data-target={"#trackModal1"+val.id} onClick={() => {this.setState({song_id: val.id, price: 20, licenses: 2})}}>
-                                                                                            <div className="pricingTable-header">
-                                                                                                <span className="price-value">$20<span className="month">Premium</span></span>
-                                                                                            </div>
-                                                                                            <div className="pricingTable-sign-up">
-                                                                                                <small>exclusive</small>
-                                                                                                <a href="#" className="btn btn-block">mp3 + wave</a>
-                                                                                            </div>
-                                                                                        </button>
+                                                                                    <div className="bottom-gradient " />
+                                                                                </section>
+                                                                                <div className="p-lg-5" style={{background:"black", height:"500px"}}>
+                                                                                    <div className="mb-3 card no-b p-3">
+                                                                                        <div className="card-header transparent b-b">
+                                                                                            <strong>Beats Price</strong>
+                                                                                        </div>
+                                                                                        <ul className="playlist list-group list-group-flush">
+                                                                                            <li className="list-group-item" >
+                                                                                                <div className="d-flex align-items-center ">
+                                                                                                    <div
+                                                                                                        className="col-8 ">
+                                                                                                        <h6>Basic Lease</h6>
+                                                                                                        <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                            MP3 Only
+                                                                                                        </small>
+                                                                                                    </div>
+                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.basic_price, licenses_name: "basic_price", song_id: val.id}
+                                                                                                    , () => {this.handleSubmit(e)})}}>
+                                                                                                        <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                            <div className="s-16">
+                                                                                                                {val.basic_price} $
+                                                                                                            </div>
+                                                                                                            <i className="icon-first-order"/>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                            <li className="list-group-item" >
+                                                                                                <div
+                                                                                                    className="d-flex align-items-center ">
+                                                                                                    <div
+                                                                                                        className="col-8 ">
+                                                                                                        <h6>Silver Lease</h6>
+                                                                                                        <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                            MP3 + WAVE
+                                                                                                        </small>
+                                                                                                    </div>
+                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.silver_price, licenses_name: "silver_price", song_id: val.id}
+                                                                                                        , () => {this.handleSubmit(e)})}}>
+                                                                                                        <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                            <div className="s-14">
+                                                                                                                {val.silver_price} $
+                                                                                                            </div>
+                                                                                                            <i className="icon-money"/>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                            <li className="list-group-item" >
+                                                                                                <div
+                                                                                                    className="d-flex align-items-center ">
+                                                                                                    <div
+                                                                                                        className="col-8 ">
+                                                                                                        <h6>Gold Lease</h6>
+                                                                                                        <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                            MP3 + WAVE + STEMS
+                                                                                                        </small>
+                                                                                                    </div>
+                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.gold_price, licenses_name: "gold_price", song_id: val.id}
+                                                                                                        , () => {this.handleSubmit(e)})}}>
+                                                                                                        <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                            <div className="s-14">
+                                                                                                                {val.gold_price} $
+                                                                                                            </div>
+                                                                                                            <i className="icon-money"/>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                            {val.platinum_price ?
+                                                                                            <li className="list-group-item">
+                                                                                                <div
+                                                                                                    className="d-flex align-items-center ">
+                                                                                                    <div
+                                                                                                        className="col-8 ">
+                                                                                                        <h5> Platinum Lease</h5>
+                                                                                                        <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                        Unlimited + Exclusive
+                                                                                                        </small>
+                                                                                                    </div>
+                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.platinum_price, licenses_name: "platinum_price", song_id: val.id}
+                                                                                                        , () => {this.handleSubmit(e)})}}>
+                                                                                                        <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                            <div className="s-14">
+                                                                                                                {val.platinum_price} $
+                                                                                                            </div>
+                                                                                                            <i className="icon-money"/>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>: null}
+                                                                                        </ul>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -413,46 +597,11 @@ class Beats extends Component {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="modal custom show" id={"trackModal1" + val.id} tabIndex="-1" role="dialog"
-                                                             aria-labelledby="trackModalLabel" aria-hidden="true">
-                                                            <div className="modal-dialog">
-                                                                <div className="modal-content" style={{height: "100%", backgroundImage: "url(" + logo + ")", backgroundColor: "black"}}>
+                                                        </div>)}
 
-                                                                    <div className="modal-header">
-                                                                        <h3 className="getlaid text-light" id="trackModalLabel">Add To Cart</h3>
-                                                                        <button id={"closeTwo" + val.id} type="button" className="close danger-color-dark" data-dismiss="modal" aria-label="Close" style={{borderRadius: "10px"}}>
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div className="modal-body" style={{overflow:"auto"}}>
-                                                                        <div className="card text-center" id="card-beats">
-                                                                            <div className="card-header text-center border-bottom-0 bg-transparent text-success pt-4">
-                                                                                <h5 className="text-light">Add stems</h5>
-                                                                            </div>
-                                                                            <div className="card-body">
-                                                                                <h1 className="text-light">24,99 euros</h1>
-                                                                            </div>
-
-                                                                            <div className="card-body list-group-flush">
-                                                                                <h4 className="fas fa-male text-green mx-2">for more work flexibility on the beats</h4>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="row" style={{margin:"0 auto", paddingTop:"50px"}}>
-                                                                            <button className="btn btn-outline-danger btn-sm pl-5 pr-5" style={{margin:"0 auto"}} onClick={(e) => this.handleSubmit(e)}>cancel</button>
-                                                                            <button className="btn btn-outline-success btn-sm pl-5 pr-5" style={{margin:"0 auto"}} onClick={(e) => {this.setState({price: this.state.price + 29.99, samples: true}, () => {
-                                                                                this.handleSubmit(e);
-                                                                            })}}>Accept</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>)}
-
-                                            </div>
+                                                </div>
+                                                :null
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -496,6 +645,7 @@ class Beats extends Component {
             </div>
         );
     }
+
     static pausePlayer() {
         _this.pausePlayer(false);
     }
@@ -511,7 +661,8 @@ class Beats extends Component {
 
 const mapStateToProps = state => {
     return {
-        beats: state.beats.beats
+        beats: state.beats.beats,
+        pricing: state.profile.pricing
     };
 };
 

@@ -2,33 +2,29 @@ import './Home.css';
 import React, { Component } from "react";
 import Cookies from 'universal-cookie';
 import axios from 'axios';
-import Music from '../Music/Music';
+// import Music from '../Music/Music';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Redirect } from 'react-router-dom';
 import Profile from "../Profile/Profile";
 import Beats from "../Beats/Beats";
 import Cart from "../Cart/Cart";
 import IslPlayer from "../Players/Players";
-import PlayList from "../Playlist/Playlist";
+// import PlayList from "../Playlist/Playlist";
 import Conf from "../../Config/tsconfig";
 import './Home.css';
+import Loader from 'react-loader-spinner'
+import {connect} from "react-redux";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
+let cookies = new Cookies();
 let ifStopPlayer = {};
+let headers;
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            music : true,
-            profile: false,
-            loading: false,
-            isOpen: false,
-            redirect: false,
-            playMusic: false,
-            logo_style: 'logo_navbar',
-            PlayList: [],
-            PlaListInfo : ''
+            isMounted: false, loading: false, redirect: false
         };
     }
 
@@ -43,29 +39,77 @@ class Home extends Component {
         IslPlayer.startPlayerComponent(index, type_, component);
     };
 
-    changeLogoStyle = () => {
-        if (this.state.isOpen) {
-            this.setState({logo_style: 'logo_navbar'});
-            this.setState({isOpen: false});
-        } else {
-            this.setState({logo_style: 'new_logo_navbar'});
-            this.setState({isOpen: true});
+    ifConnectionError = (err) => {
+        try {
+            if (err.response.data === "Connection error") {
+                setTimeout(() => {
+                    this.componentDidMount();
+                }, 5000);
+            } else if (err.response.data === "token invalid") {
+                this.logout();
+            } else {
+                console.log(err)
+            }
+        } catch (e) {
+            this.logout();
         }
     };
 
+    componentDidMount() {
+        this.setState({isMounted: true }, () => {
+            this.setState({loading: true}, () => {
+                try {
+                    headers = {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': "*",
+                        'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+                    };
+                    axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
+                        this.props.beats_initialisation_pricing(resp.data);
+                        axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
+                            this.props.profile_initialisation_info(resp.data['my_profile']);
+                            this.props.profile_initialisation_role(resp.data['role']);
+                            this.props.profile_initialisation_follower(resp.data['my_followers']);
+                            this.props.profile_initialisation_following(resp.data['my_followings']);
+                            if (resp.data['role'] === "Artist") {
+                                axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
+                                    this.props.profile_initialisation_contract(resp.data);
+                                    this.setState({loading: false})
+                                }).catch(err => {
+                                    this.ifConnectionError(err);
+                                })
+                            } else {
+                                this.setState({loading: false})
+                            }
+                        }).catch(err => {
+                            this.ifConnectionError(err);
+                        });
+                    }).catch(err => {
+                        this.ifConnectionError(err);
+                    });
+                } catch (e) {
+                    this.setState({redirect: true});
+                }
+            });
+        });
+    }
+
+    componentWillUnmount() {
+        const publicIp = require("react-public-ip");
+
+        const ipv4 = publicIp.v4() || "192.168.1.19";
+        const ipv6 = publicIp.v6() || "";
+        console.log(ipv4, ipv6)
+        this.setState({ isMounted: false });
+    }
+
     logout = () => {
-        let cookies = new Cookies();
-        let new_headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-        axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: new_headers}).then(resp =>{
+        axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: headers}).then(resp =>{
             cookies.remove("Isl_Creative_pass");
-            console.log(resp.data);
             this.setState({redirect: true});
         }).catch(err => {
-            console.log(err.response)
+            cookies.remove("Isl_Creative_pass");
+            this.setState({redirect: true});
         })
     };
 
@@ -74,58 +118,13 @@ class Home extends Component {
             return <Redirect to="/login" />
         } else if (this.state.loading) {
             return (
-                <div id="loader" className="loader">
-                    <div className="loader-container">
-                        <div className="preloader-wrapper big active">
-                            <div className="spinner-layer spinner-blue">
-                                <div className="circle-clipper left">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="gap-patch">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="circle-clipper right">
-                                    <div className="circle"/>
-                                </div>
-                            </div>
-
-                            <div className="spinner-layer spinner-red">
-                                <div className="circle-clipper left">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="gap-patch">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="circle-clipper right">
-                                    <div className="circle"/>
-                                </div>
-                            </div>
-
-                            <div className="spinner-layer spinner-yellow">
-                                <div className="circle-clipper left">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="gap-patch">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="circle-clipper right">
-                                    <div className="circle"/>
-                                </div>
-                            </div>
-
-                            <div className="spinner-layer spinner-green">
-                                <div className="circle-clipper left">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="gap-patch">
-                                    <div className="circle"/>
-                                </div>
-                                <div className="circle-clipper right">
-                                    <div className="circle"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div className="absolute center-center">
+                    <Loader
+                        type="Bars"
+                        color="#636466"
+                        height={150}
+                        width={150}
+                    />
                 </div>
             );
         } else {
@@ -226,4 +225,27 @@ class Home extends Component {
     }
 }
 
-export default Home;
+const mapDispatchToProps = dispatch => {
+    return {
+        beats_initialisation_pricing: (data) => {
+            dispatch({type: "ADD_PRICING", data: data})
+        },
+        profile_initialisation_info: (data) => {
+            dispatch({type: "ADD_PROFILE_INFO", data: data})
+        },
+        profile_initialisation_role: (data) => {
+            dispatch({type: "ADD_ROLE", data: data})
+        },
+        profile_initialisation_follower: (data) => {
+            dispatch({type: "ADD_FOLLOWER", data: data})
+        },
+        profile_initialisation_following: (data) => {
+            dispatch({type: "ADD_FOLLOWING", data: data})
+        },
+        profile_initialisation_contract: (data) => {
+            dispatch({type: "ADD_CONTRACT", data: data})
+        },
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Home);

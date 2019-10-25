@@ -5,23 +5,15 @@ import axios from 'axios';
 import Modal from "react-awesome-modal";
 import Conf from "../../Config/tsconfig";
 import { ToastContainer, toast } from 'react-toastify';
-import {connect} from "react-redux";
+import LoginFacebook from "../Facebook/Facebook";
+import LoginGoogle from "../Google/Google";
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            to_route: '/home',
-            keys: '',
-            loading : false,
-            changePass: false,
-            ResetPassword: false,
-            visible: false,
-            visibility: false,
-            redirect: false,
-            email: '',
-            password: '',
-            confirm_password: ''
+            to_route: '/', keys: '', loading : false, changePass: false, ResetPassword: false, visible: false,
+            visibility: false, redirect: false, email: '', password: '', confirm_password: ''
         };
     }
 
@@ -221,51 +213,46 @@ class Login extends Component {
                         </form>
                     </Modal>
 
-                    <Modal visible={this.state.ResetPassword} width="400" height="200" animationType='slide'>
-                        <form onSubmit={this.verifyKeysResetPass} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                    <Modal visible={this.state.ResetPassword} width="400" height="100" animationType='slide'>
+                        <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                             <div className="col text-center">
                                 <div className="body">
                                     <div className="custom-float">
-                                        <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>Send the key
-                                            confirmation for reset your password</label>
                                         <input type="text" id="keys" className="form-control"
-                                               placeholder="key" name="keys" value={this.state.keys}
+                                               placeholder="this key is in your mailbox" name="keys" value={this.state.keys}
                                                onChange={this.changeKeys} required/>
                                     </div>
-                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4">Send</button>
+                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysResetPass}>Send</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </Modal>
 
                     <Modal visible={this.state.visibility} width="400" height="200" animationType='slide'>
-                        <form onSubmit={this.verifyEmail} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                        <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                             <button className="ModalClose" onClick={(e) => this.setState({visibility: false})}>
                                 <i className="icon-close s-24" style={{color:"orange"}} />
                             </button>
                             <div className="col text-center">
                                 <div className="body">
-                                    <div className="custom-float">
-                                        <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>E-Mail Address</label>
+                                    <div className="custom-float center">
                                         <input type="email" id="email" className="form-control"
-                                               placeholder="Enter your email" name="email" value={this.state.email}
+                                               placeholder="Your email here" name="email" value={this.state.email}
                                                onChange={this.changeEmail} required/>
                                     </div>
-                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4">Send</button>
+                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyEmail}>Send</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </Modal>
 
-                    <Modal visible={this.state.visible} width="400" height="200" animationType='slide'>
+                    <Modal visible={this.state.visible} width="400" height="100" animationType='slide'>
                         <form onSubmit={this.verifyKeysSubmit} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                             <div className="col text-center">
                                 <div className="body">
                                     <div className="custom-float">
-                                        <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>Confirm your Email for
-                                            activate your acount</label>
                                         <input type="text" id="keys" className="form-control"
-                                               placeholder="key"
+                                               placeholder="Type your key in your mailbox"
                                                name="keys" value={this.state.keys}
                                                onChange={this.changeKeys} required/>
                                     </div>
@@ -305,9 +292,13 @@ class Login extends Component {
                                                                    onChange={this.changePassword} required/>
                                                         </div>
                                                     </div>
+                                                    <div className="row ml-1">
                                                     <input type="submit"
                                                            className="btn btn-outline-primary btn-sm pl-4 pr-4"
                                                            value="Log In"/>
+                                                        <LoginFacebook/>
+                                                        <LoginGoogle/>
+                                                    </div>
 
                                                 </div>
                                                 {/* #END# Input */}
