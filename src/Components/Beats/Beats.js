@@ -12,6 +12,7 @@ import ReactTooltip from 'react-tooltip';
 import Modal from "react-awesome-modal";
 import {FacebookLogin} from "react-facebook-login-component";
 import { FacebookProvider, Feed } from 'react-facebook';
+import Suggestion from "./Suggestion";
 
 let token = "";
 let _this;
@@ -23,7 +24,7 @@ class Beats extends Component {
         this.state = {
             genre:'', genre_info: [], beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
             placeHolder: "Search", sort_by: ["Latest", "Oldest"], sort_placeHolder: "Sort", sort: '',
-            link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null
+            link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null,
         };
         _this = this
     }
@@ -32,7 +33,7 @@ class Beats extends Component {
 
     changeSort = (e) => {this.setState({sort: e.target.value}, () => {this.getBeats("sort")})};
 
-    AddForPlay = (index) => {
+    AddForPlay = (index, _state) => {
         let new_headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': "*",
@@ -41,9 +42,10 @@ class Beats extends Component {
         axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + this.props.beats[index]['id'], {headers:new_headers}).then(response => {
             let temp = {"index": index, "link": response.data};
             this.props.updateBeats(temp);
-            this.setState(prevState => ({link_beats: {...prevState.link_beats, [index]: true}}));
+            if (_state === "link_beats")
+                this.setState(prevState => ({link_beats: {...prevState.link_beats, [index]: true}}));
         }).catch(error => {
-            console.log(error.response);
+            console.log(error);
         })
     };
 
@@ -65,6 +67,34 @@ class Beats extends Component {
         }
     };
 
+    LikeOrFollow = (LikeOrFollow, arg) => {
+        if (token === Conf.configs.TokenVisitor) {
+            document.getElementById("LoginRequire").click();
+        } else if (LikeOrFollow === "like") {
+            let new_headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': token
+            };
+            axios.post(Conf.configs.ServerApi + "api/medias/admire/" + arg, {},{headers: new_headers}).then(resp =>{
+                toast.success("liked")
+            }).catch(err => {
+                toast.warn("already liked")
+            });
+        } else if (LikeOrFollow === "follow") {
+            let new_headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': token
+            };
+            axios.post(Conf.configs.ServerApi + "api/admiration/admire_user/" + arg, {},{headers: new_headers}).then(resp =>{
+                toast.success("followed")
+            }).catch(err => {
+                toast.warn("already followed")
+            });
+        }
+    };
+
     pausePlayer = (run) => {
         if (this.state.index !== null) {
             this.setState({tmp: this.state.index}, () => {
@@ -78,16 +108,6 @@ class Beats extends Component {
     };
 
     getBeats = (type_) => {
-        this.props.resetBeats({"key": true});
-        // const publicIp = require('public-ip');
-        //
-        // (async () => {
-        //     console.log(await publicIp.v4());
-        //     //=> '46.5.21.123'
-        //
-        //     console.log(await publicIp.v6());
-        //     //=> 'fe80::200:f8ff:fe21:67cf'
-        // }) ();
         if (token) {
             let url_ = "";
             let key = "";
@@ -116,17 +136,20 @@ class Beats extends Component {
                 'Isl-Token': token
             };
 
-            this.props.resetBeats();
-            axios.get(Conf.configs.ServerApi + url_, {headers: new_headers}).then(resp =>{
-                const info = resp.data[key];
-                this.props.resetBeats();
-                this.setState({genre: "", sort: ""});
-                for(let row in info) {info[row]['link'] = ""}
-                this.props.addBeats(info, {"key": true});
-                for (let row_ in this.props.beats) {this.AddForPlay(row_)}
+            axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: new_headers}).then(resp =>{
+                this.props.suggestion_beats(resp.data);
+                axios.get(Conf.configs.ServerApi + url_, {headers: new_headers}).then(resp =>{
+                    const info = resp.data[key];
+                    this.setState({genre: "", sort: ""});
+                    for(let row in info) {info[row]['link'] = ""}
+                    this.props.addBeats(info, {"key": true});
+                    for (let row_ in this.props.beats) {this.AddForPlay(row_)}
+                }).catch(err => {
+                    console.log(err.response)
+                })
             }).catch(err => {
                 console.log(err.response)
-            })
+            });
         }
     };
 
@@ -147,34 +170,79 @@ class Beats extends Component {
     };
 
     handleSubmit = (e) => {
-        let data = {
-            "song_id": this.state.song_id,
-            "price": this.state.price,
-            "licenses_name": this.state.licenses_name
-        };
-        let new_headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': token
-        };
-        axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data,  {headers: new_headers}).then(resp =>{
-            toast.success(resp.data);
-        }).catch(err => {
-            toast.error(err.response.data);
-        })
+        if (token !== Conf.configs.TokenVisitor) {
+            let new_headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': token
+            };
+            let data = {
+                "song_id": this.state.song_id,
+                "price": this.state.price,
+                "licenses_name": this.state.licenses_name
+            };
+            axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data, {headers: new_headers}).then(resp => {
+                toast.success(resp.data);
+            }).catch(err => {
+                toast.error(err.response.data);
+            })
+        } else {
+            const carts = JSON.parse(localStorage.getItem("MyCarts"));
+            if (!carts) {
+                for (let row in this.props.beats) {
+                    if (this.props.beats[row]['id'] === this.state.song_id) {
+                        localStorage.setItem("MyCarts",  JSON.stringify([{
+                            "media" : {
+                                "photo": this.props.beats[row]["photo"],
+                                "artist": this.props.beats[row]["artist"],
+                                "title": this.props.beats[row]["title"]
+                            },
+                            "song_id": this.state.song_id,
+                            "price": this.state.price,
+                            "licenses_name": this.state.licenses_name
+                        }]))
+                    }
+                }
+                toast.success("added");
+            } else {
+                const cart_S = carts.some(item => item.song_id === this.state.song_id);
+                if (!cart_S) {
+                    localStorage.removeItem("MyCarts");
+                    for (let row in this.props.beats) {
+                        if (this.props.beats[row]['id'] === this.state.song_id) {
+                            carts.push({
+                                "media" : {
+                                    "photo": this.props.beats[row]["photo"],
+                                    "artist": this.props.beats[row]["artist"],
+                                    "title": this.props.beats[row]["title"]
+                                },
+                                "song_id": this.state.song_id,
+                                "price": this.state.price,
+                                "licenses_name": this.state.licenses_name
+                            });
+                        }
+                    }
+                    localStorage.setItem("MyCarts",  JSON.stringify(carts));
+                    toast.success("added");
+                } else {
+                    toast.warn("you have it in cart");
+                }
+            }
+        }
     };
 
     componentDidMount() {
         this.setState({ isMounted: true, usingAdBlock: this.fakeAdBanner.offsetHeight === 0 }, () => {
+            if (this.state.usingAdBlock)
+                toast.error("disables your adblocker please");
             try {
-                if (this.state.usingAdBlock)
-                    toast.error("disables your adblocker please");
                 let cookies = new Cookies();
                 token = cookies.get("Isl_Creative_pass")["Isl_Token"];
-                this.getGenre();
-                this.getBeats("random");
             } catch (e) {
-                this.props.Redirect();
+                token = Conf.configs.TokenVisitor;
+            } finally {
+                this.getGenre();
+                for (let row_ in this.props.beats) {this.AddForPlay(row_, "link_beats")};
             }
         });
     }
@@ -387,11 +455,11 @@ class Beats extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card-body no-p">
+                                <div className="card-body no-p" style={{height: 400}}>
                                     <div className="tab-content" id="v-pills-tabContent1">
                                         <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
                                             {this.props.beats ?
-                                                <div className="playlist pl-lg-3 pr-lg-3">
+                                                <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
                                                     {this.props.beats.map((val, index) =>
                                                         <div className="m-1 my-4" key={index}>
                                                             <div className="d-flex align-items-center">
@@ -438,7 +506,7 @@ class Beats extends Component {
                                                                                 )}
                                                                             </Feed>
                                                                         </FacebookProvider>
-                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"/>
+                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => this.LikeOrFollow("like", val.id)}/>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-2 d-none d-sm-block">
@@ -620,23 +688,47 @@ class Beats extends Component {
                                             <small> Best beatmaker on the ISL platform </small>
                                         </div>
                                     </div>
-                                    <ul className="playlist list-group list-group-flush">
-                                        <li className="list-group-item">
-                                            <div className="d-flex align-items-center">
-                                                <div className="col-10">
-                                                    <figure className="avatar avatar-md float-left  mr-3 mt-1">
-                                                        <img src={TestImg} alt="" />
-                                                    </figure>
-                                                    <h6>Zoe Foe</h6>
-                                                    <small>5 Beats</small>
+                                    <ul className="playlist list-group bg-black list-group-flush" style={{height: 500}}>
+                                        {this.props.top_beatmaker ? this.props.top_beatmaker.map((val, index) =>
+                                            <li className="list-group-item" key={index}>
+                                                <div className="d-flex align-items-center">
+                                                    <div className="col-10">
+                                                        <figure className="avatar avatar-md float-left  mr-3 mt-1">
+                                                            <img src={val.photo || TestImg} alt=""/>
+                                                        </figure>
+                                                        <h6>{val.name}</h6>
+                                                        <small>5 Beats</small>
+                                                    </div>
+                                                    <i className="icon-user-plus ml-auto" onClick={() => this.LikeOrFollow("follow", val.id)}/>
+                                                    <a href="#" className="ml-auto"><i
+                                                        className="icon-user-circle"/></a>
                                                 </div>
-                                                <a href="#" className="ml-auto"><i className="icon-user-plus" /></a>
-                                                <a href="#" className="ml-auto"><i className="icon-user-circle" /></a>
-                                            </div>
-                                        </li>
+                                            </li>
+                                            ): null}
                                     </ul>
                                 </div>
                             </div>
+                    </div>
+                    <Suggestion ToPlay={this.props.ToPlay}/>
+                    <button type="button" id="LoginRequire" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" hidden={true}/>
+                    <div aria-disabled={"false"} className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">You are not logged</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">x</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    Already have an account? Login or SignUp
+                                </div>
+                                <div className="modal-footer">
+                                    <a href="/login"><button type="button" className="btn btn-secondary"> Login </button></a>
+                                    <a href="/register"><button type="button" className="btn btn-success"> Register </button></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 <div>
@@ -662,7 +754,7 @@ class Beats extends Component {
 const mapStateToProps = state => {
     return {
         beats: state.beats.beats,
-        pricing: state.profile.pricing
+        top_beatmaker: state.beats.top_beatmaker,
     };
 };
 
@@ -673,9 +765,6 @@ const mapDispatchToProps = dispatch => {
         },
         updateBeats: (data) => {
             dispatch({type: "UPDATE_BEATS_LIST", data: data})
-        },
-        resetBeats: (data) => {
-            dispatch({type: "RESET_BEATS", data: data})
         }
     };
 };

@@ -1,9 +1,20 @@
 const initState = {
     beats: [],
+    top_beatmaker: [],
+    top_beats: [],
+    latest_beats: [],
+    discovery_beats: [],
+    new_beatMaker: [],
+    isl_playlist: []
 };
 
 const beatsReducer = (state = initState, action) => {
     switch (action.type) {
+        case "ADD_BEATS":
+            return {
+                ...state,
+                beats: action.data
+            };
         case "UPDATE_BEATS_LIST":
             for (let row in state.beats) {
                 if (parseInt(row) === parseInt(action.data.index)) {
@@ -14,14 +25,82 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 beats: [...state.beats]
             };
-        case "ADD_BEATS":
+
+        case "ADD_TOP_BEATMAKER":
             return {
-                beats: action.data
+                ...state,
+                top_beatmaker: action.data
             };
-        case "RESET_BEATS":
+        case "ADD_NEW_BEATMAKER":
             return {
-                beats: []
+                ...state,
+                new_beatMaker: action.data
             };
+
+        case "ADD_TOP_BEATS":
+            return {
+                ...state,
+                top_beats: action.data
+            };
+        case "UPDATE_TOP_BEATS_LIST":
+            for (let row in state.top_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) {
+                    state.top_beats[row]['link'] = action.data.link
+                }
+            }
+            return {
+                ...state,
+                top_beats: [...state.top_beats]
+            };
+
+        case "ADD_LATEST_BEATS":
+            return {
+                ...state,
+                latest_beats: action.data
+            };
+        case "UPDATE_LATEST_BEATS_LIST":
+            for (let row in state.latest_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) {
+                    state.latest_beats[row]['link'] = action.data.link
+                }
+            }
+            return {
+                ...state,
+                latest_beats: [...state.latest_beats]
+            };
+
+        case "ADD_DISCOVERY_BEATS":
+            return {
+                ...state,
+                discovery_beats: action.data
+            };
+        case "UPDATE_DISCOVERY_BEATS_LIST":
+            for (let row in state.discovery_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) {
+                    state.discovery_beats[row]['link'] = action.data.link
+                }
+            }
+            return {
+                ...state,
+                discovery_beats: [...state.discovery_beats]
+            };
+
+        case "ADD_ISL_PLAYLIST":
+            return {
+                ...state,
+                isl_playlist: action.data
+            };
+        case "UPDATE_ISL_PLAYLIST_LIST":
+            for (let row in state.isl_playlist) {
+                if (parseInt(row) === parseInt(action.data.index)) {
+                    state.isl_playlist[row]['link'] = action.data.link
+                }
+            }
+            return {
+                ...state,
+                isl_playlist: [...state.isl_playlist]
+            };
+
         default:
             return state;
     }

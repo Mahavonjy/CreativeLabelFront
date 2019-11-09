@@ -8,6 +8,7 @@
     "node_modules"
   ],
   "configs": {
-    "ServerApi": "http://127.0.0.1:5000/"
+    "ServerApi": "http://130.211.211.223/",
+    "TokenVisitor": "visitor"
   }
 }

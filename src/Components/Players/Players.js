@@ -12,6 +12,7 @@ import './styles/_player.scss'
 import './styles/_variables.scss'
 import './styles/style.css'
 import axios from 'axios';
+import Suggestion from "../Beats/Suggestion";
 
 let _this;
 
@@ -23,7 +24,8 @@ class Players extends Component {
             IsPlaying: false, progressbar: 0, VolumeBar: 100, VolumeUp: true,
             currentTime: '00:00', totalTime: '00:00', loop: false, shuffle: false,
             component: null, listInfo: null, tmp: 0, listen: false, listen_min: null,
-            isMounted: false , userPlaylist: [], songId: null,
+            isMounted: false , userPlaylist: [], songId: null, pres_listened: false,
+            listened: false
         };
         this.history = [];
         this.player = new Audio();
@@ -76,7 +78,6 @@ class Players extends Component {
                     this.player.play();
                 } else {
                     beats.playPlayer(this.state.currentIndex , "beats");
-
                 }
             })
         } else if (this.state.songId) {
@@ -97,6 +98,8 @@ class Players extends Component {
                     beats.changeIndex(this.state.currentIndex)
                 } else if (this.state.component === "profile") {
                     profile.changeIndex(this.state.currentIndex)
+                } else if (this.state.component === "suggestion") {
+                    Suggestion.changeIndex(this.state.currentIndex)
                 }
                 this.startPlayer()
             })
@@ -111,6 +114,8 @@ class Players extends Component {
                         beats.changeIndex(this.state.currentIndex)
                     } else if (this.state.component === "profile") {
                         profile.changeIndex(this.state.currentIndex)
+                    } else if (this.state.component === "suggestion") {
+                        Suggestion.changeIndex(this.state.currentIndex)
                     }
                     this.startPlayer()
                 });
@@ -127,6 +132,8 @@ class Players extends Component {
                     beats.changeIndex(this.state.currentIndex)
                 } else if (this.state.component === "profile") {
                     profile.changeIndex(this.state.currentIndex)
+                } else if (this.state.component === "suggestion") {
+                    Suggestion.changeIndex(this.state.currentIndex)
                 }
                 this.startPlayer()
             });
@@ -154,7 +161,7 @@ class Players extends Component {
             let temp = this.state.totalTime.split(':');
             let tot = parseInt(temp[0]) * 60 + parseInt(temp[1]);
             this.setState({listen_min: Math.floor(( (( tot * 40 ) / 10 ) * 70 ) / 100) });
-            this.setState({listen: true})
+            this.setState({listen: true, listened: false, pres_listened: false})
         }
     };
 
@@ -178,7 +185,6 @@ class Players extends Component {
     };
 
     toggleShuffle = () => {
-        console.log("i am here");
         this.setState({shuffle: !this.state.shuffle})
     };
 
@@ -192,6 +198,24 @@ class Players extends Component {
         })
     };
 
+    SongListened = (listened, pres_listened) => {
+        let cookies = new Cookies();
+        let headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': "*"
+        };
+        try {
+            headers['Isl-Token'] = cookies.get("Isl_Creative_pass")["Isl_Token"]
+        } catch (e) {
+            headers['Isl-Token'] = Conf.configs.TokenVisitor;
+        } finally {
+            if (listened)
+                axios.put(Conf.configs.ServerApi + "api/medias/listened/" + this.state.songId, {}, {headers: headers}).then(resp => null);
+            else if (pres_listened)
+                axios.put(Conf.configs.ServerApi + "api/medias/pres_listened/" + this.state.songId, {}, {headers: headers}).then(resp => null)
+        }
+    };
+
     componentDidMount(index, type_, component) {
         this.setState({ isMounted: true , component: component});
         const that = this;
@@ -203,9 +227,22 @@ class Players extends Component {
             this.state.list = this.props.profile_beats;
             this.state.listInfo = null;
             this.startPlayer(index);
-        } else {
-            this.state.list = this.props.Playlist;
-            this.state.listInfo = this.props.PlaylistInfo;
+        } else if (type_ === "latest_beats" && component === "suggestion") {
+            this.state.list = this.props.latest_beats;
+            this.state.listInfo = null;
+            this.startPlayer(index);
+        } else if (type_ === "top_beats" && component === "suggestion") {
+            this.state.list = this.props.top_beats;
+            this.state.listInfo = null;
+            this.startPlayer(index);
+        } else if (type_ === "discovery_beats" && component === "suggestion") {
+            this.state.list = this.props.discovery_beats;
+            this.state.listInfo = null;
+            this.startPlayer(index);
+        } else if (type_ === "isl_playlist" && component === "suggestion") {
+            this.state.list = this.props.isl_playlist;
+            this.state.listInfo = null;
+            this.startPlayer(index);
         }
         this.player.addEventListener('volumechange', function() {
             that.setState({VolumeBar: this.volume * 100})
@@ -216,8 +253,13 @@ class Players extends Component {
             that.setState({progressbar: position * 100});
             that.convertTime(Math.round(this.currentTime));
             that.totalTime(Math.round(this.duration));
-            if (that.state.tmp === that.state.listen_min) {
-                console.log("balance la fonction pour dire qu'il a ecouter")
+            if (that.state.tmp === 10 && !that.state.pres_listened) {
+                _this.setState({pres_listened: true});
+                _this.SongListened(false, true);
+            }
+            if (that.state.tmp === that.state.listen_min && !that.state.listened) {
+                _this.setState({listened: true});
+                _this.SongListened(true);
             }
             if (this.ended) {
                 that.state.tmp = 0;
@@ -263,6 +305,7 @@ class Players extends Component {
             console.log(err.response)
         })
     };
+
     render() {
         return (
             <div>
@@ -273,7 +316,7 @@ class Players extends Component {
                             <a href="#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
                         </div>
                         <div className="p-3">
-                            <ul id="playlist" className="playlist">
+                            <ul id="playlist" className="playlist" style={{height: "100%"}}>
                                 {this.state.songId ? this.props.beats.map((val, index) =>
                                     <li className="list-group-item my-1" key={index}>
                                         <div className="no-ajaxy media-url">
@@ -368,33 +411,33 @@ class Players extends Component {
                                     </a>
                                 </li>
                                 {/* User Account*/}
-                                <li className="dropup custom-dropdown user user-menu ">
-                                    <a href="#" className="nav-link" data-toggle="dropdown">
-                                        {this.state.songId ?
-                                            <figure className="avatar">
-                                                <img src={this.state.currentImage} alt="" />
-                                            </figure> :
-                                            <figure className="avatar">
-                                                <i className="icon-user-circle" />
-                                            </figure>}
-                                    </a>
-                                    <div className="dropdown-menu p-4 dropdown-menu-right">
-                                        <div className="row box justify-content-between my-2">
-                                            <div className="col text-center">
-                                                <a className="ajaxifyPage" href="saved.html">
-                                                    <i className="icon icon-heart s-24" />
-                                                    <div className="pt-1">Follow</div>
-                                                </a>
-                                            </div>
-                                            <div className="col text-center">
-                                                <a className="ajaxifyPage" href="profile.html">
-                                                    <i className="icon-user-4  s-24" />
-                                                    <div className="pt-1">Profile</div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                {/*<li className="dropup custom-dropdown user user-menu ">*/}
+                                {/*    <a href="#" className="nav-link" data-toggle="dropdown">*/}
+                                {/*        {this.state.songId ?*/}
+                                {/*            <figure className="avatar">*/}
+                                {/*                <img src={this.state.currentImage} alt="" />*/}
+                                {/*            </figure> :*/}
+                                {/*            <figure className="avatar">*/}
+                                {/*                <i className="icon-user-circle" />*/}
+                                {/*            </figure>}*/}
+                                {/*    </a>*/}
+                                {/*    <div className="dropdown-menu p-4 dropdown-menu-right">*/}
+                                {/*        <div className="row box justify-content-between my-2">*/}
+                                {/*            <div className="col text-center">*/}
+                                {/*                <a className="ajaxifyPage" href="saved.html">*/}
+                                {/*                    <i className="icon icon-heart s-24" />*/}
+                                {/*                    <div className="pt-1">Follow</div>*/}
+                                {/*                </a>*/}
+                                {/*            </div>*/}
+                                {/*            <div className="col text-center">*/}
+                                {/*                <a className="ajaxifyPage" href="profile.html">*/}
+                                {/*                    <i className="icon-user-4  s-24" />*/}
+                                {/*                    <div className="pt-1">Profile</div>*/}
+                                {/*                </a>*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</li>*/}
                             </ul>
                         </div>
                     </div>
@@ -415,7 +458,12 @@ class Players extends Component {
 const mapStateToProps = state => {
     return {
         beats: state.beats.beats,
-        profile_beats: state.profile.beats
+        profile_beats: state.profile.beats_,
+        top_beats: state.beats.top_beats,
+        latest_beats: state.beats.latest_beats,
+        discovery_beats: state.beats.discovery_beats,
+        new_beatMaker: state.beats.new_beatMaker,
+        isl_playlist: state.beats.isl_playlist
     };
 };
 

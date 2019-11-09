@@ -3,11 +3,17 @@ const initState = {
     PlaListInfo : null,
     playMusic: false,
     redirect: false,
-    loading: false
+    loading: false,
+    auth: false
 };
 
 const PlaylistHomeReducer = (state = initState, action) => {
     switch (action.type) {
+        case "EDIT_AUTH":
+            return {
+                ...state,
+                auth: action.data
+            };
         case "ADD_PLAYLIST_INFO":
             return {
                 ...state,

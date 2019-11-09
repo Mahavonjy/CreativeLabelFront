@@ -93,6 +93,7 @@ class Register extends Component {
         } else {
             return (
                 <main>
+                    <a className="btn fab-right-top right-side absolute shadow btn-primary m-t-150" href="/home" ><i className="icon-home-1"/></a>
                     <div ref={r => (this.fakeAdBanner = r)}
                          style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
                          className="adBanner"/>

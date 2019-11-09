@@ -179,6 +179,7 @@ class Login extends Component {
             return (
                 <div id="primary" className="p-t-b-100 height-full">
                     {!this.state.changePass && !this.state.ResetPassword && !this.state.visibility && !this.state.visible ? <ToastContainer/>: null}
+                    <a className="btn fab-right-top right-side absolute shadow btn-primary m-t-50" href="/home"><i className="icon-home-1"/></a>
 
                     <Modal visible={this.state.changePass} width="400" height="300" animationType='slide'>
                         <ToastContainer position="top-center"

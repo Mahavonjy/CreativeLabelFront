@@ -48,6 +48,8 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
     "react-share": "^3.0.1",
+    "react-stripe-checkout": "^2.6.3",
+    "react-stripe-elements": "^5.1.0",
     "react-toastify": "^5.3.2",
     "react-tooltip": "^3.11.1",
     "react-twitter-share-link": "^1.2.1",
@@ -78,5 +80,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://130.211.211.223"
+  "homepage": "https://192.168.1.19"
 }

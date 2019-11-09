@@ -30,6 +30,18 @@ class Profile extends Component {
         _this = this;
     }
 
+    static pausePlayer() {
+        _this.pausePlayer(false);
+    }
+
+    static playPlayer(index, type_) {
+        _this.Play(index, type_);
+    }
+
+    static changeIndex(index) {
+        _this.setState({index: index});
+    }
+
     togglePopupEditProfile = (success) => {
         this.setState({PopupEditProfile: !this.state.PopupEditProfile}, () => {
             if (success === 1) {
@@ -75,7 +87,6 @@ class Profile extends Component {
 
     componentDidMount() {
         this.setState({ isMounted: true });
-        this.getMedia();
         this.IfRequest();
     }
 
@@ -209,7 +220,17 @@ class Profile extends Component {
                                                 <p className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an artist</p>
                                                 <p className="dropdown-item"><i className="icon-user-4 mr-3"/>Become an manager</p>
                                             </div> : null }
-                                        <p className="dropdown-item" ><i className="icon-settings-6 mr-3"/>settings</p>
+                                        <li className="dropdown-item list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i className="icon icon-cogs text-blue mr-3" />
+                                                <small className="mr-3">Send Notification by mail</small>
+                                            </div>
+                                            <div className="material-switch">
+                                                <input id="sw2" name="someSwitchOption001" type="checkbox" />
+                                                <label htmlFor="sw2" className="bg-secondary" />
+                                            </div>
+                                        </li>
+                                        {/*<p className="dropdown-item" ><i className="icon-settings-6 mr-3"/>settings</p>*/}
                                     </div>
                                 </div>
                                 {this.props.role === 'Artist' ?
@@ -486,9 +507,9 @@ class Profile extends Component {
                                                 {/*</div>*/}
                                                 <div className="tab-pane fade  show active" id="w2-tab3" role="tabpanel"
                                                      aria-labelledby="w2-tab3">
-                                                    {this.props.beats ?
+                                                    {this.props.beats_ ?
                                                         <div className="playlist pl-lg-3 pr-lg-3">
-                                                            {this.props.beats.map((val, index) =>
+                                                            {this.props.beats_.map((val, index) =>
                                                                 <div className="m-1 my-4" key={index}>
                                                                     <div className="d-flex align-items-center">
                                                                         <div className="col-1">
@@ -613,23 +634,12 @@ class Profile extends Component {
                 </div>
             );
     }
-    static pausePlayer() {
-        _this.pausePlayer(false);
-    }
-
-    static playPlayer(index, type_) {
-        _this.Play(index, type_);
-    }
-
-    static changeIndex(index) {
-        _this.setState({index: index});
-    }
 }
 
 const mapStateToProps = state => {
     return {
         profile_info: state.profile.profile_info,
-        beats: state.profile.beats,
+        beats_: state.profile.beats_,
         role: state.profile.role,
     };
 };

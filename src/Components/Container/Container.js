@@ -6,17 +6,31 @@ import Register from "../Register/Register";
 import NotFound from "../NotFound/NotFound";
 import Preference from "../Preference/SongGenre";
 import PreviewScreen from "../PreviewScreen/PreviewScreen";
+import Profile from "../Profile/Profile";
 
 class Container extends Component {
     render() {
         return (
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/" component={PreviewScreen} />
-                        <Route path="/home" component={Home} />
-                        <Route path="/login" component={Login} />
-                        <Route path="/register" component={Register} />
-                        <Route path="/preference" component={Preference} />
+                        <Route exact path="/">
+                            <PreviewScreen/>
+                        </Route>
+                        <Route path="/home">
+                            <Home Page="/home"/>
+                        </Route>
+                        <Route path="/login">
+                            <Login/>
+                        </Route>
+                        <Route path="/register">
+                            <Register/>
+                        </Route>
+                        <Route path="/preference">
+                            <Preference/>
+                        </Route>
+                        <Route path="/profile">
+                            <Home Page="profile"/>
+                        </Route>
                         <Route component={NotFound}/>
                     </Switch>
                 </BrowserRouter>
