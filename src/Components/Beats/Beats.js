@@ -242,7 +242,14 @@ class Beats extends Component {
                 token = Conf.configs.TokenVisitor;
             } finally {
                 this.getGenre();
-                for (let row_ in this.props.beats) {this.AddForPlay(row_, "link_beats")};
+                if (!this.props.ready) {
+                    for (let row_ in this.props.beats) {this.AddForPlay(row_, "link_beats")};
+                    this.props.readyBeats()
+                } else {
+                    for (let row_ in this.props.beats) {
+                        this.setState(prevState => ({link_beats: {...prevState.link_beats, [row_]: true}}));
+                    }
+                }
             }
         });
     }
@@ -755,6 +762,7 @@ const mapStateToProps = state => {
     return {
         beats: state.beats.beats,
         top_beatmaker: state.beats.top_beatmaker,
+        ready: state.beats.ready,
     };
 };
 
@@ -765,6 +773,9 @@ const mapDispatchToProps = dispatch => {
         },
         updateBeats: (data) => {
             dispatch({type: "UPDATE_BEATS_LIST", data: data})
+        },
+        readyBeats: () => {
+            dispatch({type: "BEATS_READY"})
         }
     };
 };

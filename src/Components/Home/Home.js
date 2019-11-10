@@ -56,6 +56,21 @@ class Home extends Component {
         }
     };
 
+    NotOnline = (headers_) => {
+        axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers_}).then(resp => {
+            this.props.addBeats(resp.data["random"]);
+            this.props.topBeats(resp.data["top_beats"]);
+            this.props.newBeatMaker(resp.data["new_beatMaker"]);
+            this.props.topBeatMaker(resp.data["top_beatmaker"]);
+            this.props.latestBeats(resp.data["latest_beats"]);
+            this.props.discoveryBeats(resp.data["discovery_beats"]);
+            this.props.islBeats(resp.data["isl_playlist"]);
+            this.setState({loading: false})
+        }).catch(err => {
+            console.log(err)
+        });
+    };
+
     componentDidMount() {
         this.setState({isMounted: true }, () => {
             this.setState({loading: true}, () => {
@@ -79,7 +94,7 @@ class Home extends Component {
                                     this.props.profile_add_albums(resp.data['albums']);
                                     axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
                                         this.props.profile_initialisation_contract(resp.data);
-                                        this.setState({loading: false})
+                                        this.NotOnline(headers)
                                     }).catch(err => {
                                         this.ifConnectionError(err);
                                     })
@@ -99,19 +114,7 @@ class Home extends Component {
                         'Access-Control-Allow-Origin': "*",
                         'Isl-Token': Conf.configs.TokenVisitor
                     };
-                } finally {
-                    axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers}).then(resp => {
-                        this.props.addBeats(resp.data["random"]);
-                        this.props.topBeats(resp.data["top_beats"]);
-                        this.props.newBeatMaker(resp.data["new_beatMaker"]);
-                        this.props.topBeatMaker(resp.data["top_beatmaker"]);
-                        this.props.latestBeats(resp.data["latest_beats"]);
-                        this.props.discoveryBeats(resp.data["discovery_beats"]);
-                        this.props.islBeats(resp.data["isl_playlist"]);
-                        this.setState({loading: false})
-                    }).catch(err => {
-                        console.log(err)
-                    });
+                    this.NotOnline(headers)
                 }
             });
         });
@@ -273,6 +276,7 @@ class Home extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.Home.auth,
+        contract: state.profile.contract,
     };
 };
 

@@ -6,7 +6,6 @@ import Register from "../Register/Register";
 import NotFound from "../NotFound/NotFound";
 import Preference from "../Preference/SongGenre";
 import PreviewScreen from "../PreviewScreen/PreviewScreen";
-import Profile from "../Profile/Profile";
 
 class Container extends Component {
     render() {
@@ -27,9 +26,6 @@ class Container extends Component {
                         </Route>
                         <Route path="/preference">
                             <Preference/>
-                        </Route>
-                        <Route path="/profile">
-                            <Home Page="profile"/>
                         </Route>
                         <Route component={NotFound}/>
                     </Switch>

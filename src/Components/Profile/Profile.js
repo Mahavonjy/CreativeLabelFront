@@ -86,6 +86,7 @@ class Profile extends Component {
     togglePopupRequestToArtist = () => {this.setState({PopupRequestToArtist: 0});};
 
     componentDidMount() {
+        console.log("I am here no?")
         this.setState({ isMounted: true });
         this.IfRequest();
     }

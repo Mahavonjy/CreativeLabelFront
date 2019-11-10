@@ -95,18 +95,60 @@ class Suggestion extends Component {
     };
 
     componentDidMount() {
-        for (let row_ in this.props.latest_beats) {
-            this.AddForPlay(row_, "link_latest_beats")
+        if (!this.props.ready_latest_beats) {
+            for (let row_ in this.props.latest_beats) {
+                this.AddForPlay(row_, "link_latest_beats");
+                if (parseInt(row_) === parseInt(this.props.latest_beats.length) -1)
+                    this.props.readyLatestBeats()
+            }
+        } else {
+            for (let row_ in this.props.latest_beats) {
+                this.setState(prevState => ({link_latest_beats: {...prevState.link_latest_beats, [row_]: true}}))
+            }
         }
-        for (let row_ in this.props.discovery_beats) {
-            this.AddForPlay(row_, "link_discovery_beats")
+
+        if (!this.props.ready_discovery_beats) {
+            for (let row_ in this.props.discovery_beats) {
+                this.AddForPlay(row_, "link_discovery_beats");
+                if (parseInt(row_) === parseInt(this.props.discovery_beats.length) -1)
+                    this.props.readyDiscoveryBeats()
+            }
+        } else {
+            for (let row_ in this.props.discovery_beats) {
+                this.setState(prevState => ({link_discovery_beats: {...prevState.link_discovery_beats, [row_]: true}}))
+            }
         }
-        for (let row_ in this.props.top_beats) {
-            this.AddForPlay(row_, "link_top_beats")
+
+        if (!this.props.ready_top_beats) {
+            for (let row_ in this.props.top_beats) {
+                this.AddForPlay(row_, "link_top_beats")
+                if (parseInt(row_) === parseInt(this.props.top_beats.length) -1)
+                    this.props.readyTopBeats()
+            }
+        } else {
+            for (let row_ in this.props.top_beats) {
+                this.setState(prevState => ({link_top_beats: {...prevState.link_top_beats, [row_]: true}}))
+            }
         }
-        for (let row_ in this.props.isl_playlist) {
-            this.AddForPlay(row_, "link_isl_playlist")
+
+        if (!this.props.ready_isl_playlist) {
+            for (let row_ in this.props.isl_playlist) {
+                this.AddForPlay(row_, "link_isl_playlist");
+                if (parseInt(row_) === parseInt(this.props.isl_playlist.length) -1)
+                    this.props.readyIslBeats()
+            }
+        } else {
+            for (let row_ in this.props.isl_playlist) {
+                this.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [row_]: true}}))
+            }
         }
+
+        console.log(
+            this.props.ready_latest_beats,
+            this.props.ready_top_beats,
+            this.props.ready_discovery_beats,
+            this.props.ready_isl_playlist,
+            )
     }
 
     render() {
@@ -364,7 +406,11 @@ const mapStateToProps = state => {
         latest_beats: state.beats.latest_beats,
         discovery_beats: state.beats.discovery_beats,
         new_beatMaker: state.beats.new_beatMaker,
-        isl_playlist: state.beats.isl_playlist
+        isl_playlist: state.beats.isl_playlist,
+        ready_top_beats: state.beats.ready_top_beats,
+        ready_latest_beats: state.beats.ready_latest_beats,
+        ready_discovery_beats: state.beats.ready_discovery_beats,
+        ready_isl_playlist: state.beats.ready_isl_playlist,
     };
 };
 
@@ -381,6 +427,18 @@ const mapDispatchToProps = dispatch => {
         },
         updateIslBeats: (data) => {
             dispatch({type: "UPDATE_ISL_PLAYLIST_LIST", data: data})
+        },
+        readyTopBeats: () => {
+            dispatch({type: "TOP_BEATS_READY"})
+        },
+        readyLatestBeats: () => {
+            dispatch({type: "LATEST_BEATS_READY"})
+        },
+        readyDiscoveryBeats: () => {
+            dispatch({type: "DISCOVERY_BEATS_READY"})
+        },
+        readyIslBeats: () => {
+            dispatch({type: "ISL_BEATS_READY"})
         },
     };
 };

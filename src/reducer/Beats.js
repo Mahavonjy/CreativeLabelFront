@@ -5,11 +5,41 @@ const initState = {
     latest_beats: [],
     discovery_beats: [],
     new_beatMaker: [],
-    isl_playlist: []
+    isl_playlist: [],
+    ready: false,
+    ready_top_beats: false,
+    ready_latest_beats: false,
+    ready_discovery_beats: false,
+    ready_isl_playlist: false
 };
 
 const beatsReducer = (state = initState, action) => {
     switch (action.type) {
+        case "TOP_BEATS_READY":
+            return {
+                ...state,
+                ready_top_beats: true
+            };
+        case "LATEST_BEATS_READY":
+            return {
+                ...state,
+                ready_latest_beats: true
+            };
+        case "DISCOVERY_BEATS_READY":
+            return {
+                ...state,
+                ready_discovery_beats: true
+            };
+        case "ISL_BEATS_READY":
+            return {
+                ...state,
+                ready_isl_playlist: true
+            };
+        case "BEATS_READY":
+            return {
+                ...state,
+                ready: true
+            };
         case "ADD_BEATS":
             return {
                 ...state,
@@ -25,7 +55,6 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 beats: [...state.beats]
             };
-
         case "ADD_TOP_BEATMAKER":
             return {
                 ...state,
@@ -36,7 +65,6 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 new_beatMaker: action.data
             };
-
         case "ADD_TOP_BEATS":
             return {
                 ...state,
@@ -52,7 +80,6 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 top_beats: [...state.top_beats]
             };
-
         case "ADD_LATEST_BEATS":
             return {
                 ...state,
@@ -68,7 +95,6 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 latest_beats: [...state.latest_beats]
             };
-
         case "ADD_DISCOVERY_BEATS":
             return {
                 ...state,
@@ -84,7 +110,6 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 discovery_beats: [...state.discovery_beats]
             };
-
         case "ADD_ISL_PLAYLIST":
             return {
                 ...state,
