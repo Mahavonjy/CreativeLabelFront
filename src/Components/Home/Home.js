@@ -15,6 +15,9 @@ import './Home.css';
 import Loader from 'react-loader-spinner'
 import {connect} from "react-redux";
 import Modal from "react-awesome-modal";
+import OneBeat from "../Beats/OneBeat";
+import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import {toast} from "react-toastify";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let cookies = new Cookies();
@@ -25,7 +28,10 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isMounted: false, loading: false, redirect: false
+            isMounted: false, loading: false, redirect: false,
+            href: window.location.href.split("/"),
+            single_beat: '', all_artist_beats: [], beats_similar: [],
+            profile_checked: '', user_data: '', user_beats: []
         };
     }
 
@@ -49,7 +55,7 @@ class Home extends Component {
             } else if (err.response.data === "token invalid") {
                 this.logout();
             } else {
-                console.log(err)
+                this.logout();
             }
         } catch (e) {
             this.logout();
@@ -65,7 +71,33 @@ class Home extends Component {
             this.props.latestBeats(resp.data["latest_beats"]);
             this.props.discoveryBeats(resp.data["discovery_beats"]);
             this.props.islBeats(resp.data["isl_playlist"]);
-            this.setState({loading: false})
+            if (this.state.href[this.state.href.length - 2] === "CheckThisBeat") {
+                axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
+                    this.setState({
+                        single_beat: resp.data['single_beat'],
+                        all_artist_beats: resp.data['all_artist_beats'],
+                        beats_similar: resp.data['similar_beats']
+                    }, () => {
+                        this.setState({loading: false})
+                    })
+                }).catch(err => {
+                    toast.error("Connection Error")
+                })
+            } else if (this.state.href[this.state.href.length - 2] === "isl_artist_profile") {
+                axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
+                    this.setState({
+                        profile_checked: resp.data['profile_checked'],
+                        user_data: resp.data['user_data'],
+                        user_beats: resp.data['user_beats']
+                    }, () => {
+                        this.setState({loading: false})
+                    })
+                }).catch(err => {
+                    toast.error("Connection Error")
+                })
+            } else {
+                this.setState({loading: false})
+            }
         }).catch(err => {
             console.log(err)
         });
@@ -73,50 +105,54 @@ class Home extends Component {
 
     componentDidMount() {
         this.setState({isMounted: true }, () => {
-            this.setState({loading: true}, () => {
-                try {
-                    headers = {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': "*",
-                        'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-                    };
-                    axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
-                        this.props.beats_initialisation_pricing(resp.data);
-                        axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
-                            this.props.profile_initialisation_info(resp.data['my_profile']);
-                            this.props.profile_initialisation_role(resp.data['role']);
-                            this.props.profile_initialisation_follower(resp.data['my_followers']);
-                            this.props.profile_initialisation_following(resp.data['my_followings']);
-                            if (resp.data['role'] === "Artist") {
-                                axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp =>{
-                                    this.props.profile_add_beats(resp.data['beats']);
-                                    this.props.profile_add_single(resp.data['music']);
-                                    this.props.profile_add_albums(resp.data['albums']);
-                                    axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
-                                        this.props.profile_initialisation_contract(resp.data);
-                                        this.NotOnline(headers)
+            if (this.props.beats.length === 0) {
+                this.setState({loading: true}, () => {
+                    try {
+                        headers = {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': "*",
+                            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+                        };
+                        axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
+                            this.props.beats_initialisation_pricing(resp.data);
+                            axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
+                                this.props.profile_initialisation_info(resp.data['my_profile']);
+                                this.props.profile_initialisation_role(resp.data['role']);
+                                this.props.profile_initialisation_follower(resp.data['my_followers']);
+                                this.props.profile_initialisation_following(resp.data['my_followings']);
+                                if (resp.data['role'] === "Artist") {
+                                    axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
+                                        this.props.profile_add_beats(resp.data['beats']);
+                                        this.props.profile_add_single(resp.data['music']);
+                                        this.props.profile_add_albums(resp.data['albums']);
+                                        axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
+                                            this.props.profile_initialisation_contract(resp.data);
+                                            this.NotOnline(headers)
+                                        }).catch(err => {
+                                            this.ifConnectionError(err);
+                                        })
                                     }).catch(err => {
-                                        this.ifConnectionError(err);
+                                        console.log(err.response)
                                     })
-                                }).catch(err => {
-                                    console.log(err.response)
-                                })
-                            }
+                                }
+                            }).catch(err => {
+                                this.ifConnectionError(err);
+                            });
                         }).catch(err => {
                             this.ifConnectionError(err);
                         });
-                    }).catch(err => {
-                        this.ifConnectionError(err);
-                    });
-                } catch (e) {
-                    headers = {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': "*",
-                        'Isl-Token': Conf.configs.TokenVisitor
-                    };
-                    this.NotOnline(headers)
-                }
-            });
+                    } catch (e) {
+                        headers = {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': "*",
+                            'Isl-Token': Conf.configs.TokenVisitor
+                        };
+                        this.NotOnline(headers)
+                    }
+                });
+            } else {
+                console.log()
+            }
         });
     }
 
@@ -125,17 +161,21 @@ class Home extends Component {
     }
 
     logout = () => {
-        if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
-            document.getElementById("LoginRequire").click();
-            this.props.home_edit_auth(true);
-        } else {
-            axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: headers}).then(resp => {
-                cookies.remove("Isl_Creative_pass");
-                this.setState({redirect: true});
-            }).catch(err => {
-                cookies.remove("Isl_Creative_pass");
-                this.setState({redirect: true});
-            })
+        try {
+            if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
+                document.getElementById("LoginRequire").click();
+                this.props.home_edit_auth(true);
+            } else {
+                axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: headers}).then(resp => {
+                    cookies.remove("Isl_Creative_pass");
+                    this.setState({redirect: true});
+                }).catch(err => {
+                    cookies.remove("Isl_Creative_pass");
+                    window.location = "/home"
+                })
+            }
+        } catch (e) {
+            window.location = "/home"
         }
     };
 
@@ -161,7 +201,7 @@ class Home extends Component {
                         <div className="modal-dialog" role="document">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">You are not logged</h5>
+                                    <h5 className="modal-title" id="exampleModalLabel">Nouveau chez ISL Creative? Créer votre compte ISL Creative</h5>
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">x</span>
                                     </button>
@@ -170,8 +210,8 @@ class Home extends Component {
                                     Already have an account? Login or SignUp
                                 </div>
                                 <div className="modal-footer">
-                                    <a href="/login"><button type="button" className="btn btn-secondary"> Login </button></a>
-                                    <a href="/register"><button type="button" className="btn btn-success"> Register </button></a>
+                                    <a href="/login"><button type="button" className="btn btn-secondary"> Connexion </button></a>
+                                    <a href="/register"><button type="button" className="btn btn-success"> Inscription </button></a>
                                 </div>
                             </div>
                         </div>
@@ -259,6 +299,15 @@ class Home extends Component {
                                         <Beats Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/>} />
                                     <Route path="/Cart" component={() =>
                                         <Cart Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/>} />
+                                    <Route path="/CheckThisBeat/:id(\d+)" component={() =>
+                                        <OneBeat Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}
+                                                 SingleBeat={this.state.single_beat} ArtistBeats={this.state.all_artist_beats}
+                                                 SimilarBeats={this.state.beats_similar}/>}/>
+                                    <Route path="/isl_artist_profile/:id(\d+)" component={() =>
+                                        <OtherProfile Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}
+                                                      ProfileChecked={this.state.profile_checked} UserData={this.state.user_data}
+                                                      UserBeats={this.state.user_beats}/>}/>
+                                    {/*profile_checked: '', user_data: '', user_beats: []*/}
                                     {/*<Route path="/Playlist" component={() =>*/}
                                     {/*    <PlayList Redirect={() => this.setState({redirect: true})}*/}
                                     {/*              IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/>} />*/}
@@ -277,6 +326,7 @@ const mapStateToProps = state => {
     return {
         auth: state.Home.auth,
         contract: state.profile.contract,
+        beats: state.beats.beats,
     };
 };
 

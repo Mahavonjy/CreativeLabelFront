@@ -128,6 +128,11 @@ class EditBeats extends Component {
             console.log(err.response)
         })
     };
+
+    componentDidMount() {
+        console.log("here")
+    }
+
     render() {
         return (
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">

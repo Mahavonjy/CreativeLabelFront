@@ -4,6 +4,7 @@ import TestImg from "../../assets/img/demo/a2.jpg";
 import axios from "axios";
 import Conf from "../../Config/tsconfig";
 import IslPlayer from "../Players/Players";
+import {Link} from 'react-router-dom';
 
 let _this;
 
@@ -142,13 +143,6 @@ class Suggestion extends Component {
                 this.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [row_]: true}}))
             }
         }
-
-        console.log(
-            this.props.ready_latest_beats,
-            this.props.ready_top_beats,
-            this.props.ready_discovery_beats,
-            this.props.ready_isl_playlist,
-            )
     }
 
     render() {
@@ -157,7 +151,7 @@ class Suggestion extends Component {
                 <aside className="col-md-4">
                     <div className="card mb-3">
                         <div className="card-header transparent b-b">
-                            <strong>Latest Beats</strong>
+                            <strong>Les dernières créations</strong>
                         </div>
                         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 300}}>
                             {this.props.latest_beats ? this.props.latest_beats.map((val, index) =>
@@ -189,8 +183,10 @@ class Suggestion extends Component {
                                             <figure className="avatar-md float-left  mr-3 mt-1">
                                                 <img className="r-3" src={val.photo || TestImg} alt=""/>
                                             </figure>
-                                            <h6>{val.title}</h6>
-                                            <small>{val.artist}</small>
+                                            <Link to={'CheckThisBeat/' + val.id}>
+                                                <h6>{val.title}</h6>
+                                                <small>{val.artist}</small>
+                                            </Link>
                                         </div>
                                         <div className="ml-auto text-red">
                                             <i className="icon-opencart"/>
@@ -202,20 +198,26 @@ class Suggestion extends Component {
                     </div>
                     <div className="card mb-3">
                         <div className="card-header transparent b-b">
-                            <strong>New BeatMakers</strong>
+                            <strong>Nouveaux Beatmakers</strong>
                         </div>
                         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 300}}>
                             {this.props.new_beatMaker ? this.props.new_beatMaker.map((val, index) =>
                                 <li className="list-group-item" key={index}>
                                     <div className="d-flex align-items-center">
                                         <div className="col-10">
-                                            <figure className="avatar avatar-md float-left  mr-3 mt-1">
-                                                <img src={val.photo || TestImg} alt=""/>
-                                            </figure>
-                                            <h6>{val.name}</h6>
-                                            <small>5 Albums - 50 Songs</small>
+                                            <Link to={"isl_artist_profile/" + val.id}>
+                                                <figure className="avatar avatar-md float-left  mr-3 mt-1">
+                                                    <img src={val.photo || TestImg} alt=""/>
+                                                </figure>
+                                                <h6>{val.name}</h6>
+                                                <small>5 Albums - 50 Songs</small>
+                                            </Link>
                                         </div>
-                                        <a href="#" className="ml-auto"><i className="icon-more"/></a>
+                                        <div className="ml-auto">
+                                            <Link to={"isl_artist_profile/" + val.id}><i
+                                                className="icon-user-circle text-blue"/>
+                                            </Link>
+                                        </div>
                                     </div>
                                 </li>
                             ) : null}
@@ -234,7 +236,7 @@ class Suggestion extends Component {
                                     </div>
                                     <div>
                                         <div>
-                                            <h4 className="text-primary">African discovery</h4>
+                                            <h4 className="text-primary">Les découvertes</h4>
                                         </div>
                                         <small> African style to be highlighted</small>
                                         <div className="mt-2">
@@ -246,7 +248,7 @@ class Suggestion extends Component {
                                 <small className="my-3">Beats Performing</small>
                                 <ul className="playlist list-group bg-dark list-group-flush" style={{height: 185}}>
                                     {this.props.discovery_beats ? this.props.discovery_beats.map((val, index) =>
-                                        <li className="list-group-item">
+                                        <li className="list-group-item" key={index}>
                                             <div className="d-flex align-items-center">
                                                 <div>
                                                     {this.state.link_discovery_beats[index] ?
@@ -272,7 +274,9 @@ class Suggestion extends Component {
                                                     }
                                                 </div>
                                                 <div className="col-10">
-                                                    <small>{val.title}</small>
+                                                    <Link to={'CheckThisBeat/' + val.id}>
+                                                        <small>{val.title}</small>
+                                                    </Link>
                                                 </div>
                                                 <small className="ml-auto"><i
                                                     className="icon-opencart text-red"/></small>
@@ -329,7 +333,9 @@ class Suggestion extends Component {
                                                     }
                                                 </div>
                                                 <div className="col-10">
-                                                    <small>{val.title}</small>
+                                                    <Link to={'CheckThisBeat/' + val.id}>
+                                                        <small >{val.title}</small>
+                                                    </Link>
                                                 </div>
                                                 <small className="ml-auto"><i
                                                     className="icon-opencart text-red"/></small>
@@ -383,7 +389,9 @@ class Suggestion extends Component {
                                         }
                                     </div>
                                     <div className="col-6">
-                                        <h6>{val.title}</h6>
+                                        <Link to={'CheckThisBeat/' + val.id}>
+                                            <h6>{val.title}</h6>
+                                        </Link>
                                     </div>
                                     <span className="badge badge-primary badge-pill ml-auto"> {val.time}</span>
                                     <a href="#" className="ml-auto"><i className="icon-share-1"/></a>

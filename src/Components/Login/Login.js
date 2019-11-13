@@ -8,6 +8,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import LoginFacebook from "../Facebook/Facebook";
 import LoginGoogle from "../Google/Google";
 
+let headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+};
+
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -40,7 +45,7 @@ class Login extends Component {
                 'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
             };
             axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp =>{
+                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp => {
                     this.setState({redirect: true});
                 }).catch(err =>{
                     if (err.response.data === "no choice music genre") {
@@ -48,7 +53,6 @@ class Login extends Component {
                         this.setState({loading: false});
                         this.setState({redirect: true});
                     }
-                    toast.error(err.response.data);
                 })
             }).catch(err => {
                 console.log(err.response)
@@ -58,10 +62,7 @@ class Login extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*"
-        };
+
         let data = {
             email: this.state.email,
             password: this.state.password,
@@ -101,12 +102,11 @@ class Login extends Component {
             email: this.state.email,
             keys: this.state.keys,
         };
-
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(response =>{
+        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data, {headers: headers}).then(response => {
             this.setState({visible: false});
+            toast.success("validate, you can log now")
         }).catch(error =>{
-            let response = JSON.stringify(error.response.data);
-            toast.error(response.replace(/"/g, ''));
+            toast.error(error.response.data);
         })
     };
 
@@ -191,7 +191,7 @@ class Login extends Component {
                                         pauseOnVisibilityChange
                                         draggable
                                         pauseOnHover/>
-                        <form onSubmit={this.changeMyPassword} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                        <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                             <div className="col text-center">
                                 <div className="body">
                                     <div className="custom-float">
@@ -208,10 +208,10 @@ class Login extends Component {
                                                value={this.state.confirm_password} onChange={this.changeConfirmPassword}
                                                required/>
                                     </div>
-                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4">Send</button>
+                                    <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.changeMyPassword}>Send</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </Modal>
 
                     <Modal visible={this.state.ResetPassword} width="400" height="100" animationType='slide'>
@@ -248,7 +248,7 @@ class Login extends Component {
                     </Modal>
 
                     <Modal visible={this.state.visible} width="400" height="100" animationType='slide'>
-                        <form onSubmit={this.verifyKeysSubmit} className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                        <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                             <div className="col text-center">
                                 <div className="body">
                                     <div className="custom-float">
@@ -257,10 +257,10 @@ class Login extends Component {
                                                name="keys" value={this.state.keys}
                                                onChange={this.changeKeys} required/>
                                     </div>
-                                <button className="btn btn-outline-success btn-sm pl-4 pr-4">Send</button>
+                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysSubmit}>Send</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </Modal>
 
                     <div className="container">
@@ -274,7 +274,7 @@ class Login extends Component {
                                 <div className="mt-5">
                                     <div className="row grid">
                                         <div className="col-md-7 card p-5">
-                                            <form className="form-material" onSubmit={this.handleSubmit}>
+                                            <div className="form-material">
                                                 {/* Input */}
                                                 <div className="body">
                                                     <div className="form-group form-float">
@@ -294,16 +294,16 @@ class Login extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="row ml-1">
-                                                    <input type="submit"
-                                                           className="btn btn-outline-primary btn-sm pl-4 pr-4"
+                                                    <input onClick={this.handleSubmit}
+                                                           className="btn btn-outline-primary btn-sm"
                                                            value="Log In"/>
-                                                        <LoginFacebook/>
-                                                        <LoginGoogle/>
+                                                        {/*<LoginFacebook/>*/}
+                                                        {/*<LoginGoogle/>*/}
                                                     </div>
 
                                                 </div>
                                                 {/* #END# Input */}
-                                            </form>
+                                            </div>
                                             <div className="pt-5">
                                                 <small>
                                                     <a

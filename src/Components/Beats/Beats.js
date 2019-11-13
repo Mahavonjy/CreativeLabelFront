@@ -13,6 +13,7 @@ import Modal from "react-awesome-modal";
 import {FacebookLogin} from "react-facebook-login-component";
 import { FacebookProvider, Feed } from 'react-facebook';
 import Suggestion from "./Suggestion";
+import { Link } from 'react-router-dom';
 
 let token = "";
 let _this;
@@ -275,7 +276,7 @@ class Beats extends Component {
                                         <div className="col-12 col-lg-10 animated">
                                             <div className="xv-slider-content clearfix color-white">
                                                 <h1 className="s-64 mt-5 font-weight-lighter">Creative Beats</h1>
-                                                <p className="s-24 font-weight-lighter">The exclusive buy & sell plateform for african beats <br /> For music professionals (Artists, Beatmakers, labels...)  </p>
+                                                <p className="s-24 font-weight-lighter"> Des créations orginales qui font la différence  <br /> Pour les professionnels de la musique (artistes,producteurs, labels...)  </p>
                                             </div>
                                         </div>
                                     </div>
@@ -296,14 +297,14 @@ class Beats extends Component {
                                             <div className="d-flex">
                                                 <i className="icon-heartbeat s-36 mr-3  mt-2"/>
                                                 <div>
-                                                    <h4>All Beats</h4>
-                                                    <p>Choose your type of beats, listen and buy</p>
+                                                    <h4>Les instrus afro-tropicales</h4>
+                                                    <p>Toutes les créactions</p>
                                                     <div className="mt-8 d-flex">
                                                         <div className="dropdown">
                                                             <button className="btn btn-outline-info btn-fab-md pl-md-6 pr-md-6" type="button"
                                                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                                     aria-expanded="false">
-                                                                <i className="icon-hand-peace-o"/>Offers
+                                                                <i className="icon-hand-peace-o"/>Offres
                                                             </button>
                                                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{width: "300px"}}>
                                                                 <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
@@ -430,7 +431,7 @@ class Beats extends Component {
                                                             <button className="btn btn-outline-secondary btn-fab-md pl-md-4 pr-md-4" type="button"
                                                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                                     aria-expanded="false">
-                                                                <i className="icon-filter"/>Filters
+                                                                <i className="icon-filter"/>Filtres
                                                             </button>
                                                             <div className="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
                                                                 <button className="btn btn-outline-warning btn-fab-md" onClick={() => this.getBeats("random")}>
@@ -497,7 +498,10 @@ class Beats extends Component {
                                                                     <figure className="avatar-md float-left  mr-2">
                                                                         <img className="r-3" src={val.photo} alt="" />
                                                                     </figure>
-                                                                    <h6>{val.title}</h6><small>{val.artist}</small>
+                                                                    <Link to={'CheckThisBeat/' + val.id}>
+                                                                        <h6>{val.title}</h6>
+                                                                        <small className="text-blue">{val.artist}</small>
+                                                                    </Link>
                                                                 </div>
                                                                 <ReactTooltip/>
                                                                 <div className="col-md-5 d-none d-sm-block">
@@ -690,9 +694,9 @@ class Beats extends Component {
                                         </div>
                                         <div>
                                             <div>
-                                                <h4 className="text-primary">Top BeatMaker</h4>
+                                                <h4 className="text-primary">Top Beatmakers</h4>
                                             </div>
-                                            <small> Best beatmaker on the ISL platform </small>
+                                            <small> Classement ISL Creative des Beatmakers </small>
                                         </div>
                                     </div>
                                     <ul className="playlist list-group bg-black list-group-flush" style={{height: 500}}>
@@ -700,15 +704,17 @@ class Beats extends Component {
                                             <li className="list-group-item" key={index}>
                                                 <div className="d-flex align-items-center">
                                                     <div className="col-10">
+                                                        <Link to={"isl_artist_profile/" + val.id}>
                                                         <figure className="avatar avatar-md float-left  mr-3 mt-1">
                                                             <img src={val.photo || TestImg} alt=""/>
                                                         </figure>
                                                         <h6>{val.name}</h6>
                                                         <small>5 Beats</small>
+                                                        </Link>
                                                     </div>
                                                     <i className="icon-user-plus ml-auto" onClick={() => this.LikeOrFollow("follow", val.id)}/>
-                                                    <a href="#" className="ml-auto"><i
-                                                        className="icon-user-circle"/></a>
+                                                    <Link to={"isl_artist_profile/" + val.id} className="ml-auto"><i
+                                                        className="icon-user-circle"/></Link>
                                                 </div>
                                             </li>
                                             ): null}

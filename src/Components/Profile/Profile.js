@@ -86,9 +86,8 @@ class Profile extends Component {
     togglePopupRequestToArtist = () => {this.setState({PopupRequestToArtist: 0});};
 
     componentDidMount() {
-        console.log("I am here no?")
         this.setState({ isMounted: true });
-        this.IfRequest();
+        this.IfRequest()
     }
 
     componentWillUnmount() {this.setState({ isMounted: false });}
@@ -133,23 +132,27 @@ class Profile extends Component {
     };
 
     IfRequest = () => {
-        let new_headers = {
-            'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-        axios.put(Conf.configs.ServerApi + "api/users/update_user_to/artist", {}, {headers: new_headers}).then(resp =>{
-        }).catch(err => {
-            try {
-                if (err.response.data === "wait a few day") {
-                    this.setState({wait: true});
-                } else if (err.response.data === "your request is declined") {
-                    this.setState({decline: true});
+        try {
+            let new_headers = {
+                'Content-Type': 'multipart/form-data',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+            };
+            axios.put(Conf.configs.ServerApi + "api/users/update_user_to/artist", {}, {headers: new_headers}).then(resp =>{
+            }).catch(err => {
+                try {
+                    if (err.response.data === "wait a few day") {
+                        this.setState({wait: true});
+                    } else if (err.response.data === "your request is declined") {
+                        this.setState({decline: true});
+                    }
+                } catch (e) {
+                    console.log("request")
                 }
-            } catch (e) {
-                console.log("request")
-            }
-        });
+            });
+        } catch (e) {
+            this.props.Redirect()
+        }
     };
 
     pausePlayer = (run) => {
@@ -631,7 +634,7 @@ class Profile extends Component {
                         </div>
                     </div>
                     :null}
-                    <EditBeats/>
+                {this.props.contract ? <EditBeats/> : null}
                 </div>
             );
     }
@@ -642,6 +645,7 @@ const mapStateToProps = state => {
         profile_info: state.profile.profile_info,
         beats_: state.profile.beats_,
         role: state.profile.role,
+        contract: state.profile.contract
     };
 };
 

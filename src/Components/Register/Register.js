@@ -40,6 +40,7 @@ class Register extends Component {
         document.getElementById("register").setAttribute("disabled", "disabled");
         if (this.state.password.length < 8) {
             toast.error("Password too short");
+            document.getElementById("register").removeAttribute("disabled");
         } else {
             if (this.state.password === this.state.confirm_password) {
                 let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
@@ -47,26 +48,22 @@ class Register extends Component {
                 this.setState({isActive: true});
                 axios.post(Conf.configs.ServerApi + "api/users/register", data, {headers: headers}).then(response => {
                     this.setState({isActive: false});
-                    const cookies = new Cookies();
-                    cookies.set("Isl_Creative_pass", {
-                        "name": response.data.name,
-                        "email": response.data.email,
-                        "Isl_Token": response.data.token
-                    });
                     toast.success("email send, Check your mailbox");
                     this.setState({visible: true});
                 }).catch(error => {
                     this.setState({isActive: false});
                     if (error.response.data.email) {
                         toast.error(error.response.data.email[0]);
+                        document.getElementById("register").removeAttribute("disabled");
                     } else {
                         let response = JSON.stringify(error.response.data);
                         toast.error(response.replace(/"/g, ''));
+                        document.getElementById("register").removeAttribute("disabled");
                     }
-                    toast.error(error.response.data);
                 })
             } else {
-                toast.error("Passwords Do Not Match")
+                toast.error("Passwords Do Not Match");
+                document.getElementById("register").removeAttribute("disabled");
             }
         }
     };
@@ -77,8 +74,13 @@ class Register extends Component {
             email: this.state.email,
             keys: this.state.keys,
         };
-
         axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(response =>{
+            const cookies = new Cookies();
+            cookies.set("Isl_Creative_pass", {
+                "name": response.data.name,
+                "email": response.data.email,
+                "Isl_Token": response.data.token
+            });
             this.setState({redirect: true});
         }).catch(error =>{
             let response = JSON.stringify(error.response.data);
@@ -97,7 +99,7 @@ class Register extends Component {
                     <div ref={r => (this.fakeAdBanner = r)}
                          style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
                          className="adBanner"/>
-                    {!this.state.visible? <ToastContainer/>: null}
+                    {!this.state.visible ? <ToastContainer/>: null}
                     <LoadingOverlay active={this.state.isActive}
                                     spinner text="I'm sending you confirmation mail ..."
                                     styles={{
@@ -156,7 +158,7 @@ class Register extends Component {
                                                         <div className="form-group form-float">
                                                             <div className="form-line">
                                                                 <input type="text" id="name" className="form-control"
-                                                                       placeholder="Enter your name" name="name"
+                                                                       placeholder="Votre nom" name="name"
                                                                        value={this.state.name}
                                                                        onChange={this.changeName} required/>
                                                             </div>
@@ -164,7 +166,7 @@ class Register extends Component {
                                                         <div className="form-group form-float">
                                                             <div className="form-line">
                                                                 <input type="email" id="email" className="form-control"
-                                                                       placeholder="Enter your email"
+                                                                       placeholder="E-mail"
                                                                        name="email" value={this.state.email}
                                                                        onChange={this.changeEmail} required/>
                                                             </div>
@@ -173,7 +175,7 @@ class Register extends Component {
                                                             <div className="form-line">
                                                                 <input type="password" id="password"
                                                                        className="form-control"
-                                                                       placeholder="At least 8 character"
+                                                                       placeholder="Au moins 8 caractères"
                                                                        name="password" value={this.state.password}
                                                                        onChange={this.changePassword} required/>
                                                             </div>
@@ -182,7 +184,7 @@ class Register extends Component {
                                                             <div className="form-line">
                                                                 <input type="password" id="password"
                                                                        className="form-control"
-                                                                       placeholder="retype your password"
+                                                                       placeholder="Entrez le mot de passe à nouveau"
                                                                        name="confirm_password"
                                                                        value={this.state.confirm_password}
                                                                        onChange={this.changeConfirmPassword} required/>
@@ -191,7 +193,7 @@ class Register extends Component {
                                                         <div className="row ml-1">
                                                             <button type="submit" id="register"
                                                                    className="btn btn-outline-primary btn-sm pl-4 pr-4"
-                                                            >Register</button>
+                                                            >Créer votre compte ISL Creative</button>
                                                             <LoginFacebook/>
                                                             <LoginGoogle/>
                                                         </div>
@@ -200,10 +202,9 @@ class Register extends Component {
                                                 </form>
                                             </div>
                                             <div className="col-md-5  p-5">
-                                                <h1 className="mt-3 font-weight-lighter">Are you already
-                                                    registered?</h1>
+                                                <h1 className="mt-3 font-weight-lighter">Vous possédez déjà un compte?</h1>
                                                 <NavLink to="/login" activeClassName="PageSwitcher__Item--Active"
-                                                         className="PageSwitcher__Item"><button className="btn btn-outline-primary btn-sm pl-4 pr-4">Login</button></NavLink>
+                                                         className="PageSwitcher__Item"><button className="btn btn-outline-primary btn-sm pl-4 pr-4">Identifiez-vous</button></NavLink>
                                             </div>
                                         </div>
                                     </div>

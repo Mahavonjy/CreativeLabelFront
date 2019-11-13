@@ -96,7 +96,7 @@ class SongGenre extends Component {
             }
         }
         if (ex.length < 5) {
-            toast.warn("chosen at least 5 types");
+            toast.warn("Veuillez choisir au moins 5 genres");
         } else {
             let data = {"user_genre_list": ex};
             if (token) {
@@ -181,9 +181,7 @@ class SongGenre extends Component {
                         {this.state.first_array.map((all_music_genres, index) =>
                             <div className="music-genre" key={index} style={{background: `${all_music_genres[0]}`}}>
                                 <div className="top"
-                                     onClick={() => {
-                                         this.BooleanToChange(index)
-                                     }}
+                                     onClick={() => {this.BooleanToChange(index)}}
                                      style={{backgroundImage: `url(${all_music_genres[2].image})`}}
                                 >
                                     <div className="music-wrapper">
