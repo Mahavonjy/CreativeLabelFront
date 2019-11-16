@@ -175,7 +175,7 @@ class EditSingle extends Component {
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
                     <div className="col text-center">
-                        <h4 className="text-green text-monospace">Edit Single</h4>
+                        <h4 className="text-green text-monospace">Add single</h4>
                         <div className="body">
                             <div className="custom-float">
                                 <div className="input-group-prepend">

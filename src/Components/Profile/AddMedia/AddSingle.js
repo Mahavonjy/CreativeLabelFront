@@ -279,28 +279,28 @@ class AddSingle extends Component {
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
                     <div className="col text-center">
-                        <h4 className="text-green text-monospace">upload your beat</h4>
+                        <h4 className="text-green text-monospace"> Uploader vos instrus</h4>
                         <div className="body">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	title *</div>
+                                    <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	Titre *</div>
                                     <input value={this.state.title} onChange={this.changeTitle} id="title" name="title"
                                            className="form-control" type="text" required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	artist *</div>
+                                    <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	Artiste *</div>
                                     <input value={this.state.artist} onChange={this.changeArtist} id="artist"
                                            name="artist" className="form-control" type="text" required disabled={true}/>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text center text-dark" data-tip="if you want tag an artist"><i className="icon-user"/>&nbsp;	artist tag</div>
+                                    <div className="input-group-text center text-dark" data-tip="if you want tag an artist"><i className="icon-user"/>&nbsp;	Tags</div>
                                     <input value={this.state.artist_tag} onChange={this.changeArtistTag} id="artist"
                                            name="artist" className="form-control" type="text" required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Your beats genre"><i className="icon-text-width"/>&nbsp;	genre *</div>
+                                    <div className="input-group-text text-dark" data-tip="Your beats genre"><i className="icon-text-width"/>&nbsp;	Genre *</div>
                                     <input id="genre" name="genre" className="form-control"
                                            value={this.state.genre} onChange={this.changeGenre} list="music-genre" required/>
                                     <datalist id="music-genre">
@@ -310,7 +310,7 @@ class AddSingle extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="For now, it's only beats type"><i className="icon-text-width"/>&nbsp;	type</div>
+                                    <div className="input-group-text text-dark" data-tip="For now, it's only beats type"><i className="icon-text-width"/>&nbsp;	Type</div>
                                     <input id="type" name="type" className="form-control"
                                            value={this.state.genre_musical} onChange={this.changeGenreMusical}
                                            list="music-type" required disabled/>
@@ -321,7 +321,7 @@ class AddSingle extends Component {
                                 </div>
                                 {this.state.beats ?
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                        <div className="input-group-text text-dark" data-tip="Your beats bpm"><i className="icon-stack-exchange"/>&nbsp;	bpm</div>
+                                        <div className="input-group-text text-dark" data-tip="Your beats bpm"><i className="icon-stack-exchange"/>&nbsp;	Bpm</div>
                                         <input value={this.state.bpm} onChange={this.changeBpm}
                                                id="bpm" name="bpm" className="form-control" type="number"/>
                                     </div>
@@ -329,12 +329,12 @@ class AddSingle extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Upload here your beats_name.mp3"><i className="icon-music"/>&nbsp;	mp3 *</div>
+                                    <div className="input-group-text text-dark" data-tip="Upload here your beats_name.mp3"><i className="icon-music"/>&nbsp;	Mp3 *</div>
                                     <input onChange={this.uploadFile} id="picture" name="picture"
                                            className="form-control" type="file"  required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Upload here your beats photo"><i className="icon-picture-o"/>&nbsp; photo</div>
+                                    <div className="input-group-text text-dark" data-tip="Upload here your beats photo"><i className="icon-picture-o"/>&nbsp; Photo</div>
                                     <input onChange={this.uploadPic} id="picture" name="picture"
                                            className="form-control" type="file" required/>
                                 </div>
@@ -343,12 +343,12 @@ class AddSingle extends Component {
                                 <div>
                                     <div className="custom-float">
                                         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                            <div className="input-group-text text-dark" data-tip="Upload here your beats_name.wave"><i className="icon-music"/>&nbsp;	wave_file *</div>
+                                            <div className="input-group-text text-dark" data-tip="Upload here your beats_name.wave"><i className="icon-music"/>&nbsp;	Fichier wav *</div>
                                             <input onChange={this.uploadWaveFile} id="wave" name="wave"
                                                    className="form-control" type="file"  required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                            <div className="input-group-text text-dark" data-tip="Upload here your beats stems"><i className="icon-music"/>&nbsp;	stems_folder</div>
+                                            <div className="input-group-text text-dark" data-tip="Upload here your beats stems"><i className="icon-music"/>&nbsp;	Dossier stems (fichier zip,rar...)</div>
                                             <input onChange={this.uploadStemsFile} id="stems" name="stems"
                                                    className="form-control" type="file"  required/>
                                         </div>
@@ -359,7 +359,7 @@ class AddSingle extends Component {
                                 <div style={{display: "flex"}}>
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='basic_price'><i className="icon-money"/>basic<small className="text-danger">*</small></div>
+                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='basic_price'><i className="icon-money"/>Standard<small className="text-danger">*</small></div>
                                             <div className="input-group-text text-light unique-color-dark" id="basic_north">
                                                 <p className="center" id="north_basic" onClick={(e) => this.ChangeStyle(e)}>
                                                     {this.props.pricing['basic']['north']} $
@@ -375,7 +375,7 @@ class AddSingle extends Component {
 
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='silver_price'><i className="icon-money"/>silver<small className="text-danger">*</small></div>
+                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='silver_price'><i className="icon-money"/>Silver<small className="text-danger">*</small></div>
                                             <div className="input-group-text text-light unique-color-dark" id="silver_north">
                                                 <p className="center" id="north_silver" onClick={(e) => this.ChangeStyle(e)}>
                                                     {this.props.pricing['silver']['north']} $
@@ -391,7 +391,7 @@ class AddSingle extends Component {
 
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='gold_price'><i className="icon-money"/>gold<small className="text-danger">*</small></div>
+                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='gold_price'><i className="icon-money"/>Gold<small className="text-danger">*</small></div>
                                             <div className="input-group-text text-light unique-color-dark" id="gold_north">
                                                 <p className="center" id="north_gold" onClick={(e) => this.ChangeStyle(e)}>
                                                     {this.props.pricing['gold']['north']} $
@@ -407,7 +407,7 @@ class AddSingle extends Component {
 
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='platinum_price'>platinum</div>
+                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='platinum_price'>Platinum</div>
                                             <div className="input-group-text text-light unique-color-dark" id="platinum_north">
                                                 <p className="center" id="north_platinum" onClick={(e) => this.ChangeStyle(e)}>
                                                     {this.props.pricing['platinum']['north']} $
@@ -425,12 +425,12 @@ class AddSingle extends Component {
                                 :null}
                             <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
-                                    <div className="input-group-text text-dark" data-tip="If you want to add an description for you beats"><i className="icon-crosshairs"/>&nbsp;	description</div>
+                                    <div className="input-group-text text-dark" data-tip="If you want to add an description for you beats"><i className="icon-crosshairs"/>&nbsp;	Description</div>
                                     <textarea value={this.state.description} onChange={this.changeDescription}
-                                              id="description" name="description" className="form-control" placeholder={"Add text"}/>
+                                              id="description" name="description" className="form-control" placeholder={"Ajouter une description"}/>
                                 </div>
                             </div>
-                            <button id="add-music" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> this.handleSubmit(e)}>Add</button>
+                            <button id="add-music" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> this.handleSubmit(e)}>Enregistrer</button>
                         </div>
                     </div>
                 </div>

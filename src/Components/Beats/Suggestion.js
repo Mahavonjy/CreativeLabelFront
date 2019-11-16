@@ -152,6 +152,7 @@ class Suggestion extends Component {
                     <div className="card mb-3">
                         <div className="card-header transparent b-b">
                             <strong>Les dernières créations</strong>
+							<br/>Ecouter les instrus afro tropicales sorties récemment
                         </div>
                         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 300}}>
                             {this.props.latest_beats ? this.props.latest_beats.map((val, index) =>
@@ -199,6 +200,7 @@ class Suggestion extends Component {
                     <div className="card mb-3">
                         <div className="card-header transparent b-b">
                             <strong>Nouveaux Beatmakers</strong>
+							<br/> Les beatmakers qui rejoignent ISL Creative 
                         </div>
                         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 300}}>
                             {this.props.new_beatMaker ? this.props.new_beatMaker.map((val, index) =>
@@ -238,7 +240,7 @@ class Suggestion extends Component {
                                         <div>
                                             <h4 className="text-primary">Les découvertes</h4>
                                         </div>
-                                        <small> African style to be highlighted</small>
+                                        <small> Des instrus uniques pour donner de la singularité à vos projets</small>
                                         <div className="mt-2">
                                             <i className="icon-clock-o mr-1"/>
                                             I'ts time for all Africa
@@ -354,9 +356,9 @@ class Suggestion extends Component {
                             </div>
                             <div>
                                 <div>
-                                    <h4 className="text-primary">ISL Playlist</h4>
+                                    <h4 className="text-primary">Playlist ISL</h4>
                                 </div>
-                                <small> this playlist is for you and me </small>
+                                <small> La playlist pour vous </small>
                                 <div className="mt-2">
                                     <i className="icon-clock-o mr-1"> </i> to see
                                 </div>

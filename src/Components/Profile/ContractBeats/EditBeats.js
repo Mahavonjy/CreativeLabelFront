@@ -141,22 +141,22 @@ class EditBeats extends Component {
                     <div className="card-header pb-0">
                         <div className="d-flex justify-content-between">
                             <div className="align-self-center">
-                                <h4>Custom your beats contract</h4>
+                                <h4>Personnaliser les contrats</h4>
                             </div>
                             <div className="align-self-center">
                                 <ul className="nav nav-pills mb-3" role="tablist">
                                     <li className="nav-item">
                                         <a className="nav-link active show" id="w4--tab1" data-toggle="tab" href="#w4-tab1" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">
-                                            basic</a>
+                                            Standard</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="w4--tab2" data-toggle="tab" href="#w4-tab2" role="tab" aria-controls="tab2" aria-selected="false">silver</a>
+                                        <a className="nav-link" id="w4--tab2" data-toggle="tab" href="#w4-tab2" role="tab" aria-controls="tab2" aria-selected="false">Silver</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="w4--tab3" data-toggle="tab" href="#w4-tab3" role="tab" aria-controls="tab3" aria-selected="false">gold</a>
+                                        <a className="nav-link" id="w4--tab3" data-toggle="tab" href="#w4-tab3" role="tab" aria-controls="tab3" aria-selected="false">Gold</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="w4--tab4" data-toggle="tab" href="#w4-tab4" role="tab" aria-controls="tab4" aria-selected="false">platinum</a>
+                                        <a className="nav-link" id="w4--tab4" data-toggle="tab" href="#w4-tab4" role="tab" aria-controls="tab4" aria-selected="false">Platinum</a>
                                     </li>
                                 </ul>
                             </div>
@@ -169,7 +169,7 @@ class EditBeats extends Component {
                                     <div className="col-md-8">
                                         <div className="custom-float">
                                             <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	north price *</div>
+                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
                                                 <input value={this.state.basic_north_price} onChange={this.changeBasicNorthPrice} id="basic_north_price" name="basic_north_price"
                                                        className="form-control" type="text" required/>
                                             </div>
@@ -180,18 +180,18 @@ class EditBeats extends Component {
                                             </div>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of radio station *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de diffusion Radio & TV *</small>
                                             <input value={this.state.basic_number_radio_station} id="basic_number_radio_station"
                                                    onChange={this.changeBasicRadioStation} name="basic_number_radio_station" className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of distribution copies *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de copie distribuée *</small>
                                             <input value={this.state.basic_number_of_distribution_copies} onChange={this.changeBasicDistributionCopies}
                                                    id="basic_number_of_distribution_copies" name="basic_number_of_distribution_copies"
                                                    className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb of audio stream *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb de stream *</small>
                                             <input value={this.state.basic_number_audio_stream} onChange={this.changeBasicAudioStream}
                                                    id="basic_number_audio_stream" name="basic_number_audio_stream" className="form-control"
                                                    type="number" required/>
@@ -200,13 +200,13 @@ class EditBeats extends Component {
                                     <div className="col-md-4">
                                         <div className="card">
                                             <div className="card-header transparent">
-                                                <strong> Your basic settings </strong>
+                                                <strong> Paramètres Standard </strong>
                                             </div>
                                             <div className="card-body p-0">
                                                 <ul className="list-group no-b">
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-check-circle purple-text" />enable
+                                                            <i className="icon icon-check-circle purple-text" />Activer l'offre Standard
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="basic_enabled" name="basic_enabled" type="checkbox" onChange={this.changeBasicEnabled} checked={!!this.state.basic_enable}/>
@@ -215,7 +215,7 @@ class EditBeats extends Component {
                                                     </li>
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-eyeglasses text-blue" />unlimited
+                                                            <i className="icon icon-eyeglasses text-blue" />Activer l'offre unlimited
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="unlimited" name="unlimited" type="checkbox" disabled={true}/>
@@ -229,7 +229,7 @@ class EditBeats extends Component {
                                 </div>
 
                                 <button className="col text-center btn btn-outline-info btn-sm pl-md-4 pr-md-4" id="basic_contract"
-                                        onClick={(e)=> this.handleSubmit(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
+                                        onClick={(e)=> this.handleSubmit(e)} style={{marginTop: 25, marginBottom: 25}}>Enregistrer</button>
 
                             </div>
                             <div className="tab-pane fade text-center p-5" id="w4-tab2" role="tabpanel" aria-labelledby="w4-tab2">
@@ -237,7 +237,7 @@ class EditBeats extends Component {
                                     <div className="col-md-8">
                                         <div className="custom-float">
                                             <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	north price *</div>
+                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
                                                 <input value={this.state.silver_north_price} onChange={this.changeSilverNorthPrice} id="silver_north_price" name="silver_north_price"
                                                        className="form-control" type="text" required/>
                                             </div>
@@ -248,18 +248,18 @@ class EditBeats extends Component {
                                             </div>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of radio station *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp; nb de diffusion Radio & TV *</small>
                                             <input value={this.state.silver_number_radio_station} id="basic_number_radio_station"
                                                    onChange={this.changeSilverRadioStation} name="basic_number_radio_station" className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of distribution copies *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de copie distribuée*</small>
                                             <input value={this.state.silver_number_of_distribution_copies} onChange={this.changeSilverDistributionCopies}
                                                    id="basic_number_of_distribution_copies" name="basic_number_of_distribution_copies"
                                                    className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb of audio stream *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb de stream*</small>
                                             <input value={this.state.silver_number_audio_stream} onChange={this.changeSilverAudioStream}
                                                    id="basic_number_audio_stream" name="basic_number_audio_stream" className="form-control"
                                                    type="number" required/>
@@ -268,13 +268,13 @@ class EditBeats extends Component {
                                     <div className="col-md-4">
                                         <div className="card">
                                             <div className="card-header transparent">
-                                                <strong> Your silver settings </strong>
+                                                <strong> Paramètres Silver </strong>
                                             </div>
                                             <div className="card-body p-0">
                                                 <ul className="list-group no-b">
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-check-circle purple-text" />enable
+                                                            <i className="icon icon-check-circle purple-text" />Activer l'offre Silver
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="silver_enabled" name="silver_enabled" type="checkbox" onChange={this.changeSilverEnabled} checked={!!this.state.silver_enable}/>
@@ -304,7 +304,7 @@ class EditBeats extends Component {
                                     <div className="col-md-8">
                                         <div className="custom-float">
                                             <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	north price *</div>
+                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
                                                 <input value={this.state.gold_north_price} onChange={this.changeGoldNorthPrice} id="gold_north_price" name="gold_north_price"
                                                        className="form-control" type="text" required/>
                                             </div>
@@ -315,18 +315,18 @@ class EditBeats extends Component {
                                             </div>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of radio station *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp; nb de diffusion Radio & TV  *</small>
                                             <input value={this.state.gold_number_radio_station} id="gold_number_radio_station"
                                                    onChange={this.changeGoldRadioStation} name="gold_number_radio_station" className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of distribution copies *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de copie distribuée *</small>
                                             <input value={this.state.gold_number_of_distribution_copies} onChange={this.changeGoldDistributionCopies}
                                                    id="gold_number_of_distribution_copies" name="gold_number_of_distribution_copies"
                                                    className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb of audio stream *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb de stream *</small>
                                             <input value={this.state.gold_number_audio_stream} onChange={this.changeGoldAudioStream}
                                                    id="gold_number_audio_stream" name="gold_number_audio_stream" className="form-control"
                                                    type="number" required/>
@@ -335,13 +335,13 @@ class EditBeats extends Component {
                                     <div className="col-md-4">
                                         <div className="card">
                                             <div className="card-header transparent">
-                                                <strong> Your gold settings </strong>
+                                                <strong> Paramètres Gold </strong>
                                             </div>
                                             <div className="card-body p-0">
                                                 <ul className="list-group no-b">
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-check-circle purple-text" />enable
+                                                            <i className="icon icon-check-circle purple-text" />Activer l'offre Gold
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="silver_enabled" name="silver_enabled" type="checkbox" onChange={this.changeGoldEnabled} checked={!!this.state.gold_enable}/>
@@ -350,7 +350,7 @@ class EditBeats extends Component {
                                                     </li>
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-eyeglasses text-blue" />unlimited
+                                                            <i className="icon icon-eyeglasses text-blue" />Activer l'offre Unlimited 
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="unlimited" name="unlimited" type="checkbox" disabled={true}/>
@@ -371,7 +371,7 @@ class EditBeats extends Component {
                                     <div className="col-md-8">
                                         <div className="custom-float">
                                             <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	north price *</div>
+                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
                                                 <input value={this.state.platinum_north_price} onChange={this.changePlatinumNorthPrice} id="platinum_north_price" name="platinum_north_price"
                                                        className="form-control" type="text" required/>
                                             </div>
@@ -382,18 +382,18 @@ class EditBeats extends Component {
                                             </div>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of radio station *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de diffusion Radio & TV  *</small>
                                             <input value={this.state.platinum_number_radio_station} id="platinum_number_radio_station"
                                                    onChange={this.changePlatinumRadioStation} name="platinum_number_radio_station" className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb of distribution copies *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de copie distribuée  *</small>
                                             <input value={this.state.platinum_number_of_distribution_copies} onChange={this.changePlatinumDistributionCopies}
                                                    id="platinum_number_of_distribution_copies" name="platinum_number_of_distribution_copies"
                                                    className="form-control" type="number" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
-                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb of audio stream *</small>
+                                            <small className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp; nb de stream *</small>
                                             <input value={this.state.platinum_number_audio_stream} onChange={this.changePlatinumAudioStream}
                                                    id="platinum_number_audio_stream" name="platinum_number_audio_stream" className="form-control"
                                                    type="number" required/>
@@ -402,13 +402,13 @@ class EditBeats extends Component {
                                     <div className="col-md-4">
                                         <div className="card">
                                             <div className="card-header transparent">
-                                                <strong> Your platinum settings </strong>
+                                                <strong> Paramètres Platinum </strong>
                                             </div>
                                             <div className="card-body p-0">
                                                 <ul className="list-group no-b">
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-check-circle purple-text" />enable
+                                                            <i className="icon icon-check-circle purple-text" /> Activer l'offre platinum
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="platinum_enabled" name="platinum_enabled" type="checkbox"

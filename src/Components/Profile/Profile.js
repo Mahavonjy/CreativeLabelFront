@@ -243,7 +243,7 @@ class Profile extends Component {
                                             {/*    onClick={() => this.togglePopupAddAlbum(0)}>Add Album*/}
                                             {/*</button>*/}
                                             <button className="btn btn-outline-success btn-sm pl-2 pr-2"
-                                                    onClick={() => this.togglePopupAddSingle(0)}>Add Single
+                                                    onClick={() => this.togglePopupAddSingle(0)}>Ajout de beats 
                                             </button>
                                         </div> : null}
                                     <div className="text-center p-5 mt-5">
@@ -257,14 +257,14 @@ class Profile extends Component {
                                             {this.props.profile_info.email ? this.props.profile_info.email : "Email"}
                                         </div>
                                         <button className="btn btn-outline-primary btn-sm  mt-3 pl-4 pr-4"
-                                                onClick={() => this.togglePopupEditProfile(0)}>Edit
+                                                onClick={() => this.togglePopupEditProfile(0)}>Modifier
                                         </button>
                                     </div>
                                 </div>
                                 <div className="col-md-8">
                                     <div className="p5 b-b">
                                         <div className="pl-8 mt-4">
-                                            <h3>Official Information</h3>
+                                            <h3>Informations personnelles </h3>
                                         </div>
                                         <div className="row">
                                             <div className="col-md-4">
@@ -281,48 +281,48 @@ class Profile extends Component {
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>Gender</h5>
-                                                    <span>{this.props.profile_info.gender ? this.props.profile_info.gender : "Gender"}</span>
+                                                    <h5>Genre</h5>
+                                                    <span>{this.props.profile_info.gender ? this.props.profile_info.gender : "Genre"}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>Birth day</h5>
+                                                    <h5>Anniversaire</h5>
                                                     <span>{this.props.profile_info.birth ? this.props.profile_info.birth : "0000-00-00"}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>Address</h5>
-                                                    <span>{this.props.profile_info.address ? this.props.profile_info.address : "Address"}</span>
+                                                    <h5>Adresse</h5>
+                                                    <span>{this.props.profile_info.address ? this.props.profile_info.address : "Adresse"}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>Phone</h5>
-                                                    <span>{this.props.profile_info.phone ? this.props.profile_info.phone : "Phone"}</span>
+                                                    <h5>Téléphone</h5>
+                                                    <span>{this.props.profile_info.phone ? this.props.profile_info.phone : "Téléphone"}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>Country</h5>
-                                                    <span>{this.props.profile_info.country ? this.props.profile_info.country : "Country"}</span>
+                                                    <h5>Pays</h5>
+                                                    <span>{this.props.profile_info.country ? this.props.profile_info.country : "Pays"}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>Region</h5>
-                                                    <span>{this.props.profile_info.region ? this.props.profile_info.region : "Region"}</span>
+                                                    <h5>Région</h5>
+                                                    <span>{this.props.profile_info.region ? this.props.profile_info.region : "Région"}</span>
                                                 </div>
                                             </div>
                                             <div className="col-md-4">
                                                 <div className="p-4">
-                                                    <h5>City</h5>
-                                                    <span>{this.props.profile_info.city ? this.props.profile_info.city : "City"}</span>
+                                                    <h5>Ville</h5>
+                                                    <span>{this.props.profile_info.city ? this.props.profile_info.city : "Ville"}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>	
                                 </div>
                             </div>
                         </div>
@@ -338,8 +338,8 @@ class Profile extends Component {
                                                     <div className="d-flex">
                                                         <i className="icon-music s-36 mr-3  mt-2"/>
                                                         <div>
-                                                            <h4>Album & Song & Beat</h4>
-                                                            <p>all albums, singles and beats added</p>
+                                                            <h4>Les sorties populaires </h4>
+                                                            <p>Albums, singles & beats </p>
                                                             {this.state.loading ?
                                                                 <div className="preloader-wrapper small active"
                                                                      style={{position: "absolute", right: "50px"}}>
@@ -578,7 +578,7 @@ class Profile extends Component {
                                                                         </div>
                                                                     </div>
                                                                 </div>)}
-                                                        </div> : <h4 className="text-center">Empty</h4>}
+                                                        </div> : <h4 className="text-center">Aucune sortie</h4>}
                                                 </div>
                                             </div>
                                         </div>

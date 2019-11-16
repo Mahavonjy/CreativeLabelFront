@@ -308,59 +308,60 @@ class Beats extends Component {
                                                             </button>
                                                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{width: "300px"}}>
                                                                 <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Basic Lease (MP3) </h5>
-                                                                    <small>• Receive untagged MP3 file</small><br/>
-                                                                    <small>• Non-profit & promotional use only</small><br/>
-                                                                    <small>• Upload to Soundcloud</small><br/>
-                                                                    <small>• Use for non-profit Album + Performances</small><br/>
-                                                                    <small>• Limited to 10,000 non-profitable streams</small><br/>
-                                                                    <small>• Instant delivery</small><br/>
-                                                                    <small>• Must credits : Prod. by [Name of Producer] / ISL Creative</small>
+                                                                    <h5 className="text-center text-green"> Standard (MP3) </h5>
+                                                                    <small>• MP3 (sans voicetag) </small><br/>
+                                                                    <small>• Utilisation non-commerciale & promotionnelle uniquement</small><br/>
+                                                                    <small>• Mise en ligne sur Soundcloud  autorisée</small><br/>
+                                                                    <small>• Utilisation non-commerciale pour Album + Shows</small><br/>
+                                                                    <small>• Limité à 10 000 streams non-monétisés</small><br/>
+                                                                    <small>• 100% libre de droits</small><br/>
+                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
                                                                 </ReactTooltip>
                                                                 <ReactTooltip className="special-color-dark" id='silver_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Silver Lease (MP3 + WAVE) </h5>
+                                                                    <h5 className="text-center text-green"> Silver (MP3 + WAVE) </h5>
 
-                                                                    <small>• Receive untagged MP3 + WAV files</small><br/>
-                                                                    <small>• Profitable – Sell up to 10,000 unit sales</small><br/>
-                                                                    <small>• Upload to Soundcloud, Apple Music, iTunes , Spotify</small><br/>
-                                                                    <small>• Use for profit Album + Performances + Music Video</small><br/>
-                                                                    <small>• Limited to 100,000 streams</small><br/>
-                                                                    <small>• Radio & TV airplays on 3 stations</small><br/>
-                                                                    <small>• Instant delivery</small><br/>
-                                                                    <small>• Must credits : Prod. by [Name of Producer] / ISL Creative</small>
+                                                                    <small>• MP3+ WAV (sans voicetag) </small><br/>
+                                                                    <small>• Utilisation commerciale- jusqu'à 10 000 copies</small><br/>
+                                                                    <small>• Mise en ligne sur Soundcloud, Apple Music, iTunes,Spotify,etc...</small><br/>
+                                                                    <small>• Utilisation commerciale pour album, shows+ clip vidéo
+																	</small><br/>
+                                                                    <small>• Limité à 100,000 streams</small><br/>
+                                                                    <small>• Diffusion TV et Radio limitée à 3 stations</small><br/>
+                                                                    <small>• 100% libre de droits</small><br/>
+                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
                                                                 </ReactTooltip>
                                                                 <ReactTooltip className="special-color-dark" id='gold_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Gold Lease (MP3 + WAVE + STEMS) </h5>
+                                                                    <h5 className="text-center text-green"> Gold (MP3 + WAVE + STEMS) </h5>
 
-                                                                    <small>• Receive untagged MP3 + WAV files+ Tracked-Out files/Stems</small><br/>
-                                                                    <small>• Possibility to mix and re-arrange with stems (trackouts)</small><br/>
-                                                                    <small>• Includes the Silver Lease  features</small><br/>
-                                                                    <small>• Limited to 200,000 streams</small><br/>
-                                                                    <small>• Unlimited Radio & TV airplays</small><br/>
-                                                                    <small>• Instant Delivery</small><br/>
-                                                                    <small>• Must credits : Prod.by [Name of Producer] / ISL Creative</small>
+                                                                    <small>• MP3 + WAV+ Stems (sans voicetag) </small><br/>
+                                                                    <small>• Possibilité de mixer et réarranger avec les stems (trackouts) </small><br/>
+                                                                    <small>• Inclut les caractéristiques de la licence Silver</small><br/>
+                                                                    <small>• Limite de 200,000 streams</small><br/>
+                                                                    <small>• Diffusion TV et Radio illimitée</small><br/>
+                                                                    <small>• 100% libre de droits</small><br/>
+                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
                                                                 </ReactTooltip>
                                                                 <ReactTooltip className="special-color-dark" id='platinum_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Platinum Lease (Unlimited + Exclusive) </h5>
+                                                                    <h5 className="text-center text-green"> Platinum Unlimited) </h5>
 
-                                                                    <small>• Receive untagged MP3 + WAV files + Tracked-Out files/Stems</small><br/>
-                                                                    <small>• Possibility to mix and re-arrange with stems (trackouts)</small><br/>
-                                                                    <small>• Unlimited profitable sales + streams (iTunes, Spotify  etc.)</small><br/>
-                                                                    <small>• Use for unlimited profit Album + Performances + Music Video</small><br/>
-                                                                    <small>• Unlimited TV broadcast + Radio airplay</small><br/>
-                                                                    <small>• Credits : Prod. by [Name of Producer] / Beats Avenue</small>
+                                                                    <small>• MP3 + WAV + Stems (sans voicetag)</small><br/>
+                                                                    <small>• Possibilité de mixer et réarranger avec les stems(trackouts)</small><br/>
+                                                                    <small>• Utilisation commerciale illimitée: ventes + streams (iTunes, Spotify  etc.)</small><br/>
+                                                                    <small>• Utilisation commerciale pour Album+ Shows+ Clip vidéo</small><br/>
+                                                                    <small>• Diffusion illimitée pour TV & Radio</small><br/>
+                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
                                                                 </ReactTooltip>
                                                                 <div className="card">
                                                                     <div className="card-header text-center text-green b-b">
-                                                                        <strong>Price by beatmaker</strong>
+                                                                        <strong>Licences</strong>
                                                                     </div>
                                                                     <ul className="playlist list-group list-group-flush ">
                                                                         <li className="list-group-item" data-tip data-for='basic_price'>
                                                                             <div className="align-items-center text-center text-blue">
                                                                                 <div className="col">
-                                                                                    <h6>Basic Lease</h6>
+                                                                                    <h6>Standard</h6>
                                                                                     <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                    Mp3 Only
+                                                                                    Mp3
                                                                                     </small>
                                                                                 </div>
                                                                                 {/*<div className="ml-auto">*/}
@@ -375,9 +376,9 @@ class Beats extends Component {
                                                                         <li className="list-group-item" data-tip data-for='silver_price'>
                                                                             <div className="d-flex align-items-center text-blue ">
                                                                                 <div className="col">
-                                                                                    <h6>Silver Lease</h6>
+                                                                                    <h6>Silver</h6>
                                                                                     <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                        Mp3 + Wave
+                                                                                        Mp3 + Wav
                                                                                     </small>
                                                                                 </div>
                                                                                 {/*<div className="ml-auto">*/}
@@ -392,9 +393,9 @@ class Beats extends Component {
                                                                         <li className="list-group-item" data-tip data-for='gold_price'>
                                                                             <div className="d-flex align-items-center text-blue ">
                                                                                 <div className="col">
-                                                                                    <h6>Gold Lease</h6>
+                                                                                    <h6>Gold</h6>
                                                                                     <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                        Mp3 + Wave + Stems
+                                                                                        Mp3 + Wav + Stems
                                                                                     </small>
                                                                                 </div>
                                                                                 {/*<div className="ml-auto">*/}
@@ -409,9 +410,9 @@ class Beats extends Component {
                                                                         <li className="list-group-item" data-tip data-for='platinum_price'>
                                                                             <div className="d-flex align-items-center text-blue ">
                                                                                 <div className="col">
-                                                                                    <h6>Platinum Lease</h6>
+                                                                                    <h6>Platinum</h6>
                                                                                     <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                        Unlimited+ Exclusive
+                                                                                     Mp3 + Wav + Stems + Unlimited
                                                                                     </small>
                                                                                 </div>
                                                                                 {/*<div className="ml-auto">*/}
@@ -581,16 +582,16 @@ class Beats extends Component {
                                                                                 <div className="p-lg-5" style={{background:"black", height:"500px"}}>
                                                                                     <div className="mb-3 card no-b p-3">
                                                                                         <div className="card-header transparent b-b">
-                                                                                            <strong>Beats Price</strong>
+                                                                                            <strong>Prix</strong>
                                                                                         </div>
                                                                                         <ul className="playlist list-group list-group-flush">
                                                                                             <li className="list-group-item" >
                                                                                                 <div className="d-flex align-items-center ">
                                                                                                     <div
                                                                                                         className="col-8 ">
-                                                                                                        <h6>Basic Lease</h6>
+                                                                                                        <h6>Standard</h6>
                                                                                                         <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                                            MP3 Only
+                                                                                                            MP3
                                                                                                         </small>
                                                                                                     </div>
                                                                                                     <div className="ml-auto" onClick={(e) => {this.setState({price: val.basic_price, licenses_name: "basic_price", song_id: val.id}
@@ -609,9 +610,9 @@ class Beats extends Component {
                                                                                                     className="d-flex align-items-center ">
                                                                                                     <div
                                                                                                         className="col-8 ">
-                                                                                                        <h6>Silver Lease</h6>
+                                                                                                        <h6>Silver</h6>
                                                                                                         <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                                            MP3 + WAVE
+                                                                                                            MP3 + WAV
                                                                                                         </small>
                                                                                                     </div>
                                                                                                     <div className="ml-auto" onClick={(e) => {this.setState({price: val.silver_price, licenses_name: "silver_price", song_id: val.id}
@@ -630,9 +631,9 @@ class Beats extends Component {
                                                                                                     className="d-flex align-items-center ">
                                                                                                     <div
                                                                                                         className="col-8 ">
-                                                                                                        <h6>Gold Lease</h6>
+                                                                                                        <h6>Gold</h6>
                                                                                                         <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                                            MP3 + WAVE + STEMS
+                                                                                                            MP3 + WAV + STEMS
                                                                                                         </small>
                                                                                                     </div>
                                                                                                     <div className="ml-auto" onClick={(e) => {this.setState({price: val.gold_price, licenses_name: "gold_price", song_id: val.id}
