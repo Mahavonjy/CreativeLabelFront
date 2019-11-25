@@ -7,6 +7,7 @@ import IslPlayer from "../Players/Players";
 import {Link} from 'react-router-dom';
 import ReactTooltip from "react-tooltip";
 import {FacebookProvider, Feed} from "react-facebook";
+import Beats from "./Beats";
 
 let _this;
 
@@ -210,7 +211,7 @@ class Suggestion extends Component {
                                                         )}
                                                     </Feed>
                                                 </FacebookProvider>
-                                                <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => this.LikeOrFollow("like", val.id)}/>
+                                                <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => Beats.LikeOrFollow("like", val.id)}/>
                                             </div>
                                         </div>
                                         <div className="col-sm-2 d-none d-sm-block">
@@ -368,7 +369,7 @@ class Suggestion extends Component {
                                                             )}
                                                         </Feed>
                                                     </FacebookProvider>
-                                                    <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => this.LikeOrFollow("like", val.id)}/>
+                                                    <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => Beats.LikeOrFollow("like", val.id)}/>
                                                 </div>
                                             </div>
                                             <div className="col-sm-2 d-none d-sm-block">
@@ -419,11 +420,10 @@ class Suggestion extends Component {
                                                     <small>5 Albums - 50 Songs</small>
                                                 </Link>
                                             </div>
-                                            <div className="ml-auto">
-                                                <Link to={"isl_artist_profile/" + val.id}><i
-                                                    className="icon-user-circle text-blue"/>
-                                                </Link>
-                                            </div>
+                                            <i className="icon-user-plus ml-auto" onClick={() => Beats.LikeOrFollow("follow", val.id)}/>
+                                            <Link to={"isl_artist_profile/" + val.id} className="ml-auto">
+                                                <i className="icon-user-circle"/>
+                                            </Link>
                                         </div>
                                     </li>
                                 ) : null}

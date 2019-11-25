@@ -25,15 +25,13 @@ class Beats extends Component {
         super(props);
         this.state = {
             genre:'', genre_info: [], beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
-            placeHolder: "Search", sort_by: ["Latest", "Oldest"], sort_placeHolder: "Sort", sort: '',
+            placeHolder: "Search",
             link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null,
         };
         _this = this
     }
 
     changeGenre = (e) => {this.setState({genre: e.target.value}, () => {this.getBeats("genre")})};
-
-    changeSort = (e) => {this.setState({sort: e.target.value}, () => {this.getBeats("sort")})};
 
     AddForPlay = (index, _state) => {
         let new_headers = {
@@ -69,7 +67,7 @@ class Beats extends Component {
         }
     };
 
-    LikeOrFollow = (LikeOrFollow, arg) => {
+    static LikeOrFollow = (LikeOrFollow, arg) => {
         if (token === Conf.configs.TokenVisitor) {
             document.getElementById("LoginRequire").click();
         } else if (LikeOrFollow === "like") {
@@ -119,17 +117,11 @@ class Beats extends Component {
                 url_ = "api/medias/genre/beats/" + this.state.genre;
                 key = "songs"
             }
+
             if (type_ === "random") {
+                console.log("random")
                 url_ = "api/beats/random";
                 key = "random"
-            }
-            if (type_ === "sort" && this.state.sort === "Latest") {
-                url_ = "api/beats/increasing";
-                key = "increasing"
-            }
-            if (type_ === "sort" && this.state.sort === "Oldest") {
-                url_ = "api/beats/descending";
-                key = "descending"
             }
 
             let new_headers = {
@@ -138,20 +130,16 @@ class Beats extends Component {
                 'Isl-Token': token
             };
 
-            axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: new_headers}).then(resp =>{
-                this.props.suggestion_beats(resp.data);
-                axios.get(Conf.configs.ServerApi + url_, {headers: new_headers}).then(resp =>{
-                    const info = resp.data[key];
-                    this.setState({genre: "", sort: ""});
-                    for(let row in info) {info[row]['link'] = ""}
+            axios.get(Conf.configs.ServerApi + url_, {headers: new_headers}).then(resp =>{
+                const info = resp.data[key];
+                this.setState({genre: ""}, () => {
+                    for (let row in info) {info[row]['link'] = ""}
                     this.props.addBeats(info, {"key": true});
                     for (let row_ in this.props.beats) {this.AddForPlay(row_)}
-                }).catch(err => {
-                    console.log(err.response)
-                })
+                });
             }).catch(err => {
                 console.log(err.response)
-            });
+            })
         }
     };
 
@@ -448,15 +436,6 @@ class Beats extends Component {
                                                                     /></div>
                                                                     <datalist id="music-genre">{this.state.genre_info.map((val, index) => <option key={index} value={val}/>)}</datalist>
                                                                 </div>
-                                                                <div className="md-form my-0">
-                                                                    <div className="input-group-text bg-mdb-color">Sort by&nbsp;
-                                                                        <input className="form-control" type="text"
-                                                                               placeholder={this.state.sort_placeHolder}
-                                                                               value={this.state.sort} onChange={this.changeSort}
-                                                                               list="music-sort"
-                                                                        /></div>
-                                                                    <datalist id="music-sort">{this.state.sort_by.map((val, index) => <option key={index} value={val}/>)}</datalist>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -502,7 +481,7 @@ class Beats extends Component {
                                                                     </figure>
                                                                     <Link to={'CheckThisBeat/' + val.id}>
                                                                         <h6>{val.title}</h6>
-                                                                        <small className="text-blue">{val.artist}</small>
+                                                                        <small className="text-red">{val.artist}</small>
                                                                     </Link>
                                                                 </div>
                                                                 <ReactTooltip/>
@@ -519,7 +498,7 @@ class Beats extends Component {
                                                                                 )}
                                                                             </Feed>
                                                                         </FacebookProvider>
-                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => this.LikeOrFollow("like", val.id)}/>
+                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => Beats.LikeOrFollow("like", val.id)}/>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-2 d-none d-sm-block">
@@ -714,7 +693,7 @@ class Beats extends Component {
                                                         <small>5 Beats</small>
                                                         </Link>
                                                     </div>
-                                                    <i className="icon-user-plus ml-auto" onClick={() => this.LikeOrFollow("follow", val.id)}/>
+                                                    <i className="icon-user-plus ml-auto" onClick={() => Beats.LikeOrFollow("follow", val.id)}/>
                                                     <Link to={"isl_artist_profile/" + val.id} className="ml-auto"><i
                                                         className="icon-user-circle"/></Link>
                                                 </div>
