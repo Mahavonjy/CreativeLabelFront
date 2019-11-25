@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Home from "../Home/Home";
-import Login from "../Login/Login";
-import Register from "../Register/Register";
 import NotFound from "../NotFound/NotFound";
-import Preference from "../Preference/SongGenre";
 import PreviewScreen from "../PreviewScreen/PreviewScreen";
 import axios from "axios";
 import Conf from "../../Config/tsconfig";
@@ -71,13 +68,13 @@ class Container extends Component {
                             <Home/>
                         </Route>
                         <Route path="/login">
-                            <Login/>
+                            <Redirect to="/home"/>
                         </Route>
                         <Route path="/register">
-                            <Register/>
+                            <Home/>
                         </Route>
                         <Route path="/preference">
-                            <Preference/>
+                            <Home/>
                         </Route>
                         <Route component={NotFound}/>
                     </Switch>

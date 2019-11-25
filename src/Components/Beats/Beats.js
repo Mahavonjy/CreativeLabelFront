@@ -14,6 +14,7 @@ import {FacebookLogin} from "react-facebook-login-component";
 import { FacebookProvider, Feed } from 'react-facebook';
 import Suggestion from "./Suggestion";
 import { Link } from 'react-router-dom';
+import SignInOrUp from "../SingnInOrUp/SignInOrUp";
 
 let token = "";
 let _this;
@@ -724,26 +725,6 @@ class Beats extends Component {
                             </div>
                     </div>
                     <Suggestion ToPlay={this.props.ToPlay}/>
-                    <button type="button" id="LoginRequire" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" hidden={true}/>
-                    <div aria-disabled={"false"} className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel">
-                        <div className="modal-dialog" role="document">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">You are not logged</h5>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">x</span>
-                                    </button>
-                                </div>
-                                <div className="modal-body">
-                                    Already have an account? Login or SignUp
-                                </div>
-                                <div className="modal-footer">
-                                    <a href="/login"><button type="button" className="btn btn-secondary"> Login </button></a>
-                                    <a href="/register"><button type="button" className="btn btn-success"> Register </button></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </section>
                 <div>
                 </div>

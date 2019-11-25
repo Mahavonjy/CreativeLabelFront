@@ -18,6 +18,9 @@ import Modal from "react-awesome-modal";
 import OneBeat from "../Beats/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import {toast} from "react-toastify";
+import SignInOrUp from "../SingnInOrUp/SignInOrUp";
+import Register from "../Register/Register";
+import Preference from "../Preference/SongGenre";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let cookies = new Cookies();
@@ -31,7 +34,8 @@ class Home extends Component {
             isMounted: false, loading: false, redirect: false,
             href: window.location.href.split("/"),
             single_beat: '', all_artist_beats: [], beats_similar: [],
-            profile_checked: '', user_data: '', user_beats: []
+            profile_checked: '', user_data: '', user_beats: [],
+            logout_class: "icon icon-exit-2 s-24", log_name: "logout"
         };
     }
 
@@ -96,7 +100,10 @@ class Home extends Component {
                     toast.error("Connection Error")
                 })
             } else {
-                this.setState({loading: false})
+                this.setState({loading: false}, () => {
+                    if (this.state.href[this.state.href.length - 1] === "home#LoginRequire")
+                        document.getElementsByClassName("LoginRequire")[0].click();
+                })
             }
         }).catch(err => {
             console.log(err)
@@ -142,12 +149,14 @@ class Home extends Component {
                             this.ifConnectionError(err);
                         });
                     } catch (e) {
-                        headers = {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': "*",
-                            'Isl-Token': Conf.configs.TokenVisitor
-                        };
-                        this.NotOnline(headers)
+                        this.setState({logout_class: "icon icon-login s-24", log_name: "login"}, () => {
+                            headers = {
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': "*",
+                                'Isl-Token': Conf.configs.TokenVisitor
+                            };
+                            this.NotOnline(headers)
+                        });
                     }
                 });
             } else {
@@ -168,20 +177,20 @@ class Home extends Component {
             } else {
                 axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: headers}).then(resp => {
                     cookies.remove("Isl_Creative_pass");
-                    this.setState({redirect: true});
+                    window.location.replace('/home');
                 }).catch(err => {
                     cookies.remove("Isl_Creative_pass");
-                    window.location = "/home"
+                    window.location.replace('/home');
                 })
             }
         } catch (e) {
-            window.location = "/home"
+            window.location.reload()
         }
     };
 
     render() {
         if (this.state.redirect) {
-            return <Redirect to="/login" />
+            return <Redirect to="/home" />
         } else if (this.state.loading) {
             return (
                 <div className="absolute center-center">
@@ -196,22 +205,17 @@ class Home extends Component {
         } else {
             return (
                 <div>
-                    <button type="button" id="LoginRequire" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" hidden={true}/>
-                    <div aria-disabled={"false"} className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel">
-                        <div className="modal-dialog" role="document">
+                    <button type="button" id="LoginRequire" className="btn btn-primary LoginRequire" data-toggle="modal" data-target="#exampleModal" hidden={true}/>
+                    <div aria-disabled={"false"} className="modal fade p-t-b-50" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel">
+                        <div className="modal-dialog p-t-100" role="document">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Nouveau chez ISL Creative? Créer votre compte ISL Creative</h5>
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">x</span>
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    Already have an account? Login or SignUp
-                                </div>
-                                <div className="modal-footer">
-                                    <a href="/login"><button type="button" className="btn btn-secondary"> Connexion </button></a>
-                                    <a href="/register"><button type="button" className="btn btn-success"> Inscription </button></a>
+                                    <SignInOrUp/>
                                 </div>
                             </div>
                         </div>
@@ -238,6 +242,7 @@ class Home extends Component {
                                             {/*    <i className="icon icon-home-1 s-24" /> <span>Music</span>*/}
                                             {/*</li>*/}
                                             <li style={{margin: "0 0 20px 10px"}} onClick={() => {
+
                                                 if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                                                     document.getElementById("LoginRequire").click();
                                                     this.props.home_edit_auth(true);
@@ -245,6 +250,7 @@ class Home extends Component {
                                                     history.push("/Profile");
                                                     this.setState({select: "Profile"})
                                                 }
+
                                             }}>
                                             <i className="icon icon-user s-24" /> <span>Profile</span>
                                         </li>
@@ -283,8 +289,9 @@ class Home extends Component {
                                             {/*}}>*/}
                                             {/*    <i className="icon icon-info s-24" /> <span>About Us</span>*/}
                                             {/*</li>*/}
+
                                             <li style={{margin: "0 0 20px 10px"}} onClick={this.logout}>
-                                                <i className="icon icon-exit-2 s-24" /> <span>Logout</span>
+                                                <i className={this.state.logout_class}/> <span>{this.state.log_name}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -293,20 +300,48 @@ class Home extends Component {
                                     {/*<Route path="/Music" exact component={() =>*/}
                                     {/*    <Music Redirect={() => this.setState({redirect: true})}*/}
                                     {/*           IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/> } />*/}
-                                    <Route path="/Profile" component={() =>
-                                        <Profile Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/>} />
-                                    <Route path="/home" exact component={() =>
-                                        <Beats Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/>} />
-                                    <Route path="/Cart" component={() =>
-                                        <Cart Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/>} />
-                                    <Route path="/CheckThisBeat/:id(\d+)" component={() =>
-                                        <OneBeat Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}
-                                                 SingleBeat={this.state.single_beat} ArtistBeats={this.state.all_artist_beats}
-                                                 SimilarBeats={this.state.beats_similar}/>}/>
-                                    <Route path="/isl_artist_profile/:id(\d+)" component={() =>
-                                        <OtherProfile Redirect={() => this.logout()} IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}
-                                                      ProfileChecked={this.state.profile_checked} UserData={this.state.user_data}
-                                                      UserBeats={this.state.user_beats}/>}/>
+                                    <Route path="/register" exact component={
+                                        () => <Register/>
+                                    } />
+                                    <Route path="/preference" exact component={
+                                        () => <Preference/>
+                                    } />
+                                    <Route path="/Profile" component={
+                                        () => <Profile Redirect={() => this.logout()}
+                                                       IfToken={this.redirectToLogin}
+                                                       ToPlay={this.addToPlaylist}
+                                        />
+                                    } />
+                                    <Route path="/home" exact component={
+                                        () => <Beats Redirect={() => this.logout()}
+                                                     IfToken={this.redirectToLogin}
+                                                     ToPlay={this.addToPlaylist}
+                                        />
+                                    } />
+                                    <Route path="/Cart" component={
+                                        () => <Cart Redirect={() => this.logout()}
+                                                    IfToken={this.redirectToLogin}
+                                                    ToPlay={this.addToPlaylist}
+                                        />
+                                    } />
+                                    <Route path="/CheckThisBeat/:id(\d+)" component={
+                                        () => <OneBeat Redirect={() => this.logout()}
+                                                       IfToken={this.redirectToLogin}
+                                                       ToPlay={this.addToPlaylist}
+                                                       SingleBeat={this.state.single_beat}
+                                                       ArtistBeats={this.state.all_artist_beats}
+                                                       SimilarBeats={this.state.beats_similar}
+                                        />
+                                    }/>
+                                    <Route path="/isl_artist_profile/:id(\d+)" component={
+                                        () => <OtherProfile Redirect={() => this.logout()}
+                                                            IfToken={this.redirectToLogin}
+                                                            ToPlay={this.addToPlaylist}
+                                                            ProfileChecked={this.state.profile_checked}
+                                                            UserData={this.state.user_data}
+                                                            UserBeats={this.state.user_beats}
+                                        />
+                                    }/>
                                     {/*profile_checked: '', user_data: '', user_beats: []*/}
                                     {/*<Route path="/Playlist" component={() =>*/}
                                     {/*    <PlayList Redirect={() => this.setState({redirect: true})}*/}
@@ -314,7 +349,7 @@ class Home extends Component {
                                 </main>
                             </React.Fragment>)}
                         />
-                    </Router>/
+                    </Router>
                     <IslPlayer/>
                 </div>
             );

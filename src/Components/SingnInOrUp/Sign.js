@@ -1,6 +1,9 @@
-let right = $('.right');
-let left = $('.left');
+import $ from 'jquery';
 
+let right = document.getElementsByClassName("right");
+let left = document.getElementsByClassName("left");
+
+// document.getElementsByClassName("r-btn").click(console.log("clicked"));
 $('.r-btn').on('click', function(event){
     right.addClass('r-active').removeClass('r-inactive');
     right.css('transform', 'rotate(-31deg) translate(-650px, 115px)');
@@ -25,19 +28,4 @@ $('.l-btn').on('click', function(event){
     left.addClass('l-active').removeClass('l-inactive');
     left.css('transform', 'rotate(-31deg) translate(-660px, -184px)');
     left.css('transition', '0.4s ease-in-out');
-});
-
-$(document).on('click', '.pass-view', function(event){
-    let $open = $(this).children('.fa-eye');
-    let $close = $(this).children('.fa-eye-slash');
-    let $pass = $(this).siblings('.pass');
-    if($open.is(':visible')){
-        $close.show();
-        $open.hide();
-        $pass.attr('type', 'text');
-    } else {
-        $close.hide();
-        $open.show();
-        $pass.attr('type', 'password');
-    }
 });

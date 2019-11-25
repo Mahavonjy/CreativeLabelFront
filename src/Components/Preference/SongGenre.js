@@ -12,14 +12,12 @@ class SongGenre extends Component {
         this.state = {
             redirect: false, button: false,
             isNotMatch : false, loading: false,
-            errorMessage: 'Choice maximum',
             first_array:[], second_array: [],
-            redirect_to: '/'
+            redirect_to: '/home'
         };
     }
 
     componentDidMount() {
-        this.setState({loading : true});
         this.addToArray();
         this.getIfToken();
     }
@@ -33,6 +31,7 @@ class SongGenre extends Component {
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
             };
+            console.log("1");
             axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
                 axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp =>{
                     this.setState({redirect: true});
@@ -43,7 +42,7 @@ class SongGenre extends Component {
                 toast.warn("chosen at least 5 types");
             })
         } else {
-            this.setState({redirect_to: "/login"}, () => {this.setState({redirect: true})})
+            this.setState({redirect_to: "/home#LoginRequire"}, () => {this.setState({redirect: true})})
         }
     };
 
@@ -75,7 +74,6 @@ class SongGenre extends Component {
                     }]]
                 }))
             }
-            this.setState({loading : false});
         }).catch(error =>{
             toast.error(error.response.data);
         })
@@ -175,9 +173,9 @@ class SongGenre extends Component {
             return (
                 <div className="MusicChoiceTitle">
                     <ToastContainer/>
-                    <h1>What kind of music love you?</h1>
-                    <button className="send-genre" onClick={this.sendToApi}>Send</button>
-                    <div className="row-genre">
+                    <h1>What kind of music love you ?</h1>
+                    <button className="send-genre" onClick={this.sendToApi}>Valider</button>
+                    <div className="row-genre pb-lg-5">
                         {this.state.first_array.map((all_music_genres, index) =>
                             <div className="music-genre" key={index} style={{background: `${all_music_genres[0]}`}}>
                                 <div className="top"

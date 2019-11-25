@@ -95,7 +95,6 @@ class Register extends Component {
         } else {
             return (
                 <main>
-                    <a className="btn fab-right-top right-side absolute shadow btn-primary m-t-150" href="/home" ><i className="icon-home-1"/></a>
                     <div ref={r => (this.fakeAdBanner = r)}
                          style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
                          className="adBanner"/>
@@ -192,7 +191,7 @@ class Register extends Component {
                                                         </div>
                                                         <div className="row ml-1">
                                                             <button type="submit" id="register"
-                                                                   className="btn btn-outline-primary btn-sm pl-4 pr-4"
+                                                                   className="btn btn-outline-primary btn-fab-md pl-4 pr-4"
                                                             >Créer votre compte ISL Creative</button>
                                                             <LoginFacebook/>
                                                             <LoginGoogle/>
@@ -201,10 +200,12 @@ class Register extends Component {
                                                     {/* #END# Input */}
                                                 </form>
                                             </div>
-                                            <div className="col-md-5  p-5">
-                                                <h1 className="mt-3 font-weight-lighter">Vous possédez déjà un compte?</h1>
-                                                <NavLink to="/login" activeClassName="PageSwitcher__Item--Active"
-                                                         className="PageSwitcher__Item"><button className="btn btn-outline-primary btn-sm pl-4 pr-4">Identifiez-vous</button></NavLink>
+                                            <div className="col-md-5 text-center p-5">
+                                                <h2 className="mt-3 font-weight-lighter">Vous possédez déjà un compte?</h2>
+                                                <button className="btn btn-outline-primary m-t-50 btn-xl pl-4 pr-4"
+                                                        onClick={() => window.location.replace('/home#LoginRequire')}>
+                                                        Identifiez-vous
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
