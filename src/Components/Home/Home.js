@@ -69,7 +69,6 @@ class Home extends Component {
     NotOnline = (headers_) => {
         axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers_}).then(resp => {
             this.props.addBeats(resp.data["random"]);
-            this.props.topBeats(resp.data["top_beats"]);
             this.props.newBeatMaker(resp.data["new_beatMaker"]);
             this.props.topBeatMaker(resp.data["top_beatmaker"]);
             this.props.latestBeats(resp.data["latest_beats"]);
@@ -304,7 +303,11 @@ class Home extends Component {
                                         () => <Register/>
                                     } />
                                     <Route path="/preference" exact component={
-                                        () => <Preference/>
+                                        () => {
+                                            if (cookies.get("Isl_Creative_pass"))
+                                                return (<Preference/>)
+                                            else window.location.replace('/home#LoginRequire')
+                                        }
                                     } />
                                     <Route path="/Profile" component={
                                         () => <Profile Redirect={() => this.logout()}
@@ -399,9 +402,6 @@ const mapDispatchToProps = dispatch => {
         },
         addBeats: (data) => {
             dispatch({type: "ADD_BEATS", data: data})
-        },
-        topBeats: (data) => {
-            dispatch({type: "ADD_TOP_BEATS", data: data})
         },
         newBeatMaker: (data) => {
             dispatch({type: "ADD_NEW_BEATMAKER", data: data})

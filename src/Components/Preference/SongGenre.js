@@ -5,45 +5,36 @@ import Cookies from "universal-cookie";
 import Conf from "../../Config/tsconfig";
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+const cookies = new Cookies();
 
 class SongGenre extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false, button: false,
-            isNotMatch : false, loading: false,
-            first_array:[], second_array: [],
-            redirect_to: '/home'
+            button: false, isNotMatch : false, loading: false, first_array:[], second_array: [],
         };
     }
 
     componentDidMount() {
-        this.addToArray();
         this.getIfToken();
+        this.addToArray();
     }
 
     getIfToken = () => {
-        let cookies = new Cookies();
-        let data = cookies.get("Isl_Creative_pass");
-        if (data) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            console.log("1");
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp =>{
-                    this.setState({redirect: true});
-                }).catch(err =>{
-                    toast.warn("chosen at least 5 types");
-                })
-            }).catch(err => {
+        let new_headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': "*",
+            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+        };
+        axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then( () => {
+            axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(() =>{
+                window.location.replace('/home');
+            }).catch(() =>{
                 toast.warn("chosen at least 5 types");
             })
-        } else {
-            this.setState({redirect_to: "/home#LoginRequire"}, () => {this.setState({redirect: true})})
-        }
+        }).catch(() => {
+            toast.warn("chosen at least 5 types");
+        })
     };
 
     BooleanToChange = (index) => {
@@ -80,7 +71,6 @@ class SongGenre extends Component {
     };
 
     sendToApi = () => {
-        const cookies = new Cookies();
         let token = cookies.get("Isl_Creative_pass")["Isl_Token"];
         let headers = {
             'Content-Type': 'application/json',
@@ -99,7 +89,7 @@ class SongGenre extends Component {
             let data = {"user_genre_list": ex};
             if (token) {
                 axios.post(Conf.configs.ServerApi + "api/medias/add_users_genre", data,{headers:headers}).then(response =>{
-                    this.setState({redirect: true});
+                    window.location.replace('/home');
                 }).catch(error =>{
                     toast.error(error.response.data);
                 })

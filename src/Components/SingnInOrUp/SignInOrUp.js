@@ -160,12 +160,10 @@ class SignInOrUp extends Component {
                 password: this.state.password,
             };
 
-            axios.put(Conf.configs.ServerApi + "api/users/reset_password", data, {headers: headers}).then(response =>{
-                const cookies = new Cookies();
-                cookies.set("Isl_Creative_pass", {"name":response.data.name, "email":response.data.email, "Isl_Token":response.data.token});
-                console.log(cookies.get("Isl_Creative_pass"));
-                this.setState({redirect: true});
-            }).catch(error =>{
+            axios.put(Conf.configs.ServerApi + "api/users/reset_password", data, {headers: headers}).then(() => {
+                toast.success("Password updated");
+                this.setState({changePass: false});
+            }).catch(error => {
                 if (data["password"].length < 8) {
                     toast.warn("password too short");
                 } else {

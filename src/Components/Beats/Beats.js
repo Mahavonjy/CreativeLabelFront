@@ -701,7 +701,7 @@ class Beats extends Component {
                                             <small> Classement ISL Creative des Beatmakers </small>
                                         </div>
                                     </div>
-                                    <ul className="playlist list-group bg-black list-group-flush" style={{height: 500}}>
+                                    <ul className="playlist list-group bg-black list-group-flush" style={{height: 428}}>
                                         {this.props.top_beatmaker ? this.props.top_beatmaker.map((val, index) =>
                                             <li className="list-group-item" key={index}>
                                                 <div className="d-flex align-items-center">
