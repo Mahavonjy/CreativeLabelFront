@@ -9,6 +9,7 @@
   ],
   "configs": {
     "ServerApi": "http://130.211.211.223/",
+    "FacebookId": "423325871770542",
     "TokenVisitor": "visitor"
   }
 }
