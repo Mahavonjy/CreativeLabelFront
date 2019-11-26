@@ -15,6 +15,8 @@ import { FacebookProvider, Feed } from 'react-facebook';
 import Suggestion from "./Suggestion";
 import { Link } from 'react-router-dom';
 import SignInOrUp from "../SingnInOrUp/SignInOrUp";
+import FunctionTools from "../FunctionTools/FunctionTools";
+import config from "react-ad-block-detect/webpack.config.babel";
 
 let token = "";
 let _this;
@@ -64,34 +66,6 @@ class Beats extends Component {
                     IslPlayer.pauseOrPlayPlayer();
                 })
             }
-        }
-    };
-
-    static LikeOrFollow = (LikeOrFollow, arg) => {
-        if (token === Conf.configs.TokenVisitor) {
-            document.getElementById("LoginRequire").click();
-        } else if (LikeOrFollow === "like") {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': token
-            };
-            axios.post(Conf.configs.ServerApi + "api/medias/admire/" + arg, {},{headers: new_headers}).then(resp =>{
-                toast.success("liked")
-            }).catch(err => {
-                toast.warn("already liked")
-            });
-        } else if (LikeOrFollow === "follow") {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': token
-            };
-            axios.post(Conf.configs.ServerApi + "api/admiration/admire_user/" + arg, {},{headers: new_headers}).then(resp =>{
-                toast.success("followed")
-            }).catch(err => {
-                toast.warn("already followed")
-            });
         }
     };
 
@@ -157,68 +131,6 @@ class Beats extends Component {
         }).catch(err => {
             console.log(err.response)
         })
-    };
-
-    handleSubmit = (e) => {
-        if (token !== Conf.configs.TokenVisitor) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': token
-            };
-            let data = {
-                "song_id": this.state.song_id,
-                "price": this.state.price,
-                "licenses_name": this.state.licenses_name
-            };
-            axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data, {headers: new_headers}).then(resp => {
-                toast.success(resp.data);
-            }).catch(err => {
-                toast.error(err.response.data);
-            })
-        } else {
-            const carts = JSON.parse(localStorage.getItem("MyCarts"));
-            if (!carts) {
-                for (let row in this.props.beats) {
-                    if (this.props.beats[row]['id'] === this.state.song_id) {
-                        localStorage.setItem("MyCarts",  JSON.stringify([{
-                            "media" : {
-                                "photo": this.props.beats[row]["photo"],
-                                "artist": this.props.beats[row]["artist"],
-                                "title": this.props.beats[row]["title"]
-                            },
-                            "song_id": this.state.song_id,
-                            "price": this.state.price,
-                            "licenses_name": this.state.licenses_name
-                        }]))
-                    }
-                }
-                toast.success("added");
-            } else {
-                const cart_S = carts.some(item => item.song_id === this.state.song_id);
-                if (!cart_S) {
-                    localStorage.removeItem("MyCarts");
-                    for (let row in this.props.beats) {
-                        if (this.props.beats[row]['id'] === this.state.song_id) {
-                            carts.push({
-                                "media" : {
-                                    "photo": this.props.beats[row]["photo"],
-                                    "artist": this.props.beats[row]["artist"],
-                                    "title": this.props.beats[row]["title"]
-                                },
-                                "song_id": this.state.song_id,
-                                "price": this.state.price,
-                                "licenses_name": this.state.licenses_name
-                            });
-                        }
-                    }
-                    localStorage.setItem("MyCarts",  JSON.stringify(carts));
-                    toast.success("added");
-                } else {
-                    toast.warn("you have it in cart");
-                }
-            }
-        }
     };
 
     componentDidMount() {
@@ -489,8 +401,8 @@ class Beats extends Component {
                                                                     <div className="d-flex">
                                                                         <small className="ml-auto">{val.silver_price}$</small>
                                                                         <small className="ml-auto">{val.bpm}/bpm</small>
-                                                                        <FacebookProvider appId="423325871770542">
-                                                                            <Feed link="https://www.tests.com/">
+                                                                        <FacebookProvider appId={Conf.configs.FacebookId}>
+                                                                            <Feed link={"http://" + window.location.host + '/CheckThisBeat/' + val.id}>
                                                                                 {({ handleClick }) => (
                                                                                     <div className="ml-auto transparent border-0">
                                                                                         <i className="icon-share-1 text-red" onClick={handleClick}/>
@@ -498,7 +410,9 @@ class Beats extends Component {
                                                                                 )}
                                                                             </Feed>
                                                                         </FacebookProvider>
-                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => Beats.LikeOrFollow("like", val.id)}/>
+                                                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => {
+                                                                            FunctionTools.LikeOrFollow("like", val.id);
+                                                                        }}/>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-2 d-none d-sm-block">
@@ -524,7 +438,7 @@ class Beats extends Component {
                                                                         <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
                                                                     </div>
                                                                 </div>
-                                                                <div className="modal custom show" id={"trackModal"+val.id} tabIndex="-1" role="dialog"
+                                                                <div className="modal custom show" id={"trackModal"+ val.id} tabIndex="-1" role="dialog"
                                                                      aria-labelledby="trackModalLabel" aria-hidden="true">
                                                                     <div className="modal-dialog">
                                                                         <div className="modal-content" style={{height: "100%"}}>
@@ -574,8 +488,7 @@ class Beats extends Component {
                                                                                                             MP3
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.basic_price, licenses_name: "basic_price", song_id: val.id}
-                                                                                                    , () => {this.handleSubmit(e)})}}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-16">
                                                                                                                 {val.basic_price} $
@@ -595,8 +508,7 @@ class Beats extends Component {
                                                                                                             MP3 + WAV
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.silver_price, licenses_name: "silver_price", song_id: val.id}
-                                                                                                        , () => {this.handleSubmit(e)})}}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.silver_price} $
@@ -616,8 +528,7 @@ class Beats extends Component {
                                                                                                             MP3 + WAV + STEMS
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.gold_price, licenses_name: "gold_price", song_id: val.id}
-                                                                                                        , () => {this.handleSubmit(e)})}}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.gold_price} $
@@ -638,8 +549,7 @@ class Beats extends Component {
                                                                                                         Unlimited + Exclusive
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => {this.setState({price: val.platinum_price, licenses_name: "platinum_price", song_id: val.id}
-                                                                                                        , () => {this.handleSubmit(e)})}}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.platinum_price} $
@@ -693,7 +603,7 @@ class Beats extends Component {
                                                         <small>5 Beats</small>
                                                         </Link>
                                                     </div>
-                                                    <i className="icon-user-plus ml-auto" onClick={() => Beats.LikeOrFollow("follow", val.id)}/>
+                                                    <i className="icon-user-plus ml-auto" onClick={() => FunctionTools.LikeOrFollow("follow", val.id)}/>
                                                     <Link to={"isl_artist_profile/" + val.id} className="ml-auto"><i
                                                         className="icon-user-circle"/></Link>
                                                 </div>
@@ -703,6 +613,7 @@ class Beats extends Component {
                                 </div>
                             </div>
                     </div>
+                    <FunctionTools/>
                     <Suggestion ToPlay={this.props.ToPlay}/>
                 </section>
                 <div>

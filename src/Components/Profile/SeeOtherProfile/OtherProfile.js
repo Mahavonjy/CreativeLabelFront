@@ -6,6 +6,7 @@ import PhotoD from '../../../images/socials/profile.png';
 import { ToastContainer, toast } from 'react-toastify';
 import IslPlayer from "../../Players/Players";
 import {FacebookProvider, Feed} from "react-facebook";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 
 const cookies = new Cookies();
 let _this;
@@ -19,6 +20,10 @@ class OtherProfile extends Component {
             index: null, tmp: null, followed: 0
         };
         _this = this;
+    }
+
+    static UpdateStateFollowed () {
+        _this.setState({followed: 1})
     }
 
     static pausePlayer() {
@@ -57,44 +62,15 @@ class OtherProfile extends Component {
         }
     };
 
-    LikeOrFollow = (LikeOrFollow, arg) => {
-        if (token === Conf.configs.TokenVisitor) {
-            document.getElementById("LoginRequire").click();
-        } else if (LikeOrFollow === "like") {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': token
-            };
-            axios.post(Conf.configs.ServerApi + "api/medias/admire/" + arg, {},{headers: new_headers}).then(resp =>{
-                toast.success("liked")
-            }).catch(err => {
-                toast.warn("already liked")
-            });
-        } else if (LikeOrFollow === "follow") {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': token
-            };
-            axios.post(Conf.configs.ServerApi + "api/admiration/admire_user/" + arg, {},{headers: new_headers}).then(resp => {
-                this.setState({followed: 1});
-                toast.success("followed")
-            }).catch(err => {
-                toast.warn("already followed")
-            });
-        }
-    };
-
     Play = (index, type_) => {
         if (this.state.index !== index && this.state.tmp === null) {
             this.setState({index: index, tmp: index}, () => {
-                this.props.ToPlay(index, type_, "profile");
+                this.props.ToPlay(index, type_, "OtherProfile");
             })
         } else {
             if (index !== this.state.index) {
                 this.setState({index: index, tmp: index}, () => {
-                    this.props.ToPlay(index, type_, "profile");
+                    this.props.ToPlay(index, type_, "OtherProfile");
                 })
             } else {
                 this.setState({tmp: null}, () => {
@@ -141,8 +117,10 @@ class OtherProfile extends Component {
                                     <div>
                                         <h4 className="p-t-10">{this.props.ProfileChecked.name || "Name"}</h4>
                                         <button className="btn btn-outline-primary btn-sm  mt-3 pl-4 pr-4"
-                                        onClick={() => this.LikeOrFollow("follow", )}>
-                                            Follow {this.props.UserData.followers}
+                                        onClick={() => {
+                                            FunctionTools.LikeOrFollow("follow", this.props.UserData.user_id);
+                                        }}>
+                                            Followers {this.props.UserData.followers + this.state.followed}
                                         </button>
                                     </div>
                                 </div>
@@ -233,9 +211,9 @@ class OtherProfile extends Component {
                                                         <div className="d-flex align-items-center">
                                                             <div className="col-1">
                                                                 <div>
-                                                                        {/*<i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>*/}
-                                                                        {/*<i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, "beats")}}/>*/}
-                                                                    <i className="icon-play s-28 text-danger"/>
+                                                                    {this.state.index === index ?
+                                                                        <i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>:
+                                                                        <i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, this.props.UserBeats)}}/>}
                                                                 </div>
                                                             </div>
                                                             <div className="col-md-4">
@@ -247,8 +225,8 @@ class OtherProfile extends Component {
                                                             <div className="col-sm-2">
                                                                 <small className="ml-auto">{val.bpm}/bpm</small>
                                                             </div>
-                                                            <FacebookProvider appId="423325871770542">
-                                                                <Feed link="https://www.tests.com/">
+                                                            <FacebookProvider appId={Conf.configs.FacebookId}>
+                                                                <Feed link={"http://" + window.location.host + '/CheckThisBeat/' + val.id}>
                                                                     {({ handleClick }) => (
                                                                         <div className="ml-auto transparent border-0">
                                                                             <i className="icon-share-1 text-red" onClick={handleClick}/>
@@ -257,9 +235,138 @@ class OtherProfile extends Component {
                                                                 </Feed>
                                                             </FacebookProvider>
                                                             <div className="col-sm-2">
-                                                                <button className="btn btn-outline-primary btn-sm" type="button" data-toggle="modal">
+                                                                <button className="btn btn-outline-primary btn-sm" type="button"
+                                                                        data-toggle="modal" data-target={"#trackModalArtistOtherProfile" + val.id} >
                                                                     <i className="icon-opencart"/>
                                                                 </button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="modal custom show" id={"trackModalArtistOtherProfile"+ val.id} tabIndex="-1" role="dialog"
+                                                             aria-labelledby="trackModalLabel" aria-hidden="true">
+                                                            <div className="modal-dialog">
+                                                                <div className="modal-content" style={{height: "100%"}}>
+
+                                                                    <div className="modal-header">
+                                                                        <h3 className="getlaid text-dark" id="trackModalLabel">Add To Cart</h3>
+                                                                        <button id={"closeOne" + val.id} type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div className="modal-body" style={{overflow:"auto"}}>
+                                                                        <section className="relative" style={{margin:"0 auto"}}>
+                                                                            <div className="has-bottom-gradient">
+                                                                                <div className="row">
+                                                                                    <div className="col-md-10 offset-sm-1">
+                                                                                        <div className="row" style={{width:"300px", margin: "0 auto"}}>
+                                                                                            <img src={val.photo} alt="/" style={{width:"300px", margin:"0 auto"}}/>
+                                                                                            <h1 className="my-3 text-white" style={{margin: "0 auto"}}>{val.title}</h1>
+                                                                                            <div className="col-md-9">
+                                                                                                <div className="d-md-flex align-items-center justify-content-between">
+                                                                                                    <div className="ml-auto mb-2">
+                                                                                                        <a href="#" className="snackbar" data-text="Bookmark clicked" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-bookmark s-24" /></a>
+                                                                                                        <a href="#" className="snackbar ml-3" data-text="You like this song" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-heart s-24" /></a>
+                                                                                                        <a href="#" className="snackbar ml-3" data-text="Thanks for sharing" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-share-1 s-24" /></a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="bottom-gradient " />
+                                                                        </section>
+                                                                        <div className="p-lg-5" style={{background:"black", height:"500px"}}>
+                                                                            <div className="mb-3 card no-b p-3">
+                                                                                <div className="card-header transparent b-b">
+                                                                                    <strong>Prix</strong>
+                                                                                </div>
+                                                                                <ul className="playlist list-group list-group-flush">
+                                                                                    <li className="list-group-item" >
+                                                                                        <div className="d-flex align-items-center ">
+                                                                                            <div
+                                                                                                className="col-8 ">
+                                                                                                <h6>Standard</h6>
+                                                                                                <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                    MP3
+                                                                                                </small>
+                                                                                            </div>
+                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
+                                                                                                <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                    <div className="s-16">
+                                                                                                        {val.basic_price} $
+                                                                                                    </div>
+                                                                                                    <i className="icon-first-order"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <li className="list-group-item" >
+                                                                                        <div
+                                                                                            className="d-flex align-items-center ">
+                                                                                            <div
+                                                                                                className="col-8 ">
+                                                                                                <h6>Silver</h6>
+                                                                                                <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                    MP3 + WAV
+                                                                                                </small>
+                                                                                            </div>
+                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
+                                                                                                <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                    <div className="s-14">
+                                                                                                        {val.silver_price} $
+                                                                                                    </div>
+                                                                                                    <i className="icon-money"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <li className="list-group-item" >
+                                                                                        <div
+                                                                                            className="d-flex align-items-center ">
+                                                                                            <div
+                                                                                                className="col-8 ">
+                                                                                                <h6>Gold</h6>
+                                                                                                <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                    MP3 + WAV + STEMS
+                                                                                                </small>
+                                                                                            </div>
+                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
+                                                                                                <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                    <div className="s-14">
+                                                                                                        {val.gold_price} $
+                                                                                                    </div>
+                                                                                                    <i className="icon-money"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    {val.platinum_price ?
+                                                                                        <li className="list-group-item">
+                                                                                            <div
+                                                                                                className="d-flex align-items-center ">
+                                                                                                <div
+                                                                                                    className="col-8 ">
+                                                                                                    <h5> Platinum Lease</h5>
+                                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
+                                                                                                        Unlimited + Exclusive
+                                                                                                    </small>
+                                                                                                </div>
+                                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
+                                                                                                    <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                                                                        <div className="s-14">
+                                                                                                            {val.platinum_price} $
+                                                                                                        </div>
+                                                                                                        <i className="icon-money"/>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </li>: null}
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -243,7 +243,7 @@ class Profile extends Component {
                                             {/*    onClick={() => this.togglePopupAddAlbum(0)}>Add Album*/}
                                             {/*</button>*/}
                                             <button className="btn btn-outline-success btn-sm pl-2 pr-2"
-                                                    onClick={() => this.togglePopupAddSingle(0)}>Ajout de beats 
+                                                    onClick={() => this.togglePopupAddSingle(0)}>Ajout de beats
                                             </button>
                                         </div> : null}
                                     <div className="text-center p-5 mt-5">
@@ -322,7 +322,7 @@ class Profile extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -643,7 +643,7 @@ class Profile extends Component {
 const mapStateToProps = state => {
     return {
         profile_info: state.profile.profile_info,
-        beats_: state.profile.beats_,
+        beats_: state.profile.beats,
         role: state.profile.role,
         contract: state.profile.contract
     };

@@ -76,7 +76,7 @@ class SignInOrUp extends Component {
             axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp =>{
                 toast.success("You are logged");
                 document.getElementsByClassName("close")[0].click();
-                window.location.replace("/home");
+                window.location.reload();
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
