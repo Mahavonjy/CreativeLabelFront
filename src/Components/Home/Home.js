@@ -175,9 +175,11 @@ class Home extends Component {
                                 });
                             }).catch(err => {
                                 try {
-                                    if (err.response.data === "no choice music genre")
+                                    if (err.response.data === "no choice music genre") {
                                         window.location.replace('/preference');
-                                    else this.NotOnline(headers)
+                                    } else if (err.response.data === "token invalid") {
+                                        this.logout()
+                                    } else this.NotOnline(headers)
                                 } catch(e) {
                                     window.location.replace('/badConnexion')
                                 }
