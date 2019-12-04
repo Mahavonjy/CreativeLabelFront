@@ -176,8 +176,9 @@ class Home extends Component {
                             }).catch(err => {
                                 try {
                                     if (err.response.data === "no choice music genre")
-                                        window.location.replace('/preference')
-                                }catch(e){
+                                        window.location.replace('/preference');
+                                    else this.NotOnline(headers)
+                                } catch(e) {
                                     window.location.replace('/badConnexion')
                                 }
                             });
