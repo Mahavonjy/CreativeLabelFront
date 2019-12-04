@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import IslPlayer from "../../Players/Players";
 import {FacebookProvider, Feed} from "react-facebook";
 import FunctionTools from "../../FunctionTools/FunctionTools";
+import {connect} from "react-redux";
 
 const cookies = new Cookies();
 let _this;
@@ -291,7 +292,7 @@ class OtherProfile extends Component {
                                                                                                     MP3
                                                                                                 </small>
                                                                                             </div>
-                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
+                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
                                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                     <div className="s-16">
                                                                                                         {val.basic_price} $
@@ -311,7 +312,7 @@ class OtherProfile extends Component {
                                                                                                     MP3 + WAV
                                                                                                 </small>
                                                                                             </div>
-                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
+                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
                                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                     <div className="s-14">
                                                                                                         {val.silver_price} $
@@ -331,7 +332,7 @@ class OtherProfile extends Component {
                                                                                                     MP3 + WAV + STEMS
                                                                                                 </small>
                                                                                             </div>
-                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
+                                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
                                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                     <div className="s-14">
                                                                                                         {val.gold_price} $
@@ -352,7 +353,7 @@ class OtherProfile extends Component {
                                                                                                         Unlimited + Exclusive
                                                                                                     </small>
                                                                                                 </div>
-                                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
+                                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
                                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                         <div className="s-14">
                                                                                                             {val.platinum_price} $
@@ -384,4 +385,15 @@ class OtherProfile extends Component {
     }
 }
 
-export default OtherProfile;
+const mapDispatchToProps = dispatch => {
+    return {
+        addCarts: (data) => {
+            dispatch({type: "ADD_CART", data: data})
+        },
+        addTotalPrice: (data) => {
+            dispatch({type: "ADD_TOTAL_PRICE", data: data})
+        }
+    };
+};
+
+export default connect(null, mapDispatchToProps)(OtherProfile);

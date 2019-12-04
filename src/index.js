@@ -8,11 +8,13 @@ import {combineReducers, createStore} from 'redux';
 import profileReducer from './reducer/Profile';
 import beatsReducer from './reducer/Beats';
 import PlaylistHomeReducer from "./reducer/Home";
+import cartsReducer from "./reducer/Carts";
 
 const Reducers = combineReducers({
     "beats": beatsReducer,
     "profile": profileReducer,
-    "Home": PlaylistHomeReducer
+    "Home": PlaylistHomeReducer,
+    "Carts": cartsReducer
 });
 
 ReactDOM.render(

@@ -4,6 +4,7 @@ import axios from 'axios';
 import Conf from "../../../Config/tsconfig";
 import {toast, ToastContainer} from "react-toastify";
 import Modal from 'react-awesome-modal';
+import {connect} from "react-redux";
 
 class EditAlbum extends Component {
     constructor (props) {
@@ -11,42 +12,9 @@ class EditAlbum extends Component {
         this.state = {
             file: null, album_name: this.props.Album['album_name'], artist: this.props.Album['artist'], loading: false,
             genre: this.props.Album['genre'], genre_musical: this.props.Album['genre_musical'],
-            description: this.props.Album['description'], photo: null, price: '', beats: false, genre_info: [],
+            description: this.props.Album['description'], photo: null, price: '', beats: false
         };
     }
-
-    componentDidMount() {
-        this.getIfToken();
-    }
-
-    getIfToken = () => {
-        let cookies = new Cookies();
-        let data = cookies.get("Isl_Creative_pass");
-        if (data) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: new_headers}).then(resp =>{
-                    const info = resp.data;
-                    console.log(resp.data);
-                    for(let row in info){
-                        this.setState(prevState => ({
-                            genre_info: [...prevState.genre_info, info[row].genre]
-                        }))
-                    }
-                    console.log(this.state.genre_info);
-
-                }).catch(err => {
-                    console.log(err.response)
-                })
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
-    };
 
     changeAlbumName = (e) => {this.setState({album_name : e.target.value});};
 
@@ -171,7 +139,7 @@ class EditAlbum extends Component {
                                     <input id="genre" name="genre" className="form-control" value={this.state.genre}
                                            onChange={this.changeGenre} list="music-genre" required/>
                                     <datalist id="music-genre">
-                                        {this.state.genre_info.map((val, index) => <option key={index} value={val}/>)}
+                                        {this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                     </datalist>
                                 </div>
                             </div>
@@ -223,4 +191,10 @@ class EditAlbum extends Component {
     }
 }
 
-export default EditAlbum;
+const mapStateToProps = state => {
+    return {
+        AllMediaGenre: state.Home.AllMediaGenre,
+    };
+};
+
+export default connect(mapStateToProps, null)(EditAlbum);

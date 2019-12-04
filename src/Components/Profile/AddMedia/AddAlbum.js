@@ -4,6 +4,7 @@ import axios from 'axios';
 import Conf from "../../../Config/tsconfig";
 import {toast, ToastContainer} from "react-toastify";
 import Modal from 'react-awesome-modal';
+import {connect} from "react-redux";
 
 let cookies = new Cookies();
 class AddAlbum extends Component {
@@ -12,41 +13,9 @@ class AddAlbum extends Component {
         this.state = {
             file: '', album_name: '', artist: cookies.get("Isl_Creative_pass")["name"], loading: false,
             genre: '', genre_musical: '', description: '',
-            photo: '', price: '', beats: false, genre_info: [],
+            photo: '', price: '', beats: false
         };
     }
-
-    componentDidMount() {
-        this.getIfToken();
-    }
-
-    getIfToken = () => {
-        let data = cookies.get("Isl_Creative_pass");
-        if (data) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: new_headers}).then(resp =>{
-                    const info = resp.data;
-                    console.log(resp.data);
-                    for(let row in info){
-                        this.setState(prevState => ({
-                            genre_info: [...prevState.genre_info, info[row].genre]
-                        }))
-                    }
-                    console.log(this.state.genre_info);
-
-                }).catch(err => {
-                    console.log(err.response)
-                })
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
-    };
 
     changeAlbumName = (e) => {this.setState({album_name : e.target.value});};
 
@@ -120,13 +89,9 @@ class AddAlbum extends Component {
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
             };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.post(Conf.configs.ServerApi + "api/albums/uploadAlbums", bodyFormData, {headers: new_headers}).then(resp => {
-                    this.setState({loading: false});
-                    this.props.closePopup(1);
-                }).catch(err => {
-                    toast.error(err.response.data)
-                })
+            axios.post(Conf.configs.ServerApi + "api/albums/uploadAlbums", bodyFormData, {headers: new_headers}).then(resp => {
+                this.setState({loading: false});
+                this.props.closePopup(1);
             }).catch(err => {
                 toast.error(err.response.data)
             })
@@ -184,7 +149,7 @@ class AddAlbum extends Component {
                                     <input id="genre" name="genre" className="form-control" value={this.state.genre}
                                            onChange={this.changeGenre} list="music-genre" required/>
                                     <datalist id="music-genre">
-                                        {this.state.genre_info.map((val, index) => <option key={index} value={val}/>)}
+                                        {this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                     </datalist>
                                 </div>
                             </div>
@@ -235,5 +200,10 @@ class AddAlbum extends Component {
         );
     }
 }
+const mapStateToProps = state => {
+    return {
+        AllMediaGenre: state.Home.AllMediaGenre
+    };
+};
 
-export default AddAlbum;
+export default connect(mapStateToProps, null)(AddAlbum);

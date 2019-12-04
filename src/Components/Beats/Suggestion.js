@@ -17,7 +17,7 @@ class Suggestion extends Component {
         super(props);
         this.state = {
             link_latest_beats: [], link_discovery_beats: [], tmp: null,
-            link_top_beats: [], link_isl_playlist: [], index: null
+            link_top_beats: [], link_isl_playlist: [], index: null, isMounted: false,
         };
          _this = this
     }
@@ -95,53 +95,64 @@ class Suggestion extends Component {
     };
 
     componentDidMount() {
-        if (!this.props.ready_latest_beats) {
-            for (let row_ in this.props.latest_beats) {
-                this.AddForPlay(row_, "link_latest_beats");
-                if (parseInt(row_) === parseInt(this.props.latest_beats.length) -1)
-                    this.props.readyLatestBeats()
+        this.setState({isMounted: true }, () => {
+            if (!this.props.ready_latest_beats) {
+                for (let row_ in this.props.latest_beats) {
+                    this.AddForPlay(row_, "link_latest_beats");
+                    if (parseInt(row_) === parseInt(this.props.latest_beats.length) - 1)
+                        this.props.readyLatestBeats()
+                }
+            } else {
+                for (let row_ in this.props.latest_beats) {
+                    this.setState(prevState => ({link_latest_beats: {...prevState.link_latest_beats, [row_]: true}}))
+                }
             }
-        } else {
-            for (let row_ in this.props.latest_beats) {
-                this.setState(prevState => ({link_latest_beats: {...prevState.link_latest_beats, [row_]: true}}))
-            }
-        }
 
-        if (!this.props.ready_discovery_beats) {
-            for (let row_ in this.props.discovery_beats) {
-                this.AddForPlay(row_, "link_discovery_beats");
-                if (parseInt(row_) === parseInt(this.props.discovery_beats.length) -1)
-                    this.props.readyDiscoveryBeats()
+            if (!this.props.ready_discovery_beats) {
+                for (let row_ in this.props.discovery_beats) {
+                    this.AddForPlay(row_, "link_discovery_beats");
+                    if (parseInt(row_) === parseInt(this.props.discovery_beats.length) - 1)
+                        this.props.readyDiscoveryBeats()
+                }
+            } else {
+                for (let row_ in this.props.discovery_beats) {
+                    this.setState(prevState => ({
+                        link_discovery_beats: {
+                            ...prevState.link_discovery_beats,
+                            [row_]: true
+                        }
+                    }))
+                }
             }
-        } else {
-            for (let row_ in this.props.discovery_beats) {
-                this.setState(prevState => ({link_discovery_beats: {...prevState.link_discovery_beats, [row_]: true}}))
-            }
-        }
 
-        if (!this.props.ready_top_beats) {
-            for (let row_ in this.props.top_beats) {
-                this.AddForPlay(row_, "link_top_beats")
-                if (parseInt(row_) === parseInt(this.props.top_beats.length) -1)
-                    this.props.readyTopBeats()
+            if (!this.props.ready_top_beats) {
+                for (let row_ in this.props.top_beats) {
+                    this.AddForPlay(row_, "link_top_beats")
+                    if (parseInt(row_) === parseInt(this.props.top_beats.length) - 1)
+                        this.props.readyTopBeats()
+                }
+            } else {
+                for (let row_ in this.props.top_beats) {
+                    this.setState(prevState => ({link_top_beats: {...prevState.link_top_beats, [row_]: true}}))
+                }
             }
-        } else {
-            for (let row_ in this.props.top_beats) {
-                this.setState(prevState => ({link_top_beats: {...prevState.link_top_beats, [row_]: true}}))
-            }
-        }
 
-        if (!this.props.ready_isl_playlist) {
-            for (let row_ in this.props.isl_playlist) {
-                this.AddForPlay(row_, "link_isl_playlist");
-                if (parseInt(row_) === parseInt(this.props.isl_playlist.length) -1)
-                    this.props.readyIslBeats()
+            if (!this.props.ready_isl_playlist) {
+                for (let row_ in this.props.isl_playlist) {
+                    this.AddForPlay(row_, "link_isl_playlist");
+                    if (parseInt(row_) === parseInt(this.props.isl_playlist.length) - 1)
+                        this.props.readyIslBeats()
+                }
+            } else {
+                for (let row_ in this.props.isl_playlist) {
+                    this.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [row_]: true}}))
+                }
             }
-        } else {
-            for (let row_ in this.props.isl_playlist) {
-                this.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [row_]: true}}))
-            }
-        }
+        })
+    }
+
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
     }
 
     render() {
@@ -289,7 +300,7 @@ class Suggestion extends Component {
                                                                                     MP3
                                                                                 </small>
                                                                             </div>
-                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
+                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                     <div className="s-16">
                                                                                         {val.basic_price} $
@@ -309,7 +320,7 @@ class Suggestion extends Component {
                                                                                     MP3 + WAV
                                                                                 </small>
                                                                             </div>
-                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
+                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                     <div className="s-14">
                                                                                         {val.silver_price} $
@@ -329,7 +340,7 @@ class Suggestion extends Component {
                                                                                     MP3 + WAV + STEMS
                                                                                 </small>
                                                                             </div>
-                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
+                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                     <div className="s-14">
                                                                                         {val.gold_price} $
@@ -350,7 +361,7 @@ class Suggestion extends Component {
                                                                                         Unlimited + Exclusive
                                                                                     </small>
                                                                                 </div>
-                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
+                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                         <div className="s-14">
                                                                                             {val.platinum_price} $
@@ -393,46 +404,46 @@ class Suggestion extends Component {
                             <small className="my-3">Beats Performing</small>
                             <div className="playlist list-group bg-dark list-group-flush" style={{height: 250}}>
                                 {this.props.discovery_beats ? this.props.discovery_beats.map((val, index) =>
-                                    <div>
-                                    <div className="list-group-item" key={index}>
-                                        <div className="d-flex align-items-center">
-                                            <div>
-                                                {this.state.link_discovery_beats[index] ?
-                                                    <div className="text-red">
-                                                        {this.state.index === index ?
-                                                            <i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>:
-                                                            <i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, "discovery_beats")}}/>}
-                                                    </div>
-                                                    :
-                                                    <div className="preloader-wrapper small active">
-                                                        <div className="spinner-layer spinner-red-only">
-                                                            <div className="circle-clipper left">
-                                                                <div className="circle"/>
-                                                            </div>
-                                                            <div className="gap-patch">
-                                                                <div className="circle"/>
-                                                            </div>
-                                                            <div className="circle-clipper right">
-                                                                <div className="circle"/>
+                                    <div key={index}>
+                                        <div className="list-group-item">
+                                            <div className="d-flex align-items-center">
+                                                <div>
+                                                    {this.state.link_discovery_beats[index] ?
+                                                        <div className="text-red">
+                                                            {this.state.index === index ?
+                                                                <i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>:
+                                                                <i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, "discovery_beats")}}/>}
+                                                        </div>
+                                                        :
+                                                        <div className="preloader-wrapper small active">
+                                                            <div className="spinner-layer spinner-red-only">
+                                                                <div className="circle-clipper left">
+                                                                    <div className="circle"/>
+                                                                </div>
+                                                                <div className="gap-patch">
+                                                                    <div className="circle"/>
+                                                                </div>
+                                                                <div className="circle-clipper right">
+                                                                    <div className="circle"/>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                }
+                                                    }
+                                                </div>
+                                                <div className="col-10">
+                                                    <Link to={'CheckThisBeat/' + val.id}>
+                                                        <small>{val.title}</small>
+                                                    </Link>
+                                                </div>
+                                                <button className="dropdown-item"
+                                                        type="button" data-toggle="modal"
+                                                        data-target={"#trackModalDiscovery" + val.id}>
+                                                    <small className="ml-auto"><i
+                                                        className="icon-opencart text-red"/>
+                                                    </small>
+                                                </button>
                                             </div>
-                                            <div className="col-10">
-                                                <Link to={'CheckThisBeat/' + val.id}>
-                                                    <small>{val.title}</small>
-                                                </Link>
-                                            </div>
-                                            <button className="dropdown-item"
-                                                    type="button" data-toggle="modal"
-                                                    data-target={"#trackModalDiscovery" + val.id}>
-                                                <small className="ml-auto"><i
-                                                    className="icon-opencart text-red"/>
-                                                </small>
-                                            </button>
                                         </div>
-                                    </div>
                                         <div className="modal custom show" id={"trackModalDiscovery"+ val.id} tabIndex="-1" role="dialog"
                                              aria-labelledby="trackModalLabel" aria-hidden="true">
                                             <div className="modal-dialog">
@@ -483,7 +494,7 @@ class Suggestion extends Component {
                                                                                     MP3
                                                                                 </small>
                                                                             </div>
-                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
+                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                     <div className="s-16">
                                                                                         {val.basic_price} $
@@ -503,7 +514,7 @@ class Suggestion extends Component {
                                                                                     MP3 + WAV
                                                                                 </small>
                                                                             </div>
-                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
+                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                     <div className="s-14">
                                                                                         {val.silver_price} $
@@ -523,7 +534,7 @@ class Suggestion extends Component {
                                                                                     MP3 + WAV + STEMS
                                                                                 </small>
                                                                             </div>
-                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
+                                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
                                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                     <div className="s-14">
                                                                                         {val.gold_price} $
@@ -544,7 +555,7 @@ class Suggestion extends Component {
                                                                                         Unlimited + Exclusive
                                                                                     </small>
                                                                                 </div>
-                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
+                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                         <div className="s-14">
                                                                                             {val.platinum_price} $
@@ -710,7 +721,7 @@ class Suggestion extends Component {
                                                                                         MP3
                                                                                     </small>
                                                                                 </div>
-                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
+                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                         <div className="s-16">
                                                                                             {val.basic_price} $
@@ -730,7 +741,7 @@ class Suggestion extends Component {
                                                                                         MP3 + WAV
                                                                                     </small>
                                                                                 </div>
-                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
+                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                         <div className="s-14">
                                                                                             {val.silver_price} $
@@ -750,7 +761,7 @@ class Suggestion extends Component {
                                                                                         MP3 + WAV + STEMS
                                                                                     </small>
                                                                                 </div>
-                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
+                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                         <div className="s-14">
                                                                                             {val.gold_price} $
@@ -771,7 +782,7 @@ class Suggestion extends Component {
                                                                                             Unlimited + Exclusive
                                                                                         </small>
                                                                                     </div>
-                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
+                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                             <div className="s-14">
                                                                                                 {val.platinum_price} $
@@ -866,6 +877,12 @@ const mapDispatchToProps = dispatch => {
         readyIslBeats: () => {
             dispatch({type: "ISL_BEATS_READY"})
         },
+        addCarts: (data) => {
+            dispatch({type: "ADD_CART", data: data})
+        },
+        addTotalPrice: (data) => {
+            dispatch({type: "ADD_TOTAL_PRICE", data: data})
+        }
     };
 };
 

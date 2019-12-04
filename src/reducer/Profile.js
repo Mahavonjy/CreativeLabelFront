@@ -10,17 +10,18 @@ const profileReducer = (state = initState, action) => {
                 ...state,
                 profile_info: action.data
             };
-        case "ADD_ALBUMS":
+        case "ADD_PROFILE_ALBUMS":
             return {
                 ...state,
                 albums: action.data
             };
-        case "ADD_SINGLE":
+        case "ADD_PROFILE_SINGLE":
             return {
                 ...state,
                 single: action.data
             };
-        case "ADD_BEATS":
+        case "ADD_PROFILE_BEATS":
+            state.beats = [];
             return {
                 ...state,
                 beats: action.data

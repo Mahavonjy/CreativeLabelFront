@@ -12,7 +12,7 @@ import PhotoD from '../../images/socials/profile.png';
 import { ToastContainer, toast } from 'react-toastify';
 import RequestToArtist from './Request/RequestToArtist';
 import IslPlayer from "../Players/Players";
-import EditBeats from "./ContractBeats/EditBeats";
+import EditContractBeats from "./ContractBeats/EditContractBeats";
 
 const cookies = new Cookies();
 const date = new Date();
@@ -25,7 +25,7 @@ class Profile extends Component {
         this.state = {
             wait: false, decline: false, loading: false, PopupEditProfile: false, PopupAddSingle: false,
             PopupAddAlbum: false, PopupAddEditSingle: -1, PopupAddEditAlbum: -1, PopupRequestToArtist: -1,
-            isMounted: false, song: "", type_: "", index: null, tmp: null
+            isMounted: false, song: "", type_: "", index: null, tmp: null, beats: this.props.beats_
         };
         _this = this;
     }
@@ -52,26 +52,20 @@ class Profile extends Component {
 
     togglePopupAddSingle = (success) => {
         this.setState({PopupAddSingle: !this.state.PopupAddSingle}, () => {
-            if (success === 1) {
-                this.getMedia();
-                toast.success("Song added");
-            }
+            if (success === 1) this.getMedia("Song added", "success");
         });
     };
 
     togglePopupAddAlbum = (success) => {
         this.setState({PopupAddAlbum: !this.state.PopupAddAlbum}, () => {
-            if (success === 1) {
-                this.getMedia();
-                toast.success("Album added");
-            }
+            if (success === 1) this.getMedia("Album added", "success");
         });
     };
 
     togglePopupEditSingle = (index, type_) => {
         this.setState({PopupAddEditSingle: index});
         if (type_ === "beats") {
-            this.setState({type_: type_, song: this.props.beats[index]}, () => {
+            this.setState({type_: type_, song: this.props.beats_[index]}, () => {
                 this.setState({PopupAddEditSingle: index});
             })
         } else if (type_ === "medias") {
@@ -86,13 +80,12 @@ class Profile extends Component {
     togglePopupRequestToArtist = () => {this.setState({PopupRequestToArtist: 0});};
 
     componentDidMount() {
-        this.setState({ isMounted: true });
-        this.IfRequest()
+        this.setState({ isMounted: true});
     }
 
     componentWillUnmount() {this.setState({ isMounted: false });}
 
-    getMedia = () => {
+    getMedia = (message, status) => {
         let data = cookies.get("Isl_Creative_pass");
         if (data) {
             let new_headers = {
@@ -100,13 +93,13 @@ class Profile extends Component {
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
             };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: new_headers}).then(resp =>{
-                    this.props.profile_add_beats(resp.data['beats']);
-                    this.props.profile_add_single(resp.data['music']);
-                    this.props.profile_add_albums(resp.data['albums']);
-                }).catch(err => {
-                    console.log(err.response)
+            axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: new_headers}).then(resp =>{
+                this.setState({beats: resp.data['beats']}, () => {
+                    if (message && status) {
+                        if (status === "success") toast.success(message);
+                        if (status === "error") toast.error(message)
+                    }
+
                 })
             }).catch(err => {
                 console.log(err.response)
@@ -115,44 +108,25 @@ class Profile extends Component {
     };
 
     delete = (e, type_) => {
-        document.getElementById(e.target.id).setAttribute("disabled", "disabled");
+        let id = e.target.id;
+        document.getElementById(id).setAttribute("disabled", "disabled");
         this.setState({loading: true});
         let new_headers = {
             'Content-Type': 'multipart/form-data',
             'Access-Control-Allow-Origin': "*",
             'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
         };
-        axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + e.target.id, {headers: new_headers}).then(resp =>{
-            this.setState({loading: false});
-            toast.success("deleted");
-            this.getMedia();
-        }).catch(err => {
-            toast.error(err.response.data)
-        })
-    };
-
-    IfRequest = () => {
-        try {
-            let new_headers = {
-                'Content-Type': 'multipart/form-data',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.put(Conf.configs.ServerApi + "api/users/update_user_to/artist", {}, {headers: new_headers}).then(resp =>{
-            }).catch(err => {
-                try {
-                    if (err.response.data === "wait a few day") {
-                        this.setState({wait: true});
-                    } else if (err.response.data === "your request is declined") {
-                        this.setState({decline: true});
-                    }
-                } catch (e) {
-                    console.log("request")
-                }
+        axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + e.target.id, {headers: new_headers}).then(resp => {
+            this.setState({loading: false}, () => {
+                this.getMedia("deleted", "success");
             });
-        } catch (e) {
-            this.props.Redirect()
-        }
+        }).catch(err => {
+            console.log(err);
+            this.setState({loading: false}, () => {
+                document.getElementById(id).removeAttribute("disabled");
+                toast.error(err.response.data)
+            });
+        })
     };
 
     pausePlayer = (run) => {
@@ -192,20 +166,17 @@ class Profile extends Component {
                 {this.state.PopupAddSingle ? <AddSingle Type={"beats"} closePopup={(e) => this.togglePopupAddSingle(e)}/> : <ToastContainer/>}
                 {this.state.PopupEditProfile ? <EditProfile closePopup={(e) => this.togglePopupEditProfile(e)}/> : <ToastContainer/>}
                 {this.state.PopupAddEditSingle !== -1 ? <EditSingle Song={this.state.song} Type={this.state.type_} Success={() => {
-                    this.getMedia();
                     this.setState({PopupAddEditSingle: -1});
-                    toast.success("Updated");
+                    this.getMedia("Updated", "success");
                 }} CloseEdit={() => this.setState({PopupAddEditSingle: -1})}
                 />: <ToastContainer/>}
                 {this.state.PopupAddEditAlbum !== -1 ? <EditAlbum Album={this.props.albums[this.state.PopupAddEditAlbum]} Success={() => {
-                    this.getMedia();
                     this.setState({PopupAddEditAlbum: -1});
-                    toast.success("Updated");
+                    this.getMedia("Updated", "success");
                 }} CloseEdit={() => this.setState({PopupAddEditAlbum: -1})}
                 />: <ToastContainer/>}
                 {this.state.PopupRequestToArtist !== -1 ? <RequestToArtist ProfileName={this.props.profile_info.name} Success={() => {
-                    this.setState({PopupRequestToArtist: -1});
-                    toast.success("Request Send");
+                    window.location.reload()
                 }} CloseRequest={() => this.setState({PopupRequestToArtist: -1})}
                 />: <ToastContainer/>}
                 <div className="container-fluid relative animatedParent animateOnce p-lg-3">
@@ -221,8 +192,7 @@ class Profile extends Component {
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         {this.props.role !== "Artist" && this.props.role !== "Manager" ?
                                             <div>
-                                                <p className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an artist</p>
-                                                <p className="dropdown-item"><i className="icon-user-4 mr-3"/>Become an manager</p>
+                                                <p className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an BeatMaker</p>
                                             </div> : null }
                                         <li className="dropdown-item list-group-item d-flex justify-content-between align-items-center">
                                             <div>
@@ -511,9 +481,9 @@ class Profile extends Component {
                                                 {/*</div>*/}
                                                 <div className="tab-pane fade  show active" id="w2-tab3" role="tabpanel"
                                                      aria-labelledby="w2-tab3">
-                                                    {this.props.beats_ ?
+                                                    {this.state.beats ?
                                                         <div className="playlist pl-lg-3 pr-lg-3">
-                                                            {this.props.beats_.map((val, index) =>
+                                                            {this.state.beats.map((val, index) =>
                                                                 <div className="m-1 my-4" key={index}>
                                                                     <div className="d-flex align-items-center">
                                                                         <div className="col-1">
@@ -634,7 +604,7 @@ class Profile extends Component {
                         </div>
                     </div>
                     :null}
-                {this.props.contract ? <EditBeats/> : null}
+                {this.props.contract ? <EditContractBeats/> : null}
                 </div>
             );
     }

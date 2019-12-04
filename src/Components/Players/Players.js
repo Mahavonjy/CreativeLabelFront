@@ -334,7 +334,7 @@ class Players extends Component {
     render() {
         return (
             <div key={this.props.key}>
-                <aside className="control-sidebar fixed ">
+                <aside className="control-sidebar fixed " style={{height: "100%"}}>
                     <div className="slimScroll">
                         <div className="sidebar-header">
                             <h4>Beats Playlist</h4>
@@ -435,34 +435,6 @@ class Players extends Component {
                                         <i className="icon icon-menu s-36" />
                                     </a>
                                 </li>
-                                {/* User Account*/}
-                                {/*<li className="dropup custom-dropdown user user-menu ">*/}
-                                {/*    <a href="#" className="nav-link" data-toggle="dropdown">*/}
-                                {/*        {this.state.songId ?*/}
-                                {/*            <figure className="avatar">*/}
-                                {/*                <img src={this.state.currentImage} alt="" />*/}
-                                {/*            </figure> :*/}
-                                {/*            <figure className="avatar">*/}
-                                {/*                <i className="icon-user-circle" />*/}
-                                {/*            </figure>}*/}
-                                {/*    </a>*/}
-                                {/*    <div className="dropdown-menu p-4 dropdown-menu-right">*/}
-                                {/*        <div className="row box justify-content-between my-2">*/}
-                                {/*            <div className="col text-center">*/}
-                                {/*                <a className="ajaxifyPage" href="saved.html">*/}
-                                {/*                    <i className="icon icon-heart s-24" />*/}
-                                {/*                    <div className="pt-1">Follow</div>*/}
-                                {/*                </a>*/}
-                                {/*            </div>*/}
-                                {/*            <div className="col text-center">*/}
-                                {/*                <a className="ajaxifyPage" href="profile.html">*/}
-                                {/*                    <i className="icon-user-4  s-24" />*/}
-                                {/*                    <div className="pt-1">Profile</div>*/}
-                                {/*                </a>*/}
-                                {/*            </div>*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*</li>*/}
                             </ul>
                         </div>
                     </div>

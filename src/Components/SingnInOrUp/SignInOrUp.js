@@ -31,31 +31,6 @@ class SignInOrUp extends Component {
 
     changeName = (e) => {this.setState({name: e.target.value});};
 
-    getIfToken = () => {
-        let cookies = new Cookies();
-        let data = cookies.get("Isl_Creative_pass");
-        if (data) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp => {
-                    this.setState({redirect: true});
-                }).catch(err =>{
-                    if (err.response.data === "no choice music genre") {
-                        this.setState({to_route: '/preference'});
-                        this.setState({loading: false});
-                        this.setState({redirect: true});
-                    }
-                })
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
-    };
-
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -76,16 +51,14 @@ class SignInOrUp extends Component {
             axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp =>{
                 toast.success("You are logged");
                 document.getElementsByClassName("close")[0].click();
-                window.location.reload();
                 setTimeout(() => {
                     window.location.reload();
-                }, 1000);
+                }, 2000);
             }).catch(err => {
                 try {
                     if (err.response.data === "no choice music genre") {
-                        this.setState({to_route: '/preference'}, () => {
-                            this.setState({loading: false});
-                            window.location.replace(this.state.to_route)
+                        this.setState({loading: false}, () => {
+                            window.location.replace('/preference')
                         });
                     } else {
                         console.log(err)
@@ -99,7 +72,9 @@ class SignInOrUp extends Component {
             if (response === "Active your account") {
                 this.setState({visible: true}, () => {toast.error(response)});
             } else {
-                toast.error(response);
+                this.setState({loading: false}, () => {
+                    toast.error("email or password incorrect")
+                });
             }
         })
     };
@@ -122,7 +97,6 @@ class SignInOrUp extends Component {
             email: this.state.email
         };
         axios.post(Conf.configs.ServerApi + "api/users/get_mail", data).then(response =>{
-            console.log(response.data);
             this.setState({visibility: false});
             this.setState({ResetPassword: true});
         }).catch(error =>{

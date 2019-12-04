@@ -3,37 +3,15 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Home from "../Home/Home";
 import NotFound from "../NotFound/NotFound";
 import PreviewScreen from "../PreviewScreen/PreviewScreen";
-import axios from "axios";
-import Conf from "../../Config/tsconfig";
-import Cookies from "universal-cookie/cjs";
-import {toast, ToastContainer} from "react-toastify";
+import ConnexionError from "../ConnexionError/ConnexionError";
 
 class Container extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            href: window.location.href.split("/"), ret: false, isMounted: false,
+            href: window.location.href.split("/"), isMounted: false,
         };
     }
-
-    IfConnected = () => {
-        try {
-           let cookies = new Cookies();
-           let headers = {
-               'Content-Type': 'application/json',
-               'Access-Control-Allow-Origin': "*",
-               'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-           };
-           axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: headers}).then(resp => {
-               this.setState({ret: true});
-           }).catch(err => {
-               console.log()
-           })
-       } catch (e) {
-            console.log()
-       }
-       return this.state.ret
-    };
 
     componentDidMount() {
         this.setState({ isMounted: true})
@@ -46,7 +24,6 @@ class Container extends Component {
     render() {
         return (
                 <BrowserRouter>
-                    <ToastContainer/>
                     <Switch>
                         <Route exact path="/">
                             <PreviewScreen/>
@@ -54,7 +31,7 @@ class Container extends Component {
                         <Route path="/home">
                             <Home/>
                         </Route>
-                        {this.IfConnected() && this.state.href[this.state.href.length - 1] === "Profile" ?
+                        {this.state.href[this.state.href.length - 1] === "Profile" ?
                             <Route path="/Profile">
                                 <Home Page="/home"/>
                             </Route> :  null}
@@ -75,6 +52,9 @@ class Container extends Component {
                         </Route>
                         <Route path="/preference">
                             <Home/>
+                        </Route>
+                        <Route path="/badConnexion">
+                            <ConnexionError/>
                         </Route>
                         <Route component={NotFound}/>
                     </Switch>

@@ -4,6 +4,7 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import Conf from "../../Config/tsconfig";
 import Modal from "react-awesome-modal";
+import {connect} from "react-redux";
 
 class EditPlaylist extends Component {
     constructor(props) {
@@ -13,8 +14,8 @@ class EditPlaylist extends Component {
             genre: this.props.data.genre,
             description: this.props.data.description,
             photo: '',
-            genre_info: [],
-            loading: false
+            loading: false,
+            isMounted: false
         };
     }
 
@@ -59,26 +60,12 @@ class EditPlaylist extends Component {
         document.getElementById(e.target.id).removeAttribute("disabled");
     };
 
-    getAllMediaGenre = () => {
-        let cookies = new Cookies();
-        let new_headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-        axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: new_headers}).then(resp => {
-            for (let row in resp.data) {
-                this.setState(prevState => ({
-                    genre_info: [...prevState.genre_info, resp.data[row].genre]
-                }))
-            }
-        }).catch(err => {
-            toast.error(err.response.data)
-        })
-    };
-
     componentDidMount() {
-        this.getAllMediaGenre();
+        this.setState({isMounted: true});
+    }
+
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
     }
 
     render() {
@@ -122,7 +109,7 @@ class EditPlaylist extends Component {
                                     <input id="genre" name="genre" className="form-control" value={this.state.genre}
                                            onChange={this.changeGenre} list="music-genre" required/>
                                     <datalist id="music-genre">
-                                        {this.state.genre_info.map((val, index) => <option key={index} value={val}/>)}
+                                        {this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                     </datalist>
                                 </div>
                                 <div className="input-group-prepend">
@@ -147,4 +134,10 @@ class EditPlaylist extends Component {
     }
 }
 
-export default EditPlaylist;
+const mapStateToProps = state => {
+    return {
+        AllMediaGenre: state.Home.AllMediaGenre,
+    };
+};
+
+export default connect(mapStateToProps, null)(EditPlaylist);

@@ -5,13 +5,13 @@ import Cookies from "universal-cookie";
 import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import logo from "../../../images/Logo/ISL_logo.png";
 
 class EditProfile extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            photo: '',
-            loading: false,
+            photo: '', loading: false,
             name: this.props.profile_info.name,
             email: this.props.profile_info.email,
             gender: this.props.profile_info.gender,
@@ -46,14 +46,11 @@ class EditProfile extends Component {
 
     changeAge = (e) => {this.setState({age : e.target.value});};
 
-    uploadFile = (e) =>{
-        let file = e.target.files[0];
-        console.log(file);
-        this.setState({photo : file});
-    };
+    uploadFile = (e) =>{this.setState({photo : e.target.files[0]});};
 
-    handleSubmit = (e) => {
-        document.getElementById(e.target.id).setAttribute("disabled", "disabled");
+    handleSubmitUpdateProfile = (e) => {
+        let id = e.target.id;
+        document.getElementById(id).setAttribute("disabled", "disabled");
         this.setState({loading: true});
         let cookies = new Cookies();
         const bodyFormData = new FormData();
@@ -76,24 +73,22 @@ class EditProfile extends Component {
             'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
         };
 
-        axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-            axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: new_headers}).then(resp => {
-                this.setState({loading: false});
-                this.props.profile_initialisation(resp.data);
-                console.log(resp.data)
-            }).catch(err => {
-                this.setState({loading: false});
-                toast.error(err.response.data)
+        axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: new_headers}).then(resp => {
+            this.props.profile_initialisation(resp.data);
+            this.setState({loading: false}, () => {
+                this.props.closePopup(1);
             });
-            this.props.closePopup(1);
         }).catch(err => {
-            console.log(err.response);
-        })
+            this.setState({loading: false}, () => {
+                toast.error(err.response.data);
+                document.getElementById(id).removeAttribute("disabled");
+            });
+        });
     };
 
     render() {
         return (
-            <Modal visible={true} width="700" height="800" animationType='slide'>
+            <Modal visible={true} width="650" height="550" animationType='slide'>
                 <ToastContainer/>
                 {this.state.loading ?
                     <div className="preloader-wrapper small active" style={{position: "absolute", right: 0}}>
@@ -106,8 +101,8 @@ class EditProfile extends Component {
                             </div>
                         </div>
                     </div>: null}
-                <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
-
+                <img alt={"logo"} src={logo} className="center" style={{position: "absolute",width: 650, height: 550, opacity:0.4}}/>
+                <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
                     <button className="ModalClose" onClick={(e) => this.props.closePopup(0)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
@@ -115,15 +110,13 @@ class EditProfile extends Component {
                         <h4 className="text-green text-monospace">Edit Profile</h4>
                         <div className="body">
                             <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-user"/>name</div>
                                     <input value={this.state.name} onChange={this.changeName}
                                            id="name" name="name" placeholder="name"
                                            className="form-control" type="text" required/>
                                 </div>
-                            </div>
-                            <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-envelope"/>email</div>
                                     <input value={this.state.email} onChange={this.changeEmail}
                                            id="email" name="email" placeholder="Email"
@@ -131,49 +124,50 @@ class EditProfile extends Component {
                                 </div>
                             </div>
                             <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-location-arrow"/>region</div>
                                     <input value={this.state.region} onChange={this.changeRegion}
                                            id="region" name="region" className="form-control"  type="text" />
                                 </div>
-                            </div>
-                            <div className="custom-float">
-                                <div className="input-group-prepend">
+
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-birthday-cake"/>birth</div>
                                     <input  value={this.state.birth} onChange={this.changeBirth}
                                             id="birth" name="birth" className="form-control" type="date" />
                                 </div>
                             </div>
                             <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-address-book"/>address</div>
                                     <input value={this.state.address} onChange={this.changeAddress}
                                            id="address" name="address" className="form-control" type="text" />
                                 </div>
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
+                                    <div className="input-group-text"><i className="icon-map-location"/>country</div>
+                                    <select className="selectpicker form-control" value={this.state.country} onChange={this.changeCountry}>
+                                        <option value="Madagascar">Madagascar</option>
+                                    </select>
+                                </div>
                             </div>
                             <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-smartphone-1"/>phone</div>
                                     <input value={this.state.phone} onChange={this.changePhone}
                                            id="phoneNumber" name="phoneNumber" className="form-control" type="number" />
                                 </div>
-                            </div>
-                            <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-street-view"/>city</div>
                                     <input value={this.state.city} onChange={this.changeCity}
                                            id="city" name="city" className="form-control" type="text" />
                                 </div>
                             </div>
                             <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-info-circle"/>description</div>
                                     <input value={this.state.description} onChange={this.changeDescription}
                                            id="description" name="description" className="form-control" type="text" />
                                 </div>
-                            </div>
-                            <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text"><i className="icon-venus-double"/>gender</div>
                                     <select className="selectpicker form-control" value={this.state.gender} onChange={this.changeGender}>
                                         <option value="0">Female</option>
@@ -182,21 +176,12 @@ class EditProfile extends Component {
                                 </div>
                             </div>
                             <div className="custom-float">
-                                <div className="input-group-prepend">
-                                    <div className="input-group-text"><i className="icon-map-location"/>country</div>
-                                    <select className="selectpicker form-control" value={this.state.country} onChange={this.changeCountry}>
-                                        <option value="Madagascar">Madagascar</option>
-                                        <option value="Senegal">Senegal</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="custom-float">
-                                <div className="input-group-prepend">
+                                <div className="input-group-prepend center" style={{width: "90%"}}>
                                     <div className="input-group-text"><i className="icon-picture-o"/>profile picture</div>
                                     <input onChange={this.uploadFile} id="picture" name="picture" className="form-control" type="file" />
                                 </div>
                             </div>
-                            <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e) => this.handleSubmit(e)}>Update</button>
+                            <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e) => this.handleSubmitUpdateProfile(e)}>Update</button>
                         </div>
                     </div>
                 </div>

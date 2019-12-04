@@ -12,7 +12,8 @@ class LoginGoogle extends React.Component{
         this.state = {
             to_route: '/',
             loading: false,
-            redirect: false
+            redirect: false,
+            isMounted: false
         };
     }
 
@@ -58,6 +59,14 @@ class LoginGoogle extends React.Component{
         //     console.log(error);
         // });
     };
+
+    componentDidMount() {
+        this.setState({isMounted: true});
+    }
+
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
+    }
 
     render () {
         const redirectToReferrer = this.state.redirect;

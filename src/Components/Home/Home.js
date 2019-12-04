@@ -14,13 +14,14 @@ import Conf from "../../Config/tsconfig";
 import './Home.css';
 import Loader from 'react-loader-spinner'
 import {connect} from "react-redux";
-import Modal from "react-awesome-modal";
 import OneBeat from "../Beats/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import {toast} from "react-toastify";
 import SignInOrUp from "../SingnInOrUp/SignInOrUp";
 import Register from "../Register/Register";
 import Preference from "../Preference/SongGenre";
+import FunctionTools from "../FunctionTools/FunctionTools";
+import ReactTooltip from "react-tooltip";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let cookies = new Cookies();
@@ -35,7 +36,7 @@ class Home extends Component {
             href: window.location.href.split("/"),
             single_beat: '', all_artist_beats: [], beats_similar: [],
             profile_checked: '', user_data: '', user_beats: [],
-            logout_class: "icon icon-exit-2 s-24", log_name: "logout"
+            logout_class: "icon icon-exit-2 s-24", log_name: "logout", ret: false, connexion_reloaded: 0
         };
     }
 
@@ -51,19 +52,26 @@ class Home extends Component {
     };
 
     ifConnectionError = (err) => {
-        try {
-            if (err.response.data === "Connection error") {
-                setTimeout(() => {
-                    this.componentDidMount();
-                }, 5000);
-            } else if (err.response.data === "token invalid") {
-                this.logout();
-            } else {
-                this.logout();
+        this.setState({connexion_reloaded: this.state.connexion_reloaded + 1}, () => {
+            try {
+                if (err.response.data === "Connection error") {
+                    if (this.state.connexion_reloaded > 3) {
+                        window.location.replace('/badConnexion')
+                    } else {
+                        setTimeout(() => {
+                            this.componentDidMount();
+                        }, 5000);
+                    }
+                } else if (err.response.data === "token invalid") {
+                    this.logout();
+                } else {
+                    this.logout();
+                }
+            } catch (e) {
+                console.log(err)
+                // this.logout();
             }
-        } catch (e) {
-            this.logout();
-        }
+        })
     };
 
     NotOnline = (headers_) => {
@@ -74,36 +82,49 @@ class Home extends Component {
             this.props.latestBeats(resp.data["latest_beats"]);
             this.props.discoveryBeats(resp.data["discovery_beats"]);
             this.props.islBeats(resp.data["isl_playlist"]);
-            if (this.state.href[this.state.href.length - 2] === "CheckThisBeat") {
-                axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
-                    this.setState({
-                        single_beat: resp.data['single_beat'],
-                        all_artist_beats: resp.data['all_artist_beats'],
-                        beats_similar: resp.data['similar_beats']
-                    }, () => {
-                        this.setState({loading: false})
+            axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: headers_}).then(resp =>{
+                const info = resp.data;
+                let tmp_arr = [];
+                for (let row in info) {tmp_arr.push(info[row].genre)}
+                this.props.addAllMediaGenre(tmp_arr);
+                if (this.state.href[this.state.href.length - 2] === "CheckThisBeat") {
+                    axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp => {
+                        this.setState({
+                            single_beat: resp.data['single_beat'],
+                            all_artist_beats: resp.data['all_artist_beats'],
+                            beats_similar: resp.data['similar_beats']
+                        }, () => {
+                            this.setState({loading: false})
+                        })
+                    }).catch(err => {
+                        this.setState({loading: false}, () => {
+                            toast.error("Connection Error")
+                        });
                     })
-                }).catch(err => {
-                    toast.error("Connection Error")
-                })
-            } else if (this.state.href[this.state.href.length - 2] === "isl_artist_profile") {
-                axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
-                    this.setState({
-                        profile_checked: resp.data['profile_checked'],
-                        user_data: resp.data['user_data'],
-                        user_beats: resp.data['user_beats']
-                    }, () => {
-                        this.setState({loading: false})
+                } else if (this.state.href[this.state.href.length - 2] === "isl_artist_profile") {
+                    axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
+                        this.setState({
+                            profile_checked: resp.data['profile_checked'],
+                            user_data: resp.data['user_data'],
+                            user_beats: resp.data['user_beats']
+                        }, () => {
+                            this.setState({loading: false})
+                        })
+                    }).catch(err => {
+                        toast.error("Connection Error")
                     })
-                }).catch(err => {
-                    toast.error("Connection Error")
-                })
-            } else {
-                this.setState({loading: false}, () => {
-                    if (this.state.href[this.state.href.length - 1] === "home#LoginRequire")
-                        document.getElementsByClassName("LoginRequire")[0].click();
-                })
-            }
+                } else if (this.state.href[this.state.href.length - 1] === 'register') {
+                    FunctionTools.getIfToken();
+                    this.setState({loading: false})
+                } else {
+                    this.setState({loading: false}, () => {
+                        if (this.state.href[this.state.href.length - 1] === "home#LoginRequire")
+                            document.getElementsByClassName("LoginRequire")[0].click();
+                    })
+                }
+            }).catch(err => {
+                console.log(err.response)
+            });
         }).catch(err => {
             console.log(err)
         });
@@ -119,34 +140,54 @@ class Home extends Component {
                             'Access-Control-Allow-Origin': "*",
                             'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
                         };
-                        axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
-                            this.props.beats_initialisation_pricing(resp.data);
-                            axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
-                                this.props.profile_initialisation_info(resp.data['my_profile']);
-                                this.props.profile_initialisation_role(resp.data['role']);
-                                this.props.profile_initialisation_follower(resp.data['my_followers']);
-                                this.props.profile_initialisation_following(resp.data['my_followings']);
-                                if (resp.data['role'] === "Artist") {
-                                    axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-                                        this.props.profile_add_beats(resp.data['beats']);
-                                        this.props.profile_add_single(resp.data['music']);
-                                        this.props.profile_add_albums(resp.data['albums']);
-                                        axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
-                                            this.props.profile_initialisation_contract(resp.data);
+                        if (this.state.href[this.state.href.length - 1] !== 'preference') {
+                            axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                                axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
+                                    this.props.beats_initialisation_pricing(resp.data);
+                                    axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
+                                        this.props.profile_initialisation_info(resp.data['my_profile']);
+                                        this.props.profile_initialisation_role(resp.data['role']);
+                                        this.props.profile_initialisation_follower(resp.data['my_followers']);
+                                        this.props.profile_initialisation_following(resp.data['my_followings']);
+                                        FunctionTools.AddPropsCart(headers, this.props);
+                                        if (resp.data['role'] === "Artist") {
+                                            axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
+                                                this.props.profile_add_beats(resp.data['beats']);
+                                                this.props.profile_add_single(resp.data['music']);
+                                                this.props.profile_add_albums(resp.data['albums']);
+                                                axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
+                                                    this.props.profile_initialisation_contract(resp.data);
+                                                    this.NotOnline(headers)
+                                                }).catch(err => {
+                                                    this.ifConnectionError(err);
+                                                })
+                                            }).catch(err => {
+                                                console.log(err.response)
+                                            })
+                                        } else {
                                             this.NotOnline(headers)
-                                        }).catch(err => {
-                                            this.ifConnectionError(err);
-                                        })
+                                        }
                                     }).catch(err => {
-                                        console.log(err.response)
-                                    })
-                                }
+                                        this.ifConnectionError(err);
+                                    });
+                                }).catch(err => {
+                                    this.ifConnectionError(err);
+                                });
                             }).catch(err => {
-                                this.ifConnectionError(err);
+                                try {
+                                    if (err.response.data === "no choice music genre")
+                                        window.location.replace('/preference')
+                                }catch(e){
+                                    window.location.replace('/badConnexion')
+                                }
                             });
-                        }).catch(err => {
-                            this.ifConnectionError(err);
-                        });
+                        } else {
+                            axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                                window.location.replace('/home')
+                            }).catch(() => {
+                                this.setState({loading: false});
+                            });
+                        }
                     } catch (e) {
                         this.setState({logout_class: "icon icon-login s-24", log_name: "login"}, () => {
                             headers = {
@@ -159,7 +200,7 @@ class Home extends Component {
                     }
                 });
             } else {
-                console.log()
+                console.log("")
             }
         });
     }
@@ -225,7 +266,8 @@ class Home extends Component {
                                 <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
                                     <div className="sidebar">
                                         <ul className="sidebar-menu">
-                                            <li style={{margin: "0 0 20px 10px"}} onClick={() => {
+                                            <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
+                                            <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Instrumental" onClick={() => {
                                                 if (location.pathname !== "/home") {
                                                     history.push("/home");
                                                     this.setState({select: ""})
@@ -240,7 +282,7 @@ class Home extends Component {
                                             {/*}}>*/}
                                             {/*    <i className="icon icon-home-1 s-24" /> <span>Music</span>*/}
                                             {/*</li>*/}
-                                            <li style={{margin: "0 0 20px 10px"}} onClick={() => {
+                                            <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profile" onClick={() => {
 
                                                 if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                                                     document.getElementById("LoginRequire").click();
@@ -263,7 +305,7 @@ class Home extends Component {
                                         {/*}}>*/}
                                         {/*    <i className="icon icon-dedent s-24" /> <span>Playlist</span>*/}
                                         {/*</li>*/}
-                                            <li style={{margin: "0 0 20px 10px"}} onClick={() => {
+                                            <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
                                                 if (location.pathname !== "/Cart") {
                                                     history.push("/Cart");
                                                     this.setState({select: "Cart"})
@@ -289,7 +331,7 @@ class Home extends Component {
                                             {/*    <i className="icon icon-info s-24" /> <span>About Us</span>*/}
                                             {/*</li>*/}
 
-                                            <li style={{margin: "0 0 20px 10px"}} onClick={this.logout}>
+                                            <li style={{margin: "0 0 20px 10px"}} data-tip={this.state.logout_class === "icon icon-login s-24"? "Se Connecter": " Se deconnecter"} onClick={this.logout}>
                                                 <i className={this.state.logout_class}/> <span>{this.state.log_name}</span>
                                             </li>
                                         </ul>
@@ -304,17 +346,19 @@ class Home extends Component {
                                     } />
                                     <Route path="/preference" exact component={
                                         () => {
-                                            if (cookies.get("Isl_Creative_pass"))
-                                                return (<Preference/>)
-                                            else window.location.replace('/home#LoginRequire')
+                                            if (cookies.get("Isl_Creative_pass")) {
+                                                return (<Preference/>);
+                                            } else window.location.replace('/home#LoginRequire')
                                         }
                                     } />
-                                    <Route path="/Profile" component={
-                                        () => <Profile Redirect={() => this.logout()}
-                                                       IfToken={this.redirectToLogin}
-                                                       ToPlay={this.addToPlaylist}
-                                        />
-                                    } />
+                                    <Route exact path="/Profile" component={
+                                        () => {if (cookies.get("Isl_Creative_pass"))
+                                        return (<Profile Redirect={() => this.logout()}
+                                                         IfToken={this.redirectToLogin}
+                                                         ToPlay={this.addToPlaylist}
+                                        />);
+                                        else window.location.replace('/home#LoginRequire')
+                                    }}/>
                                     <Route path="/home" exact component={
                                         () => <Beats Redirect={() => this.logout()}
                                                      IfToken={this.redirectToLogin}
@@ -363,7 +407,9 @@ class Home extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.Home.auth,
+        AllMediaGenre: state.Home.AllMediaGenre,
         contract: state.profile.contract,
+        beats_: state.profile.beats,
         beats: state.beats.beats,
     };
 };
@@ -371,13 +417,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         profile_add_albums: (data) => {
-            dispatch({type: "ADD_ALBUMS", data: data})
+            dispatch({type: "ADD_PROFILE_ALBUMS", data: data})
         },
         profile_add_single: (data) => {
-            dispatch({type: "ADD_SINGLE", data: data})
+            dispatch({type: "ADD_PROFILE_SINGLE", data: data})
         },
         profile_add_beats: (data) => {
-            dispatch({type: "ADD_BEATS", data: data})
+            dispatch({type: "ADD_PROFILE_BEATS", data: data})
         },
         beats_initialisation_pricing: (data) => {
             dispatch({type: "ADD_PRICING", data: data})
@@ -418,6 +464,15 @@ const mapDispatchToProps = dispatch => {
         islBeats: (data) => {
             dispatch({type: "ADD_ISL_PLAYLIST", data: data})
         },
+        addAllMediaGenre: (data) => {
+            dispatch({type: "ADD_ALL_MEDIA_GENRE", data: data})
+        },
+        addCarts: (data) => {
+            dispatch({type: "ADD_CART", data: data})
+        },
+        addTotalPrice: (data) => {
+            dispatch({type: "ADD_TOTAL_PRICE", data: data})
+        }
     };
 };
 

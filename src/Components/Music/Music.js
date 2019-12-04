@@ -24,6 +24,7 @@ class Music extends Component {
             loading: false,
             errorMessage: '',
             alb: false,
+            isMounted: false
         };
     }
 
@@ -44,31 +45,37 @@ class Music extends Component {
     };
 
     componentDidMount() {
-        let cookies = new Cookies();
-        try {
-            if (!cookies.get("Isl_Creative_pass")["Isl_Token"]) {
-                this.props.Redirect();
-            }
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                cookies.set("Isl_Creative_licenses", {"licenses":resp.data.licenses});
-                if (this.props.albums_array.length === 0) {
-                    this.setState({loading: false});
-                    this.albumSuggestion();
-                    this.MediaSuggestion();
-                }
-            }).catch(err => {
-                if (err.response.data === "token invalid") {
+        this.setState({isMounted: true}, () => {
+            let cookies = new Cookies();
+            try {
+                if (!cookies.get("Isl_Creative_pass")["Isl_Token"]) {
                     this.props.Redirect();
                 }
-            })
-        } catch (e) {
-            this.props.Redirect();
-        }
+                let new_headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': "*",
+                    'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+                };
+                axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
+                    cookies.set("Isl_Creative_licenses", {"licenses":resp.data.licenses});
+                    if (this.props.albums_array.length === 0) {
+                        this.setState({loading: false});
+                        this.albumSuggestion();
+                        this.MediaSuggestion();
+                    }
+                }).catch(err => {
+                    if (err.response.data === "token invalid") {
+                        this.props.Redirect();
+                    }
+                })
+            } catch (e) {
+                this.props.Redirect();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
     }
 
     addForPlay = (music_list) => {

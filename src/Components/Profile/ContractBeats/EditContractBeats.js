@@ -6,35 +6,31 @@ import Cookies from "universal-cookie";
 import {toast, ToastContainer} from "react-toastify";
 
 const cookies = new Cookies();
-class EditBeats extends Component {
+class EditContractBeats extends Component {
     constructor (props) {
         super(props);
         this.state = {
             basic_enable: this.props.contract['basic_lease']['enabled'],
-            basic_north_price: this.props.contract['basic_lease']['north_price'],
-            basic_south_price: this.props.contract['basic_lease']['south_price'],
+            basic: this.props.contract['basic_lease']['price'],
             basic_number_audio_stream: this.props.contract['basic_lease']['number_audio_stream'],
             basic_number_radio_station: this.props.contract['basic_lease']['number_radio_station'],
             basic_number_of_distribution_copies: this.props.contract['basic_lease']['number_of_distribution_copies'],
 
             silver_enable: this.props.contract['silver_lease']['enabled'],
-            silver_north_price: this.props.contract['silver_lease']['north_price'],
-            silver_south_price: this.props.contract['silver_lease']['south_price'],
+            silver: this.props.contract['silver_lease']['price'],
             silver_number_audio_stream: this.props.contract['silver_lease']['number_audio_stream'],
             silver_number_radio_station: this.props.contract['silver_lease']['number_radio_station'],
             silver_number_of_distribution_copies: this.props.contract['silver_lease']['number_of_distribution_copies'],
 
             gold_enable: this.props.contract['gold_lease']['enabled'],
-            gold_north_price: this.props.contract['gold_lease']['north_price'],
-            gold_south_price: this.props.contract['gold_lease']['south_price'],
+            gold: this.props.contract['gold_lease']['price'],
             gold_number_audio_stream: this.props.contract['gold_lease']['number_audio_stream'],
             gold_number_radio_station: this.props.contract['gold_lease']['number_radio_station'],
             gold_number_of_distribution_copies: this.props.contract['gold_lease']['number_of_distribution_copies'],
 
             platinum_enable: this.props.contract['platinum_lease']['enabled'],
             platinum_unlimited: this.props.contract['platinum_lease']['unlimited'],
-            platinum_north_price: this.props.contract['platinum_lease']['north_price'],
-            platinum_south_price: this.props.contract['platinum_lease']['south_price'],
+            platinum: this.props.contract['platinum_lease']['price'],
             platinum_number_audio_stream: this.props.contract['platinum_lease']['number_audio_stream'],
             platinum_number_radio_station: this.props.contract['platinum_lease']['number_radio_station'],
             platinum_number_of_distribution_copies: this.props.contract['platinum_lease']['number_of_distribution_copies'],
@@ -42,35 +38,31 @@ class EditBeats extends Component {
     }
 
     // Initialisation of all basic lease state
-    changeBasicEnabled =  (e) => {this.setState({basic_enable : !this.state.basic_enable})};
-    changeBasicNorthPrice =  (e) => {this.setState({basic_north_price : e.target.value})};
-    changeBasicSouthPrice =  (e) => {this.setState({basic_south_price : e.target.value})};
+    changeBasicEnabled =  () => {this.setState({basic_enable : !this.state.basic_enable})};
+    changeBasicPrice =  (e) => {this.setState({basic : e.target.value})};
     changeBasicAudioStream =  (e) => {this.setState({basic_number_audio_stream : e.target.value})};
     changeBasicRadioStation =  (e) => {this.setState({basic_number_radio_station : e.target.value})};
     changeBasicDistributionCopies =  (e) => {this.setState({basic_number_of_distribution_copies : e.target.value})};
     // Initialisation of all silver lease state
     changeSilverEnabled =  (e) => {this.setState({silver_enable : !this.state.silver_enable})};
-    changeSilverNorthPrice =  (e) => {this.setState({silver_north_price : e.target.value})};
-    changeSilverSouthPrice =  (e) => {this.setState({silver_south_price : e.target.value})};
+    changeSilverPrice =  (e) => {this.setState({silver : e.target.value})};
     changeSilverAudioStream =  (e) => {this.setState({silver_number_audio_stream : e.target.value})};
     changeSilverRadioStation =  (e) => {this.setState({silver_number_radio_station : e.target.value})};
     changeSilverDistributionCopies =  (e) => {this.setState({silver_number_of_distribution_copies : e.target.value})};
     // Initialisation of all gold lease state
     changeGoldEnabled =  (e) => {this.setState({gold_enable : !this.state.gold_enable})};
-    changeGoldNorthPrice =  (e) => {this.setState({gold_north_price : e.target.value})};
-    changeGoldSouthPrice =  (e) => {this.setState({gold_south_price : e.target.value})};
+    changeGoldPrice =  (e) => {this.setState({gold : e.target.value})};
     changeGoldAudioStream =  (e) => {this.setState({gold_number_audio_stream : e.target.value})};
     changeGoldRadioStation =  (e) => {this.setState({gold_number_radio_station : e.target.value})};
     changeGoldDistributionCopies =  (e) => {this.setState({gold_number_of_distribution_copies : e.target.value})};
     // Initialisation of all platinum lease state
     changePlatinumEnabled =  (e) => {this.setState({platinum_enable : !this.state.platinum_enable})};
-    changePlatinumNorthPrice =  (e) => {this.setState({platinum_north_price : e.target.value})};
-    changePlatinumSouthPrice =  (e) => {this.setState({platinum_south_price : e.target.value})};
+    changePlatinumPrice =  (e) => {this.setState({platinum : e.target.value})};
     changePlatinumAudioStream =  (e) => {this.setState({platinum_number_audio_stream : e.target.value})};
     changePlatinumRadioStation =  (e) => {this.setState({platinum_number_radio_station : e.target.value})};
     changePlatinumDistributionCopies =  (e) => {this.setState({platinum_number_of_distribution_copies : e.target.value})};
 
-    handleSubmit = (e) => {
+    handleSubmitContractUpdate = (e) => {
         let url, data;
         let headers = {
             'Content-Type': 'application/json',
@@ -81,8 +73,7 @@ class EditBeats extends Component {
             url = 'update_basic';
             data = this.props.contract['basic_lease'];
             data['enabled'] = this.state.basic_enable;
-            data['south_price'] = this.state.basic_south_price;
-            data['north_price'] = this.state.basic_north_price;
+            data['price'] = this.state.basic;
             data['number_audio_stream'] = this.state.basic_number_audio_stream;
             data['number_radio_station'] = this.state.basic_number_radio_station;
             data['number_of_distribution_copies'] = this.state.basic_number_of_distribution_copies;
@@ -90,8 +81,7 @@ class EditBeats extends Component {
             url = 'update_silver';
             data = this.props.contract['silver_lease'];
             data['enabled'] = this.state.silver_enable;
-            data['south_price'] = this.state.silver_south_price;
-            data['north_price'] = this.state.silver_north_price;
+            data['price'] = this.state.silver;
             data['number_audio_stream'] = this.state.silver_number_audio_stream;
             data['number_radio_station'] = this.state.silver_number_radio_station;
             data['number_of_distribution_copies'] = this.state.silver_number_of_distribution_copies;
@@ -99,8 +89,7 @@ class EditBeats extends Component {
             url = 'update_gold';
             data = this.props.contract['gold_lease'];
             data['enabled'] = this.state.gold_enable;
-            data['south_price'] = this.state.gold_south_price;
-            data['north_price'] = this.state.gold_north_price;
+            data['price'] = this.state.gold;
             data['number_audio_stream'] = this.state.gold_number_audio_stream;
             data['number_radio_station'] = this.state.gold_number_radio_station;
             data['number_of_distribution_copies'] = this.state.gold_number_of_distribution_copies;
@@ -108,8 +97,7 @@ class EditBeats extends Component {
             url = 'update_platinum';
             data = this.props.contract['platinum_lease'];
             data['enabled'] = this.state.platinum_enable;
-            data['south_price'] = this.state.platinum_south_price;
-            data['north_price'] = this.state.platinum_north_price;
+            data['price'] = this.state.platinum;
             data['number_audio_stream'] = this.state.platinum_number_audio_stream;
             data['number_radio_station'] = this.state.platinum_number_radio_station;
             data['number_of_distribution_copies'] = this.state.platinum_number_of_distribution_copies;
@@ -128,10 +116,6 @@ class EditBeats extends Component {
             console.log(err.response)
         })
     };
-
-    componentDidMount() {
-        console.log("here")
-    }
 
     render() {
         return (
@@ -167,17 +151,10 @@ class EditBeats extends Component {
                             <div className="tab-pane fade text-center p-5 show active" id="w4-tab1" role="tabpanel" aria-labelledby="w4-tab1">
                                 <div className="row">
                                     <div className="col-md-8">
-                                        <div className="custom-float">
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
-                                                <input value={this.state.basic_north_price} onChange={this.changeBasicNorthPrice} id="basic_north_price" name="basic_north_price"
-                                                       className="form-control" type="text" required/>
-                                            </div>
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	south price *</div>
-                                                <input value={this.state.basic_south_price} onChange={this.changeBasicSouthPrice} id="basic_south_price"
-                                                       name="basic_south_price" className="form-control" type="text" required/>
-                                            </div>
+                                        <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
+                                            <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
+                                            <input value={this.state.basic} onChange={this.changeBasicPrice} id="basic" name="basic"
+                                                   className="form-control" type="text" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                                             <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de diffusion Radio & TV *</small>
@@ -229,23 +206,16 @@ class EditBeats extends Component {
                                 </div>
 
                                 <button className="col text-center btn btn-outline-info btn-sm pl-md-4 pr-md-4" id="basic_contract"
-                                        onClick={(e)=> this.handleSubmit(e)} style={{marginTop: 25, marginBottom: 25}}>Enregistrer</button>
+                                        onClick={(e)=> this.handleSubmitContractUpdate(e)} style={{marginTop: 25, marginBottom: 25}}>Enregistrer</button>
 
                             </div>
                             <div className="tab-pane fade text-center p-5" id="w4-tab2" role="tabpanel" aria-labelledby="w4-tab2">
                                 <div className="row">
                                     <div className="col-md-8">
-                                        <div className="custom-float">
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
-                                                <input value={this.state.silver_north_price} onChange={this.changeSilverNorthPrice} id="silver_north_price" name="silver_north_price"
-                                                       className="form-control" type="text" required/>
-                                            </div>
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	south price *</div>
-                                                <input value={this.state.silver_south_price} onChange={this.changeSilverSouthPrice} id="silver_south_price"
-                                                       name="silver_south_price" className="form-control" type="text" required/>
-                                            </div>
+                                        <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
+                                            <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
+                                            <input value={this.state.silver} onChange={this.changeSilverPrice} id="silver" name="silver"
+                                                   className="form-control" type="text" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                                             <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp; nb de diffusion Radio & TV *</small>
@@ -297,22 +267,15 @@ class EditBeats extends Component {
                                 </div>
 
                                 <button className="col text-center btn btn-outline-info btn-sm pl-md-4 pr-md-4" id="silver_contract"
-                                        onClick={(e)=> this.handleSubmit(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
+                                        onClick={(e)=> this.handleSubmitContractUpdate(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
                             </div>
                             <div className="tab-pane fade text-center p-5" id="w4-tab3" role="tabpanel" aria-labelledby="w4-tab3">
                                 <div className="row">
                                     <div className="col-md-8">
-                                        <div className="custom-float">
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
-                                                <input value={this.state.gold_north_price} onChange={this.changeGoldNorthPrice} id="gold_north_price" name="gold_north_price"
-                                                       className="form-control" type="text" required/>
-                                            </div>
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	south price *</div>
-                                                <input value={this.state.gold_south_price} onChange={this.changeGoldSouthPrice} id="gold_south_price"
-                                                       name="gold_south_price" className="form-control" type="text" required/>
-                                            </div>
+                                        <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
+                                            <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
+                                            <input value={this.state.gold} onChange={this.changeGoldPrice} id="gold" name="gold"
+                                                   className="form-control" type="text" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                                             <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp; nb de diffusion Radio & TV  *</small>
@@ -350,7 +313,7 @@ class EditBeats extends Component {
                                                     </li>
                                                     <li className="list-group-item d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <i className="icon icon-eyeglasses text-blue" />Activer l'offre Unlimited 
+                                                            <i className="icon icon-eyeglasses text-blue" />Activer l'offre Unlimited
                                                         </div>
                                                         <div className="material-switch">
                                                             <input id="unlimited" name="unlimited" type="checkbox" disabled={true}/>
@@ -364,22 +327,15 @@ class EditBeats extends Component {
                                 </div>
 
                                 <button className="col text-center btn btn-outline-info btn-sm pl-md-4 pr-md-4" id="gold_contract"
-                                        onClick={(e)=> this.handleSubmit(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
+                                        onClick={(e)=> this.handleSubmitContractUpdate(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
                             </div>
                             <div className="tab-pane fade text-center p-5" id="w4-tab4" role="tabpanel" aria-labelledby="w4-tab4">
                                 <div className="row">
                                     <div className="col-md-8">
-                                        <div className="custom-float">
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
-                                                <input value={this.state.platinum_north_price} onChange={this.changePlatinumNorthPrice} id="platinum_north_price" name="platinum_north_price"
-                                                       className="form-control" type="text" required/>
-                                            </div>
-                                            <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
-                                                <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	south price *</div>
-                                                <input value={this.state.platinum_south_price} onChange={this.changePlatinumSouthPrice} id="platinum_south_price"
-                                                       name="platinum_south_price" className="form-control" type="text" required/>
-                                            </div>
+                                        <div className="input-group-prepend d-inline-block center" style={{width: "100%", padding: "2px"}}>
+                                            <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	prix du beat *</div>
+                                            <input value={this.state.platinum} onChange={this.changePlatinumPrice} id="platinum" name="platinum"
+                                                   className="form-control" type="text" required/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                                             <small className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	nb de diffusion Radio & TV  *</small>
@@ -432,7 +388,7 @@ class EditBeats extends Component {
                                 </div>
 
                                 <button className="col text-center btn btn-outline-info btn-sm pl-md-4 pr-md-4" id="platinum_contract"
-                                        onClick={(e)=> this.handleSubmit(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
+                                        onClick={(e)=> this.handleSubmitContractUpdate(e)} style={{marginTop: 25, marginBottom: 25}}>Update</button>
                             </div>
                         </div>
                     </div>
@@ -459,4 +415,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditBeats);
+export default connect(mapStateToProps, mapDispatchToProps)(EditContractBeats);

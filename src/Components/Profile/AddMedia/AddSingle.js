@@ -15,41 +15,24 @@ class AddSingle extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            file: '', title: '', artist: cookies.get("Isl_Creative_pass")["name"], genre: '',
-            genre_musical: 'beats', description: '', photo: '', artist_tag: '', beats_wave: '', stems: '',
-            beats: true, genre_info: [], bpm: 0, basic_price: this.props.pricing['basic']['south'],
-            silver_price: this.props.pricing['silver']['south'], gold_price: this.props.pricing['gold']['south'],
+            file: '',
+            title: '',
+            artist: cookies.get("Isl_Creative_pass")["name"],
+            genre: '',
+            genre_musical: 'beats',
+            description: '',
+            photo: '',
+            artist_tag: '',
+            beats_wave: '',
+            stems: '',
+            beats: true,
+            bpm: 0,
+            basic_price: this.props.pricing['basic'],
+            silver_price: this.props.pricing['silver'],
+            gold_price: this.props.pricing['gold'],
             platinum_price: 0
         };
     }
-
-    componentDidMount() {
-        this.getIfToken();
-    }
-
-    getIfToken = () => {
-        if (cookies.get("Isl_Creative_pass")) {
-            new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: new_headers}).then(resp =>{
-                    const info = resp.data;
-                    for (let row in info) {
-                        this.setState(prevState => ({
-                            genre_info: [...prevState.genre_info, info[row].genre]
-                        }))
-                    }
-                }).catch(err => {
-                    console.log(err.response)
-                })
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
-    };
 
     changeTitle = (e) => {this.setState({title : e.target.value});};
 
@@ -80,36 +63,38 @@ class AddSingle extends Component {
 
     uploadPic = (e) =>{this.setState({photo : e.target.files[0]});};
 
-    disabledBtn = (e) => {
-        this.setState({loading: false});
-        document.getElementById(e.target.id).removeAttribute("disabled");
+    disabledBtn = (id) => {
+        this.setState({loading: false}, () => {
+            document.getElementById(id).removeAttribute("disabled");
+        });
     };
 
     handleSubmit = (e) => {
-        document.getElementById(e.target.id).setAttribute("disabled", "disabled");
+        let id = e.target.id;
+        document.getElementById(id).setAttribute("disabled", "disabled");
         this.setState({loading: true});
         const bodyFormData = new FormData();
         if (this.state.genre_musical === "beats" && !this.state.beats_wave) {
             toast.error("i need beats wave file");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else if (this.state.genre_musical === "beats" && !this.state.stems) {
             toast.error("i need beats stems file");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else if (!this.state.file) {
             toast.error("i need music file");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else if (!this.state.title) {
             toast.error("title is required");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else if (!this.state.artist) {
             toast.error("artist is required");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else if (!this.state.genre) {
             toast.error("genre is required");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else if (!this.state.photo) {
             toast.error("photo is required");
-            this.disabledBtn(e)
+            this.disabledBtn(id)
         } else {
             let link = "";
             if (this.state.genre_musical === "beats") {
@@ -138,113 +123,65 @@ class AddSingle extends Component {
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
             };
-            axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(resp => {
-                axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: new_headers}).then(resp => {
-                    this.setState({loading: false});
-                    this.props.closePopup(1);
-                }).catch(err => {
-                    toast.error(err.response.data);
-                });
+            axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: new_headers}).then(resp => {
+                this.setState({loading: false});
+                this.props.closePopup(1);
             }).catch(err => {
-                toast.error(err.response.data)
-            })
+                toast.error(err.response.data);
+            });
         }
     };
 
     ChangeStyle = (e) => {
-        const id = e.target.id;
-        if (id  === "basic_north" || id  === "north_basic") {
-            this.setState({basic_price: this.props.pricing['basic']['north']}, () => {
-                document.getElementById("basic_north").classList.replace('unique-color-dark', 'success-color');
-                document.getElementById("basic_south").classList.replace('success-color', 'unique-color-dark');
+        if (document.getElementById("platinum").classList.replace('unique-color-dark', 'success-color')) {
+            this.setState({platinum_price: this.props.pricing['platinum']});
+        } else {
+            this.setState({platinum_price: 0}, () => {
+                document.getElementById("platinum").classList.replace('success-color', 'unique-color-dark')
             });
-        } else if (id  === "basic_south" || id === "south_basic") {
-            this.setState({basic_price: this.props.pricing['basic']['south']}, () => {
-                document.getElementById("basic_south").classList.replace('unique-color-dark', 'success-color');
-                document.getElementById("basic_north").classList.replace('success-color', 'unique-color-dark');
-            });
-        } else if (id  === "silver_north" || id === "north_silver") {
-            this.setState({silver_price: this.props.pricing['silver']['north']}, () => {
-                document.getElementById("silver_north").classList.replace('unique-color-dark', 'success-color');
-                document.getElementById("silver_south").classList.replace('success-color', 'unique-color-dark');
-            });
-        } else if (id  === "silver_south" || id === "south_silver") {
-            this.setState({silver_price: this.props.pricing['silver']['south']}, () => {
-                document.getElementById("silver_south").classList.replace('unique-color-dark', 'success-color');
-                document.getElementById("silver_north").classList.replace('success-color', 'unique-color-dark');
-            });
-        } else if (id  === "gold_north" || id === "north_gold") {
-            this.setState({gold_price: this.props.pricing['gold']['north']}, () => {
-                document.getElementById("gold_north").classList.replace('unique-color-dark', 'success-color');
-                document.getElementById("gold_south").classList.replace('success-color', 'unique-color-dark');
-            });
-        } else if (id  === "gold_south" || id === "south_gold") {
-            this.setState({gold_price: this.props.pricing['gold']['south']}, () => {
-                document.getElementById("gold_south").classList.replace('unique-color-dark', 'success-color');
-                document.getElementById("gold_north").classList.replace('success-color', 'unique-color-dark');
-            });
-        } else if (id  === "platinum_north" || id === "north_platinum") {
-            if (document.getElementById("platinum_north").classList.replace('unique-color-dark', 'success-color')) {
-                this.setState({platinum_price: this.props.pricing['platinum']['north']}, () => {
-                    document.getElementById("platinum_south").classList.replace('success-color', 'unique-color-dark')
-                });
-            } else {
-                this.setState({platinum_price: 0}, () => {
-                    document.getElementById("platinum_north").classList.replace('success-color', 'unique-color-dark')
-                });
-            }
-        } else if (id  === "platinum_south" || id === "south_platinum") {
-            if (document.getElementById("platinum_south").classList.replace('unique-color-dark', 'success-color')) {
-                this.setState({platinum_price: this.props.pricing['platinum']['south']}, () => {
-                    document.getElementById("platinum_north").classList.replace('success-color', 'unique-color-dark')
-                });
-            } else {
-                this.setState({platinum_price: 0}, () => {
-                    document.getElementById("platinum_south").classList.replace('success-color', 'unique-color-dark')
-                });
-            }
         }
     };
 
     render() {
         return (
-            <Modal visible={true} width="700" height="850" animationType='slide'>
+            <Modal visible={true} width="700" height="650" animationType='slide'>
                 <ReactTooltip/>
+
                 <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
-                    <h5 className="text-center text-green"> Basic Lease (MP3) </h5>
+                    <h5 className="text-center text-green"> Basic Lease (MP3) {this.props.contract['basic_lease']['price']}$ </h5>
                     <small>• Receive untagged MP3 file</small><br/>
                     <small>• Non-profit & promotional use only</small><br/>
                     <small>• Upload to Soundcloud</small><br/>
                     <small>• Use for non-profit Album + Performances</small><br/>
-                    <small>• Limited to 10,000 non-profitable streams</small><br/>
+                    <small>• Limited to {this.props.contract['basic_lease']['number_audio_stream']} non-profitable streams</small><br/>
                     <small>• Instant delivery</small><br/>
                     <small>• Must credits : Prod. by [Name of Producer] / ISL Creative</small>
                 </ReactTooltip>
                 <ReactTooltip className="special-color-dark" id='silver_price' aria-haspopup='true'>
-                    <h5 className="text-center text-green"> Silver Lease (MP3 + WAVE) </h5>
+                    <h5 className="text-center text-green"> Silver Lease (MP3 + WAVE) {this.props.contract['silver_lease']['price']}$ </h5>
 
                     <small>• Receive untagged MP3 + WAV files</small><br/>
                     <small>• Profitable – Sell up to 10,000 unit sales</small><br/>
                     <small>• Upload to Soundcloud, Apple Music, iTunes , Spotify</small><br/>
                     <small>• Use for profit Album + Performances + Music Video</small><br/>
-                    <small>• Limited to 100,000 streams</small><br/>
+                    <small>• Limited to {this.props.contract['silver_lease']['number_audio_stream']} streams</small><br/>
                     <small>• Radio & TV airplays on 3 stations</small><br/>
                     <small>• Instant delivery</small><br/>
                     <small>• Must credits : Prod. by [Name of Producer] / ISL Creative</small>
                 </ReactTooltip>
                 <ReactTooltip className="special-color-dark" id='gold_price' aria-haspopup='true'>
-                    <h5 className="text-center text-green"> Gold Lease (MP3 + WAVE + STEMS) </h5>
+                    <h5 className="text-center text-green"> Gold Lease (MP3 + WAVE + STEMS) {this.props.contract['gold_lease']['price']}$</h5>
 
                     <small>• Receive untagged MP3 + WAV files+ Tracked-Out files/Stems</small><br/>
                     <small>• Possibility to mix and re-arrange with stems (trackouts)</small><br/>
                     <small>• Includes the Silver Lease  features</small><br/>
-                    <small>• Limited to 200,000 streams</small><br/>
+                    <small>• Limited to {this.props.contract['gold_lease']['number_audio_stream']} streams</small><br/>
                     <small>• Unlimited Radio & TV airplays</small><br/>
                     <small>• Instant Delivery</small><br/>
                     <small>• Must credits : Prod.by [Name of Producer] / ISL Creative</small>
                 </ReactTooltip>
                 <ReactTooltip className="special-color-dark" id='platinum_price' aria-haspopup='true'>
-                    <h5 className="text-center text-green"> Platinum Lease (Unlimited + Exclusive) </h5>
+                    <h5 className="text-center text-green"> Platinum Lease (Unlimited + Exclusive) {this.props.contract['silver_lease']['price']}$ </h5>
 
                     <small>• Receive untagged MP3 + WAV files + Tracked-Out files/Stems</small><br/>
                     <small>• Possibility to mix and re-arrange with stems (trackouts)</small><br/>
@@ -253,6 +190,7 @@ class AddSingle extends Component {
                     <small>• Unlimited TV broadcast + Radio airplay</small><br/>
                     <small>• Credits : Prod. by [Name of Producer] / Beats Avenue</small>
                 </ReactTooltip>
+
                 <ToastContainer position="bottom-center"
                                 autoClose={5000}
                                 hideProgressBar={false}
@@ -273,7 +211,7 @@ class AddSingle extends Component {
                             </div>
                         </div>
                     </div>: null}
-                <img alt={"logo"} src={logo} style={{position: "absolute", marginTop: "15%", opacity:0.4}}/>
+                <img alt={"logo"} src={logo} style={{position: "absolute", marginTop: "5%", opacity:0.4}}/>
                 <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
                     <button className="ModalClose" onClick={() => this.props.closePopup(0)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
@@ -304,7 +242,7 @@ class AddSingle extends Component {
                                     <input id="genre" name="genre" className="form-control"
                                            value={this.state.genre} onChange={this.changeGenre} list="music-genre" required/>
                                     <datalist id="music-genre">
-                                        {this.state.genre_info.map((val, index) => <option key={index} value={val}/>)}
+                                        {this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                     </datalist>
                                 </div>
                             </div>
@@ -360,14 +298,9 @@ class AddSingle extends Component {
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
                                             <div className="input-group-text text-dark font-weight-bold" data-tip data-for='basic_price'><i className="icon-money"/>Standard<small className="text-danger">*</small></div>
-                                            <div className="input-group-text text-light unique-color-dark" id="basic_north">
-                                                <p className="center" id="north_basic" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['basic']['north']} $
-                                                </p>
-                                            </div>
-                                            <div className="input-group-text text-light success-color" id="basic_south">
-                                                <p className="center" id="south_basic" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['basic']['south']} $
+                                            <div className="input-group-text text-light success-color" id="basic">
+                                                <p className="center" id="basic">
+                                                    {this.props.pricing['basic']} $
                                                 </p>
                                             </div>
                                         </div>
@@ -376,14 +309,9 @@ class AddSingle extends Component {
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
                                             <div className="input-group-text text-dark font-weight-bold" data-tip data-for='silver_price'><i className="icon-money"/>Silver<small className="text-danger">*</small></div>
-                                            <div className="input-group-text text-light unique-color-dark" id="silver_north">
-                                                <p className="center" id="north_silver" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['silver']['north']} $
-                                                </p>
-                                            </div>
-                                            <div className="input-group-text text-light success-color" id="silver_south">
-                                                <p className="center" id="south_silver" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['silver']['south']} $
+                                            <div className="input-group-text text-light success-color" id="silver">
+                                                <p className="center" id="silver">
+                                                    {this.props.pricing['silver']} $
                                                 </p>
                                             </div>
                                         </div>
@@ -392,14 +320,9 @@ class AddSingle extends Component {
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
                                             <div className="input-group-text text-dark font-weight-bold" data-tip data-for='gold_price'><i className="icon-money"/>Gold<small className="text-danger">*</small></div>
-                                            <div className="input-group-text text-light unique-color-dark" id="gold_north">
-                                                <p className="center" id="north_gold" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['gold']['north']} $
-                                                </p>
-                                            </div>
-                                            <div className="input-group-text text-light success-color" id="gold_south">
-                                                <p className="center" id="south_gold" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['gold']['south']} $
+                                            <div className="input-group-text text-light success-color" id="gold">
+                                                <p className="center" id="gold">
+                                                    {this.props.pricing['gold']} $
                                                 </p>
                                             </div>
                                         </div>
@@ -408,14 +331,9 @@ class AddSingle extends Component {
                                     <div className="custom-float center" style={{width: "100%"}}>
                                         <div className="input-group-prepend d-inline-block center">
                                             <div className="input-group-text text-dark font-weight-bold" data-tip data-for='platinum_price'>Platinum</div>
-                                            <div className="input-group-text text-light unique-color-dark" id="platinum_north">
-                                                <p className="center" id="north_platinum" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['platinum']['north']} $
-                                                </p>
-                                            </div>
-                                            <div className="input-group-text text-light unique-color-dark" id="platinum_south">
-                                                <p className="center" id="south_platinum" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['platinum']['south']} $
+                                            <div className="input-group-text text-light unique-color-dark" id="platinum">
+                                                <p className="center" id="platinum" onClick={(e) => this.ChangeStyle(e)}>
+                                                    {this.props.pricing['platinum']} $
                                                 </p>
                                             </div>
                                         </div>
@@ -442,6 +360,8 @@ class AddSingle extends Component {
 const mapStateToProps = state => {
     return {
         pricing: state.profile.pricing_beats,
+        AllMediaGenre: state.Home.AllMediaGenre,
+        contract: state.profile.contract
     };
 };
 

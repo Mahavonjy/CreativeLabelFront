@@ -13,7 +13,8 @@ class Playlist extends Component {
             data: '',
             userPlaylist : [],
             PopupCreatePlaylist : false,
-            PopupEditPlaylist : false
+            PopupEditPlaylist : false,
+            isMounted: false
         };
     }
 
@@ -52,10 +53,16 @@ class Playlist extends Component {
             toast.error(err.response.data);
         })
     };
-
     componentDidMount() {
-        this.getPlayList();
+        this.setState({isMounted: true}, () => {
+            this.getPlayList();
+        });
     }
+
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
+    }
+
     render() {
         return (
             <div className="Base">

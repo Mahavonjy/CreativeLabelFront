@@ -1,15 +1,14 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import Conf from "../../Config/tsconfig";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import {toast, ToastContainer} from "react-toastify";
-import IslPlayer from "../Players/Players";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import Cart from "../Cart/Cart";
 
 // Global variable
 let cookies = new Cookies();
 let token;
-let _that;
 
 try {
     token = cookies.get("Isl_Creative_pass")["Isl_Token"]
@@ -18,18 +17,34 @@ try {
 }
 
 class FunctionTools extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isMounted: false, response: false
-        };
 
-        _that = this;
-    }
+    static FillInCartProps = (headers, props) => {
+        axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
+            let tmp = 0;
+            for (let row in resp.data) {tmp = tmp + resp.data[row]['price']}
+            props.addTotalPrice(Math.round(tmp * 100) / 100);
+            props.addCarts(resp.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    };
 
-    static AddToCart = (song_id, price, licenses_name, beat) => {
+    static async AddPropsCart(new_headers, props) {
+        try {
+            let carts = JSON.parse(localStorage.getItem("MyCarts"));
+
+            for (let cart in carts) {
+                let tmp = carts[cart];
+                await FunctionTools.AddToCart(tmp.song_id, tmp.price, tmp.licenses_name, null, null, true)
+            }
+        } finally {
+            FunctionTools.FillInCartProps(new_headers, props);
+        }
+    };
+
+    static AddToCart = (song_id, price, licenses_name, beat, props, special) => {
         if (token !== Conf.configs.TokenVisitor) {
-            let new_headers = {
+            let headers = {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': token
@@ -39,10 +54,14 @@ class FunctionTools extends Component {
                 "price": price,
                 "licenses_name": licenses_name
             };
-            axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data, {headers: new_headers}).then(resp => {
-                toast.success(resp.data);
+            return axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data, {headers: headers}).then(resp => {
+                if (!special) {
+                    FunctionTools.AddPropsCart(headers, props);
+                    toast.success(resp.data);
+                } else return true
             }).catch(err => {
-                toast.error(err.response.data);
+                if (!special) toast.error(err.response.data);
+                else return false
             })
         } else {
             const carts = JSON.parse(localStorage.getItem("MyCarts"));
@@ -108,6 +127,23 @@ class FunctionTools extends Component {
                 toast.warn("already followed");
             });
         };
+    };
+
+    static getIfToken = (special) => {
+        try {
+            let cookies = new Cookies();
+            let new_headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+            };
+            return axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(() => {
+                if (special) return true;
+                else window.location.replace('/home');
+            }).catch(() => {
+                return false
+            })
+        } catch (e) {}
     };
 
     render() {

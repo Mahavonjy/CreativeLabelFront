@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import SignInOrUp from "../SingnInOrUp/SignInOrUp";
 import FunctionTools from "../FunctionTools/FunctionTools";
 import config from "react-ad-block-detect/webpack.config.babel";
+import Offers from "./Offers/Offers";
 
 let token = "";
 let _this;
@@ -26,8 +27,8 @@ class Beats extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            genre:'', genre_info: [], beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
-            placeHolder: "Search",
+            genre:'', beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
+            placeHolder: "Search", visibleOffers: true,
             link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null,
         };
         _this = this
@@ -47,7 +48,7 @@ class Beats extends Component {
             if (_state === "link_beats")
                 this.setState(prevState => ({link_beats: {...prevState.link_beats, [index]: true}}));
         }).catch(error => {
-            console.log(error);
+            console.log(error.data);
         })
     };
 
@@ -93,7 +94,6 @@ class Beats extends Component {
             }
 
             if (type_ === "random") {
-                console.log("random")
                 url_ = "api/beats/random";
                 key = "random"
             }
@@ -117,23 +117,8 @@ class Beats extends Component {
         }
     };
 
-    getGenre = () => {
-        let new_headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': token
-        };
-        axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: new_headers}).then(resp =>{
-            const info = resp.data;
-            for(let row in info){
-                this.setState(prevState => ({genre_info: [...prevState.genre_info, info[row].genre]}))
-            }
-        }).catch(err => {
-            console.log(err.response)
-        })
-    };
-
     componentDidMount() {
+        // document.getElementsByClassName("offers")[0].click();
         this.setState({ isMounted: true, usingAdBlock: this.fakeAdBanner.offsetHeight === 0 }, () => {
             if (this.state.usingAdBlock)
                 toast.error("disables your adblocker please");
@@ -143,7 +128,6 @@ class Beats extends Component {
             } catch (e) {
                 token = Conf.configs.TokenVisitor;
             } finally {
-                this.getGenre();
                 if (!this.props.ready) {
                     for (let row_ in this.props.beats) {this.AddForPlay(row_, "link_beats")};
                     this.props.readyBeats()
@@ -166,7 +150,7 @@ class Beats extends Component {
                 <div ref={r => (this.fakeAdBanner = r)}
                      style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
                      className="adBanner"/>
-                <ToastContainer/>
+                {/*<ToastContainer/>*/}
                 <ReactTooltip/>
                 <section>
                     <div className="text-white">
@@ -201,131 +185,19 @@ class Beats extends Component {
                                                     <h4>Les instrus afro-tropicales</h4>
                                                     <p>Toutes les créactions</p>
                                                     <div className="mt-8 d-flex">
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-outline-info btn-fab-md pl-md-6 pr-md-6" type="button"
-                                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false">
-                                                                <i className="icon-hand-peace-o"/>Offres
-                                                            </button>
-                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{width: "300px"}}>
-                                                                <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Standard (MP3) </h5>
-                                                                    <small>• MP3 (sans voicetag) </small><br/>
-                                                                    <small>• Utilisation non-commerciale & promotionnelle uniquement</small><br/>
-                                                                    <small>• Mise en ligne sur Soundcloud  autorisée</small><br/>
-                                                                    <small>• Utilisation non-commerciale pour Album + Shows</small><br/>
-                                                                    <small>• Limité à 10 000 streams non-monétisés</small><br/>
-                                                                    <small>• 100% libre de droits</small><br/>
-                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
-                                                                </ReactTooltip>
-                                                                <ReactTooltip className="special-color-dark" id='silver_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Silver (MP3 + WAVE) </h5>
-
-                                                                    <small>• MP3+ WAV (sans voicetag) </small><br/>
-                                                                    <small>• Utilisation commerciale- jusqu'à 10 000 copies</small><br/>
-                                                                    <small>• Mise en ligne sur Soundcloud, Apple Music, iTunes,Spotify,etc...</small><br/>
-                                                                    <small>• Utilisation commerciale pour album, shows+ clip vidéo
-																	</small><br/>
-                                                                    <small>• Limité à 100,000 streams</small><br/>
-                                                                    <small>• Diffusion TV et Radio limitée à 3 stations</small><br/>
-                                                                    <small>• 100% libre de droits</small><br/>
-                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
-                                                                </ReactTooltip>
-                                                                <ReactTooltip className="special-color-dark" id='gold_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Gold (MP3 + WAVE + STEMS) </h5>
-
-                                                                    <small>• MP3 + WAV+ Stems (sans voicetag) </small><br/>
-                                                                    <small>• Possibilité de mixer et réarranger avec les stems (trackouts) </small><br/>
-                                                                    <small>• Inclut les caractéristiques de la licence Silver</small><br/>
-                                                                    <small>• Limite de 200,000 streams</small><br/>
-                                                                    <small>• Diffusion TV et Radio illimitée</small><br/>
-                                                                    <small>• 100% libre de droits</small><br/>
-                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
-                                                                </ReactTooltip>
-                                                                <ReactTooltip className="special-color-dark" id='platinum_price' aria-haspopup='true'>
-                                                                    <h5 className="text-center text-green"> Platinum Unlimited) </h5>
-
-                                                                    <small>• MP3 + WAV + Stems (sans voicetag)</small><br/>
-                                                                    <small>• Possibilité de mixer et réarranger avec les stems(trackouts)</small><br/>
-                                                                    <small>• Utilisation commerciale illimitée: ventes + streams (iTunes, Spotify  etc.)</small><br/>
-                                                                    <small>• Utilisation commerciale pour Album+ Shows+ Clip vidéo</small><br/>
-                                                                    <small>• Diffusion illimitée pour TV & Radio</small><br/>
-                                                                    <small>• Credits : Prod. par [Nom du producteur] / ISL Creative</small>
-                                                                </ReactTooltip>
-                                                                <div className="card">
-                                                                    <div className="card-header text-center text-green b-b">
-                                                                        <strong>Licences</strong>
+                                                        <button type="button" id="Offers" className="btn btn-outline-info btn-fab-md pl-md-6 pr-md-6 Offers" data-toggle="modal" data-target="#exampleModalOffers">Offers</button>
+                                                        <div aria-disabled={"false"} className="modal fade p-t-b-50 Offers" id="exampleModalOffers" role="dialog" aria-labelledby="exampleModalLabelOffers">
+                                                            <div className="modal-dialog" role="document" style={{width: "100%"}}>
+                                                                <div className="modal-content transparent border-0">
+                                                                    <div className="modal-header">
+                                                                        <h1 className="pt-2">Creative Beats Offers</h1>
+                                                                        <button type="button" className="closeOffers transparent border-0" data-dismiss="modal" aria-label="Close">
+                                                                            <i className="icon-close s-36 text-red"/>
+                                                                        </button>
                                                                     </div>
-                                                                    <ul className="playlist list-group list-group-flush ">
-                                                                        <li className="list-group-item" data-tip data-for='basic_price'>
-                                                                            <div className="align-items-center text-center text-blue">
-                                                                                <div className="col">
-                                                                                    <h6>Standard</h6>
-                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                    Mp3
-                                                                                    </small>
-                                                                                </div>
-                                                                                {/*<div className="ml-auto">*/}
-                                                                                {/*    <div*/}
-                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
-                                                                                {/*        <div className="s-12">14.99 $</div>*/}
-                                                                                {/*        <small>24.99 $</small>*/}
-                                                                                {/*    </div>*/}
-                                                                                {/*</div>*/}
-                                                                            </div>
-                                                                        </li>
-                                                                        <li className="list-group-item" data-tip data-for='silver_price'>
-                                                                            <div className="d-flex align-items-center text-blue ">
-                                                                                <div className="col">
-                                                                                    <h6>Silver</h6>
-                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                        Mp3 + Wav
-                                                                                    </small>
-                                                                                </div>
-                                                                                {/*<div className="ml-auto">*/}
-                                                                                {/*    <div*/}
-                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
-                                                                                {/*        <div className="s-12">34.99 $</div>*/}
-                                                                                {/*        <small>49.99 $</small>*/}
-                                                                                {/*    </div>*/}
-                                                                                {/*</div>*/}
-                                                                            </div>
-                                                                        </li>
-                                                                        <li className="list-group-item" data-tip data-for='gold_price'>
-                                                                            <div className="d-flex align-items-center text-blue ">
-                                                                                <div className="col">
-                                                                                    <h6>Gold</h6>
-                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                        Mp3 + Wav + Stems
-                                                                                    </small>
-                                                                                </div>
-                                                                                {/*<div className="ml-auto">*/}
-                                                                                {/*    <div*/}
-                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
-                                                                                {/*        <div className="s-12">74.99 $</div>*/}
-                                                                                {/*        <small>99.99 $</small>*/}
-                                                                                {/*    </div>*/}
-                                                                                {/*</div>*/}
-                                                                            </div>
-                                                                        </li>
-                                                                        <li className="list-group-item" data-tip data-for='platinum_price'>
-                                                                            <div className="d-flex align-items-center text-blue ">
-                                                                                <div className="col">
-                                                                                    <h6>Platinum</h6>
-                                                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                                                     Mp3 + Wav + Stems + Unlimited
-                                                                                    </small>
-                                                                                </div>
-                                                                                {/*<div className="ml-auto">*/}
-                                                                                {/*    <div*/}
-                                                                                {/*        className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">*/}
-                                                                                {/*        <div className="s-12">74.99 $</div>*/}
-                                                                                {/*        <small>99.99 $</small>*/}
-                                                                                {/*    </div>*/}
-                                                                                {/*</div>*/}
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
+                                                                    <div className="modal-body">
+                                                                        <Offers/>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -346,7 +218,7 @@ class Beats extends Component {
                                                                            value={this.state.genre} onChange={this.changeGenre}
                                                                            list="music-genre"
                                                                     /></div>
-                                                                    <datalist id="music-genre">{this.state.genre_info.map((val, index) => <option key={index} value={val}/>)}</datalist>
+                                                                    <datalist id="music-genre">{this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}</datalist>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -488,7 +360,7 @@ class Beats extends Component {
                                                                                                             MP3
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val)}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-16">
                                                                                                                 {val.basic_price} $
@@ -508,7 +380,7 @@ class Beats extends Component {
                                                                                                             MP3 + WAV
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val)}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.silver_price} $
@@ -528,7 +400,7 @@ class Beats extends Component {
                                                                                                             MP3 + WAV + STEMS
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val)}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.gold_price} $
@@ -549,7 +421,7 @@ class Beats extends Component {
                                                                                                         Unlimited + Exclusive
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val)}>
+                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.platinum_price} $
@@ -641,6 +513,7 @@ const mapStateToProps = state => {
         beats: state.beats.beats,
         top_beatmaker: state.beats.top_beatmaker,
         ready: state.beats.ready,
+        AllMediaGenre: state.Home.AllMediaGenre,
     };
 };
 
@@ -654,6 +527,12 @@ const mapDispatchToProps = dispatch => {
         },
         readyBeats: () => {
             dispatch({type: "BEATS_READY"})
+        },
+        addCarts: (data) => {
+            dispatch({type: "ADD_CART", data: data})
+        },
+        addTotalPrice: (data) => {
+            dispatch({type: "ADD_TOTAL_PRICE", data: data})
         }
     };
 };

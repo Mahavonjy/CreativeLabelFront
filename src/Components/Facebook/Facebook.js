@@ -12,7 +12,8 @@ class LoginFacebook extends React.Component{
         this.state = {
             loading: false,
             redirect: false,
-            to_route: '/'
+            to_route: '/',
+            isMounted: false
         };
     }
 
@@ -58,6 +59,14 @@ class LoginFacebook extends React.Component{
             console.log(error.response);
         })
     };
+
+    componentDidMount() {
+        this.setState({isMounted: true});
+    }
+
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
+    }
 
     render () {
         const redirectToReferrer = this.state.redirect;
