@@ -33,7 +33,7 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Utilisation non-commerciale & promotionnelle uniquement</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Mise en ligne sur Soundcloud  autorisée</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Utilisation non-commerciale pour Album + Shows</li>
-                                <li><span className="fa-li"><i className="fas fa-check" /></span>Limité à 10 000 streams non-monétisés</li>
+                                <li><span className="fa-li"><i className="fas fa-check" /></span>Streams limités & non-monétisés</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
@@ -54,8 +54,8 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Utilisation commerciale- jusqu'à 10 000 copies</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Mise en ligne sur Soundcloud, Apple Music, iTunes,Spotify,etc...</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Utilisation commerciale pour album, shows + clip vidéo</li>
-                                <li><span className="fa-li"><i className="fas fa-check" /></span>Limité à 100,000 streams</li>
-                                <li><span className="fa-li"><i className="fas fa-check" /></span>Diffusion TV et Radio limitée à 3 stations</li>
+                                <li><span className="fa-li"><i className="fas fa-check" /></span>Streams limités </li>
+                                <li><span className="fa-li"><i className="fas fa-check" /></span>Diffusions TV & Radio limitée</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
@@ -74,8 +74,8 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span><strong>MP3 + WAV+ Stems (sans voicetag)</strong></li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Possibilité de mixer et réarranger avec les stems (trackouts)</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Inclut les caractéristiques de la licence Silver</li>
-                                <li><span className="fa-li"><i className="fas fa-check" /></span>Limite de 200,000 streams</li>
-                                <li><span className="fa-li"><i className="fas fa-check" /></span>Diffusion TV et Radio illimitée</li>
+                                <li><span className="fa-li"><i className="fas fa-check" /></span>steams limités</li>
+                                <li><span className="fa-li"><i className="fas fa-check" /></span>Diffusion TV & Radio illimitée</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
@@ -95,7 +95,7 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Possibilité de mixer et réarranger avec les stems (trackouts)</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Utilisation commerciale illimitée: ventes + streams (iTunes, Spotify  etc.)</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>Utilisation commerciale pour Album+ Shows+ Clip vidéo</li>
-                                <li><span className="fa-li"><i className="fas fa-check" /></span>Diffusion illimitée pour TV & Radio</li>
+                                <li><span className="fa-li"><i className="fas fa-check" /></span>Diffusion TV & Radio illimitée</li>
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
