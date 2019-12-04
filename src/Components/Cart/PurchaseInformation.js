@@ -40,7 +40,7 @@ class PurchaseInformation extends Component {
                 <div className="col-12 pl-lg-3">
 
                     <div className="row row-eq-height my-3">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div className="card">
                                 <div className="card-header  transparent">
                                     <h4 className="text-red"><strong> Adresse de facturation </strong></h4>
@@ -88,7 +88,59 @@ class PurchaseInformation extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
+                            <div className="card">
+                                <div className="card-header transparent">
+                                    {this.props.profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>
+
+                                        : <h4 className="text-red"><strong>Vous avez déjà un compte ?
+                                            <button className="border-top-0 border-left-0 border-right-0 text-red transparent" onClick={() =>  document.getElementById("LoginRequire").click()}>&nbsp;Se connecter</button></strong></h4>}
+
+
+                                </div>
+                                <div className="card-body text-center">
+                                    <form className="form-material">
+                                        {/* Input */}
+                                        <div className="body">
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <input type="text" id="name" className="form-control"
+                                                           placeholder="Votre nom" name="name"
+                                                           value={this.state.name}
+                                                           onChange={this.changeName} required/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <input type="text" id="lastname" className="form-control"
+                                                           placeholder="Votre prénom" name="lastname"
+                                                           value={this.state.lastname}
+                                                           onChange={this.changeLastName} required/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <input type="email" id="email" className="form-control"
+                                                           placeholder="E-mail"
+                                                           name="email" value={this.state.email}
+                                                           onChange={this.changeEmail} required/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <div className="material-switch">
+                                                        <input id="unlimited" name="unlimited" type="checkbox" onChange={() => {this.setState({rules: !this.state.rules})}}/>
+                                                        <label htmlFor="sw2" className="text-red text-monospace text-muted" > J'accepte les Conditions Générales d'Utilisation</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* #END# Input */}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
                             <div className="card">
                                 <div className="card-header transparent">
                                     {this.props.profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>

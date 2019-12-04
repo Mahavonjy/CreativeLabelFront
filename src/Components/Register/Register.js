@@ -18,15 +18,15 @@ class Register extends Component {
         };
     }
 
-    changeKeys = (e) => {this.setState({keys : e.target.value});};
+    changeKeys = (e) => {this.setState({keys : e.target.value})};
 
-    changeEmail = (e) => {this.setState({email : e.target.value});};
+    changeEmail = (e) => {this.setState({email : e.target.value})};
 
-    changeConfirmPassword = (e) => {this.setState({confirm_password: e.target.value});};
+    changeConfirmPassword = (e) => {this.setState({confirm_password: e.target.value})};
 
-    changePassword = (e) => {this.setState({password: e.target.value});};
+    changePassword = (e) => {this.setState({password: e.target.value})};
 
-    changeName = (e) => {this.setState({name: e.target.value});};
+    changeName = (e) => {this.setState({name: e.target.value})};
 
     verifyKeysSubmit = (e) => {
         e.preventDefault();
