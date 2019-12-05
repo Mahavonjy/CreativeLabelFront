@@ -6,6 +6,8 @@ import TestImg from "../../assets/img/demo/a2.jpg";
 import {toast, ToastContainer} from "react-toastify";
 import {connect} from "react-redux";
 import PurchaseInformation from "./PurchaseInformation";
+import Home from "../Home/Home";
+
 let _that;
 
 let cookies = new Cookies();
@@ -55,7 +57,7 @@ class Cart extends Component {
         }
     };
 
-    deleteCart = (song_id, id) =>{
+    deleteCart = (song_id, id) => {
         this.setState({delete: song_id}, () => {
             try {
                 let headers = {
@@ -63,18 +65,20 @@ class Cart extends Component {
                     "Access-Control-Allow-Origin":'*',
                     'Isl-Token':  cookies.get("Isl_Creative_pass")["Isl_Token"]
                 };
+
                 axios.delete(Conf.configs.ServerApi + "api/carts/delete/" + id , {headers: headers}).then(resp => {
-                    this.setState({cart:  this.state.cart.filter( function (cart) {
-                            if (cart.id === id) {
-                                _that.setState({total_price: Math.round((_that.state.total_price - cart.price) * 100) / 100 })
-                            } else return cart
-                        })}, () => {
-                        toast.success(resp.data)
-                    });
+                    let tmp = this.state.cart;
+                    for (let cart in tmp) {
+                        if (tmp[cart].id === id) this.state.cart.splice(this.state.cart.indexOf(tmp[cart]), 1);
+                    }
+                    toast.success("deleted");
+                    Home.Decrement();
+                    if (tmp.length === 0) window.location.replace('/home')
                 }).catch(err => {
                     console.log(err.response)
                 })
             } catch (e) {
+                toast.success("deleted");
                 let Carts = JSON.parse(localStorage.getItem("MyCarts"));
                 let carts_tmp = [];
                 for (let cart in Carts) {
@@ -83,44 +87,12 @@ class Cart extends Component {
                     } else carts_tmp.push(Carts[cart])
                 }
                 localStorage.removeItem("MyCarts");
-                this.setState({cart: carts_tmp}, () => {localStorage.setItem("MyCarts",  JSON.stringify(carts_tmp))})
+                this.setState({cart: carts_tmp}, () => {
+                    localStorage.setItem("MyCarts",  JSON.stringify(carts_tmp));
+                    Home.Decrement();
+                });
             }
         });
-    };
-
-    HandleTokenStripe = (token, addresses) => {
-        try {
-            let headers = {
-                "Content-Type":'application/json',
-                "Access-Control-Allow-Origin":'*',
-                'Isl-Token':  cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            let data = {
-                "stripe_token": token,
-                "addresses": addresses,
-                "MyCarts": this.state.cart
-            };
-            axios.post(Conf.configs.ServerApi + "api/beats/payment/beatShop", data,{headers: headers}).then(resp =>{
-                console.log(resp.data);
-            }).catch(err => {
-                console.log(err.response)
-            })
-        } catch (e) {
-            let headers = {
-                "Content-Type":'application/json',
-                "Access-Control-Allow-Origin":'*'
-            };
-            let data = {
-                "stripe_token": token,
-                "addresses": addresses,
-                "MyCarts": this.state.cart
-            };
-            axios.post(Conf.configs.ServerApi + "api/beats/payment/beatShop", data,{headers: headers}).then(resp =>{
-                console.log(resp.data);
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
     };
 
     componentDidMount() {
@@ -136,7 +108,7 @@ class Cart extends Component {
             <div className="Base">
                 <ToastContainer/>
                 <div className="row no-gutters">
-                <div className="col-lg-6 no-b p-lg-3 m-t-10 ">
+                    <div className="col-lg-6 no-b p-lg-3 m-t-10 ">
                 <div className="card-header dark-grey darken-1 text-white">
                     <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                         Total: {this.state.total_price}$
@@ -214,7 +186,7 @@ class Cart extends Component {
                                     <div>
                                         <h4 className="text-primary">Same Artist</h4>
                                     </div>
-                                    <small> Artist with the same beats</small>
+                                    <small>Artist with the same beats</small>
                                 </div>
                             </div>
                             <ul className="playlist list-group bg-dark list-group-flush" style={{height: 388}}>

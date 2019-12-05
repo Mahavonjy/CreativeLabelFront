@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import {toast, ToastContainer} from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import Cart from "../Cart/Cart";
+import Home from "../Home/Home";
 
 // Global variable
 let cookies = new Cookies();
@@ -21,6 +21,7 @@ class FunctionTools extends Component {
     static FillInCartProps = (headers, props) => {
         axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
             let tmp = 0;
+            if (resp.data.length !== 0) Home.IncrementCart(resp.data.length);
             for (let row in resp.data) {tmp = tmp + resp.data[row]['price']}
             props.addTotalPrice(Math.round(tmp * 100) / 100);
             props.addCarts(resp.data);
@@ -32,7 +33,7 @@ class FunctionTools extends Component {
     static async AddPropsCart(new_headers, props) {
         try {
             let carts = JSON.parse(localStorage.getItem("MyCarts"));
-
+            localStorage.removeItem("MyCarts");
             for (let cart in carts) {
                 let tmp = carts[cart];
                 await FunctionTools.AddToCart(tmp.song_id, tmp.price, tmp.licenses_name, null, null, true)
@@ -56,7 +57,7 @@ class FunctionTools extends Component {
             };
             return axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data, {headers: headers}).then(resp => {
                 if (!special) {
-                    FunctionTools.AddPropsCart(headers, props);
+                    FunctionTools.AddPropsCart(headers, props).then(() => console.log());
                     toast.success(resp.data);
                 } else return true
             }).catch(err => {
@@ -76,6 +77,7 @@ class FunctionTools extends Component {
                     "price": price,
                     "licenses_name": licenses_name
                 }]));
+                Home.IncrementCart();
                 toast.success("added");
             } else {
                 const cart_S = carts.some(item => item.song_id === song_id);
@@ -92,6 +94,7 @@ class FunctionTools extends Component {
                         "licenses_name": licenses_name
                     });
                     localStorage.setItem("MyCarts",  JSON.stringify(carts));
+                    Home.IncrementCart();
                     toast.success("added");
                 } else {
                     toast.warn("you have it in cart");
@@ -144,6 +147,22 @@ class FunctionTools extends Component {
                 return false
             })
         } catch (e) {}
+    };
+
+    static isNumber = (number_) => {
+        let _tmp = false;
+        for (let r in number_) {
+            let r_ = parseInt(number_[r]);
+            if (isNaN(r_))
+                _tmp = true
+        }
+        if (_tmp)
+            return false;
+        let tmp_ = number_.split(/[.,_\/ -]/);
+        if (tmp_.length > 1)
+            return false;
+        let tmp = parseInt(number_);
+        return tmp === parseInt(tmp, 10);
     };
 
     render() {

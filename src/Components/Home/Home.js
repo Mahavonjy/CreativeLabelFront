@@ -16,17 +16,20 @@ import Loader from 'react-loader-spinner'
 import {connect} from "react-redux";
 import OneBeat from "../Beats/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import SignInOrUp from "../SingnInOrUp/SignInOrUp";
 import Register from "../Register/Register";
 import Preference from "../Preference/SongGenre";
 import FunctionTools from "../FunctionTools/FunctionTools";
+import CommandSuccess from "../CommandStatus/Success/CommandSuccess";
 import ReactTooltip from "react-tooltip";
+import CommandError from "../CommandStatus/Error/CommandError";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let cookies = new Cookies();
 let ifStopPlayer = {};
 let headers;
+let _that;
 
 class Home extends Component {
     constructor(props) {
@@ -35,10 +38,21 @@ class Home extends Component {
             isMounted: false, loading: false, redirect: false,
             href: window.location.href.split("/"),
             single_beat: '', all_artist_beats: [], beats_similar: [],
-            profile_checked: '', user_data: '', user_beats: [],
+            profile_checked: '', user_data: '', user_beats: [], cart: 0,
             logout_class: "icon icon-exit-2 s-24", log_name: "logout", ret: false, connexion_reloaded: 0
         };
+        _that = this
     }
+
+    static IncrementCart = (number_) => {
+        if (number_) {
+            _that.setState({cart: number_})
+        } else _that.setState({cart: _that.state.cart + 1})
+    };
+
+    static Decrement = () => {
+        _that.setState({cart: _that.state.cart - 1})
+    };
 
     redirectToLogin = () => {this.setState({redirect: true})};
 
@@ -116,6 +130,8 @@ class Home extends Component {
                 } else if (this.state.href[this.state.href.length - 1] === 'register') {
                     FunctionTools.getIfToken();
                     this.setState({loading: false})
+                } else if (this.state.href[this.state.href.length - 1] === 'Cart') {
+                    if (!this.state.cart) window.location.replace('/home')
                 } else {
                     this.setState({loading: false}, () => {
                         if (this.state.href[this.state.href.length - 1] === "home#LoginRequire")
@@ -134,6 +150,8 @@ class Home extends Component {
         this.setState({isMounted: true }, () => {
             if (this.props.beats.length === 0) {
                 this.setState({loading: true}, () => {
+                    try {this.setState({cart: JSON.parse(localStorage.getItem("MyCarts")).length})
+                    } catch (e) {console.log()}
                     try {
                         headers = {
                             'Content-Type': 'application/json',
@@ -149,7 +167,7 @@ class Home extends Component {
                                         this.props.profile_initialisation_role(resp.data['role']);
                                         this.props.profile_initialisation_follower(resp.data['my_followers']);
                                         this.props.profile_initialisation_following(resp.data['my_followings']);
-                                        FunctionTools.AddPropsCart(headers, this.props);
+                                        FunctionTools.AddPropsCart(headers, this.props).then(() => console.log());
                                         if (resp.data['role'] === "Artist") {
                                             axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
                                                 this.props.profile_add_beats(resp.data['beats']);
@@ -232,9 +250,7 @@ class Home extends Component {
     };
 
     render() {
-        if (this.state.redirect) {
-            return <Redirect to="/home" />
-        } else if (this.state.loading) {
+        if (this.state.loading) {
             return (
                 <div className="absolute center-center">
                     <Loader
@@ -309,12 +325,18 @@ class Home extends Component {
                                         {/*    <i className="icon icon-dedent s-24" /> <span>Playlist</span>*/}
                                         {/*</li>*/}
                                             <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
-                                                if (location.pathname !== "/Cart") {
-                                                    history.push("/Cart");
-                                                    this.setState({select: "Cart"})
-                                                }
+                                                if (this.state.cart) {
+                                                    if (location.pathname !== "/Cart" ) {
+                                                        history.push("/Cart");
+                                                        this.setState({select: "Cart"})
+                                                    }
+                                                } else toast.warn("Your cart is empty")
                                             }}>
-                                                <i className="icon icon-cart-plus s-24" /> <span>Cart</span>
+                                                <div id="CartBadge">
+                                                      <span className="p1" data-count={this.state.cart}>
+                                                          <i className="p3 icon icon-cart-plus s-24" data-count="4b"/> cart
+                                                      </span>
+                                                </div>
                                             </li>
 
                                             {/*<li style={{margin: "0 0 20px 10px"}} onClick={() => {*/}
@@ -346,6 +368,12 @@ class Home extends Component {
                                     {/*           IfToken={this.redirectToLogin} ToPlay={this.addToPlaylist}/> } />*/}
                                     <Route path="/register" exact component={
                                         () => <Register/>
+                                    } />
+                                    <Route path="/CommandSuccess" exact component={
+                                        () => <CommandSuccess/>
+                                    } />
+                                    <Route path="/CommandError" exact component={
+                                        () => <CommandError/>
                                     } />
                                     <Route path="/preference" exact component={
                                         () => {
@@ -414,6 +442,7 @@ const mapStateToProps = state => {
         contract: state.profile.contract,
         beats_: state.profile.beats,
         beats: state.beats.beats,
+        cart: state.Carts.carts,
     };
 };
 

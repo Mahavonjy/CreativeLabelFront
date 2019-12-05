@@ -340,6 +340,21 @@
     }
     100% { opacity: 0 }
 }
+#CartBadge .p1[data-count]:after{
+    position:absolute;
+    left:35px;
+    bottom: 10px;
+    content: attr(data-count);
+    font-size:15px;
+    padding:.1em;
+    border-radius:50%;
+    line-height:1em;
+    color: white;
+    background:rgba(255,0,0,.85);
+    text-align:center;
+    min-width: 1.2em;
+    font-weight:bold;
+}
 @keyframes imageAnimation {
     0% {
         opacity: 0;

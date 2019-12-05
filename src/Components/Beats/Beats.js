@@ -360,7 +360,10 @@ class Beats extends Component {
                                                                                                             MP3
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
+                                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                                        FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}
+                                                                                                    }>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-16">
                                                                                                                 {val.basic_price} $
@@ -380,7 +383,10 @@ class Beats extends Component {
                                                                                                             MP3 + WAV
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
+                                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                                        FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props);
+                                                                                                    }}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.silver_price} $
@@ -400,7 +406,10 @@ class Beats extends Component {
                                                                                                             MP3 + WAV + STEMS
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
+                                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                                        FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)
+                                                                                                    }}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.gold_price} $
@@ -421,7 +430,10 @@ class Beats extends Component {
                                                                                                         Unlimited + Exclusive
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
+                                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                                        FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)
+                                                                                                    }}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.platinum_price} $

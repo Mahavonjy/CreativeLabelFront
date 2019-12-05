@@ -55,6 +55,12 @@ class Container extends Component {
                         </Route>
                         <Route path="/badConnexion">
                             <ConnexionError/>
+                        </Route><
+                        Route path="/CommandSuccess">
+                            <Home/>
+                        </Route>
+                        <Route path="/CommandError">
+                            <Home/>
                         </Route>
                         <Route component={NotFound}/>
                     </Switch>

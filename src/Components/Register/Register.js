@@ -65,13 +65,17 @@ class Register extends Component {
                     this.setState({visible: true});
                 }).catch(error => {
                     this.setState({isActive: false});
-                    if (error.response.data.email) {
-                        toast.error(error.response.data.email[0]);
-                        document.getElementById("register").removeAttribute("disabled");
-                    } else {
-                        let response = JSON.stringify(error.response.data);
-                        toast.error(response.replace(/"/g, ''));
-                        document.getElementById("register").removeAttribute("disabled");
+                    try {
+                        if (error.response.data.email) {
+                            toast.error(error.response.data.email[0]);
+                            document.getElementById("register").removeAttribute("disabled");
+                        } else {
+                            let response = JSON.stringify(error.response.data);
+                            toast.error(response.replace(/"/g, ''));
+                            document.getElementById("register").removeAttribute("disabled");
+                        }
+                    } catch (e) {
+                        console.log(error)
                     }
                 })
             } else {

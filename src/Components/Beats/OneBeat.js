@@ -266,7 +266,10 @@ class OneBeat extends Component {
                                                                                                         MP3
                                                                                                     </small>
                                                                                                 </div>
-                                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
+                                                                                                <div className="ml-auto" onClick={async (e) => {
+                                                                                                    await document.getElementById("closeOne" + val.id).click();
+                                                                                                    FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)
+                                                                                                }}>
                                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                         <div className="s-16">
                                                                                                             {val.basic_price} $
@@ -286,7 +289,10 @@ class OneBeat extends Component {
                                                                                                         MP3 + WAV
                                                                                                     </small>
                                                                                                 </div>
-                                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
+                                                                                                <div className="ml-auto" onClick={async (e) => {
+                                                                                                    await document.getElementById("closeOne" + val.id).click();
+                                                                                                    FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)
+                                                                                                }}>
                                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                         <div className="s-14">
                                                                                                             {val.silver_price} $
@@ -306,7 +312,10 @@ class OneBeat extends Component {
                                                                                                         MP3 + WAV + STEMS
                                                                                                     </small>
                                                                                                 </div>
-                                                                                                <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
+                                                                                                <div className="ml-auto" onClick={async (e) => {
+                                                                                                    await document.getElementById("closeOne" + val.id).click();
+                                                                                                    FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)
+                                                                                                }}>
                                                                                                     <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                         <div className="s-14">
                                                                                                             {val.gold_price} $
@@ -327,7 +336,10 @@ class OneBeat extends Component {
                                                                                                             Unlimited + Exclusive
                                                                                                         </small>
                                                                                                     </div>
-                                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
+                                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                                        FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)
+                                                                                                    }}>
                                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                             <div className="s-14">
                                                                                                                 {val.platinum_price} $
@@ -435,7 +447,10 @@ class OneBeat extends Component {
                                                                                             MP3
                                                                                         </small>
                                                                                     </div>
-                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)}>
+                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                        FunctionTools.AddToCart(val.id, val.basic_price, "basic_price", val, this.props)
+                                                                                    }}>
                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                             <div className="s-16">
                                                                                                 {val.basic_price} $
@@ -455,7 +470,10 @@ class OneBeat extends Component {
                                                                                             MP3 + WAV
                                                                                         </small>
                                                                                     </div>
-                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)}>
+                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                        FunctionTools.AddToCart(val.id, val.silver_price, "silver_price", val, this.props)
+                                                                                    }}>
                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                             <div className="s-14">
                                                                                                 {val.silver_price} $
@@ -475,7 +493,10 @@ class OneBeat extends Component {
                                                                                             MP3 + WAV + STEMS
                                                                                         </small>
                                                                                     </div>
-                                                                                    <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)}>
+                                                                                    <div className="ml-auto" onClick={async (e) => {
+                                                                                        await document.getElementById("closeOne" + val.id).click();
+                                                                                        FunctionTools.AddToCart(val.id, val.gold_price, "gold_price", val, this.props)
+                                                                                    }}>
                                                                                         <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                             <div className="s-14">
                                                                                                 {val.gold_price} $
@@ -496,7 +517,10 @@ class OneBeat extends Component {
                                                                                                 Unlimited + Exclusive
                                                                                             </small>
                                                                                         </div>
-                                                                                        <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)}>
+                                                                                        <div className="ml-auto" onClick={async (e) => {
+                                                                                            await document.getElementById("closeOne" + val.id).click();
+                                                                                            FunctionTools.AddToCart(val.id, val.platinum_price, "platinum_price", val, this.props)
+                                                                                        }}>
                                                                                             <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                                                 <div className="s-14">
                                                                                                     {val.platinum_price} $
@@ -570,7 +594,10 @@ class OneBeat extends Component {
                                                                 MP3
                                                             </small>
                                                         </div>
-                                                        <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.basic_price, "basic_price", this.props.SingleBeat, this.props)}>
+                                                        <div className="ml-auto" onClick={async (e) => {
+                                                            await document.getElementById("closeOne" + this.props.SingleBeat.id).click();
+                                                            FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.basic_price, "basic_price", this.props.SingleBeat, this.props)
+                                                        }}>
                                                             <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                 <div className="s-16">
                                                                     {this.props.SingleBeat.basic_price} $
@@ -590,7 +617,10 @@ class OneBeat extends Component {
                                                                 MP3 + WAV
                                                             </small>
                                                         </div>
-                                                        <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.silver_price, "silver_price", this.props.SingleBeat, this.props)}>
+                                                        <div className="ml-auto" onClick={async (e) => {
+                                                            await document.getElementById("closeOne" + this.props.SingleBeat.id).click();
+                                                            FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.silver_price, "silver_price", this.props.SingleBeat, this.props)
+                                                        }}>
                                                             <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                 <div className="s-14">
                                                                     {this.props.SingleBeat.silver_price} $
@@ -610,7 +640,10 @@ class OneBeat extends Component {
                                                                 MP3 + WAV + STEMS
                                                             </small>
                                                         </div>
-                                                        <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.gold_price, "gold_price", this.props.SingleBeat, this.props)}>
+                                                        <div className="ml-auto" onClick={async (e) => {
+                                                            await document.getElementById("closeOne" + this.props.SingleBeat.id).click();
+                                                            FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.gold_price, "gold_price", this.props.SingleBeat, this.props)
+                                                        }}>
                                                             <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                 <div className="s-14">
                                                                     {this.props.SingleBeat.gold_price} $
@@ -631,7 +664,10 @@ class OneBeat extends Component {
                                                                     Unlimited + Exclusive
                                                                 </small>
                                                             </div>
-                                                            <div className="ml-auto" onClick={(e) => FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.platinum_price, "platinum_price", this.props.SingleBeat, this.props)}>
+                                                            <div className="ml-auto" onClick={async (e) => {
+                                                                await document.getElementById("closeOne" + this.props.SingleBeat.id).click();
+                                                                FunctionTools.AddToCart(this.props.SingleBeat.id, this.props.SingleBeat.platinum_price, "platinum_price", this.props.SingleBeat, this.props)
+                                                            }}>
                                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                                     <div className="s-14">
                                                                         {this.props.SingleBeat.platinum_price} $
