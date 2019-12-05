@@ -8,7 +8,8 @@ class PurchaseInformation extends Component {
         this.state = {
             isMounted: false, name: this.props.profile_info.name, lastname: '',
             email: this.props.profile_info.email, address: this.props.profile_info.address, postal_code: null,
-            city: this.props.profile_info.city, phone: this.props.profile_info.phone, rules: false
+            city: this.props.profile_info.city, phone: this.props.profile_info.phone, rules: false,
+            card_number: null,
         };
     }
 
@@ -26,6 +27,8 @@ class PurchaseInformation extends Component {
 
     changePhone = (e) => {this.setState({phone: e.target.value})};
 
+    changeCardNumber = (e) => {this.setState({card_number: e.target.value})};
+
     componentDidMount() {
         this.setState({ isMounted: true})
     }
@@ -38,10 +41,49 @@ class PurchaseInformation extends Component {
         return (
             <div className="row-eq-height p-b-100">
                 <div className="col-12 pl-lg-3">
-
                     <div className="row row-eq-height my-3">
                         <div className="col-md-6">
                             <div className="card">
+                                <div className="card-header transparent">
+                                    {this.props.profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>
+
+                                        : <h4 className="text-red"><strong>Vous avez déjà un compte ?
+                                            <button className="border-top-0 border-left-0 border-right-0 text-red transparent" onClick={() =>  document.getElementById("LoginRequire").click()}>&nbsp;Se connecter</button></strong></h4>}
+
+
+                                </div>
+                                <div className="card-body text-center">
+                                    <form className="form-material">
+                                        {/* Input */}
+                                        <div className="body">
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <input type="text" id="name" className="form-control"
+                                                           placeholder="Votre nom" name="name"
+                                                           value={this.state.name}
+                                                           onChange={this.changeName} required/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <input type="text" id="lastname" className="form-control"
+                                                           placeholder="Votre prénom" name="lastname"
+                                                           value={this.state.lastname}
+                                                           onChange={this.changeLastName} required/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group form-float">
+                                                <div className="form-line">
+                                                    <input type="email" id="email" className="form-control"
+                                                           placeholder="E-mail"
+                                                           name="email" value={this.state.email}
+                                                           onChange={this.changeEmail} required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* #END# Input */}
+                                    </form>
+                                </div>
                                 <div className="card-header  transparent">
                                     <h4 className="text-red"><strong> Adresse de facturation </strong></h4>
                                 </div>
@@ -91,12 +133,7 @@ class PurchaseInformation extends Component {
                         <div className="col-md-6">
                             <div className="card">
                                 <div className="card-header transparent">
-                                    {this.props.profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>
-
-                                        : <h4 className="text-red"><strong>Vous avez déjà un compte ?
-                                            <button className="border-top-0 border-left-0 border-right-0 text-red transparent" onClick={() =>  document.getElementById("LoginRequire").click()}>&nbsp;Se connecter</button></strong></h4>}
-
-
+                                    <h4 className="text-red"><strong>Informations carte bancaire</strong></h4>
                                 </div>
                                 <div className="card-body text-center">
                                     <form className="form-material">
@@ -104,15 +141,17 @@ class PurchaseInformation extends Component {
                                         <div className="body">
                                             <div className="form-group form-float">
                                                 <div className="form-line">
-                                                    <input type="text" id="name" className="form-control"
-                                                           placeholder="Votre nom" name="name"
-                                                           value={this.state.name}
-                                                           onChange={this.changeName} required/>
+                                                    <label className="col-form-label">Numero de la carte</label>
+                                                    <input type="text" id="card_number" className="form-control"
+                                                           placeholder="0000 0000 0000 0000" name="card_number"
+                                                           value={this.state.card_number}
+                                                           onChange={this.changeCardNumber} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
                                                 <div className="form-line">
-                                                    <input type="text" id="lastname" className="form-control"
+                                                    <label className="col-form-label">Expiration (MM/AA)</label>
+                                                    <input type="date"  data-date="" data-date-format="MMMM YYYY" id="lastname" className="form-control"
                                                            placeholder="Votre prénom" name="lastname"
                                                            value={this.state.lastname}
                                                            onChange={this.changeLastName} required/>

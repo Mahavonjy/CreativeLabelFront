@@ -136,7 +136,7 @@ class Cart extends Component {
             <div className="Base">
                 <ToastContainer/>
                 <div className="row no-gutters">
-                <div className="col-lg-8 no-b p-lg-3 m-t-10 ">
+                <div className="col-lg-6 no-b p-lg-3 m-t-10 ">
                 <div className="card-header dark-grey darken-1 text-white">
                     <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                         Total: {this.state.total_price}$
@@ -204,7 +204,7 @@ class Cart extends Component {
 
                 </div>
                 </div>
-                    <div className="col-lg-4 p-lg-3">
+                    <div className="col-lg-6 p-lg-3">
                         <div className="mb-3 card p-3">
                             <div>
                                 <div className="mr-3 float-left text-center">
@@ -217,7 +217,7 @@ class Cart extends Component {
                                     <small> Artist with the same beats</small>
                                 </div>
                             </div>
-                            <ul className="playlist list-group bg-black list-group-flush" style={{height: 388}}>
+                            <ul className="playlist list-group bg-dark list-group-flush" style={{height: 388}}>
                                 <li className="list-group-item">
                                     <div className="d-flex align-items-center">
                                         <div className="col-10">
