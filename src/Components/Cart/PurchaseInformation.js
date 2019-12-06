@@ -59,6 +59,10 @@ class PurchaseInformation extends Component {
 
     HandleTokenStripe = (stripe_data) => {
         this.setState({payment_loading: true}, () => {
+            let cart_tmp = [];
+            if (this.props.cart.length !== 0)
+                cart_tmp = this.props.cart;
+            else cart_tmp = this.props.Cart;
             let headers = {
                 "Content-Type":'application/json',
                 "Access-Control-Allow-Origin":'*',
@@ -75,7 +79,7 @@ class PurchaseInformation extends Component {
                 },
                 "stripe_token": stripe_data,
                 "addresses": this.state.address,
-                "MyCarts": this.props.cart
+                "MyCarts": cart_tmp
             };
             try {
                 headers['Isl-Token'] = cookies.get("Isl_Creative_pass")["Isl_Token"];
@@ -88,9 +92,8 @@ class PurchaseInformation extends Component {
                     });
                 }).catch(err => {
                     this.setState({payment_loading: false}, () => {
-                        console.log(err.response)
+                        window.location.replace('/CommandError')
                     });
-                    // window.location.replace('/CommamndError')
                 })
             }
         });

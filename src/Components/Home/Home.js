@@ -131,7 +131,8 @@ class Home extends Component {
                     FunctionTools.getIfToken();
                     this.setState({loading: false})
                 } else if (this.state.href[this.state.href.length - 1] === 'Cart') {
-                    if (!this.state.cart) window.location.replace('/home')
+                    if (!this.state.cart) window.location.replace('/home');
+                    else this.setState({loading: false});
                 } else {
                     this.setState({loading: false}, () => {
                         if (this.state.href[this.state.href.length - 1] === "home#LoginRequire")
