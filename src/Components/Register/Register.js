@@ -7,8 +7,8 @@ import {ToastContainer, toast} from "react-toastify";
 import LoadingOverlay from 'react-loading-overlay';
 import LoginGoogle from "../Google/Google";
 import LoginFacebook from "../Facebook/Facebook";
-import FunctionTools from "../FunctionTools/FunctionTools";
 
+let cookies = new Cookies();
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -35,7 +35,6 @@ class Register extends Component {
             keys: this.state.keys,
         };
         axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(response =>{
-            const cookies = new Cookies();
             cookies.set("Isl_Creative_pass", {
                 "name": response.data.name,
                 "email": response.data.email,
@@ -60,6 +59,7 @@ class Register extends Component {
                 let data = {name: this.state.name, email: this.state.email, password: this.state.password,};
                 this.setState({isActive: true});
                 axios.post(Conf.configs.ServerApi + "api/users/register", data, {headers: headers}).then(response => {
+                    cookies.set("Isl_Creative_pass", {"name":response.data.name, "email":response.data.email, "Isl_Token":response.data.token});
                     this.setState({isActive: false});
                     toast.success("email send, Check your mailbox");
                     this.setState({visible: true});
