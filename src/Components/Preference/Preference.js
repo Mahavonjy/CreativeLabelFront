@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
 import './music_genres.css';
-import Cookies from "universal-cookie";
 import Conf from "../../Config/tsconfig";
 import { ToastContainer, toast } from 'react-toastify';
-const cookies = new Cookies();
 
-class SongGenre extends Component {
+let headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*"
+};
+
+class Preference extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +20,7 @@ class SongGenre extends Component {
     componentDidMount() {
         this.setState({isMounted: true}, () => {
             toast.warn("Veuillez choisir au moins 5 genres");
-            this.addToArray();
+            this.addAllMediaGenreToArray()
         });
     }
 
@@ -33,7 +36,7 @@ class SongGenre extends Component {
         this.setState({array: new_array});
     };
 
-    addToArray = () => {
+    addAllMediaGenreToArray = () => {
 
         let headers = {
             'Content-Type': 'application/json',
@@ -54,32 +57,23 @@ class SongGenre extends Component {
         })
     };
 
-    sendToApi = () => {
-        let token = cookies.get("Isl_Creative_pass")["Isl_Token"];
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': token
-        };
-        let ex = [];
+    sendUserGenreToApi = () => {
+
+        let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+        headers['Isl-Token'] = user_credentials.token;
+        let user_genre_tmp = [];
         for (let row in this.state.first_array) {
-            if (this.state.first_array[row][1]) {
-                ex[ex.length] = this.state.first_array[row][2].genre
-            }
+            if (this.state.first_array[row][1]) user_genre_tmp.push(this.state.first_array[row][2].genre)
         }
-        if (ex.length < 5) {
+        if (user_genre_tmp.length < 5) {
             toast.warn("Veuillez choisir au moins 5 genres");
         } else {
-            let data = {"user_genre_list": ex};
-            if (token) {
-                axios.post(Conf.configs.ServerApi + "api/medias/add_users_genre", data,{headers:headers}).then(response =>{
-                    window.location.replace('/home');
-                }).catch(error =>{
-                    toast.error(error.response.data);
-                })
-            } else {
-                toast.error("not token");
-            }
+            let data = {"user_genre_list": user_genre_tmp};
+            axios.post(Conf.configs.ServerApi + "api/medias/add_users_genre", data,{headers:headers}).then(response =>{
+                window.location.replace("/beats")
+            }).catch(error => {
+                toast.error(error.response.data);
+            })
         }
     };
 
@@ -91,15 +85,13 @@ class SongGenre extends Component {
         return (
             <div className="MusicChoiceTitle">
                 <ToastContainer/>
-                <h1>What kind of music love you ?</h1>
-                <button className="send-genre" onClick={this.sendToApi}>Valider</button>
+                <h1>Quelle genre de musique aimiez vous ?</h1>
+                <button className="send-genre" onClick={this.sendUserGenreToApi}>Valider</button>
                 <div className="row-genre pb-lg-5">
                     {this.state.first_array.map((all_music_genres, index) =>
                         <div className="music-genre" key={index} style={{background: `${all_music_genres[0]}`}}>
-                            <div className="top"
-                                 onClick={() => {this.BooleanToChange(index)}}
-                                 style={{backgroundImage: `url(${all_music_genres[2].image})`}}
-                            >
+                            <div className="top" onClick={() => {this.BooleanToChange(index)}}
+                                 style={{backgroundImage: `url(${all_music_genres[2].image})`}}>
                                 <div className="music-wrapper">
                                     <p className="heading">{all_music_genres[2].genre}</p>
                                 </div>
@@ -112,4 +104,4 @@ class SongGenre extends Component {
     }
 }
 
-export default SongGenre;
+export default Preference;

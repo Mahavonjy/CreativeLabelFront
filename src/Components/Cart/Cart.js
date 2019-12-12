@@ -73,7 +73,7 @@ class Cart extends Component {
                     }
                     toast.success("deleted");
                     Home.Decrement();
-                    if (tmp.length === 0) window.location.replace('/home')
+                    if (tmp.length === 0) window.location.replace('/beats')
                 }).catch(err => {
                     console.log(err.response)
                 })

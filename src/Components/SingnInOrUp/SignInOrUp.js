@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import "./Sign.css"
-import Cookies from "universal-cookie";
 import axios from "axios";
 import Conf from "../../Config/tsconfig";
 import {toast, ToastContainer} from "react-toastify";
 import Modal from "react-awesome-modal";
+import {bindActionCreators} from "redux";
+import * as CreateFields from "../FunctionTools/CreateFields";
+import {connect} from "react-redux";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -21,62 +22,40 @@ class SignInOrUp extends Component {
         };
     }
 
-    changeKeys = (e) => {this.setState({keys : e.target.value})};
+    changeFields = (e) => {this.setState({[e.target.id]: e.target.value})};
 
-    changeConfirmPassword = (e) => {this.setState({confirm_password: e.target.value})};
-
-    changeEmail = (e) => {this.setState({email : e.target.value})};
-
-    changePassword = (e) => {this.setState({password: e.target.value})};
-
-    changeName = (e) => {this.setState({name: e.target.value});};
-
-    handleSubmit = (e) => {
+    sendLoginCredentials = (e) => {
         e.preventDefault();
 
         let data = {
             email: this.state.email,
             password: this.state.password,
         };
-        this.setState({loading : true});
-        axios.post(Conf.configs.ServerApi + "api/users/login", data, {headers: headers}).then(response =>{
-            const cookies = new Cookies();
-            cookies.set("Isl_Creative_pass", {"name":response.data.name, "email":response.data.email, "Isl_Token":response.data.token});
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            this.setState({loading : false});
-            axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: new_headers}).then(resp =>{
-                toast.success("You are logged");
-                document.getElementsByClassName("close")[0].click();
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            }).catch(err => {
-                try {
-                    if (err.response.data === "no choice music genre") {
-                        this.setState({loading: false}, () => {
-                            window.location.replace('/preference')
+        this.setState({loading : true}, () => {
+            axios.post(Conf.configs.ServerApi + "api/users/login", data, {headers: headers}).then(response =>{
+                localStorage.setItem("Isl_Credentials", JSON.stringify(response.data));
+                this.setState({loading : false}, () => {
+                    toast.success("Vous etes connecté");
+                    document.getElementsByClassName("close")[0].click();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                });
+            }).catch(error =>{
+                this.setState({loading : false}, () => {
+                    let response = JSON.stringify(error.response.data).replace(/"/g, '');
+                    if (response === "Veuillez activer votre compte") {
+                        this.setState({visible: true}, () => {
+                            toast.error(response)
                         });
                     } else {
-                        console.log(err)
+                        this.setState({loading: false}, () => {
+                            toast.error("email ou mot de passe")
+                        });
                     }
-                } catch (e) {
-                    console.log(err)
-                }
+                })
             })
-        }).catch(error =>{
-            let response = JSON.stringify(error.response.data).replace(/"/g, '');
-            if (response === "Active your account") {
-                this.setState({visible: true}, () => {toast.error(response)});
-            } else {
-                this.setState({loading: false}, () => {
-                    toast.error("email or password incorrect")
-                });
-            }
-        })
+        });
     };
 
     verifyKeysSubmit = () => {
@@ -84,21 +63,16 @@ class SignInOrUp extends Component {
             email: this.state.email,
             keys: this.state.keys,
         };
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data, {headers: headers}).then(response => {
-            this.setState({visible: false});
-            toast.success("validate, you can log now")
+        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
+            this.setState({visible: false}, () => {toast.success("validate, you can log now")});
         }).catch(error =>{
             toast.error(error.response.data);
         })
     };
 
     verifyEmail = () => {
-        const data = {
-            email: this.state.email
-        };
-        axios.post(Conf.configs.ServerApi + "api/users/get_mail", data).then(response =>{
-            this.setState({visibility: false});
-            this.setState({ResetPassword: true});
+        axios.post(Conf.configs.ServerApi + "api/users/get_mail", {email: this.state.email}).then(() =>{
+            this.setState({visibility: false, ResetPassword: true});
         }).catch(error =>{
             let response = JSON.stringify(error.response.data);
             toast.error(response.replace(/"/g, ''));
@@ -111,9 +85,8 @@ class SignInOrUp extends Component {
             keys: this.state.keys,
         };
 
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(response =>{
-            this.setState({ResetPassword: false});
-            this.setState({changePass: true});
+        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(() =>{
+            this.setState({ResetPassword: false, changePass: true});
         }).catch(error =>{
             let response = JSON.stringify(error.response.data);
             toast.error(response.replace(/"/g, ''));
@@ -151,25 +124,6 @@ class SignInOrUp extends Component {
         }
     };
 
-    onClickSignUp = () => {
-        let right = document.getElementsByClassName("right")[0];
-        let left = document.getElementsByClassName("left")[0];
-        right.classList.replace('r-inactive', 'r-active');
-        right.style.transform = 'rotate(-31deg) translate(-650px, 115px)';
-        right.style.transition = '0.4s ease-in-out';
-        let lbtn = document.getElementsByClassName("l-btn")[0];
-        let ldisc = document.getElementsByClassName("l-disc")[0];
-        let rdisc = document.getElementsByClassName("r-disc")[0];
-        let rbtn = document.getElementsByClassName("r-btn")[0];
-        lbtn.style.display = 'block';
-        ldisc.style.display = 'block';
-        rdisc.style.display = 'none';
-        rbtn.style.display = 'none';
-        left.classList.replace('l-inactive', 'l-active');
-        left.style.transform = 'rotate(-31deg) translate(-60px, -184px)';
-        left.style.transition = '0.4s ease-in-out';
-    };
-
     onClickSignIn = () => {
         let right = document.getElementsByClassName("right")[0];
         let left = document.getElementsByClassName("left")[0];
@@ -198,9 +152,7 @@ class SignInOrUp extends Component {
         this.setState({ isMounted: false });
     }
 
-    close = () => {
-        document.getElementsByClassName("close")[0].click();
-    };
+    close = () => {document.getElementsByClassName("close")[0].click()};
 
     render() {
         return (
@@ -222,19 +174,15 @@ class SignInOrUp extends Component {
                             <div className="body">
                                 <div className="custom-float">
                                     <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>New Password</label><br/>
-                                    <input type="password" id="password" className="form-control"
-                                           placeholder="At least 8 character" name="password"
-                                           value={this.state.password}
-                                           onChange={this.changePassword} required/>
+                                    {this.props.InputCreate('password', this.state.password, this.changeFields, "Au moins 8 caractères", "password", true)}
                                 </div>
+
                                 <div className="custom-float">
                                     <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}> Confirm_Password</label> <br/>
-                                    <input type="password" id="confirm_password" className="form-control"
-                                           placeholder="retype your password" name="confirm_password"
-                                           value={this.state.confirm_password} onChange={this.changeConfirmPassword}
-                                           required/>
+                                    {this.props.InputCreate('confirm_password', this.state.confirm_password, this.changeFields, "Entrez le mot de passe à nouveau", "password", true)}
                                 </div>
-                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.changeMyPassword}>Send</button>
+
+                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.changeMyPassword}>Envoyer</button>
                             </div>
                         </div>
                     </div>
@@ -245,11 +193,9 @@ class SignInOrUp extends Component {
                         <div className="col text-center">
                             <div className="body">
                                 <div className="custom-float">
-                                    <input type="text" id="keys" className="form-control"
-                                           placeholder="this key is in your mailbox" name="keys" value={this.state.keys}
-                                           onChange={this.changeKeys} required/>
+                                    {this.props.InputCreate('keys', this.state.keys, this.changeFields, "Inserer votre clé ici", "number", true)}
                                 </div>
-                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysResetPass}>Send</button>
+                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysResetPass}>Verifier</button>
                             </div>
                         </div>
                     </div>
@@ -263,11 +209,9 @@ class SignInOrUp extends Component {
                         <div className="col text-center">
                             <div className="body">
                                 <div className="custom-float center">
-                                    <input type="email" id="email" className="form-control"
-                                           placeholder="Your email here" name="email" value={this.state.email}
-                                           onChange={this.changeEmail} required/>
+                                    {this.props.InputCreate('email', this.state.email, this.changeFields, "E-mail", "email", true)}
                                 </div>
-                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyEmail}>Send</button>
+                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyEmail}>Envoyer</button>
                             </div>
                         </div>
                     </div>
@@ -278,10 +222,7 @@ class SignInOrUp extends Component {
                         <div className="col text-center">
                             <div className="body">
                                 <div className="custom-float">
-                                    <input type="text" id="keys" className="form-control"
-                                           placeholder="Type your key in your mailbox"
-                                           name="keys" value={this.state.keys}
-                                           onChange={this.changeKeys} required/>
+                                    {this.props.InputCreate('keys', this.state.keys, this.changeFields, "Inserer votre clé ici", "number", true)}
                                 </div>
                                 <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysSubmit}>Send</button>
                             </div>
@@ -295,15 +236,15 @@ class SignInOrUp extends Component {
                     </div>
                     <div className="row l-form">
 
-                        <input className="l-usr" placeholder="You email" name="email"
-                               value={this.state.email} onChange={this.changeEmail}/>
+                        <input className="l-usr" placeholder="You email" name="email" id="email"
+                               value={this.state.email} onChange={this.changeFields}/>
 
                         <div className="pass-wrap l-pass">
-                            <input className="pass" placeholder="password" type="password"
-                                   name="password" value={this.state.password} onChange={this.changePassword}/>
+                            <input className="pass" placeholder="password" type="password" id="password"
+                                   name="password" value={this.state.password} onChange={this.changeFields}/>
                         </div>
 
-                        <button className="l-go" onClick={this.handleSubmit}>Connexion</button>
+                        <button className="l-go" onClick={this.sendLoginCredentials}>Connexion</button>
                         <small className="f-p" onClick={(e) => this.setState({visibility: true})}>Forgot password?</small>
                     </div>
                     {this.state.loading ?
@@ -322,33 +263,9 @@ class SignInOrUp extends Component {
                     </div> : null}
 
                     <div className="r-form">
-                        <input className="r-usr"
-                               placeholder="Votre nom"
-                               name="name"
-                               value={this.state.name}
-                               onChange={this.changeName}/>
-
-                        <input className="r-email" placeholder="E-mail"
-                               name="email" value={this.state.email}
-                               onChange={this.changeEmail}/>
-
-                        <div className="pass-wrap r-pass">
-                            <input className="pass" type="password"
-                                   placeholder="Au moins 8 caractères"
-                                   name="password" value={this.state.password}
-                                   onChange={this.changePassword}/>
-                        </div>
-
-                        <div className="pass-wrap r-con">
-                            <input className="pass" type="password"
-                                   placeholder="Entrez le mot de passe à nouveau"
-                                   name="confirm_password"
-                                   value={this.state.confirm_password}
-                                   onChange={this.changeConfirmPassword}/>
-                        </div>
-
-                        <button className="r-go">Inscription</button>
+                        {/* HERE IS REGISTER */}
                     </div>
+
                     <div className="l-overlay l-inactive left">
                         <div className="tri-l tri-l1"/>
                         <div className="tri-l tri-l2"/>
@@ -373,4 +290,10 @@ class SignInOrUp extends Component {
     }
 }
 
-export default SignInOrUp;
+const mapDispatch = (dispatch) => {
+    return {
+        InputCreate: bindActionCreators(CreateFields.CreateInput, dispatch),
+    };
+};
+
+export default connect(null, mapDispatch)(SignInOrUp);

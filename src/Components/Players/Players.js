@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import beats from '../Beats/Beats';
+import beats from '../Beats/AllBeatsSuggestion/Beats';
 import profile from '../Profile/Profile';
 import {connect} from "react-redux";
 import logo from "../../images/Logo/ISL_logo.png"
 import "../../assets/css/app.css";
-import Cookies from 'universal-cookie';
 import Conf from "../../Config/tsconfig";
 import './styles/main.scss'
 import './styles/_global.scss'
@@ -12,8 +11,8 @@ import './styles/_player.scss'
 import './styles/_variables.scss'
 import './styles/style.css'
 import axios from 'axios';
-import Suggestion from "../Beats/Suggestion";
-import OneBeat from "../Beats/OneBeat";
+import Suggestion from "../Beats/AllBeatsSuggestion/Suggestion";
+import OneBeat from "../Beats/AllBeatsSuggestion/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 
 let _this;
@@ -215,13 +214,13 @@ class Players extends Component {
     };
 
     SongListened = (listened, pres_listened) => {
-        let cookies = new Cookies();
+        let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
         let headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': "*"
         };
         try {
-            headers['Isl-Token'] = cookies.get("Isl_Creative_pass")["Isl_Token"]
+            headers['Isl-Token'] = user_credentials.token
         } catch (e) {
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
         } finally {
@@ -296,40 +295,6 @@ class Players extends Component {
     componentWillUnmount() {
         this.setState({ isMounted: false });
     }
-
-    getPlayList = () => {
-        let cookies = new Cookies();
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-
-        axios.get(Conf.configs.ServerApi + "api/playlists/userPlaylist", {headers:headers}).then(resp =>{
-            const info = resp.data['users_playlist'];
-            for (let row in info) {
-                this.setState(prevState => ({
-                    userPlaylist: [...prevState.userPlaylist, info[row]]
-                }))
-            }
-        }).catch(error => {
-            console.log(error);
-        })
-    };
-
-    addToPlaylist = (playlist_id) => {
-        let cookies = new Cookies();
-        let new_headers = {
-            'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-        axios.post(Conf.configs.ServerApi + "api/playlists/addInPlaylist/" + playlist_id + "/" + this.state.songId , {},{headers: new_headers}).then(resp =>{
-            console.log(resp.data);
-        }).catch(err => {
-            console.log(err.response)
-        })
-    };
 
     render() {
         return (

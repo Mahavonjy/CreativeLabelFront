@@ -142,7 +142,7 @@ class FunctionTools extends Component {
             };
             return axios.get(Conf.configs.ServerApi + "api/users/if_token_valide", {headers: new_headers}).then(() => {
                 if (special) return true;
-                else window.location.replace('/home');
+                else window.location.replace('/beats');
             }).catch(() => {
                 return false
             })

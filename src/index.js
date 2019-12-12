@@ -4,21 +4,29 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import {combineReducers, createStore} from 'redux';
 import profileReducer from './reducer/Profile';
 import beatsReducer from './reducer/Beats';
 import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
+import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import { sessionReducer, sessionService } from 'redux-react-session';
+import thunkMiddleware from "redux-thunk"
 
 const Reducers = combineReducers({
     "beats": beatsReducer,
     "profile": profileReducer,
     "Home": PlaylistHomeReducer,
-    "Carts": cartsReducer
+    "Carts": cartsReducer,
+    session: sessionReducer
 });
 
+
+const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));
+
+sessionService.initSessionService(store);
+
 ReactDOM.render(
-    <Provider store={createStore(Reducers)} >
+    <Provider store={store} >
         <App />
     </Provider>
     , document.getElementById('app')

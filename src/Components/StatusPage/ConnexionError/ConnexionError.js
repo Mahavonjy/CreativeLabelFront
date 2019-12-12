@@ -9,7 +9,7 @@ class ConnexionError extends Component {
                         <h1 className="text-primary">oops!</h1>
                         <p className="section-subtitle">Bad Gateway</p>
                         <p className="s-256">502</p>
-                        <a href="/home">refresh</a>
+                        <a href="/beats">refresh</a>
                     </div>
                 </div>
             </div>

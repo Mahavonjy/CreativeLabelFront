@@ -9,7 +9,7 @@ class NotFound extends Component {
                             <h1 className="text-primary">oops!</h1>
                             <p className="section-subtitle">Something went wrong. The page you are looking for is gone or you are not logged</p>
                             <p className="s-256">404</p>
-                            <a href="/home">Go To Home</a>
+                            <a href="/beats">Return</a>
                         </div>
                     </div>
                 </div>

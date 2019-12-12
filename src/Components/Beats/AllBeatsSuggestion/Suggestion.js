@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
-import TestImg from "../../assets/img/demo/a2.jpg";
+import TestImg from "../../../assets/img/demo/a2.jpg";
 import axios from "axios";
-import Conf from "../../Config/tsconfig";
-import IslPlayer from "../Players/Players";
-import FunctionTools from "../FunctionTools/FunctionTools";
+import Conf from "../../../Config/tsconfig";
+import IslPlayer from "../../Players/Players";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 import {Link} from 'react-router-dom';
 import ReactTooltip from "react-tooltip";
 import {FacebookProvider, Feed} from "react-facebook";

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 // import logo from '../../images/Logo/ISL_logo.png'
 
@@ -34,7 +34,7 @@ class PreviewScreen extends Component {
                             <p className="text-light">Hip Hop, Afro beats, Reggae, Dancehall, Riddim, Couper Décaler, Ndombolo, Salegy, Maloya, Kawitry, Rumba, Benga, et bien plus...</p>
                             <br/>
                             <br/>
-                            <NavLink to="/home">
+                            <NavLink to="/beats">
                                 <button id="beats" className="btn btn-outline-success pl-lg-5 pr-lg-5">C'est parti!&nbsp;&nbsp;<i className="icon-arrow-circle-o-right"/></button>
                             </NavLink>
                         </div>

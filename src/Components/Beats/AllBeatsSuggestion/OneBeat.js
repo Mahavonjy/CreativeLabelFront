@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import NotFound from "../NotFound/NotFound";
-import axios from "axios";
-import Conf from "../../Config/tsconfig";
-import Cookies from "universal-cookie/cjs";
+import NotFound from "../../StatusPage/NotFound/NotFound";
 import {toast, ToastContainer} from "react-toastify";
-import TestImg from "../../assets/img/demo/a2.jpg";
-import IslPlayer from "../Players/Players";
-import FunctionTools from "../FunctionTools/FunctionTools";
+import TestImg from "../../../assets/img/demo/a2.jpg";
+import IslPlayer from "../../Players/Players";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 import {connect} from "react-redux";
 
 let PhotoD =" https://zupimages.net/up/19/18/3ltf.png";

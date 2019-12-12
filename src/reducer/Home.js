@@ -10,11 +10,6 @@ const initState = {
 
 const PlaylistHomeReducer = (state = initState, action) => {
     switch (action.type) {
-        case "EDIT_AUTH":
-            return {
-                ...state,
-                auth: action.data
-            };
         case "ADD_PLAYLIST_INFO":
             return {
                 ...state,
