@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import beats from '../Beats/AllBeatsSuggestion/Beats';
-import profile from '../Profile/Profile';
 import {connect} from "react-redux";
 import logo from "../../images/Logo/ISL_logo.png"
 import "../../assets/css/app.css";
@@ -11,9 +9,8 @@ import './styles/_player.scss'
 import './styles/_variables.scss'
 import './styles/style.css'
 import axios from 'axios';
-import Suggestion from "../Beats/AllBeatsSuggestion/Suggestion";
-import OneBeat from "../Beats/AllBeatsSuggestion/OneBeat";
-import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import {bindActionCreators} from "redux";
+import * as CreateFields from "../FunctionTools/CreateFields";
 
 let _this;
 
@@ -26,7 +23,7 @@ class Players extends Component {
             currentTime: '00:00', totalTime: '00:00', loop: false, shuffle: false,
             component: null, listInfo: null, tmp: 0, listen: false, listen_min: null,
             isMounted: false , userPlaylist: [], songId: null, pres_listened: false,
-            listened: false, type_: ''
+            listened: false, type_: '', _that: '', set_of_beats_name: ''
         };
         this.history = [];
         this.player = new Audio();
@@ -66,27 +63,13 @@ class Players extends Component {
                 if (run) {
                     this.player.play();
                 } else {
-                    if (this.state.component === "beats") beats.playPlayer(this.state.currentIndex , "beats");
-                    if (this.state.component === "OneBeats") OneBeat.playPlayer(this.state.currentIndex , "beats");
-                    if (this.state.component === "OtherProfile") OtherProfile.playPlayer(this.state.currentIndex , "beats");
+                    this.props.playPlayer(this.state.currentIndex , "beats", this.state._that , this.state.set_of_beats_name);
                 }
             })
         } else if (this.state.songId) {
             this.setState({IsPlaying: false}, () => {
-                if (this.state.component === "OneBeats") {
-                    OneBeat.pausePlayer();
-                    this.player.pause()
-                } else if (this.state.component === "OtherProfile") {
-                    OtherProfile.pausePlayer();
-                    this.player.pause()
-                }
-                if (this.state.type_ === "OneBeats") {
-                    OneBeat.PauseOrPlaySingle();
-                    this.player.pause()
-                } else {
-                    beats.pausePlayer();
-                    this.player.pause()
-                }
+                this.props.pausePlayer(this.state._that , this.state.set_of_beats_name);
+                this.player.pause()
             })
         }
     };
@@ -97,17 +80,7 @@ class Players extends Component {
         if (this.state.shuffle) {
             this.history.push(this.state.currentIndex);
             this.setState({currentIndex: Math.floor(Math.random() * this.state.list.length)}, function() {
-                if (this.state.component === "beats") {
-                    beats.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "profile") {
-                    profile.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "suggestion") {
-                    Suggestion.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "OneBeats") {
-                    OneBeat.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "OtherProfile") {
-                    OtherProfile.changeIndex(this.state.currentIndex)
-                }
+                this.props.changeIndex(this.state.currentIndex, this.state._that);
                 this.startPlayer()
             })
         } else {
@@ -116,18 +89,8 @@ class Players extends Component {
                 this.setState({IsPlaying: false});
             } else {
                 this.history.push(this.state.currentIndex);
-                this.setState({currentIndex: this.state.currentIndex + 1}, function(){
-                    if (this.state.component === "beats") {
-                        beats.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "profile") {
-                        profile.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "suggestion") {
-                        Suggestion.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "OneBeats") {
-                        OneBeat.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "OtherProfile") {
-                        OtherProfile.changeIndex(this.state.currentIndex)
-                    }
+                this.setState({currentIndex: this.state.currentIndex + 1}, function next () {
+                    this.props.changeIndex(this.state.currentIndex, this.state._that)
                     this.startPlayer()
                 });
             }
@@ -138,18 +101,8 @@ class Players extends Component {
         this.state.tmp = 0;
         this.state.listen = false;
         if (this.history[this.history.length - 1]>= 0) {
-            this.setState({currentIndex: this.history.pop()}, function(){
-                if (this.state.component === "beats") {
-                    beats.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "profile") {
-                    profile.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "suggestion") {
-                    Suggestion.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "OneBeats") {
-                    OneBeat.changeIndex(this.state.currentIndex)
-                }  else if (this.state.component === "OtherProfile") {
-                    OtherProfile.changeIndex(this.state.currentIndex)
-                }
+            this.setState({currentIndex: this.history.pop()}, function prev () {
+                this.props.changeIndex(this.state.currentIndex, this.state._that)
                 this.startPlayer()
             });
         } else {
@@ -187,12 +140,6 @@ class Players extends Component {
         this.player.currentTime = percent * this.player.duration;
     };
 
-    onVolumeClick = (e) => {
-        const offsetX = e.nativeEvent.offsetX;
-        const offsetWidth = e.nativeEvent.target.offsetWidth;
-        this.player.volume = offsetX / offsetWidth;
-    };
-
     toggleLoop = () => {
         this.setState({loop: !this.state.loop}, function(){
             this.player.loop = this.state.loop
@@ -201,16 +148,6 @@ class Players extends Component {
 
     toggleShuffle = () => {
         this.setState({shuffle: !this.state.shuffle})
-    };
-
-    toggleVolume = () => {
-        this.setState({VolumeUp: !this.state.VolumeUp}, function(){
-            if(!this.state.VolumeUp){
-                this.player.volume = 0;
-            }else{
-                this.player.volume = 1;
-            }
-        })
     };
 
     SongListened = (listened, pres_listened) => {
@@ -231,64 +168,37 @@ class Players extends Component {
         }
     };
 
-    componentDidMount(index, type_, component) {
-        this.setState({ isMounted: true , component: component, type_: type_}, () => {
-            const that = this;
-            if (type_ === "beats" && component === "beats") {
-                this.state.list = this.props.beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (type_ === "beats" && component === "profile") {
-                this.state.list = this.props.profile_beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (type_ === "latest_beats" && component === "suggestion") {
-                this.state.list = this.props.latest_beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            }  else if (type_ === "discovery_beats" && component === "suggestion") {
-                this.state.list = this.props.discovery_beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (component === "OtherProfile") {
-                this.state.list = type_;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (component === "suggestion") {
-                this.state.list = type_;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (component === "OneBeats") {
-                this.state.list = type_;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (type_ === "OneBeats" ) {
-                this.state.list = component;
-                this.state.listInfo = null;
-                this.startPlayer(index);
+    componentDidMount(index, type_, run, _that, set_of_beats_name) {
+        this.setState({ isMounted: true , type_: type_, _that: _that, set_of_beats_name: set_of_beats_name}, () => {
+            if (index) {
+                const that = this;
+                this.state.list = this.props.list;
+                this.state.listInfo = this.props.listInfo;
+                if (run) this.PlayOrPause();
+                else this.startPlayer(index);
+                this.player.addEventListener('volumechange', function() {
+                    that.setState({VolumeBar: this.volume * 100})
+                }, false);
+                this.player.addEventListener('timeupdate', function() {
+                    that.state.tmp = that.state.tmp + 1;
+                    let position = this.currentTime / this.duration;
+                    that.setState({progressbar: position * 100});
+                    that.convertTime(Math.round(this.currentTime));
+                    that.totalTime(Math.round(this.duration));
+                    if (that.state.tmp === 10 && !that.state.pres_listened) {
+                        _this.setState({pres_listened: true});
+                        _this.SongListened(false, true);
+                    }
+                    if (that.state.tmp === that.state.listen_min && !that.state.listened) {
+                        _this.setState({listened: true});
+                        _this.SongListened(true);
+                    }
+                    if (this.ended) {
+                        that.state.tmp = 0;
+                        that.playNext()
+                    }
+                });
             }
-            this.player.addEventListener('volumechange', function() {
-                that.setState({VolumeBar: this.volume * 100})
-            }, false);
-            this.player.addEventListener('timeupdate', function() {
-                that.state.tmp = that.state.tmp + 1;
-                let position = this.currentTime / this.duration;
-                that.setState({progressbar: position * 100});
-                that.convertTime(Math.round(this.currentTime));
-                that.totalTime(Math.round(this.duration));
-                if (that.state.tmp === 10 && !that.state.pres_listened) {
-                    _this.setState({pres_listened: true});
-                    _this.SongListened(false, true);
-                }
-                if (that.state.tmp === that.state.listen_min && !that.state.listened) {
-                    _this.setState({listened: true});
-                    _this.SongListened(true);
-                }
-                if (this.ended) {
-                    that.state.tmp = 0;
-                    that.playNext()
-                }
-            });
         });
     }
 
@@ -408,25 +318,28 @@ class Players extends Component {
         );
     }
 
-    static startPlayerComponent(index, type_, component) {
-        _this.componentDidMount(index, type_, component)
+    static startPlayerComponent(index, type_, run, that, set_of_beats_name) {
+        _this.componentDidMount(index, type_, run, that, set_of_beats_name)
     }
 
-    static  pauseOrPlayPlayer() {
-        _this.PlayOrPause();
+    static  pauseOrPlayPlayer(run) {
+        _this.PlayOrPause(run);
     }
 }
 
 const mapStateToProps = state => {
     return {
-        beats: state.beats.beats,
-        profile_beats: state.profile.beats,
-        top_beats: state.beats.top_beats,
-        latest_beats: state.beats.latest_beats,
-        discovery_beats: state.beats.discovery_beats,
-        new_beatMaker: state.beats.new_beatMaker,
-        isl_playlist: state.beats.isl_playlist,
+        list: state.Player.list,
+        listInfo: state.Player.listInfo,
     };
 };
 
-export default connect(mapStateToProps, null)(Players);
+const mapDispatchToProps = dispatch => {
+    return {
+        pausePlayer: bindActionCreators(CreateFields.pausePlayer, dispatch),
+        playPlayer: bindActionCreators(CreateFields.playPlayer, dispatch),
+        changeIndex: bindActionCreators(CreateFields.changeIndex, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Players);

@@ -44,13 +44,13 @@ class Home extends Component {
         _that.setState({cart: _that.state.cart - 1})
     };
 
-    addToPlaylist = (index, type_, component) => {
+    addToPlaylist = (index, type_, run, that, set_of_beats_name) => {
         ifStopPlayer[key] = false;
         if (!ifStopPlayer[key]) {
             key = Math.floor(Math.random() * Math.floor(999999999));
             ifStopPlayer[key] = true;
         }
-        IslPlayer.startPlayerComponent(index, type_, component);
+        IslPlayer.startPlayerComponent(index, type_, run, that, set_of_beats_name);
     };
 
     ifConnectionError = (err) => {

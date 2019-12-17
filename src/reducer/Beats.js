@@ -1,16 +1,11 @@
 const initState = {
-    beats: [],
-    top_beatmaker: [],
-    top_beats: [],
-    latest_beats: [],
-    discovery_beats: [],
-    new_beatMaker: [],
-    isl_playlist: [],
-    ready: false,
-    ready_top_beats: false,
-    ready_latest_beats: false,
-    ready_discovery_beats: false,
-    ready_isl_playlist: false
+    beats: [], top_beatmaker: [],
+    top_beats: [], latest_beats: [],
+    discovery_beats: [], new_beatMaker: [],
+    isl_playlist: [], ready: false,
+    ready_top_beats: false, ready_latest_beats: false,
+    ready_discovery_beats: false, ready_isl_playlist: false,
+    beat_maker_beats: [], other_beat_maker_beats: []
 };
 
 const beatsReducer = (state = initState, action) => {
@@ -45,15 +40,20 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 beats: action.data
             };
-        case "UPDATE_BEATS_LIST":
-            for (let row in state.beats) {
-                if (parseInt(row) === parseInt(action.data.index)) {
-                    state.beats[row]['link'] = action.data.link
-                }
-            }
+        case "ADD_LATEST_BEATS":
             return {
                 ...state,
-                beats: [...state.beats]
+                latest_beats: action.data
+            };
+        case "ADD_BEAT_MAKER_BEATS":
+            return {
+                ...state,
+                beat_maker_beats: action.data
+            };
+        case "ADD_OTHER_BEAT_MAKER_BEATS":
+            return {
+                ...state,
+                other_beat_maker_beats: action.data
             };
         case "ADD_TOP_BEATMAKER":
             return {
@@ -70,30 +70,37 @@ const beatsReducer = (state = initState, action) => {
                 ...state,
                 top_beats: action.data
             };
-        case "UPDATE_TOP_BEATS_LIST":
-            for (let row in state.top_beats) {
-                if (parseInt(row) === parseInt(action.data.index)) {
-                    state.top_beats[row]['link'] = action.data.link
-                }
+        case "UPDATE_BEATS_LIST":
+            for (let row in state.beats) {
+                if (parseInt(row) === parseInt(action.data.index)) state.beats[row]['link'] = action.data.link
             }
             return {
                 ...state,
-                top_beats: [...state.top_beats]
-            };
-        case "ADD_LATEST_BEATS":
-            return {
-                ...state,
-                latest_beats: action.data
+                beats: [...state.beats]
             };
         case "UPDATE_LATEST_BEATS_LIST":
             for (let row in state.latest_beats) {
-                if (parseInt(row) === parseInt(action.data.index)) {
-                    state.latest_beats[row]['link'] = action.data.link
-                }
+                if (parseInt(row) === parseInt(action.data.index)) state.latest_beats[row]['link'] = action.data.link
             }
             return {
                 ...state,
                 latest_beats: [...state.latest_beats]
+            };
+        case "UPDATE_BEAT_MAKER_BEATS":
+            for (let row in state.beat_maker_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) state.beat_maker_beats[row]['link'] = action.data.link
+            }
+            return {
+                ...state,
+                beat_maker_beats: [...state.beat_maker_beats]
+            };
+        case "UPDATE_TOP_BEATS_LIST":
+            for (let row in state.top_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) state.top_beats[row]['link'] = action.data.link
+            }
+            return {
+                ...state,
+                top_beats: [...state.top_beats]
             };
         case "ADD_DISCOVERY_BEATS":
             return {
@@ -102,9 +109,7 @@ const beatsReducer = (state = initState, action) => {
             };
         case "UPDATE_DISCOVERY_BEATS_LIST":
             for (let row in state.discovery_beats) {
-                if (parseInt(row) === parseInt(action.data.index)) {
-                    state.discovery_beats[row]['link'] = action.data.link
-                }
+                if (parseInt(row) === parseInt(action.data.index)) state.discovery_beats[row]['link'] = action.data.link
             }
             return {
                 ...state,
@@ -117,9 +122,7 @@ const beatsReducer = (state = initState, action) => {
             };
         case "UPDATE_ISL_PLAYLIST_LIST":
             for (let row in state.isl_playlist) {
-                if (parseInt(row) === parseInt(action.data.index)) {
-                    state.isl_playlist[row]['link'] = action.data.link
-                }
+                if (parseInt(row) === parseInt(action.data.index)) state.isl_playlist[row]['link'] = action.data.link
             }
             return {
                 ...state,

@@ -50,7 +50,7 @@ class SignInOrUp extends Component {
                         });
                     } else {
                         this.setState({loading: false}, () => {
-                            toast.error("email ou mot de passe")
+                            toast.error("email ou mot de passe incorrect")
                         });
                     }
                 })

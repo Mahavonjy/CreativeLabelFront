@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Conf from "../../../Config/tsconfig";
-import {ToastContainer, toast} from "react-toastify";
+import {toast} from "react-toastify";
 import {connect} from "react-redux";
-import IslPlayer from '../../Players/Players'
 import ReactTooltip from 'react-tooltip';
 import Suggestion from "./Suggestion";
 import FunctionTools from "../../FunctionTools/FunctionTools";
@@ -12,6 +11,7 @@ import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 import * as PopupFields from "../../FunctionTools/PopupFields";
 
+let set_of_beats_name = "AllBeat";
 let token = "";
 let _this;
 
@@ -29,52 +29,6 @@ class Beats extends Component {
 
     changeGenre = (e) => {this.setState({genre: e.target.value}, () => {this.getBeats("genre")})};
 
-    AddForPlay = (index, _state) => {
-        let new_headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': token
-        };
-        axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + this.props.beats[index]['id'], {headers:new_headers}).then(response => {
-            let temp = {"index": index, "link": response.data};
-            this.props.updateBeats(temp);
-            if (_state === "link_beats")
-                this.setState(prevState => ({link_beats: {...prevState.link_beats, [index]: true}}));
-        }).catch(error => {
-            console.log(error.data);
-        })
-    };
-
-    Play = (index, type_) => {
-        if (this.state.index !== index && this.state.tmp === null) {
-            this.setState({index: index, tmp: index}, () => {
-                this.props.ToPlay(index, type_, "beats");
-            })
-        } else {
-            if (index !== this.state.index) {
-                this.setState({index: index, tmp: index}, () => {
-                    this.props.ToPlay(index, type_, "beats");
-                })
-            } else {
-                this.setState({tmp: null}, () => {
-                    IslPlayer.pauseOrPlayPlayer();
-                })
-            }
-        }
-    };
-
-    pausePlayer = (run) => {
-        if (this.state.index !== null) {
-            this.setState({tmp: this.state.index}, () => {
-                this.setState({index: null}, () => {
-                    if (run) {
-                        IslPlayer.pauseOrPlayPlayer();
-                    }
-                })
-            });
-        }
-    };
-
     getBeats = (type_) => {
         if (token) {
             let url_ = "";
@@ -84,9 +38,7 @@ class Beats extends Component {
                 this.setState({placeHolder: this.state.genre});
                 url_ = "api/medias/genre/beats/" + this.state.genre;
                 key = "songs"
-            }
-
-            if (type_ === "random") {
+            } else if (type_ === "random") {
                 url_ = "api/beats/random";
                 key = "random"
             }
@@ -102,7 +54,7 @@ class Beats extends Component {
                 this.setState({genre: ""}, () => {
                     for (let row in info) {info[row]['link'] = ""}
                     this.props.addBeats(info, {"key": true});
-                    for (let row_ in this.props.beats) {this.AddForPlay(row_)}
+                    for (let row_ in this.props.beats) {FunctionTools.AddForPlay(row_, null, this, this.props.beats[row_]['id'])}
                 });
             }).catch(err => {
                 console.log(err.response)
@@ -120,9 +72,8 @@ class Beats extends Component {
             } catch (e) {
                 token = Conf.configs.TokenVisitor;
             } finally {
-
                 if (!this.props.ready) {
-                    for (let row_ in this.props.beats) {this.AddForPlay(row_, "link_beats")};
+                    for (let row_ in this.props.beats) {FunctionTools.AddForPlay(row_, "link_beats", this, this.props.beats[row_]['id'])}
                     this.props.readyBeats()
                 } else {
                     for (let row_ in this.props.beats) {
@@ -131,6 +82,7 @@ class Beats extends Component {
                 }
             }
         });
+
     }
 
     componentWillUnmount() {
@@ -207,11 +159,11 @@ class Beats extends Component {
                                 <div className="card-body no-p" style={{height: 400}}>
                                     <div className="tab-content" id="v-pills-tabContent1">
                                         <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
-                                            {this.props.beats ?
+                                            {this.props.beats.length !== 0 ?
                                                 <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
-                                                    {this.props.CreateBeatsPlaylist(this, "AllBeat")}
+                                                    {this.props.CreateBeatsPlaylist(this, set_of_beats_name, this.props.beats, "oneBeats")}
                                                 </div>
-                                                :<div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
+                                                : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
                                                     <p className="text-center">Vide</p>
                                                 </div>}
                                         </div>
@@ -222,23 +174,23 @@ class Beats extends Component {
                             </div>
                         </div>
                         <div className="col-lg-4">
-                                <div className="mb-3 card p-3">
-                                    <div>
-                                        <div className="mr-3 float-left text-center">
-                                            <div className="s-36"><i className="icon-music-player-3"/></div>
-                                        </div>
-                                        <div>
-                                            <div>
-                                                <h4 className="text-primary">Top Beatmakers</h4>
-                                            </div>
-                                            <small> Classement ISL Creative des Beatmakers </small>
-                                        </div>
+                            <div className="mb-3 card p-3">
+                                <div>
+                                    <div className="mr-3 float-left text-center">
+                                        <div className="s-36"><i className="icon-music-player-3"/></div>
                                     </div>
-                                    {/* Here is top beatmakers */}
-                                    {this.props.DisplayArtist(this)}
-                                    {/* end of top beatmakers */}
+                                    <div>
+                                        <div>
+                                            <h4 className="text-primary">Top Beatmakers</h4>
+                                        </div>
+                                        <small> Classement ISL Creative des Beatmakers </small>
+                                    </div>
                                 </div>
+                                {/* Here is top beatmakers */}
+                                {this.props.DisplayArtist(this.props.top_beatmaker)}
+                                {/* end of top beatmakers */}
                             </div>
+                        </div>
                     </div>
                     <FunctionTools/>
                     <Suggestion ToPlay={this.props.ToPlay}/>
@@ -246,14 +198,6 @@ class Beats extends Component {
                 </div>
             </div>
         );
-    }
-
-    static pausePlayer() {
-        _this.pausePlayer(false);
-    }
-
-    static playPlayer(index, type_) {
-        _this.Play(index, type_);
     }
 
     static changeIndex(index) {
@@ -283,6 +227,9 @@ const mapDispatchToProps = dispatch => {
         },
         addCarts: (data) => {
             dispatch({type: "ADD_CART", data: data})
+        },
+        addNewPlayerList: (data) => {
+            dispatch({type: "ADD_NEW_PLAYER_PLAYLIST", data: data})
         },
         addTotalPrice: (data) => {
             dispatch({type: "ADD_TOTAL_PRICE", data: data})

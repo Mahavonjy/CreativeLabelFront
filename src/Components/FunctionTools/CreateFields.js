@@ -16,6 +16,7 @@ import Preference from "../Preference/Preference";
 import Profile from "../Profile/Profile";
 import OneBeat from "../Beats/AllBeatsSuggestion/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import IslPlayer from "../Players/Players";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     return () => {
@@ -33,104 +34,168 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
     };
 };
 
-export const CreateBeatsPlaylist = (that, set_of_beats_name) => {
+export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_value, height_div) => {
+
+    function Play (that, index, type_, run) {
+        if (that.state.index !== index && that.state.tmp === null) {
+            that.setState({index: index, tmp: index}, () => {
+                that.props.addNewPlayerList(props_value);
+                that.props.ToPlay(index, type_, run, that, set_of_beats_name);
+            })
+        } else {
+            if (index !== that.state.index) {
+                let tmp;
+                if (that.state.index === that.state.tmp) tmp = true;
+                that.setState({index: index, tmp: index}, () => {
+                    if (tmp) that.props.ToPlay(index, type_, run);
+                    else IslPlayer.pauseOrPlayPlayer(true);
+                })
+            } else that.setState({tmp: null}, () => {pausePlayer(that, false)});
+        }
+    }
+
+    function pausePlayer (that, run) {
+        if (that.state.index !== null) {
+            that.setState({tmp: that.state.index}, () => {
+                that.setState({index: null}, () => {
+                    if (run) {
+                        IslPlayer.pauseOrPlayPlayer(false);
+                    }
+                })
+            });
+        }
+    }
 
     return () => {
-        return (
-            <div>
-                {that.props.beats.map((val, index) =>
-                    <div className="m-1 my-4" key={index}>
-                        <div className="d-flex align-items-center">
-                            <div className="col-1">
-                                {that.state.link_beats[index] ?
-                                    <div>
+        if (height_div === "short_beats") {
+            return (
+                <div>
+                    {props_value.map((val, index) =>
+                        <div className="list-group-item" key={index}>
+                            <div className="d-flex align-items-center">
+                                <div>
+                                    {state_value === "oneBeats"?
+                                        <div className="text-red">
                                         {that.state.index === index ?
-                                            <i className="icon-pause s-28 text-danger" onClick={() => that.pausePlayer(true)}/>:
-                                            <i className="icon-play s-28 text-danger" onClick={() => {that.Play(index, "beats")}}/>}
+                                            <i className="icon-pause s-28 text-danger" onClick={() => pausePlayer(that, true)}/>:
+                                            <i className="icon-play s-28 text-danger" onClick={() => {Play(that, index, "beats", false)}}/>}
+                                        </div> : <div>
+                                        {state_value[index] ?
+                                            <div className="text-red">
+                                                {that.state.index === index ?
+                                                    <i className="icon-pause s-28 text-danger" onClick={() => pausePlayer(that, true)}/>:
+                                                    <i className="icon-play s-28 text-danger" onClick={() => {Play(that, index, "beats", false)}}/>}
+                                            </div> :
+                                            <div className="spinner-grow text-primary" role="status">
+                                                <span className="sr-only"/>
+                                            </div>}
+                                    </div>}
+                                </div>
+                                <div className="col-10">
+                                    <Link to={'beats/CheckThisBeat/' + val.id}>
+                                        <small>{val.title}</small>
+                                    </Link>
+                                </div>
+                                <button className="dropdown-item"
+                                        type="button" data-toggle="modal"
+                                        data-target={"#" + set_of_beats_name + val.id}>
+                                    <small className="ml-auto"><i
+                                        className="icon-opencart text-red"/>
+                                    </small>
+                                </button>
+                                {/* Here is Popup for add to cart */}
+                                {that.props.ForAddToCard(that, val, set_of_beats_name)}
+                            </div>
+                        </div>)}
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    {props_value.map((val, index) =>
+                        <div className="m-1 my-4" key={index}>
+                            <div className="d-flex align-items-center">
+                                <div className="col-1">
+                                    {state_value[index] ?
+                                        <div>
+                                            {that.state.index === index ?
+                                                <i className="icon-pause s-28 text-danger" onClick={() => pausePlayer(that, true)}/>:
+                                                <i className="icon-play s-28 text-danger" onClick={() => Play(that, index, "beats", false)}/>}
+                                        </div>
+                                        :
+                                        <div className="spinner-grow text-primary" role="status">
+                                            <span className="sr-only"/>
+                                        </div>
+                                    }
+                                </div>
+                                <div className="col-md-3">
+                                    <figure className="avatar-md float-left  mr-2">
+                                        <img className="r-3" src={val.photo} alt="" />
+                                    </figure>
+                                    <Link to={'beats/CheckThisBeat/' + val.id}>
+                                        <h6>{val.title}</h6>
+                                        <small className="text-red">{val.artist}</small>
+                                    </Link>
+                                </div>
+                                <ReactTooltip/>
+                                <div className="col-md-5 d-none d-sm-block">
+                                    <div className="d-flex">
+                                        <small className="ml-auto">{val.silver_price}$</small>
+                                        <small className="ml-auto">{val.bpm}/bpm</small>
+                                        <FacebookProvider appId={Conf.configs.FacebookId}>
+                                            <Feed link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
+                                                {({ handleClick }) => (
+                                                    <div className="ml-auto transparent border-0">
+                                                        <i className="icon-share-1 text-red" onClick={handleClick}/>
+                                                    </div>
+                                                )}
+                                            </Feed>
+                                        </FacebookProvider>
+                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => {
+                                            FunctionTools.LikeOrFollow("like", val.id);
+                                        }}/>
                                     </div>
-                                    :
-                                    <div className="preloader-wrapper small active">
-                                        <div className="spinner-layer spinner-red-only">
-                                            <div className="circle-clipper left">
-                                                <div className="circle"/>
-                                            </div>
-                                            <div className="gap-patch">
-                                                <div className="circle"/>
-                                            </div>
-                                            <div className="circle-clipper right">
-                                                <div className="circle"/>
-                                            </div>
+                                </div>
+                                <div className="col-sm-2 d-none d-sm-block">
+                                    <div className="d-flex">
+                                        <div className="ml-auto">
+                                            <button className="btn btn-outline-primary btn-sm" type="button" data-toggle="modal"
+                                                    data-target={"#" + set_of_beats_name + val.id}><i className="icon-opencart"/>
+                                            </button>
                                         </div>
                                     </div>
-                                }
-                            </div>
-                            <div className="col-md-3">
-                                <figure className="avatar-md float-left  mr-2">
-                                    <img className="r-3" src={val.photo} alt="" />
-                                </figure>
-                                <Link to={'CheckThisBeat/' + val.id}>
-                                    <h6>{val.title}</h6>
-                                    <small className="text-red">{val.artist}</small>
-                                </Link>
-                            </div>
-                            <ReactTooltip/>
-                            <div className="col-md-5 d-none d-sm-block">
-                                <div className="d-flex">
-                                    <small className="ml-auto">{val.silver_price}$</small>
-                                    <small className="ml-auto">{val.bpm}/bpm</small>
-                                    <FacebookProvider appId={Conf.configs.FacebookId}>
-                                        <Feed link={"http://" + window.location.host + '/CheckThisBeat/' + val.id}>
-                                            {({ handleClick }) => (
-                                                <div className="ml-auto transparent border-0">
-                                                    <i className="icon-share-1 text-red" onClick={handleClick}/>
-                                                </div>
-                                            )}
-                                        </Feed>
-                                    </FacebookProvider>
-                                    <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => {
-                                        FunctionTools.LikeOrFollow("like", val.id);
-                                    }}/>
                                 </div>
-                            </div>
-                            <div className="col-sm-2 d-none d-sm-block">
-                                <div className="d-flex">
-                                    <div className="ml-auto">
-                                        <button className="btn btn-outline-primary btn-sm" type="button" data-toggle="modal"
-                                                data-target={"#" + set_of_beats_name + val.id}><i className="icon-opencart"/>
+                                <div className="col-1 ml-auto d-sm-none" >
+                                    <a href="#" data-toggle="dropdown"
+                                       aria-haspopup="true"
+                                       aria-expanded="false">
+                                        <i className="icon-more-1"/></a>
+                                    <div className="dropdown-menu dropdown-menu-right">
+                                        <button className="dropdown-item"
+                                                type="button" data-toggle="modal"
+                                                data-target={"#" + set_of_beats_name + val.id}><i
+                                            className="icon-shopping-bag mr-3"/>Add To Cart
                                         </button>
+                                        <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-1 ml-auto d-sm-none" >
-                                <a href="#" data-toggle="dropdown"
-                                   aria-haspopup="true"
-                                   aria-expanded="false">
-                                    <i className="icon-more-1"/></a>
-                                <div className="dropdown-menu dropdown-menu-right">
-                                    <button className="dropdown-item"
-                                            type="button" data-toggle="modal"
-                                            data-target={"#trackModal" + val.id}><i
-                                        className="icon-shopping-bag mr-3"/>Add To Cart
-                                    </button>
-                                    <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
-                                </div>
-                            </div>
 
-                            {/* Here is Popup for add to cart */}
-                            {that.props.ForAddToCard(that, val, set_of_beats_name)}
+                                {/* Here is Popup for add to cart */}
+                                {that.props.ForAddToCard(that, val, set_of_beats_name)}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        )
+                    )}
+                </div>
+            )
+        }
     };
 };
 
-export const DisplayArtist = (that) => {
+export const DisplayArtist = (that_value) => {
     return () => {
         return (
-            <ul className="playlist list-group bg-black list-group-flush" style={{height: 428}}>
-                {that.props.top_beatmaker ? that.props.top_beatmaker.map((val, index) =>
+            <ul className="playlist list-group bg-dark list-group-flush" style={{height: 428}}>
+                {that_value ? that_value.map((val, index) =>
                     <li className="list-group-item" key={index}>
                         <div className="d-flex align-items-center">
                             <div className="col-10">
@@ -259,5 +324,26 @@ export const SideBarsMain = (that) => {
                                         UserBeats={that.state.user_beats}/>}/>
             </div>
         )
+    }
+};
+
+export const pausePlayer = (_that , set_of_beats_name) => {
+    return () => {
+        CreateBeatsPlaylist(_that , set_of_beats_name);
+        return true;
+    }
+};
+
+export const playPlayer = (index, type_, _that , set_of_beats_name) => {
+    return () => {
+        CreateBeatsPlaylist(_that , set_of_beats_name);
+        return true;
+    }
+};
+
+export const changeIndex = (index, _that) => {
+    return () => {
+        _that.setState({index: index});
+        return true;
     }
 };

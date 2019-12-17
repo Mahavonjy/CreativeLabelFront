@@ -165,6 +165,34 @@ class FunctionTools extends Component {
         return tmp === parseInt(tmp, 10);
     };
 
+    static  AddForPlay = (index, _state, that, song_id) => {
+        let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
+        axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + song_id, {headers:headers}).then(response => {
+            let temp = {"index": index, "link": response.data};
+            if (_state === "link_beats") {
+                that.props.updateBeats(temp);
+                that.setState(prevState => ({link_beats: {...prevState.link_beats, [index]: true}}));
+            } else if (_state === "link_latest_beats") {
+                that.props.updateLatestBeats(temp);
+                that.setState(prevState => ({link_latest_beats: {...prevState.link_latest_beats, [index]: true}}))
+            } else if (_state === "link_discovery_beats") {
+                that.props.updateDiscoveryBeats(temp);
+                that.setState(prevState => ({link_discovery_beats: {...prevState.link_discovery_beats, [index]: true}}))
+            } else if (_state === "link_isl_playlist") {
+                that.props.updateIslBeats(temp);
+                that.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [index]: true}}))
+            } else if (_state === "link_all_artist_beats") {
+                that.props.updateBeatMakerBeats(temp);
+                that.setState(prevState => ({link_all_artist_beats: {...prevState.link_all_artist_beats, [index]: true}}))
+            } else if (_state === "link_all_other_artist_beats") {
+                that.props.updateOtherBeatMakerBeats(temp);
+                that.setState(prevState => ({link_all_other_artist_beats: {...prevState.link_all_other_artist_beats, [index]: true}}))
+            }
+        }).catch(error => {
+            console.log(error.data);
+        })
+    };
+
     render() {
         return(
             <ToastContainer/>

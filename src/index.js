@@ -8,22 +8,20 @@ import profileReducer from './reducer/Profile';
 import beatsReducer from './reducer/Beats';
 import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
+import playersReducer from "./reducer/Players";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
-import { sessionReducer, sessionService } from 'redux-react-session';
 import thunkMiddleware from "redux-thunk"
 
 const Reducers = combineReducers({
     "beats": beatsReducer,
     "profile": profileReducer,
     "Home": PlaylistHomeReducer,
+    "Player": playersReducer,
     "Carts": cartsReducer,
-    session: sessionReducer
 });
 
 
 const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));
-
-sessionService.initSessionService(store);
 
 ReactDOM.render(
     <Provider store={store} >
