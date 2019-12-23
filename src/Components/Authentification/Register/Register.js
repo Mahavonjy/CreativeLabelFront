@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import Conf from "../../Config/tsconfig";
+import Conf from "../../../Config/tsconfig";
 import Modal from 'react-awesome-modal';
 import {ToastContainer, toast} from "react-toastify";
 import LoadingOverlay from 'react-loading-overlay';
 import LoginGoogle from "../SocialCredentials/Google/Google";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import {bindActionCreators} from "redux";
-import * as Validators from "../Validators/Validatiors"
-import * as CreateFields from "../FunctionTools/CreateFields"
+import * as Validators from "../../Validators/Validatiors"
+import * as CreateFields from "../../FunctionTools/CreateFields"
 import {connect} from "react-redux";
 
 let user_credentials;

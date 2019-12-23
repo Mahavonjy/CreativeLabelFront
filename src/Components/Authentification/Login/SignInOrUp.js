@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./Sign.css"
 import axios from "axios";
-import Conf from "../../Config/tsconfig";
+import Conf from "../../../Config/tsconfig";
 import {toast, ToastContainer} from "react-toastify";
 import Modal from "react-awesome-modal";
 import {bindActionCreators} from "redux";
-import * as CreateFields from "../FunctionTools/CreateFields";
+import * as CreateFields from "../../FunctionTools/CreateFields";
 import {connect} from "react-redux";
 
 let headers = {

@@ -9,7 +9,7 @@ class CommandSuccess extends Component {
                         <h1 className="text-success">Felicitation</h1>
                         <p className="section-subtitle">Merci pour votre commande d'Instrumental chez nous. votre commande vous sera envoyer sur votre boite email d'ici quelques instant.</p>
                         <p className="s-256"><i className="icon-success text-success s-256"/></p>
-                        <a className="text-light font-weight-bold">Visualiser Votre Commande</a>
+                        <a href="/#" className="text-light font-weight-bold">Visualiser Votre Commande</a>
                     </div>
                 </div>
             </div>

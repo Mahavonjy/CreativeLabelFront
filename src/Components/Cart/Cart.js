@@ -8,12 +8,9 @@ import {connect} from "react-redux";
 import PurchaseInformation from "./PurchaseInformation";
 import Home from "../Home/Home";
 
-let _that;
-
 let cookies = new Cookies();
 class Cart extends Component {
     ToPlay;
-    IfToken;
     constructor(props) {
         super(props);
         this.state = {
@@ -24,8 +21,6 @@ class Cart extends Component {
             isMounted: false,
             delete: null
         };
-
-        _that = this
     }
 
     getCart = () => {
@@ -199,8 +194,8 @@ class Cart extends Component {
                                             <h6>Zoe Foe</h6>
                                             <small>5 Albums - 50 Songs</small>
                                         </div>
-                                        <a href="#" className="ml-auto"><i className="icon-user-plus" /></a>
-                                        <a href="#" className="ml-auto"><i className="icon-user-circle" /></a>
+                                        <a href="/#" className="ml-auto"><i className="icon-user-plus" /></a>
+                                        <a href="/#" className="ml-auto"><i className="icon-user-circle" /></a>
                                     </div>
                                 </li>
                             </ul>

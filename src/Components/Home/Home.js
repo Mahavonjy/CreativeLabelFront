@@ -175,8 +175,6 @@ class Home extends Component {
                 if (resp.data['role'] === "Artist") {
                     axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
                         this.props.profile_add_beats(resp.data['beats']);
-                        this.props.profile_add_single(resp.data['music']);
-                        this.props.profile_add_albums(resp.data['albums']);
                         axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
                             this.props.profile_initialisation_contract(resp.data);
                             this.NotOnline(headers)
@@ -301,12 +299,6 @@ const mapDispatchToProps = dispatch => {
         },
         addTotalPrice: (data) => {
             dispatch({type: "ADD_TOTAL_PRICE", data: data})
-        },
-        profile_add_albums: (data) => {
-            dispatch({type: "ADD_PROFILE_ALBUMS", data: data})
-        },
-        profile_add_single: (data) => {
-            dispatch({type: "ADD_PROFILE_SINGLE", data: data})
         },
         profile_add_beats: (data) => {
             dispatch({type: "ADD_PROFILE_BEATS", data: data})

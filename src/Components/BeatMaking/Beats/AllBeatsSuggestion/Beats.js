@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Conf from "../../../Config/tsconfig";
+import Conf from "../../../../Config/tsconfig";
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import ReactTooltip from 'react-tooltip';
 import Suggestion from "./Suggestion";
-import FunctionTools from "../../FunctionTools/FunctionTools";
+import FunctionTools from "../../../FunctionTools/FunctionTools";
 import Offers from "../Offers/Offers";
 import {bindActionCreators} from "redux";
-import * as CreateFields from "../../FunctionTools/CreateFields";
-import * as PopupFields from "../../FunctionTools/PopupFields";
+import * as CreateFields from "../../../FunctionTools/CreateFields";
+import * as PopupFields from "../../../FunctionTools/PopupFields";
 
 let set_of_beats_name = "AllBeat";
 let token = "";

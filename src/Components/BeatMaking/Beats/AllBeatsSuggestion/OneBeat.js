@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import NotFound from "../../StatusPage/NotFound/NotFound";
+import NotFound from "../../../StatusPage/NotFound/NotFound";
 import {ToastContainer} from "react-toastify";
-import TestImg from "../../../assets/img/demo/a2.jpg";
-import IslPlayer from "../../Players/Players";
-import FunctionTools from "../../FunctionTools/FunctionTools";
+import TestImg from "../../../../assets/img/demo/a2.jpg";
+import IslPlayer from "../../../Players/Players";
+import FunctionTools from "../../../FunctionTools/FunctionTools";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import * as CreateFields from "../../FunctionTools/CreateFields";
-import * as PopupFields from "../../FunctionTools/PopupFields";
+import * as CreateFields from "../../../FunctionTools/CreateFields";
+import * as PopupFields from "../../../FunctionTools/PopupFields";
 
 let _that;
 class OneBeat extends Component {
@@ -17,7 +17,7 @@ class OneBeat extends Component {
         this.state = {
             href: window.location.href.split("/"), isMounted: false, NotFound: false, playing: false,
             single_beat: '', index: null, tmp: null, song_id_shared: null,
-            songId: null, link_all_artist_beats : []
+            songId: null, link_all_artist_beats: []
         };
         _that = this
     }
@@ -105,15 +105,15 @@ class OneBeat extends Component {
                                             <div className="d-md-flex align-items-center justify-content-between">
                                                 <h1 className="my-3 text-white ">{this.props.SingleBeat.title}</h1>
                                                 <div className="ml-auto mb-2">
-                                                    <a href="#" className="snackbar" data-text="Bookmark clicked"
+                                                    <a href="/#" className="snackbar" data-text="Bookmark clicked"
                                                        data-pos="top-right" data-showaction="true" data-actiontext="ok"
                                                        data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i
                                                         className="icon-bookmark s-24"/></a>
-                                                    <a href="#" className="snackbar ml-3" data-text="You like this song"
+                                                    <a href="/#" className="snackbar ml-3" data-text="You like this song"
                                                        data-pos="top-right" data-showaction="true" data-actiontext="ok"
                                                        data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i
                                                         className="icon-heart s-24"/></a>
-                                                    <a href="#" className="snackbar ml-3" data-text="Thanks for sharing"
+                                                    <a href="/#" className="snackbar ml-3" data-text="Thanks for sharing"
                                                        data-pos="top-right" data-showaction="true" data-actiontext="ok"
                                                        data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i
                                                         className="icon-share-1 s-24"/></a>

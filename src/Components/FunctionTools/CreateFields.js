@@ -7,14 +7,14 @@ import FunctionTools from "./FunctionTools";
 import TestImg from "../../assets/img/demo/a2.jpg";
 import TestImg1 from "../../assets/img/demo/b1.jpg";
 import {toast} from "react-toastify";
-import Register from "../Register/Register";
+import Register from "../Authentification/Register/Register";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
-import Beats from "../Beats/AllBeatsSuggestion/Beats";
+import Beats from "../BeatMaking/Beats/AllBeatsSuggestion/Beats";
 import Cart from "../Cart/Cart";
 import Preference from "../Preference/Preference";
 import Profile from "../Profile/Profile";
-import OneBeat from "../Beats/AllBeatsSuggestion/OneBeat";
+import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import IslPlayer from "../Players/Players";
 
@@ -112,6 +112,7 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
         } else {
             return (
                 <div>
+                    <ReactTooltip/>
                     {props_value.map((val, index) =>
                         <div className="m-1 my-4" key={index}>
                             <div className="d-flex align-items-center">
@@ -132,17 +133,24 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                     <figure className="avatar-md float-left  mr-2">
                                         <img className="r-3" src={val.photo} alt="" />
                                     </figure>
-                                    <Link to={'beats/CheckThisBeat/' + val.id}>
-                                        <h6>{val.title}</h6>
-                                        <small className="text-red">{val.artist}</small>
-                                    </Link>
+                                    {height_div !== "user_profile" ?
+                                        <Link to={'beats/CheckThisBeat/' + val.id}>
+                                            <h6>{val.title}</h6>
+                                            <small className="text-red">{val.artist}</small>
+                                        </Link>:
+                                        <div className="d-flex">
+                                            <h6 className="ml-auto mr-2">{val.title}</h6>
+                                            <small className="ml-auto mr-2">{val.time}</small>
+                                        </div>
+                                    }
                                 </div>
                                 <ReactTooltip/>
-                                <div className="col-md-5 d-none d-sm-block">
+                                <div className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
                                     <div className="d-flex">
-                                        <small className="ml-auto">{val.silver_price}$</small>
+                                        {height_div !== "user_profile" ? <small className="ml-auto">{val.silver_price}$</small>: null}
                                         <small className="ml-auto">{val.bpm}/bpm</small>
-                                        <FacebookProvider appId={Conf.configs.FacebookId}>
+                                        {height_div !== "user_profile" ?
+                                            <FacebookProvider appId={Conf.configs.FacebookId}>
                                             <Feed link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
                                                 {({ handleClick }) => (
                                                     <div className="ml-auto transparent border-0">
@@ -150,12 +158,22 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                                     </div>
                                                 )}
                                             </Feed>
-                                        </FacebookProvider>
-                                        <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => {
-                                            FunctionTools.LikeOrFollow("like", val.id);
-                                        }}/>
+                                        </FacebookProvider> :
+                                            <div className="ml-auto" title={"Edit this beats"}>
+                                                <small className="ml-auto">Ecouté {val.number_play} fois</small>
+                                            </div>}
+                                        {height_div !== "user_profile" ?
+                                            <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => {
+                                                FunctionTools.LikeOrFollow("like", val.id);
+                                            }}/> :
+                                            <div className="ml-auto" title={"Edit this beats"}>
+                                                <i className="icon-edit s-24" id={val.id}
+                                                   onClick={() => that.togglePopupEditSingle(index, "beats")}>
+                                                </i>
+                                            </div>}
                                     </div>
                                 </div>
+                                {height_div !== "user_profile" ?
                                 <div className="col-sm-2 d-none d-sm-block">
                                     <div className="d-flex">
                                         <div className="ml-auto">
@@ -164,24 +182,52 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> :
+                                    <div className="col-sm-1 d-none d-sm-block">
+                                        <div className="d-flex">
+                                            <div className="ml-auto">
+                                                <i className="icon-trash s-24"
+                                                   id={val.id}
+                                                   onClick={(e) => that.delete(e, "beats")}>
+                                                </i>
+                                            </div>
+                                        </div>
+                                    </div> }
+
                                 <div className="col-1 ml-auto d-sm-none" >
                                     <a href="#" data-toggle="dropdown"
                                        aria-haspopup="true"
                                        aria-expanded="false">
                                         <i className="icon-more-1"/></a>
                                     <div className="dropdown-menu dropdown-menu-right">
-                                        <button className="dropdown-item"
-                                                type="button" data-toggle="modal"
-                                                data-target={"#" + set_of_beats_name + val.id}><i
-                                            className="icon-shopping-bag mr-3"/>Add To Cart
-                                        </button>
-                                        <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
+                                        {height_div !== "user_profile" ?
+                                        <div>
+                                            <button className="dropdown-item"
+                                                    type="button" data-toggle="modal"
+                                                    data-target={"#" + set_of_beats_name + val.id}><i
+                                                className="icon-shopping-bag mr-3"/>Add To Cart
+                                            </button>
+                                            <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
+                                        </div>:
+                                            <div>
+                                                <button className="dropdown-item"
+                                                        title={"Edit this beats"}
+                                                        id={val.id}
+                                                        onClick={() => that.togglePopupEditSingle(index, "beats")}><i
+                                                    className="icon-edit mr-3"/>Edit
+                                                </button>
+                                                <button className="dropdown-item"
+                                                        title={"Delete this beats"}
+                                                        id={val.id}
+                                                        onClick={(e) => that.delete(e, "beats")}><i
+                                                    className="icon-trash mr-3"/>Delete
+                                                </button>
+                                            </div>}
                                     </div>
                                 </div>
 
                                 {/* Here is Popup for add to cart */}
-                                {that.props.ForAddToCard(that, val, set_of_beats_name)}
+                                {height_div !== "user_profile" ? <div> {that.props.ForAddToCard(that, val, set_of_beats_name)} </div>: null}
                             </div>
                         </div>
                     )}

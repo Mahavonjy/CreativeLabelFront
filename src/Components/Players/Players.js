@@ -169,6 +169,7 @@ class Players extends Component {
     };
 
     componentDidMount(index, type_, run, _that, set_of_beats_name) {
+        console.log(index, type_, run, _that, set_of_beats_name, this.props.list);
         this.setState({ isMounted: true , type_: type_, _that: _that, set_of_beats_name: set_of_beats_name}, () => {
             if (index) {
                 const that = this;

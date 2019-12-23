@@ -1,6 +1,6 @@
 const initState = {
-    profile_info: '', albums: [], single: [], beats: [], contract: '',
-    role: '', follower: '', following: '', pricing_beats: ''
+    profile_info: '', albums: [], single: [], user_beats: [], contract: '',
+    role: '', follower: '', following: '', pricing_beats: '', ready_beats: false,
 };
 
 const profileReducer = (state = initState, action) => {
@@ -9,6 +9,16 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 profile_info: action.data
+            };
+        case "SET_READY_BEATS_TO_TRUE":
+            return {
+                ...state,
+                ready_beats: true
+            };
+        case "SET_READY_BEATS_TO_FALSE":
+            return {
+                ...state,
+                ready_beats: false
             };
         case "ADD_PROFILE_ALBUMS":
             return {
@@ -21,10 +31,14 @@ const profileReducer = (state = initState, action) => {
                 single: action.data
             };
         case "ADD_PROFILE_BEATS":
-            state.beats = [];
             return {
                 ...state,
-                beats: action.data
+                user_beats: action.data
+            };
+        case "CLEAN_PROFILE_BEATS":
+            return {
+                ...state,
+                user_beats: []
             };
         case "ADD_CONTRACT":
             return {
@@ -50,6 +64,20 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 pricing_beats: action.data
+            };
+        case "UPDATE_PROFILE_BEATS":
+            for (let row in state.user_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) state.user_beats[row]['link'] = action.data.link
+            }
+            return {
+                ...state,
+                user_beats: [...state.user_beats]
+            };
+        case "DELETE_IN_PROFILE_BEATS":
+            state.user_beats = state.user_beats.filter((beat) => beat.id !== parseInt(action.data));
+            return {
+                ...state,
+                user_beats: [...state.user_beats]
             };
         default:
             return state;

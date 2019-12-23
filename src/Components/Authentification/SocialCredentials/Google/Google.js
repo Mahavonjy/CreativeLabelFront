@@ -1,7 +1,7 @@
 import React from 'react';
 import { GoogleLogin } from 'react-google-login-component';
 import axios from 'axios';
-import Conf from "../../../Config/tsconfig";
+import Conf from "../../../../Config/tsconfig";
 
 class LoginGoogle extends React.Component{
 

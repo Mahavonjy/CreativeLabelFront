@@ -5,41 +5,31 @@ import AddSingle from './AddMedia/AddSingle';
 import AddAlbum from './AddMedia/AddAlbum';
 import EditSingle from './Edit/EditSingle';
 import EditAlbum from './Edit/EditAlbum';
-import Cookies from 'universal-cookie';
 import { connect } from 'react-redux';
 import Conf from "../../Config/tsconfig";
 import PhotoD from '../../images/socials/profile.png';
 import { ToastContainer, toast } from 'react-toastify';
 import RequestToArtist from './Request/RequestToArtist';
-import IslPlayer from "../Players/Players";
 import EditContractBeats from "./ContractBeats/EditContractBeats";
+import FunctionTools from "../FunctionTools/FunctionTools";
+import {bindActionCreators} from "redux";
+import * as CreateFields from "../FunctionTools/CreateFields";
 
-const cookies = new Cookies();
-const date = new Date();
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+};
 let _this;
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            wait: false, decline: false, loading: false, PopupEditProfile: false, PopupAddSingle: false,
+            loading: false, PopupEditProfile: false, PopupAddSingle: false,
             PopupAddAlbum: false, PopupAddEditSingle: -1, PopupAddEditAlbum: -1, PopupRequestToArtist: -1,
-            isMounted: false, song: "", type_: "", index: null, tmp: null, beats: this.props.beats_
+            isMounted: false, song: "", type_: "", index: null, tmp: null, user_beats_link: [], user_beats: this.props.user_beats
         };
         _this = this;
-    }
-
-    static pausePlayer() {
-        _this.pausePlayer(false);
-    }
-
-    static playPlayer(index, type_) {
-        _this.Play(index, type_);
-    }
-
-    static changeIndex(index) {
-        _this.setState({index: index});
     }
 
     togglePopupEditProfile = (success) => {
@@ -52,20 +42,27 @@ class Profile extends Component {
 
     togglePopupAddSingle = (success) => {
         this.setState({PopupAddSingle: !this.state.PopupAddSingle}, () => {
-            if (success === 1) this.getMedia("Song added", "success");
+            if (success === 1) {
+                this.getMedia("Song added", "success").then(r => this.setState({user_beats_link: []}, () => {
+                    this.props.profile_clean_add_beats();
+                    this.getMedia().then(r => this.main());
+                }));
+            }
         });
     };
 
     togglePopupAddAlbum = (success) => {
         this.setState({PopupAddAlbum: !this.state.PopupAddAlbum}, () => {
-            if (success === 1) this.getMedia("Album added", "success");
+            if (success === 1) {
+                this.getMedia("Album added", "success").then(r => this.main());
+            }
         });
     };
 
     togglePopupEditSingle = (index, type_) => {
         this.setState({PopupAddEditSingle: index});
         if (type_ === "beats") {
-            this.setState({type_: type_, song: this.props.beats_[index]}, () => {
+            this.setState({type_: type_, song: this.props.user_beats[index]}, () => {
                 this.setState({PopupAddEditSingle: index});
             })
         } else if (type_ === "medias") {
@@ -75,88 +72,65 @@ class Profile extends Component {
         }
     };
 
-    togglePopupEditAlbum = (index) => {this.setState({PopupAddEditAlbum: index});};
+    togglePopupEditAlbum = (index) => {this.setState({PopupAddEditAlbum: index})};
 
-    togglePopupRequestToArtist = () => {this.setState({PopupRequestToArtist: 0});};
+    togglePopupRequestToArtist = () => {this.setState({PopupRequestToArtist: 0})};
+
+    main = () => {
+        if (!this.props.ready_beats) {
+            for (let row_ in this.props.user_beats) FunctionTools.AddForPlay(row_, "user_beats_link", this, this.props.user_beats[row_]['id']);
+            this.props.profile_ready_beats()
+        } else {
+            for (let row_ in this.props.user_beats) this.setState(prevState => ({user_beats_link: {...prevState.user_beats_link, [row_]: true}}))
+        }
+    };
 
     componentDidMount() {
-        this.setState({ isMounted: true});
+        this.setState({ isMounted: true}, () => {
+            try {
+                const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+                headers['Isl-Token'] = user_credentials.token;
+            } catch (e) {
+                //
+            } finally {
+                this.main();
+            }
+        });
     }
 
-    componentWillUnmount() {this.setState({ isMounted: false });}
+    componentWillUnmount() {this.setState({ isMounted: false })}
 
-    getMedia = (message, status) => {
-        let data = cookies.get("Isl_Creative_pass");
-        if (data) {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
-            axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: new_headers}).then(resp =>{
-                this.setState({beats: resp.data['beats']}, () => {
-                    if (message && status) {
-                        if (status === "success") toast.success(message);
-                        if (status === "error") toast.error(message)
-                    }
-
-                })
-            }).catch(err => {
-                console.log(err.response)
-            })
-        }
+    async getMedia (message, status) {
+        return await axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp =>{
+            this.setState({user_beats_link: []}, () => {
+                this.props.profile_add_beats(resp.data['beats']);
+                this.props.profile_not_ready_beats();
+                if (status === "success") toast.success(message);
+                if (status === "error") toast.error(message);
+            });
+            return true
+        }).catch(err => {
+            console.log(err.response);
+            return false
+        });
     };
 
     delete = (e, type_) => {
-        let id = e.target.id;
+        const id = e.target.id;
         document.getElementById(id).setAttribute("disabled", "disabled");
-        this.setState({loading: true});
-        let new_headers = {
-            'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-        axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + e.target.id, {headers: new_headers}).then(resp => {
-            this.setState({loading: false}, () => {
-                this.getMedia("deleted", "success");
-            });
-        }).catch(err => {
-            console.log(err);
-            this.setState({loading: false}, () => {
-                document.getElementById(id).removeAttribute("disabled");
-                toast.error(err.response.data)
-            });
-        })
-    };
-
-    pausePlayer = (run) => {
-        if (this.state.index !== null) {
-            this.setState({tmp: this.state.index}, () => {
-                this.setState({index: null}, () => {
-                    if (run) {
-                        IslPlayer.pauseOrPlayPlayer();
-                    }
+        this.setState({loading: true}, () => {
+            axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + id, {headers: headers}).then(resp => {
+                this.props.profile_delete_in_beats(id);
+                this.setState({loading: false, user_beats: this.state.user_beats.filter((beat) => beat.id !== parseInt(id))}, () => {
+                    toast.success("Deleted");
                 })
-            });
-        }
-    };
-
-    Play = (index, type_) => {
-        if (this.state.index !== index && this.state.tmp === null) {
-            this.setState({index: index, tmp: index}, () => {
-                this.props.ToPlay(index, type_, "profile");
+            }).catch(err => {
+                this.setState({loading: false}, () => {
+                    document.getElementById(id).removeAttribute("disabled");
+                    toast.error(err.response.data)
+                });
             })
-        } else {
-            if (index !== this.state.index) {
-                this.setState({index: index, tmp: index}, () => {
-                    this.props.ToPlay(index, type_, "profile");
-                })
-            } else {
-                this.setState({tmp: null}, () => {
-                    IslPlayer.pauseOrPlayPlayer();
-                })
-            }
-        }
+        });
     };
 
     render() {
@@ -167,12 +141,12 @@ class Profile extends Component {
                 {this.state.PopupEditProfile ? <EditProfile closePopup={(e) => this.togglePopupEditProfile(e)}/> : <ToastContainer/>}
                 {this.state.PopupAddEditSingle !== -1 ? <EditSingle Song={this.state.song} Type={this.state.type_} Success={() => {
                     this.setState({PopupAddEditSingle: -1});
-                    this.getMedia("Updated", "success");
+                    this.getMedia("Updated", "success").then(r => this.main());
                 }} CloseEdit={() => this.setState({PopupAddEditSingle: -1})}
                 />: <ToastContainer/>}
                 {this.state.PopupAddEditAlbum !== -1 ? <EditAlbum Album={this.props.albums[this.state.PopupAddEditAlbum]} Success={() => {
                     this.setState({PopupAddEditAlbum: -1});
-                    this.getMedia("Updated", "success");
+                    this.getMedia("Updated", "success").then(r => this.main());
                 }} CloseEdit={() => this.setState({PopupAddEditAlbum: -1})}
                 />: <ToastContainer/>}
                 {this.state.PopupRequestToArtist !== -1 ? <RequestToArtist ProfileName={this.props.profile_info.name} Success={() => {
@@ -190,7 +164,7 @@ class Profile extends Component {
                                         <i className="icon-more-1"/>
                                     </button>
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {this.props.role !== "Artist" && this.props.role !== "Manager" ?
+                                        {this.props.role !== "Artist" ?
                                             <div>
                                                 <p className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an BeatMaker</p>
                                             </div> : null }
@@ -325,17 +299,6 @@ class Profile extends Component {
                                                             <div className="mt-3">
                                                                 <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1"
                                                                     role="tablist">
-                                                                    {/*<li className="nav-item">*/}
-                                                                    {/*    <a className="nav-link"*/}
-                                                                    {/*       id="w2--tab1" data-toggle="tab"*/}
-                                                                    {/*       href="#w2-tab1" role="tab"*/}
-                                                                    {/*       aria-selected="false">Albums</a>*/}
-                                                                    {/*</li>*/}
-                                                                    {/*<li className="nav-item">*/}
-                                                                    {/*    <a className="nav-link" id="w3--tab1"*/}
-                                                                    {/*       data-toggle="tab" href="#w2-tab2" role="tab"*/}
-                                                                    {/*       aria-selected="false">Single</a>*/}
-                                                                    {/*</li>*/}
                                                                     <li className="nav-item">
                                                                         <a className="nav-link active show"
                                                                            id="w3--tab2" data-toggle="tab"
@@ -351,204 +314,16 @@ class Profile extends Component {
                                         </div>
                                         <div className="card-body no-p">
                                             <div className="tab-content" id="v-pills-tabContent1">
-                                                {/*<div className="tab-pane fade show active" id="w2-tab1" role="tabpanel"*/}
-                                                {/*     aria-labelledby="w2-tab1">*/}
-                                                {/*    {this.props.albums.length !== 0 ?*/}
-                                                {/*        <div className="playlist pl-lg-3 pr-lg-3">*/}
-                                                {/*            {this.props.albums.map((val, index) =>*/}
-                                                {/*                <div className="m-1 my-4" key={index}>*/}
-                                                {/*                    <div className="d-flex align-items-center">*/}
-                                                {/*                        <div className="col-1">*/}
-                                                {/*                            <a className="no-ajaxy media-url" href=""*/}
-                                                {/*                               data-wave="assets/media/track1.json">*/}
-                                                {/*                                <i className="icon-play s-28"/>*/}
-                                                {/*                            </a>*/}
-                                                {/*                        </div>*/}
-                                                {/*                        <div className="col-md-6">*/}
-                                                {/*                            <figure*/}
-                                                {/*                                className="avatar-md float-left  mr-3 mt-1">*/}
-                                                {/*                                <img className="r-3"*/}
-                                                {/*                                     src={val.album_photo ? val.album_photo : "https://via.placeholder.com/500"}*/}
-                                                {/*                                     alt=""/>*/}
-                                                {/*                            </figure>*/}
-                                                {/*                            <h6>{val.album_name}</h6>{val.artist}*/}
-                                                {/*                        </div>*/}
-                                                {/*                        <div className="col-md-5 d-none d-lg-block">*/}
-                                                {/*                            <div className="d-flex">*/}
-                                                {/*                                <span*/}
-                                                {/*                                    className="ml-auto">{val.number_songs} {val.number_songs > 1 ? "Songs" : "Song"}</span>*/}
-                                                {/*                                <div className="ml-auto">*/}
-                                                {/*                                    <button*/}
-                                                {/*                                        className="btn btn-outline-info btn-sm"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={() => this.togglePopupEditAlbum(index)}>Edit*/}
-                                                {/*                                    </button>*/}
-                                                {/*                                </div>*/}
-                                                {/*                                <div className="ml-auto">*/}
-                                                {/*                                    <button*/}
-                                                {/*                                        className="btn btn-outline-primary btn-sm"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={(e) => this.delete(e, "albums")}>delete*/}
-                                                {/*                                    </button>*/}
-                                                {/*                                </div>*/}
-                                                {/*                            </div>*/}
-                                                {/*                        </div>*/}
-                                                {/*                        <div className="col-1 ml-auto d-lg-none">*/}
-                                                {/*                            <a href="#" data-toggle="dropdown"*/}
-                                                {/*                               aria-haspopup="true"*/}
-                                                {/*                               aria-expanded="false">*/}
-                                                {/*                                <i className="icon-more-1"/></a>*/}
-                                                {/*                            <div*/}
-                                                {/*                                className="dropdown-menu dropdown-menu-right">*/}
-                                                {/*                                <button className="dropdown-item"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={() => this.togglePopupEditAlbum(index)}><i*/}
-                                                {/*                                    className="icon-edit mr-3"/>Edit*/}
-                                                {/*                                </button>*/}
-                                                {/*                                <button className="dropdown-item"><i*/}
-                                                {/*                                    className="icon-shopping-bag mr-3"*/}
-                                                {/*                                    id={val.id}*/}
-                                                {/*                                    onClick={(e) => this.delete(e, "albums")}/>Delete*/}
-                                                {/*                                </button>*/}
-                                                {/*                            </div>*/}
-                                                {/*                        </div>*/}
-                                                {/*                    </div>*/}
-                                                {/*                </div>)}*/}
-                                                {/*        </div> : <h4 className="text-center">Empty</h4>}*/}
-                                                {/*</div>*/}
-                                                {/*<div className="tab-pane fade" id="w2-tab2" role="tabpanel"*/}
-                                                {/*     aria-labelledby="w2-tab3">*/}
-                                                {/*    {this.props.single.length !== 0 ?*/}
-                                                {/*        <div className="playlist pl-lg-3 pr-lg-3">*/}
-                                                {/*            {this.props.single.map((val, index) =>*/}
-                                                {/*                <div className="m-1 my-4" key={index}>*/}
-                                                {/*                    <div className="d-flex align-items-center">*/}
-                                                {/*                        <div className="col-1">*/}
-                                                {/*                            <a className="no-ajaxy media-url" href="">*/}
-                                                {/*                                <i className="icon-play s-28"/>*/}
-                                                {/*                            </a>*/}
-                                                {/*                        </div>*/}
-                                                {/*                        <div className="col-md-6">*/}
-                                                {/*                            <figure*/}
-                                                {/*                                className="avatar-md float-left  mr-3 mt-1">*/}
-                                                {/*                                <img className="r-3"*/}
-                                                {/*                                     src={val.photo ? val.photo : "https://via.placeholder.com/450"}*/}
-                                                {/*                                     alt=""/>*/}
-                                                {/*                            </figure>*/}
-                                                {/*                            <h6>{val.title}</h6>{val.artist_tag ? val.artist + " ft " + val.artist_tag : val.artist}*/}
-                                                {/*                        </div>*/}
-                                                {/*                        <div className="col-md-5 d-none d-lg-block">*/}
-                                                {/*                            <div className="d-flex">*/}
-                                                {/*                                <span className="ml-auto">{val.number_play ? val.number_play: 0}</span>*/}
-                                                {/*                                <div className="ml-auto">*/}
-                                                {/*                                    <button*/}
-                                                {/*                                        className="btn btn-outline-info btn-sm"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={() => this.togglePopupEditSingle(index, "medias")}>Edit*/}
-                                                {/*                                    </button>*/}
-                                                {/*                                </div>*/}
-                                                {/*                                <div className="ml-auto">*/}
-                                                {/*                                    <button*/}
-                                                {/*                                        className="btn btn-outline-primary btn-sm"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={(e) => this.delete(e, "medias")}>delete*/}
-                                                {/*                                    </button>*/}
-                                                {/*                                </div>*/}
-                                                {/*                            </div>*/}
-                                                {/*                        </div>*/}
-                                                {/*                        <div className="col-1 ml-auto d-lg-none">*/}
-                                                {/*                            <a href="#" data-toggle="dropdown"*/}
-                                                {/*                               aria-haspopup="true"*/}
-                                                {/*                               aria-expanded="false">*/}
-                                                {/*                                <i className="icon-more-1"/></a>*/}
-                                                {/*                            <div*/}
-                                                {/*                                className="dropdown-menu dropdown-menu-right">*/}
-                                                {/*                                <button className="dropdown-item"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={() => this.togglePopupEditSingle(index, "medias")}><i*/}
-                                                {/*                                    className="icon-edit mr-3"/>Edit*/}
-                                                {/*                                </button>*/}
-                                                {/*                                <button className="dropdown-item"*/}
-                                                {/*                                        id={val.id}*/}
-                                                {/*                                        onClick={(e) => this.delete(e, "medias")}><i*/}
-                                                {/*                                    className="icon-shopping-bag mr-3"/>Delete*/}
-                                                {/*                                </button>*/}
-                                                {/*                            </div>*/}
-                                                {/*                        </div>*/}
-                                                {/*                    </div>*/}
-                                                {/*                </div>)}*/}
-                                                {/*        </div> : <h4 className="text-center">Empty</h4>}*/}
-                                                {/*</div>*/}
                                                 <div className="tab-pane fade  show active" id="w2-tab3" role="tabpanel"
                                                      aria-labelledby="w2-tab3">
-                                                    {this.state.beats ?
-                                                        <div className="playlist pl-lg-3 pr-lg-3">
-                                                            {this.state.beats.map((val, index) =>
-                                                                <div className="m-1 my-4" key={index}>
-                                                                    <div className="d-flex align-items-center">
-                                                                        <div className="col-1">
-                                                                            <div>
-                                                                                {this.state.index === index ?
-                                                                                    <i className="icon-pause s-28 text-danger" onClick={() => this.pausePlayer(true)}/>:
-                                                                                    <i className="icon-play s-28 text-danger" onClick={() => {this.Play(index, "beats")}}/>}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="col-md-4">
-                                                                            <figure
-                                                                                className="avatar-md float-left  mr-2 mt-1">
-                                                                                <img className="r-3"
-                                                                                     src={val.photo ? val.photo : "https://via.placeholder.com/450"}
-                                                                                     alt=""/>
-                                                                            </figure>
-                                                                            <h6>{val.title}</h6>{val.artist}
-                                                                        </div>
-                                                                        <div className="col-sm-2">
-                                                                            <small className="ml-auto">{val.time}</small>
-                                                                        </div>
-                                                                        <div className="col-sm-2">
-                                                                            <small className="ml-auto">{val.bpm}/bpm</small>
-                                                                        </div>
-                                                                        <div className="col-sm-2 d-none d-lg-block">
-                                                                            <div className="d-flex">
-                                                                                <div className="ml-auto" title={"Edit this beats"}>
-                                                                                    <i
-                                                                                        className="icon-edit s-24"
-                                                                                        id={val.id}
-                                                                                        onClick={() => this.togglePopupEditSingle(index, "beats")}>
-                                                                                    </i>
-                                                                                </div>
-                                                                                <div className="ml-auto" title={"Delete this beats"}>
-                                                                                    <i className="icon-trash s-24"
-                                                                                        id={val.id}
-                                                                                        onClick={(e) => this.delete(e, "beats")}>
-                                                                                    </i>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="col-1 ml-auto d-lg-none">
-                                                                            <a href="#" data-toggle="dropdown"
-                                                                               aria-haspopup="true"
-                                                                               aria-expanded="false">
-                                                                                <i className="icon-more-1"/></a>
-                                                                            <div
-                                                                                className="dropdown-menu dropdown-menu-right">
-                                                                                <button className="dropdown-item"
-                                                                                        title={"Edit this beats"}
-                                                                                        id={val.id}
-                                                                                        onClick={() => this.togglePopupEditSingle(index, "beats")}><i
-                                                                                    className="icon-edit mr-3"/>Edit
-                                                                                </button>
-                                                                                <button className="dropdown-item"
-                                                                                        title={"Delete this beats"}
-                                                                                        id={val.id}
-                                                                                        onClick={(e) => this.delete(e, "beats")}><i
-                                                                                    className="icon-trash mr-3"/>Delete
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>)}
-                                                        </div> : <h4 className="text-center">Aucune sortie</h4>}
+
+                                                    {this.state.user_beats.length !== 0 ?
+                                                        <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
+                                                            {this.props.CreateBeatsPlaylist(this, "UserProfile", this.state.user_beats, this.state.user_beats_link, "user_profile")}
+                                                        </div>
+                                                        : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
+                                                            <p className="text-center">Pas d'instrumental</p>
+                                                        </div>}
                                                 </div>
                                             </div>
                                         </div>
@@ -556,54 +331,6 @@ class Profile extends Component {
                                 </div>
                             </div>
                         </div> : null}
-                {this.state.wait ?
-                    <div className="p-lg-5">
-                        <div className="mb-3 card no-b p-3">
-                            <button className="ModalClose" onClick={() => this.setState({wait: false})}>
-                                <i className="icon-close s-24" style={{color:"orange", position:"absolute", right: 0}} />
-                            </button>
-                            <div>
-                                <div className="mr-3 float-left text-center">
-                                    <div className="s-36">{date.getDate()}</div>
-                                    <span>{monthNames[date.getMonth()]}</span>
-                                </div>
-                                <div>
-                                    <div>
-                                        <h4 className="text-info">Statut</h4>
-                                    </div>
-                                    <small> Status of your application to become an artist</small>
-                                    <div className="mt-2">
-                                        <i className="icon-clock-o mr-1"> </i> wait a few day
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    :null}
-                {this.state.decline ?
-                    <div className="p-lg-5">
-                        <div className="mb-3 card no-b p-3">
-                            <button className="ModalClose" onClick={() => this.setState({decline: false})}>
-                                <i className="icon-close s-24" style={{color:"orange", position:"absolute", right: 0}} />
-                            </button>
-                            <div>
-                                <div className="mr-3 float-left text-center">
-                                    <div className="s-36">{date.getDate()}</div>
-                                    <span>{monthNames[date.getMonth()]}</span>
-                                </div>
-                                <div>
-                                    <div>
-                                        <h4 className="text-primary">Statut</h4>
-                                    </div>
-                                    <small> Status of your application to become an artist</small>
-                                    <div className="mt-2">
-                                        <i className="icon-clock-o mr-1"> </i> your request is declined
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    :null}
                 {this.props.contract ? <EditContractBeats/> : null}
                 </div>
             );
@@ -613,23 +340,37 @@ class Profile extends Component {
 const mapStateToProps = state => {
     return {
         profile_info: state.profile.profile_info,
-        beats_: state.profile.beats,
+        ready_beats: state.profile.ready_beats,
+        contract: state.profile.contract,
+        user_beats: state.profile.user_beats,
         role: state.profile.role,
-        contract: state.profile.contract
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        profile_add_albums: (data) => {
-            dispatch({type: "ADD_ALBUMS", data: data})
-        },
-        profile_add_single: (data) => {
-            dispatch({type: "ADD_SINGLE", data: data})
-        },
         profile_add_beats: (data) => {
             dispatch({type: "ADD_BEATS", data: data})
-        }
+        },
+        profile_clean_add_beats: () => {
+            dispatch({type: "CLEAN_PROFILE_BEATS"})
+        },
+        profile_delete_in_beats: (data) => {
+            dispatch({type: "DELETE_IN_PROFILE_BEATS", data: data})
+        },
+        addNewPlayerList: (data) => {
+            dispatch({type: "ADD_NEW_PLAYER_PLAYLIST", data: data})
+        },
+        profile_update_beats: (data) => {
+            dispatch({type: "UPDATE_PROFILE_BEATS", data: data})
+        },
+        profile_ready_beats: (data) => {
+            dispatch({type: "SET_READY_BEATS_TO_TRUE", data: data})
+        },
+        profile_not_ready_beats: (data) => {
+            dispatch({type: "SET_READY_BEATS_TO_FALSE", data: data})
+        },
+        CreateBeatsPlaylist: bindActionCreators(CreateFields.CreateBeatsPlaylist, dispatch),
     };
 };
 

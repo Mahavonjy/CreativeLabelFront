@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Modal from 'react-awesome-modal';
-import Cookies from "universal-cookie";
 import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import logo from "../../../images/Logo/ISL_logo.png"
@@ -8,8 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ReactTooltip from 'react-tooltip';
 import {connect} from "react-redux";
 
-let cookies = new Cookies();
-let new_headers;
+const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
 class AddSingle extends Component {
     Type;
     constructor (props) {
@@ -17,7 +15,7 @@ class AddSingle extends Component {
         this.state = {
             file: '',
             title: '',
-            artist: cookies.get("Isl_Creative_pass")["name"],
+            artist: user_credentials.name,
             genre: '',
             genre_musical: 'beats',
             description: '',
@@ -121,7 +119,7 @@ class AddSingle extends Component {
             let new_headers = {
                 'Content-Type': 'multipart/form-data',
                 'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+                'Isl-Token': user_credentials.token
             };
             axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: new_headers}).then(resp => {
                 this.setState({loading: false});

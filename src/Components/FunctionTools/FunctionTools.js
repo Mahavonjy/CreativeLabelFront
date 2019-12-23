@@ -187,6 +187,9 @@ class FunctionTools extends Component {
             } else if (_state === "link_all_other_artist_beats") {
                 that.props.updateOtherBeatMakerBeats(temp);
                 that.setState(prevState => ({link_all_other_artist_beats: {...prevState.link_all_other_artist_beats, [index]: true}}))
+            } else if (_state === "user_beats_link") {
+                that.props.profile_update_beats(temp);
+                that.setState(prevState => ({user_beats_link: {...prevState.user_beats_link, [index]: true}}))
             }
         }).catch(error => {
             console.log(error.data);

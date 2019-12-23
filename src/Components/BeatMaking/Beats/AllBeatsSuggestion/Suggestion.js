@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
-import FunctionTools from "../../FunctionTools/FunctionTools";
+import FunctionTools from "../../../FunctionTools/FunctionTools";
 import {bindActionCreators} from "redux";
-import * as CreateFields from "../../FunctionTools/CreateFields";
-import * as PopupFields from "../../FunctionTools/PopupFields";
+import * as CreateFields from "../../../FunctionTools/CreateFields";
+import * as PopupFields from "../../../FunctionTools/PopupFields";
 
 let _this;
 

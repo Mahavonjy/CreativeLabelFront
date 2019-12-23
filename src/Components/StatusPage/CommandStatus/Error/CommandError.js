@@ -9,7 +9,7 @@ class CommandError extends Component {
                         <h1 className="text-danger">Probleme de payement</h1>
                         <p className="section-subtitle">Nous avons rencotrer un problem sur votre commande d'Instrumental chez nous. veuiller ressayer.</p>
                         <p className="s-256"><i className="icon-error text-danger s-256"/></p>
-                        <a className="text-light font-weight-bold">Visualiser l'Erreur</a>
+                        <a href="/#" className="text-light font-weight-bold">Visualiser l'Erreur</a>
                     </div>
                 </div>
             </div>
