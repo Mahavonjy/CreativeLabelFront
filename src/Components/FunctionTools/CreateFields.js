@@ -17,6 +17,7 @@ import Profile from "../Profile/Profile";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import IslPlayer from "../Players/Players";
+import KantoBiz from "../KantoBiz/KantoBiz";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     return () => {
@@ -349,6 +350,7 @@ export const SideBarsMain = (that) => {
                 <Route path="/register" exact component={() => <Register/>}/>
                 <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
                 <Route path="/CommandError" exact component={() => <CommandError/>}/>
+                <Route path="/kantobiz" exact component={() => <KantoBiz/>}/>
                 <Route path="/beats" exact component={() => <Beats ToPlay={that.addToPlaylist}/>}/>
                 <Route path="/Cart" component={() => <Cart ToPlay={that.addToPlaylist}/>}/>
                 <Route path="/preference" exact component={() => {

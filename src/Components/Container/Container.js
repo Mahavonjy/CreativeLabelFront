@@ -25,39 +25,52 @@ class Container extends Component {
         return (
                 <BrowserRouter>
                     <Switch>
+                        {/* HOME ROUTING */}
                         <Route exact path="/">
                             <PreviewScreen/>
                         </Route>
-                        <Route path="/beats">
-                            <Home/>
-                        </Route>
+                        {/* PROFILE ROUTING */}
                         <Route path="/Profile">
-                            <Home/>
-                        </Route>
-                        <Route path="/beats/CheckThisBeat/:id(\d+)">
                             <Home/>
                         </Route>
                         <Route path="/Profile/isl_artist_profile/:id(\d+)">
                             <Home/>
                         </Route>
+                        {/* BEATS ROUTING */}
+                        <Route path="/beats">
+                            <Home/>
+                        </Route>
+                        <Route path="/beats/CheckThisBeat/:id(\d+)">
+                            <Home/>
+                        </Route>
+                        {/* KANTOBIZ ROUTING */}
+                        <Route path="/kantobiz">
+                            <Home/>
+                        </Route>
+                        {/* CART ROUTING */}
                         <Route path="/Cart">
                             <Home/>
                         </Route>
+                        {/* REGISTER ROUTING */}
                         <Route path="/register">
                             <Home/>
                         </Route>
+                        {/* PREFERENCE ROUTING */}
                         <Route path="/preference">
                             <Home/>
                         </Route>
+                        {/* BAD CONNEXION */}
                         <Route path="/badConnexion">
                             <ConnexionError/>
                         </Route>
+                        {/* COMMAND RESPONSE ROUTING */}
                         <Route path="/CommandSuccess">
                             <Home/>
                         </Route>
                         <Route path="/CommandError">
                             <Home/>
                         </Route>
+                        {/* NOT FOUND */}
                         <Route component={NotFound}/>
                     </Switch>
                 </BrowserRouter>
