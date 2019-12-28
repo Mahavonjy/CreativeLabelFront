@@ -7,35 +7,32 @@ import {toast, ToastContainer} from "react-toastify";
 
 const cookies = new Cookies();
 class EditContractBeats extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            basic_enable: this.props.contract['basic_lease']['enabled'],
-            basic: this.props.contract['basic_lease']['price'],
-            basic_number_audio_stream: this.props.contract['basic_lease']['number_audio_stream'],
-            basic_number_radio_station: this.props.contract['basic_lease']['number_radio_station'],
-            basic_number_of_distribution_copies: this.props.contract['basic_lease']['number_of_distribution_copies'],
+    state = {
+        basic_enable: this.props.contract['basic_lease']['enabled'],
+        basic: this.props.contract['basic_lease']['price'],
+        basic_number_audio_stream: this.props.contract['basic_lease']['number_audio_stream'],
+        basic_number_radio_station: this.props.contract['basic_lease']['number_radio_station'],
+        basic_number_of_distribution_copies: this.props.contract['basic_lease']['number_of_distribution_copies'],
 
-            silver_enable: this.props.contract['silver_lease']['enabled'],
-            silver: this.props.contract['silver_lease']['price'],
-            silver_number_audio_stream: this.props.contract['silver_lease']['number_audio_stream'],
-            silver_number_radio_station: this.props.contract['silver_lease']['number_radio_station'],
-            silver_number_of_distribution_copies: this.props.contract['silver_lease']['number_of_distribution_copies'],
+        silver_enable: this.props.contract['silver_lease']['enabled'],
+        silver: this.props.contract['silver_lease']['price'],
+        silver_number_audio_stream: this.props.contract['silver_lease']['number_audio_stream'],
+        silver_number_radio_station: this.props.contract['silver_lease']['number_radio_station'],
+        silver_number_of_distribution_copies: this.props.contract['silver_lease']['number_of_distribution_copies'],
 
-            gold_enable: this.props.contract['gold_lease']['enabled'],
-            gold: this.props.contract['gold_lease']['price'],
-            gold_number_audio_stream: this.props.contract['gold_lease']['number_audio_stream'],
-            gold_number_radio_station: this.props.contract['gold_lease']['number_radio_station'],
-            gold_number_of_distribution_copies: this.props.contract['gold_lease']['number_of_distribution_copies'],
+        gold_enable: this.props.contract['gold_lease']['enabled'],
+        gold: this.props.contract['gold_lease']['price'],
+        gold_number_audio_stream: this.props.contract['gold_lease']['number_audio_stream'],
+        gold_number_radio_station: this.props.contract['gold_lease']['number_radio_station'],
+        gold_number_of_distribution_copies: this.props.contract['gold_lease']['number_of_distribution_copies'],
 
-            platinum_enable: this.props.contract['platinum_lease']['enabled'],
-            platinum_unlimited: this.props.contract['platinum_lease']['unlimited'],
-            platinum: this.props.contract['platinum_lease']['price'],
-            platinum_number_audio_stream: this.props.contract['platinum_lease']['number_audio_stream'],
-            platinum_number_radio_station: this.props.contract['platinum_lease']['number_radio_station'],
-            platinum_number_of_distribution_copies: this.props.contract['platinum_lease']['number_of_distribution_copies'],
-        };
-    }
+        platinum_enable: this.props.contract['platinum_lease']['enabled'],
+        platinum_unlimited: this.props.contract['platinum_lease']['unlimited'],
+        platinum: this.props.contract['platinum_lease']['price'],
+        platinum_number_audio_stream: this.props.contract['platinum_lease']['number_audio_stream'],
+        platinum_number_radio_station: this.props.contract['platinum_lease']['number_radio_station'],
+        platinum_number_of_distribution_copies: this.props.contract['platinum_lease']['number_of_distribution_copies'],
+    };
 
     // Initialisation of all basic lease state
     changeBasicEnabled =  () => {this.setState({basic_enable : !this.state.basic_enable})};

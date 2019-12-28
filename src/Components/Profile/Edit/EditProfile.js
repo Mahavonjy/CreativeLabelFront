@@ -8,22 +8,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import logo from "../../../images/Logo/ISL_logo.png";
 
 class EditProfile extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            photo: '', loading: false,
-            name: this.props.profile_info.name,
-            email: this.props.profile_info.email,
-            gender: this.props.profile_info.gender,
-            birth: this.props.profile_info.birth,
-            address: this.props.profile_info.address,
-            phone: this.props.profile_info.phone,
-            country: this.props.profile_info.country,
-            region: this.props.profile_info.region,
-            city: this.props.profile_info.city,
-            description: this.props.profile_info.description,
-        };
-    }
+    state = {
+        photo: '', loading: false,
+        name: this.props.profile_info.name,
+        email: this.props.profile_info.email,
+        gender: this.props.profile_info.gender,
+        birth: this.props.profile_info.birth,
+        address: this.props.profile_info.address,
+        phone: this.props.profile_info.phone,
+        country: this.props.profile_info.country,
+        region: this.props.profile_info.region,
+        city: this.props.profile_info.city,
+        description: this.props.profile_info.description,
+    };
+
     changeName = (e) => {this.setState({name : e.target.value});};
 
     changeEmail = (e) => {this.setState({email : e.target.value});};

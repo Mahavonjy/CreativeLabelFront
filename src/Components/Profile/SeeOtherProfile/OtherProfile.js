@@ -24,11 +24,9 @@ class OtherProfile extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isMounted: true });
-        this.props.addOtherBeatMakerBeats(this.props.UserBeats);
-        for (let row_ in this.props.UserBeats) {
-            FunctionTools.AddForPlay(row_, "link_all_other_artist_beats", this, this.props.UserBeats[row_]['id'])
-        }
+        this.setState({ isMounted: true }, () => {
+            FunctionTools.AddForPlay(this, "link_all_other_artist_beats", this.props.other_beat_maker_beats, this.props.updateOtherBeatMakerBeats).then(() => console.log(''))
+        });
     }
 
     componentWillUnmount() {this.setState({ isMounted: false });}
@@ -174,9 +172,6 @@ const mapDispatchToProps = dispatch => {
         },
         addNewPlayerList: (data) => {
             dispatch({type: "ADD_NEW_PLAYER_PLAYLIST", data: data})
-        },
-        addOtherBeatMakerBeats: (data) => {
-            dispatch({type: "ADD_OTHER_BEAT_MAKER_BEATS", data: data})
         },
         updateOtherBeatMakerBeats: (data) => {
             dispatch({type: "UPDATE_OTHER_BEAT_MAKER_BEATS", data: data})

@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import Conf from "../../Config/tsconfig";
 import PhotoD from '../../images/socials/profile.png';
 import { ToastContainer, toast } from 'react-toastify';
-import RequestToArtist from './Request/RequestToArtist';
 import EditContractBeats from "./ContractBeats/EditContractBeats";
 import FunctionTools from "../FunctionTools/FunctionTools";
 import {bindActionCreators} from "redux";
@@ -19,18 +18,14 @@ const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': "*",
 };
-let _this;
 
 class Profile extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading: false, PopupEditProfile: false, PopupAddSingle: false,
-            PopupAddAlbum: false, PopupAddEditSingle: -1, PopupAddEditAlbum: -1, PopupRequestToArtist: -1,
-            isMounted: false, song: "", type_: "", index: null, tmp: null, user_beats_link: [], user_beats: this.props.user_beats
-        };
-        _this = this;
-    }
+    state = {
+        loading: false, PopupEditProfile: false, PopupAddSingle: false,
+        PopupAddAlbum: false, PopupAddEditSingle: -1, PopupAddEditAlbum: -1,
+        isMounted: false, song: "", type_: "", index: null, tmp: null,
+        user_beats_link: [], user_beats: this.props.user_beats
+    };
 
     togglePopupEditProfile = (success) => {
         this.setState({PopupEditProfile: !this.state.PopupEditProfile}, () => {
@@ -74,11 +69,9 @@ class Profile extends Component {
 
     togglePopupEditAlbum = (index) => {this.setState({PopupAddEditAlbum: index})};
 
-    togglePopupRequestToArtist = () => {this.setState({PopupRequestToArtist: 0})};
-
     main = () => {
         if (!this.props.ready_beats) {
-            for (let row_ in this.props.user_beats) FunctionTools.AddForPlay(row_, "user_beats_link", this, this.props.user_beats[row_]['id']);
+            FunctionTools.AddForPlay(this, "user_beats_link", this.props.user_beats, this.props.profile_update_beats).then(() => console.log(''));
             this.props.profile_ready_beats()
         } else {
             for (let row_ in this.props.user_beats) this.setState(prevState => ({user_beats_link: {...prevState.user_beats_link, [row_]: true}}))
@@ -149,10 +142,6 @@ class Profile extends Component {
                     this.getMedia("Updated", "success").then(r => this.main());
                 }} CloseEdit={() => this.setState({PopupAddEditAlbum: -1})}
                 />: <ToastContainer/>}
-                {this.state.PopupRequestToArtist !== -1 ? <RequestToArtist ProfileName={this.props.profile_info.name} Success={() => {
-                    window.location.reload()
-                }} CloseRequest={() => this.setState({PopupRequestToArtist: -1})}
-                />: <ToastContainer/>}
                 <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                     <div className="card no-b shadow no-r">
                         <div className="row no-gutters">
@@ -166,7 +155,7 @@ class Profile extends Component {
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         {this.props.role !== "Artist" ?
                                             <div>
-                                                <p className="dropdown-item text-blue" onClick={this.togglePopupRequestToArtist}><i className="icon-user-plus mr-3"/>Become an BeatMaker</p>
+                                                <p className="dropdown-item text-blue" ><i className="icon-user-plus mr-3"/>Become an Artist</p>
                                             </div> : null }
                                         <li className="dropdown-item list-group-item d-flex justify-content-between align-items-center">
                                             <div>

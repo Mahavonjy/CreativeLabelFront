@@ -7,14 +7,11 @@ import Modal from 'react-awesome-modal';
 import {connect} from "react-redux";
 
 class EditAlbum extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            file: null, album_name: this.props.Album['album_name'], artist: this.props.Album['artist'], loading: false,
-            genre: this.props.Album['genre'], genre_musical: this.props.Album['genre_musical'],
-            description: this.props.Album['description'], photo: null, price: '', beats: false
-        };
-    }
+    state = {
+        file: null, album_name: this.props.Album['album_name'], artist: this.props.Album['artist'], loading: false,
+        genre: this.props.Album['genre'], genre_musical: this.props.Album['genre_musical'],
+        description: this.props.Album['description'], photo: null, price: '', beats: false
+    };
 
     changeAlbumName = (e) => {this.setState({album_name : e.target.value});};
 
@@ -87,7 +84,6 @@ class EditAlbum extends Component {
             })
         }
     };
-
 
     render() {
         return (

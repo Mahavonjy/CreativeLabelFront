@@ -10,18 +10,14 @@ import {bindActionCreators} from "redux";
 import * as Validators from "../../Validators/Validatiors"
 import * as CreateFields from "../../FunctionTools/CreateFields"
 import {connect} from "react-redux";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 
 let user_credentials;
 class Register extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            keys: '', isActive: false, visible: false, isMounted: false,
-            email: '', password: '', confirm_password: '', name: '', usingAdBlock: false
-        };
-    }
-
-    changeFields = (e) => {this.setState({[e.target.id]: e.target.value})};
+    state = {
+        keys: '', isActive: false, visible: false, isMounted: false,
+        email: '', password: '', confirm_password: '', name: '', usingAdBlock: false
+    };
 
     verifyKeysSubmit = (e) => {
         e.preventDefault();
@@ -114,7 +110,7 @@ class Register extends Component {
 
                                 <div className="center p-10">
                                     <div className="form-line">
-                                        {this.props.InputCreate('keys', this.state.keys, this.changeFields, "Inserer votre clé ici", "number", true)}
+                                        {this.props.InputCreate('keys', this.state.keys, (e) => {FunctionTools.changeFields(this, e)}, "Inserer votre clé ici", "number", true)}
                                     </div>
                                 </div>
 
@@ -141,22 +137,22 @@ class Register extends Component {
                                                 <div className="body">
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('name', this.state.name, this.changeFields, "Votre nom", "text", true)}
+                                                            {this.props.InputCreate('name', this.state.name, (e) => {FunctionTools.changeFields(this, e)}, "Votre nom", "text", true)}
                                                         </div>
                                                     </div>
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('email', this.state.email, this.changeFields, "E-mail", "email", true)}
+                                                            {this.props.InputCreate('email', this.state.email, (e) => {FunctionTools.changeFields(this, e)}, "E-mail", "email", true)}
                                                         </div>
                                                     </div>
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('password', this.state.password, this.changeFields, "Au moins 8 caractères", "password", true)}
+                                                            {this.props.InputCreate('password', this.state.password, (e) => {FunctionTools.changeFields(this, e)}, "Au moins 8 caractères", "password", true)}
                                                         </div>
                                                     </div>
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('confirm_password', this.state.confirm_password, this.changeFields, "Entrez le mot de passe à nouveau", "password", true)}
+                                                            {this.props.InputCreate('confirm_password', this.state.confirm_password, (e) => {FunctionTools.changeFields(this, e)}, "Entrez le mot de passe à nouveau", "password", true)}
                                                         </div>
                                                     </div>
 

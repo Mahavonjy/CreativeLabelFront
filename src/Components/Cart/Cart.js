@@ -10,18 +10,14 @@ import Home from "../Home/Home";
 
 let cookies = new Cookies();
 class Cart extends Component {
-    ToPlay;
-    constructor(props) {
-        super(props);
-        this.state = {
-            redirect: false,
-            loading: false,
-            total_price: this.props.total_price,
-            cart: this.props.cart,
-            isMounted: false,
-            delete: null
-        };
-    }
+    state = {
+        redirect: false,
+        loading: false,
+        total_price: this.props.total_price,
+        cart: this.props.cart,
+        isMounted: false,
+        delete: null
+    };
 
     getCart = () => {
         try {

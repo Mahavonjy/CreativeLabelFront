@@ -5,7 +5,6 @@ import {FacebookProvider, Feed} from "react-facebook";
 import Conf from "../../Config/tsconfig";
 import FunctionTools from "./FunctionTools";
 import TestImg from "../../assets/img/demo/a2.jpg";
-import TestImg1 from "../../assets/img/demo/b1.jpg";
 import {toast} from "react-toastify";
 import Register from "../Authentification/Register/Register";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
@@ -18,6 +17,12 @@ import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import IslPlayer from "../Players/Players";
 import KantoBiz from "../KantoBiz/KantoBiz";
+import TestImageTwo from "../../assets/img/demo/a3.jpg"
+import TestImageOne from "../../assets/img/demo/a7.jpg";
+import TestImageThree from "../../assets/img/demo/a5.jpg";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"
+import "../KantoBiz/KantoBiz.css";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     return () => {
@@ -196,7 +201,7 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                     </div> }
 
                                 <div className="col-1 ml-auto d-sm-none" >
-                                    <a href="#" data-toggle="dropdown"
+                                    <a href="/#" data-toggle="dropdown"
                                        aria-haspopup="true"
                                        aria-expanded="false">
                                         <i className="icon-more-1"/></a>
@@ -264,27 +269,104 @@ export const DisplayArtist = (that_value) => {
     }
 };
 
-export const CreativeHeaders = () => {
+export const CreativeHeaders = (Title, Description, that) => {
     return () => {
         return (
-            <section>
-                <div className="text-white">
-                    <div className="xv-slide" data-bg-possition="top" style={{backgroundImage: 'url('+TestImg1+')'}}>
-                        <div className="has-bottom-gradient">
-                            <div className="home-menu p-md-5">
+            <div>
+                <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
+                    <div className="carousel-inner" style={{height: 430}}>
+                        <div className="carousel-item active">
+                            <img className="d-block w-100" src={TestImageThree} alt=""/>
+                        </div>
+                        <div className="carousel-item">
+                            <img className="d-block w-100" src={TestImageOne} alt=""/>
+                        </div>
+                        <div className="carousel-item">
+                            <img className="d-block w-100" src={TestImageTwo} alt=""/>
+                        </div>
+                        <div className={that && Title === "Creative KantoBiz"? "has-bottom-gradient d-none d-sm-block": "has-bottom-gradient" }>
+                            <div className="home-menu pl-md-5">
                                 <div className="row">
                                     <div className="col-12 col-lg-10 animated">
                                         <div className="xv-slider-content clearfix color-white">
-                                            <h1 className="s-64 mt-5 font-weight-lighter">Creative Beats</h1>
-                                            <p className="s-24 font-weight-lighter"> Des créations orginales qui font la différence  <br /> Pour les professionnels de la musique (artistes,producteurs, labels...)  </p>
+                                            <h1 className="s-64 mt-5 font-weight-lighter"> {Title} </h1>
+                                            <p className="s-24 font-weight-lighter" dangerouslySetInnerHTML={{__html: Description }}/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {that && Title === "Creative KantoBiz"?
+                            <div className="Base">
+                            {/* Input Search */}
+                            <div className="search-bar border-primary p-10" style={{borderRadius: "10px"}}>
+                                <form action="#">
+                                    <div className="search-row row justify-content-center">
+
+                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
+                                            <input className="bg-transparent text-center text-white border-0" type="text" name="city" placeholder="Madagascar" id="location" value="Madagascar" disabled={true}/>
+                                            <label className="input-group-addon bg-transparent"><i className="icon-map-location text-center text-red"/><span className="ml-2 text-white">?</span></label>
+                                        </div>
+
+                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
+                                            <div className="btn-group bootstrap-select listing-categories">
+                                                <button className="btn btn-outline-dark border-0 dropdown-toggle text-white" type="button"
+                                                        data-toggle="dropdown" aria-haspopup="true" id="city"
+                                                        aria-expanded="false">Choisir la ville
+                                                </button>
+                                                <div className="dropdown-menu">
+                                                    <a className="dropdown-item" href="/#">Action</a>
+                                                </div>
+                                            </div>
+                                            <label className="input-group-addon bg-transparent"><i className="icon-location-arrow text-red"/><span className="ml-2 text-white">?</span></label>
+                                        </div>
+
+                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
+                                            <div className="btn-group bootstrap-select listing-categories">
+                                                <button className="btn btn-outline-dark border-0 dropdown-toggle text-left text-white" type="button"
+                                                        data-toggle="dropdown" aria-haspopup="true" id="city"
+                                                        aria-expanded="false">Thematiques
+                                                </button>
+                                                <div className="dropdown-menu">
+                                                    <a className="dropdown-item" href="/#">Action</a>
+                                                </div>
+                                            </div>
+                                            <label className="input-group-addon bg-transparent"><i className="icon-tasks text-center text-red"/><span className="ml-2 text-white">?</span></label>
+                                        </div>
+
+                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
+                                            <div className="btn-group bootstrap-select listing-categories">
+                                                <button className="btn btn-outline-dark border-0 dropdown-toggle text-white" type="button"
+                                                        data-toggle="dropdown" aria-haspopup="true" id="Evenement"
+                                                        aria-expanded="false">	&nbsp;	Evenements
+                                                </button>
+                                                <div className="dropdown-menu">
+                                                    <a className="dropdown-item" href="/#">Action</a>
+                                                </div>
+                                            </div>
+                                            <label className="input-group-addon bg-transparent"><i className="icon-network text-center text-red"/><span className="ml-2 text-white">?</span></label>
+                                        </div>
+
+                                        <div className=" col-sm-2 d-inline-block border border-primary text-center " style={{borderRadius: "5px"}}>
+                                            <DatePicker className="bg-transparent text-center text-white border-0" selected={that.state.startDate} onChange={that.ChangeDate}/>
+                                            <label className="input-group-addon bg-transparent"><i className="icon-calendar text-center text-red"/><span className="ml-2 text-white">?</span></label>
+                                        </div>
+
+                                        <div className="col-md-10">
+                                            <button type="submit" className="btn btn-outline-primary btn-lg p-3 m-2 col">Cherchez des prestaions <i className="icon-search-1 text-white"/></button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            {/* End Search */}
+                        </div> :null}
+
                     </div>
+                    <a className="carousel-control-prev" href="#islCreativeCarousel" role="button" data-slide="prev" style={{fontSize: 0}}>prev</a>
+                    <a className="carousel-control-next" href="#islCreativeCarousel" role="button" data-slide="next" style={{fontSize: 0}}>next</a>
                 </div>
-            </section>
+            </div>
         )
     }
 };
@@ -293,6 +375,7 @@ export const SideBars = (that, location, history, headers) => {
     return () => {
         return (
             <div className="sidebar">
+                <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
                 <ul className="sidebar-menu">
                     <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
 
@@ -302,7 +385,16 @@ export const SideBars = (that, location, history, headers) => {
                             history.push("/beats");
                             that.setState({select: ""})
                         }
-                    }}><i className="icon icon-heartbeat s-24" /> <span>Beats</span>
+                    }}><i className="icon icon-heartbeat s-24" /> <span className="ml-5">BeatMaking</span>
+                    </li>
+
+                    {/* KantoBiz */}
+                    <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet KantoBiz" onClick={() => {
+                        if (location.pathname !== "/kantobiz") {
+                            history.push("/kantobiz");
+                            that.setState({select: ""})
+                        }
+                    }}><i className="icon icon-compact-disc-2 s-24" /> <span className="ml-5">KantoBiz</span>
                     </li>
 
                     {/* PROFILE */}
@@ -313,7 +405,7 @@ export const SideBars = (that, location, history, headers) => {
                             history.push("/Profile");
                             that.setState({select: "Profile"})
                         }
-                    }}><i className="icon icon-user s-24" /> <span>Profile</span>
+                    }}><i className="icon icon-user s-24" /> <span className="ml-5">Profile</span>
                     </li>
 
                     {/* CART */}
@@ -326,14 +418,14 @@ export const SideBars = (that, location, history, headers) => {
                         } else toast.warn("Your cart is empty")
                     }}>
                         <div id="CartBadge">
-                            <span className="p1" data-count={that.state.cart}>
-                                <i className="p3 icon icon-cart-plus s-24" data-count="4b"/> cart
+                            <span className="p1 " data-count={that.state.cart}>
+                                <i className="icon icon-cart-plus s-24 mr-5" data-count="4b"/> Cart
                             </span>
                         </div>
                     </li>
 
                     {/* LOGOUT OR LOGIN */}
-                    <li style={{margin: "0 0 20px 10px"}} data-tip={that.state.logout_class === "icon icon-login s-24"? "Se Connecter": " Se deconnecter"} onClick={that.logout}>
+                    <li style={{margin: "0 0 20px 10px"}} data-tip={that.state.logout_class === "icon icon-login s-24 mr-5"? "Se Connecter": " Se deconnecter"} onClick={that.logout}>
                         <i className={that.state.logout_class}/> <span>{that.state.log_name}</span>
                     </li>
 
@@ -361,15 +453,9 @@ export const SideBarsMain = (that) => {
                         return (<Profile ToPlay={that.addToPlaylist}/>);
                     else window.location.replace('/beats#LoginRequire')}}/>
                 <Route path="/beats/CheckThisBeat/:id(\d+)" component={
-                    () => <OneBeat ToPlay={that.addToPlaylist}
-                                   SingleBeat={that.state.single_beat}
-                                   ArtistBeats={that.state.all_artist_beats}
-                                   SimilarBeats={that.state.beats_similar}/>}/>
+                    () => <OneBeat ToPlay={that.addToPlaylist} SingleBeat={that.state.single_beat} SimilarBeats={that.state.beats_similar}/>}/>
                 <Route path="/Profile/isl_artist_profile/:id(\d+)" component={
-                    () => <OtherProfile ToPlay={that.addToPlaylist}
-                                        ProfileChecked={that.state.profile_checked}
-                                        UserData={that.state.user_data}
-                                        UserBeats={that.state.user_beats}/>}/>
+                    () => <OtherProfile ToPlay={that.addToPlaylist} ProfileChecked={that.state.profile_checked} UserData={that.state.user_data}/>}/>
             </div>
         )
     }

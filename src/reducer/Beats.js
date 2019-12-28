@@ -5,7 +5,7 @@ const initState = {
     isl_playlist: [], ready: false,
     ready_top_beats: false, ready_latest_beats: false,
     ready_discovery_beats: false, ready_isl_playlist: false,
-    beat_maker_beats: [], other_beat_maker_beats: []
+    beat_maker_beats: [], other_beat_maker_beats: [], beats_similar: []
 };
 
 const beatsReducer = (state = initState, action) => {
@@ -69,6 +69,27 @@ const beatsReducer = (state = initState, action) => {
             return {
                 ...state,
                 top_beats: action.data
+            };
+        case "ADD_BEATS_SIMILAR":
+            return {
+                ...state,
+                beats_similar: action.data
+            };
+        case "UPDATE_SIMILAR_BEATS":
+            for (let row in state.beats_similar) {
+                if (parseInt(row) === parseInt(action.data.index)) state.beats_similar[row]['link'] = action.data.link
+            }
+            return {
+                ...state,
+                beats_similar: [...state.beats_similar]
+            };
+        case "UPDATE_OTHER_BEAT_MAKER_BEATS":
+            for (let row in state.other_beat_maker_beats) {
+                if (parseInt(row) === parseInt(action.data.index)) state.other_beat_maker_beats[row]['link'] = action.data.link
+            }
+            return {
+                ...state,
+                other_beat_maker_beats: [...state.other_beat_maker_beats]
             };
         case "UPDATE_BEATS_LIST":
             for (let row in state.beats) {

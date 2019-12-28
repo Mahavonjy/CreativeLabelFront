@@ -6,12 +6,9 @@ import PreviewScreen from "../PreviewScreen/PreviewScreen";
 import ConnexionError from "../StatusPage/ConnexionError/ConnexionError";
 
 class Container extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isMounted: false,
-        };
-    }
+    state = {
+        isMounted: false,
+    };
 
     componentDidMount() {
         this.setState({ isMounted: true})

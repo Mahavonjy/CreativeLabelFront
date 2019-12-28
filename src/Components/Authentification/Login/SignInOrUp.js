@@ -7,6 +7,7 @@ import Modal from "react-awesome-modal";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 import {connect} from "react-redux";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -14,15 +15,10 @@ let headers = {
 };
 
 class SignInOrUp extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            to_route: '/', keys: '', loading : false, changePass: false, ResetPassword: false, visible: false,
-            visibility: false, redirect: false, email: '', password: '', confirm_password: '', isMounted: false,
-        };
-    }
-
-    changeFields = (e) => {this.setState({[e.target.id]: e.target.value})};
+    state = {
+        to_route: '/', keys: '', loading : false, changePass: false, ResetPassword: false, visible: false,
+        visibility: false, redirect: false, email: '', password: '', confirm_password: '', isMounted: false,
+    };
 
     sendLoginCredentials = (e) => {
         e.preventDefault();
@@ -144,6 +140,8 @@ class SignInOrUp extends Component {
         left.style.transition = '0.4s ease-in-out';
     };
 
+    close = () => {document.getElementsByClassName("close")[0].click()};
+
     componentDidMount() {
         this.setState({ isMounted: true})
     }
@@ -151,8 +149,6 @@ class SignInOrUp extends Component {
     componentWillUnmount() {
         this.setState({ isMounted: false });
     }
-
-    close = () => {document.getElementsByClassName("close")[0].click()};
 
     render() {
         return (
@@ -174,12 +170,12 @@ class SignInOrUp extends Component {
                             <div className="body">
                                 <div className="custom-float">
                                     <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>New Password</label><br/>
-                                    {this.props.InputCreate('password', this.state.password, this.changeFields, "Au moins 8 caractères", "password", true)}
+                                    {this.props.InputCreate('password', this.state.password, (e) => {FunctionTools.changeFields(this, e)}, "Au moins 8 caractères", "password", true)}
                                 </div>
 
                                 <div className="custom-float">
                                     <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}> Confirm_Password</label> <br/>
-                                    {this.props.InputCreate('confirm_password', this.state.confirm_password, this.changeFields, "Entrez le mot de passe à nouveau", "password", true)}
+                                    {this.props.InputCreate('confirm_password', this.state.confirm_password, (e) => {FunctionTools.changeFields(this, e)}, "Entrez le mot de passe à nouveau", "password", true)}
                                 </div>
 
                                 <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.changeMyPassword}>Envoyer</button>
@@ -193,7 +189,7 @@ class SignInOrUp extends Component {
                         <div className="col text-center">
                             <div className="body">
                                 <div className="custom-float">
-                                    {this.props.InputCreate('keys', this.state.keys, this.changeFields, "Inserer votre clé ici", "number", true)}
+                                    {this.props.InputCreate('keys', this.state.keys, (e) => {FunctionTools.changeFields(this, e)}, "Inserer votre clé ici", "number", true)}
                                 </div>
                                 <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysResetPass}>Verifier</button>
                             </div>
@@ -209,7 +205,7 @@ class SignInOrUp extends Component {
                         <div className="col text-center">
                             <div className="body">
                                 <div className="custom-float center">
-                                    {this.props.InputCreate('email', this.state.email, this.changeFields, "E-mail", "email", true)}
+                                    {this.props.InputCreate('email', this.state.email, (e) => {FunctionTools.changeFields(this, e)}, "E-mail", "email", true)}
                                 </div>
                                 <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyEmail}>Envoyer</button>
                             </div>
@@ -222,7 +218,7 @@ class SignInOrUp extends Component {
                         <div className="col text-center">
                             <div className="body">
                                 <div className="custom-float">
-                                    {this.props.InputCreate('keys', this.state.keys, this.changeFields, "Inserer votre clé ici", "number", true)}
+                                    {this.props.InputCreate('keys', this.state.keys, (e) => {FunctionTools.changeFields(this, e)}, "Inserer votre clé ici", "number", true)}
                                 </div>
                                 <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysSubmit}>Send</button>
                             </div>
@@ -237,11 +233,11 @@ class SignInOrUp extends Component {
                     <div className="row l-form">
 
                         <input className="l-usr" placeholder="You email" name="email" id="email"
-                               value={this.state.email} onChange={this.changeFields}/>
+                               value={this.state.email} onChange={(e) => {FunctionTools.changeFields(this, e)}}/>
 
                         <div className="pass-wrap l-pass">
                             <input className="pass" placeholder="password" type="password" id="password"
-                                   name="password" value={this.state.password} onChange={this.changeFields}/>
+                                   name="password" value={this.state.password} onChange={(e) => {FunctionTools.changeFields(this, e)}}/>
                         </div>
 
                         <button className="l-go" onClick={this.sendLoginCredentials}>Connexion</button>

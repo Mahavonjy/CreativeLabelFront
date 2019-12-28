@@ -75,40 +75,40 @@ class Players extends Component {
     };
 
     playNext = () => {
-        this.state.tmp = 0;
-        this.state.listen = false;
-        if (this.state.shuffle) {
-            this.history.push(this.state.currentIndex);
-            this.setState({currentIndex: Math.floor(Math.random() * this.state.list.length)}, function() {
-                this.props.changeIndex(this.state.currentIndex, this.state._that);
-                this.startPlayer()
-            })
-        } else {
-            if(this.state.currentIndex === this.state.list.length - 1){
-                this.player.pause();
-                this.setState({IsPlaying: false});
-            } else {
+        this.setState({tmp: 0, listen: false}, () => {
+            if (this.state.shuffle) {
                 this.history.push(this.state.currentIndex);
-                this.setState({currentIndex: this.state.currentIndex + 1}, function next () {
-                    this.props.changeIndex(this.state.currentIndex, this.state._that)
+                this.setState({currentIndex: Math.floor(Math.random() * this.state.list.length)}, function() {
+                    this.props.changeIndex(this.state.currentIndex, this.state._that);
                     this.startPlayer()
-                });
+                })
+            } else {
+                if(this.state.currentIndex === this.state.list.length - 1){
+                    this.player.pause();
+                    this.setState({IsPlaying: false});
+                } else {
+                    this.history.push(this.state.currentIndex);
+                    this.setState({currentIndex: this.state.currentIndex + 1}, function next () {
+                        this.props.changeIndex(this.state.currentIndex, this.state._that)
+                        this.startPlayer()
+                    });
+                }
             }
-        }
+        })
     };
 
     playPrev = () => {
-        this.state.tmp = 0;
-        this.state.listen = false;
-        if (this.history[this.history.length - 1]>= 0) {
-            this.setState({currentIndex: this.history.pop()}, function prev () {
-                this.props.changeIndex(this.state.currentIndex, this.state._that)
-                this.startPlayer()
-            });
-        } else {
-            this.player.pause();
-            this.setState({IsPlaying: false});
-        }
+        this.setState({tmp: 0, listen: false}, () => {
+            if (this.history[this.history.length - 1] >= 0) {
+                this.setState({currentIndex: this.history.pop()}, function prev() {
+                    this.props.changeIndex(this.state.currentIndex, this.state._that)
+                    this.startPlayer()
+                });
+            } else {
+                this.player.pause();
+                this.setState({IsPlaying: false});
+            }
+        });
     };
 
     convertTime = (seconds) => {
@@ -169,36 +169,35 @@ class Players extends Component {
     };
 
     componentDidMount(index, type_, run, _that, set_of_beats_name) {
-        console.log(index, type_, run, _that, set_of_beats_name, this.props.list);
         this.setState({ isMounted: true , type_: type_, _that: _that, set_of_beats_name: set_of_beats_name}, () => {
             if (index) {
                 const that = this;
-                this.state.list = this.props.list;
-                this.state.listInfo = this.props.listInfo;
-                if (run) this.PlayOrPause();
-                else this.startPlayer(index);
-                this.player.addEventListener('volumechange', function() {
-                    that.setState({VolumeBar: this.volume * 100})
-                }, false);
-                this.player.addEventListener('timeupdate', function() {
-                    that.state.tmp = that.state.tmp + 1;
-                    let position = this.currentTime / this.duration;
-                    that.setState({progressbar: position * 100});
-                    that.convertTime(Math.round(this.currentTime));
-                    that.totalTime(Math.round(this.duration));
-                    if (that.state.tmp === 10 && !that.state.pres_listened) {
-                        _this.setState({pres_listened: true});
-                        _this.SongListened(false, true);
-                    }
-                    if (that.state.tmp === that.state.listen_min && !that.state.listened) {
-                        _this.setState({listened: true});
-                        _this.SongListened(true);
-                    }
-                    if (this.ended) {
-                        that.state.tmp = 0;
-                        that.playNext()
-                    }
-                });
+                this.setState({list: this.props.list, listInfo: this.props.listInfo}, () => {
+                    if (run) this.PlayOrPause();
+                    else this.startPlayer(index);
+                    this.player.addEventListener('volumechange', function() {
+                        that.setState({VolumeBar: this.volume * 100})
+                    }, false);
+                    this.player.addEventListener('timeupdate', function() {
+                        that.state.tmp = that.state.tmp + 1;
+                        let position = this.currentTime / this.duration;
+                        that.setState({progressbar: position * 100});
+                        that.convertTime(Math.round(this.currentTime));
+                        that.totalTime(Math.round(this.duration));
+                        if (that.state.tmp === 10 && !that.state.pres_listened) {
+                            _this.setState({pres_listened: true});
+                            _this.SongListened(false, true);
+                        }
+                        if (that.state.tmp === that.state.listen_min && !that.state.listened) {
+                            _this.setState({listened: true});
+                            _this.SongListened(true);
+                        }
+                        if (this.ended) {
+                            that.state.tmp = 0;
+                            that.playNext()
+                        }
+                    });
+                })
             }
         });
     }
@@ -214,7 +213,7 @@ class Players extends Component {
                     <div className="slimScroll">
                         <div className="sidebar-header">
                             <h4>Beats Playlist</h4>
-                            <a href="#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
+                            <a href="/#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
                         </div>
                         <div className="p-3">
                             <ul id="playlist" className="playlist" style={{height: "100%"}}>
@@ -242,10 +241,10 @@ class Players extends Component {
                 <nav className="navbar-wrapper navbar-bottom-fixed shadow">
                     <div className="navbar navbar-expand player-header justify-content-between  bd-navbar">
                         <div className="d-flex align-items-center">
-                            <a href="#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
+                            <a href="/#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
                                 <i />
                             </a>
-                            <a className="navbar-brand d-none d-lg-block" href="/home">
+                            <a className="navbar-brand d-none d-lg-block" href="/beats">
                                 <div className="d-flex align-items-center s-14 l-s-2">
                                     <figure className="avatar-md float-left mr-3 mt-1">
                                         <img className="r-5" src={logo} alt="" />
@@ -307,7 +306,7 @@ class Players extends Component {
                             <ul className="nav navbar-nav">
                                 {/* User Playlist*/}
                                 <li className="d-none d-lg-inline-flex flex-column">
-                                    <a data-toggle="control-sidebar">
+                                    <a data-toggle="control-sidebar" href="/#">
                                         <i className="icon icon-menu s-36" />
                                     </a>
                                 </li>

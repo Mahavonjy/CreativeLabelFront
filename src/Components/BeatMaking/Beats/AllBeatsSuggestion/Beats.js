@@ -13,19 +13,14 @@ import * as PopupFields from "../../../FunctionTools/PopupFields";
 
 let set_of_beats_name = "AllBeat";
 let token = "";
-let _this;
 
 class Beats extends Component {
     ToPlay;
-    constructor(props) {
-        super(props);
-        this.state = {
-            genre:'', beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
-            placeHolder: "Search", visibleOffers: true,
-            link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null,
-        };
-        _this = this
-    }
+    state = {
+        genre:'', beats: [], song_id: '', price: 0, licenses_name: '', samples: false,
+        placeHolder: "Search", visibleOffers: true,
+        link_beats : [], index: null, tmp: null, isMounted: false, usingAdBlock: false, song_id_shared: null,
+    };
 
     changeGenre = (e) => {this.setState({genre: e.target.value}, () => {this.getBeats("genre")})};
 
@@ -73,7 +68,7 @@ class Beats extends Component {
                 token = Conf.configs.TokenVisitor;
             } finally {
                 if (!this.props.ready) {
-                    for (let row_ in this.props.beats) {FunctionTools.AddForPlay(row_, "link_beats", this, this.props.beats[row_]['id'])}
+                    FunctionTools.AddForPlay(this, "link_beats", this.props.beats, this.props.updateBeats).then(r => console.log(''));
                     this.props.readyBeats()
                 } else {
                     for (let row_ in this.props.beats) {
@@ -97,7 +92,7 @@ class Beats extends Component {
                      className="adBanner"/>
                 <ReactTooltip/>
                 {/* Headers */}
-                {this.props.CreativeHeaders()}
+                {this.props.CreativeHeaders("Creative BeatMaking", 'Des créations orginales qui font la différence <br/> Pour les professionnels de la musique (artistes,producteurs, labels...)')}
                 {/* End Headers */}
                 <div className="Base">
                 {/*PlayList & Events*/}
@@ -200,9 +195,6 @@ class Beats extends Component {
         );
     }
 
-    static changeIndex(index) {
-        _this.setState({index: index});
-    }
 }
 
 const mapStateToProps = state => {

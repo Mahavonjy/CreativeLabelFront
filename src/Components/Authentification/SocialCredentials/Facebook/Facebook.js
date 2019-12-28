@@ -1,17 +1,13 @@
 import React from 'react';
 import { FacebookLogin } from 'react-facebook-login-component';
 import axios from "axios";
-import { Redirect } from 'react-router-dom';
 import Conf from "../../../../Config/tsconfig";
 
 class LoginFacebook extends React.Component{
 
-    constructor (props, context) {
-        super(props, context);
-        this.state = {
-            isMounted: false
-        };
-    }
+    state = {
+        isMounted: false
+    };
 
     responseFacebook = (response) => {
         let data_facebook = response;

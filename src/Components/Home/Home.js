@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from 'axios';
 import './Home.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Cart from "../Cart/Cart";
 import IslPlayer from "../Players/Players";
 import Conf from "../../Config/tsconfig";
 import {connect} from "react-redux";
@@ -27,9 +26,8 @@ class Home extends Component {
         this.state = {
             isMounted: false, loading: false,
             href: window.location.href.split("/"),
-            single_beat: '', all_artist_beats: [], beats_similar: [],
-            profile_checked: '', user_data: '', user_beats: [], cart: 0,
-            logout_class: "icon icon-exit-2 s-24", log_name: "logout", ret: false, connexion_reloaded: 0
+            single_beat: '', beats_similar: [], profile_checked: '', user_data: '', cart: 0,
+            logout_class: "icon icon-exit-2 s-24 mr-5", log_name: "logout", ret: false, connexion_reloaded: 0
         };
         _that = this
     }
@@ -76,48 +74,51 @@ class Home extends Component {
         })
     };
 
+    CheckSpecialRoute = (headers_) => {
+        if (this.state.href[this.state.href.length - 2] === "CheckThisBeat") {
+            axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp => {
+                this.props.addBeatMakerBeats(resp.data['all_artist_beats']);
+                this.props.addSimilarBeats(resp.data['similar_beats']);
+                this.setState({single_beat: resp.data['single_beat']}, () => {this.setState({loading: false})})
+            }).catch(() => {window.location.replace('/NotFound')})
+        } else if (this.state.href[this.state.href.length - 2] === "isl_artist_profile") {
+            axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
+                this.props.addOtherBeatMakerBeats(resp.data['user_beats']);
+                this.setState({
+                    profile_checked: resp.data['profile_checked'],
+                    user_data: resp.data['user_data'],
+                }, () => {this.setState({loading: false})})
+            }).catch(() => {toast.error("Connection Error")})
+        } else if (this.state.href[this.state.href.length - 1] === 'Cart') {
+            if (!this.state.cart) window.location.replace('/beats');
+            else this.setState({loading: false});
+        } else {
+            this.setState({loading: false}, () => {
+                if (this.state.href[this.state.href.length - 1] === "beats#LoginRequire")
+                    document.getElementsByClassName("LoginRequire")[0].click();
+            })
+        }
+    };
+
     NotOnline = (headers_) => {
-        axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers_}).then(resp => {
-            this.props.addBeats(resp.data["random"]);
-            this.props.newBeatMaker(resp.data["new_beatMaker"]);
-            this.props.topBeatMaker(resp.data["top_beatmaker"]);
-            this.props.latestBeats(resp.data["latest_beats"]);
-            this.props.discoveryBeats(resp.data["discovery_beats"]);
-            this.props.islBeats(resp.data["isl_playlist"]);
+        Promise.all([
             axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: headers_}).then(resp =>{
                 let tmp_arr = [];
                 for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
                 this.props.addAllMediaGenre(tmp_arr);
-                if (this.state.href[this.state.href.length - 2] === "CheckThisBeat") {
-                    axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp => {
-                        this.setState({
-                            single_beat: resp.data['single_beat'],
-                            all_artist_beats: resp.data['all_artist_beats'],
-                            beats_similar: resp.data['similar_beats']
-                        }, () => {this.setState({loading: false})})
-                    }).catch(() => {window.location.replace('/NotFound')})
-                } else if (this.state.href[this.state.href.length - 2] === "isl_artist_profile") {
-                    axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
-                        this.setState({
-                            profile_checked: resp.data['profile_checked'],
-                            user_data: resp.data['user_data'],
-                            user_beats: resp.data['user_beats']
-                        }, () => {this.setState({loading: false})})
-                    }).catch(() => {toast.error("Connection Error")})
-                } else if (this.state.href[this.state.href.length - 1] === 'Cart') {
-                    if (!this.state.cart) window.location.replace('/beats');
-                    else this.setState({loading: false});
-                } else {
-                    this.setState({loading: false}, () => {
-                        if (this.state.href[this.state.href.length - 1] === "beats#LoginRequire")
-                            document.getElementsByClassName("LoginRequire")[0].click();
-                    })
-                }
-            }).catch(err => {
-                console.log(err.response)
-            });
-        }).catch(err => {
-            console.log(err)
+            }).catch(err => {console.log(err.response)}),
+            axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers_}).then(resp => {
+                this.props.addBeats(resp.data["random"]);
+                this.props.newBeatMaker(resp.data["new_beatMaker"]);
+                this.props.topBeatMaker(resp.data["top_beatmaker"]);
+                this.props.latestBeats(resp.data["latest_beats"]);
+                this.props.discoveryBeats(resp.data["discovery_beats"]);
+                this.props.islBeats(resp.data["isl_playlist"]);
+            }).catch(err => {console.log(err)})
+        ]).then(() => {
+            this.CheckSpecialRoute(headers_);
+        }).catch(() => {
+            this.CheckSpecialRoute(headers_);
         });
     };
 
@@ -154,7 +155,7 @@ class Home extends Component {
                         });
                     }
                 } catch (e) {
-                    this.setState({logout_class: "icon icon-login s-24", log_name: "login"}, () => {
+                    this.setState({logout_class: "icon icon-login s-24 mr-5", log_name: "Login"}, () => {
                         headers['Isl-Token'] = Conf.configs.TokenVisitor;
                         this.NotOnline(headers)
                     });
@@ -164,8 +165,7 @@ class Home extends Component {
     };
 
     fetchUserData = () => {
-        axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
-            this.props.beats_initialisation_pricing(resp.data);
+        Promise.all([
             axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
                 this.props.profile_initialisation_info(resp.data['my_profile']);
                 this.props.profile_initialisation_role(resp.data['role']);
@@ -189,14 +189,18 @@ class Home extends Component {
                 }
             }).catch(err => {
                 this.ifConnectionError(err);
-            });
-        }).catch(err => {
-            this.ifConnectionError(err);
-        });
+            }),
+            axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
+                this.props.beats_initialisation_pricing(resp.data);
+            }).catch(err => {
+                this.ifConnectionError(err);
+            })
+        ]).then((resp) => console.log(''))
     };
 
     componentDidMount() {
         this.setState({isMounted: true }, () => {
+
             user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
             if (this.props.beats.length === 0) {
                 this.Online();
@@ -275,6 +279,15 @@ const mapDispatchToProps = dispatch => {
     return {
         addBeats: (data) => {
             dispatch({type: "ADD_BEATS", data: data})
+        },
+        addBeatMakerBeats: (data) => {
+            dispatch({type: "ADD_BEAT_MAKER_BEATS", data: data})
+        },
+        addSimilarBeats: (data) => {
+            dispatch({type: "ADD_BEATS_SIMILAR", data: data})
+        },
+        addOtherBeatMakerBeats: (data) => {
+            dispatch({type: "ADD_OTHER_BEAT_MAKER_BEATS", data: data})
         },
         newBeatMaker: (data) => {
             dispatch({type: "ADD_NEW_BEATMAKER", data: data})

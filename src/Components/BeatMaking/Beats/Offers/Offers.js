@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import './offers.css'
 
 class Offers extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            href: window.location.href.split("/"), isMounted: false,
-        };
-    }
+    state = {
+        isMounted: false,
+    };
 
     componentDidMount() {
         this.setState({ isMounted: true})

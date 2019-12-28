@@ -8,14 +8,11 @@ import {connect} from "react-redux";
 
 let cookies = new Cookies();
 class AddAlbum extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            file: '', album_name: '', artist: cookies.get("Isl_Creative_pass")["name"], loading: false,
-            genre: '', genre_musical: '', description: '',
-            photo: '', price: '', beats: false
-        };
-    }
+    state = {
+        file: '', album_name: '', artist: cookies.get("Isl_Creative_pass")["name"], loading: false,
+        genre: '', genre_musical: '', description: '',
+        photo: '', price: '', beats: false
+    };
 
     changeAlbumName = (e) => {this.setState({album_name : e.target.value});};
 

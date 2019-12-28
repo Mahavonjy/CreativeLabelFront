@@ -18,17 +18,22 @@ try {
 
 class FunctionTools extends Component {
 
-    static FillInCartProps = (headers, props) => {
-        axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
-            let tmp = 0;
-            if (resp.data.length !== 0) Home.IncrementCart(resp.data.length);
-            for (let row in resp.data) {tmp = tmp + resp.data[row]['price']}
-            props.addTotalPrice(Math.round(tmp * 100) / 100);
-            props.addCarts(resp.data);
-        }).catch(err => {
-            console.log(err)
-        });
-    };
+    static async AddForPlay (that, state_name, beat_props, up_props) {
+        let all_call_api = [];
+        let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
+        for (let index in beat_props) {
+            await that.setState(prevState => ({[state_name]: {...prevState[state_name], [index]: true}}), () => {
+                all_call_api.push(
+                    axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + beat_props[index]['id'], {headers:headers}).then(response => {
+                        up_props({"index": index, "link": response.data});
+                    }).catch(error => {
+                        console.log(error.data);
+                    })
+                )
+            });
+        }
+        return Promise.all(all_call_api).then(r => console.log(''))
+    }
 
     static async AddPropsCart(new_headers, props) {
         try {
@@ -158,43 +163,26 @@ class FunctionTools extends Component {
         }
         if (_tmp)
             return false;
-        let tmp_ = number_.split(/[.,_\/ -]/);
+        let tmp_ = number_.split(/[.,_/ -]/);
         if (tmp_.length > 1)
             return false;
         let tmp = parseInt(number_);
         return tmp === parseInt(tmp, 10);
     };
 
-    static  AddForPlay = (index, _state, that, song_id) => {
-        let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
-        axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + song_id, {headers:headers}).then(response => {
-            let temp = {"index": index, "link": response.data};
-            if (_state === "link_beats") {
-                that.props.updateBeats(temp);
-                that.setState(prevState => ({link_beats: {...prevState.link_beats, [index]: true}}));
-            } else if (_state === "link_latest_beats") {
-                that.props.updateLatestBeats(temp);
-                that.setState(prevState => ({link_latest_beats: {...prevState.link_latest_beats, [index]: true}}))
-            } else if (_state === "link_discovery_beats") {
-                that.props.updateDiscoveryBeats(temp);
-                that.setState(prevState => ({link_discovery_beats: {...prevState.link_discovery_beats, [index]: true}}))
-            } else if (_state === "link_isl_playlist") {
-                that.props.updateIslBeats(temp);
-                that.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [index]: true}}))
-            } else if (_state === "link_all_artist_beats") {
-                that.props.updateBeatMakerBeats(temp);
-                that.setState(prevState => ({link_all_artist_beats: {...prevState.link_all_artist_beats, [index]: true}}))
-            } else if (_state === "link_all_other_artist_beats") {
-                that.props.updateOtherBeatMakerBeats(temp);
-                that.setState(prevState => ({link_all_other_artist_beats: {...prevState.link_all_other_artist_beats, [index]: true}}))
-            } else if (_state === "user_beats_link") {
-                that.props.profile_update_beats(temp);
-                that.setState(prevState => ({user_beats_link: {...prevState.user_beats_link, [index]: true}}))
-            }
-        }).catch(error => {
-            console.log(error.data);
-        })
+    static FillInCartProps = (headers, props) => {
+        axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
+            let tmp = 0;
+            if (resp.data.length !== 0) Home.IncrementCart(resp.data.length);
+            for (let row in resp.data) {tmp = tmp + resp.data[row]['price']}
+            props.addTotalPrice(Math.round(tmp * 100) / 100);
+            props.addCarts(resp.data);
+        }).catch(err => {
+            console.log(err)
+        });
     };
+
+    static changeFields = (that, e) => {that.setState({[e.target.id]: e.target.value})};
 
     render() {
         return(

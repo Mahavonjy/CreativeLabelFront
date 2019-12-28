@@ -6,52 +6,28 @@ import logo from "../../../images/Logo/ISL_logo.png"
 import { ToastContainer, toast } from 'react-toastify';
 import ReactTooltip from 'react-tooltip';
 import {connect} from "react-redux";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 
 const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
 class AddSingle extends Component {
-    Type;
-    constructor (props) {
-        super(props);
-        this.state = {
-            file: '',
-            title: '',
-            artist: user_credentials.name,
-            genre: '',
-            genre_musical: 'beats',
-            description: '',
-            photo: '',
-            artist_tag: '',
-            beats_wave: '',
-            stems: '',
-            beats: true,
-            bpm: 0,
-            basic_price: this.props.pricing['basic'],
-            silver_price: this.props.pricing['silver'],
-            gold_price: this.props.pricing['gold'],
-            platinum_price: 0
-        };
-    }
-
-    changeTitle = (e) => {this.setState({title : e.target.value});};
-
-    changeBpm = (e) => {this.setState({bpm : e.target.value});};
-
-    changeArtist = (e) => {this.setState({artist : e.target.value});};
-
-    changeArtistTag = (e) => {this.setState({artist_tag : e.target.value});};
-
-    changeGenre = (e) => {this.setState({genre : e.target.value});};
-
-    changeGenreMusical = (e) => {
-        this.setState({genre_musical : e.target.value});
-        if (e.target.value === "beats"){
-            this.setState({beats: true});
-        } else {
-            this.setState({beats: false});
-        }
+    state = {
+        file: '',
+        title: '',
+        artist: user_credentials.name,
+        genre: '',
+        genre_musical: 'beats',
+        description: '',
+        photo: '',
+        artist_tag: '',
+        beats_wave: '',
+        stems: '',
+        beats: true,
+        bpm: 0,
+        basic_price: this.props.pricing['basic'],
+        silver_price: this.props.pricing['silver'],
+        gold_price: this.props.pricing['gold'],
+        platinum_price: 0
     };
-
-    changeDescription = (e) => {this.setState({description : e.target.value});};
 
     uploadFile = (e) => {this.setState({file : e.target.files[0]})};
 
@@ -220,25 +196,25 @@ class AddSingle extends Component {
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text text-dark" data-tip="Your beats title"><i className="icon-text-width"/>&nbsp;	Titre *</div>
-                                    <input value={this.state.title} onChange={this.changeTitle} id="title" name="title"
+                                    <input value={this.state.title} onChange={(e) => {FunctionTools.changeFields(this, e)}} id="title" name="title"
                                            className="form-control" type="text" required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text text-dark" data-tip="Your artist name"><i className="icon-user"/>&nbsp;	Artiste *</div>
-                                    <input value={this.state.artist} onChange={this.changeArtist} id="artist"
+                                    <input value={this.state.artist} onChange={(e) => {FunctionTools.changeFields(this, e)}} id="artist"
                                            name="artist" className="form-control" type="text" required disabled={true}/>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text center text-dark" data-tip="if you want tag an artist"><i className="icon-user"/>&nbsp;	Tags</div>
-                                    <input value={this.state.artist_tag} onChange={this.changeArtistTag} id="artist"
-                                           name="artist" className="form-control" type="text" required/>
+                                    <input value={this.state.artist_tag} onChange={(e) => {FunctionTools.changeFields(this, e)}} id="artist_tag"
+                                           name="artist_tag" className="form-control" type="text" required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text text-dark" data-tip="Your beats genre"><i className="icon-text-width"/>&nbsp;	Genre *</div>
                                     <input id="genre" name="genre" className="form-control"
-                                           value={this.state.genre} onChange={this.changeGenre} list="music-genre" required/>
+                                           value={this.state.genre} onChange={(e) => {FunctionTools.changeFields(this, e)}} list="music-genre" required/>
                                     <datalist id="music-genre">
                                         {this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                     </datalist>
@@ -247,8 +223,8 @@ class AddSingle extends Component {
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text text-dark" data-tip="For now, it's only beats type"><i className="icon-text-width"/>&nbsp;	Type</div>
-                                    <input id="type" name="type" className="form-control"
-                                           value={this.state.genre_musical} onChange={this.changeGenreMusical}
+                                    <input id="genre_musical" name="genre_musical" className="form-control"
+                                           value={this.state.genre_musical} onChange={(e) => {FunctionTools.changeFields(this, e)}}
                                            list="music-type" required disabled/>
                                     <datalist id="music-type">
                                         <option value="music">music</option>
@@ -258,7 +234,7 @@ class AddSingle extends Component {
                                 {this.state.beats ?
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                         <div className="input-group-text text-dark" data-tip="Your beats bpm"><i className="icon-stack-exchange"/>&nbsp;	Bpm</div>
-                                        <input value={this.state.bpm} onChange={this.changeBpm}
+                                        <input value={this.state.bpm} onChange={(e) => {FunctionTools.changeFields(this, e)}}
                                                id="bpm" name="bpm" className="form-control" type="number"/>
                                     </div>
                                     :null}
@@ -342,7 +318,7 @@ class AddSingle extends Component {
                             <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
                                     <div className="input-group-text text-dark" data-tip="If you want to add an description for you beats"><i className="icon-crosshairs"/>&nbsp;	Description</div>
-                                    <textarea value={this.state.description} onChange={this.changeDescription}
+                                    <textarea value={this.state.description} onChange={(e) => this.ChangeStyle(e)}
                                               id="description" name="description" className="form-control" placeholder={"Ajouter une description"}/>
                                 </div>
                             </div>

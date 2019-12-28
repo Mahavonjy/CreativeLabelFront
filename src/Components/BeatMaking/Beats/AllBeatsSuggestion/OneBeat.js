@@ -11,34 +11,15 @@ import * as PopupFields from "../../../FunctionTools/PopupFields";
 
 let _that;
 class OneBeat extends Component {
-    SingleBeat;
     constructor(props) {
         super(props);
         this.state = {
             href: window.location.href.split("/"), isMounted: false, NotFound: false, playing: false,
             single_beat: '', index: null, tmp: null, song_id_shared: null,
-            songId: null, link_all_artist_beats: []
+            songId: null, link_all_artist_beats: [], link_all_beats_similar: []
         };
         _that = this
     }
-
-    Play = (index, type_) => {
-        if (this.state.index !== index && this.state.tmp === null) {
-            this.setState({index: index, tmp: index}, () => {
-                this.props.ToPlay(index, type_, "OneBeats");
-            })
-        } else {
-            if (index !== this.state.index) {
-                this.setState({index: index, tmp: index}, () => {
-                    this.props.ToPlay(index, type_, "OneBeats");
-                })
-            } else {
-                this.setState({tmp: null}, () => {
-                    IslPlayer.pauseOrPlayPlayer();
-                })
-            }
-        }
-    };
 
     pausePlayer = (run) => {
         if (this.state.index !== null) {
@@ -72,10 +53,11 @@ class OneBeat extends Component {
 
     componentDidMount() {
         this.setState({ isMounted: true}, () => {
-            this.props.addBeatMakerBeats(this.props.ArtistBeats);
-            for (let row_ in this.props.ArtistBeats) {
-                FunctionTools.AddForPlay(row_, "link_all_artist_beats", this, this.props.ArtistBeats[row_]['id'])
-            }
+            Promise.all([
+                FunctionTools.AddForPlay(this, "link_all_artist_beats", this.props.beat_maker_beats, this.props.updateBeatMakerBeats).then(() => console.log('')),
+                FunctionTools.AddForPlay(this, "link_all_beats_similar", this.props.beats_similar, this.props.updateSimilarBeats).then(() => console.log(''))
+                ]
+            ).then(() => console.log(''))
         });
     }
 
@@ -188,7 +170,7 @@ class OneBeat extends Component {
                                     </div>
                                     {this.props.SimilarBeats.length !== 0 ?
                                         <div className="playlist pl-lg-3 pr-lg-3" style={{height: 400}}>
-                                            {this.props.CreateBeatsPlaylist(this, "SimilarBeats", this.props.SimilarBeats, "oneBeats", "long_beats")}
+                                            {this.props.CreateBeatsPlaylist(this, "SimilarBeats", this.props.beats_similar, this.state.link_all_beats_similar, "long_beats")}
                                         </div>
                                         : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 400}}>
                                             <p className="text-center">Pas d'instrumental similaire</p>
@@ -207,6 +189,7 @@ class OneBeat extends Component {
 const mapStateToProps = state => {
     return {
         beat_maker_beats: state.beats.beat_maker_beats,
+        beats_similar: state.beats.beats_similar,
     };
 };
 
@@ -218,11 +201,11 @@ const mapDispatchToProps = dispatch => {
         addTotalPrice: (data) => {
             dispatch({type: "ADD_TOTAL_PRICE", data: data})
         },
-        addBeatMakerBeats: (data) => {
-            dispatch({type: "ADD_BEAT_MAKER_BEATS", data: data})
-        },
         updateBeatMakerBeats: (data) => {
             dispatch({type: "UPDATE_BEAT_MAKER_BEATS", data: data})
+        },
+        updateSimilarBeats: (data) => {
+            dispatch({type: "UPDATE_SIMILAR_BEATS", data: data})
         },
         addNewPlayerList: (data) => {
             dispatch({type: "ADD_NEW_PLAYER_PLAYLIST", data: data})

@@ -9,17 +9,12 @@ import {connect} from "react-redux";
 
 let cookies = new Cookies();
 class EditSingle extends Component {
-    Song;
-    Success;
-    constructor (props) {
-        super(props);
-        this.state = {
-            file: null, title: this.props.Song.title, artist: this.props.Song.artist,
-            genre: this.props.Song.genre, genre_musical: this.props.Song.genre_musical,
-            description: this.props.Song.description, photo: null, artist_tag: this.props.Song.artist_tag,
-            beats_wave: '', stems: '', bpm: 0, beats: false,
-        };
-    }
+    state = {
+        file: null, title: this.props.Song.title, artist: this.props.Song.artist,
+        genre: this.props.Song.genre, genre_musical: this.props.Song.genre_musical,
+        description: this.props.Song.description, photo: null, artist_tag: this.props.Song.artist_tag,
+        beats_wave: '', stems: '', bpm: 0, beats: false,
+    };
 
     changeArtistTag = (e) => {this.setState({artist_tag : e.target.value});};
 

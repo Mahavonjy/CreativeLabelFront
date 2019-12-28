@@ -10,12 +10,9 @@ let headers = {
 };
 
 class Preference extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            button: false, isNotMatch : false, first_array:[], second_array: [], isMounted: false
-        };
-    }
+    state = {
+        button: false, isNotMatch : false, first_array:[], second_array: [], isMounted: false
+    };
 
     componentDidMount() {
         this.setState({isMounted: true}, () => {
@@ -25,15 +22,15 @@ class Preference extends Component {
     }
 
     BooleanToChange = (index) => {
+        let tmp_state = {...this.state.first_array};
         if (this.state.first_array[index][0] === "#9DA6B1") {
-            this.state.first_array[index][0] = "darkolivegreen";
-            this.state.first_array[index][1] = true;
+            tmp_state[index][0] = "darkolivegreen";
+            tmp_state[index][1] = true;
         } else if (this.state.first_array[index][0] === "darkolivegreen") {
-            this.state.first_array[index][0] = "#9DA6B1";
-            this.state.first_array[index][1] = false;
+            tmp_state[index][0] = "#9DA6B1";
+            tmp_state[index][1] = false;
         }
-        let new_array = this.state.first_array;
-        this.setState({array: new_array});
+        this.setState({tmp_state}, () => {this.setState({array: this.state.first_array});});
     };
 
     addAllMediaGenreToArray = () => {

@@ -1,3 +1,4 @@
+const $ = window.$;
 !function (t) {
     function e(i) {
         if (n[i]) return n[i].exports;

@@ -10,15 +10,12 @@ import Cookies from "universal-cookie";
 let cookies = new Cookies();
 
 class PurchaseInformation extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isMounted: false, name: this.props.profile_info.name, lastname: '',
-            email: this.props.profile_info.email, address: this.props.profile_info.address, postal_code: '',
-            city: this.props.profile_info.city, phone: this.props.profile_info.phone, rules: false,
-            card_number: '', expiration: '', cvc: '', card_name: '', payment_loading: false
-        };
-    }
+    state = {
+        isMounted: false, name: this.props.profile_info.name, lastname: '',
+        email: this.props.profile_info.email, address: this.props.profile_info.address, postal_code: '',
+        city: this.props.profile_info.city, phone: this.props.profile_info.phone, rules: false,
+        card_number: '', expiration: '', cvc: '', card_name: '', payment_loading: false
+    };
 
     changeName = (e) => {this.setState({name: e.target.value})};
 

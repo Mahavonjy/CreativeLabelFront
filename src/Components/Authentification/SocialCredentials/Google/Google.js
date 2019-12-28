@@ -5,12 +5,9 @@ import Conf from "../../../../Config/tsconfig";
 
 class LoginGoogle extends React.Component{
 
-    constructor (props, context) {
-        super(props, context);
-        this.state = {
-            isMounted: false
-        };
-    }
+    state = {
+        isMounted: false
+    };
 
     responseGoogle = (googleUser) => {
         let data = {

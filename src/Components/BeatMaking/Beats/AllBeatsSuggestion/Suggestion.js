@@ -5,25 +5,17 @@ import {bindActionCreators} from "redux";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
 import * as PopupFields from "../../../FunctionTools/PopupFields";
 
-let _this;
-
 class Suggestion extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            link_latest_beats: [], link_discovery_beats: [], tmp: null,
-            link_top_beats: [], link_isl_playlist: [], index: null, isMounted: false,
-        };
-         _this = this
-    }
+    state = {
+        link_latest_beats: [], link_discovery_beats: [], tmp: null,
+        link_top_beats: [], link_isl_playlist: [], index: null, isMounted: false,
+    };
 
     componentDidMount() {
         this.setState({isMounted: true }, () => {
             if (!this.props.ready_latest_beats) {
-                for (let row_ in this.props.latest_beats) {
-                    FunctionTools.AddForPlay(row_, "link_latest_beats", this, this.props.latest_beats[row_]['id']);
-                    if (parseInt(row_) === this.props.latest_beats.length - 1) this.props.readyLatestBeats()
-                }
+                FunctionTools.AddForPlay(this, "link_latest_beats", this.props.latest_beats, this.props.updateLatestBeats).then(r => console.log(''));
+                this.props.readyLatestBeats()
             } else {
                 for (let row_ in this.props.latest_beats) {
                     this.setState(prevState => ({link_latest_beats: {...prevState.link_latest_beats, [row_]: true}}))
@@ -31,32 +23,17 @@ class Suggestion extends Component {
             }
 
             if (!this.props.ready_discovery_beats) {
-                for (let row_ in this.props.discovery_beats) {
-                    FunctionTools.AddForPlay(row_, "link_discovery_beats", this, this.props.discovery_beats[row_]['id']);
-                    if (parseInt(row_) === this.props.discovery_beats.length - 1) this.props.readyDiscoveryBeats()
-                }
+                FunctionTools.AddForPlay(this, "link_discovery_beats", this.props.discovery_beats, this.props.updateDiscoveryBeats).then(r => console.log(''));
+                this.props.readyDiscoveryBeats();
             } else {
                 for (let row_ in this.props.discovery_beats) {
                     this.setState(prevState => ({link_discovery_beats: {...prevState.link_discovery_beats, [row_]: true}}))
                 }
             }
 
-            if (!this.props.ready_top_beats) {
-                for (let row_ in this.props.top_beats) {
-                    FunctionTools.AddForPlay(row_, "link_top_beats", this, this.props.top_beats[row_]['id']);
-                    if (parseInt(row_) === this.props.top_beats.length - 1) this.props.readyTopBeats()
-                }
-            } else {
-                for (let row_ in this.props.top_beats) {
-                    this.setState(prevState => ({link_top_beats: {...prevState.link_top_beats, [row_]: true}}))
-                }
-            }
-
             if (!this.props.ready_isl_playlist) {
-                for (let row_ in this.props.isl_playlist) {
-                    FunctionTools.AddForPlay(row_, "link_isl_playlist", this, this.props.isl_playlist[row_]['id']);
-                    if (parseInt(row_) === this.props.isl_playlist.length - 1) this.props.readyIslBeats()
-                }
+                FunctionTools.AddForPlay(this, "link_isl_playlist", this.props.isl_playlist, this.props.updateIslBeats).then(r => console.log(''));
+                this.props.readyIslBeats();
             } else {
                 for (let row_ in this.props.isl_playlist) {
                     this.setState(prevState => ({link_isl_playlist: {...prevState.link_isl_playlist, [row_]: true}}))
@@ -203,9 +180,6 @@ const mapDispatchToProps = dispatch => {
         },
         updateIslBeats: (data) => {
             dispatch({type: "UPDATE_ISL_PLAYLIST_LIST", data: data})
-        },
-        readyTopBeats: () => {
-            dispatch({type: "TOP_BEATS_READY"})
         },
         readyLatestBeats: () => {
             dispatch({type: "LATEST_BEATS_READY"})

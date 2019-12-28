@@ -1,5 +1,3 @@
-import {toast} from "react-toastify";
-
 export const RegisterValidation = (state) => {
     return () => {
         if (state.password.length < 8)
