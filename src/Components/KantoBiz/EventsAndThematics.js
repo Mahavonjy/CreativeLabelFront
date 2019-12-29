@@ -5,7 +5,7 @@ export const EventAndThematics = () => {
         return (
             <div className="p-b-100">
                 {/* Type of Events */}
-                <div className="events">
+                <div className="events pt-5">
                     <div className="relative mb-5 p-t-10 p-b-10 ml-5 ">
                         <h1 className="mb-2 text-primary">Nos Evenements</h1>
                         <p>Voici tout les differentes enevements dans KantoBiz</p>
@@ -111,59 +111,99 @@ export const EventAndThematics = () => {
                 </div>
                 {/* End type of Events */}
                 {/* All thematics */}
-                <div className="thematics">
+                <div className="thematics pt-5">
                     <div className="relative mb-5 p-t-10 p-b-10 ml-5 ">
                         <h1 className="mb-2 text-primary">Nos Thematiques/Univers</h1>
                         <p>Voici tout les differentes univers dans KantoBiz</p>
                     </div>
-                    <div className="container-card">
-                        <div className="card">
-                            <h3 className="title">Card 1</h3>
+                    <div className="row ml-5 mr-5 justify-content-center">
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
-                            <div className="circle">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className="stroke" cx={60} cy={60} r={50} />
-                                </svg>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
+                            <button className="btn btn-outline-info relative align-middle mt-4">Les prestation</button>
                         </div>
-                        <div className="card">
-                            <h3 className="title">Card 2</h3>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
-                            <div className="circle">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className="stroke" cx={60} cy={60} r={50} />
-                                </svg>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
                         </div>
-                        <div className="card">
-                            <h3 className="title">Card 3</h3>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
-                            <div className="circle">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className="stroke" cx={60} cy={60} r={50} />
-                                </svg>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
                         </div>
-                        <div className="card">
-                            <h3 className="title">Card 4</h3>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
-                            <div className="circle">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className="stroke" cx={60} cy={60} r={50} />
-                                </svg>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                        </div>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
+                            <div className="bar">
+                                <div className="emptybar" />
+                                <div className="filledbar" />
+                            </div>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                            </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                        </div>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
+                            <div className="bar">
+                                <div className="emptybar" />
+                                <div className="filledbar" />
+                            </div>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                            </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                        </div>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
+                            <div className="bar">
+                                <div className="emptybar" />
+                                <div className="filledbar" />
+                            </div>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                            </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestations</button>
+                        </div>
+                        <div className="thematics-card col-md-3">
+                            <h3 className="pt-3 text-white">Card Name</h3>
+                            <div className="bar">
+                                <div className="emptybar" />
+                                <div className="filledbar" />
+                            </div>
+                            <div className="circle center p-t-80">
+                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                            </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
                         </div>
                     </div>
                 </div>

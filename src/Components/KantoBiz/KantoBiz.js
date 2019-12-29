@@ -42,7 +42,7 @@ class KantoBiz extends Component {
 
                 {/* This is a main of for show different component */}
 
-                <div className="Base pt-2">
+                <div className="Base">
                     {/* Navigation Page*/}
                     <div className="NextOrPrevPage">
                         <span className="float-left"><i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>
