@@ -182,6 +182,14 @@ class FunctionTools extends Component {
         });
     };
 
+    static formatDate = (date) => {
+        let day = date.getDate();
+        let monthIndex = date.getMonth();
+        let year = date.getFullYear();
+
+        return day + '-' + monthIndex + '-' + year;
+    };
+
     static changeFields = (that, e) => {that.setState({[e.target.id]: e.target.value})};
 
     render() {

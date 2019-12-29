@@ -20,8 +20,8 @@ import KantoBiz from "../KantoBiz/KantoBiz";
 import TestImageTwo from "../../assets/img/demo/a3.jpg"
 import TestImageOne from "../../assets/img/demo/a7.jpg";
 import TestImageThree from "../../assets/img/demo/a5.jpg";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"
+import SearchBar from "../KantoBiz/SearchBar";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     return () => {
@@ -268,7 +268,7 @@ export const DisplayArtist = (that_value) => {
     }
 };
 
-export const CreativeHeaders = (Title, Description, that) => {
+export const CreativeHeaders = (Title, Description) => {
     return () => {
         return (
             <div>
@@ -283,7 +283,7 @@ export const CreativeHeaders = (Title, Description, that) => {
                         <div className="carousel-item">
                             <img className="d-block w-100" src={TestImageTwo} alt=""/>
                         </div>
-                        <div className={that && Title === "Creative KantoBiz"? "has-bottom-gradient d-none d-sm-block": "has-bottom-gradient" }>
+                        <div className={Title === "Creative KantoBiz"? "has-bottom-gradient d-none d-sm-block": "has-bottom-gradient" }>
                             <div className="home-menu pl-md-5">
                                 <div className="row">
                                     <div className="col-12 col-lg-10 animated">
@@ -295,71 +295,7 @@ export const CreativeHeaders = (Title, Description, that) => {
                                 </div>
                             </div>
                         </div>
-                        {that && Title === "Creative KantoBiz"?
-                            <div className="Base search-bar relative p-b-40 p-t-10">
-                            {/* Input Search */}
-                                <h3 className="text-center text-red">Trouvez la meilleur prestation pour votre evenement</h3><br/>
-                                <form action="#">
-                                    <div className="search-row row justify-content-center">
-                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
-                                            <input className="bg-transparent text-center text-white border-0" type="text" name="city" placeholder="Madagascar" id="location" value="Madagascar" disabled={true}/>
-                                            <label className="input-group-addon bg-transparent"><i className="icon-map-location text-center text-red"/><span className="ml-2 text-white">?</span></label>
-                                        </div>
-
-                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
-                                            <div className="btn-group bootstrap-select listing-categories">
-                                                <button className="btn btn-outline-dark border-0 dropdown-toggle text-white" type="button"
-                                                        data-toggle="dropdown" aria-haspopup="true" id="city"
-                                                        aria-expanded="false">Choisir la ville
-                                                </button>
-                                                <div className="dropdown-menu">
-                                                    <a className="dropdown-item" href="/#">Action</a>
-                                                </div>
-                                            </div>
-                                            <label className="input-group-addon bg-transparent"><i className="icon-location-arrow text-red"/><span className="ml-2 text-white">?</span></label>
-                                        </div>
-
-                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
-                                            <div className="btn-group bootstrap-select listing-categories">
-                                                <button className="btn btn-outline-dark border-0 dropdown-toggle text-left text-white" type="button"
-                                                        data-toggle="dropdown" aria-haspopup="true" id="city"
-                                                        aria-expanded="false">Thematiques
-                                                </button>
-                                                <div className="dropdown-menu">
-                                                    <a className="dropdown-item" href="/#">Action</a>
-                                                </div>
-                                            </div>
-                                            <label className="input-group-addon bg-transparent"><i className="icon-tasks text-center text-red"/><span className="ml-2 text-white">?</span></label>
-                                        </div>
-
-                                        <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px"}}>
-                                            <div className="btn-group bootstrap-select listing-categories">
-                                                <button className="btn btn-outline-dark border-0 dropdown-toggle text-white" type="button"
-                                                        data-toggle="dropdown" aria-haspopup="true" id="Evenement"
-                                                        aria-expanded="false">	&nbsp;	Evenements
-                                                </button>
-                                                <div className="dropdown-menu">
-                                                    <a className="dropdown-item" href="/#">Action</a>
-                                                </div>
-                                            </div>
-                                            <label className="input-group-addon bg-transparent"><i className="icon-network text-center text-red"/><span className="ml-2 text-white">?</span></label>
-                                        </div>
-
-                                        <div className=" col-sm-2 d-inline-block border border-primary text-center " style={{borderRadius: "5px"}}>
-                                            <DatePicker className="bg-transparent text-center text-white border-0" selected={that.state.startDate} onChange={that.ChangeDate}/>
-                                            <label className="input-group-addon bg-transparent"><i className="icon-calendar text-center text-red"/><span className="ml-2 text-white">?</span></label>
-                                        </div>
-
-                                        <div className="col-md-10">
-                                            <button type="submit" className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;<i className="icon-search-1 text-white"/></button>
-                                        </div>
-
-                                    </div>
-                                </form>
-                            {/* End Search */}
-                            </div>
-                            :null}
-
+                        {Title === "Creative KantoBiz"? <SearchBar/>:null}
                     </div>
                     <a className="carousel-control-prev" href="#islCreativeCarousel" role="button" data-slide="prev" style={{fontSize: 0}}>prev</a>
                     <a className="carousel-control-next" href="#islCreativeCarousel" role="button" data-slide="next" style={{fontSize: 0}}>next</a>

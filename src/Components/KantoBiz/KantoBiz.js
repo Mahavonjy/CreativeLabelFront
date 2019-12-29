@@ -3,26 +3,11 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import * as EventAndThematics from "./EventsAndThematics";
-import "./KantoBiz.css";
+import "./style/KantoBiz.css";
 
 class KantoBiz extends Component {
     state = {
         isMounted: false,
-        startDate: new Date()
-    };
-
-    formatDate = (date) => {
-        let day = date.getDate();
-        let monthIndex = date.getMonth();
-        let year = date.getFullYear();
-
-        return day + '-' + monthIndex + '-' + year;
-    };
-
-    ChangeDate = (date) => {
-        let new_date = this.formatDate(date);
-        let now = this.formatDate(new Date());
-        if (parseInt(new_date) - parseInt(now) >= 0) this.setState({startDate: date});
     };
 
     componentDidMount() {
@@ -37,7 +22,7 @@ class KantoBiz extends Component {
         return (
             <div>
                 {/* Headers */}
-                {this.props.CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)", this)}
+                {this.props.CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)")}
                 {/* End Headers */}
 
                 {/* This is a main of for show different component */}

@@ -13,98 +13,98 @@ export const EventAndThematics = () => {
                     <div className="card-container">
                         <div className="card-left">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </div>
                         </div>
                         <div className="card-top">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/1011334/pexels-photo-1011334.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/1011334/pexels-photo-1011334.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Quisque cursus, metus vitae pharetra auctor.</p>
+                                <span>Quisque cursus, metus vitae pharetra auctor.</span>
                             </div>
                         </div>
                         <div className="card-right">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/35828/soap-bubble-colorful-ball-soapy-water.jpg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/35828/soap-bubble-colorful-ball-soapy-water.jpg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Ut eu diam at pede suscipit sodales.</p>
+                                <span>Ut eu diam at pede suscipit sodales.</span>
                             </div>
                         </div>
                         <div className="card-right">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/701855/pexels-photo-701855.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/701855/pexels-photo-701855.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Donec lacus nunc, viverra nec, blandit vel, egestas et, augue.</p>
+                                <span>Donec lacus nunc, viverra nec, blandit vel, egestas et, augue.</span>
                             </div>
                         </div>
                         <div className="card-top">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/668295/pexels-photo-668295.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/668295/pexels-photo-668295.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </div>
                         </div>
                         <div className="card-bottom">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/63238/pexels-photo-63238.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/63238/pexels-photo-63238.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Ut eu diam at pede suscipit sodales.</p>
+                                <span>Ut eu diam at pede suscipit sodales.</span>
                             </div>
                         </div>
                         <div className="card-left">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/997725/pexels-photo-997725.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/997725/pexels-photo-997725.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </div>
                         </div>
                         <div className="card-bottom">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/585581/pexels-photo-585581.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/585581/pexels-photo-585581.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Quisque cursus, metus vitae pharetra auctor.</p>
+                                <span>Quisque cursus, metus vitae pharetra auctor.</span>
                             </div>
                         </div>
                         <div className="card-right">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/532561/pexels-photo-532561.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/532561/pexels-photo-532561.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </div>
                         </div>
                         <div className="card-top">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/279376/pexels-photo-279376.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/279376/pexels-photo-279376.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Integer lacinia sollicitudin massa. Cras metus.</p>
+                                <span>Integer lacinia sollicitudin massa. Cras metus.</span>
                             </div>
                         </div>
                         <div className="card-left">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/701855/pexels-photo-701855.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/701855/pexels-photo-701855.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </div>
                         </div>
                         <div className="card-top">
                             <div className="card-image">
-                                <img src="https://images.pexels.com/photos/978342/pexels-photo-978342.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
+                                <img alt="" src="https://images.pexels.com/photos/978342/pexels-photo-978342.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260" />
                             </div>
                             <div className="card-text">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </div>
                         </div>
                     </div>
@@ -117,93 +117,104 @@ export const EventAndThematics = () => {
                         <p>Voici tout les differentes univers dans KantoBiz</p>
                     </div>
                     <div className="row ml-5 mr-5 justify-content-center">
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Cirque/Arts de la rue</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Cirque/Arts de la rue" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info relative align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info relative align-middle mt-4">Voir les prestation</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Comédiens</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Comédiens" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">DJ</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="DJ" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Danseurs</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Danseurs" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Magiciens</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Magiciens" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Chanteur/Musicien</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Chanteur/Musicien" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Beatmaking</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Beatmaking" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
                             <button className="btn btn-outline-info absolute align-middle mt-4">Les prestations</button>
                         </div>
-                        <div className="thematics-card col-md-3">
-                            <h3 className="pt-3 text-white">Card Name</h3>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Spécialiste de l’audiovisuel</h3>
                             <div className="bar">
                                 <div className="emptybar" />
                                 <div className="filledbar" />
                             </div>
                             <div className="circle center p-t-80">
-                                <img src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                                <img alt="Spécialiste de l’audiovisuel" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                        </div>
+                        <div className="thematics-card col-md-4">
+                            <h3 className="pt-3 text-white">Spectacles enfants</h3>
+                            <div className="bar">
+                                <div className="emptybar" />
+                                <div className="filledbar" />
+                            </div>
+                            <div className="circle center p-t-80">
+                                <img alt="Spectacles enfants" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
+                            </div>
+                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
                         </div>
                     </div>
                 </div>
