@@ -247,8 +247,7 @@ class AddSingle extends Component {
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                     <div className="input-group-text text-dark" data-tip="Upload here your beats photo"><i className="icon-picture-o"/>&nbsp; Photo</div>
-                                    <input onChange={this.uploadPic} id="picture" name="picture"
-                                           className="form-control" type="file" required/>
+                                    <input onChange={this.uploadPic} id="picture" name="picture" className="form-control" type="file" required/>
                                 </div>
                             </div>
                             {this.state.beats ?

@@ -5,6 +5,14 @@
     background-image: linear-gradient(to top, #000000, #1b1a1a, #2e2d2e, #434243, #58585a);
 }
 
+.NextOrPrevPageStepper {
+    cursor: grab;
+    height: 30px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-image: linear-gradient(to top, #ed1c24, #b2102d, #77132a, #3d121d, #000000);
+}
+
 .search-bar {
     border-radius: 5px;
     background-image: linear-gradient(to right bottom, #000000, #1b1a1a, #2e2d2e, #434243, #58585a);

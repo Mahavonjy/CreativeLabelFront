@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class FirstForm extends Component {
+class Recaputilatif extends Component {
     state = {
         isMounted: false,
     };
@@ -15,11 +15,11 @@ class FirstForm extends Component {
 
     render() {
         return (
-            <div>
-                <p>Ma formilaire sera ici</p>
+            <div className="Base">
+                <p>Ici sera ma recaputilatif</p>
             </div>
         );
     }
 }
 
-export default FirstForm;
+export default Recaputilatif;

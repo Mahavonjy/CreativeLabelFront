@@ -12,7 +12,7 @@ import * as CreateFields from "../../FunctionTools/CreateFields"
 import {connect} from "react-redux";
 import ReactTooltip from 'react-tooltip';
 import FunctionTools from "../../FunctionTools/FunctionTools";
-import FirstForm from "../../KantoBiz/Prestations/FirstForm";
+import Form from "../../KantoBiz/Prestations/Form/Form";
 
 let user_credentials;
 class Register extends Component {
@@ -27,8 +27,8 @@ class Register extends Component {
         confirm_password: '',
         usingAdBlock: false,
         choiceArtistType: false,
-        becomeArtistForm: false,
-        artist_type: ""
+        becomeArtistForm: true,
+        artist_type: "Beatmaker"
     };
 
     verifyKeysSubmit = (e) => {
@@ -85,7 +85,7 @@ class Register extends Component {
 
     render() {
         return (
-            <main>
+            <main style={{backgroundImage: "radial-gradient(circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, #232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)"}}>
                 <div ref={r => (this.fakeAdBanner = r)}
                      style={{ height: '1px', width: '1px', visiblity: 'none', pointerEvents: 'none' }}
                      className="adBanner"/>
@@ -184,7 +184,7 @@ class Register extends Component {
                             </a>
                         </div>
                         {/* if user choice become an artist*/}
-                        {this.state.becomeArtistForm ? <FirstForm ArtistType={this.state.artist_type}/>: null}
+                        {this.state.becomeArtistForm ? <Form artistType={this.state.artist_type}/>: null}
                         {/* end form become an artist*/}
                         <div className="row">
                             <div className="col-md-10 mx-md-auto">

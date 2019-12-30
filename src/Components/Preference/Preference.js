@@ -30,7 +30,7 @@ class Preference extends Component {
             tmp_state[index][0] = "#9DA6B1";
             tmp_state[index][1] = false;
         }
-        this.setState({tmp_state}, () => {this.setState({array: this.state.first_array});});
+        this.setState({first_array: tmp_state}, () => {this.setState({array: this.state.first_array});});
     };
 
     addAllMediaGenreToArray = () => {

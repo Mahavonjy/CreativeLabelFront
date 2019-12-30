@@ -41,7 +41,7 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
 
 export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_value, height_div) => {
 
-    function Play (that, index, type_, run) {
+    function Play(that, index, type_, run) {
         if (that.state.index !== index && that.state.tmp === null) {
             that.setState({index: index, tmp: index}, () => {
                 that.props.addNewPlayerList(props_value);
@@ -55,11 +55,13 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                     if (tmp) that.props.ToPlay(index, type_, run);
                     else IslPlayer.pauseOrPlayPlayer(true);
                 })
-            } else that.setState({tmp: null}, () => {pausePlayer(that, false)});
+            } else that.setState({tmp: null}, () => {
+                pausePlayer(that, false)
+            });
         }
     }
 
-    function pausePlayer (that, run) {
+    function pausePlayer(that, run) {
         if (that.state.index !== null) {
             that.setState({tmp: that.state.index}, () => {
                 that.setState({index: null}, () => {
@@ -79,22 +81,28 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                         <div className="list-group-item" key={index}>
                             <div className="d-flex align-items-center">
                                 <div>
-                                    {state_value === "oneBeats"?
+                                    {state_value === "oneBeats" ?
                                         <div className="text-red">
-                                        {that.state.index === index ?
-                                            <i className="icon-pause s-28 text-danger" onClick={() => pausePlayer(that, true)}/>:
-                                            <i className="icon-play s-28 text-danger" onClick={() => {Play(that, index, "beats", false)}}/>}
+                                            {that.state.index === index ?
+                                                <i className="icon-pause s-28 text-danger"
+                                                   onClick={() => pausePlayer(that, true)}/> :
+                                                <i className="icon-play s-28 text-danger" onClick={() => {
+                                                    Play(that, index, "beats", false)
+                                                }}/>}
                                         </div> : <div>
-                                        {state_value[index] ?
-                                            <div className="text-red">
-                                                {that.state.index === index ?
-                                                    <i className="icon-pause s-28 text-danger" onClick={() => pausePlayer(that, true)}/>:
-                                                    <i className="icon-play s-28 text-danger" onClick={() => {Play(that, index, "beats", false)}}/>}
-                                            </div> :
-                                            <div className="spinner-grow text-primary" role="status">
-                                                <span className="sr-only"/>
-                                            </div>}
-                                    </div>}
+                                            {state_value[index] ?
+                                                <div className="text-red">
+                                                    {that.state.index === index ?
+                                                        <i className="icon-pause s-28 text-danger"
+                                                           onClick={() => pausePlayer(that, true)}/> :
+                                                        <i className="icon-play s-28 text-danger" onClick={() => {
+                                                            Play(that, index, "beats", false)
+                                                        }}/>}
+                                                </div> :
+                                                <div className="spinner-grow text-primary" role="status">
+                                                    <span className="sr-only"/>
+                                                </div>}
+                                        </div>}
                                 </div>
                                 <div className="col-10">
                                     <Link to={'beats/CheckThisBeat/' + val.id}>
@@ -125,8 +133,10 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                     {state_value[index] ?
                                         <div>
                                             {that.state.index === index ?
-                                                <i className="icon-pause s-28 text-danger" onClick={() => pausePlayer(that, true)}/>:
-                                                <i className="icon-play s-28 text-danger" onClick={() => Play(that, index, "beats", false)}/>}
+                                                <i className="icon-pause s-28 text-danger"
+                                                   onClick={() => pausePlayer(that, true)}/> :
+                                                <i className="icon-play s-28 text-danger"
+                                                   onClick={() => Play(that, index, "beats", false)}/>}
                                         </div>
                                         :
                                         <div className="spinner-grow text-primary" role="status">
@@ -136,13 +146,13 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                 </div>
                                 <div className="col-md-3">
                                     <figure className="avatar-md float-left  mr-2">
-                                        <img className="r-3" src={val.photo} alt="" />
+                                        <img className="r-3" src={val.photo} alt=""/>
                                     </figure>
                                     {height_div !== "user_profile" ?
                                         <Link to={'beats/CheckThisBeat/' + val.id}>
                                             <h6>{val.title}</h6>
                                             <small className="text-red">{val.artist}</small>
-                                        </Link>:
+                                        </Link> :
                                         <div className="d-flex">
                                             <h6 className="ml-auto mr-2">{val.title}</h6>
                                             <small className="ml-auto mr-2">{val.time}</small>
@@ -150,27 +160,31 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                     }
                                 </div>
                                 <ReactTooltip/>
-                                <div className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
+                                <div
+                                    className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
                                     <div className="d-flex">
-                                        {height_div !== "user_profile" ? <small className="ml-auto">{val.silver_price}$</small>: null}
+                                        {height_div !== "user_profile" ?
+                                            <small className="ml-auto">{val.silver_price}$</small> : null}
                                         <small className="ml-auto">{val.bpm}/bpm</small>
                                         {height_div !== "user_profile" ?
                                             <FacebookProvider appId={Conf.configs.FacebookId}>
-                                            <Feed link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
-                                                {({ handleClick }) => (
-                                                    <div className="ml-auto transparent border-0">
-                                                        <i className="icon-share-1 text-red" onClick={handleClick}/>
-                                                    </div>
-                                                )}
-                                            </Feed>
-                                        </FacebookProvider> :
+                                                <Feed
+                                                    link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
+                                                    {({handleClick}) => (
+                                                        <div className="ml-auto transparent border-0">
+                                                            <i className="icon-share-1 text-red" onClick={handleClick}/>
+                                                        </div>
+                                                    )}
+                                                </Feed>
+                                            </FacebookProvider> :
                                             <div className="ml-auto" title={"Edit this beats"}>
                                                 <small className="ml-auto">Ecouté {val.number_play} fois</small>
                                             </div>}
                                         {height_div !== "user_profile" ?
-                                            <i className="icon-heart-1 ml-auto text-red" data-tip="Like me" onClick={() => {
-                                                FunctionTools.LikeOrFollow("like", val.id);
-                                            }}/> :
+                                            <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"
+                                               onClick={() => {
+                                                   FunctionTools.LikeOrFollow("like", val.id);
+                                               }}/> :
                                             <div className="ml-auto" title={"Edit this beats"}>
                                                 <i className="icon-edit s-24" id={val.id}
                                                    onClick={() => that.togglePopupEditSingle(index, "beats")}>
@@ -179,15 +193,17 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                     </div>
                                 </div>
                                 {height_div !== "user_profile" ?
-                                <div className="col-sm-2 d-none d-sm-block">
-                                    <div className="d-flex">
-                                        <div className="ml-auto">
-                                            <button className="btn btn-outline-primary btn-sm" type="button" data-toggle="modal"
-                                                    data-target={"#" + set_of_beats_name + val.id}><i className="icon-opencart"/>
-                                            </button>
+                                    <div className="col-sm-2 d-none d-sm-block">
+                                        <div className="d-flex">
+                                            <div className="ml-auto">
+                                                <button className="btn btn-outline-primary btn-sm" type="button"
+                                                        data-toggle="modal"
+                                                        data-target={"#" + set_of_beats_name + val.id}><i
+                                                    className="icon-opencart"/>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div> :
+                                    </div> :
                                     <div className="col-sm-1 d-none d-sm-block">
                                         <div className="d-flex">
                                             <div className="ml-auto">
@@ -197,23 +213,24 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                                 </i>
                                             </div>
                                         </div>
-                                    </div> }
+                                    </div>}
 
-                                <div className="col-1 ml-auto d-sm-none" >
+                                <div className="col-1 ml-auto d-sm-none">
                                     <a href="/#" data-toggle="dropdown"
                                        aria-haspopup="true"
                                        aria-expanded="false">
                                         <i className="icon-more-1"/></a>
                                     <div className="dropdown-menu dropdown-menu-right">
                                         {height_div !== "user_profile" ?
-                                        <div>
-                                            <button className="dropdown-item"
-                                                    type="button" data-toggle="modal"
-                                                    data-target={"#" + set_of_beats_name + val.id}><i
-                                                className="icon-shopping-bag mr-3"/>Add To Cart
-                                            </button>
-                                            <small className="dropdown-item"><i className="icon-money mr-3"/>{val.silver_price}$</small>
-                                        </div>:
+                                            <div>
+                                                <button className="dropdown-item"
+                                                        type="button" data-toggle="modal"
+                                                        data-target={"#" + set_of_beats_name + val.id}><i
+                                                    className="icon-shopping-bag mr-3"/>Add To Cart
+                                                </button>
+                                                <small className="dropdown-item"><i
+                                                    className="icon-money mr-3"/>{val.silver_price}$</small>
+                                            </div> :
                                             <div>
                                                 <button className="dropdown-item"
                                                         title={"Edit this beats"}
@@ -232,7 +249,8 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                 </div>
 
                                 {/* Here is Popup for add to cart */}
-                                {height_div !== "user_profile" ? <div> {that.props.ForAddToCard(that, val, set_of_beats_name)} </div>: null}
+                                {height_div !== "user_profile" ?
+                                    <div> {that.props.ForAddToCard(that, val, set_of_beats_name)} </div> : null}
                             </div>
                         </div>
                     )}
@@ -258,11 +276,13 @@ export const DisplayArtist = (that_value) => {
                                     <small>5 Beats</small>
                                 </Link>
                             </div>
-                            <i className="icon-user-plus ml-auto" onClick={() => FunctionTools.LikeOrFollow("follow", val.id)}/>
-                            <Link to={"Profile/isl_artist_profile/" + val.id} className="ml-auto"><i className="icon-user-circle"/></Link>
+                            <i className="icon-user-plus ml-auto"
+                               onClick={() => FunctionTools.LikeOrFollow("follow", val.id)}/>
+                            <Link to={"Profile/isl_artist_profile/" + val.id} className="ml-auto"><i
+                                className="icon-user-circle"/></Link>
                         </div>
                     </li>
-                ): <p className="text-center">Vide</p>}
+                ) : <p className="text-center">Vide</p>}
             </ul>
         )
     }
@@ -283,22 +303,26 @@ export const CreativeHeaders = (Title, Description) => {
                         <div className="carousel-item">
                             <img className="d-block w-100" src={TestImageTwo} alt=""/>
                         </div>
-                        <div className={Title === "Creative KantoBiz"? "has-bottom-gradient d-none d-sm-block": "has-bottom-gradient" }>
+                        <div
+                            className={Title === "Creative KantoBiz" ? "has-bottom-gradient d-none d-sm-block" : "has-bottom-gradient"}>
                             <div className="home-menu pl-md-5">
                                 <div className="row">
                                     <div className="col-12 col-lg-10 animated">
                                         <div className="xv-slider-content clearfix color-white">
                                             <h1 className="s-64 mt-5 font-weight-lighter"> {Title} </h1>
-                                            <p className="s-24 font-weight-lighter" dangerouslySetInnerHTML={{__html: Description }}/>
+                                            <p className="s-24 font-weight-lighter"
+                                               dangerouslySetInnerHTML={{__html: Description}}/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {Title === "Creative KantoBiz"? <SearchBar/>:null}
+                        {Title === "Creative KantoBiz" ? <SearchBar/> : null}
                     </div>
-                    <a className="carousel-control-prev" href="#islCreativeCarousel" role="button" data-slide="prev" style={{fontSize: 0}}>prev</a>
-                    <a className="carousel-control-next" href="#islCreativeCarousel" role="button" data-slide="next" style={{fontSize: 0}}>next</a>
+                    <a className="carousel-control-prev" href="#islCreativeCarousel" role="button" data-slide="prev"
+                       style={{fontSize: 0}}>prev</a>
+                    <a className="carousel-control-next" href="#islCreativeCarousel" role="button" data-slide="next"
+                       style={{fontSize: 0}}>next</a>
                 </div>
             </div>
         )
@@ -319,7 +343,7 @@ export const SideBars = (that, location, history, headers) => {
                             history.push("/beats");
                             that.setState({select: ""})
                         }
-                    }}><i className="icon icon-heartbeat s-24" /> <span className="ml-5">BeatMaking</span>
+                    }}><i className="icon icon-heartbeat s-24"/> <span className="ml-5">BeatMaking</span>
                     </li>
 
                     {/* KantoBiz */}
@@ -328,7 +352,7 @@ export const SideBars = (that, location, history, headers) => {
                             history.push("/kantobiz");
                             that.setState({select: ""})
                         }
-                    }}><i className="icon icon-compact-disc-2 s-24" /> <span className="ml-5">KantoBiz</span>
+                    }}><i className="icon icon-compact-disc-2 s-24"/> <span className="ml-5">KantoBiz</span>
                     </li>
 
                     {/* PROFILE */}
@@ -339,13 +363,13 @@ export const SideBars = (that, location, history, headers) => {
                             history.push("/Profile");
                             that.setState({select: "Profile"})
                         }
-                    }}><i className="icon icon-user s-24" /> <span className="ml-5">Profile</span>
+                    }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
                     </li>
 
                     {/* CART */}
                     <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
                         if (that.state.cart) {
-                            if (location.pathname !== "/Cart" ) {
+                            if (location.pathname !== "/Cart") {
                                 history.push("/Cart");
                                 that.setState({select: "Cart"})
                             }
@@ -359,7 +383,9 @@ export const SideBars = (that, location, history, headers) => {
                     </li>
 
                     {/* LOGOUT OR LOGIN */}
-                    <li style={{margin: "0 0 20px 10px"}} data-tip={that.state.logout_class === "icon icon-login s-24 mr-5"? "Se Connecter": " Se deconnecter"} onClick={that.logout}>
+                    <li style={{margin: "0 0 20px 10px"}}
+                        data-tip={that.state.logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se deconnecter"}
+                        onClick={that.logout}>
                         <i className={that.state.logout_class}/> <span>{that.state.log_name}</span>
                     </li>
 
@@ -381,30 +407,35 @@ export const SideBarsMain = (that) => {
                 <Route path="/Cart" component={() => <Cart ToPlay={that.addToPlaylist}/>}/>
                 <Route path="/preference" exact component={() => {
                     if (JSON.parse(localStorage.getItem("Isl_Credentials"))) return (<Preference/>);
-                    else window.location.replace('/beats#LoginRequire')}}/>
+                    else window.location.replace('/beats#LoginRequire')
+                }}/>
                 <Route exact path="/Profile" component={
-                    () => {if (JSON.parse(localStorage.getItem("Isl_Credentials")))
-                        return (<Profile ToPlay={that.addToPlaylist}/>);
-                    else window.location.replace('/beats#LoginRequire')}}/>
+                    () => {
+                        if (JSON.parse(localStorage.getItem("Isl_Credentials")))
+                            return (<Profile ToPlay={that.addToPlaylist}/>);
+                        else window.location.replace('/beats#LoginRequire')
+                    }}/>
                 <Route path="/beats/CheckThisBeat/:id(\d+)" component={
-                    () => <OneBeat ToPlay={that.addToPlaylist} SingleBeat={that.state.single_beat} SimilarBeats={that.state.beats_similar}/>}/>
+                    () => <OneBeat ToPlay={that.addToPlaylist} SingleBeat={that.state.single_beat}
+                                   SimilarBeats={that.state.beats_similar}/>}/>
                 <Route path="/Profile/isl_artist_profile/:id(\d+)" component={
-                    () => <OtherProfile ToPlay={that.addToPlaylist} ProfileChecked={that.state.profile_checked} UserData={that.state.user_data}/>}/>
+                    () => <OtherProfile ToPlay={that.addToPlaylist} ProfileChecked={that.state.profile_checked}
+                                        UserData={that.state.user_data}/>}/>
             </div>
         )
     }
 };
 
-export const pausePlayer = (_that , set_of_beats_name) => {
+export const pausePlayer = (_that, set_of_beats_name) => {
     return () => {
-        CreateBeatsPlaylist(_that , set_of_beats_name);
+        CreateBeatsPlaylist(_that, set_of_beats_name);
         return true;
     }
 };
 
-export const playPlayer = (index, type_, _that , set_of_beats_name) => {
+export const playPlayer = (index, type_, _that, set_of_beats_name) => {
     return () => {
-        CreateBeatsPlaylist(_that , set_of_beats_name);
+        CreateBeatsPlaylist(_that, set_of_beats_name);
         return true;
     }
 };
