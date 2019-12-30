@@ -14,7 +14,7 @@ let headers = {
     'Access-Control-Allow-Origin': "*",
 };
 
-class SignInOrUp extends Component {
+class Login extends Component {
     state = {
         to_route: '/', keys: '', loading : false, changePass: false, ResetPassword: false, visible: false,
         visibility: false, redirect: false, email: '', password: '', confirm_password: '', isMounted: false,
@@ -292,4 +292,4 @@ const mapDispatch = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatch)(SignInOrUp);
+export default connect(null, mapDispatch)(Login);

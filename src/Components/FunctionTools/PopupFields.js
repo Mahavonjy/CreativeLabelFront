@@ -1,6 +1,6 @@
 import React from "react";
 import FunctionTools from "./FunctionTools";
-import SignInOrUp from "../Authentification/Login/SignInOrUp";
+import SignInOrUp from "../Authentification/Login/Login";
 import Loader from "react-loader-spinner";
 
 export const ForAddToCard = (that, val, set_of_beats_name) => {

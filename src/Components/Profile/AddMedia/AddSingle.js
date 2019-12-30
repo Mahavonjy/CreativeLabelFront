@@ -165,15 +165,8 @@ class AddSingle extends Component {
                     <small>• Credits : Prod. by [Name of Producer] / Beats Avenue</small>
                 </ReactTooltip>
 
-                <ToastContainer position="bottom-center"
-                                autoClose={5000}
-                                hideProgressBar={false}
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl={false}
-                                pauseOnVisibilityChange
-                                draggable
-                                pauseOnHover/>
+                <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
+
                 {this.state.loading ?
                     <div className="preloader-wrapper small active" style={{position: "absolute", right: 0}}>
                         <div className="spinner-layer spinner-yellow-only">

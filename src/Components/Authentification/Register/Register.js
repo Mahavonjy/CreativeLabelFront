@@ -225,12 +225,12 @@ class Register extends Component {
                                             </form>
                                         </div>
                                         <div className="col-md-5 text-center p-5">
-                                            <h2 className="mt-3 font-weight-lighter">Vous possédez déjà un compte?</h2>
-                                            <button className="btn btn-outline-primary m-t-50 btn-xl pl-4 pr-4"
+                                            <h3 className="mt-3 font-weight-lighter">Vous possédez déjà un compte?</h3>
+                                            <button className="btn btn-outline-primary m-t-50 btn-xl pl-5 pr-5"
                                                     onClick={() => window.location.replace('/beats#LoginRequire')}>
                                                 Identifiez-vous
                                             </button>
-                                            <button className="btn btn-outline-primary m-t-50 btn-xl pl-4 pr-4"
+                                            <button className="btn btn-outline-primary m-t-50 btn-xl pl-5 pr-5"
                                                     onClick={() => {this.setState({choiceArtistType: true})}}>
                                                 Devenir Artiste
                                             </button>
