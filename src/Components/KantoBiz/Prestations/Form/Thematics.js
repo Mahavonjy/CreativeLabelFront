@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
 const audioVisualOptions =
     [
         'Monteur vidéoclip', 'Cameraman', 'Photographes', 'Réalisateur clip vidéo', 'autres'
@@ -47,23 +48,27 @@ class Thematics extends Component {
         this.state = {
             isMounted: false,
             options: [],
-            choices:[]
+            thematics_options_selected: this.props.thematics_options_selected
         };
         that = this
     }
 
     addOption = (val, index) => {
         this.state.options.splice(index, 1);
-        this.setState(prevState => ({choices: [...prevState.choices, val]}))
+        this.setState(prevState => ({thematics_options_selected: [...prevState.thematics_options_selected, val]}), () => {
+            this.props.addOptionSelected(this.state.thematics_options_selected)
+        })
     };
 
     removeOption = (val, index) => {
-        this.state.choices.splice(index, 1);
-        this.setState(prevState => ({options: [...prevState.options, val]}))
+        this.state.thematics_options_selected.splice(index, 1);
+        this.setState(prevState => ({options: [...prevState.options, val]}), () => {
+            this.props.addOptionSelected(this.state.thematics_options_selected)
+        })
     };
 
     static validation () {
-        if (that.state.choices.length !== 0)
+        if (that.state.thematics_options_selected.length !== 0)
             return {"error": false};
         return {"error": true, "message": "veuillez choisir au moins un genre "}
     };
@@ -80,6 +85,7 @@ class Thematics extends Component {
             else if (artistType === "Chanteur/Musicien") options_state = ChantMusicOptions;
             else if (artistType === "Beatmaker") options_state = beatMakerOptions;
             else if (artistType === "Spécialiste de l’audiovisuel")  options_state = audioVisualOptions;
+            options_state.filter(option => !this.props.thematics_options_selected.some(selected => selected === option));
             this.setState({options: options_state});
         })
     }
@@ -111,7 +117,7 @@ class Thematics extends Component {
                         <div className="col border" style={{borderRadius: 10, background: "#58585a", height: 400}}>
                             <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Choisis</h4>
                             <div className="overflow-auto row justify-content-center" style={{maxHeight: 350, cursor: "not-allowed"}}>
-                                {this.state.choices.map((val, index) =>
+                                {this.state.thematics_options_selected.map((val, index) =>
                                     <span key={index} className="bg-brown m-1 text-center"
                                           style={{borderRadius: 10, width: 142, maxHeight: 21}}
                                           onClick={() => this.removeOption(val, index)}>{val}
@@ -127,4 +133,18 @@ class Thematics extends Component {
     }
 }
 
-export default Thematics;
+const mapStateToProps = state => {
+    return {
+        thematics_options_selected: state.KantoBizForm.thematics_options_selected,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addOptionSelected: (data) => {
+            dispatch({type: "ADD_THEMATICS_GENRE_SELECTED", data: data})
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Thematics);

@@ -76,6 +76,7 @@ class Register extends Component {
         this.setState({ usingAdBlock: this.fakeAdBanner.offsetHeight === 0 , isMounted: true}, () => {
             if (this.state.usingAdBlock)
                 toast.error("facebook, google sont bloquer par adblock", {"autoClose": false});
+            // document.getElementsByClassName("progtrckr-doing").setAttribute("disabled");
         });
     }
 

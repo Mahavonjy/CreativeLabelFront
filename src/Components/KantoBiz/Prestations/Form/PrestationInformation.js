@@ -1,9 +1,9 @@
-import React, { Component, useCallback } from "react";
+import React, { Component } from "react";
 import FunctionTools from "../../../FunctionTools/FunctionTools";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
 import {connect} from "react-redux";
-import MultiselectTools from "../../../FunctionTools/MultiselectTools";
+import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {toast} from "react-toastify";
 let that;
 
@@ -12,11 +12,11 @@ class PrestationInformation extends Component {
         super(props);
         this.state = {
             isMounted: false,
-            title: "",
-            city: "",
-            description: "",
+            title: this.props.title,
+            city: this.props.city_reference,
+            description: this.props.description,
             dropActive: false,
-            files: []
+            files: this.props.files
         };
         that = this
     }
@@ -43,11 +43,13 @@ class PrestationInformation extends Component {
         if (file) {
             let file = e.target.files[0];
             let { name, size, type } = file;
-            files = { name, size, type, file }
+            let url = URL.createObjectURL(file);
+            files = { name, size, type, url, file }
         } else {
             files = Array.prototype.map.call(e.dataTransfer.files, (file) => {
                 let { name, size, type } = file;
-                return { name, size, type, file };
+                let url = URL.createObjectURL(file);
+                return { name, size, type, url, file };
             }).filter(file => file.type)[0];
         }
 
@@ -55,7 +57,7 @@ class PrestationInformation extends Component {
         if (tmp_file[0] !== "image") toast.error("veuillez mettre une image");
         else {
             tmp_file_state.push(files);
-            this.setState({files: tmp_file_state})
+            this.setState({files: tmp_file_state}, () => {this.props.addPicturesOfService(this.state.files)})
         }
     };
 
@@ -78,7 +80,7 @@ class PrestationInformation extends Component {
             return {"error": true, "message": "veuillez choisir un titre "};
         if (!that.state.city)
             return {"error": true, "message": "veuillez choisir une ville de reference "};
-        if (!that.state.files)
+        if (that.state.files.length <= 0)
             return {"error": true, "message": "veuillez choisir au moins une photo "};
         return {"error": false};
     };
@@ -96,7 +98,7 @@ class PrestationInformation extends Component {
                             <div className="body">
                                 <div className="form-group form-float">
                                     <div className="form-line">
-                                        {this.props.InputCreate('title', this.state.title, (e) => {FunctionTools.changeFields(this, e)}, "Titre de votre Prestation", "text", true)}
+                                        {this.props.InputCreate('title', this.state.title, (e) => {FunctionTools.changeFields(this, e, this.props.addTitleOfService)}, "Titre de votre Prestation", "text", true)}
                                     </div>
                                 </div>
                                 <div className="form-group form-float">
@@ -104,14 +106,14 @@ class PrestationInformation extends Component {
                                         <textarea defaultValue={this.state.description} id={this.state.description}
                                                   name={this.state.description} className="form-control" style={{height: 100}}
                                                   placeholder="Quelques ligne de description de votre prestaion"
-                                                  onChange={(e) => FunctionTools.changeFields(this, e)}/>
+                                                  onChange={(e) => FunctionTools.changeFields(this, e, this.props.addDescriptionOfService)}/>
                                     </div>
                                 </div>
                                 <div className="form-group form-float">
                                     <div className="form-line">
                                         <input id="city" name="city" className="form-control"
                                                placeholder={this.state.city || "Veuillez choisir votre ville de reference"}
-                                               value={this.state.city} onChange={(e) => {FunctionTools.changeFields(this, e)}}
+                                               value={this.state.city} onChange={(e) => {FunctionTools.changeFields(this, e, this.props.addReferenceOfCity)}}
                                                list="city-type" required/>
                                         <datalist id="city-type">
                                             <option value="Manakara">Manakara</option>
@@ -123,7 +125,8 @@ class PrestationInformation extends Component {
                                 </div>
                                 <div className="form-group form-float">
                                     <div className="form-line">
-                                        <MultiselectTools tags={[]} list={[{id: 0, value: 'Manakara'}, {id: 1, value: 'Toliara'}, {id: 2, value: 'Tamatave'}]}
+                                        <MultiSelectTools tags={this.props.others_city} list={['Manakara', 'Toliara', 'Toamasina', 'Mahajanga']}
+                                                          funcToFillInProps={this.props.addOthersCityOfService}
                                                           placeholder="Ajouter d'autres villes" sort />
                                     </div>
                                 </div>
@@ -139,7 +142,7 @@ class PrestationInformation extends Component {
                                 <label className="custom-file-label" htmlFor="inputGroupFile01">Choisir une image</label>
                             </div>
                         </div>
-                        <div className="file has-name is-boxed">
+                        <div className="file has-name is-boxed d-none d-sm-block">
                             <span className="file-label" onDragEnter={this.onDragEnter} onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDrop={this.onDrop}>
                                 <div className="buttonStyle">
                                       <span className="line-1"/>
@@ -152,27 +155,56 @@ class PrestationInformation extends Component {
                                       <i className="icon icon-file-image-o align-middle s-64 text-light"/>
                                 </div>
                             </span>
-                            {this.state.files.length > 0 ?
-                                <ul className="pt-5">
-                                    {this.state.files.map((file, index) =>
-                                        <li className="bg-light m-1 text-black float-left" key={index} style={{borderRadius: 5}}>
-                                            <span className="ml-1 font-italic" key={index}>{file.name} &nbsp;
-                                                <i className="text-red icon icon-window-close-o" key={index} onClick={() => this.removeFile(index)}/>
-                                            </span>
-                                        </li>
-                                    )}
-                                </ul> : <small>Vous n'avez importez aucune images</small>}
                         </div>
+                        {this.state.files.length > 0 ?
+                            <ul className="pt-5">
+                                {this.state.files.map((file, index) =>
+                                    <li className="bg-light m-1 text-black float-left" key={index} style={{borderRadius: 5}}>
+                                        <span className="ml-1 font-italic" key={index}>{file.name} &nbsp;
+                                            <i className="text-red icon icon-window-close-o" key={index} onClick={() => this.removeFile(index)}/>
+                                        </span>
+                                    </li>
+                                )}
+                            </ul> : <small>Vous n'avez importez aucune images</small>}
                     </div>
                 </div>
             </div>
         );
     }
 }
-const mapDispatch = (dispatch) => {
+
+const mapStateToProps = state => {
     return {
-        InputCreate: bindActionCreators(CreateFields.CreateInput, dispatch),
+        files: state.KantoBizForm.files,
+        title: state.KantoBizForm.title,
+        city_reference: state.KantoBizForm.city_reference,
+        others_city: state.KantoBizForm.others_city,
+        description: state.KantoBizForm.description,
     };
 };
 
-export default connect(null, mapDispatch)(PrestationInformation);
+const mapDispatch = (dispatch) => {
+    return {
+        addTitleOfService: (data) => {
+            dispatch({type: "ADD_SERVICE_TITLE", data: data})
+        },
+        addReferenceOfCity: (data) => {
+            dispatch({type: "ADD_REFERENCE_CITY_OF_SERVICE", data: data})
+        },
+        addOthersCityOfService: (data) => {
+            dispatch({type: "ADD_OTHERS_CITY_OF_SERVICE", data: data})
+        },
+        addDescriptionOfService: (data) => {
+            dispatch({type: "ADD_DESCRIPTION_OF_SERVICE", data: data})
+        },
+        addPicturesOfService: (data) => {
+            dispatch({type: "ADD_PICTURES_OF_SERVICE", data: data})
+        },
+        addEventSelected: (data) => {
+            dispatch({type: "ADD_EVENTS_SELECTED", data: data})
+        },
+        InputCreate: bindActionCreators(CreateFields.CreateInput, dispatch),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatch)(PrestationInformation);

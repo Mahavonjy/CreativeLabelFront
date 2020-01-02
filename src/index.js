@@ -10,6 +10,7 @@ import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
 import playersReducer from "./reducer/Players";
 import kantoBizForm from "./reducer/KantoBiz/Form";
+import KantoBizSearchResults from "./reducer/KantoBiz/SearchResult";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from "redux-thunk"
 
@@ -20,6 +21,7 @@ const Reducers = combineReducers({
     "Player": playersReducer,
     "Carts": cartsReducer,
     "KantoBizForm": kantoBizForm,
+    "KantobizSearch": KantoBizSearchResults
 });
 
 const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));

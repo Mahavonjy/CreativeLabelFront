@@ -190,7 +190,12 @@ class FunctionTools extends Component {
         return day + '-' + monthIndex + '-' + year;
     };
 
-    static changeFields = (that, e) => {that.setState({[e.target.id]: e.target.value})};
+    static changeFields = (that, e, up_props) => {
+        let value = e.target.value;
+        that.setState({[e.target.id]: value}, () => {
+            if (up_props) up_props(value)
+        })
+    };
 
     render() {
         return(
