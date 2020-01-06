@@ -3,11 +3,16 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import * as EventAndThematics from "./EventsAndThematics";
+import Results from "./Prestations/Results/Results";
 import "./style/KantoBiz.css";
+import DisplayPrestation from "./Prestations/Results/DisplayPrestation";
 
 class KantoBiz extends Component {
     state = {
         isMounted: false,
+        EventAndThematics: this.props.StateEventAndThematics,
+        ResultsPage: this.props.ResultsPage,
+        DisplayService: this.props.DisplayService
     };
 
     componentDidMount() {
@@ -37,8 +42,14 @@ class KantoBiz extends Component {
 
                     <div className="main-page">
                         {/* Different events or thematics */}
-                        {this.props.EventAndThematics()}
+                        {this.state.EventAndThematics ? this.props.EventAndThematics() : null}
                         {/* End events or Thematics */}
+                        {/* Show all Prestation result */}
+                        {this.state.ResultsPage ? <Results/> : null}
+                        {/* End Result */}
+                        {/* Show one Prestation selected */}
+                        {this.state.DisplayService ? <DisplayPrestation/> : null}
+                        {/* End Display It */}
                     </div>
 
                 </div>
@@ -48,6 +59,14 @@ class KantoBiz extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        ResultsPage: state.KantobizSearch.ResultsPage,
+        StateEventAndThematics: state.KantobizSearch.EventAndThematics,
+        DisplayService: state.KantobizSearch.DisplayService,
+    };
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         CreativeHeaders: bindActionCreators(CreateFields.CreativeHeaders, dispatch),
@@ -55,4 +74,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(KantoBiz);
+export default connect(mapStateToProps, mapDispatchToProps)(KantoBiz);

@@ -159,9 +159,7 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                         </div>
                                     }
                                 </div>
-                                <ReactTooltip/>
-                                <div
-                                    className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
+                                <div className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
                                     <div className="d-flex">
                                         {height_div !== "user_profile" ?
                                             <small className="ml-auto">{val.silver_price}$</small> : null}

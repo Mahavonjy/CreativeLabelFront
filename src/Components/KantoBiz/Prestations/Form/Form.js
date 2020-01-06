@@ -66,19 +66,19 @@ class Form extends Component {
                                 <div className="mdl-stepper-bar-left" />
                                 <div className="mdl-stepper-bar-right" />
                             </div>
-                            <div className={this.state.steps_index === 1 && "mdl-stepper-step active-step" || this.state.steps_index < 1 && "mdl-stepper-step" || this.state.steps_index > 1 && "mdl-stepper-step success-step"}>
+                            <div className={(this.state.steps_index === 1 && "mdl-stepper-step active-step") || (this.state.steps_index < 1 && "mdl-stepper-step") || (this.state.steps_index > 1 && "mdl-stepper-step success-step")}>
                                 <div className="mdl-stepper-circle"><span>2</span></div>
                                 <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Information de la prestation</small></div>
                                 <div className="mdl-stepper-bar-left" />
                                 <div className="mdl-stepper-bar-right" />
                             </div>
-                            <div className={this.state.steps_index === 2 && "mdl-stepper-step active-step" || this.state.steps_index < 2 && "mdl-stepper-step" || this.state.steps_index > 2 && "mdl-stepper-step success-step"}>
+                            <div className={(this.state.steps_index === 2 && "mdl-stepper-step active-step") || (this.state.steps_index < 2 && "mdl-stepper-step") || (this.state.steps_index > 2 && "mdl-stepper-step success-step")}>
                                 <div className="mdl-stepper-circle"><span>3</span></div>
                                 <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Detail de la prestation</small></div>
                                 <div className="mdl-stepper-bar-left" />
                                 <div className="mdl-stepper-bar-right" />
                             </div>
-                            <div className={this.state.steps_index === 3 && "mdl-stepper-step active-step" || this.state.steps_index < 3 && "mdl-stepper-step" || this.state.steps_index > 3 && "mdl-stepper-step success-step"}>
+                            <div className={(this.state.steps_index === 3 && "mdl-stepper-step active-step") || (this.state.steps_index < 3 && "mdl-stepper-step") || (this.state.steps_index > 3 && "mdl-stepper-step success-step")}>
                                 <div className="mdl-stepper-circle"><span>4</span></div>
                                 <div className="mdl-stepper-title text-light d-none d-lg-block"><small className="d-none d-lg-block">Recaputilatif</small></div>
                                 <div className="mdl-stepper-bar-left" />

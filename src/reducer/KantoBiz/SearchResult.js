@@ -1,5 +1,9 @@
 const initState = {
-    result: []
+    results: [],
+    ResultsPage: false,
+    DisplayService: true,
+    filter_events_selected: [],
+    EventAndThematics: false
 };
 
 const KantoBizSearchResults = (state = initState, action) => {
@@ -7,8 +11,35 @@ const KantoBizSearchResults = (state = initState, action) => {
         case "ADD_KANTOBIZ_RESULTS":
             return {
                 ...state,
-                result: action.data
+                results: action.data
             };
+        case "ADD_FILTER_EVENTS_SELECTED":
+            return {
+                ...state,
+                filter_events_selected: action.data
+            };
+        case "ACTIVE_RESULTS_PAGE":
+            return {
+                ...state,
+                ResultsPage: true,
+                DisplayService: false,
+                EventAndThematics: false,
+            };
+        case "ACTIVE_EVENT_AND_THEMATICS_PAGE":
+            return {
+                ...state,
+                ResultsPage: false,
+                DisplayService: false,
+                EventAndThematics: true
+            };
+        case "ACTIVE_DISPLAY_SERVICE_PAGE":
+            return {
+                ...state,
+                ResultsPage: false,
+                DisplayService: true,
+                EventAndThematics: false
+            };
+
         default:
             return state;
     }

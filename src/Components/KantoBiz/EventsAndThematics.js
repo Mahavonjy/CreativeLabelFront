@@ -126,7 +126,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Cirque/Arts de la rue" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info relative align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info relative align-middle">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Comédiens</h3>
@@ -137,7 +137,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Comédiens" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">DJ</h3>
@@ -148,7 +148,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="DJ" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Danseurs</h3>
@@ -159,7 +159,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Danseurs" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Magiciens</h3>
@@ -170,7 +170,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Magiciens" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Chanteur/Musicien</h3>
@@ -181,7 +181,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Chanteur/Musicien" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Beatmaking</h3>
@@ -192,7 +192,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Beatmaking" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Les prestations</button>
+                            <button className="btn btn-outline-info absolute align-middle ">Les prestations</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Spécialiste de l’audiovisuel</h3>
@@ -203,7 +203,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Spécialiste de l’audiovisuel" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle ">Voir les prestation</button>
                         </div>
                         <div className="thematics-card col-md-4">
                             <h3 className="pt-3 text-white">Spectacles enfants</h3>
@@ -214,7 +214,7 @@ export const EventAndThematics = () => {
                             <div className="circle center p-t-80">
                                 <img alt="Spectacles enfants" src="https://zupimages.net/up/19/18/3ltf.png" style={{width: "100%"}}/>
                             </div>
-                            <button className="btn btn-outline-info absolute align-middle mt-4">Voir les prestation</button>
+                            <button className="btn btn-outline-info absolute align-middle">Voir les prestation</button>
                         </div>
                     </div>
                 </div>
