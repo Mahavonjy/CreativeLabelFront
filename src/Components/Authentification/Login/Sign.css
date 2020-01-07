@@ -11,10 +11,11 @@
 .container-login {
     height: 300px;
     width: 500px;
-    background-color: #333;
+    background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #721e49, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
     position: absolute;
     top:50%;
     left:50%;
+    border-radius: 10px;
     transform: translate(-50%, -50%);
     overflow: hidden;
     box-shadow: 5px 5px #111;
@@ -30,7 +31,7 @@
     filter: url(#gooeyness);
     height: 300px;
     width: 600px;
-    background-color: #6ddba8;
+    background-color: #58585a;
     transform: rotate(-31deg) translate(-660px, -184px);
     position: absolute;
     transition: transform 0.4s ease-in-out;
@@ -41,7 +42,7 @@
     vertical-align: middle;
     width: 50px;
     height: 50px;
-    border-bottom: solid 30px #6ddba8;
+    border-bottom: solid 30px #58585a;
     border-left: solid 30px transparent;
     border-right: solid 30px transparent;
     transform: rotate(90deg);
@@ -71,7 +72,8 @@
     filter: url(#gooeyness);
     height: 300px;
     width: 600px;
-    background-color: #6ddba8;
+    /*background-color: #58585a;*/
+    background-image: linear-gradient(to left, #1a171b, #47203c, #821b4b, #bd0344, #ed1c24);
     transform: rotate(-31deg) translate(-50px, 116px);
     position: absolute;
     transition: transform 0.4s ease-in-out;
@@ -82,7 +84,7 @@
     vertical-align: middle;
     width: 50px;
     height: 50px;
-    border-bottom: solid 30px #6ddba8;
+    border-bottom: solid 30px #58585a;
     border-left: solid 30px transparent;
     border-right: solid 30px transparent;
     transform: rotate(90deg);
@@ -109,12 +111,11 @@
     top: 245px;
 }
 
-.r-btn ,.l-btn {
+.r-btn , .l-btn {
     width: 100px;
     height: 30px;
     border-radius: 50px;
     border: 2px solid white;
-    background-color: transparent;
     color: white;
     padding-bottom: 1px;
     position: absolute;
@@ -145,7 +146,7 @@ button:hover {
 }
 .l-form input {
     display: list-item;
-    border: 3px solid #6ddba8;
+    border: 3px solid #58585a;
     background-color: transparent;
     border-radius: 50px;
     height: 30px;
@@ -170,14 +171,14 @@ button:hover {
     top: 50px;
 }
 .l-go {
-    background-color: #6ddba8;
+    background-color: #58585a;
     border: none;
     border-radius: 50px;
     width: 100px;
     height: 30px;
     position: absolute;
     top: 105px;
-    color: #333;
+    color: white;
     box-shadow: 2px 5px #222;
 }
 
@@ -189,7 +190,7 @@ button:hover {
 }
 .r-form input {
     display: list-item;
-    border: 3px solid #6ddba8;
+    border: 3px solid #58585a;
     background-color: transparent;
     border-radius: 50px;
     height: 30px;
@@ -233,7 +234,7 @@ button:hover {
 }
 
 .r-go {
-    background-color: #6ddba8;
+    background-color: #58585a;
     border: none;
     border-radius: 50px;
     width: 160px;
@@ -276,7 +277,7 @@ button:hover {
 }
 .pass {
     background-color: transparent;
-    border: 3px solid #6ddba8;
+    border: 3px solid #58585a;
     border-radius: 50px;
     width: 180px;
     padding: 0 10px 0 10px;
@@ -291,13 +292,13 @@ button:hover {
     bottom: 0;
 }
 .pass-wrap i {
-    color: #6ddba8;
+    color: #58585a;
     position: absolute;
     right: 5px;
     top: 8px;
 }
 .pass-wrap:hover i {
-    color: #63c698;
+    color: #58585a;
 }
 
 @keyframes animate {
@@ -333,11 +334,11 @@ button:hover {
 }
 
 #more-btn {
-    border: 1px solid #6ddba8;
-    background-color: #6ddba8;
+    border: 1px solid #58585a;
+    background-color: #58585a;
     padding: 5px 10px 5px 10px;
     font-weight: bold;
-    color: #319b6a;
+    color: red;
     display: inline;
     outline: none;
     box-shadow: 5px 5px #111;

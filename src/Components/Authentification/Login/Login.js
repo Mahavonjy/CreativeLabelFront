@@ -220,7 +220,7 @@ class Login extends Component {
                                 <div className="custom-float">
                                     {this.props.InputCreate('keys', this.state.keys, (e) => {FunctionTools.changeFields(this, e)}, "Inserer votre clé ici", "number", true)}
                                 </div>
-                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysSubmit}>Send</button>
+                                <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={this.verifyKeysSubmit}>Envoyer</button>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@ class Login extends Component {
                                    name="password" value={this.state.password} onChange={(e) => {FunctionTools.changeFields(this, e)}}/>
                         </div>
 
-                        <button className="l-go" onClick={this.sendLoginCredentials}>Connexion</button>
+                        <button className="l-go btn btn-outline-success" onClick={this.sendLoginCredentials}>Connexion</button>
                         <small className="f-p" onClick={(e) => this.setState({visibility: true})}>Forgot password?</small>
                     </div>
                     {this.state.loading ?
@@ -278,8 +278,8 @@ class Login extends Component {
                     </div>
                     <small className="l-disc" style={{display: 'none'}}>Already have an account?</small>
                     <small className="r-disc">Don't have an account?</small>
-                    <button className="l-btn" onClick={this.onClickSignIn}>SIGN IN</button>
-                    <button className="r-btn" onClick={() => window.location.replace('/register')}>SIGN UP</button>
+                    <button className="l-btn btn btn-outline-success" onClick={this.onClickSignIn}>SIGN IN</button>
+                    <button className="r-btn btn btn-outline-danger" onClick={() => window.location.replace('/register')}>Inscription</button>
                 </div>
             </div>
         );

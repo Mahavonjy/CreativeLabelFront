@@ -2,14 +2,25 @@ import React, { Component } from "react";
 import DatePicker from "react-datepicker"
 import StarRatings from 'react-star-ratings';
 import Calendar from "../../Calendar/Calendar";
-
+import FunctionTools from "../../../FunctionTools/FunctionTools";
+import {toast} from "react-toastify";
 import "./Results.css"
 
 class DisplayPrestation extends Component {
     state = {
         isMounted: false,
-        event_date: new Date(),
+        event_date: new Date(), //synchroniser avec la recherche après
+        reservation: false,
+        address: "",
         rating: 1
+    };
+
+    Reserve = () => {
+        let new_date = FunctionTools.formatDate(this.state.event_date);
+        let now = FunctionTools.formatDate(new Date());
+        if (!this.state.address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
+        else if (parseInt(new_date) - parseInt(now) <= 0) toast.error("Veuillez mettre une autre date");
+        else this.setState({reservation: true})
     };
 
     changeRating = ( newRating ) => {
@@ -17,10 +28,6 @@ class DisplayPrestation extends Component {
             rating: newRating
         });
     };
-
-    componentDidMount() {
-        this.setState({ isMounted: true})
-    }
 
     ImageClick = (e) => {
         const cube = document.querySelector(".cube");
@@ -31,6 +38,10 @@ class DisplayPrestation extends Component {
 
         if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
     };
+
+    componentDidMount() {
+        this.setState({ isMounted: true})
+    }
 
     componentWillUnmount() {
         this.setState({ isMounted: false });
@@ -95,23 +106,27 @@ class DisplayPrestation extends Component {
                                                                         timeFormat="HH:mm"
                                                                         timeIntervals={15}
                                                                         timeCaption="time"
-                                                                        className="form-control datePick"
+                                                                        className="form-control"
+                                                                        style={{zIndex: 99}}
                                                                         dateFormat="MMMM d, yyyy h:mm aa"/>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <small><i className="icon-map-marker"/>&nbsp;33 Cliveden Close, Melbourne VIC 3000, Australia</small>
+                                                <small><i className="icon-map-marker"/>&nbsp;{this.state.address ? this.state.address : "Veuiller nous renseigner en bas l'adresse de votre evenenment"}</small>
                                                 <div className="col pt-5 pb-5">
                                                     <div className="custom-float">
                                                         <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                                                             <div className="input-group-text text-dark">
                                                                 <i className="icon-map-marker"/>&nbsp;Ajouter une adresse ici *</div>
-                                                            <input type="text" id="Description" name="Description" className="form-control" />
+                                                            <input type="text" value={this.state.address} id="address"
+                                                                   placeholder="Ecrire ici l'adresse de votre evenement"
+                                                                   name="address" className="form-control"
+                                                                   onChange={(e) => FunctionTools.changeFields(this, e)} />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button className="btn btn-outline-success">Reserver</button>
+                                            <button className="btn btn-outline-success" onClick={this.Reserve}>Reserver</button>
                                         </div>
                                         <div className="mb-4 card">
                                             <div className="flex-grow-0 text-center pb-3">

@@ -11,25 +11,21 @@ let cookies = new Cookies();
 
 class PurchaseInformation extends Component {
     state = {
-        isMounted: false, name: this.props.profile_info.name, lastname: '',
-        email: this.props.profile_info.email, address: this.props.profile_info.address, postal_code: '',
-        city: this.props.profile_info.city, phone: this.props.profile_info.phone, rules: false,
-        card_number: '', expiration: '', cvc: '', card_name: '', payment_loading: false
+        isMounted: false,
+        cvc: '',
+        card_name: '',
+        rules: false,
+        lastname: '',
+        postal_code: '',
+        card_number: '',
+        expiration: '',
+        payment_loading: false,
+        name: this.props.profile_info.name,
+        email: this.props.profile_info.email,
+        address: this.props.profile_info.address,
+        city: this.props.profile_info.city,
+        phone: this.props.profile_info.phone,
     };
-
-    changeName = (e) => {this.setState({name: e.target.value})};
-
-    changeEmail = (e) => {this.setState({email: e.target.value})};
-
-    changeLastName = (e) => {this.setState({lastname: e.target.value})};
-
-    changeAddress = (e) => {this.setState({address: e.target.value})};
-
-    changePostalCode = (e) => {this.setState({postal_code: e.target.value})};
-
-    changeCity = (e) => {this.setState({city: e.target.value})};
-
-    changePhone = (e) => {this.setState({phone: e.target.value})};
 
     changeCardNumber = (e) => {
         let cardNumber = e.target.value;
@@ -43,10 +39,6 @@ class PurchaseInformation extends Component {
             this.setState({card_number: null})
         }
     };
-
-    changeExpiration = (e) => {this.setState({expiration: e.target.value})};
-
-    changeCardName = (e) => {this.setState({card_name: e.target.value})};
 
     changeCVC = (e) => {
         let cvc = e.target.value;
@@ -107,34 +99,32 @@ class PurchaseInformation extends Component {
         }
     };
 
+    stateInvalid (state_name, message) {
+        if (!this.state[state_name]) {
+            toast.error("Veuiller remplier le champ " + message);
+            return false
+        }
+        return true
+    }
+
     InputValidators = () => {
-        if (!this.state.name) {
-            toast.error("Veuiller remplier le champ nom");
-        } else if (!this.state.email) {
-            toast.error("Veuiller remplier le champ email");
-        } else if (!this.state.address) {
-            toast.error("Veuiller remplier le champ addresse");
-        } else if (!this.state.postal_code) {
-            toast.error("Veuiller remplier le champ code postal");
-        } else if (!this.state.city) {
-            toast.error("Veuiller remplier le champ ville");
-        } else if (!this.state.card_number) {
-            toast.error("Veuiller rensigner le champ numero de la carte");
-        } else if (!this.state.expiration) {
-            toast.error("Veuiller rensigner le champ date d'expiration");
-        } else if (!this.state.cvc) {
-            toast.error("Veuiller rensigner le champ cvc");
-        } else if (!this.state.card_name) {
-            toast.error("Veuiller rensigner le champ nom sur la carte");
-        } else if (!this.state.rules) {
-            toast.error("Veuiller lire et accepter la condition d'utilisation");
-        } else {
-            let card_tmp = this.state.card_number.match(/\d{1,4}/g);
-            if (card_tmp.length !== 4 || card_tmp[card_tmp.length - 1].length !== 4) {
-                toast.error("Carte de credit invalide");
-            } else if (this.state.cvc.length !== 3) {
-                toast.error("CVC invalide");
-            } else this.Command();
+        if (
+            this.stateInvalid(this.state.name, "name") && this.stateInvalid(this.state.email, "email") &&
+            this.stateInvalid(this.state.address, "address") && this.stateInvalid(this.state.postal_code, "code postal") &&
+            this.stateInvalid(this.state.city, "ville") && this.stateInvalid(this.state.card_number, "numero de la carte") &&
+            this.stateInvalid(this.state.expiration, "date d'expiration") && this.stateInvalid(this.state.cvc, "cvc") &&
+            this.stateInvalid(this.state.card_name, "nom sur la carte")
+        ) {
+            if (!this.state.rules) {
+                toast.error("Veuiller lire et accepter la condition d'utilisation");
+            } else {
+                let card_tmp = this.state.card_number.match(/\d{1,4}/g);
+                if (card_tmp.length !== 4 || card_tmp[card_tmp.length - 1].length !== 4) {
+                    toast.error("Carte de credit invalide");
+                } else if (this.state.cvc.length !== 3) {
+                    toast.error("CVC invalide");
+                } else this.Command();
+            }
         }
     };
 
@@ -220,7 +210,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="name" className="form-control"
                                                            placeholder="Votre nom" name="name"
                                                            value={this.state.name || ''}
-                                                           onChange={this.changeName} required/>
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
@@ -228,7 +218,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="lastname" className="form-control"
                                                            placeholder="Votre prénom" name="lastname"
                                                            value={this.state.lastname}
-                                                           onChange={this.changeLastName} required/>
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
@@ -236,7 +226,7 @@ class PurchaseInformation extends Component {
                                                     <input type="email" id="email" className="form-control"
                                                            placeholder="E-mail"
                                                            name="email" value={this.state.email || ''}
-                                                           onChange={this.changeEmail} required/>
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -255,7 +245,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="address" className="form-control"
                                                            placeholder="Votre address" name="address"
                                                            value={this.state.address || ''}
-                                                           onChange={this.changeAddress}
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)}
                                                            required/>
                                                 </div>
                                             </div>
@@ -264,7 +254,7 @@ class PurchaseInformation extends Component {
                                                     <input type="number" id="postal_code" className="form-control"
                                                            placeholder="Votre code postal" name="postal_code"
                                                            value={this.state.postal_code || ''}
-                                                           onChange={this.changePostalCode}
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)}
                                                            required/>
                                                 </div>
                                             </div>
@@ -273,14 +263,15 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="city" className="form-control"
                                                            placeholder="votre ville" name="city"
                                                            value={this.state.city || ''}
-                                                           onChange={this.changeCity} required/>
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
                                                 <div className="form-line">
                                                     <input type="number" id="phone" className="form-control"
                                                            placeholder="votre telephone" name="phone"
-                                                           value={this.state.phone || ''} onChange={this.changePhone}/>
+                                                           value={this.state.phone || ''}
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -320,7 +311,7 @@ class PurchaseInformation extends Component {
                                                 <div className="col-sm-8">
                                                     <input type="month" id="expiration" className="form-control"
                                                            name="expiration" value={this.state.expiration}
-                                                           onChange={this.changeExpiration} required/>
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group row">
@@ -337,8 +328,8 @@ class PurchaseInformation extends Component {
                                                 <div className="col-sm-8">
                                                     <input type="text" id="card_name" className="form-control"
                                                            placeholder="Nom du proprietaire de la carte"
-                                                           name="cvc" value={this.state.card_name}
-                                                           onChange={this.changeCardName} required/>
+                                                           name="card_name" value={this.state.card_name}
+                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
