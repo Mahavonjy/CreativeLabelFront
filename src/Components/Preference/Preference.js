@@ -22,7 +22,7 @@ class Preference extends Component {
     }
 
     BooleanToChange = (index) => {
-        let tmp_state = {...this.state.first_array};
+        let tmp_state = [...this.state.first_array];
         if (this.state.first_array[index][0] === "#9DA6B1") {
             tmp_state[index][0] = "darkolivegreen";
             tmp_state[index][1] = true;

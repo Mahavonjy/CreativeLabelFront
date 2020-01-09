@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import moment from "moment";
-import './Calendar.css'
+import '../style/Calendar.css'
 
 class Calendar extends Component {
     state = {

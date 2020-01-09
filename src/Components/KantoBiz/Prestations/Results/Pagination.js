@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Results.css"
+import "../../style/Results.css"
 
 class Pagination extends Component {
     state = {

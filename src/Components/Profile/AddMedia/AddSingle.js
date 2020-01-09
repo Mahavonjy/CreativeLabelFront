@@ -6,7 +6,9 @@ import logo from "../../../images/Logo/ISL_logo.png"
 import { ToastContainer, toast } from 'react-toastify';
 import ReactTooltip from 'react-tooltip';
 import {connect} from "react-redux";
+import * as CreateFields from "../../FunctionTools/CreateFields";
 import FunctionTools from "../../FunctionTools/FunctionTools";
+import {bindActionCreators} from "redux";
 
 const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
 class AddSingle extends Component {
@@ -167,17 +169,8 @@ class AddSingle extends Component {
 
                 <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
 
-                {this.state.loading ?
-                    <div className="preloader-wrapper small active" style={{position: "absolute", right: 0}}>
-                        <div className="spinner-layer spinner-yellow-only">
-                            <div className="circle-clipper left">
-                                <div className="circle"/>
-                            </div>
-                            <div className="circle-clipper right">
-                                <div className="circle"/>
-                            </div>
-                        </div>
-                    </div>: null}
+                {this.state.loading ? this.props.smallSpinner("absolute", "0") : null}
+
                 <img alt={"logo"} src={logo} style={{position: "absolute", marginTop: "5%", opacity:0.4}}/>
                 <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
                     <button className="ModalClose" onClick={() => this.props.closePopup(0)}>
@@ -331,4 +324,10 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, null)(AddSingle);
+const mapDispatchToProps = dispatch => {
+    return {
+        smallSpinner: bindActionCreators(CreateFields.smallSpinner, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddSingle);

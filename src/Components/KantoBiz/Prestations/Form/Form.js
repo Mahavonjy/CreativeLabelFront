@@ -4,7 +4,7 @@ import Thematics from "./Thematics";
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
-import "./Form.css"
+import "../../style/Form.css"
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 const index_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif];

@@ -5,9 +5,11 @@ import {toast} from "react-toastify";
 import Modal from "react-awesome-modal";
 import axios from "axios";
 import Conf from "../../Config/tsconfig";
-import Cookies from "universal-cookie";
-
-let cookies = new Cookies();
+let headers = {
+    "Content-Type":'application/json',
+    "Access-Control-Allow-Origin":'*',
+    'Isl-Token':  ''
+};
 
 class PurchaseInformation extends Component {
     state = {
@@ -46,16 +48,12 @@ class PurchaseInformation extends Component {
             this.setState({cvc: e.target.value})
     };
 
-    HandleTokenStripe = (stripe_data) => {
+    beatsHandleTokenStripe = (stripe_data) => {
         this.setState({payment_loading: true}, () => {
             let cart_tmp = [];
             if (this.props.cart.length !== 0)
                 cart_tmp = this.props.cart;
             else cart_tmp = this.props.Cart;
-            let headers = {
-                "Content-Type":'application/json',
-                "Access-Control-Allow-Origin":'*',
-            };
             let data = {
                 "user_data": {
                     "name": this.state.name,
@@ -71,7 +69,8 @@ class PurchaseInformation extends Component {
                 "MyCarts": cart_tmp
             };
             try {
-                headers['Isl-Token'] = cookies.get("Isl_Creative_pass")["Isl_Token"];
+                let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+                headers['Isl-Token'] = user_credentials.token;
             } catch (e) {
                 headers['Isl-Token'] = Conf.configs.TokenVisitor;
             } finally {
@@ -88,6 +87,22 @@ class PurchaseInformation extends Component {
         });
     };
 
+    kantoBizHandleTokenStripe = (stripe_data) => {
+        this.setState({payment_loading: true}, () => {
+            setTimeout(() => {
+                this.setState({payment_loading: true})
+            }, 2000)
+        });
+    };
+
+    stateInvalid (state_name, message) {
+        if (!this.state[state_name]) {
+            toast.error("Veuiller remplier le champ " + message);
+            return false
+        }
+        return true
+    }
+
     loadStripe = () => {
         if(!window.document.getElementById('stripe-script')) {
             let s = window.document.createElement("script");
@@ -98,14 +113,6 @@ class PurchaseInformation extends Component {
             window.document.body.appendChild(s);
         }
     };
-
-    stateInvalid (state_name, message) {
-        if (!this.state[state_name]) {
-            toast.error("Veuiller remplier le champ " + message);
-            return false
-        }
-        return true
-    }
 
     InputValidators = () => {
         if (
@@ -142,7 +149,8 @@ class PurchaseInformation extends Component {
             address_zip: this.state.postal_code
         }, (status, response) => {
             if (status === 200) {
-                this.HandleTokenStripe(response);
+                if (this.props.beats_cart) this.beatsHandleTokenStripe(response);
+                else if (this.props.kantoBiz) this.kantoBizHandleTokenStripe(response);
             } else {
                 toast.error(response.error.message)
             }
@@ -190,8 +198,8 @@ class PurchaseInformation extends Component {
                     </div>
                 </Modal>
                 <div className="col-12 pl-lg-3">
-                    <div className="row row-eq-height my-3">
-                        <div className="col-md-6">
+                    <div className="row justify-content-center my-3">
+                        <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-header transparent">
                                     {this.props.profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>
@@ -280,7 +288,7 @@ class PurchaseInformation extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-lg-6">
                             <div className="card">
                                 <div className="card-header transparent">
                                     <h4 className="text-red"><strong>Informations carte bancaire</strong></h4>
@@ -340,7 +348,7 @@ class PurchaseInformation extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button className="btn btn-outline-success btn-fab-md pl-4 pr-4" onClick={() => {this.InputValidators()}} >Commander</button>
+                                            <button className="btn btn-outline-success btn-fab-md pl-4 pr-4" onClick={() => {this.InputValidators()}} >{this.props.kantoBiz ? "Confirmer la reservation": "Commander"}</button>
                                         </div>
                                         {/* #END# Input */}
                                     </div>

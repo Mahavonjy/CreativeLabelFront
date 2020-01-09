@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Cookies from "universal-cookie";
 import Conf from "../../Config/tsconfig";
 import TestImg from "../../assets/img/demo/a2.jpg";
 import {toast, ToastContainer} from "react-toastify";
@@ -8,7 +7,12 @@ import {connect} from "react-redux";
 import PurchaseInformation from "./PurchaseInformation";
 import Home from "../Home/Home";
 
-let cookies = new Cookies();
+let headers = {
+    "Content-Type":'application/json',
+    "Access-Control-Allow-Origin":'*',
+    'Isl-Token':  ''
+};
+
 class Cart extends Component {
     state = {
         redirect: false,
@@ -21,13 +25,10 @@ class Cart extends Component {
 
     getCart = () => {
         try {
-            let new_headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*",
-                'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-            };
+            let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+            headers['Isl-Token'] = user_credentials.token;
             if (this.state.cart.length === 0) {
-                axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: new_headers}).then(resp => {
+                axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
                     let tmp = 0;
                     for (let row in resp.data) {
                         tmp = tmp + resp.data[row]['price'];
@@ -51,12 +52,8 @@ class Cart extends Component {
     deleteCart = (song_id, id) => {
         this.setState({delete: song_id}, () => {
             try {
-                let headers = {
-                    "Content-Type":'application/json',
-                    "Access-Control-Allow-Origin":'*',
-                    'Isl-Token':  cookies.get("Isl_Creative_pass")["Isl_Token"]
-                };
-
+                let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+                headers['Isl-Token'] = user_credentials.token;
                 axios.delete(Conf.configs.ServerApi + "api/carts/delete/" + id , {headers: headers}).then(resp => {
                     let tmp = this.state.cart;
                     for (let cart in tmp) {
@@ -198,7 +195,7 @@ class Cart extends Component {
                         </div>
                     </div>
                 </div>
-                <PurchaseInformation Cart={this.state.cart} TotalPrice={this.state.total_price}/>
+                <PurchaseInformation Cart={this.state.cart} TotalPrice={this.state.total_price} beats_cart/>
             </div>
         );
     }

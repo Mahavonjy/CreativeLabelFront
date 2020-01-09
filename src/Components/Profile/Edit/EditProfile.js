@@ -6,6 +6,9 @@ import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import logo from "../../../images/Logo/ISL_logo.png";
+import FunctionTools from "../../FunctionTools/FunctionTools";
+import {bindActionCreators} from "redux";
+import * as CreateFields from "../../FunctionTools/CreateFields";
 
 class EditProfile extends Component {
     state = {
@@ -22,29 +25,13 @@ class EditProfile extends Component {
         description: this.props.profile_info.description,
     };
 
-    changeName = (e) => {this.setState({name : e.target.value});};
+    changePhone = (e) => {this.setState({phone : e.target.value})};
 
-    changeEmail = (e) => {this.setState({email : e.target.value});};
+    changeCountry = (e) => {this.setState({country : e.target.value})};
 
-    changeGender = (e) => {this.setState({gender : e.target.value});};
+    changeCity = (e) => {this.setState({city : e.target.value})};
 
-    changeBirth = (e) => {this.setState({birth : e.target.value});};
-
-    changeAddress = (e) => {this.setState({address : e.target.value});};
-
-    changePhone = (e) => {this.setState({phone : e.target.value});};
-
-    changeCountry = (e) => {this.setState({country : e.target.value});};
-
-    changeRegion = (e) => {this.setState({region : e.target.value});};
-
-    changeCity = (e) => {this.setState({city : e.target.value});};
-
-    changeDescription = (e) => {this.setState({description : e.target.value});};
-
-    changeAge = (e) => {this.setState({age : e.target.value});};
-
-    uploadFile = (e) =>{this.setState({photo : e.target.files[0]});};
+    uploadFile = (e) =>{this.setState({photo : e.target.files[0]})};
 
     handleSubmitUpdateProfile = (e) => {
         let id = e.target.id;
@@ -88,17 +75,7 @@ class EditProfile extends Component {
         return (
             <Modal visible={true} width="650" height="550" animationType='slide'>
                 <ToastContainer/>
-                {this.state.loading ?
-                    <div className="preloader-wrapper small active" style={{position: "absolute", right: 0}}>
-                        <div className="spinner-layer spinner-yellow-only">
-                            <div className="circle-clipper left">
-                                <div className="circle"/>
-                            </div>
-                            <div className="circle-clipper right">
-                                <div className="circle"/>
-                            </div>
-                        </div>
-                    </div>: null}
+                {this.state.loading ? this.props.smallSpinner("absolute", "0") : null}
                 <img alt={"logo"} src={logo} className="center" style={{position: "absolute",width: 650, height: 550, opacity:0.4}}/>
                 <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
                     <button className="ModalClose" onClick={(e) => this.props.closePopup(0)}>
@@ -109,39 +86,39 @@ class EditProfile extends Component {
                         <div className="body">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-user"/>name</div>
-                                    <input value={this.state.name} onChange={this.changeName}
+                                    <div className="input-group-text black-text bolder"><i className="icon-user"/>&nbsp;name</div>
+                                    <input value={this.state.name} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="name" name="name" placeholder="name"
                                            className="form-control" type="text" required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-envelope"/>email</div>
-                                    <input value={this.state.email} onChange={this.changeEmail}
+                                    <div className="input-group-text black-text bolder"><i className="icon-envelope"/>&nbsp;email</div>
+                                    <input value={this.state.email} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="email" name="email" placeholder="Email"
                                            className="form-control" type="text" required/>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-location-arrow"/>region</div>
-                                    <input value={this.state.region} onChange={this.changeRegion}
+                                    <div className="input-group-text black-text bolder"><i className="icon-location-arrow"/>&nbsp;region</div>
+                                    <input value={this.state.region} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="region" name="region" className="form-control"  type="text" />
                                 </div>
 
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-birthday-cake"/>birth</div>
-                                    <input  value={this.state.birth} onChange={this.changeBirth}
+                                    <div className="input-group-text black-text bolder"><i className="icon-birthday-cake"/>&nbsp;birth</div>
+                                    <input  value={this.state.birth} onChange={(e) => FunctionTools.changeFields(this, e)}
                                             id="birth" name="birth" className="form-control" type="date" />
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-address-book"/>address</div>
-                                    <input value={this.state.address} onChange={this.changeAddress}
+                                    <div className="input-group-text black-text bolder"><i className="icon-address-book"/>&nbsp;address</div>
+                                    <input value={this.state.address} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="address" name="address" className="form-control" type="text" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-map-location"/>country</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-map-location"/>&nbsp;country</div>
                                     <select className="selectpicker form-control" value={this.state.country} onChange={this.changeCountry}>
                                         <option value="Madagascar">Madagascar</option>
                                     </select>
@@ -149,25 +126,25 @@ class EditProfile extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-smartphone-1"/>phone</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-smartphone-1"/>&nbsp;phone</div>
                                     <input value={this.state.phone} onChange={this.changePhone}
                                            id="phoneNumber" name="phoneNumber" className="form-control" type="number" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-street-view"/>city</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-street-view"/>&nbsp;city</div>
                                     <input value={this.state.city} onChange={this.changeCity}
                                            id="city" name="city" className="form-control" type="text" />
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-info-circle"/>description</div>
-                                    <input value={this.state.description} onChange={this.changeDescription}
+                                    <div className="input-group-text black-text bolder"><i className="icon-info-circle"/>&nbsp;description</div>
+                                    <input value={this.state.description} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="description" name="description" className="form-control" type="text" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-venus-double"/>gender</div>
-                                    <select className="selectpicker form-control" value={this.state.gender} onChange={this.changeGender}>
+                                    <div className="input-group-text black-text bolder"><i className="icon-venus-double"/>&nbsp;gender</div>
+                                    <select className="selectpicker form-control" value={this.state.gender} onChange={(e) => FunctionTools.changeFields(this, e)}>
                                         <option value="0">Female</option>
                                         <option value="1">male</option>
                                     </select>
@@ -175,7 +152,7 @@ class EditProfile extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
-                                    <div className="input-group-text"><i className="icon-picture-o"/>profile picture</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;profile picture</div>
                                     <input onChange={this.uploadFile} id="picture" name="picture" className="form-control" type="file" />
                                 </div>
                             </div>
@@ -199,6 +176,7 @@ const mapDispatchToProps = dispatch => {
         profile_initialisation: (data) => {
             dispatch({type: "ADD_PROFILE_INFO", data: data})
         },
+        smallSpinner: bindActionCreators(CreateFields.smallSpinner, dispatch),
     };
 };
 

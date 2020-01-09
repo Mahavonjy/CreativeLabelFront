@@ -4,14 +4,16 @@ import StarRatings from 'react-star-ratings';
 import Calendar from "../../Calendar/Calendar";
 import FunctionTools from "../../../FunctionTools/FunctionTools";
 import {toast} from "react-toastify";
-import "./Results.css"
+import "../../style/Results.css"
+import PurchaseInformation from "../../../Cart/PurchaseInformation";
 
 class DisplayPrestation extends Component {
     state = {
         isMounted: false,
-        event_date: new Date(), //synchroniser avec la recherche après
+        event_date: new Date(), // synchroniser avec la recherche après
         reservation: false,
         address: "",
+        price: 400,
         rating: 1
     };
 
@@ -85,7 +87,7 @@ class DisplayPrestation extends Component {
                                     <div className="col-md-4">
                                         <div className="mb-4 card">
                                             <div className="flex-grow-0 text-center pb-3">
-                                                <h2 className="col text-primary pb-3">400$ &nbsp;<i className="icon icon-info"/></h2>
+                                                <h2 className="col text-primary pb-3">{this.state.price}$ &nbsp;<i className="icon icon-info"/></h2>
                                                 <h4 className="col text-primary">Durée de la préparation : 1j</h4>
                                                 <h4 className="col text-primary">Durée de la prestation : 1j</h4>
                                                 <div className="col">
@@ -151,7 +153,13 @@ class DisplayPrestation extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-md-8">
+                                    {this.state.reservation ?
+                                        <div className="col-md-8">
+                                            <PurchaseInformation eventDate={this.state.event_date}
+                                                                 address={this.state.address}
+                                                                 TotalPrice={this.state.price} kantoBiz/>
+                                        </div> :
+                                        <div className="col-md-8">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Options&nbsp;<i className="icon icon-info"/></h2>
 
@@ -209,7 +217,7 @@ class DisplayPrestation extends Component {
                                             <h2 className="col text-primary pb-3">Calendrier&nbsp;<i className="icon icon-info"/></h2>
                                             <Calendar noEdit/>
                                         </div>
-                                    </div>
+                                    </div>}
                                 </div>
                             </div>
                         </div>

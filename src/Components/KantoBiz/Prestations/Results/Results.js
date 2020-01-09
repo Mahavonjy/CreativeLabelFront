@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import InputRange from "react-input-range";
 import "../../style/KantoBiz.css"
-import "./Results.css"
+import "../../style/Results.css"
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {connect} from "react-redux";
 import Pagination from "./Pagination";
@@ -10,10 +10,10 @@ let exampleItems = [...Array(150).keys()].map(i => ({ id: (i+1), name:
         <div className="card_kanto">
             <div className="additional">
                 <div className="user-card_kanto d-none d-sm-block">
-                    <div className="level center">
+                    <div className="level center-result">
                         Thematic Title
                     </div>
-                    <div className="points center">
+                    <div className="points center-result">
                         5&nbsp;<i className="icon icon-star"/>
                     </div>
                     <div className="text-center" style={{paddingTop: 70}}>

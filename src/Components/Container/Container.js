@@ -11,7 +11,11 @@ class Container extends Component {
     };
 
     componentDidMount() {
-        this.setState({ isMounted: true})
+        this.setState({ isMounted: true}, () => {
+            // document.addEventListener('contextmenu', function(e) {
+            //     e.preventDefault();
+            // });
+        })
     }
 
     componentWillUnmount() {

@@ -2,6 +2,58 @@ import React from "react";
 import FunctionTools from "./FunctionTools";
 import SignInOrUp from "../Authentification/Login/Login";
 import Loader from "react-loader-spinner";
+import Modal from "react-awesome-modal";
+import ReactTooltip from "react-tooltip";
+
+export const DifferentArtist = (that) => {
+    return () => {
+        return (
+            <Modal visible={true} width="400" height="230" animationType='slide'>
+                <ReactTooltip/>
+                <div className="col text-center pt-4 pb-5" style={{height: 230, borderRadius: 5, background: "#58585a"}}>
+                    <h4 className="text-green text-monospace">Quelle genre d'artiste êtes vous ?</h4>
+                    <div className="body row justify-content-center pt-2">
+
+                        <button className="col-md-6 m-2 text-light" onClick={() => that.setState({artist_type: "Spécialiste de l’audiovisuel", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Monteur vidéoclip, Cameraman, Photographes, Réalisateur clip vidéo, autres"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Spécialiste de l’audiovisuel</button>
+
+                        <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Beatmaker", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Acapella, Afrobeat, Blues, Breakbeat, Classique, Dancehall, Electronica, Folk, Metal, Funk, Gospel, House, Jazz, Pop, Slam, Swing, Soul, Rap, Reggae, Rock, Rumba, Samba, Vakondrazana, Rumba, Kilalaky, Rnb, Ndombolo, Basesa, Hira gasy, Batrelaky, Reggae-muffin, Reggaeton, Remix, Goma, Kuduro, Afro-trap, Kawitri, Malesa, Tsapiky, Zafindraona, Slow, Coupé-Décalé"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Beatmaker</button>
+
+                        <button className="col-md-5 m-2 text-light" onClick={() => that.setState({artist_type: "Chanteur/Musicien", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Acapella, Afrobeat, Blues, Breakbeat, Classique, Dancehall, Electronica, Folk, Metal, Funk, Gospel, House, Jazz, Pop, Slam, Swing, Soul, Rap, Reggae, Rock, Rumba, Samba, Vakondrazana, Rumba, Kilalaky, Rnb, Ndombolo, Basesa, Hira gasy, Batrelaky, Reggae-muffin, Reggaeton, Remix, Goma, Kuduro, Afro-trap, Kawitri, Malesa, Tsapiky, Zafindraona, Slow, Coupé-Décalé"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Chanteur/Musicien</button>
+
+                        <button className="col-md-6 m-2 text-light" onClick={() => that.setState({artist_type: "Cirque/Artistes de la Rue", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur, marionnettiste, mime, autre"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Cirque/Artistes de la Rue</button>
+
+                        <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Comédiens", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Burlesque, Comédie, Conteur, Drame, expérimental, Humoriste, imitateur, Stand up, autre"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Comédiens</button>
+
+                        <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Danseurs", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Bachata, cabaret, capoeira, chachacha, classique, contemporain, ethnique, expérimental, hip hop, Improvisation, Jazz, Kizomba, Moderne, Oriental, Salsa, Samba, Tango, kilalaky, batrelaky, salegy, Ndombolo, Vakondrazana,zouk, Kawitri,Maloya, Kompas, autre"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Danseurs</button>
+
+                        <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Magiciens", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Close-ups, Mentalistes, Prestidigitateurs, autre"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Magiciens</button>
+
+                        <button className="col-md-2 m-2 text-light" onClick={() => that.setState({artist_type: "Dj", becomeArtistForm: true, choiceArtistType: false})}
+                                data-tip="Animateur, Mix, Live set, DJ Set"
+                                style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Dj</button>
+                    </div>
+                    <div className="footer pt-3">
+                        <button className="btn btn-outline-danger btn-sm pl-4 pr-4" onClick={() => that.setState({choiceArtistType: false})}>Annuler&nbsp;<i className="icon icon-remove align-middle"/></button>
+                    </div>
+                </div>
+            </Modal>
+        )
+    }
+};
 
 export const ForAddToCard = (that, val, set_of_beats_name) => {
     return () => {

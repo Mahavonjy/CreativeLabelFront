@@ -444,3 +444,20 @@ export const changeIndex = (index, _that) => {
         return true;
     }
 };
+
+export const smallSpinner = (position, right) => {
+    return () => {
+        return (
+            <div className="preloader-wrapper small active" style={{position: position, right: right}}>
+                <div className="spinner-layer spinner-yellow-only">
+                    <div className="circle-clipper left">
+                        <div className="circle"/>
+                    </div>
+                    <div className="circle-clipper right">
+                        <div className="circle"/>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+};
