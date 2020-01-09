@@ -18,8 +18,8 @@
     display: block;
     position: absolute;
     box-shadow: 0 0 0.5rem #fff,
-    0 0 1.5rem var(--border-color),
-    0 0 3rem var(--border-color);
+    0 0 1.5rem,
+    0 0 3rem;
 }
 
 .image-buttons input {
@@ -28,7 +28,7 @@
 
 .image-buttons input:focus {
     outline: none;
-    border: 0.2rem solid var(--border-color);
+    border: 0.2rem solid;
 }
 
 /* Transform images to create cube */
@@ -501,5 +501,193 @@ button { cursor: pointer; }
     }
     .responstable th:first-child, .responstable td:first-child {
         text-align: center;
+    }
+}
+
+/* New Table*/
+
+.responsive-table {
+    width: 100%;
+    margin-bottom: 1.5em;
+    border-spacing: 0;
+}
+@media (min-width: 48em) {
+    .responsive-table {
+        font-size: 0.9em;
+    }
+}
+@media (min-width: 62em) {
+    .responsive-table {
+        font-size: 1em;
+    }
+}
+.responsive-table thead {
+    position: absolute;
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+@media (min-width: 48em) {
+    .responsive-table thead {
+        position: relative;
+        clip: auto;
+        height: auto;
+        width: auto;
+        overflow: auto;
+    }
+}
+
+.responsive-table thead th {
+    background-color: #58585a;
+    border: 1px solid #58585a;
+    font-weight: normal;
+    text-align: center;
+    color: white;
+}
+.responsive-table thead th:first-of-type {
+    text-align: left;
+}
+.responsive-table tbody,
+.responsive-table tr,
+.responsive-table th,
+.responsive-table td {
+    display: block;
+    padding: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: left;
+    white-space: normal;
+}
+@media (min-width: 48em) {
+    .responsive-table tr {
+        display: table-row;
+    }
+}
+.responsive-table th,
+.responsive-table td {
+    padding: 0.5em;
+    vertical-align: middle;
+}
+@media (min-width: 30em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.75em 0.5em;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table th,
+    .responsive-table td {
+        display: table-cell;
+        padding: 0.5em;
+    }
+}
+@media (min-width: 62em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.75em 0.5em;
+    }
+}
+@media (min-width: 75em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.75em;
+    }
+}
+.responsive-table caption {
+    margin-bottom: 1em;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+@media (min-width: 48em) {
+    .responsive-table caption {
+        font-size: 1.5em;
+    }
+}
+.responsive-table tfoot {
+    font-size: 0.8em;
+    font-style: italic;
+}
+@media (min-width: 62em) {
+    .responsive-table tfoot {
+        font-size: 0.9em;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody {
+        display: table-row-group;
+    }
+}
+.responsive-table tbody tr {
+    margin-bottom: 1em;
+}
+@media (min-width: 48em) {
+    .responsive-table tbody tr {
+        display: table-row;
+        border-width: 1px;
+    }
+}
+.responsive-table tbody tr:last-of-type {
+    margin-bottom: 0;
+}
+@media (min-width: 48em) {
+    .responsive-table tbody tr:nth-of-type(even) {
+        background-color: rgba(94, 93, 82, 0.1);
+    }
+}
+.responsive-table tbody th[scope="row"] {
+    background-color: #1d96b2;
+    color: white;
+}
+@media (min-width: 30em) {
+    .responsive-table tbody th[scope="row"] {
+        border-left: 1px solid #58585a;
+        border-bottom: 1px solid #58585a;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody th[scope="row"] {
+        background-color: transparent;
+        color: #5e5d52;
+        text-align: left;
+    }
+}
+.responsive-table tbody td {
+    text-align: right;
+}
+@media (min-width: 48em) {
+    .responsive-table tbody td {
+        border-left: 1px solid #58585a;
+        border-bottom: 1px solid #58585a;
+        text-align: center;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody td:last-of-type {
+        border-right: 1px solid #58585a;
+    }
+}
+.responsive-table tbody td[data-type="currency"] {
+    text-align: right;
+}
+.responsive-table tbody td[data-title]:before {
+    content: attr(data-title);
+    float: left;
+    font-size: 0.8em;
+    color: rgba(94, 93, 82, 0.75);
+}
+@media (min-width: 30em) {
+    .responsive-table tbody td[data-title]:before {
+        font-size: 0.9em;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody td[data-title]:before {
+        content: none;
     }
 }

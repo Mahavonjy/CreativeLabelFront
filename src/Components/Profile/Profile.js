@@ -15,6 +15,7 @@ import * as CreateFields from "../FunctionTools/CreateFields";
 import Form from "../KantoBiz/Prestations/Form/Form";
 import * as PopupFields from "../FunctionTools/PopupFields";
 import PaymentsAndReservations from "./Section/PaymentsAndReservations";
+import BankingDetails from "./Section/BankingDetails";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -275,9 +276,7 @@ class Profile extends Component {
                                                     <PaymentsAndReservations/>
                                                 </div>
                                                 <div className="tab-pane fade" id="Coordonnees-bancaires" role="tabpanel">
-                                                    <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
-                                                        <p className="text-center">Pas de Coordonnees bancaires pour le moment</p>
-                                                    </div>
+                                                    <BankingDetails/>
                                                 </div>
                                             </div>
                                         </div>
