@@ -18,8 +18,8 @@ class PaymentsAndReservations extends Component {
             <div className="col" style={{height: 320}}>
                 <div className="card no-b">
                     <div className="card-body">
-                        <div className="row">
-                            <div className="col-3">
+                        <div className="row justify-content-center">
+                            <div className="col-lg-2">
                                 <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                     <a className="nav-link active" data-toggle="pill" href="#v-pills-reservation" role="tab" aria-controls="v-pills-reservation" aria-selected="true">
                                         Mes réservations
@@ -32,28 +32,19 @@ class PaymentsAndReservations extends Component {
                                     </a>
                                 </div>
                             </div>
-                            <div className="col-9">
+                            <div className="col-lg-10 pt-3">
                                 <div className="tab-content" id="v-pills-tabContent">
-                                    <div className="tab-pane fade active show"
-                                         id="v-pills-reservation"
-                                         role="tabpanel"
-                                         aria-labelledby="v-pills-reservation-tab">
+                                    <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
                                         <p>
                                             Rien pour la reservation pour le moment
                                         </p>
                                     </div>
-                                    <div className="tab-pane fade"
-                                         id="v-pills-payment-done"
-                                         role="tabpanel"
-                                         aria-labelledby="v-pills-payment-done-tab">
+                                    <div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">
                                         <p>
                                             Rien pour le payment effectués pour le moment
                                         </p>
                                     </div>
-                                    <div className="tab-pane fade"
-                                         id="v-pills-payment-repaid"
-                                         role="tabpanel"
-                                         aria-labelledby="v-pills-payment-repaid-tab">
+                                    <div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel" aria-labelledby="v-pills-payment-repaid-tab">
                                         <p>
                                             Rien pour le payment remboursée pour le moment
                                         </p>
