@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
+import ReactTooltip from 'react-tooltip';
 const audioVisualOptions =
     [
         'Monteur vidéoclip', 'Cameraman', 'Photographes', 'Réalisateur clip vidéo', 'autres'
@@ -101,10 +102,11 @@ class Thematics extends Component {
                     <div className="card-header transparent b-b">
                         <strong className="text-red">Précisez nous votre style</strong>
                     </div>
+                    <ReactTooltip/>
                     <div className="row">
                         <div className="col border" style={{borderRadius: 10, background: "#58585a", height: 400}}>
-                            <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Options</h4>
-                            <div className="overflow-auto row justify-content-center" style={{maxHeight: 350}}>
+                            <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Options&nbsp;<i className="icon icon-info text-red" data-tip="Les options sont les genres de prestations que vous pouvez realiser"/></h4>
+                            <div className="overflow-auto row justify-content-center" style={{maxHeight: 350}} data-tip="Veuillez cliquer pour l'ajouter">
                                 {this.state.options.map((val, index) =>
                                     <span key={index} className="bg-brown m-1 text-center"
                                           style={{borderRadius: 10, width: 142, maxHeight: 21, cursor: "copy"}}
@@ -115,8 +117,8 @@ class Thematics extends Component {
                         </div>
                         <i className="icon icon-more-2 s-36 text-red ml-2 mr-2 d-none d-sm-block" style={{paddingTop: 180}}/>
                         <div className="col border" style={{borderRadius: 10, background: "#58585a", height: 400}}>
-                            <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Choisis</h4>
-                            <div className="overflow-auto row justify-content-center" style={{maxHeight: 350, cursor: "not-allowed"}}>
+                            <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Choisis&nbsp;<i className="icon icon-info text-red" data-tip="Les options placés sont ce que vous avez choisi, ce que vous voulez faire pour cette prestation"/></h4>
+                            <div className="overflow-auto row justify-content-center" style={{maxHeight: 350, cursor: "not-allowed"}} data-tip="Veuillez cliquer pour le supprimer">
                                 {this.state.thematics_options_selected.map((val, index) =>
                                     <span key={index} className="bg-brown m-1 text-center"
                                           style={{borderRadius: 10, width: 142, maxHeight: 21}}

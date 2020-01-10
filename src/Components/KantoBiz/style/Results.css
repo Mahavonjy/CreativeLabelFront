@@ -346,14 +346,6 @@
         float: left;
     }
 
-    .events {
-        width: 250px !important;
-        overflow-y: auto;
-        margin-left: 20px;
-        max-height: 40px;
-        font-size: small;
-    }
-
     .small-kanto-list {
         max-height: 50px !important;
         overflow: auto;
@@ -443,69 +435,6 @@ button { cursor: pointer; }
 
 /* Table */
 
-.responstable {
-    margin: 1em 0;
-    width: 100%;
-    background: #FFF;
-    color: #024457;
-    border-radius: 10px;
-    border: 1px solid #167F92;
-    overflow: hidden;
-}
-.responstable tr {
-    border-top: 1px solid #58585a;
-    border-bottom: 1px solid #58585a;
-}
-.responstable tr:nth-child(odd) {
-    background-color: #EAF3F3;
-}
-.responstable th {
-    display: none;
-    border: 1px solid #FFF;
-    background-color: #58585a;
-    color: #FFF;
-}
-.responstable td {
-    display: block;
-}
-.responstable td:first-child {
-    padding-top: .5em;
-}
-.responstable td:last-child {
-    padding-bottom: .5em;
-}
-.responstable td:before {
-    content: attr(data-th) ": ";
-    font-weight: bold;
-    width: 8em;
-    display: inline-block;
-}
-@media (min-width: 480px) {
-    .responstable td:before {
-        display: none;
-    }
-}
-@media (min-width: 480px) {
-    .responstable td {
-        border: 1px solid #D9E4E6;
-    }
-}
-.responstable th, .responstable td {
-    text-align: left;
-    margin: .5em 1em;
-}
-@media (min-width: 480px) {
-    .responstable th, .responstable td {
-        display: table-cell;
-        padding: 1em;
-    }
-    .responstable th:first-child, .responstable td:first-child {
-        text-align: center;
-    }
-}
-
-/* New Table*/
-
 .responsive-table {
     width: 100%;
     margin-bottom: 1.5em;
@@ -544,7 +473,6 @@ button { cursor: pointer; }
 
 .responsive-table thead th {
     background-color: #58585a;
-    border: 1px solid #58585a;
     font-weight: normal;
     text-align: center;
     color: white;

@@ -468,7 +468,7 @@ ol.progtrckr li.progtrckr-todo:before {
 }
 
 .mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-circle {
-    background-color: rgb(33, 150, 243);
+    background-color: #ED1C24;
 }
 
 .mdl-stepper-horizontal-alternative .mdl-stepper-step.success-step .mdl-stepper-circle {

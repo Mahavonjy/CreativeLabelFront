@@ -106,6 +106,7 @@ class Home extends Component {
                 let tmp_arr = [];
                 for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
                 this.props.addAllMediaGenre(tmp_arr);
+                this.props.addPrefAllMediaGenre(resp.data);
             }).catch(err => {console.log(err.response)}),
             axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers_}).then(resp => {
                 this.props.addBeats(resp.data["random"]);
@@ -151,7 +152,7 @@ class Home extends Component {
                         axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
                             this.fetchUserData()
                         }).catch(() => {
-                            this.setState({loading: false});
+                            this.NotOnline(headers)
                         });
                     }
                 } catch (e) {
@@ -172,18 +173,20 @@ class Home extends Component {
                 this.props.profile_initialisation_follower(resp.data['my_followers']);
                 this.props.profile_initialisation_following(resp.data['my_followings']);
                 FunctionTools.AddPropsCart(headers, this.props).then(() => console.log());
-                if (resp.data['role'] === "Artist") {
-                    axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-                        this.props.profile_add_beats(resp.data['beats']);
+                if (resp.data['role'] === "beatmaker") {
+                    Promise.all([
+                        axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
+                            this.props.profile_add_beats(resp.data['beats']);
+                        }).catch(err => {
+                            console.log(err.response)
+                        }),
                         axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
                             this.props.profile_initialisation_contract(resp.data);
                             this.NotOnline(headers)
                         }).catch(err => {
                             this.ifConnectionError(err);
                         })
-                    }).catch(err => {
-                        console.log(err.response)
-                    })
+                    ]).then(() => null);
                 } else {
                     this.NotOnline(headers)
                 }
@@ -200,7 +203,6 @@ class Home extends Component {
 
     componentDidMount() {
         this.setState({isMounted: true }, () => {
-
             user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
             if (this.props.beats.length === 0) {
                 this.Online();
@@ -306,6 +308,9 @@ const mapDispatchToProps = dispatch => {
         },
         addAllMediaGenre: (data) => {
             dispatch({type: "ADD_ALL_MEDIA_GENRE", data: data})
+        },
+        addPrefAllMediaGenre: (data) => {
+            dispatch({type: "ADD_ALL_MEDIA_GENRE_PREF", data: data})
         },
         addCarts: (data) => {
             dispatch({type: "ADD_CART", data: data})

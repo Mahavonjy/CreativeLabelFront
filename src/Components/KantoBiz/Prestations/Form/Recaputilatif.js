@@ -111,8 +111,8 @@ class Recaputilatif extends Component {
                                     </div>
                                 )}
                             </div>
-                            <a className="carousel-control-prev" href="#islCreativeCarousel" role="button" data-slide="prev">prev</a>
-                            <a className="carousel-control-next" href="#islCreativeCarousel" role="button" data-slide="next">next</a>
+                            <a className="carousel-control-prev bg-dark" href="#islCreativeCarousel" role="button" data-slide="prev">prev</a>
+                            <a className="carousel-control-next bg-dark" href="#islCreativeCarousel" role="button" data-slide="next">next</a>
                         </div>
                     </div>
                 </div>

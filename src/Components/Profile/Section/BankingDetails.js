@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import FunctionTools from "../../FunctionTools/FunctionTools";
+import ReactTooltip from 'react-tooltip';
 
 class BankingDetails extends Component {
     state = {
@@ -9,11 +10,17 @@ class BankingDetails extends Component {
         email: '',
         country: '',
         phone: '',
+        iban: '',
+        swift_bic: '',
         rules: false
     };
 
     componentDidMount() {
-        this.setState({ isMounted: true})
+        this.setState({ isMounted: true}, () => {
+            document.getElementById('iban').addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
+            });
+        })
     }
 
     componentWillUnmount() {
@@ -23,6 +30,7 @@ class BankingDetails extends Component {
     render() {
         return (
             <div className="col">
+                <ReactTooltip/>
                 <div className="row justify-content-center my-3">
                     <div className="col-lg-6">
                         <div className="card">
@@ -110,21 +118,21 @@ class BankingDetails extends Component {
                                     <div className="body">
 
                                         <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">IBAN</label>
+                                            <label className="col-sm-4 col-form-label"><i className="icon icon-info text-red" data-tip="A remplir"/>&nbsp;IBAN</label>
                                             <div className="col-sm-8">
-                                                <input type="text" id="card_number" className="form-control"
-                                                       placeholder="0000 0000 0000 0000" name="card_number"
-                                                       value={this.state.card_number}
-                                                       onChange={this.changeCardNumber} required/>
+                                                <input type="text" id="iban" className="form-control"
+                                                       placeholder="0000 0000 0000 0000" name="iban"
+                                                       value={this.state.iban}
+                                                       onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">SWIFT / BIC</label>
+                                            <label className="col-sm-4 col-form-label"><i className="icon icon-info text-red" data-tip="A remplir"/>&nbsp;SWIFT / BIC</label>
                                             <div className="col-sm-8">
-                                                <input type="text" id="card_number" className="form-control"
-                                                       placeholder="0000 0000 0000 0000" name="card_number"
-                                                       value={this.state.card_number}
-                                                       onChange={this.changeCardNumber} required/>
+                                                <input type="text" id="swift_bic" className="form-control"
+                                                       placeholder="0000 0000 0000 0000" name="swift_bic"
+                                                       value={this.state.swift_bic}
+                                                       onChange={(e) => FunctionTools.changeFields(this, e)} required/>
                                             </div>
                                         </div>
 

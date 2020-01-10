@@ -5,9 +5,12 @@ import "../../style/Results.css"
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {connect} from "react-redux";
 import Pagination from "./Pagination";
+import ReactTooltip from 'react-tooltip';
 
 let exampleItems = [...Array(150).keys()].map(i => ({ id: (i+1), name:
-        <div className="card_kanto">
+        <div>
+            <ReactTooltip/>
+            <div className="card_kanto" data-tip="Cliquer Moi">
             <div className="additional">
                 <div className="user-card_kanto d-none d-sm-block">
                     <div className="level center-result">
@@ -104,6 +107,7 @@ let exampleItems = [...Array(150).keys()].map(i => ({ id: (i+1), name:
                 <small className="more-genre pl-2 text-black">kilalaky, rumba, afindrafindrao, batrelaky, tsapiky, reggae, Kitoto</small>
             </div>
         </div>
+        </div>
 }));
 
 class Results extends Component {
@@ -136,7 +140,7 @@ class Results extends Component {
         return (
             <div className="row row-eq-height p-b-100">
                 <div className="col-lg-3 pt-5">
-                    <h4 className="text-red text-center">Trier La recherche</h4>
+                    <h4 className="text-red text-center">Filter Le résultat</h4>
                     <div className="text-center ml-5 mr-5">
                         <label className="pb-3 pt-4">Evenement</label>
                         <MultiSelectTools funcToFillInProps={this.props.addFilterEventSelected} tags={this.props.filter_events_selected} list={this.state.events_type} placeholder="Ajouter un evenement"/>

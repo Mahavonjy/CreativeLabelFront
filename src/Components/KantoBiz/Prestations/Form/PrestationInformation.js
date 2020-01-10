@@ -5,6 +5,7 @@ import * as CreateFields from "../../../FunctionTools/CreateFields";
 import {connect} from "react-redux";
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {toast} from "react-toastify";
+import ReactTooltip from 'react-tooltip';
 let that;
 
 class PrestationInformation extends Component {
@@ -88,6 +89,7 @@ class PrestationInformation extends Component {
     render() {
         return (
             <div className="Base">
+                <ReactTooltip/>
                 <div className="card-header transparent b-b">
                     <strong className="text-red">Donnez les informations generale de votre prestation</strong>
                 </div>
@@ -97,11 +99,11 @@ class PrestationInformation extends Component {
                             {/* Input */}
                             <div className="body">
                                 <div className="form-group form-float">
-                                    <div className="form-line">
+                                    <div className="form-line" data-tip={!this.state.title ? "Veuillez donnée un titre a votre prestation, ex: AnnivShow, ForaParty ..." : null}>
                                         {this.props.InputCreate('title', this.state.title, (e) => {FunctionTools.changeFields(this, e, this.props.addTitleOfService)}, "Titre de votre Prestation", "text", true)}
                                     </div>
                                 </div>
-                                <div className="form-group form-float">
+                                <div className="form-group form-float" data-tip={!this.state.description ? "Veuillez nous décrire cette prestation en quelques mots" : null}>
                                     <div className="form-line">
                                         <textarea defaultValue={this.state.description} id={this.state.description}
                                                   name={this.state.description} className="form-control" style={{height: 100}}
@@ -109,7 +111,7 @@ class PrestationInformation extends Component {
                                                   onChange={(e) => FunctionTools.changeFields(this, e, this.props.addDescriptionOfService)}/>
                                     </div>
                                 </div>
-                                <div className="form-group form-float">
+                                <div className="form-group form-float" data-tip={!this.state.city ? "Veuillez donnée une ville reference pour votre prestation" : null}>
                                     <div className="form-line">
                                         <input id="city" name="city" className="form-control"
                                                placeholder={this.state.city || "Veuillez choisir votre ville de reference"}
@@ -123,7 +125,7 @@ class PrestationInformation extends Component {
                                         </datalist>
                                     </div>
                                 </div>
-                                <div className="form-group form-float">
+                                <div className="form-group form-float" data-tip={!this.state.others_city ? "Veuillez donnez quelques ville ou vous pouvez executé cette même prestation" : null}>
                                     <div className="form-line">
                                         <MultiSelectTools tags={this.props.others_city} list={['Manakara', 'Toliara', 'Toamasina', 'Mahajanga']}
                                                           funcToFillInProps={this.props.addOthersCityOfService}
@@ -137,12 +139,12 @@ class PrestationInformation extends Component {
                     <div className="col-md-5 text-center p-5">
                         <span className="font-weight-lighter">Faites glisser votre image ou naviguez</span>
                         <div className="form-group pt-5">
-                            <div className="custom-file">
+                            <div className="custom-file" data-tip="C'est ici que vous cherchez vos images dans votre appareil">
                                 <input onChange={(e) => this.onDrop(e, true)} type="file" accept="image/*" className="custom-file-input" />
                                 <label className="custom-file-label" htmlFor="inputGroupFile01">Choisir une image</label>
                             </div>
                         </div>
-                        <div className="file has-name is-boxed d-none d-sm-block">
+                        <div className="file has-name is-boxed d-none d-sm-block" data-tip="C'est ici que vous déplacerai vos images">
                             <span className="file-label" onDragEnter={this.onDragEnter} onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDrop={this.onDrop}>
                                 <div className="buttonStyle">
                                       <span className="line-1"/>

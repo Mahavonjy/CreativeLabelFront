@@ -10,6 +10,7 @@ import FunctionTools from "../../FunctionTools/FunctionTools";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 
+const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
 class EditProfile extends Component {
     state = {
         photo: '', loading: false,
@@ -25,19 +26,12 @@ class EditProfile extends Component {
         description: this.props.profile_info.description,
     };
 
-    changePhone = (e) => {this.setState({phone : e.target.value})};
-
-    changeCountry = (e) => {this.setState({country : e.target.value})};
-
-    changeCity = (e) => {this.setState({city : e.target.value})};
-
     uploadFile = (e) =>{this.setState({photo : e.target.files[0]})};
 
     handleSubmitUpdateProfile = (e) => {
         let id = e.target.id;
         document.getElementById(id).setAttribute("disabled", "disabled");
         this.setState({loading: true});
-        let cookies = new Cookies();
         const bodyFormData = new FormData();
         bodyFormData.append('name', this.state.name);
         bodyFormData.append('email', this.state.email);
@@ -52,13 +46,13 @@ class EditProfile extends Component {
         bodyFormData.append('phone', this.state.phone ? this.state.phone: 0);
         bodyFormData.append('birth', this.state.birth ? this.state.birth: '01/01/1998');
 
-        let new_headers = {
+        let headers = {
             'Content-Type': 'multipart/form-data',
             'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+            'Isl-Token': user_credentials.token
         };
 
-        axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: new_headers}).then(resp => {
+        axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: headers}).then(resp => {
             this.props.profile_initialisation(resp.data);
             this.setState({loading: false}, () => {
                 this.props.closePopup(1);
@@ -82,11 +76,11 @@ class EditProfile extends Component {
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
                     <div className="col text-center">
-                        <h4 className="text-green text-monospace">Edit Profile</h4>
+                        <h4 className="text-green text-monospace">Modifier votre profile</h4>
                         <div className="body">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-user"/>&nbsp;name</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-user"/>&nbsp;nom</div>
                                     <input value={this.state.name} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="name" name="name" placeholder="name"
                                            className="form-control" type="text" required/>
@@ -100,59 +94,63 @@ class EditProfile extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-location-arrow"/>&nbsp;region</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-location-arrow"/>&nbsp;région</div>
                                     <input value={this.state.region} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="region" name="region" className="form-control"  type="text" />
                                 </div>
 
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-birthday-cake"/>&nbsp;birth</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-birthday-cake"/>&nbsp;Date de naissance</div>
                                     <input  value={this.state.birth} onChange={(e) => FunctionTools.changeFields(this, e)}
                                             id="birth" name="birth" className="form-control" type="date" />
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-address-book"/>&nbsp;address</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-address-book"/>&nbsp;adresse</div>
                                     <input value={this.state.address} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="address" name="address" className="form-control" type="text" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-map-location"/>&nbsp;country</div>
-                                    <select className="selectpicker form-control" value={this.state.country} onChange={this.changeCountry}>
+                                    <div className="input-group-text black-text bolder"><i className="icon-map-location"/>&nbsp;Pays</div>
+                                    <select className="selectpicker form-control" id="country" name="country" value={this.state.country} onChange={(e) => FunctionTools.changeFields(this, e)}>
                                         <option value="Madagascar">Madagascar</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-smartphone-1"/>&nbsp;phone</div>
-                                    <input value={this.state.phone} onChange={this.changePhone}
-                                           id="phoneNumber" name="phoneNumber" className="form-control" type="number" />
+                                    <div className="input-group-text black-text bolder"><i className="icon-smartphone-1"/>&nbsp;Télephone</div>
+                                    <input value={this.state.phone} onChange={(e) => FunctionTools.changeFields(this, e)}
+                                           id="phone" name="phone" className="form-control" type="number" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-street-view"/>&nbsp;city</div>
-                                    <input value={this.state.city} onChange={this.changeCity}
-                                           id="city" name="city" className="form-control" type="text" />
+                                    <div className="input-group-text black-text bolder"><i className="icon-street-view"/>&nbsp;Ville</div>
+                                    <select className="selectpicker form-control" id="city" name="city" value={this.state.city} onChange={(e) => FunctionTools.changeFields(this, e)}>
+                                        <option value="">Veuillez choisir</option>
+                                        <option value="Manakara">Manakara</option>
+                                        <option value="Tamatave">Tamatave</option>
+                                        <option value="Toliara">Toliara</option>
+                                    </select>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-info-circle"/>&nbsp;description</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-info-circle"/>&nbsp;Description</div>
                                     <input value={this.state.description} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="description" name="description" className="form-control" type="text" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-venus-double"/>&nbsp;gender</div>
-                                    <select className="selectpicker form-control" value={this.state.gender} onChange={(e) => FunctionTools.changeFields(this, e)}>
-                                        <option value="0">Female</option>
+                                    <div className="input-group-text black-text bolder"><i className="icon-venus-double"/>&nbsp;Sexe</div>
+                                    <select className="selectpicker form-control" id="gender" name="gender" value={this.state.gender} onChange={(e) => FunctionTools.changeFields(this, e)}>
+                                        <option value="0">Femelle</option>
                                         <option value="1">male</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
-                                    <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;profile picture</div>
+                                    <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de profile</div>
                                     <input onChange={this.uploadFile} id="picture" name="picture" className="form-control" type="file" />
                                 </div>
                             </div>

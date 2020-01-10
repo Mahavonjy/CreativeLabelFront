@@ -1,8 +1,18 @@
 import React, { Component } from "react";
+import ReactTooltip from 'react-tooltip';
+import {connect} from "react-redux";
 
 class PaymentsAndReservations extends Component {
     state = {
         isMounted: false,
+    };
+
+    auditor_pro_canceled = () => {
+        console.log("L'auditeur annule la prestation");
+    };
+
+    artist_canceled = () => {
+        console.log("L'artist annule la prestation");
     };
 
     tableGenerator = (status, action) => {
@@ -10,16 +20,16 @@ class PaymentsAndReservations extends Component {
             <table className="responsive-table">
                 <thead>
                 <tr>
-                    <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info"/></th>
-                    <th scope="col">Date&nbsp;<i className="icon icon-info"/></th>
-                    <th scope="col">Artist&nbsp;<i className="icon icon-info"/></th>
-                    <th scope="col">Évènenment&nbsp;<i className="icon icon-info"/></th>
-                    <th scope="col">Adresse&nbsp;<i className="icon icon-info"/></th>
-                    <th scope="col">Montant&nbsp;<i className="icon icon-info"/></th>
+                    <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisi"/></th>
+                    <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Ceci est la date ou votre evenement va se dérouler"/></th>
+                    <th scope="col">Artist&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'artist concerné par l'evenement avec un lien qui va direct sur son profile"/></th>
+                    <th scope="col">Évènenment&nbsp;<i className="icon icon-info" data-tip="Ceci sera le type d'evenement de l'autideur qui a reserver "/></th>
+                    <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="Ceci est l'adresse choisi par l'auditeur ou se déroulera l'evenement"/></th>
+                    <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Ici sera le montant HT de la prestation (Choisi par l'artiste)"/></th>
                     {status ?
-                        <th scope="col">Status&nbsp;<i className="icon icon-info"/></th>
-                        : <th scope="col">Facture&nbsp;<i className="icon icon-info"/></th>}
-                    {action ? <th scope="col">Action&nbsp;<i className="icon icon-info"/></th> : null}
+                        <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Ici s'affichera le status de votre réservation qui sera varier"/></th>
+                        : <th scope="col">Facture&nbsp;<i className="icon icon-info" data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/></th>}
+                    {action ? <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip="Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec"/></th> : null}
                 </tr>
                 </thead>
 
@@ -32,9 +42,9 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Adresse">Lot 1M 30 Andragnovato-Est</td>
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-yellow" data-title="Status">En attente</td>
-                        : <td className="small text-red" data-title="Status">Ici</td>}
+                        : <td className="small text-red" data-title="Status">télécharger</td>}
                     {action ? <div className="text-center mt-2">
-                        <button className="btn btn-outline-danger">Annuler</button>
+                        <button className="btn btn-outline-danger" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
                     </div>: null}
                 </tr>
                 <tr>
@@ -45,7 +55,7 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Adresse">Lot 1M 30 Andragnovato-Est</td>
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-red" data-title="Status">Echec</td>
-                        : <td className="small text-red" data-title="Status">Ici</td>}
+                        : <td className="small text-red" data-title="Status">télécharger</td>}
                     {action ?
                         <div className="text-center mt-2">
                             <button className="btn btn-outline-danger" disabled>Annuler</button>
@@ -59,10 +69,10 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Adresse">Lot 1M 30 Andragnovato-Est</td>
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-green" data-title="Status">Validé</td>
-                        : <td className="small text-red" data-title="Status">Ici</td>}
+                        : <td className="small text-red" data-title="Status">télécharger</td>}
                     {action ?
                         <div className="text-center mt-2">
-                            <button className="btn btn-outline-success">Noter</button>
+                            <button className="btn btn-outline-success" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
                         </div>: null}
                 </tr>
                 </tbody>
@@ -81,6 +91,7 @@ class PaymentsAndReservations extends Component {
     render() {
         return (
             <div className="col" style={{minHeight: 320}}>
+                <ReactTooltip/>
                 <div className="card no-b">
                     <div className="card-body">
                         <div className="row justify-content-center">
@@ -118,4 +129,10 @@ class PaymentsAndReservations extends Component {
     }
 }
 
-export default PaymentsAndReservations;
+const mapStateToProps = state => {
+    return {
+        role: state.profile.role,
+    };
+};
+
+export default connect(mapStateToProps, null)(PaymentsAndReservations);

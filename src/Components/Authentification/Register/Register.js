@@ -27,7 +27,7 @@ class Register extends Component {
         confirm_password: '',
         usingAdBlock: false,
         choiceArtistType: false,
-        becomeArtistForm: true,
+        becomeArtistForm: false,
         artist_type: "Beatmaker"
     };
 

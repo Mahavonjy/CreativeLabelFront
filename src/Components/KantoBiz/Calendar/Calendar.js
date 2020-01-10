@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import moment from "moment";
 import '../style/Calendar.css'
+import ReactTooltip from "react-tooltip";
 
 class Calendar extends Component {
     state = {
@@ -372,6 +373,7 @@ class Calendar extends Component {
 
         return (
             <div className="calendar-rectangle">
+                <ReactTooltip/>
                 <div id="calendar-content" className="calendar-content">
                     {showEvents?
                         <section className="main-calendar">
@@ -398,13 +400,13 @@ class Calendar extends Component {
                             <div className="days-container pt-2">
                                 {this.renderWeeks()}
                                 <div className='my-legend pt-3'>
-                                    <div className="legend-title text-light">Legend&nbsp;<i className="icon icon-info-circle"/></div>
+                                    <div className="legend-title text-light">Legend&nbsp;<i className="icon icon-info-circle" data-tip="Ceci pourraît vous aidez pour comprendre le calendrier"/></div>
                                     <div className="legend-scale pt-3">
                                         <ul className="row justify-content-center legend-labels">
-                                            <li><span style={{background: '#74A9CF'}}>Reserver</span></li>
-                                            <li><span style={{background: '#00c853'}}>Disponible</span></li>
-                                            <li><span style={{background: '#ef6c00'}}>Indifférent</span></li>
-                                            <li><span style={{background: '#ED1C24'}}>Indisponible</span></li>
+                                            <li><span style={{background: '#74A9CF'}}>Reserver&nbsp;<i className="icon icon-info" data-tip="L'artiste est indisponible car il va realiser une prestation"/></span></li>
+                                            <li><span style={{background: '#00c853'}}>Disponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est libre de pour un evenement"/></span></li>
+                                            <li><span style={{background: '#ef6c00'}}>Indifférent&nbsp;<i className="icon icon-info" data-tip="L'artiste est en vue de faire une prestation mais peut recevoir une reservation"/></span></li>
+                                            <li><span style={{background: '#ED1C24'}}>Indisponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est ne travail tout simplement pendant cette journée"/></span></li>
                                         </ul>
                                     </div>
                                 </div>

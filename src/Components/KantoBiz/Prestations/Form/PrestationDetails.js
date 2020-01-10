@@ -13,10 +13,14 @@ class PrestationDetails extends Component {
             preparation_time: this.props.preparation_time,
             service_time: this.props.service_time,
             price_of_service: this.props.price_of_service,
-            events_type: ["Mariage", "Anniversaire", "ForaZaza", "Famadihana", "ForaOlombe"],
             number_of_artist: this.props.number_of_artist,
             unit_time_of_service: this.props.unit_time_of_service,
-            unit_time_of_preparation: this.props.unit_time_of_preparation
+            unit_time_of_preparation: this.props.unit_time_of_preparation,
+            events_type:
+                [
+                    "Mariage", "Fête traditionnelle", "Anniversaire", "Show-case", "Festival et défilé", "Événement sportif",
+                    "Évènement d’entreprise", "Évènement associative", "Création d’instrumentale", "Montage vidéo"
+                ]
         };
         that = this
     }

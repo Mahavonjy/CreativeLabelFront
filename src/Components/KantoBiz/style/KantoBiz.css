@@ -206,13 +206,13 @@
 
 .thematics-card:hover ~ .thematics-card {
     position: relative;
-    left: 2%;
+    left: 1%;
     transition: 0.4s ease-out;
 }
 
 .bar {
     position: relative;
-    top: 50px;
+    top: 20px;
     left: 10px;
     height: 5px;
     width: 90%;

@@ -7,6 +7,18 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {toast, ToastContainer} from "react-toastify";
 
+const envents =
+    [
+        "Mariage", "Fête traditionnelle", "Anniversaire", "Show-case", "Festival et défilé", "Événement sportif",
+        "Évènement d’entreprise", "Évènement associative", "Création d’instrumentale", "Montage vidéo"
+    ];
+
+const thematics =
+    [
+        "Comédiens", "DJ", "Danseurs", "Magiciens", "Chanteur/Musicien", "Cirque/Arts de la rue", "Spectacles enfants",
+        "Beatmaking", "Spécialiste de l’audiovisuel"
+    ];
+
 class SearchBar extends Component {
     state = {
         city: "",
@@ -52,7 +64,7 @@ class SearchBar extends Component {
                     <small>• DJ (Animateur, Mix, Live set, DJ Set)</small><br/><br/>
                     <small>• Danseurs (Bachata, cabaret, capoeira, chachacha, classique,<br/>
                         contemporain, ethnique, expérimental, hip hop, Improvisation, Jazz, Kizomba, Moderne,<br/>
-                        Oriental, Salsa, Samba, Tango, kilalaky, batrelaky, salegy, Ndombolo, Vakondrazana,zouk, Kawitri,Maloya, Kompas, autre)</small><br/><br/>
+                        Oriental, Salsa, Samba, Tango, kilalaky, batrelaky, salegy, Ndombolo, Vakondrazana,zouk, Kawitri, Maloya, Kompas, autre)</small><br/><br/>
                     <small>• Magiciens (Close-ups, Mentalistes, Prestidigitateurs, autre)</small><br/><br/>
                     <small>• Chanteur/Musicien (Acapella, Afrobeat, Blues, Breakbeat, Classique, <br/>
                     Dancehall, Electronica, Folk, Metal, Funk, Gospel, House, Jazz, Pop, Slam, Swing, <br/>
@@ -66,7 +78,7 @@ class SearchBar extends Component {
                     Kawitri, Malesa, Tsapiky, Zafindraona, Slow, Coupé-Décalé) </small><br/><br/>
                     <small>• Spécialiste de l’audiovisuel (Monteur vidéoclip, Cameraman, Photographes, <br/>
                     Réalisateur clip vidéo, autre)</small><br/><br/>
-                    <small>• Spectacles enfants</small>
+                    <small>• Spectacles enfants (Clown ....)</small>
                 </ReactTooltip>
                 {/* Input Search */}
                 <h3 className="text-center text-red">Trouvez la meilleur prestation pour votre evenement</h3><br/>
@@ -74,7 +86,7 @@ class SearchBar extends Component {
                     <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px", width: "94%"}}>
                         <input className="bg-transparent text-center text-white border-0" type="text" id="country" name="country" placeholder="Madagascar" value={this.state.country} disabled={true}/>
                         <label className="input-group-addon bg-transparent"><i className="icon-map-location text-center text-red"/>
-                            <span className="ml-2 text-white" data-tip="Pour le moments, Madagascar est le seule pays">?</span></label>
+                            <span className="ml-2 text-white" data-tip="Pour le moments, Madagascar est le seule pays"><i className="icon icon-info"/></span></label>
                     </div>
 
                     <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px", width: "94%"}}>
@@ -89,7 +101,7 @@ class SearchBar extends Component {
                                 <option className="dropdown-item" id="city" name="city" defaultValue="Manakara" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Majunga</option>
                             </div>
                         </div>
-                        <label className="input-group-addon bg-transparent"><i className="icon-location-arrow text-red"/><span className="ml-2 text-white" data-tip="Veuillez choisir la ville ou votre evenement aura lieu">?</span></label>
+                        <label className="input-group-addon bg-transparent"><i className="icon-location-arrow text-red"/><span className="ml-2 text-white" data-tip="Veuillez choisir la ville ou votre evenement aura lieu"><i className="icon icon-info"/></span></label>
                     </div>
 
                     <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px", width: "94%"}}>
@@ -98,19 +110,13 @@ class SearchBar extends Component {
                                     data-toggle="dropdown" aria-haspopup="true" id="city" aria-expanded="false">{this.state.thematics || "Thematiques"}
                             </button>
                             <div className="dropdown-menu overflow-auto text-red" style={{height: 210, borderRadius: 5}}>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Cirque/Arts de la rue " onClick={(e) => {FunctionTools.changeFields(this, e)}}>Cirque/Arts de la rue</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Comédiens " onClick={(e) => {FunctionTools.changeFields(this, e)}}>Comédiens</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Danseurs" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Danseurs</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Magiciens" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Magiciens</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Chanteur/Musicien" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Chanteur/Musicien</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Spectacles enfants" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Spectacles enfants</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Beatmaking" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Beatmaking</option>
-                                <option className="dropdown-item" id="thematics" name="thematics" defaultValue="Spécialiste de l’audiovisuel" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Spécialiste de l’audiovisuel</option>
+                                {thematics.map((item, index) =>
+                                    <option key={index} className="dropdown-item" id="thematics" name="thematics" defaultValue={item} onClick={(e) => {FunctionTools.changeFields(this, e)}}>{item}</option>
+                                )}
                             </div>
                         </div>
                         <label className="input-group-addon bg-transparent"><i className="icon-tasks text-center text-red" />
-                            <span className="ml-2 text-white " data-tip data-for='thematics'>?</span></label>
+                            <span className="ml-2 text-white " data-tip data-for='thematics'><i className="icon icon-info"/></span></label>
                     </div>
 
                     <div className=" col-sm-2 d-inline-block border border-primary text-center" style={{borderRadius: "5px", width: "94%"}}>
@@ -120,21 +126,17 @@ class SearchBar extends Component {
                                     aria-expanded="false">	&nbsp; {this.state.events || "Evenements"}
                             </button>
                             <div className="dropdown-menu overflow-auto text-red" style={{height: 210, borderRadius: 5}}>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
-                                <option className="dropdown-item" id="events" name="events" defaultValue="DJ" onClick={(e) => {FunctionTools.changeFields(this, e)}}>DJ</option>
+                                {envents.map((item, index) =>
+                                    <option key={index} className="dropdown-item" id="events" name="events" defaultValue={item} onClick={(e) => {FunctionTools.changeFields(this, e)}}>{item}</option>
+                                )}
                             </div>
                         </div>
-                        <label className="input-group-addon bg-transparent"><i className="icon-network text-center text-red"/><span className="ml-2 text-white">?</span></label>
+                        <label className="input-group-addon bg-transparent"><i className="icon-network text-center text-red"/><span className="ml-2 text-white"><i className="icon icon-info"/></span></label>
                     </div>
 
                     <div className=" col-sm-2 d-inline-block border border-primary text-center " style={{borderRadius: "5px", width: "94%"}}>
                         <DatePicker className="bg-transparent text-center text-white border-0" selected={this.state.startDate} onChange={this.ChangeDate}/>
-                        <label className="input-group-addon bg-transparent"><i className="icon-calendar text-center text-red"/><span className="ml-2 text-white">?</span></label>
+                        <label className="input-group-addon bg-transparent"><i className="icon-calendar text-center text-red"/><span className="ml-2 text-white" data-tip="La date de votre Evenement"><i className="icon icon-info"/></span></label>
                     </div>
 
                     <div className="col-md-10" style={{width: "90%"}}>

@@ -1,6 +1,7 @@
 const initState = {
     PlayList: [],
     AllMediaGenre: [],
+    PrefAllMediaGenre: [],
     PlaListInfo : null,
     playMusic: false,
     redirect: false,
@@ -24,6 +25,11 @@ const PlaylistHomeReducer = (state = initState, action) => {
             return {
                 ...state,
                 AllMediaGenre: action.data
+            };
+        case "ADD_ALL_MEDIA_GENRE_PREF":
+            return {
+                ...state,
+                PrefAllMediaGenre: action.data
             };
         case "ACTIVE_OR_NO_PLAYER":
             return {

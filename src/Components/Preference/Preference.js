@@ -3,6 +3,7 @@ import axios from "axios";
 import './music_genres.css';
 import Conf from "../../Config/tsconfig";
 import { ToastContainer, toast } from 'react-toastify';
+import {connect} from "react-redux";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -14,13 +15,6 @@ class Preference extends Component {
         button: false, isNotMatch : false, first_array:[], second_array: [], isMounted: false
     };
 
-    componentDidMount() {
-        this.setState({isMounted: true}, () => {
-            toast.warn("Veuillez choisir au moins 5 genres");
-            this.addAllMediaGenreToArray()
-        });
-    }
-
     BooleanToChange = (index) => {
         let tmp_state = [...this.state.first_array];
         if (this.state.first_array[index][0] === "#9DA6B1") {
@@ -31,27 +25,6 @@ class Preference extends Component {
             tmp_state[index][1] = false;
         }
         this.setState({first_array: tmp_state}, () => {this.setState({array: this.state.first_array});});
-    };
-
-    addAllMediaGenreToArray = () => {
-
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*"
-        };
-
-        axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers:headers}).then(response =>{
-            for (let row in response.data) {
-                this.setState(prevState => ({
-                    first_array: [...prevState.first_array, ["#9DA6B1", false,  {
-                        "genre": response.data[row]["genre"],
-                        "image": response.data[row]["image"],
-                    }]]
-                }))
-            }
-        }).catch(error =>{
-            toast.error(error.response.data);
-        })
     };
 
     sendUserGenreToApi = () => {
@@ -73,6 +46,20 @@ class Preference extends Component {
             })
         }
     };
+
+    componentDidMount() {
+        this.setState({isMounted: true}, () => {
+            toast.warn("Veuillez choisir au moins 5 genres");
+            for (let row in this.props.AllMediaGenre) {
+                this.setState(prevState => ({
+                    first_array: [...prevState.first_array, ["#9DA6B1", false,  {
+                        "genre": this.props.AllMediaGenre[row]["genre"],
+                        "image": this.props.AllMediaGenre[row]["image"],
+                    }]]
+                }))
+            }
+        });
+    }
 
     componentWillUnmount() {
         this.setState({ isMounted: false });
@@ -101,4 +88,10 @@ class Preference extends Component {
     }
 }
 
-export default Preference;
+const mapStateToProps = state => {
+    return {
+        AllMediaGenre: state.Home.PrefAllMediaGenre,
+    };
+};
+
+export default connect(mapStateToProps, null)(Preference);
