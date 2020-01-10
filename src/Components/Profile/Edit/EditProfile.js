@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Modal from 'react-awesome-modal';
 import { connect } from 'react-redux';
-import Cookies from "universal-cookie";
 import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,7 +9,6 @@ import FunctionTools from "../../FunctionTools/FunctionTools";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 
-const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
 class EditProfile extends Component {
     state = {
         photo: '', loading: false,
@@ -49,7 +47,7 @@ class EditProfile extends Component {
         let headers = {
             'Content-Type': 'multipart/form-data',
             'Access-Control-Allow-Origin': "*",
-            'Isl-Token': user_credentials.token
+            'Isl-Token': this.props.user_credentials.token
         };
 
         axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: headers}).then(resp => {
@@ -165,7 +163,8 @@ class EditProfile extends Component {
 
 const mapStateToProps = state => {
     return {
-        profile_info: state.profile.profile_info
+        profile_info: state.profile.profile_info,
+        user_credentials: state.Home.user_credentials,
     };
 };
 

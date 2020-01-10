@@ -10,12 +10,11 @@ import * as CreateFields from "../../FunctionTools/CreateFields";
 import FunctionTools from "../../FunctionTools/FunctionTools";
 import {bindActionCreators} from "redux";
 
-const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
 class AddSingle extends Component {
     state = {
         file: '',
         title: '',
-        artist: user_credentials.name,
+        artist: this.props.user_credentials.name,
         genre: '',
         genre_musical: 'beats',
         description: '',
@@ -97,7 +96,7 @@ class AddSingle extends Component {
             let new_headers = {
                 'Content-Type': 'multipart/form-data',
                 'Access-Control-Allow-Origin': "*",
-                'Isl-Token': user_credentials.token
+                'Isl-Token': this.props.user_credentials.token
             };
             axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: new_headers}).then(resp => {
                 this.setState({loading: false});
@@ -320,6 +319,7 @@ const mapStateToProps = state => {
     return {
         pricing: state.profile.pricing_beats,
         AllMediaGenre: state.Home.AllMediaGenre,
+        user_credentials: state.Home.user_credentials,
         contract: state.profile.contract
     };
 };

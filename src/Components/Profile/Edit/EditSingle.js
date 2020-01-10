@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Modal from 'react-awesome-modal';
-import Cookies from "universal-cookie";
 import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,7 +8,6 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 
-let cookies = new Cookies();
 class EditSingle extends Component {
     state = {
         file: null, title: this.props.Song.title, artist: this.props.Song.artist,
@@ -95,7 +93,7 @@ class EditSingle extends Component {
                 let new_headers = {
                     'Content-Type': 'multipart/form-data',
                     'Access-Control-Allow-Origin': "*",
-                    'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
+                    'Isl-Token': this.props.user_credentials.token
                 };
                 axios.put(Conf.configs.ServerApi + link + id_, bodyFormData, {headers: new_headers}).then(() => {
                     this.setState({loading: false}, () => {
@@ -229,6 +227,7 @@ class EditSingle extends Component {
 const mapStateToProps = state => {
     return {
         AllMediaGenre: state.Home.AllMediaGenre,
+        user_credentials: state.Home.user_credentials,
     };
 };
 

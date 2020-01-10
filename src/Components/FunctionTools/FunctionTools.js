@@ -197,6 +197,14 @@ class FunctionTools extends Component {
         })
     };
 
+    static changeBoolFields = (that, e, up_props) => {
+        let id = e.target.id;
+        let value = e.target.value;
+        that.setState({[id]: !that.state[id]}, () => {
+            if (up_props) up_props(value)
+        })
+    };
+
     render() {
         return(
             <ToastContainer/>

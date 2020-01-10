@@ -96,8 +96,7 @@ class Profile extends Component {
     componentDidMount() {
         this.setState({ isMounted: true}, () => {
             try {
-                const user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
-                headers['Isl-Token'] = user_credentials.token;
+                headers['Isl-Token'] = this.props.user_credentials.token;
             } catch (e) {
                 //
             } finally {
@@ -294,6 +293,7 @@ const mapStateToProps = state => {
     return {
         profile_info: state.profile.profile_info,
         ready_beats: state.profile.ready_beats,
+        user_credentials: state.Home.user_credentials,
         contract: state.profile.contract,
         user_beats: state.profile.user_beats,
         role: state.profile.role,

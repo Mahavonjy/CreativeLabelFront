@@ -13,7 +13,6 @@ import * as PopupFields from "../FunctionTools/PopupFields";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
-let user_credentials;
 let _that;
 let headers = {
     'Content-Type': 'application/json',
@@ -131,7 +130,7 @@ class Home extends Component {
                 console.log('')
             } finally {
                 try {
-                    headers['Isl-Token'] = user_credentials.token;
+                    headers['Isl-Token'] = this.props.user_credentials.token;
                     if (this.state.href[this.state.href.length - 1] === 'register') {
                         window.location.replace('/beats')
                     } else if (this.state.href[this.state.href.length - 1] !== 'preference') {
@@ -203,7 +202,7 @@ class Home extends Component {
 
     componentDidMount() {
         this.setState({isMounted: true }, () => {
-            user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+            this.props.addUserCredentials(JSON.parse(localStorage.getItem("Isl_Credentials")));
             if (this.props.beats.length === 0) {
                 this.Online();
             } else {
@@ -270,6 +269,7 @@ class Home extends Component {
 const mapStateToProps = state => {
     return {
         AllMediaGenre: state.Home.AllMediaGenre,
+        user_credentials: state.Home.user_credentials,
         contract: state.profile.contract,
         beats_: state.profile.beats,
         beats: state.beats.beats,
@@ -281,6 +281,9 @@ const mapDispatchToProps = dispatch => {
     return {
         addBeats: (data) => {
             dispatch({type: "ADD_BEATS", data: data})
+        },
+        addUserCredentials: (data) => {
+            dispatch({type: "ADD_USER_CREDENTIALS", data: data})
         },
         addBeatMakerBeats: (data) => {
             dispatch({type: "ADD_BEAT_MAKER_BEATS", data: data})

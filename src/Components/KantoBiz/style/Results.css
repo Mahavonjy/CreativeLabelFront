@@ -178,8 +178,8 @@
 
 .nav-pills .nav-item .nav-link.active {
     color: #fff;
-    background-color: #9c27b0;
-    box-shadow: 0 5px 20px 0 rgba(0,0,0,.2), 0 13px 24px -11px rgba(156,39,176,.6);
+    background-color: #ED1C24;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.2), 0 10px 10px -11px #ED1C24;
 }
 
 .nav-pills .nav-item .nav-link {
@@ -187,7 +187,7 @@
     font-size: 12px;
     font-weight: 500;
     min-width: 100px;
-    color: #555;
+    color: #58585a;
     transition: all .3s;
     border-radius: 30px;
     padding: 10px 15px;

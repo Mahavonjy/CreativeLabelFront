@@ -1,5 +1,6 @@
 const initState = {
     PlayList: [],
+    user_credentials: {},
     AllMediaGenre: [],
     PrefAllMediaGenre: [],
     PlaListInfo : null,
@@ -11,6 +12,11 @@ const initState = {
 
 const PlaylistHomeReducer = (state = initState, action) => {
     switch (action.type) {
+        case "ADD_USER_CREDENTIALS":
+            return {
+                ...state,
+                user_credentials: action.data
+            };
         case "ADD_PLAYLIST_INFO":
             return {
                 ...state,
