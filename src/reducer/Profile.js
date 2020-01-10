@@ -15,11 +15,6 @@ const profileReducer = (state = initState, action) => {
                 ...state,
                 ready_beats: true
             };
-        case "SET_READY_BEATS_TO_FALSE":
-            return {
-                ...state,
-                ready_beats: false
-            };
         case "ADD_PROFILE_ALBUMS":
             return {
                 ...state,
@@ -34,11 +29,6 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 user_beats: action.data
-            };
-        case "CLEAN_PROFILE_BEATS":
-            return {
-                ...state,
-                user_beats: []
             };
         case "ADD_CONTRACT":
             return {
