@@ -2,29 +2,30 @@ import React, { Component } from "react";
 import {connect} from "react-redux";
 import axios from "axios";
 import Conf from "../../../Config/tsconfig";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import FunctionTools from "../../FunctionTools/FunctionTools";
 
 class EditContractBeats extends Component {
     state = {
+        // basic contract
         basic_enable: this.props.contract['basic_lease']['enabled'],
         basic: this.props.contract['basic_lease']['price'],
         basic_number_audio_stream: this.props.contract['basic_lease']['number_audio_stream'],
         basic_number_radio_station: this.props.contract['basic_lease']['number_radio_station'],
         basic_number_of_distribution_copies: this.props.contract['basic_lease']['number_of_distribution_copies'],
-
+        // silver contract
         silver_enable: this.props.contract['silver_lease']['enabled'],
         silver: this.props.contract['silver_lease']['price'],
         silver_number_audio_stream: this.props.contract['silver_lease']['number_audio_stream'],
         silver_number_radio_station: this.props.contract['silver_lease']['number_radio_station'],
         silver_number_of_distribution_copies: this.props.contract['silver_lease']['number_of_distribution_copies'],
-
+        // gold contract
         gold_enable: this.props.contract['gold_lease']['enabled'],
         gold: this.props.contract['gold_lease']['price'],
         gold_number_audio_stream: this.props.contract['gold_lease']['number_audio_stream'],
         gold_number_radio_station: this.props.contract['gold_lease']['number_radio_station'],
         gold_number_of_distribution_copies: this.props.contract['gold_lease']['number_of_distribution_copies'],
-
+        // platinum contract
         platinum_enable: this.props.contract['platinum_lease']['enabled'],
         platinum_unlimited: this.props.contract['platinum_lease']['unlimited'],
         platinum: this.props.contract['platinum_lease']['price'],
@@ -138,7 +139,6 @@ class EditContractBeats extends Component {
     render() {
         return (
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
-                <ToastContainer/>
                 <div className="card no-b">
                     <div className="card-header pb-0">
                         <div className="d-flex justify-content-between">
@@ -148,16 +148,16 @@ class EditContractBeats extends Component {
                             <div className="align-self-center">
                                 <ul className="nav nav-pills mb-3" role="tablist">
                                     <li className="nav-item">
-                                        <a className="nav-link active show" id="w4--tab1" data-toggle="tab" href="#w4-tab1" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">Standard</a>
+                                        <a className="nav-link active show" data-toggle="tab" href="#basic_tab" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">Basic</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="w4--tab2" data-toggle="tab" href="#w4-tab2" role="tab" aria-controls="tab2" aria-selected="false">Silver</a>
+                                        <a className="nav-link" data-toggle="tab" href="#silver_tab" role="tab" aria-controls="tab2" aria-selected="false">Silver</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="w4--tab3" data-toggle="tab" href="#w4-tab3" role="tab" aria-controls="tab3" aria-selected="false">Gold</a>
+                                        <a className="nav-link" data-toggle="tab" href="#gold_tab" role="tab" aria-controls="tab3" aria-selected="false">Gold</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="w4--tab4" data-toggle="tab" href="#w4-tab4" role="tab" aria-controls="tab4" aria-selected="false">Platinum</a>
+                                        <a className="nav-link" data-toggle="tab" href="#platinum_tab" role="tab" aria-controls="tab4" aria-selected="false">Platinum</a>
                                     </li>
                                 </ul>
                             </div>
@@ -165,10 +165,10 @@ class EditContractBeats extends Component {
                     </div>
                     <div className="card-body no-p">
                         <div className="tab-content">
-                            {this.generateContractTab("basic", "show active", "w4-tab1")}
-                            {this.generateContractTab("silver", "", "w4-tab2")}
-                            {this.generateContractTab("gold", "", "w4-tab3")}
-                            {this.generateContractTab("platinum", "", "w4-tab4")}
+                            {this.generateContractTab("basic", "show active", "basic_tab")}
+                            {this.generateContractTab("silver", "", "silver_tab")}
+                            {this.generateContractTab("gold", "", "gold_tab")}
+                            {this.generateContractTab("platinum", "", "platinum_tab")}
                         </div>
                     </div>
                 </div>

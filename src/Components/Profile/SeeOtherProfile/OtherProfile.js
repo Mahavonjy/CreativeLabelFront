@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PhotoD from '../../../images/socials/profile.png';
-import { ToastContainer } from 'react-toastify';
 import FunctionTools from "../../FunctionTools/FunctionTools";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -34,7 +33,6 @@ class OtherProfile extends Component {
     render() {
         return (
             <div className="Base">
-                <ToastContainer/>
                 <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                     <div className="card no-b shadow no-r">
                         <div className="row no-gutters">

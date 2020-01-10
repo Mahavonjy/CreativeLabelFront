@@ -192,7 +192,7 @@ class FunctionTools extends Component {
 
     static changeFields = (that, e, up_props) => {
         let value = e.target.value;
-        that.setState({[e.target.id]: value}, () => {
+        that.setState({[e.target.name]: value}, () => {
             if (up_props) up_props(value)
         })
     };
@@ -203,6 +203,10 @@ class FunctionTools extends Component {
         that.setState({[id]: !that.state[id]}, () => {
             if (up_props) up_props(value)
         })
+    };
+
+    static changeFileFields = (that, e) => {
+        that.setState({[e.target.id] : e.target.files[0]});
     };
 
     render() {

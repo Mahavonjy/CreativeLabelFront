@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
 import logo from "../../images/Logo/ISL_logo.png"
-import "../../assets/css/app.css";
 import Conf from "../../Config/tsconfig";
 import './styles/main.scss'
 import './styles/_global.scss'
@@ -18,13 +17,33 @@ class Players extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentIndex: 0, currentTitle: '', currentArtist: '', currentImage: '',
-            IsPlaying: false, progressbar: 0, VolumeBar: 100, VolumeUp: true,
-            currentTime: '00:00', totalTime: '00:00', loop: false, shuffle: false,
-            component: null, listInfo: null, tmp: 0, listen: false, listen_min: null,
-            isMounted: false , userPlaylist: [], songId: null, pres_listened: false,
-            listened: false, type_: '', _that: '', set_of_beats_name: ''
+            tmp: 0,
+            type_: '',
+            _that: '',
+            currentIndex: 0,
+            currentTitle: '',
+            currentArtist: '',
+            currentImage: '',
+            IsPlaying: false,
+            progressbar: 0,
+            VolumeBar: 100,
+            VolumeUp: true,
+            currentTime: '00:00',
+            totalTime: '00:00',
+            loop: false,
+            shuffle: false,
+            component: null,
+            listInfo: null,
+            listen: false,
+            listen_min: null,
+            isMounted: false ,
+            userPlaylist: [],
+            songId: null,
+            pres_listened: false,
+            listened: false,
+            set_of_beats_name: ''
         };
+
         this.history = [];
         this.player = new Audio();
         _this = this
@@ -89,7 +108,7 @@ class Players extends Component {
                 } else {
                     this.history.push(this.state.currentIndex);
                     this.setState({currentIndex: this.state.currentIndex + 1}, function next () {
-                        this.props.changeIndex(this.state.currentIndex, this.state._that)
+                        this.props.changeIndex(this.state.currentIndex, this.state._that);
                         this.startPlayer()
                     });
                 }
@@ -101,7 +120,7 @@ class Players extends Component {
         this.setState({tmp: 0, listen: false}, () => {
             if (this.history[this.history.length - 1] >= 0) {
                 this.setState({currentIndex: this.history.pop()}, function prev() {
-                    this.props.changeIndex(this.state.currentIndex, this.state._that)
+                    this.props.changeIndex(this.state.currentIndex, this.state._that);
                     this.startPlayer()
                 });
             } else {
@@ -170,7 +189,7 @@ class Players extends Component {
 
     componentDidMount(index, type_, run, _that, set_of_beats_name) {
         this.setState({ isMounted: true , type_: type_, _that: _that, set_of_beats_name: set_of_beats_name}, () => {
-            if (index) {
+            if (set_of_beats_name) {
                 const that = this;
                 this.setState({list: this.props.list, listInfo: this.props.listInfo}, () => {
                     if (run) this.PlayOrPause();
@@ -292,9 +311,8 @@ class Players extends Component {
                                                 <small className="track-time ml-2 mr-2 text-primary align-middle">{this.state.totalTime}</small>
                                             </div>
                                         </div>
-                                        <div className="progress" style={{width: "100%", height: "4px"}}
-                                             onClick={this.state.songId ? this.onBarClick : null}>
-                                            <div className="bar" style={{width: this.state.progressbar + '%', background: "red"}}/>
+                                        <div className="progress" style={{width: "100%", height: "4px"}} onClick={this.state.songId ? this.onBarClick : null}>
+                                            <div className="progress-bar relative bg-red" style={{width: this.state.progressbar + '%'}}/>
                                         </div>
                                     </div>
                                 </div>

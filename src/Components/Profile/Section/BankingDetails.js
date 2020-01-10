@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import FunctionTools from "../../FunctionTools/FunctionTools";
-import ReactTooltip from 'react-tooltip';
 
 class BankingDetails extends Component {
     state = {
@@ -30,7 +29,6 @@ class BankingDetails extends Component {
     render() {
         return (
             <div className="col">
-                <ReactTooltip/>
                 <div className="row justify-content-center my-3">
                     <div className="col-lg-6">
                         <div className="card">
@@ -59,7 +57,7 @@ class BankingDetails extends Component {
                                         </div>
                                         <div className="form-group form-float">
                                             <div className="form-line">
-                                                <input type="email" id="email" className="form-control"
+                                                <input type="email" id="p-email" className="form-control"
                                                        placeholder="Email du proprietaire"
                                                        name="email" value={this.state.email || ''}
                                                        onChange={(e) => FunctionTools.changeFields(this, e)} required/>

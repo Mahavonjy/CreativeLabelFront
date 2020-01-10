@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import NotFound from "../../../StatusPage/NotFound/NotFound";
-import {ToastContainer} from "react-toastify";
 import TestImg from "../../../../assets/img/demo/a2.jpg";
 import IslPlayer from "../../../Players/Players";
 import FunctionTools from "../../../FunctionTools/FunctionTools";
@@ -73,7 +72,6 @@ class OneBeat extends Component {
         } else {
             return (
                 <div className="Base">
-                    <ToastContainer/>
                     <section className="pl-lg-3 bg-dark"
                              style={{backgroundImage: 'url(' + this.props.SingleBeat.photo + ')'}}>
                         <div className="has-bottom-gradient">

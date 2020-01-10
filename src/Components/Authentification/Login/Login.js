@@ -156,15 +156,8 @@ class Login extends Component {
                 {!this.state.changePass && !this.state.ResetPassword && !this.state.visibility && !this.state.visible ? <ToastContainer/>: null}
 
                 <Modal visible={this.state.changePass} width="400" height="300" animationType='slide'>
-                    <ToastContainer position="top-center"
-                                    autoClose={5000}
-                                    hideProgressBar={false}
-                                    newestOnTop
-                                    closeOnClick
-                                    rtl={false}
-                                    pauseOnVisibilityChange
-                                    draggable
-                                    pauseOnHover/>
+                    <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop
+                                    closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
                     <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                         <div className="col text-center">
                             <div className="body">
@@ -232,11 +225,11 @@ class Login extends Component {
                     </div>
                     <div className="row l-form">
 
-                        <input className="l-usr" placeholder="You email" name="email" id="email"
+                        <input className="l-usr" placeholder="You email" name="email" id="login-email"
                                value={this.state.email} onChange={(e) => {FunctionTools.changeFields(this, e)}}/>
 
                         <div className="pass-wrap l-pass">
-                            <input className="pass" placeholder="password" type="password" id="password"
+                            <input className="pass" placeholder="password" type="password" id="login-password"
                                    name="password" value={this.state.password} onChange={(e) => {FunctionTools.changeFields(this, e)}}/>
                         </div>
 

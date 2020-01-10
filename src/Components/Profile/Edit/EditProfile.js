@@ -38,7 +38,6 @@ class EditProfile extends Component {
         bodyFormData.append('country', this.state.country);
         bodyFormData.append('region', this.state.region);
         bodyFormData.append('city', this.state.city);
-        bodyFormData.append('social_id', this.props.profile_info['social_id']);
         bodyFormData.append('description', this.state.description);
         bodyFormData.append('photo', this.state.photo);
         bodyFormData.append('phone', this.state.phone ? this.state.phone: 0);
@@ -57,7 +56,11 @@ class EditProfile extends Component {
             });
         }).catch(err => {
             this.setState({loading: false}, () => {
-                toast.error(err.response.data);
+                try {
+                    toast.error(err.response.data);
+                } catch (e) {
+                    console.log(err)
+                }
                 document.getElementById(id).removeAttribute("disabled");
             });
         });

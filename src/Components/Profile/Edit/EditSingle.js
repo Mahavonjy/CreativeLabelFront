@@ -7,30 +7,25 @@ import logo from "../../../images/Logo/ISL_logo.png";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
+import FunctionTools from "../../FunctionTools/FunctionTools";
 
 class EditSingle extends Component {
     state = {
-        file: null, title: this.props.Song.title, artist: this.props.Song.artist,
-        genre: this.props.Song.genre, genre_musical: this.props.Song.genre_musical,
-        description: this.props.Song.description, photo: null, artist_tag: this.props.Song.artist_tag,
-        beats_wave: '', stems: '', bpm: 0, beats: false,
+        beats_wave: '',
+        stems: '',
+        bpm: 0,
+        beats: false,
+        file: null,
+        photo: null,
+        title: this.props.Song.title,
+        artist: this.props.Song.artist,
+        genre: this.props.Song.genre,
+        genre_musical: this.props.Song.genre_musical,
+        description: this.props.Song.description,
+        artist_tag: this.props.Song.artist_tag,
     };
 
-    changeArtistTag = (e) => {this.setState({artist_tag : e.target.value});};
-
-    changeBpm = (e) => {this.setState({bpm : e.target.value});};
-
-    changeTitle = (e) => {this.setState({title : e.target.value});};
-
-    changeArtist = (e) => {this.setState({artist : e.target.value});};
-
-    changeGenre = (e) => {this.setState({genre : e.target.value});};
-
-    uploadWaveFile = (e) => {this.setState({beats_wave : e.target.files[0]})};
-
-    uploadStemsFile = (e) => {this.setState({stems : e.target.files[0]})};
-
-    changeGenreMusical = (e) => {
+   changeGenreMusical = (e) => {
         this.setState({genre_musical : e.target.value});
         if (e.target.value === "beats"){
             this.setState({beats: true});
@@ -39,21 +34,7 @@ class EditSingle extends Component {
         }
     };
 
-    changeDescription = (e) => {this.setState({description : e.target.value});};
-
-    uploadFile = (e) => {
-        let file = e.target.files[0];
-        this.setState({file : file});
-    };
-
-    uploadPic = (e) =>{
-        let picture = e.target.files[0];
-        this.setState({
-            photo : picture
-        });
-    };
-
-    disabledBtn = (id) => {
+   disabledBtn = (id) => {
         this.setState({loading: false}, () => {
             document.getElementById(id).removeAttribute("disabled");
         });
@@ -95,9 +76,9 @@ class EditSingle extends Component {
                     'Access-Control-Allow-Origin': "*",
                     'Isl-Token': this.props.user_credentials.token
                 };
-                axios.put(Conf.configs.ServerApi + link + id_, bodyFormData, {headers: new_headers}).then(() => {
+                axios.put(Conf.configs.ServerApi + link + id_, bodyFormData, {headers: new_headers}).then(resp => {
                     this.setState({loading: false}, () => {
-                        this.props.Success();
+                        this.props.Success(resp.data);
                     });
                 }).catch(err => {
                     this.setState({loading: false}, () => {
@@ -111,15 +92,8 @@ class EditSingle extends Component {
     render() {
         return (
             <Modal visible={true} width="650" height="550" animationType='slide'>
-                <ToastContainer position="bottom-center"
-                                autoClose={5000}
-                                hideProgressBar={false}
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl={false}
-                                pauseOnVisibilityChange
-                                draggable
-                                pauseOnHover/>
+                <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false}
+                                closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
                 {this.state.loading ? this.props.smallSpinner("absolute", "0") : null}
                 <img alt={"logo"} src={logo} style={{position: "absolute", height: 550, width: 650, opacity:0.4}}/>
                 <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
@@ -127,30 +101,30 @@ class EditSingle extends Component {
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
                     <div className="col text-center">
-                        <h4 className="text-green text-monospace">Add single</h4>
+                        <h4 className="text-green text-monospace">Modifier</h4>
                         <div className="body">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-text-width"/>title</div>
-                                    <input value={this.state.title} onChange={this.changeTitle} id="title" name="title"
-                                           className="form-control" type="text" required/>
+                                    <div className="input-group-text text-dark"><i className="icon-text-width"/>&nbsp;Titre</div>
+                                    <input value={this.state.title} onChange={(e) => FunctionTools.changeFields(this, e)}
+                                           id="title" name="title" className="form-control" type="text"/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-user"/>artist</div>
-                                    <input value={this.state.artist} onChange={this.changeArtist} id="artist"
-                                           name="artist" className="form-control" type="text" required/>
+                                    <div className="input-group-text text-dark"><i className="icon-user"/>&nbsp;artists</div>
+                                    <input value={this.state.artist} onChange={(e) => FunctionTools.changeFields(this, e)}
+                                           id="artist" name="artist" className="form-control" type="text" required/>
                                 </div>
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-user"/>artist tag</div>
-                                    <input value={this.state.artist_tag} onChange={this.changeArtistTag} id="artist"
-                                           name="artist" className="form-control" type="text" required/>
+                                    <div className="input-group-text text-dark"><i className="icon-user"/>&nbsp;artist tag</div>
+                                    <input value={this.state.artist_tag} onChange={(e) => FunctionTools.changeFields(this, e)}
+                                           id="artist_tag" name="artist_tag" className="form-control" type="text" required/>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-text-width"/>genre</div>
+                                    <div className="input-group-text text-dark"><i className="icon-text-width"/>&nbsp;genre</div>
                                     <input id="genre" name="genre" className="form-control"
-                                           value={this.state.genre} onChange={this.changeGenre} list="music-genre" required/>
+                                           value={this.state.genre} onChange={(e) => FunctionTools.changeFields(this, e)} list="music-genre" required/>
                                     <datalist id="music-genre">
                                         {this.props.AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                     </datalist>
@@ -158,7 +132,7 @@ class EditSingle extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-text-width"/>type</div>
+                                    <div className="input-group-text text-dark"><i className="icon-text-width"/>&nbsp;type</div>
                                     <input id="type" name="type" className="form-control"
                                            value={this.state.genre_musical} onChange={this.changeGenreMusical}
                                            list="music-type" required disabled/>
@@ -167,55 +141,55 @@ class EditSingle extends Component {
                                     </datalist>
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text"><i className="icon-crosshairs"/>description</div>
-                                    <input value={this.state.description} onChange={this.changeDescription}
+                                    <div className="input-group-text text-dark"><i className="icon-crosshairs"/>&nbsp;description</div>
+                                    <input value={this.state.description} onChange={(e) => FunctionTools.changeFields(this, e)}
                                            id="description" name="description" className="form-control" type="text"/>
                                 </div>
                             </div>
                             {this.props.Type === "beats" ?
                                 <div className="custom-float">
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                        <div className="input-group-text"><i className="icon-stack-exchange"/>bpm</div>
-                                        <input value={this.state.bpm} onChange={this.changeBpm}
+                                        <div className="input-group-text text-dark"><i className="icon-stack-exchange"/>&nbsp;bpm</div>
+                                        <input value={this.state.bpm} onChange={(e) => FunctionTools.changeFields(this, e)}
                                                id="bpm" name="bpm" className="form-control" type="number"/>
                                     </div>
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                        <div className="input-group-text"><i className="icon-music"/>single</div>
-                                        <input onChange={this.uploadFile} id="picture" name="picture"
-                                               className="form-control" type="file"  required/>
+                                        <div className="input-group-text text-dark"><i className="icon-music"/>single</div>
+                                        <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="file" name="file"
+                                               className="form-control" type="file"  accept="audio/mpeg, .mp3"/>
                                     </div>
                                 </div>
                                 : <div className="custom-float">
                                     <div className="input-group-prepend center" style={{width: "90%"}}>
-                                        <div className="input-group-text"><i className="icon-music"/>single</div>
-                                        <input onChange={this.uploadFile} id="picture" name="picture"
-                                               className="form-control" type="file"  required/>
+                                        <div className="input-group-text text-dark"><i className="icon-music"/>&nbsp;Mp3 ou mpeg</div>
+                                        <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="file" name="file"
+                                               className="form-control" type="file"  accept="audio/mpeg, .mp3"/>
                                     </div>
                                 </div>}
                             {this.props.Type === "beats" ?
                                 <div>
                                     <div className="custom-float">
                                         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                            <div className="input-group-text"><i className="icon-music"/>wave</div>
-                                            <input onChange={this.uploadWaveFile} id="wave" name="wave"
-                                                   className="form-control" type="file"  required/>
+                                            <div className="input-group-text text-dark"><i className="icon-music"/>&nbsp;Wav *</div>
+                                            <input onChange={(e) => FunctionTools.changeFileFields(this, e)}
+                                                   id="beats_wave" name="beats_wave" className="form-control" accept=".wav, .wave" type="file"/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                            <div className="input-group-text"><i className="icon-music"/>stems</div>
-                                            <input onChange={this.uploadStemsFile} id="stems" name="stems"
-                                                   className="form-control" type="file"  required/>
+                                            <div className="input-group-text text-dark"><i className="icon-music"/>&nbsp;stems</div>
+                                            <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="stems" name="stems"
+                                                   className="form-control" type="file" accept=".zip"/>
                                         </div>
                                     </div>
                                 </div>
                                 :null}
                             <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
-                                    <div className="input-group-text"><i className="icon-picture-o"/>photo</div>
-                                    <input onChange={this.uploadPic} id="picture" name="picture"
-                                           className="form-control" type="file" required/>
+                                    <div className="input-group-text text-dark"><i className="icon-picture-o"/>&nbsp;photo</div>
+                                    <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="photo" name="photo"
+                                           className="form-control" type="file" accept="image/png, image/jpeg"/>
                                 </div>
                             </div>
-                            <button id={this.props.Song.id} className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> this.handleSubmitEditSingle(e, this.props.Song.id)}>Update</button>
+                            <button id={this.props.Song.id} className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> this.handleSubmitEditSingle(e, this.props.Song.id)}>Modifier</button>
                         </div>
                     </div>
                 </div>

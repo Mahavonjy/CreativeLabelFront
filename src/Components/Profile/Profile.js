@@ -16,6 +16,7 @@ import Form from "../KantoBiz/Prestations/Form/Form";
 import * as PopupFields from "../FunctionTools/PopupFields";
 import PaymentsAndReservations from "./Section/PaymentsAndReservations";
 import BankingDetails from "./Section/BankingDetails";
+import RefundPolicy from "./Section/RefundPolicy";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -28,6 +29,7 @@ class Profile extends Component {
         type_: "",
         index: null,
         tmp: null,
+        activeToast: true,
         isMounted: false,
         loading: false,
         PopupEditProfile: false,
@@ -41,27 +43,35 @@ class Profile extends Component {
         artist_type: "Beatmaker"
     };
 
-    togglePopupEditProfile = (success) => {
-        this.setState({PopupEditProfile: !this.state.PopupEditProfile}, () => {
+    togglePopupEditProfile (success) {
+        this.setState({PopupEditProfile: !this.state.PopupEditProfile, activeToast: false}, () => {
             if (success === 1) {
-                toast.success("Profile updated");
+                this.setState({activeToast: true}, () => {
+                    toast.success("Profile updated");
+                })
             }
         });
     };
 
-    togglePopupAddSingle = (success) => {
-        this.setState({PopupAddSingle: !this.state.PopupAddSingle}, () => {
-            if (success === 1) {
-                this.getMedia("Song added", "success").then(r => this.setState({user_beats_link: []}, () => {
-                    this.props.profile_clean_add_beats();
-                    this.getMedia().then(r => this.main());
-                }));
-            }
+    updateUserBeats (data, message, edit) {
+        let user_tmp_beats = [...this.state.user_beats];
+        if (edit) user_tmp_beats.splice(user_tmp_beats.indexOf(this.state.song), 1);
+        else this.setState(prevState => ({user_beats_link: {...prevState['user_beats_link'], [this.state.user_beats_link.length]: true}}));
+        user_tmp_beats.push(data);
+        this.setState({user_beats: user_tmp_beats, activeToast: true}, () => {
+            this.props.profile_add_beats(user_tmp_beats);
+            toast.success(message);
+        })
+    };
+
+    togglePopupAddSingle (success, data) {
+        this.setState({PopupAddSingle: !this.state.PopupAddSingle, activeToast: false}, () => {
+            if (success === 1) this.updateUserBeats(data, "Ajout avec success", false);
         });
     };
 
-    togglePopupEditSingle = (index, type_) => {
-        this.setState({PopupAddEditSingle: index});
+    togglePopupEditSingle (index, type_) {
+        this.setState({PopupAddEditSingle: index, activeToast: false});
         if (type_ === "beats") {
             this.setState({type_: type_, song: this.props.user_beats[index]}, () => {
                 this.setState({PopupAddEditSingle: index});
@@ -73,16 +83,13 @@ class Profile extends Component {
         }
     };
 
-    main = () => {
-        if (!this.props.ready_beats) {
-            FunctionTools.AddForPlay(this, "user_beats_link", this.props.user_beats, this.props.profile_update_beats).then(() => console.log(''));
-            this.props.profile_ready_beats()
-        } else {
-            for (let row_ in this.props.user_beats) this.setState(prevState => ({user_beats_link: {...prevState.user_beats_link, [row_]: true}}))
-        }
+    afterEditSingle (data) {
+        this.setState({PopupAddEditSingle: -1}, () => {
+            this.updateUserBeats(data, "Modification avec success", true);
+        });
     };
 
-    GenerateColInfo = (state_name, issue) => {
+    GenerateColInfo (state_name, issue) {
         return (
             <div className="col-md-4">
                 <div className="p-4">
@@ -93,6 +100,25 @@ class Profile extends Component {
         );
     };
 
+    delete (e, type_) {
+        const id = e.target.id;
+        this.setState({activeToast: true}, () => {
+            document.getElementById(id).setAttribute("disabled", "disabled");
+            this.setState({loading: true}, () => {
+                axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + id, {headers: headers}).then(() => {
+                    this.props.profile_delete_in_beats(id);
+                    this.setState({loading: false, user_beats: this.state.user_beats.filter((beat) => beat.id !== parseInt(id))});
+                    toast.success("Supprimé");
+                }).catch(err => {
+                    this.setState({loading: false}, () => {
+                        document.getElementById(id).removeAttribute("disabled");
+                        toast.error(err.response.data)
+                    });
+                })
+            });
+        })
+    };
+
     componentDidMount() {
         this.setState({ isMounted: true}, () => {
             try {
@@ -100,66 +126,34 @@ class Profile extends Component {
             } catch (e) {
                 //
             } finally {
-                this.main();
+                if (!this.props.ready_beats) {
+                    FunctionTools.AddForPlay(this, "user_beats_link", this.props.user_beats, this.props.profile_update_beats).then(() => console.log(''));
+                    this.props.profile_ready_beats()
+                } else {
+                    for (let row_ in this.props.user_beats) this.setState(prevState => ({user_beats_link: {...prevState.user_beats_link, [row_]: true}}))
+                }
             }
         });
     }
 
     componentWillUnmount() {this.setState({ isMounted: false })}
 
-    async getMedia (message, status) {
-        return await axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp =>{
-            this.setState({user_beats_link: []}, () => {
-                this.props.profile_add_beats(resp.data['beats']);
-                this.props.profile_not_ready_beats();
-                if (status === "success") toast.success(message);
-                if (status === "error") toast.error(message);
-            });
-            return true
-        }).catch(err => {
-            console.log(err.response);
-            return false
-        });
-    };
-
-    delete = (e, type_) => {
-        const id = e.target.id;
-        document.getElementById(id).setAttribute("disabled", "disabled");
-        this.setState({loading: true}, () => {
-            axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + id, {headers: headers}).then(resp => {
-                this.props.profile_delete_in_beats(id);
-                this.setState({loading: false, user_beats: this.state.user_beats.filter((beat) => beat.id !== parseInt(id))}, () => {
-                    toast.success("Deleted");
-                })
-            }).catch(err => {
-                this.setState({loading: false}, () => {
-                    document.getElementById(id).removeAttribute("disabled");
-                    toast.error(err.response.data)
-                });
-            })
-        });
-    };
-
     render() {
         return (
             <div className="Base p-b-100">
-                {this.state.PopupAddSingle ? <AddSingle Type={"beats"} closePopup={(e) => this.togglePopupAddSingle(e)}/> : <ToastContainer/>}
-                {this.state.PopupEditProfile ? <EditProfile closePopup={(e) => this.togglePopupEditProfile(e)}/> : <ToastContainer/>}
-                {this.state.PopupAddEditSingle !== -1 ? <EditSingle Song={this.state.song} Type={this.state.type_} Success={() => {
-                    this.setState({PopupAddEditSingle: -1});
-                    this.getMedia("Updated", "success").then(r => this.main());
-                }} CloseEdit={() => this.setState({PopupAddEditSingle: -1})}
-                />: <ToastContainer/>}
+                {this.state.activeToast ? <ToastContainer/> : null}
+                {this.state.PopupAddSingle && <AddSingle Type={"beats"} closePopup={(e, data) => this.togglePopupAddSingle(e, data)}/>}
+                {this.state.PopupEditProfile && <EditProfile closePopup={(e) => this.togglePopupEditProfile(e)}/>}
+                {this.state.PopupAddEditSingle !== -1 && <EditSingle Song={this.state.song} Type={this.state.type_} Success={(data) => {this.afterEditSingle(data)}} CloseEdit={() => this.setState({PopupAddEditSingle: -1})}/>}
                 {this.state.choiceArtistType? this.props.DifferentArtist(this): null}
                 <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                     <div className="card no-b shadow no-r">
                         <div className="row no-gutters">
                             <div className="col-md-4 b-r">
                                 <div className="dropdown" style={{position:"absolute", paddingTop: "10px"}}>
-                                    <button className="btn btn-outline-info btn-sm pt-3 pb-3" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i className="icon-more-1 s-14"/>
+                                    <button className="btn btn-outline-info btn-sm pt-3 pb-3" type="button" data-tip="Plus d'options"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i className="icon-more-1 s-12"/>
                                     </button>
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <div>
@@ -177,32 +171,31 @@ class Profile extends Component {
                                         </li>
                                     </div>
                                 </div>
-                                {this.props.role === 'beatmaker' ?
-                                    <div className="text-center" style={{paddingTop: "10px"}}>
-                                            <button className="btn btn-outline-success btn-sm pl-2 pr-2"
-                                                    onClick={() => this.togglePopupAddSingle(0)}>Ajout de beats
-                                            </button>
-                                        </div> : null}
-                                    <div className="text-center p-5 mt-5" style={{background: "url(" + PhotoTest + ")", backgroundSize: "80%", opacity: 0.5, backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
-                                        <figure className="avatar avatar-xl">
-                                            <img src={this.props.profile_info.photo ? this.props.profile_info.photo : PhotoD} alt="profile"/>
-                                        </figure>
-                                        <div className="pt-2" style={{opacity: 0.8}}>
-                                            <h4 className="text-light bg-dark center pt-2"
-                                                style={{width: "80%", borderTopLeftRadius: "10px", borderTopRightRadius: "10px"}}>
-                                                {this.props.profile_info.name ? this.props.profile_info.name : "Name"}
-                                            </h4>
-                                            <h4 className="text-light bg-dark center pt-2 pb-2" style={{width: "80%", borderBottomLeftRadius: "10px", borderBottomRightRadius: "10px"}}>
-                                                {this.props.profile_info.email ? this.props.profile_info.email : "Email"}
-                                            </h4>
-                                        </div>
+
+                                <div className="text-center p-5 mt-5" style={{background: "url(" + PhotoTest + ")", backgroundSize: "80%", opacity: 0.5, backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+                                    <figure className="avatar avatar-xl">
+                                        <img src={this.props.profile_info.photo ? this.props.profile_info.photo : PhotoD} alt="profile"/>
+                                    </figure>
+                                    <div className="pt-2" style={{opacity: 0.8}}>
+                                        <h4 className="text-light bg-dark center pt-2"
+                                            style={{width: "80%", borderTopLeftRadius: "10px", borderTopRightRadius: "10px"}}>
+                                            {this.props.profile_info.name ? this.props.profile_info.name : "Name"}
+                                        </h4>
+                                        <h4 className="text-light bg-dark center pt-2 pb-2" style={{width: "80%", borderBottomLeftRadius: "10px", borderBottomRightRadius: "10px"}}>
+                                            {this.props.profile_info.email ? this.props.profile_info.email : "Email"}
+                                        </h4>
                                     </div>
+                                </div>
                                 <div className="text-center">
                                     <button className="btn btn-outline-primary btn-sm mt-3 pl-4 pr-4"
                                             onClick={() => this.togglePopupEditProfile(0)}>Modifier mon profil
                                     </button>
                                 </div>
-                                </div>
+                                {this.props.role !== "professional_auditor" ?
+                                <div className="text-center mt-2 mb-2">
+                                    <span className="text-red">Note:&nbsp;5&nbsp;<i className="icon-star-1"/></span>
+                                </div> : null }
+                            </div>
                                 <div className="col-md-8">
                                     <div className="p5 b-b text-center">
                                         <div className="pl-8 mt-4">
@@ -252,6 +245,10 @@ class Profile extends Component {
                                                                     <li className="nav-item">
                                                                         <a className="nav-link" data-toggle="tab" href="#Coordonnees-bancaires" role="tab" aria-selected="false">Coordonnées bancaires</a>
                                                                     </li>
+                                                                    {this.props.role !== "professional_auditor" ?
+                                                                        <li className="nav-item">
+                                                                            <a className="nav-link" data-toggle="tab" href="#Refund-Policy" role="tab" aria-selected="false">Politique de remboursement </a>
+                                                                        </li> : null}
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -277,8 +274,19 @@ class Profile extends Component {
                                                 <div className="tab-pane fade" id="Coordonnees-bancaires" role="tabpanel">
                                                     <BankingDetails/>
                                                 </div>
+                                                <div className="tab-pane fade" id="Refund-Policy" role="tabpanel">
+                                                    <RefundPolicy/>
+                                                </div>
                                             </div>
                                         </div>
+                                        {this.props.role === "beatmaker" ?
+                                            <div className="card-footer pb-2">
+                                                <div className="d-flex justify-content-between">
+                                                    <div className="align-self-center">
+                                                        <button className="btn btn-outline-danger" onClick={() => this.togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
+                                                    </div>
+                                                </div>
+                                            </div> : null}
                                     </div>
                                 </div>
                             </div>
@@ -303,10 +311,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         profile_add_beats: (data) => {
-            dispatch({type: "ADD_BEATS", data: data})
-        },
-        profile_clean_add_beats: () => {
-            dispatch({type: "CLEAN_PROFILE_BEATS"})
+            dispatch({type: "ADD_PROFILE_BEATS", data: data})
         },
         profile_delete_in_beats: (data) => {
             dispatch({type: "DELETE_IN_PROFILE_BEATS", data: data})
@@ -319,9 +324,6 @@ const mapDispatchToProps = dispatch => {
         },
         profile_ready_beats: (data) => {
             dispatch({type: "SET_READY_BEATS_TO_TRUE", data: data})
-        },
-        profile_not_ready_beats: (data) => {
-            dispatch({type: "SET_READY_BEATS_TO_FALSE", data: data})
         },
         CreateBeatsPlaylist: bindActionCreators(CreateFields.CreateBeatsPlaylist, dispatch),
         smallSpinner: bindActionCreators(CreateFields.smallSpinner, dispatch),

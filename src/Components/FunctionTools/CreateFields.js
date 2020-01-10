@@ -52,7 +52,7 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                 let tmp;
                 if (that.state.index === that.state.tmp) tmp = true;
                 that.setState({index: index, tmp: index}, () => {
-                    if (tmp) that.props.ToPlay(index, type_, run);
+                    if (tmp) that.props.ToPlay(index, type_, run, that, set_of_beats_name);
                     else IslPlayer.pauseOrPlayPlayer(true);
                 })
             } else that.setState({tmp: null}, () => {
@@ -175,7 +175,7 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                                     )}
                                                 </Feed>
                                             </FacebookProvider> :
-                                            <div className="ml-auto" title={"Edit this beats"}>
+                                            <div className="ml-auto">
                                                 <small className="ml-auto">Ecouté {val.number_play} fois</small>
                                             </div>}
                                         {height_div !== "user_profile" ?
@@ -183,8 +183,8 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                                onClick={() => {
                                                    FunctionTools.LikeOrFollow("like", val.id);
                                                }}/> :
-                                            <div className="ml-auto" title={"Edit this beats"}>
-                                                <i className="icon-edit s-24" id={val.id}
+                                            <div className="ml-auto">
+                                                <i className="icon-edit s-24" id={val.id} data-tip="Modifier"
                                                    onClick={() => that.togglePopupEditSingle(index, "beats")}>
                                                 </i>
                                             </div>}
@@ -206,7 +206,7 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                         <div className="d-flex">
                                             <div className="ml-auto">
                                                 <i className="icon-trash s-24"
-                                                   id={val.id}
+                                                   id={val.id} data-tip="supprimer"
                                                    onClick={(e) => that.delete(e, "beats")}>
                                                 </i>
                                             </div>
@@ -231,14 +231,12 @@ export const CreateBeatsPlaylist = (that, set_of_beats_name, props_value, state_
                                             </div> :
                                             <div>
                                                 <button className="dropdown-item"
-                                                        title={"Edit this beats"}
-                                                        id={val.id}
+                                                        id={val.id} data-tip="Modifier"
                                                         onClick={() => that.togglePopupEditSingle(index, "beats")}><i
                                                     className="icon-edit mr-3"/>Edit
                                                 </button>
                                                 <button className="dropdown-item"
-                                                        title={"Delete this beats"}
-                                                        id={val.id}
+                                                        id={val.id} data-tip="supprimer"
                                                         onClick={(e) => that.delete(e, "beats")}><i
                                                     className="icon-trash mr-3"/>Delete
                                                 </button>

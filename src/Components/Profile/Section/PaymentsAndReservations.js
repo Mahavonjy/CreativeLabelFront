@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactTooltip from 'react-tooltip';
 import {connect} from "react-redux";
 
 class PaymentsAndReservations extends Component {
@@ -7,17 +6,17 @@ class PaymentsAndReservations extends Component {
         isMounted: false,
     };
 
-    auditor_pro_canceled = () => {
+    auditor_pro_canceled () {
         console.log("L'auditeur annule la prestation");
     };
 
-    artist_canceled = () => {
+    artist_canceled () {
         console.log("L'artist annule la prestation");
     };
 
-    tableGenerator = (status, action) => {
+    tableGenerator (status, action) {
         return (
-            <table className="responsive-table">
+            <table className="responsive-table mt-4">
                 <thead>
                 <tr>
                     <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisi"/></th>
@@ -43,9 +42,10 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-yellow" data-title="Status">En attente</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
-                    {action ? <div className="text-center mt-2">
-                        <button className="btn btn-outline-danger" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
-                    </div>: null}
+                    {action ?
+                        <td className="border-bottom-0 border-right-0">
+                            <button className="btn btn-outline-danger text-center mt-2" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
+                        </td>: null}
                 </tr>
                 <tr>
                     <th className="text-center small bolder" scope="row">BFete</th>
@@ -57,9 +57,9 @@ class PaymentsAndReservations extends Component {
                     {status ? <td className="small text-red" data-title="Status">Echec</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
                     {action ?
-                        <div className="text-center mt-2">
+                        <td className="border-bottom-0 border-right-0">
                             <button className="btn btn-outline-danger" disabled>Annuler</button>
-                        </div>: null}
+                        </td>: null}
                 </tr>
                 <tr>
                     <th className="text-center small bolder" scope="row">ForaZazaParty</th>
@@ -71,9 +71,9 @@ class PaymentsAndReservations extends Component {
                     {status ? <td className="small text-green" data-title="Status">Validé</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
                     {action ?
-                        <div className="text-center mt-2">
+                        <td className="border-bottom-0 border-right-0">
                             <button className="btn btn-outline-success" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
-                        </div>: null}
+                        </td>: null}
                 </tr>
                 </tbody>
             </table>
@@ -91,7 +91,6 @@ class PaymentsAndReservations extends Component {
     render() {
         return (
             <div className="col" style={{minHeight: 320}}>
-                <ReactTooltip/>
                 <div className="card no-b">
                     <div className="card-body">
                         <div className="row justify-content-center">

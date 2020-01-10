@@ -30,18 +30,25 @@ class AddSingle extends Component {
         platinum_price: 0
     };
 
-    uploadFile = (e) => {this.setState({file : e.target.files[0]})};
-
-    uploadWaveFile = (e) => {this.setState({beats_wave : e.target.files[0]})};
-
-    uploadStemsFile = (e) => {this.setState({stems : e.target.files[0]})};
-
-    uploadPic = (e) =>{this.setState({photo : e.target.files[0]});};
-
     disabledBtn = (id) => {
         this.setState({loading: false}, () => {
             document.getElementById(id).removeAttribute("disabled");
         });
+    };
+
+    generateSmallInput = (data_for, name, color) => {
+        return (
+            <div className="custom-float center" style={{width: "100%"}}>
+                <div className="input-group-prepend d-inline-block center">
+                    <div className="input-group-text text-dark text-capitalize font-weight-bold" data-tip data-for={data_for}><i className="icon-money"/>{name}<small className="text-danger">*</small></div>
+                    <div className={"input-group-text text-light " + color} id={name}>
+                        <p className="center" id={name} onClick={name === "platinum" ? this.ChangePlatinumStyle : null}>
+                            {this.props.pricing[name]} $
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     handleSubmit = (e) => {
@@ -93,21 +100,26 @@ class AddSingle extends Component {
             bodyFormData.append('description', this.state.description);
             bodyFormData.append('photo', this.state.photo);
 
-            let new_headers = {
+            let headers = {
                 'Content-Type': 'multipart/form-data',
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': this.props.user_credentials.token
             };
-            axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: new_headers}).then(resp => {
-                this.setState({loading: false});
-                this.props.closePopup(1);
+            axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: headers}).then(resp => {
+                this.setState({loading: false}, () => {
+                    this.props.closePopup(1, resp.data);
+                });
             }).catch(err => {
-                toast.error(err.response.data);
+                try {
+                    toast.error(err.response.data);
+                } catch (e) {
+                    console.log(err)
+                }
             });
         }
     };
 
-    ChangeStyle = (e) => {
+    ChangePlatinumStyle = () => {
         if (document.getElementById("platinum").classList.replace('unique-color-dark', 'success-color')) {
             this.setState({platinum_price: this.props.pricing['platinum']});
         } else {
@@ -218,7 +230,7 @@ class AddSingle extends Component {
                                 </div>
                                 {this.state.beats ?
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                        <div className="input-group-text text-dark" data-tip="Your beats bpm"><i className="icon-stack-exchange"/>&nbsp;	Bpm</div>
+                                        <div className="input-group-text text-dark" data-tip="Your beats bpm"><i className="icon-stack-exchange"/>&nbsp;Bpm</div>
                                         <input value={this.state.bpm} onChange={(e) => {FunctionTools.changeFields(this, e)}}
                                                id="bpm" name="bpm" className="form-control" type="number"/>
                                     </div>
@@ -226,83 +238,40 @@ class AddSingle extends Component {
                             </div>
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Upload here your beats_name.mp3"><i className="icon-music"/>&nbsp;	Mp3 *</div>
-                                    <input onChange={this.uploadFile} id="picture" name="picture"
-                                           className="form-control" type="file"  required/>
+                                    <div className="input-group-text text-dark" data-tip="Upload here your beats_name.mp3"><i className="icon-music"/>&nbsp;Mp3 ou mpeg</div>
+                                    <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="file" name="file" accept="audio/mpeg, .mp3" className="form-control" type="file" />
                                 </div>
                                 <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                    <div className="input-group-text text-dark" data-tip="Upload here your beats photo"><i className="icon-picture-o"/>&nbsp; Photo</div>
-                                    <input onChange={this.uploadPic} id="picture" name="picture" className="form-control" type="file" required/>
+                                    <div className="input-group-text text-dark" data-tip="Upload here your beats photo"><i className="icon-picture-o"/>&nbsp;Photo</div>
+                                    <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="photo" name="photo" className="form-control" accept="image/png, image/jpeg" type="file" required/>
                                 </div>
                             </div>
                             {this.state.beats ?
                                 <div>
                                     <div className="custom-float">
                                         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                            <div className="input-group-text text-dark" data-tip="Upload here your beats_name.wave"><i className="icon-music"/>&nbsp;	Fichier wav *</div>
-                                            <input onChange={this.uploadWaveFile} id="wave" name="wave"
-                                                   className="form-control" type="file"  required/>
+                                            <div className="input-group-text text-dark" data-tip="Upload here your beats_name.wave"><i className="icon-music"/>&nbsp;Fichier wav *</div>
+                                            <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="beats_wave" name="beats_wave" className="form-control" type="file"  accept=".wav, .wave"/>
                                         </div>
                                         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                            <div className="input-group-text text-dark" data-tip="Upload here your beats stems"><i className="icon-music"/>&nbsp;	Dossier stems (fichier zip,rar...)</div>
-                                            <input onChange={this.uploadStemsFile} id="stems" name="stems"
-                                                   className="form-control" type="file"  required/>
+                                            <div className="input-group-text text-dark" data-tip="Upload here your beats stems"><i className="icon-music"/>&nbsp;Dossier stems (fichier zip)</div>
+                                            <input onChange={(e) => FunctionTools.changeFileFields(this, e)} id="stems" name="stems" className="form-control" type="file"  accept=".zip"/>
                                         </div>
                                     </div>
                                 </div>
                                 :null}
                             {this.state.beats ?
                                 <div style={{display: "flex"}}>
-                                    <div className="custom-float center" style={{width: "100%"}}>
-                                        <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='basic_price'><i className="icon-money"/>Standard<small className="text-danger">*</small></div>
-                                            <div className="input-group-text text-light success-color" id="basic">
-                                                <p className="center" id="basic">
-                                                    {this.props.pricing['basic']} $
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="custom-float center" style={{width: "100%"}}>
-                                        <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='silver_price'><i className="icon-money"/>Silver<small className="text-danger">*</small></div>
-                                            <div className="input-group-text text-light success-color" id="silver">
-                                                <p className="center" id="silver">
-                                                    {this.props.pricing['silver']} $
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="custom-float center" style={{width: "100%"}}>
-                                        <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='gold_price'><i className="icon-money"/>Gold<small className="text-danger">*</small></div>
-                                            <div className="input-group-text text-light success-color" id="gold">
-                                                <p className="center" id="gold">
-                                                    {this.props.pricing['gold']} $
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="custom-float center" style={{width: "100%"}}>
-                                        <div className="input-group-prepend d-inline-block center">
-                                            <div className="input-group-text text-dark font-weight-bold" data-tip data-for='platinum_price'>Platinum</div>
-                                            <div className="input-group-text text-light unique-color-dark" id="platinum">
-                                                <p className="center" id="platinum" onClick={(e) => this.ChangeStyle(e)}>
-                                                    {this.props.pricing['platinum']} $
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    {this.generateSmallInput('basic_price', 'basic', 'success-color')}
+                                    {this.generateSmallInput('silver_price', 'silver', 'success-color')}
+                                    {this.generateSmallInput('gold_price', 'gold', 'success-color')}
+                                    {this.generateSmallInput('platinum_price', 'platinum', 'unique-color-dark')}
                                 </div>
                                 :null}
                             <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
                                     <div className="input-group-text text-dark" data-tip="If you want to add an description for you beats"><i className="icon-crosshairs"/>&nbsp;	Description</div>
-                                    <textarea value={this.state.description} onChange={(e) => this.ChangeStyle(e)}
+                                    <textarea value={this.state.description} onChange={(e) => FunctionTools.changeFields(this, e)}
                                               id="description" name="description" className="form-control" placeholder={"Ajouter une description"}/>
                                 </div>
                             </div>
