@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
+import ReactTooltip from "react-tooltip";
 
 class PaymentsAndReservations extends Component {
     state = {
@@ -9,6 +10,10 @@ class PaymentsAndReservations extends Component {
     auditor_pro_canceled () {
         console.log("L'auditeur annule la prestation");
     };
+
+    artist_accepted () {
+        console.log("L'artist accept la prestation");
+    }
 
     artist_canceled () {
         console.log("L'artist annule la prestation");
@@ -21,14 +26,17 @@ class PaymentsAndReservations extends Component {
                 <tr>
                     <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisi"/></th>
                     <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Ceci est la date ou votre evenement va se dérouler"/></th>
-                    <th scope="col">Artist&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'artist concerné par l'evenement avec un lien qui va direct sur son profile"/></th>
+                    {this.props.role !== "professional_auditor" ?
+                        <th scope="col">Auditeur&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'auditeur qui a fait cette reservation"/></th>:
+                    <th scope="col">Artist&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'artist concerné par l'evenement avec un lien qui va direct sur son profile"/></th>}
                     <th scope="col">Évènenment&nbsp;<i className="icon icon-info" data-tip="Ceci sera le type d'evenement de l'autideur qui a reserver "/></th>
                     <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="Ceci est l'adresse choisi par l'auditeur ou se déroulera l'evenement"/></th>
                     <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Ici sera le montant HT de la prestation (Choisi par l'artiste)"/></th>
                     {status ?
                         <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Ici s'affichera le status de votre réservation qui sera varier"/></th>
                         : <th scope="col">Facture&nbsp;<i className="icon icon-info" data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/></th>}
-                    {action ? <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip="Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec"/></th> : null}
+                    {action ? <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip={this.props.role === "professional_auditor" ?
+                        "Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec" : "La politique de réservation de base étant flexible, vous pouvez modifier votre politique de remboursement sous la rubrique « politique de remboursement"}/></th> : null}
                 </tr>
                 </thead>
 
@@ -42,9 +50,13 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-yellow" data-title="Status">En attente</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
+                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter la personne qui a fait cette reservation">Noter</td>}
                     {action ?
-                        <td className="border-bottom-0 border-right-0">
+                        <td className="text-center border-bottom-0 border-right-0">
                             <button className="btn btn-outline-danger text-center mt-2" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
+                            {this.props.role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2"
+                                                                                  data-tip="Lorsque vous accepter une reservaton, vos coordonnées (e-mail, téléphone…) seront envoyées à l’auditeur affecté a la reservation, afin de vous contacter."
+                                                                                  onClick={this.artist_accepted}>Accept</button> : null}
                         </td>: null}
                 </tr>
                 <tr>
@@ -56,9 +68,11 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-red" data-title="Status">Echec</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
+                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter la personne qui a fait cette reservation">Noter</td>}
                     {action ?
-                        <td className="border-bottom-0 border-right-0">
+                        <td className="text-center border-bottom-0 border-right-0">
                             <button className="btn btn-outline-danger" disabled>Annuler</button>
+                            {this.props.role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2" onClick={this.artist_accepted} disabled>Accept</button> : null}
                         </td>: null}
                 </tr>
                 <tr>
@@ -70,9 +84,11 @@ class PaymentsAndReservations extends Component {
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-green" data-title="Status">Validé</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
+                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter le niveau d’accueil de la personne qui a fait cette reservation">Noter</td>}
                     {action ?
-                        <td className="border-bottom-0 border-right-0">
-                            <button className="btn btn-outline-success" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
+                        <td className="text-center border-bottom-0 border-right-0">
+                            <button className="btn btn-outline-success text-center mt-2" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
+                            {this.props.role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2" onClick={this.artist_accepted} disabled>Accept</button> : null}
                         </td>: null}
                 </tr>
                 </tbody>
@@ -91,6 +107,7 @@ class PaymentsAndReservations extends Component {
     render() {
         return (
             <div className="col" style={{minHeight: 320}}>
+                <ReactTooltip/>
                 <div className="card no-b">
                     <div className="card-body">
                         <div className="row justify-content-center">

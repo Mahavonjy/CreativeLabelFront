@@ -1,40 +1,43 @@
-import React, { Component } from "react";
-import {connect} from "react-redux";
+import React, {Component, useState} from "react";
+import {connect, useSelector} from "react-redux";
 import axios from "axios";
 import Conf from "../../../Config/tsconfig";
 import {toast} from "react-toastify";
 import FunctionTools from "../../FunctionTools/FunctionTools";
+import { profileInitialisationContract, beatsInitialisationPricing } from "../ProfileProps"
 
-class EditContractBeats extends Component {
-    state = {
-        // basic contract
-        basic_enable: this.props.contract['basic_lease']['enabled'],
-        basic: this.props.contract['basic_lease']['price'],
-        basic_number_audio_stream: this.props.contract['basic_lease']['number_audio_stream'],
-        basic_number_radio_station: this.props.contract['basic_lease']['number_radio_station'],
-        basic_number_of_distribution_copies: this.props.contract['basic_lease']['number_of_distribution_copies'],
-        // silver contract
-        silver_enable: this.props.contract['silver_lease']['enabled'],
-        silver: this.props.contract['silver_lease']['price'],
-        silver_number_audio_stream: this.props.contract['silver_lease']['number_audio_stream'],
-        silver_number_radio_station: this.props.contract['silver_lease']['number_radio_station'],
-        silver_number_of_distribution_copies: this.props.contract['silver_lease']['number_of_distribution_copies'],
-        // gold contract
-        gold_enable: this.props.contract['gold_lease']['enabled'],
-        gold: this.props.contract['gold_lease']['price'],
-        gold_number_audio_stream: this.props.contract['gold_lease']['number_audio_stream'],
-        gold_number_radio_station: this.props.contract['gold_lease']['number_radio_station'],
-        gold_number_of_distribution_copies: this.props.contract['gold_lease']['number_of_distribution_copies'],
-        // platinum contract
-        platinum_enable: this.props.contract['platinum_lease']['enabled'],
-        platinum_unlimited: this.props.contract['platinum_lease']['unlimited'],
-        platinum: this.props.contract['platinum_lease']['price'],
-        platinum_number_audio_stream: this.props.contract['platinum_lease']['number_audio_stream'],
-        platinum_number_radio_station: this.props.contract['platinum_lease']['number_radio_station'],
-        platinum_number_of_distribution_copies: this.props.contract['platinum_lease']['number_of_distribution_copies'],
-    };
+function EditContractBeats() {
 
-    generateContractTab = (state_name, active, tab_id) => {
+    const user_credentials = useSelector(state => state.Home.user_credentials);
+    const contract = useSelector(state => state.profile.contract);
+
+    // basic contract
+    const [basic_enable, setBasicEnable] = useState(contract['basic_lease']['enabled']);
+    const [basic, setBasic] = useState(contract['basic_lease']['price']);
+    const [basic_number_audio_stream, setBasicNumberAudioStream] = useState(contract['basic_lease']['number_audio_stream']);
+    const [basic_number_radio_station, setBasicNumberRadioStation] = useState(contract['basic_lease']['number_radio_station']);
+    const [basic_number_of_distribution_copies, setBasicNumberOfDistributionCopies] = useState(contract['basic_lease']['number_of_distribution_copies']);
+    // silver contract
+    const [silver_enable, setSilverEnable] = useState(contract['silver_lease']['enabled']);
+    const [silver, setSilver] = useState(contract['silver_lease']['price']);
+    const [silver_number_audio_stream, setSilverNumberAudioStream] = useState(contract['silver_lease']['number_audio_stream']);
+    const [silver_number_radio_station, setSilverNumberRadioStation] = useState(contract['silver_lease']['number_radio_station']);
+    const [silver_number_of_distribution_copies, setSilverNumberOfDistributionCopies] = useState(contract['silver_lease']['number_of_distribution_copies']);
+    // silver contract
+    const [gold_enable, setGoldEnable] = useState(contract['gold_lease']['enabled']);
+    const [gold, setGold] = useState(contract['gold_lease']['price']);
+    const [gold_number_audio_stream, setGoldNumberAudioStream] = useState(contract['gold_lease']['number_audio_stream']);
+    const [gold_number_radio_station, setGoldNumberRadioStation] = useState(contract['gold_lease']['number_radio_station']);
+    const [gold_number_of_distribution_copies, setGoldNumberOfDistributionCopies] = useState(contract['gold_lease']['number_of_distribution_copies']);
+    // platinum contract
+    const [platinum_enable, setPlatinumEnable] = useState(contract['platinum_lease']['enabled']);
+    const [platinum, setPlatinum] = useState(contract['platinum_lease']['price']);
+    // const [platinum_unlimited, setPlatinumUnlimited] = useState(contract['platinum_lease']['unlimited']);
+    const [platinum_number_audio_stream, setPlatinumNumberAudioStream] = useState(contract['platinum_lease']['number_audio_stream']);
+    const [platinum_number_radio_station, setPlatinumNumberRadioStation] = useState(contract['platinum_lease']['number_radio_station']);
+    const [platinum_number_of_distribution_copies, setPlatinumNumberOfDistributionCopies] = useState(contract['platinum_lease']['number_of_distribution_copies']);
+
+    const generateContractTab = (state_name, state_array, active, tab_id, setPrice, setNumberRadioStation, setNumberOfDist, setNumberAudionStream, setEnable) => {
         return (
             <div className={"tab-pane fade text-center p-5 " + active} id={tab_id} role="tabpanel" aria-labelledby={tab_id}>
                 <div className="row">
@@ -43,23 +46,23 @@ class EditContractBeats extends Component {
                             <div className="input-group-text text-dark" data-tip={"Le prix de votre instrumental pour un contrat en " + state_name}>
                                 <i className="icon-text-width"/>&nbsp;prix du beat *
                             </div>
-                            <input value={this.state[state_name]} onChange={(e) => FunctionTools.changeFields(this, e)} id={state_name} name={state_name}
-                                   className="form-control" type="text"/>
+                            <input value={state_array[0]} onChange={(e) => FunctionTools.changeFields(setPrice, e)} id={state_name} name={state_name}
+                                   className="form-control" type="number"/>
                         </div>
                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                             <small className="input-group-text text-dark" data-tip={"Le nombre de diffusion Radio & TV de votre instrumental pour un contrat en " + state_name}><i className="icon-text-width"/>&nbsp;nb de diffusion Radio & TV *</small>
-                            <input value={this.state[state_name + "_number_radio_station"]} id={state_name + "_number_radio_station"}
-                                   onChange={(e) => FunctionTools.changeFields(this, e)} name={state_name + "_number_radio_station"} className="form-control" type="number"/>
+                            <input value={state_array[1]} id={state_name + "_number_radio_station"}
+                                   onChange={(e) => FunctionTools.changeFields(setNumberRadioStation, e)} name={state_name + "_number_radio_station"} className="form-control" type="number"/>
                         </div>
                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                             <small className="input-group-text text-dark" data-tip={"Le nombre de copie distribuée de votre instrumental pour un contrat en " + state_name}><i className="icon-text-width"/>&nbsp;nb de copie distribuée *</small>
-                            <input value={this.state[state_name + "_number_of_distribution_copies"]} onChange={(e) => FunctionTools.changeFields(this, e)}
+                            <input value={state_array[2]} onChange={(e) => FunctionTools.changeFields(setNumberOfDist, e)}
                                    id={state_name + "_number_of_distribution_copies"} name={state_name + "_number_of_distribution_copies"} className="form-control" type="number"/>
                         </div>
                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                             <small className="input-group-text text-dark" data-tip={"Le nombre de stream de votre instrumental pour un contrat en " + state_name}><i className="icon-user"/>&nbsp;nb de stream *</small>
-                            <input value={this.state.basic_number_audio_stream} onChange={(e) => FunctionTools.changeFields(this, e)}
-                                   id="basic_number_audio_stream" name="basic_number_audio_stream" className="form-control" type="number" required/>
+                            <input value={state_array[3]} onChange={(e) => FunctionTools.changeFields(setNumberAudionStream, e)}
+                                   id={state_name + "_number_audio_stream"} name={state_name + "_number_audio_stream"} className="form-control" type="number"/>
                         </div>
                     </div>
                     <div className="col-md-4">
@@ -74,7 +77,8 @@ class EditContractBeats extends Component {
                                             <i className="icon icon-check-circle text-red" />{"Activer l'offre " + state_name}
                                         </div>
                                         <div className="material-switch">
-                                            <input id={state_name + "_enable"} name={state_name + "_enable"} type="checkbox" onChange={(e) => FunctionTools.changeBoolFields(this, e)} checked={!!this.state[state_name + "_enable"]}/>
+                                            <input id={state_array[4]} value={state_array[4]} name={state_name + "_enable"} type="checkbox"
+                                                   onChange={(e) => FunctionTools.changeBoolFields(setEnable, e)} checked={state_array[4]}/>
                                             <label htmlFor="sw1" className="bg-primary" />
                                         </div>
                                     </li>
@@ -92,107 +96,103 @@ class EditContractBeats extends Component {
                         </div>
                     </div>
                 </div>
-
-                <button className="col text-center btn btn-outline-info btn-sm pl-md-4 pr-md-4" id={state_name + "_contract"}
-                        onClick={(e)=> this.handleSubmitContractUpdate(e)} style={{marginTop: 25, marginBottom: 25}}>{"Enregistrer ce contrat " + state_name}</button>
-
             </div>
         )
     };
 
-    generateData = (contract_name) => {
+    const generateData = (contract_name, price, nas, nrs, nodc, enable) => {
         let data;
         let url = 'update_' + contract_name;
-        data = this.props.contract[contract_name + '_lease'];
-        data['enabled'] = this.state[contract_name + '_enable'];
-        data['price'] = this.state[contract_name];
-        data['number_audio_stream'] = this.state[contract_name + '_number_audio_stream'];
-        data['number_radio_station'] = this.state[contract_name + '_number_radio_station'];
-        data['number_of_distribution_copies'] = this.state[contract_name + '_number_of_distribution_copies'];
+        data = contract[contract_name + '_lease'];
+        data['enabled'] = enable;
+        data['price'] = price;
+        data['number_audio_stream'] = nas;
+        data['number_radio_station'] = nrs;
+        data['number_of_distribution_copies'] = nodc;
         return {'data': data, 'url': url}
     };
 
-    handleSubmitContractUpdate = (e) => {
-        let contract_name = e.target.id;
-        let response = this.generateData(contract_name.split('_')[0]);
+    const handleSubmitContractUpdate = async() => {
+        let contract_array = [
+            ["basic", basic, basic_number_audio_stream, basic_number_radio_station, basic_number_of_distribution_copies, basic_enable],
+            ["silver", silver, silver_number_audio_stream, silver_number_radio_station, silver_number_of_distribution_copies, silver_enable],
+            ["gold", gold, gold_number_audio_stream, gold_number_radio_station, gold_number_of_distribution_copies, gold_enable],
+            ["platinum", platinum, platinum_number_audio_stream, platinum_number_radio_station, platinum_number_of_distribution_copies, platinum_enable],
+        ];
+        let tmp_call = [];
         let headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': "*",
-            'Isl-Token': this.props.user_credentials.token
+            'Isl-Token': user_credentials.token
         };
+        for (let x = 0; x < contract_array.length; x++) {
+            let tmp = contract_array[x];
+            let response = generateData(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
+            await tmp.push(
+                axios.put(Conf.configs.ServerApi + "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
+                    let tmp = contract;
+                    tmp[response.data['contract_name']] = response.data;
+                    profileInitialisationContract(tmp);
+                }).catch(err => {
+                    console.log(err.response)
+                })
+            )
+        }
 
-        axios.put(Conf.configs.ServerApi + "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
-            let tmp = this.props.contract;
-            tmp[response.data['contract_name']] = response.data;
-            this.props.profile_initialisation_contract(tmp);
-            toast.success("contract updated");
+        Promise.all(tmp_call).then(() => {
             axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
-                this.props.beats_initialisation_pricing(resp.data);
+                beatsInitialisationPricing(resp.data);
+                toast.success("Enregistrement avec success")
             }).catch(err => {
                 console.log(err)
             })
-        }).catch(err => {
-            console.log(err.response)
-        })
+        }).catch(() => toast.error("Veuillez re enregistrer"))
     };
 
-    render() {
-        return (
-            <div className="container-fluid relative animatedParent animateOnce p-lg-3">
-                <div className="card no-b">
-                    <div className="card-header pb-0">
-                        <div className="d-flex justify-content-between">
-                            <div className="align-self-center">
-                                <h3 className="text-red">Personnaliser les contrats</h3>
-                            </div>
-                            <div className="align-self-center">
-                                <ul className="nav nav-pills mb-3" role="tablist">
-                                    <li className="nav-item">
-                                        <a className="nav-link active show" data-toggle="tab" href="#basic_tab" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">Basic</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" data-toggle="tab" href="#silver_tab" role="tab" aria-controls="tab2" aria-selected="false">Silver</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" data-toggle="tab" href="#gold_tab" role="tab" aria-controls="tab3" aria-selected="false">Gold</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" data-toggle="tab" href="#platinum_tab" role="tab" aria-controls="tab4" aria-selected="false">Platinum</a>
-                                    </li>
-                                </ul>
-                            </div>
+    return (
+        <div className="container-fluid relative animatedParent animateOnce p-lg-3">
+            <div className="card no-b">
+                <div className="card-header pb-0">
+                    <div className="d-flex justify-content-between">
+                        <div className="align-self-center">
+                            <h3 className="text-red">Personnaliser les contrats</h3>
+                        </div>
+                        <div className="align-self-center">
+                            <ul className="nav nav-pills mb-3" role="tablist">
+                                <li className="nav-item">
+                                    <a className="nav-link active show" data-toggle="tab" href="#basic_tab" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">Basic</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" data-toggle="tab" href="#silver_tab" role="tab" aria-controls="tab2" aria-selected="false">Silver</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" data-toggle="tab" href="#gold_tab" role="tab" aria-controls="tab3" aria-selected="false">Gold</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" data-toggle="tab" href="#platinum_tab" role="tab" aria-controls="tab4" aria-selected="false">Platinum</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div className="card-body no-p">
-                        <div className="tab-content">
-                            {this.generateContractTab("basic", "show active", "basic_tab")}
-                            {this.generateContractTab("silver", "", "silver_tab")}
-                            {this.generateContractTab("gold", "", "gold_tab")}
-                            {this.generateContractTab("platinum", "", "platinum_tab")}
+                </div>
+                <div className="card-body no-p">
+                    <div className="tab-content">
+                        {generateContractTab("basic",[basic, basic_number_radio_station, basic_number_of_distribution_copies, basic_number_audio_stream, basic_enable]
+                            , "show active", "basic_tab", setBasic, setBasicNumberRadioStation, setBasicNumberOfDistributionCopies, setBasicNumberAudioStream, setBasicEnable)}
+                        {generateContractTab("silver", [silver, silver_number_radio_station, silver_number_of_distribution_copies, silver_number_audio_stream, silver_enable]
+                            , "", "silver_tab", setSilver, setSilverNumberRadioStation, setSilverNumberOfDistributionCopies, setSilverNumberAudioStream, setSilverEnable)}
+                        {generateContractTab("gold", [gold, gold_number_radio_station, gold_number_of_distribution_copies, gold_number_audio_stream, gold_enable]
+                            , "", "gold_tab", setGold, setGoldNumberRadioStation, setGoldNumberOfDistributionCopies, setGoldNumberAudioStream, setGoldEnable)}
+                        {generateContractTab("platinum", [platinum, platinum_number_radio_station, platinum_number_of_distribution_copies, platinum_number_audio_stream, platinum_enable]
+                            ,  "", "platinum_tab", setPlatinum, setPlatinumNumberRadioStation, setPlatinumNumberOfDistributionCopies, setPlatinumNumberAudioStream, setPlatinumEnable)}
+                        <div className="text-center mb-5">
+                            <button className="btn btn-outline-danger btn-sm pl-5 pr-5 font-weight-bold" id="all_contract" onClick={handleSubmitContractUpdate} >Enregister le contrat</button>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = state => {
-    return {
-        contract: state.profile.contract,
-        user_credentials: state.Home.user_credentials,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        profile_initialisation_contract: (data) => {
-            dispatch({type: "ADD_CONTRACT", data: data})
-        },
-        beats_initialisation_pricing: (data) => {
-            dispatch({type: "ADD_PRICING", data: data})
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditContractBeats);
+export default EditContractBeats;

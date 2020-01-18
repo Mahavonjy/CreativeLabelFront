@@ -393,7 +393,7 @@ class Calendar extends Component {
                                     <i className="col icon icon-arrow-left s-24" onClick={this.previous}/>
                                     {this.renderTodayLabel()}
                                     {this.renderMonthLabel()}
-                                    <i className="col icon icon-arrow-right s-24" onClick={this.next} />
+                                    <i className="col icon icon-arrow-right text-right s-24" onClick={this.next} />
                                 </div>
                                 {this.DayNames}
                             </header>

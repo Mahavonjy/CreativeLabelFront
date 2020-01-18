@@ -63,12 +63,6 @@ const profileReducer = (state = initState, action) => {
                 ...state,
                 user_beats: [...state.user_beats]
             };
-        case "DELETE_IN_PROFILE_BEATS":
-            state.user_beats = state.user_beats.filter((beat) => beat.id !== parseInt(action.data));
-            return {
-                ...state,
-                user_beats: [...state.user_beats]
-            };
         default:
             return state;
     }

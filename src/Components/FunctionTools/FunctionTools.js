@@ -35,6 +35,22 @@ class FunctionTools extends Component {
         return Promise.all(all_call_api).then(r => console.log(''))
     }
 
+    static async getMediaLink (setState, state, medias, up_props) {
+        let all_call_api = [];
+        let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
+        for (let index in medias) {
+            await setState(state => [...state, {index: true}]);
+            await all_call_api.push(
+                axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + medias[index]['id'], {headers:headers}).then(response => {
+                    up_props({"index": index, "link": response.data});
+                }).catch(error => {
+                    console.log(error.data);
+                })
+            )
+        }
+        return Promise.all(all_call_api).then(() => null)
+    }
+
     static async AddPropsCart(new_headers, props) {
         try {
             let carts = JSON.parse(localStorage.getItem("MyCarts"));
@@ -190,23 +206,31 @@ class FunctionTools extends Component {
         return day + '-' + monthIndex + '-' + year;
     };
 
-    static changeFields = (that, e, up_props) => {
+    static changeFields = (setState, e, up_props) => {
         let value = e.target.value;
-        that.setState({[e.target.name]: value}, () => {
-            if (up_props) up_props(value)
-        })
+        setState(value);
+        if (up_props) up_props(value)
     };
 
-    static changeBoolFields = (that, e, up_props) => {
-        let id = e.target.id;
+    static changeBoolFields = (setState, e, up_props) => {
         let value = e.target.value;
-        that.setState({[id]: !that.state[id]}, () => {
-            if (up_props) up_props(value)
-        })
+        if (value === true || value === "true") setState(false);
+        else setState(true);
+        if (up_props) up_props(!value)
     };
 
-    static changeFileFields = (that, e) => {
-        that.setState({[e.target.id] : e.target.files[0]});
+    static changeFileFields = (setState, e) => {
+        setState(e.target.files[0]);
+    };
+
+    static  ImageClick = (e) => {
+        const cube = document.querySelector(".cube");
+        let cubeImageClass = cube.classList[1];
+
+        const targetNode = e.target.nodeName;
+        const targetClass = e.target.className;
+
+        if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
     };
 
     render() {

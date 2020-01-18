@@ -91,7 +91,7 @@ class EditSingle extends Component {
 
     render() {
         return (
-            <Modal visible={true} width="650" height="550" animationType='slide'>
+            <Modal visible={true} width="650" height="550" effect="fadeInUp" onClickAway={() => this.props.CloseEdit}>
                 <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false}
                                 closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
                 {this.state.loading ? this.props.smallSpinner("absolute", "0") : null}
