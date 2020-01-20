@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DatePicker from "react-datepicker"
 import StarRatings from 'react-star-ratings';
 import Calendar from "../../Calendar/Calendar";
-import FunctionTools from "../../../FunctionTools/FunctionTools";
+import * as Tools from "../../../FunctionTools/Tools";
 import {toast} from "react-toastify";
 import "../../style/Results.css"
 import ReactTooltip from "react-tooltip";
@@ -19,8 +19,8 @@ class DisplayPrestation extends Component {
     };
 
     Reserve = () => {
-        let new_date = FunctionTools.formatDate(this.state.event_date);
-        let now = FunctionTools.formatDate(new Date());
+        let new_date = Tools.formatDate(this.state.event_date);
+        let now = Tools.formatDate(new Date());
         if (!this.state.address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
         else if (parseInt(new_date) - parseInt(now) <= 0) toast.error("Veuillez mettre une autre date");
         else this.setState({reservation: true})
@@ -144,7 +144,7 @@ class DisplayPrestation extends Component {
                                                             <input type="text" value={this.state.address} id="address"
                                                                    placeholder="Ecrire ici l'adresse de votre evenement"
                                                                    name="address" className="form-control"
-                                                                   onChange={(e) => FunctionTools.changeFields(this, e)} />
+                                                                   onChange={(e) => Tools.changeFields(this, e)} />
                                                         </div>
                                                     </div>
                                                 </div>

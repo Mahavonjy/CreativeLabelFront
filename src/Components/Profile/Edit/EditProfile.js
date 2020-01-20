@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from 'react-awesome-modal';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import logo from "../../../images/Logo/ISL_logo.png";
-import FunctionTools from "../../FunctionTools/FunctionTools";
-import { addProfileInfo } from "../ProfileProps";
+import * as Tools from "../../FunctionTools/Tools";
+import { profileInitialisationInfo } from "../../FunctionTools/FunctionProps";
 import { smallSpinner, generateInput } from "../../FunctionTools/CreateFields";
 
 function EditProfile (props) {
 
+    const dispatch = useDispatch();
     const profile_info = useSelector(state => state.profile.profile_info);
     const user_credentials = useSelector(state => state.Home.user_credentials);
 
+    const isMounted = useRef(false);
     const [photo, setPhoto] = useState("");
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(profile_info.name);
@@ -52,7 +54,7 @@ function EditProfile (props) {
 
         axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: headers}).then(resp => {
             let data = resp.data;
-            addProfileInfo(data);
+            dispatch(profileInitialisationInfo(data));
             props.updateProfile(data);
             setLoading(false);
             props.closePopup(1);
@@ -66,6 +68,12 @@ function EditProfile (props) {
             document.getElementById(id).removeAttribute("disabled");
         });
     };
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
     return (
         <Modal visible={true} width="650" height="550" effect="fadeInUp" onClickAway={(e) => props.closePopup(0)}>
@@ -91,7 +99,7 @@ function EditProfile (props) {
                             {generateInput("adresse", address, setAddress, "address", "text", "icon-address-book")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-map-location"/>&nbsp;Pays</div>
-                                <select className="selectpicker form-control" id="country" name="country" value={country} onChange={(e) => FunctionTools.changeFields(setCountry, e)}>
+                                <select className="selectpicker form-control" id="country" name="country" value={country} onChange={(e) => Tools.changeFields(setCountry, e)}>
                                     <option value="Madagascar">Madagascar</option>
                                 </select>
                             </div>
@@ -100,7 +108,7 @@ function EditProfile (props) {
                             {generateInput("Télephone", phone, setPhone, "phone", "number", "icon-smartphone-1")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-street-view"/>&nbsp;Ville</div>
-                                <select className="selectpicker form-control" id="city" name="city" value={city} onChange={(e) => FunctionTools.changeFields(setCity, e)}>
+                                <select className="selectpicker form-control" id="city" name="city" value={city} onChange={(e) => Tools.changeFields(setCity, e)}>
                                     <option value="">Veuillez choisir</option>
                                     <option value="Manakara">Manakara</option>
                                     <option value="Tamatave">Tamatave</option>
@@ -112,7 +120,7 @@ function EditProfile (props) {
                             {generateInput("Description", description, setDescription, "description", "text", "icon-info-circle")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-venus-double"/>&nbsp;Sexe</div>
-                                <select className="selectpicker form-control" id="gender" name="gender" value={gender} onChange={(e) => FunctionTools.changeFields(setGender, e)}>
+                                <select className="selectpicker form-control" id="gender" name="gender" value={gender} onChange={(e) => Tools.changeFields(setGender, e)}>
                                     <option value="0">Femelle</option>
                                     <option value="1">male</option>
                                 </select>
@@ -121,7 +129,7 @@ function EditProfile (props) {
                         <div className="custom-float">
                             <div className="input-group-prepend center" style={{width: "90%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de profile</div>
-                                <input onChange={(e) => FunctionTools.changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
+                                <input onChange={(e) => Tools.changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
                             </div>
                         </div>
                         <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e) => {handleSubmitUpdateProfile(e)}}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>

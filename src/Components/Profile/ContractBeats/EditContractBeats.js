@@ -1,36 +1,39 @@
-import React, {Component, useState} from "react";
-import {connect, useSelector} from "react-redux";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import Conf from "../../../Config/tsconfig";
 import {toast} from "react-toastify";
-import FunctionTools from "../../FunctionTools/FunctionTools";
-import { profileInitialisationContract, beatsInitialisationPricing } from "../ProfileProps"
+import * as Tools from "../../FunctionTools/Tools";
+import { changeFields } from "../../FunctionTools/Tools";
+import { profileInitialisationContract, beatsInitialisationPricing } from "../../FunctionTools/FunctionProps"
 
 function EditContractBeats() {
 
+    const dispatch = useDispatch();
+    const isMounted = useRef(false);
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const contract = useSelector(state => state.profile.contract);
 
     // basic contract
-    const [basic_enable, setBasicEnable] = useState(contract['basic_lease']['enabled']);
+    const [basic_enable, setBasicEnable] = useState(Boolean(contract['basic_lease']['enabled']));
     const [basic, setBasic] = useState(contract['basic_lease']['price']);
     const [basic_number_audio_stream, setBasicNumberAudioStream] = useState(contract['basic_lease']['number_audio_stream']);
     const [basic_number_radio_station, setBasicNumberRadioStation] = useState(contract['basic_lease']['number_radio_station']);
     const [basic_number_of_distribution_copies, setBasicNumberOfDistributionCopies] = useState(contract['basic_lease']['number_of_distribution_copies']);
     // silver contract
-    const [silver_enable, setSilverEnable] = useState(contract['silver_lease']['enabled']);
+    const [silver_enable, setSilverEnable] = useState(Boolean(contract['silver_lease']['enabled']));
     const [silver, setSilver] = useState(contract['silver_lease']['price']);
     const [silver_number_audio_stream, setSilverNumberAudioStream] = useState(contract['silver_lease']['number_audio_stream']);
     const [silver_number_radio_station, setSilverNumberRadioStation] = useState(contract['silver_lease']['number_radio_station']);
     const [silver_number_of_distribution_copies, setSilverNumberOfDistributionCopies] = useState(contract['silver_lease']['number_of_distribution_copies']);
     // silver contract
-    const [gold_enable, setGoldEnable] = useState(contract['gold_lease']['enabled']);
+    const [gold_enable, setGoldEnable] = useState(Boolean(contract['gold_lease']['enabled']));
     const [gold, setGold] = useState(contract['gold_lease']['price']);
     const [gold_number_audio_stream, setGoldNumberAudioStream] = useState(contract['gold_lease']['number_audio_stream']);
     const [gold_number_radio_station, setGoldNumberRadioStation] = useState(contract['gold_lease']['number_radio_station']);
     const [gold_number_of_distribution_copies, setGoldNumberOfDistributionCopies] = useState(contract['gold_lease']['number_of_distribution_copies']);
     // platinum contract
-    const [platinum_enable, setPlatinumEnable] = useState(contract['platinum_lease']['enabled']);
+    const [platinum_enable, setPlatinumEnable] = useState(Boolean(contract['platinum_lease']['enabled']));
     const [platinum, setPlatinum] = useState(contract['platinum_lease']['price']);
     // const [platinum_unlimited, setPlatinumUnlimited] = useState(contract['platinum_lease']['unlimited']);
     const [platinum_number_audio_stream, setPlatinumNumberAudioStream] = useState(contract['platinum_lease']['number_audio_stream']);
@@ -46,22 +49,22 @@ function EditContractBeats() {
                             <div className="input-group-text text-dark" data-tip={"Le prix de votre instrumental pour un contrat en " + state_name}>
                                 <i className="icon-text-width"/>&nbsp;prix du beat *
                             </div>
-                            <input value={state_array[0]} onChange={(e) => FunctionTools.changeFields(setPrice, e)} id={state_name} name={state_name}
+                            <input value={state_array[0]} onChange={(e) => changeFields(setPrice, e)} id={state_name} name={state_name}
                                    className="form-control" type="number"/>
                         </div>
                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                             <small className="input-group-text text-dark" data-tip={"Le nombre de diffusion Radio & TV de votre instrumental pour un contrat en " + state_name}><i className="icon-text-width"/>&nbsp;nb de diffusion Radio & TV *</small>
                             <input value={state_array[1]} id={state_name + "_number_radio_station"}
-                                   onChange={(e) => FunctionTools.changeFields(setNumberRadioStation, e)} name={state_name + "_number_radio_station"} className="form-control" type="number"/>
+                                   onChange={(e) => changeFields(setNumberRadioStation, e)} name={state_name + "_number_radio_station"} className="form-control" type="number"/>
                         </div>
                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                             <small className="input-group-text text-dark" data-tip={"Le nombre de copie distribuée de votre instrumental pour un contrat en " + state_name}><i className="icon-text-width"/>&nbsp;nb de copie distribuée *</small>
-                            <input value={state_array[2]} onChange={(e) => FunctionTools.changeFields(setNumberOfDist, e)}
+                            <input value={state_array[2]} onChange={(e) => changeFields(setNumberOfDist, e)}
                                    id={state_name + "_number_of_distribution_copies"} name={state_name + "_number_of_distribution_copies"} className="form-control" type="number"/>
                         </div>
                         <div className="input-group-prepend d-inline-block " style={{width: "100%", padding: "2px"}}>
                             <small className="input-group-text text-dark" data-tip={"Le nombre de stream de votre instrumental pour un contrat en " + state_name}><i className="icon-user"/>&nbsp;nb de stream *</small>
-                            <input value={state_array[3]} onChange={(e) => FunctionTools.changeFields(setNumberAudionStream, e)}
+                            <input value={state_array[3]} onChange={(e) => changeFields(setNumberAudionStream, e)}
                                    id={state_name + "_number_audio_stream"} name={state_name + "_number_audio_stream"} className="form-control" type="number"/>
                         </div>
                     </div>
@@ -77,8 +80,8 @@ function EditContractBeats() {
                                             <i className="icon icon-check-circle text-red" />{"Activer l'offre " + state_name}
                                         </div>
                                         <div className="material-switch">
-                                            <input id={state_array[4]} value={state_array[4]} name={state_name + "_enable"} type="checkbox"
-                                                   onChange={(e) => FunctionTools.changeBoolFields(setEnable, e)} checked={state_array[4]}/>
+                                            <input value={state_array[4]} name={state_name + "_enable"} type="checkbox"
+                                                   onChange={(e) => Tools.changeBoolFields(setEnable, e)} checked={state_array[4]}/>
                                             <label htmlFor="sw1" className="bg-primary" />
                                         </div>
                                     </li>
@@ -132,7 +135,7 @@ function EditContractBeats() {
                 axios.put(Conf.configs.ServerApi + "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
                     let tmp = contract;
                     tmp[response.data['contract_name']] = response.data;
-                    profileInitialisationContract(tmp);
+                    dispatch(profileInitialisationContract(tmp));
                 }).catch(err => {
                     console.log(err.response)
                 })
@@ -141,13 +144,19 @@ function EditContractBeats() {
 
         Promise.all(tmp_call).then(() => {
             axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
-                beatsInitialisationPricing(resp.data);
+                dispatch(beatsInitialisationPricing(resp.data));
                 toast.success("Enregistrement avec success")
             }).catch(err => {
                 console.log(err)
             })
         }).catch(() => toast.error("Veuillez re enregistrer"))
     };
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
     return (
         <div className="container-fluid relative animatedParent animateOnce p-lg-3">

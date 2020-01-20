@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {Link, Route} from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import {FacebookProvider, Feed} from "react-facebook";
 import Conf from "../../Config/tsconfig";
-import FunctionTools from "./FunctionTools";
+import * as Tools from "./Tools";
 import TestImg from "../../assets/img/demo/a2.jpg";
 import {toast} from "react-toastify";
 import Register from "../Authentification/Register/Register";
@@ -22,6 +22,9 @@ import TestImageOne from "../../assets/img/demo/a7.jpg";
 import TestImageThree from "../../assets/img/demo/a5.jpg";
 import "react-datepicker/dist/react-datepicker.css"
 import SearchBar from "../KantoBiz/SearchBar";
+import { ForAddToCard } from "./PopupFields"
+import { addNewPlayerList } from "../FunctionTools/FunctionProps"
+import {useDispatch} from "react-redux";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -39,11 +42,14 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
 
 export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states, state_value) => {
 
+    const dispatch = useDispatch();
+    const isMounted = useRef(false);
+
     async function Play (index, type_, run) {
         if (states.index !== index && states.tmp === null) {
             states.setIndex(index);
             states.setTmp(index);
-            await states.addNewPlayerList(states.beats);
+            await dispatch(addNewPlayerList(states.beats));
             await props.ToPlay(index, type_, run, set_of_beats_name);
         } else {
             if (index !== states.index) {
@@ -67,6 +73,12 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
             if (run) await IslPlayer.pauseOrPlayPlayer(false);
         }
     }
+
+    useEffect( () => {
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
     if (height_div === "short_beats") {
         return (
@@ -111,7 +123,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                 </small>
                             </button>
                             {/* Here is Popup for add to cart */}
-                            {/*{states.ForAddToCard(that, val, set_of_beats_name)}*/}
+                            <div> {ForAddToCard(val, set_of_beats_name, states)} </div>
                         </div>
                     </div>)}
             </div>
@@ -175,7 +187,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     {height_div !== "user_profile" ?
                                         <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"
                                            onClick={() => {
-                                               FunctionTools.LikeOrFollow("like", val.id);
+                                               Tools.LikeOrFollow("like", val.id);
                                            }}/> :
                                         <div className="ml-auto">
                                             <i className="icon-edit s-24" id={val.id} data-tip="Modifier"
@@ -237,10 +249,8 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                         </div>}
                                 </div>
                             </div>
-
                             {/* Here is Popup for add to cart */}
-                            {/*{height_div !== "user_profile" ?*/}
-                            {/*    <div> {that.props.ForAddToCard(that, val, set_of_beats_name)} </div> : null}*/}
+                            {height_div !== "user_profile" && <div> {ForAddToCard(val, set_of_beats_name, states)} </div>}
                         </div>
                     </div>
                 )}
@@ -249,10 +259,10 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
     }
 };
 
-export const DisplayArtist = (that_value) => {
+export const DisplayArtist = (artist_info) => {
     return (
         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 428}}>
-            {that_value ? that_value.map((val, index) =>
+            {artist_info.length !== 0 ? artist_info.map((val, index) =>
                 <li className="list-group-item" key={index}>
                     <div className="d-flex align-items-center">
                         <div className="col-10">
@@ -265,12 +275,12 @@ export const DisplayArtist = (that_value) => {
                             </Link>
                         </div>
                         <i className="icon-user-plus ml-auto"
-                           onClick={() => FunctionTools.LikeOrFollow("follow", val.id)}/>
+                           onClick={() => Tools.LikeOrFollow("follow", val.id)}/>
                         <Link to={"Profile/isl_artist_profile/" + val.id} className="ml-auto"><i
                             className="icon-user-circle"/></Link>
                     </div>
                 </li>
-            ) : <p className="text-center">Vide</p>}
+            ) : <p className="text-center text-red pt-5"> Pas de BeatMaker </p>}
         </ul>
     )
 };
@@ -314,7 +324,7 @@ export const CreativeHeaders = (Title, Description) => {
     )
 };
 
-export const SideBars = (that, location, history, headers) => {
+export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout) => {
     return (
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
@@ -323,19 +333,13 @@ export const SideBars = (that, location, history, headers) => {
 
                 {/* BEATS */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Instrumental" onClick={() => {
-                    if (location.pathname !== "/beats") {
-                        history.push("/beats");
-                        that.setState({select: ""})
-                    }
+                    if (location.pathname !== "/beats") history.push("/beats");
                 }}><i className="icon icon-heartbeat s-24"/> <span className="ml-5">BeatMaking</span>
                 </li>
 
                 {/* KantoBiz */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet KantoBiz" onClick={() => {
-                    if (location.pathname !== "/kantobiz") {
-                        history.push("/kantobiz");
-                        that.setState({select: ""})
-                    }
+                    if (location.pathname !== "/kantobiz") history.push("/kantobiz");
                 }}><i className="icon icon-compact-disc-2 s-24"/> <span className="ml-5">KantoBiz</span>
                 </li>
 
@@ -343,24 +347,19 @@ export const SideBars = (that, location, history, headers) => {
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profile" onClick={() => {
                     if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                         document.getElementById("LoginRequire").click();
-                    } else if (location.pathname !== "/Profile") {
-                        history.push("/Profile");
-                        that.setState({select: "Profile"})
                     }
+                    else if (location.pathname !== "/Profile") history.push("/Profile");
                 }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
                 </li>
 
                 {/* CART */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
-                    if (that.state.cart) {
-                        if (location.pathname !== "/Cart") {
-                            history.push("/Cart");
-                            that.setState({select: "Cart"})
-                        }
-                    } else toast.warn("Your cart is empty")
+                    if (state_cart)
+                        if (location.pathname !== "/Cart") history.push("/Cart");
+                    else toast.warn("Your cart is empty")
                 }}>
                     <div id="CartBadge">
-                            <span className="p1 " data-count={that.state.cart}>
+                            <span className="p1 " data-count={state_cart}>
                                 <i className="icon icon-cart-plus s-24 mr-5" data-count="4b"/> Cart
                             </span>
                     </div>
@@ -368,9 +367,9 @@ export const SideBars = (that, location, history, headers) => {
 
                 {/* LOGOUT OR LOGIN */}
                 <li style={{margin: "0 0 20px 10px"}}
-                    data-tip={that.state.logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se deconnecter"}
-                    onClick={that.logout}>
-                    <i className={that.state.logout_class}/> <span>{that.state.log_name}</span>
+                    data-tip={logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se deconnecter"}
+                    onClick={() => logout()}>
+                    <i className={logout_class}/> <span>{log_name}</span>
                 </li>
 
             </ul>
@@ -378,31 +377,27 @@ export const SideBars = (that, location, history, headers) => {
     )
 };
 
-export const SideBarsMain = (that) => {
+export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_checked, user_data) => {
     return (
         <div>
+            <Route path="/preference" exact component={() => {
+                if (JSON.parse(localStorage.getItem("Isl_Credentials")))
+                    return (<Preference/>);
+                else window.location.replace('/beats#LoginRequire')
+            }}/>
+            <Route exact path="/Profile" component={() => {
+                if (JSON.parse(localStorage.getItem("Isl_Credentials")))
+                    return (<Profile ToPlay={addToPlaylist}/>);
+                else window.location.replace('/beats#LoginRequire')
+            }}/>
             <Route path="/register" exact component={() => <Register/>}/>
             <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
             <Route path="/kantobiz" exact component={() => <KantoBiz/>}/>
-            <Route path="/beats" exact component={() => <Beats ToPlay={that.addToPlaylist}/>}/>
-            <Route path="/Cart" component={() => <Cart ToPlay={that.addToPlaylist}/>}/>
-            <Route path="/preference" exact component={() => {
-                if (JSON.parse(localStorage.getItem("Isl_Credentials"))) return (<Preference/>);
-                else window.location.replace('/beats#LoginRequire')
-            }}/>
-            <Route exact path="/Profile" component={
-                () => {
-                    if (JSON.parse(localStorage.getItem("Isl_Credentials")))
-                        return (<Profile ToPlay={that.addToPlaylist}/>);
-                    else window.location.replace('/beats#LoginRequire')
-                }}/>
-            <Route path="/beats/CheckThisBeat/:id(\d+)" component={
-                () => <OneBeat ToPlay={that.addToPlaylist} SingleBeat={that.state.single_beat}
-                               SimilarBeats={that.state.beats_similar}/>}/>
-            <Route path="/Profile/isl_artist_profile/:id(\d+)" component={
-                () => <OtherProfile ToPlay={that.addToPlaylist} ProfileChecked={that.state.profile_checked}
-                                    UserData={that.state.user_data}/>}/>
+            <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
+            <Route path="/Cart" component={() => <Cart ToPlay={addToPlaylist}/>}/>
+            <Route path="/beats/CheckThisBeat/:id(\d+)" component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat} SimilarBeats={beats_similar}/>}/>
+            <Route path="/Profile/isl_artist_profile/:id(\d+)" component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
         </div>
     )
 };
@@ -426,7 +421,7 @@ export const generateInput = (label, value, setValue, field_, type_, icon, tip, 
     return (
         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
             <div className="input-group-text black-text bolder" data-tip={tip}><i className={icon}/>&nbsp;{label}</div>
-            <input value={value} onChange={(e) => FunctionTools.changeFields(setValue, e)}
+            <input value={value} onChange={(e) => Tools.changeFields(setValue, e)}
                    id={field_} name={field_} placeholder={field_} className="form-control" type={type_} disabled={disable}/>
         </div>
     );

@@ -10,7 +10,7 @@ import {bindActionCreators} from "redux";
 import * as Validators from "../../Validators/Validatiors";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 import * as PopupFields from "../../FunctionTools/PopupFields";
-import FunctionTools from "../../FunctionTools/FunctionTools";
+import * as Tools from "../../FunctionTools/Tools";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import {connect} from "react-redux";
 
@@ -116,7 +116,7 @@ class Register extends Component {
 
                                 <div className="center p-10">
                                     <div className="form-line">
-                                        {this.props.InputCreate('keys', this.state.keys, (e) => {FunctionTools.changeFields(this, e)}, "Inserer votre clé ici", "number", true)}
+                                        {this.props.InputCreate('keys', this.state.keys, (e) => {Tools.changeFields(this, e)}, "Inserer votre clé ici", "number", true)}
                                     </div>
                                 </div>
 
@@ -148,22 +148,22 @@ class Register extends Component {
                                                 <div className="body">
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('name', this.state.name, (e) => {FunctionTools.changeFields(this, e)}, "Votre nom", "text", true)}
+                                                            {this.props.InputCreate('name', this.state.name, (e) => {Tools.changeFields(this, e)}, "Votre nom", "text", true)}
                                                         </div>
                                                     </div>
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('email', this.state.email, (e) => {FunctionTools.changeFields(this, e)}, "E-mail", "email", true)}
+                                                            {this.props.InputCreate('email', this.state.email, (e) => {Tools.changeFields(this, e)}, "E-mail", "email", true)}
                                                         </div>
                                                     </div>
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('password', this.state.password, (e) => {FunctionTools.changeFields(this, e)}, "Au moins 8 caractères", "password", true)}
+                                                            {this.props.InputCreate('password', this.state.password, (e) => {Tools.changeFields(this, e)}, "Au moins 8 caractères", "password", true)}
                                                         </div>
                                                     </div>
                                                     <div className="form-group form-float">
                                                         <div className="form-line">
-                                                            {this.props.InputCreate('confirm_password', this.state.confirm_password, (e) => {FunctionTools.changeFields(this, e)}, "Entrez le mot de passe à nouveau", "password", true)}
+                                                            {this.props.InputCreate('confirm_password', this.state.confirm_password, (e) => {Tools.changeFields(this, e)}, "Entrez le mot de passe à nouveau", "password", true)}
                                                         </div>
                                                     </div>
 

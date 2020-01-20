@@ -1,222 +1,195 @@
-import React, { Component } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from 'axios';
 import './Home.css';
 import "../../assets/css/app.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import IslPlayer from "../Players/Players";
 import Conf from "../../Config/tsconfig";
-import {connect} from "react-redux";
-import {toast} from "react-toastify";
-import FunctionTools from "../FunctionTools/FunctionTools";
-import {bindActionCreators} from "redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import * as Tools from "../FunctionTools/Tools";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import * as PopupFields from "../FunctionTools/PopupFields";
+import * as HomeProps from "../FunctionTools/FunctionProps";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
-let _that;
 let headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': "*"
 };
 
-class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isMounted: false, loading: false,
-            href: window.location.href.split("/"),
-            single_beat: '', beats_similar: [], profile_checked: '', user_data: '', cart: 0,
-            logout_class: "icon icon-exit-2 s-24 mr-5", log_name: "logout", ret: false, connexion_reloaded: 0
-        };
-        _that = this
-    }
+function Home () {
 
-    static IncrementCart = (number_) => {
-        if (number_) {
-            _that.setState({cart: number_})
-        } else _that.setState({cart: _that.state.cart + 1})
+    let user_credentials;
+    const dispatch = useDispatch();
+    const beats = useSelector(state => state.beats.beats);
+
+    const isMounted = useRef(false);
+    const [loading, setLoading] = useState(false);
+    const [href] = useState(window.location.href.split("/"));
+    const [single_beat, setSingleBeat] = useState('');
+    const [beats_similar, setBeatsSimilar] = useState([]);
+    const [profile_checked, setProfileChecked] = useState('');
+    const [user_data, setUserData] = useState('');
+    const [state_cart, setStateCart] = useState(0);
+    const [logout_class, setLogoutClass] = useState("icon icon-exit-2 s-24 mr-5");
+    const [log_name, setLogName] = useState("logout");
+    const [connexion_reloaded, setConnexionReloaded] = useState(0);
+
+    Home.IncrementCart = (number) => {
+        if (number)
+            setStateCart(number);
+        setStateCart(state_cart + 1)
     };
 
-    static Decrement = () => {
-        _that.setState({cart: _that.state.cart - 1})
+    Home.Decrement = () => {
+        setStateCart(state_cart - 1)
     };
 
-    addToPlaylist = (index, type_, run, that, set_of_beats_name) => {
+    const addToPlaylist = (index, type_, run, set_of_beats_name) => {
         ifStopPlayer[key] = false;
         if (!ifStopPlayer[key]) {
             key = Math.floor(Math.random() * Math.floor(999999999));
             ifStopPlayer[key] = true;
         }
-        IslPlayer.startPlayerComponent(index, type_, run, that, set_of_beats_name);
+        IslPlayer.startPlayerComponent(index, type_, run, set_of_beats_name);
     };
 
-    ifConnectionError = (err) => {
-        this.setState({connexion_reloaded: this.state.connexion_reloaded + 1}, () => {
-            try {
-                if (err.response.data === "Connection error") {
-                    if (this.state.connexion_reloaded > 3) {
-                        window.location.replace('/badConnexion')
-                    } else {
-                        setTimeout(() => {
-                            this.componentDidMount();
-                        }, 5000);
-                    }
-                } else if (err.response.data === "token invalid") {
-                    this.logout();
+    const ifConnectionError = (err) => {
+        setConnexionReloaded(connexion_reloaded + 1);
+        try {
+            if (err.response.data === "Connection error") {
+                if (connexion_reloaded > 3) {
+                    window.location.replace('/badConnexion')
                 } else {
-                    this.logout();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 5000);
                 }
-            } catch (e) {
-                console.log(err)
-                // this.logout();
+            } else if (err.response.data === "token invalid") {
+                logout();
+            } else {
+                logout();
             }
-        })
-    };
-
-    CheckSpecialRoute = (headers_) => {
-        if (this.state.href[this.state.href.length - 2] === "CheckThisBeat") {
-            axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp => {
-                this.props.addBeatMakerBeats(resp.data['all_artist_beats']);
-                this.props.addSimilarBeats(resp.data['similar_beats']);
-                this.setState({single_beat: resp.data['single_beat']}, () => {this.setState({loading: false})})
-            }).catch(() => {window.location.replace('/NotFound')})
-        } else if (this.state.href[this.state.href.length - 2] === "isl_artist_profile") {
-            axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + this.state.href[this.state.href.length -1], {headers: headers_}).then(resp =>{
-                this.props.addOtherBeatMakerBeats(resp.data['user_beats']);
-                this.setState({
-                    profile_checked: resp.data['profile_checked'],
-                    user_data: resp.data['user_data'],
-                }, () => {this.setState({loading: false})})
-            }).catch(() => {toast.error("Connection Error")})
-        } else if (this.state.href[this.state.href.length - 1] === 'Cart') {
-            if (!this.state.cart) window.location.replace('/beats');
-            else this.setState({loading: false});
-        } else {
-            this.setState({loading: false}, () => {
-                if (this.state.href[this.state.href.length - 1] === "beats#LoginRequire")
-                    document.getElementsByClassName("LoginRequire")[0].click();
-            })
+        } catch (e) {
+            //
         }
     };
 
-    NotOnline = (headers_) => {
-        Promise.all([
-            axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: headers_}).then(resp =>{
-                let tmp_arr = [];
-                for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
-                this.props.addAllMediaGenre(tmp_arr);
-                this.props.addPrefAllMediaGenre(resp.data);
-            }).catch(err => {console.log(err.response)}),
-            axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers_}).then(resp => {
-                this.props.addBeats(resp.data["random"]);
-                this.props.newBeatMaker(resp.data["new_beatMaker"]);
-                this.props.topBeatMaker(resp.data["top_beatmaker"]);
-                this.props.latestBeats(resp.data["latest_beats"]);
-                this.props.discoveryBeats(resp.data["discovery_beats"]);
-                this.props.islBeats(resp.data["isl_playlist"]);
-            }).catch(err => {console.log(err)})
-        ]).then(() => {
-            this.CheckSpecialRoute(headers_);
-        }).catch(() => {
-            this.CheckSpecialRoute(headers_);
-        });
+    const CheckSpecialRoute = () => {
+        let firstRouteParsing = href[href.length - 1];
+        let secondRouteParsing = href[href.length - 2];
+        if (secondRouteParsing === "CheckThisBeat") {
+            axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + firstRouteParsing, {headers: headers}).then(resp => {
+                dispatch(HomeProps.addBeatMakerBeats(resp.data['all_artist_beats']));
+                dispatch(HomeProps.addSimilarBeats(resp.data['similar_beats']));
+                setSingleBeat(resp.data['single_beat']);
+                setLoading(false);
+            }).catch(() => window.location.replace('/NotFound'))
+        } else if (secondRouteParsing === "isl_artist_profile") {
+            axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
+                dispatch(HomeProps.addOtherBeatMakerBeats(resp.data['user_beats']));
+                setProfileChecked(resp.data['profile_checked']);
+                setUserData(resp.data['user_data']);
+                setLoading(false);
+            }).catch(() => {toast.error("Connection Error")})
+        } else if (firstRouteParsing === 'Cart') {
+            if (!state_cart)
+                window.location.replace('/beats');
+            else setLoading(false);
+        } else {
+            setLoading(false);
+            if (firstRouteParsing === "beats#LoginRequire")
+                document.getElementsByClassName("LoginRequire")[0].click();
+        }
     };
 
-    Online = () => {
-        this.setState({loading: true}, () => {
-            try {
-                this.setState({cart: JSON.parse(localStorage.getItem("MyCarts")).length})
-            } catch (e) {
-                console.log('')
-            } finally {
-                try {
-                    headers['Isl-Token'] = this.props.user_credentials.token;
-                    if (this.state.href[this.state.href.length - 1] === 'register') {
-                        window.location.replace('/beats')
-                    } else if (this.state.href[this.state.href.length - 1] !== 'preference') {
-                        axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
-                            this.fetchUserData()
-                        }).catch(err => {
-                            try {
-                                if (err.response.data === "no choice music genre") {
-                                    window.location.replace('/preference');
-                                } else if (err.response.data === "token invalid") {
-                                    this.logout()
-                                } else this.NotOnline(headers)
-                            } catch(e) {
-                                window.location.replace('/badConnexion')
-                            }
-                        });
-                    } else {
-                        axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
-                            this.fetchUserData()
-                        }).catch(() => {
-                            this.NotOnline(headers)
-                        });
+    const NotOnline = () => {
+        try {
+            setStateCart(JSON.parse(localStorage.getItem("MyCarts")).length);
+        } catch (e) {
+            //
+        } finally {
+            Promise.all([
+                axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: headers}).then(resp =>{
+                    let tmp_arr = [];
+                    for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
+                    dispatch(HomeProps.addAllMediaGenre(tmp_arr));
+                    dispatch(HomeProps.addPrefAllMediaGenre(resp.data));
+                }).catch(err => ifConnectionError(err)),
+                axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers}).then(resp => {
+                    dispatch(HomeProps.addBeats(resp.data["random"]));
+                    dispatch(HomeProps.newBeatMaker(resp.data["new_beatMaker"]));
+                    dispatch(HomeProps.topBeatMaker(resp.data["top_beatmaker"]));
+                    dispatch(HomeProps.latestBeats(resp.data["latest_beats"]));
+                    dispatch(HomeProps.discoveryBeats(resp.data["discovery_beats"]));
+                    dispatch(HomeProps.islBeats(resp.data["isl_playlist"]));
+                }).catch(err => ifConnectionError(err))
+            ]).then(() => CheckSpecialRoute()).catch(() => NotOnline());
+        }
+    };
+
+    const Online = () => {
+        try {
+            let routeParsed = href[href.length - 1];
+            if (routeParsed === 'register') {
+                window.location.replace('/beats')
+            } else if (routeParsed !== 'preference') {
+                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                    fetchUserData()
+                }).catch(err => {
+                    try {
+                        if (err.response.data === "no choice music genre") {
+                            window.location.replace('/preference');
+                        } else if (err.response.data === "token invalid") {
+                            logout()
+                        } else NotOnline()
+                    } catch(e) {
+                        window.location.replace('/badConnexion')
                     }
-                } catch (e) {
-                    this.setState({logout_class: "icon icon-login s-24 mr-5", log_name: "Login"}, () => {
-                        headers['Isl-Token'] = Conf.configs.TokenVisitor;
-                        this.NotOnline(headers)
-                    });
-                }
+                });
+            } else {
+                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                    fetchUserData()
+                }).catch(() => {
+                    NotOnline()
+                });
             }
-        });
+        } catch (e) {
+            setLogoutClass("icon icon-login s-24 mr-5");
+            setLogName("Login");
+            headers['Isl-Token'] = Conf.configs.TokenVisitor;
+            NotOnline(headers)
+        }
     };
 
-    fetchUserData = () => {
+    const fetchUserData = () => {
         Promise.all([
             axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
-                this.props.profile_initialisation_info(resp.data['my_profile']);
-                this.props.profile_initialisation_role(resp.data['role']);
-                this.props.profile_initialisation_follower(resp.data['my_followers']);
-                this.props.profile_initialisation_following(resp.data['my_followings']);
-                FunctionTools.AddPropsCart(headers, this.props).then(() => console.log());
+                dispatch(HomeProps.profileInitialisationInfo(resp.data['my_profile']));
+                dispatch(HomeProps.profileInitialisationRole(resp.data['role']));
+                dispatch(HomeProps.profileInitialisationFollower(resp.data['my_followers']));
+                dispatch(HomeProps.profileInitialisationFollowing(resp.data['my_followings']));
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
                         axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-                            this.props.profile_add_beats(resp.data['beats']);
-                        }).catch(err => {
-                            console.log(err.response)
-                        }),
+                            dispatch(HomeProps.profileAddBeats(resp.data['beats']));
+                        }).catch(err => ifConnectionError(err)),
                         axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
-                            this.props.profile_initialisation_contract(resp.data);
-                            this.NotOnline(headers)
-                        }).catch(err => {
-                            this.ifConnectionError(err);
-                        })
-                    ]).then(() => null);
-                } else {
-                    this.NotOnline(headers)
-                }
-            }).catch(err => {
-                this.ifConnectionError(err);
-            }),
+                            dispatch(HomeProps.profileInitialisationContract(resp.data));
+                        }).catch(err => ifConnectionError(err))
+                    ]).then();
+                    Tools.AddPropsCart(headers, HomeProps).then(() => null);
+                } else Tools.AddPropsCart(headers, HomeProps).then(() => null);
+            }).catch(err => ifConnectionError(err)),
             axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
-                this.props.beats_initialisation_pricing(resp.data);
-            }).catch(err => {
-                this.ifConnectionError(err);
-            })
-        ]).then((resp) => console.log(''))
+                dispatch(HomeProps.beatsInitialisationPricing(resp.data));
+            }).catch(err => ifConnectionError(err))
+        ]).then(() => NotOnline()).catch(() => fetchUserData())
     };
 
-    componentDidMount() {
-        this.setState({isMounted: true }, () => {
-            this.props.addUserCredentials(JSON.parse(localStorage.getItem("Isl_Credentials")));
-            if (this.props.beats.length === 0) {
-                this.Online();
-            } else {
-                console.log("")
-            }
-        });
-    }
-
-    componentWillUnmount() {
-        this.setState({ isMounted: false });
-    }
-
-    logout = () => {
+    const logout = () => {
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
@@ -226,7 +199,7 @@ class Home extends Component {
                     window.location.replace('/beats');
                 }).catch(() => {
                     localStorage.removeItem('Isl_Credentials');
-                    window.location.replace('/beats');
+                    // window.location.replace('/beats');
                 })
             }
         } catch (e) {
@@ -234,120 +207,52 @@ class Home extends Component {
         }
     };
 
-    render() {
-        if (this.state.loading) {
-            // Here is Loading page
-            return (this.props.LoadingHome());
+    useEffect( () => {
+        setLoading(true);
+        user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
+        if (user_credentials) {
+            dispatch(HomeProps.addUserCredentials(user_credentials));
+            headers['Isl-Token'] = user_credentials.token;
+            if (beats.length === 0) Online();
         } else {
-            return (
-                <div>
-                    {/* Popup Login */}
-                    {this.props.Login()}
-                    {/* End of Popup */}
-                    <Router>
-                        <Route render={({ location, history }) => (
-                            <React.Fragment>
-                                <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
-                                    {/* SideBars with ICON */}
-                                    {this.props.SideBars(this, location, history, headers)}
-                                    {/* End SideBars */}
-                                </aside>
-                                <main>
-                                    {/* Main of SideBars */}
-                                    {this.props.SideBarsMain(this)}
-                                    {/* End main of SideBars */}
-                                </main>
-                            </React.Fragment>)}
-                        />
-                    </Router>
-                    <IslPlayer/>
-                </div>
-            );
+            dispatch(HomeProps.addUserCredentials({token: Conf.configs.TokenVisitor}));
+            headers['Isl-Token'] = Conf.configs.TokenVisitor;
+            if (beats.length === 0) NotOnline();
         }
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
+
+    if (loading) {
+        // Here is Loading page
+        return (PopupFields.LoadingHome());
+    } else {
+        return (
+            <div>
+                {/* Popup Login */}
+                {PopupFields.Login()}
+                {/* End of Popup */}
+                <Router>
+                    <Route render={({ location, history }) => (
+                        <React.Fragment>
+                            <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
+                                {/* SideBars with ICON */}
+                                {CreateFields.SideBars(state_cart, log_name, logout_class, location, history, headers, logout)}
+                                {/* End SideBars */}
+                            </aside>
+                            <main>
+                                {/* Main of SideBars */}
+                                {CreateFields.SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data)}
+                                {/* End main of SideBars */}
+                            </main>
+                        </React.Fragment>)}
+                    />
+                </Router>
+                <IslPlayer/>
+            </div>
+        );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        AllMediaGenre: state.Home.AllMediaGenre,
-        user_credentials: state.Home.user_credentials,
-        contract: state.profile.contract,
-        beats_: state.profile.beats,
-        beats: state.beats.beats,
-        cart: state.Carts.carts,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addBeats: (data) => {
-            dispatch({type: "ADD_BEATS", data: data})
-        },
-        addUserCredentials: (data) => {
-            dispatch({type: "ADD_USER_CREDENTIALS", data: data})
-        },
-        addBeatMakerBeats: (data) => {
-            dispatch({type: "ADD_BEAT_MAKER_BEATS", data: data})
-        },
-        addSimilarBeats: (data) => {
-            dispatch({type: "ADD_BEATS_SIMILAR", data: data})
-        },
-        addOtherBeatMakerBeats: (data) => {
-            dispatch({type: "ADD_OTHER_BEAT_MAKER_BEATS", data: data})
-        },
-        newBeatMaker: (data) => {
-            dispatch({type: "ADD_NEW_BEATMAKER", data: data})
-        },
-        topBeatMaker: (data) => {
-            dispatch({type: "ADD_TOP_BEATMAKER", data: data})
-        },
-        latestBeats: (data) => {
-            dispatch({type: "ADD_LATEST_BEATS", data: data})
-        },
-        discoveryBeats: (data) => {
-            dispatch({type: "ADD_DISCOVERY_BEATS", data: data})
-        },
-        islBeats: (data) => {
-            dispatch({type: "ADD_ISL_PLAYLIST", data: data})
-        },
-        addAllMediaGenre: (data) => {
-            dispatch({type: "ADD_ALL_MEDIA_GENRE", data: data})
-        },
-        addPrefAllMediaGenre: (data) => {
-            dispatch({type: "ADD_ALL_MEDIA_GENRE_PREF", data: data})
-        },
-        addCarts: (data) => {
-            dispatch({type: "ADD_CART", data: data})
-        },
-        addTotalPrice: (data) => {
-            dispatch({type: "ADD_TOTAL_PRICE", data: data})
-        },
-        profile_add_beats: (data) => {
-            dispatch({type: "ADD_PROFILE_BEATS", data: data})
-        },
-        beats_initialisation_pricing: (data) => {
-            dispatch({type: "ADD_PRICING", data: data})
-        },
-        profile_initialisation_info: (data) => {
-            dispatch({type: "ADD_PROFILE_INFO", data: data})
-        },
-        profile_initialisation_role: (data) => {
-            dispatch({type: "ADD_ROLE", data: data})
-        },
-        profile_initialisation_follower: (data) => {
-            dispatch({type: "ADD_FOLLOWER", data: data})
-        },
-        profile_initialisation_following: (data) => {
-            dispatch({type: "ADD_FOLLOWING", data: data})
-        },
-        profile_initialisation_contract: (data) => {
-            dispatch({type: "ADD_CONTRACT", data: data})
-        },
-        SideBars: bindActionCreators(CreateFields.SideBars, dispatch),
-        SideBarsMain: bindActionCreators(CreateFields.SideBarsMain, dispatch),
-        Login: bindActionCreators(PopupFields.Login, dispatch),
-        LoadingHome: bindActionCreators(PopupFields.LoadingHome, dispatch),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

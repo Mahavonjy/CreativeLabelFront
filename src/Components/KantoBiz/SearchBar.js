@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import ReactTooltip from 'react-tooltip';
-import FunctionTools from "../FunctionTools/FunctionTools";
+import * as Tools from "../FunctionTools/Tools";
 import * as Validators from "../Validators/Validatiors"
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
@@ -30,8 +30,8 @@ class SearchBar extends Component {
     };
 
     ChangeDate = (date) => {
-        let new_date = FunctionTools.formatDate(date);
-        let now = FunctionTools.formatDate(new Date());
+        let new_date = Tools.formatDate(date);
+        let now = Tools.formatDate(new Date());
         if (parseInt(new_date) - parseInt(now) >= 0) this.setState({startDate: date});
     };
 
@@ -95,10 +95,10 @@ class SearchBar extends Component {
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.state.city || "Choisir la ville"}
                             </button>
                             <div className="dropdown-menu overflow-auto text-red" style={{height: 210, borderRadius: 5}}>
-                                <option className="dropdown-item" id="city" name="city" defaultValue="Manakara" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Manakara</option>
-                                <option className="dropdown-item" id="city" name="city" defaultValue="Tamatave" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Tamatave</option>
-                                <option className="dropdown-item" id="city" name="city" defaultValue="Fianarantsoa" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Fianarantsoa</option>
-                                <option className="dropdown-item" id="city" name="city" defaultValue="Manakara" onClick={(e) => {FunctionTools.changeFields(this, e)}}>Majunga</option>
+                                <option className="dropdown-item" id="city" name="city" defaultValue="Manakara" onClick={(e) => {Tools.changeFields(this, e)}}>Manakara</option>
+                                <option className="dropdown-item" id="city" name="city" defaultValue="Tamatave" onClick={(e) => {Tools.changeFields(this, e)}}>Tamatave</option>
+                                <option className="dropdown-item" id="city" name="city" defaultValue="Fianarantsoa" onClick={(e) => {Tools.changeFields(this, e)}}>Fianarantsoa</option>
+                                <option className="dropdown-item" id="city" name="city" defaultValue="Manakara" onClick={(e) => {Tools.changeFields(this, e)}}>Majunga</option>
                             </div>
                         </div>
                         <label className="input-group-addon bg-transparent"><i className="icon-location-arrow text-red"/><span className="ml-2 text-white" data-tip="Veuillez choisir la ville ou votre evenement aura lieu"><i className="icon icon-info"/></span></label>
@@ -111,7 +111,7 @@ class SearchBar extends Component {
                             </button>
                             <div className="dropdown-menu overflow-auto text-red" style={{height: 210, borderRadius: 5}}>
                                 {thematics.map((item, index) =>
-                                    <option key={index} className="dropdown-item" id="thematics" name="thematics" defaultValue={item} onClick={(e) => {FunctionTools.changeFields(this, e)}}>{item}</option>
+                                    <option key={index} className="dropdown-item" id="thematics" name="thematics" defaultValue={item} onClick={(e) => {Tools.changeFields(this, e)}}>{item}</option>
                                 )}
                             </div>
                         </div>
@@ -127,7 +127,7 @@ class SearchBar extends Component {
                             </button>
                             <div className="dropdown-menu overflow-auto text-red" style={{height: 210, borderRadius: 5}}>
                                 {envents.map((item, index) =>
-                                    <option key={index} className="dropdown-item" id="events" name="events" defaultValue={item} onClick={(e) => {FunctionTools.changeFields(this, e)}}>{item}</option>
+                                    <option key={index} className="dropdown-item" id="events" name="events" defaultValue={item} onClick={(e) => {Tools.changeFields(this, e)}}>{item}</option>
                                 )}
                             </div>
                         </div>

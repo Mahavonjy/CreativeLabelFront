@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 function RefundPolicy () {
+
+    const isMounted = useRef(false);
     const [flexible, setFlexible] = useState(true);
     const [strict, setStrict] = useState(false);
 
@@ -15,7 +17,9 @@ function RefundPolicy () {
     };
 
     useEffect(() => {
-        //
+        return () => {
+            isMounted.current = true
+        };
     }, []);
 
     return (

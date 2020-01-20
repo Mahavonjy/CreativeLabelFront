@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
-import FunctionTools from "../FunctionTools/FunctionTools";
+import * as Tools from "../FunctionTools/Tools";
 import {toast} from "react-toastify";
 import Modal from "react-awesome-modal";
 import axios from "axios";
@@ -35,7 +35,7 @@ class PurchaseInformation extends Component {
         try {
             if (cardNumber.length <= 4) {
                 let tmp = cardNumber.join('');
-                if (FunctionTools.isNumber(tmp)) this.setState({card_number: cardNumber.join(' ')})
+                if (Tools.isNumber(tmp)) this.setState({card_number: cardNumber.join(' ')})
             }
         } catch (e) {
             this.setState({card_number: null})
@@ -218,7 +218,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="name" className="form-control"
                                                            placeholder="Votre nom" name="name"
                                                            value={this.state.name || ''}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
+                                                           onChange={(e) => Tools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
@@ -226,7 +226,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="lastname" className="form-control"
                                                            placeholder="Votre prénom" name="lastname"
                                                            value={this.state.lastname}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
+                                                           onChange={(e) => Tools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
@@ -234,7 +234,7 @@ class PurchaseInformation extends Component {
                                                     <input type="email" id="email" className="form-control"
                                                            placeholder="E-mail"
                                                            name="email" value={this.state.email || ''}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
+                                                           onChange={(e) => Tools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +253,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="address" className="form-control"
                                                            placeholder="Votre address" name="address"
                                                            value={this.state.address || ''}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)}
+                                                           onChange={(e) => Tools.changeFields(this, e)}
                                                            required/>
                                                 </div>
                                             </div>
@@ -262,7 +262,7 @@ class PurchaseInformation extends Component {
                                                     <input type="number" id="postal_code" className="form-control"
                                                            placeholder="Votre code postal" name="postal_code"
                                                            value={this.state.postal_code || ''}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)}
+                                                           onChange={(e) => Tools.changeFields(this, e)}
                                                            required/>
                                                 </div>
                                             </div>
@@ -271,7 +271,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="city" className="form-control"
                                                            placeholder="votre ville" name="city"
                                                            value={this.state.city || ''}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
+                                                           onChange={(e) => Tools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">
@@ -279,7 +279,7 @@ class PurchaseInformation extends Component {
                                                     <input type="number" id="phone" className="form-control"
                                                            placeholder="votre telephone" name="phone"
                                                            value={this.state.phone || ''}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)}/>
+                                                           onChange={(e) => Tools.changeFields(this, e)}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -319,7 +319,7 @@ class PurchaseInformation extends Component {
                                                 <div className="col-sm-8">
                                                     <input type="month" id="expiration" className="form-control"
                                                            name="expiration" value={this.state.expiration}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
+                                                           onChange={(e) => Tools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group row">
@@ -337,7 +337,7 @@ class PurchaseInformation extends Component {
                                                     <input type="text" id="card_name" className="form-control"
                                                            placeholder="Nom du proprietaire de la carte"
                                                            name="card_name" value={this.state.card_name}
-                                                           onChange={(e) => FunctionTools.changeFields(this, e)} required/>
+                                                           onChange={(e) => Tools.changeFields(this, e)} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group form-float">

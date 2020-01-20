@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import NotFound from "../../../StatusPage/NotFound/NotFound";
 import TestImg from "../../../../assets/img/demo/a2.jpg";
 import IslPlayer from "../../../Players/Players";
-import FunctionTools from "../../../FunctionTools/FunctionTools";
+import * as Tools from "../../../FunctionTools/Tools";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
@@ -53,8 +53,8 @@ class OneBeat extends Component {
     componentDidMount() {
         this.setState({ isMounted: true}, () => {
             Promise.all([
-                FunctionTools.AddForPlay(this, "link_all_artist_beats", this.props.beat_maker_beats, this.props.updateBeatMakerBeats).then(() => console.log('')),
-                FunctionTools.AddForPlay(this, "link_all_beats_similar", this.props.beats_similar, this.props.updateSimilarBeats).then(() => console.log(''))
+                Tools.AddForPlay(this, "link_all_artist_beats", this.props.beat_maker_beats, this.props.updateBeatMakerBeats).then(() => console.log('')),
+                Tools.AddForPlay(this, "link_all_beats_similar", this.props.beats_similar, this.props.updateSimilarBeats).then(() => console.log(''))
                 ]
             ).then(() => console.log(''))
         });

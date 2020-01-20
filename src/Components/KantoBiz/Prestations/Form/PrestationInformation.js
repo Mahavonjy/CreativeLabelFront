@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import FunctionTools from "../../../FunctionTools/FunctionTools";
+import * as Tools from "../../../FunctionTools/Tools";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
 import {connect} from "react-redux";
@@ -100,7 +100,7 @@ class PrestationInformation extends Component {
                             <div className="body">
                                 <div className="form-group form-float">
                                     <div className="form-line" data-tip={!this.state.title ? "Veuillez donnée un titre a votre prestation, ex: AnnivShow, ForaParty ..." : null}>
-                                        {this.props.InputCreate('title', this.state.title, (e) => {FunctionTools.changeFields(this, e, this.props.addTitleOfService)}, "Titre de votre Prestation", "text", true)}
+                                        {this.props.InputCreate('title', this.state.title, (e) => {Tools.changeFields(this, e, this.props.addTitleOfService)}, "Titre de votre Prestation", "text", true)}
                                     </div>
                                 </div>
                                 <div className="form-group form-float" data-tip={!this.state.description ? "Veuillez nous décrire cette prestation en quelques mots" : null}>
@@ -108,14 +108,14 @@ class PrestationInformation extends Component {
                                         <textarea defaultValue={this.state.description} id={this.state.description}
                                                   name={this.state.description} className="form-control" style={{height: 100}}
                                                   placeholder="Quelques ligne de description de votre prestaion"
-                                                  onChange={(e) => FunctionTools.changeFields(this, e, this.props.addDescriptionOfService)}/>
+                                                  onChange={(e) => Tools.changeFields(this, e, this.props.addDescriptionOfService)}/>
                                     </div>
                                 </div>
                                 <div className="form-group form-float" data-tip={!this.state.city ? "Veuillez donnée une ville reference pour votre prestation" : null}>
                                     <div className="form-line">
                                         <input id="city" name="city" className="form-control"
                                                placeholder={this.state.city || "Veuillez choisir votre ville de reference"}
-                                               value={this.state.city} onChange={(e) => {FunctionTools.changeFields(this, e, this.props.addReferenceOfCity)}}
+                                               value={this.state.city} onChange={(e) => {Tools.changeFields(this, e, this.props.addReferenceOfCity)}}
                                                list="city-type" required/>
                                         <datalist id="city-type">
                                             <option value="Manakara">Manakara</option>

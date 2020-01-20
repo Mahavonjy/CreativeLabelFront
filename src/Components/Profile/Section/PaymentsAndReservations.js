@@ -1,41 +1,41 @@
-import React, { Component } from "react";
-import {connect} from "react-redux";
+import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import ReactTooltip from "react-tooltip";
 
-class PaymentsAndReservations extends Component {
-    state = {
-        isMounted: false,
-    };
+function PaymentsAndReservations() {
 
-    auditor_pro_canceled () {
+    const role = useSelector(state => state.profile.role);
+
+    const isMounted = useRef(false);
+
+    const auditor_pro_canceled = () => {
         console.log("L'auditeur annule la prestation");
     };
 
-    artist_accepted () {
+    const artist_accepted = () => {
         console.log("L'artist accept la prestation");
-    }
+    };
 
-    artist_canceled () {
+    const artist_canceled = () => {
         console.log("L'artist annule la prestation");
     };
 
-    tableGenerator (status, action) {
+    const tableGenerator = (status, action) => {
         return (
             <table className="responsive-table mt-4">
                 <thead>
                 <tr>
                     <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisi"/></th>
                     <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Ceci est la date ou votre evenement va se dérouler"/></th>
-                    {this.props.role !== "professional_auditor" ?
+                    {role !== "professional_auditor" ?
                         <th scope="col">Auditeur&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'auditeur qui a fait cette reservation"/></th>:
-                    <th scope="col">Artist&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'artist concerné par l'evenement avec un lien qui va direct sur son profile"/></th>}
+                        <th scope="col">Artist&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'artist concerné par l'evenement avec un lien qui va direct sur son profile"/></th>}
                     <th scope="col">Évènenment&nbsp;<i className="icon icon-info" data-tip="Ceci sera le type d'evenement de l'autideur qui a reserver "/></th>
                     <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="Ceci est l'adresse choisi par l'auditeur ou se déroulera l'evenement"/></th>
                     <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Ici sera le montant HT de la prestation (Choisi par l'artiste)"/></th>
-                    {status ?
-                        <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Ici s'affichera le status de votre réservation qui sera varier"/></th>
+                    {status ? <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Ici s'affichera le status de votre réservation qui sera varier"/></th>
                         : <th scope="col">Facture&nbsp;<i className="icon icon-info" data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/></th>}
-                    {action ? <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip={this.props.role === "professional_auditor" ?
+                    {action ? <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip={role === "professional_auditor" ?
                         "Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec" : "La politique de réservation de base étant flexible, vous pouvez modifier votre politique de remboursement sous la rubrique « politique de remboursement"}/></th> : null}
                 </tr>
                 </thead>
@@ -53,10 +53,10 @@ class PaymentsAndReservations extends Component {
                     {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter la personne qui a fait cette reservation">Noter</td>}
                     {action ?
                         <td className="text-center border-bottom-0 border-right-0">
-                            <button className="btn btn-outline-danger text-center mt-2" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
-                            {this.props.role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2"
+                            <button className="btn btn-outline-danger text-center mt-2" onClick={role === "professional_auditor" ? () => auditor_pro_canceled() : () => artist_canceled() }>Annuler</button>
+                            {role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2"
                                                                                   data-tip="Lorsque vous accepter une reservaton, vos coordonnées (e-mail, téléphone…) seront envoyées à l’auditeur affecté a la reservation, afin de vous contacter."
-                                                                                  onClick={this.artist_accepted}>Accept</button> : null}
+                                                                                  onClick={() => artist_accepted()}>Accept</button> : null}
                         </td>: null}
                 </tr>
                 <tr>
@@ -72,7 +72,7 @@ class PaymentsAndReservations extends Component {
                     {action ?
                         <td className="text-center border-bottom-0 border-right-0">
                             <button className="btn btn-outline-danger" disabled>Annuler</button>
-                            {this.props.role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2" onClick={this.artist_accepted} disabled>Accept</button> : null}
+                            {role !== "professional_auditor" && <button className="btn btn-outline-success text-center mt-2" onClick={() => artist_accepted()} disabled>Accept</button>}
                         </td>: null}
                 </tr>
                 <tr>
@@ -87,8 +87,8 @@ class PaymentsAndReservations extends Component {
                     {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter le niveau d’accueil de la personne qui a fait cette reservation">Noter</td>}
                     {action ?
                         <td className="text-center border-bottom-0 border-right-0">
-                            <button className="btn btn-outline-success text-center mt-2" onClick={this.props.role === "professional_auditor" ? this.auditor_pro_canceled : this.artist_canceled}>Annuler</button>
-                            {this.props.role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2" onClick={this.artist_accepted} disabled>Accept</button> : null}
+                            <button className="btn btn-outline-success text-center mt-2" onClick={role === "professional_auditor" ? () => auditor_pro_canceled() : () => artist_canceled()}>Annuler</button>
+                            {role !== "professional_auditor" && <button className="btn btn-outline-success text-center mt-2" onClick={() => artist_accepted()} disabled>Accept</button>}
                         </td>: null}
                 </tr>
                 </tbody>
@@ -96,59 +96,49 @@ class PaymentsAndReservations extends Component {
         );
     };
 
-    componentDidMount() {
-        this.setState({ isMounted: true})
-    }
+    useEffect(() => {
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
-    componentWillUnmount() {
-        this.setState({ isMounted: false });
-    }
-
-    render() {
-        return (
-            <div className="col" style={{minHeight: 320}}>
-                <ReactTooltip/>
-                <div className="card no-b">
-                    <div className="card-body">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-2">
-                                <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <a className="nav-link active" data-toggle="pill" href="#v-pills-reservation" role="tab" aria-controls="v-pills-reservation" aria-selected="true">
-                                        Mes réservations
-                                    </a>
-                                    <a className="nav-link" id="v-pills-payment-done-tab" data-toggle="pill" href="#v-pills-payment-done" role="tab" aria-controls="v-pills-payment-done" aria-selected="false">
-                                        Paiements effectués
-                                    </a>
-                                    <a className="nav-link" id="v-pills-payment-repaid-tab" data-toggle="pill" href="#v-pills-payment-repaid" role="tab" aria-controls="v-pills-payment-repaid" aria-selected="false">
-                                        Paiement remboursés
-                                    </a>
-                                </div>
+    return (
+        <div className="col" style={{minHeight: 320}}>
+            <ReactTooltip/>
+            <div className="card no-b">
+                <div className="card-body">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-2">
+                            <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <a className="nav-link active" data-toggle="pill" href="#v-pills-reservation" role="tab" aria-controls="v-pills-reservation" aria-selected="true">
+                                    Mes réservations
+                                </a>
+                                <a className="nav-link" id="v-pills-payment-done-tab" data-toggle="pill" href="#v-pills-payment-done" role="tab" aria-controls="v-pills-payment-done" aria-selected="false">
+                                    Paiements effectués
+                                </a>
+                                <a className="nav-link" id="v-pills-payment-repaid-tab" data-toggle="pill" href="#v-pills-payment-repaid" role="tab" aria-controls="v-pills-payment-repaid" aria-selected="false">
+                                    Paiement remboursés
+                                </a>
                             </div>
-                            <div className="col-lg-10">
-                                <div className="tab-content" id="v-pills-tabContent">
-                                    <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
-                                        {this.tableGenerator(true, true)}
-                                    </div>
-                                    <div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">
-                                        {this.tableGenerator(false, false)}
-                                    </div>
-                                    <div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel" aria-labelledby="v-pills-payment-repaid-tab">
-                                        {this.tableGenerator(false, false)}
-                                    </div>
+                        </div>
+                        <div className="col-lg-10">
+                            <div className="tab-content" id="v-pills-tabContent">
+                                <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
+                                    {tableGenerator(true, true)}
+                                </div>
+                                <div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">
+                                    {tableGenerator(false, false)}
+                                </div>
+                                <div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel" aria-labelledby="v-pills-payment-repaid-tab">
+                                    {tableGenerator(false, false)}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = state => {
-    return {
-        role: state.profile.role,
-    };
-};
-
-export default connect(mapStateToProps, null)(PaymentsAndReservations);
+export default PaymentsAndReservations;

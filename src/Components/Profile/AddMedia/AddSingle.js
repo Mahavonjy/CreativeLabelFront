@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Modal from 'react-awesome-modal';
 import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ReactTooltip from 'react-tooltip';
 import { useSelector } from "react-redux";
 import {generateInput, smallSpinner} from "../../FunctionTools/CreateFields";
-import FunctionTools from "../../FunctionTools/FunctionTools";
+import * as Tools from "../../FunctionTools/Tools";
 
 function AddSingle (props) {
 
@@ -16,6 +16,7 @@ function AddSingle (props) {
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const contract = useSelector(state => state.profile.contract);
 
+    const isMounted = useRef(false);
     const [file, setFile] = useState("");
     const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
@@ -130,6 +131,12 @@ function AddSingle (props) {
         }
     };
 
+    useEffect(() => {
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
+
     return (
         <Modal visible={true} width="700" height="650" effect="fadeInUp" onClickAway={() => props.closePopup(0)}>
             <ReactTooltip/>
@@ -198,7 +205,7 @@ function AddSingle (props) {
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text text-dark" data-tip="Your beats genre"><i className="icon-text-width"/>&nbsp;	Genre *</div>
                                 <input id="genre" name="genre" className="form-control"
-                                       value={genre} onChange={(e) => {FunctionTools.changeFields(setGenre, e)}} list="music-genre" required/>
+                                       value={genre} onChange={(e) => {Tools.changeFields(setGenre, e)}} list="music-genre" required/>
                                 <datalist id="music-genre">
                                     {AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
                                 </datalist>
@@ -208,7 +215,7 @@ function AddSingle (props) {
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text text-dark" data-tip="For now, it's only beats type"><i className="icon-text-width"/>&nbsp;	Type</div>
                                 <input id="genre_musical" name="genre_musical" className="form-control"
-                                       value={genre_musical} onChange={(e) => {FunctionTools.changeFields(setGenreMusical, e)}}
+                                       value={genre_musical} onChange={(e) => {Tools.changeFields(setGenreMusical, e)}}
                                        list="music-type" required disabled/>
                                 <datalist id="music-type">
                                     <option value="music">music</option>
@@ -220,11 +227,11 @@ function AddSingle (props) {
                         <div className="custom-float">
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text text-dark" data-tip="Upload here your beats_name.mp3"><i className="icon-music"/>&nbsp;Mp3 ou mpeg</div>
-                                <input onChange={(e) => FunctionTools.changeFileFields(setFile, e)} id="file" name="file" accept="audio/mpeg, .mp3" className="form-control" type="file" />
+                                <input onChange={(e) => Tools.changeFileFields(setFile, e)} id="file" name="file" accept="audio/mpeg, .mp3" className="form-control" type="file" />
                             </div>
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text text-dark" data-tip="Upload here your beats photo"><i className="icon-picture-o"/>&nbsp;Photo</div>
-                                <input onChange={(e) => FunctionTools.changeFileFields(setPhoto, e)} id="photo" name="photo" className="form-control" accept="image/png, image/jpeg" type="file" required/>
+                                <input onChange={(e) => Tools.changeFileFields(setPhoto, e)} id="photo" name="photo" className="form-control" accept="image/png, image/jpeg" type="file" required/>
                             </div>
                         </div>
                         {beats &&
@@ -232,11 +239,11 @@ function AddSingle (props) {
                                 <div className="custom-float">
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                         <div className="input-group-text text-dark" data-tip="Upload here your beats_name.wave"><i className="icon-music"/>&nbsp;Fichier wav *</div>
-                                        <input onChange={(e) => FunctionTools.changeFileFields(setBeatsWave, e)} id="beats_wave" name="beats_wave" className="form-control" type="file"  accept=".wav, .wave"/>
+                                        <input onChange={(e) => Tools.changeFileFields(setBeatsWave, e)} id="beats_wave" name="beats_wave" className="form-control" type="file" accept=".wav, .wave"/>
                                     </div>
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                         <div className="input-group-text text-dark" data-tip="Upload here your beats stems"><i className="icon-music"/>&nbsp;Dossier stems (fichier zip)</div>
-                                        <input onChange={(e) => FunctionTools.changeFileFields(setStems, e)} id="stems" name="stems" className="form-control" type="file"  accept=".zip"/>
+                                        <input onChange={(e) => Tools.changeFileFields(setStems, e)} id="stems" name="stems" className="form-control" type="file" accept=".zip"/>
                                     </div>
                                 </div>
                             </div>}
@@ -250,17 +257,16 @@ function AddSingle (props) {
                         <div className="custom-float">
                             <div className="input-group-prepend center" style={{width: "90%"}}>
                                 <div className="input-group-text text-dark" data-tip="Ajouter quelque description si vous voulez"><i className="icon-crosshairs"/>&nbsp;	Description</div>
-                                <textarea value={description} onChange={(e) => FunctionTools.changeFields(setDescription, e)}
+                                <textarea value={description} onChange={(e) => Tools.changeFields(setDescription, e)}
                                           id="description" name="description" className="form-control" placeholder={"Ajouter une description"}/>
                             </div>
                         </div>
-                        <button id="add-music" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> handleSubmit(e)}>Enregistrer</button>
+                        <button id="add-music" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> handleSubmit(e)}>{loading ? "Veuiller attendre ...": "Enregister"}</button>
                     </div>
                 </div>
             </div>
         </Modal>
     );
-
 }
 
 export default AddSingle;

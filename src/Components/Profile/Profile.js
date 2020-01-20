@@ -1,17 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from 'axios';
 import EditProfile from './Edit/EditProfile';
 import AddSingle from './AddMedia/AddSingle';
 import EditSingle from './Edit/EditSingle';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Conf from "../../Config/tsconfig";
 import PhotoD from '../../images/socials/profile.png';
 import PhotoTest from '../../images/Backgrounds/adult-banking-business-2254122.jpg';
 import { ToastContainer, toast } from 'react-toastify';
 import EditContractBeats from "./ContractBeats/EditContractBeats";
-import FunctionTools from "../FunctionTools/FunctionTools";
+import * as Tools from "../FunctionTools/Tools";
 import { CreateBeatsPlaylist, smallSpinner } from "../FunctionTools/CreateFields";
-import { profileUpdateBeats, profileReadyBeats, profileAddBeats, profileAddNewPlayerList } from "./ProfileProps";
 import Form from "../KantoBiz/Prestations/Form/Form";
 import { DifferentArtist,  } from "../FunctionTools/PopupFields";
 import PaymentsAndReservations from "./Section/PaymentsAndReservations";
@@ -20,6 +19,7 @@ import RefundPolicy from "./Section/RefundPolicy";
 import MyPrestations from "./Section/MyPrestations";
 import EditPrestation from "./Section/EditPrestation";
 import Modal from "react-awesome-modal";
+import { profileAddBeats, profileUpdateBeats, profileReadyBeats } from "../FunctionTools/FunctionProps";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -28,6 +28,7 @@ const headers = {
 
 function Profile (props) {
 
+    const dispatch = useDispatch();
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const redux_profile_info = useSelector(state => state.profile.profile_info);
     const ready_beats = useSelector(state => state.profile.ready_beats);
@@ -35,6 +36,7 @@ function Profile (props) {
     const user_beats = useSelector(state => state.profile.user_beats);
     const user_role = useSelector(state => state.profile.role);
 
+    const isMounted = useRef(false);
     const [user_beats_link, setUserBeatsLink] = useState([]);
     const [song, setSong] = useState("");
     const [type_, setType_] = useState("");
@@ -67,7 +69,7 @@ function Profile (props) {
         await user_tmp_beats.push(data);
         await setStateUserBeats(user_tmp_beats);
         await setActiveToast(true);
-        await profileAddBeats(user_tmp_beats);
+        await dispatch(profileAddBeats(user_tmp_beats));
         toast.success(message);
     };
 
@@ -122,7 +124,6 @@ function Profile (props) {
         link: user_beats_link,
         beats: state_user_beats,
         togglePopupEditSong: togglePopupEditSingle,
-        addNewPlayerList: profileAddNewPlayerList,
         index: index,
         setIndex: setIndex,
         tmp: tmp,
@@ -137,13 +138,16 @@ function Profile (props) {
             //
         } finally {
             if (ready_beats) {
-                FunctionTools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats).then(() => null);
-                profileReadyBeats()
+                Tools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats).then(() => null);
+                dispatch(profileReadyBeats())
             } else {
                 for (let row_ in user_beats)
                     setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
             }
         }
+        return () => {
+            isMounted.current = true
+        };
     }, []);
 
     return (
@@ -293,7 +297,7 @@ function Profile (props) {
                                                 </div>}
                                         </div> : null}
                                     <div className={user_role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fade"} id="Prestations" role="tabpanel">
-                                        <MyPrestations/>
+                                        <MyPrestations role={user_role}/>
                                     </div>
                                     <div className="tab-pane fade" id="Paiements-Reservations" role="tabpanel">
                                         <PaymentsAndReservations/>

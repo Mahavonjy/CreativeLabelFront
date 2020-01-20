@@ -1,45 +1,44 @@
-import React, { Component } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import './music_genres.css';
 import Conf from "../../Config/tsconfig";
 import { ToastContainer, toast } from 'react-toastify';
-import {connect} from "react-redux";
+import { useSelector } from "react-redux";
 
 let headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': "*"
 };
 
-class Preference extends Component {
-    state = {
-        button: false, isNotMatch : false, first_array:[], second_array: [], isMounted: false
-    };
+function Preference() {
 
-    BooleanToChange = (index) => {
-        let tmp_state = [...this.state.first_array];
-        if (this.state.first_array[index][0] === "#9DA6B1") {
+    const AllMediaGenre = useSelector(state => state.Home.PrefAllMediaGenre);
+
+    const isMounted = useRef(false);
+    const [first_array, setFirstArray] = useState([]);
+
+    const BooleanToChange = (index) => {
+        let tmp_state = [...first_array];
+        if (first_array[index][0] === "#9DA6B1") {
             tmp_state[index][0] = "darkolivegreen";
             tmp_state[index][1] = true;
-        } else if (this.state.first_array[index][0] === "darkolivegreen") {
+        } else if (first_array[index][0] === "darkolivegreen") {
             tmp_state[index][0] = "#9DA6B1";
             tmp_state[index][1] = false;
         }
-        this.setState({first_array: tmp_state}, () => {this.setState({array: this.state.first_array});});
+        setFirstArray(tmp_state);
     };
 
-    sendUserGenreToApi = () => {
-
+    const sendUserGenreToApi = () => {
         let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
         headers['Isl-Token'] = user_credentials.token;
         let user_genre_tmp = [];
-        for (let row in this.state.first_array) {
-            if (this.state.first_array[row][1]) user_genre_tmp.push(this.state.first_array[row][2].genre)
-        }
+        for (let row in first_array) if (first_array[row][1]) user_genre_tmp.push(first_array[row][2].genre);
         if (user_genre_tmp.length < 5) {
             toast.warn("Veuillez choisir au moins 5 genres");
         } else {
             let data = {"user_genre_list": user_genre_tmp};
-            axios.post(Conf.configs.ServerApi + "api/medias/add_users_genre", data,{headers:headers}).then(response =>{
+            axios.post(Conf.configs.ServerApi + "api/medias/add_users_genre", data,{headers:headers}).then(() =>{
                 window.location.replace("/beats")
             }).catch(error => {
                 toast.error(error.response.data);
@@ -47,51 +46,39 @@ class Preference extends Component {
         }
     };
 
-    componentDidMount() {
-        this.setState({isMounted: true}, () => {
-            toast.warn("Veuillez choisir au moins 5 genres");
-            for (let row in this.props.AllMediaGenre) {
-                this.setState(prevState => ({
-                    first_array: [...prevState.first_array, ["#9DA6B1", false,  {
-                        "genre": this.props.AllMediaGenre[row]["genre"],
-                        "image": this.props.AllMediaGenre[row]["image"],
-                    }]]
-                }))
-            }
-        });
-    }
+    useEffect(() => {
+        toast.warn("Veuillez choisir au moins 5 genres");
+        for (let row in AllMediaGenre) {
+            setFirstArray(first_array => [...first_array, ["#9DA6B1", false,  {
+                "genre": AllMediaGenre[row]["genre"],
+                "image": AllMediaGenre[row]["image"],
+            }]]);
+        }
 
-    componentWillUnmount() {
-        this.setState({ isMounted: false });
-    }
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
-    render() {
-        return (
-            <div className="MusicChoiceTitle">
-                <ToastContainer/>
-                <h1>Quelle genre de musique aimiez vous ?</h1>
-                <button className="send-genre" onClick={this.sendUserGenreToApi}>Valider</button>
-                <div className="row-genre pb-lg-5">
-                    {this.state.first_array.map((all_music_genres, index) =>
-                        <div className="music-genre" key={index} style={{background: `${all_music_genres[0]}`}}>
-                            <div className="top" onClick={() => {this.BooleanToChange(index)}}
-                                 style={{backgroundImage: `url(${all_music_genres[2].image})`}}>
-                                <div className="music-wrapper">
-                                    <p className="heading">{all_music_genres[2].genre}</p>
-                                </div>
+    return (
+        <div className="MusicChoiceTitle">
+            <ToastContainer/>
+            <h1>Quelle genre de musique aimiez vous ?</h1>
+            <button className="send-genre" onClick={() => sendUserGenreToApi}>Valider</button>
+            <div className="row-genre pb-lg-5">
+                {first_array.map((all_music_genres, index) =>
+                    <div className="music-genre" key={index} style={{background: `${all_music_genres[0]}`}}>
+                        <div className="top" onClick={() => BooleanToChange(index)}
+                             style={{backgroundImage: `url(${all_music_genres[2].image})`}}>
+                            <div className="music-wrapper">
+                                <p className="heading">{all_music_genres[2].genre}</p>
                             </div>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = state => {
-    return {
-        AllMediaGenre: state.Home.PrefAllMediaGenre,
-    };
-};
-
-export default connect(mapStateToProps, null)(Preference);
+export default Preference;

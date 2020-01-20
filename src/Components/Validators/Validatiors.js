@@ -1,4 +1,4 @@
-import FunctionTools from "../FunctionTools/FunctionTools";
+import * as Tools from "../FunctionTools/Tools";
 
 export const RegisterValidation = (state) => {
     return () => {
@@ -33,7 +33,7 @@ export const validatorSearch = (state) => {
             return {"error": true, message: "veuillez choisir la thematique"};
         if (!state.events)
             return {"error": true, message: "le nom de votre evenements"};
-        if (parseInt(FunctionTools.formatDate(state.startDate)) === parseInt(FunctionTools.formatDate(new Date())))
+        if (parseInt(Tools.formatDate(state.startDate)) === parseInt(Tools.formatDate(new Date())))
             return {"error": true, message: "veuillez choisir une date"};
         return {"error": false}
     };

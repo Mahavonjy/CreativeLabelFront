@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PhotoD from '../../../images/socials/profile.png';
-import FunctionTools from "../../FunctionTools/FunctionTools";
+import * as Tools from "../../FunctionTools/Tools";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
@@ -24,7 +24,7 @@ class OtherProfile extends Component {
 
     componentDidMount() {
         this.setState({ isMounted: true }, () => {
-            FunctionTools.AddForPlay(this, "link_all_other_artist_beats", this.props.other_beat_maker_beats, this.props.updateOtherBeatMakerBeats).then(() => console.log(''))
+            Tools.AddForPlay(this, "link_all_other_artist_beats", this.props.other_beat_maker_beats, this.props.updateOtherBeatMakerBeats).then(() => console.log(''))
         });
     }
 
@@ -47,7 +47,7 @@ class OtherProfile extends Component {
                                         <h4 className="p-t-10">{this.props.ProfileChecked.name || "Name"}</h4>
                                         <button className="btn btn-outline-primary btn-sm  mt-3 pl-4 pr-4"
                                         onClick={() => {
-                                            FunctionTools.LikeOrFollow("follow", this.props.UserData.user_id);
+                                            Tools.LikeOrFollow("follow", this.props.UserData.user_id);
                                         }}>
                                             Followers {this.props.UserData.followers + this.state.followed}
                                         </button>

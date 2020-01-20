@@ -1,15 +1,13 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import { GoogleLogin } from 'react-google-login-component';
 import axios from 'axios';
 import Conf from "../../../../Config/tsconfig";
 
-class LoginGoogle extends React.Component{
+function LoginGoogle() {
 
-    state = {
-        isMounted: false
-    };
+    const isMounted = useRef(false);
 
-    responseGoogle = (googleUser) => {
+    const responseGoogle = (googleUser) => {
         let data = {
             id_token: googleUser.Zi.id_token,
             access_token: googleUser.Zi.access_token,
@@ -23,33 +21,30 @@ class LoginGoogle extends React.Component{
             'Content-Type': 'application/json',
             "Access-Control-Allow-Origin": "*"
         };
+
         axios.post(Conf.configs.ServerApi + "api/users/gCallback", data, {headers: headers}).then((response) => {
             localStorage.setItem("Isl_Credentials", JSON.stringify(response.data));
             window.location.replace('/beats')
-        }).catch((error) => {
-            console.log(error);
-        });
+        }).catch((error) => console.log(error));
     };
 
-    componentDidMount() {
-        this.setState({isMounted: true});
-    }
+    useEffect(() => {
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
-    componentWillUnmount() {
-        this.setState({ isMounted: false });
-    }
-
-    render () {
-        return (
-            <GoogleLogin socialId={Conf.configs.GoogleId}
-                         className="p-10 special-color ml-2 r-10"
-                         scope="profile"
-                         fetchBasicProfile={false}
-                         responseHandler={this.responseGoogle}>
-                <i className="icon-google-plus-square text-red s-18"/>
-            </GoogleLogin>
-        );
-    }
+    return (
+        <GoogleLogin socialId={Conf.configs.GoogleId}
+                     className="p-10 special-color ml-2 r-10"
+                     scope="profile"
+                     fetchBasicProfile={false}
+                     responseHandler={responseGoogle}>
+            <i className="icon-google-plus-square text-red s-18"/>
+        </GoogleLogin>
+    );
 }
+
+
 
 export default LoginGoogle;
