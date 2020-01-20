@@ -40,18 +40,19 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
     } else return true
 };
 
-export const pausePlayer = (_that, set_of_beats_name) => {
-    CreateBeatsPlaylist(_that, set_of_beats_name);
+export const pausePlayer = (height_div, set_of_beats_name, component_props, component_states, component_state_value) => {
+    CreateBeatsPlaylist(height_div, set_of_beats_name, component_props, component_states, component_state_value);
     return true;
 };
 
-export const playPlayer = (index, type_, _that, set_of_beats_name) => {
-    CreateBeatsPlaylist(_that, set_of_beats_name);
+export const playPlayer = (index, height_div, set_of_beats_name, component_props, component_states, component_state_value) => {
+    component_states.setIndex(index);
+    CreateBeatsPlaylist(height_div, set_of_beats_name, component_props, component_states, component_state_value);
     return true;
 };
 
-export const changeIndex = (index, _that) => {
-    _that.setState({index: index});
+export const changeIndex = (index, setIndex) => {
+    setIndex(index);
     return true;
 };
 

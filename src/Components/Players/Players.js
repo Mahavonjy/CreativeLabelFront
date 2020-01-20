@@ -1,6 +1,6 @@
-import React, {Component, useEffect, useRef, useState} from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { pausePlayer, playPlayer, changeIndex } from "../FunctionTools/CreateFields";
-import { useSelector } from "react-redux";
 import logo from "../../images/Logo/ISL_logo.png"
 import Conf from "../../Config/tsconfig";
 import './styles/main.scss'
@@ -10,38 +10,44 @@ import './styles/_variables.scss'
 import './styles/style.css'
 import axios from 'axios';
 
-function Players(props) {
+let _this;
 
-    const list = useSelector(state => state.Player.list);
-    const listInfo = useSelector(state => state.Player.listInfo);
+class Players extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tmp: 0,
+            type_: '',
+            currentIndex: 0,
+            currentTitle: '',
+            currentArtist: '',
+            currentImage: '',
+            component_props: null,
+            component_states: null,
+            component_state_value: null,
+            IsPlaying: false,
+            progressbar: 0,
+            height_div: '',
+            currentTime: '00:00',
+            totalTime: '00:00',
+            loop: false,
+            shuffle: false,
+            listInfo: null,
+            listen: false,
+            listen_min: null,
+            isMounted: false ,
+            songId: null,
+            pres_listened: false,
+            listened: false,
+            set_of_beats_name: ''
+        };
 
-    const isMounted = useRef(false);
-    const [tmp, setTmp] = useState(0);
-    const [type_, setType_] = useState('');
-    const [height_div, setHeightDiv] = useState('');
-    const [component_props, setComponentProps] = useState(null);
-    const [component_states, setComponentStates] = useState(null);
-    const [component_state_value, setComponentStateValue] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentTitle, setCurrentTitle] = useState('');
-    const [currentArtist, setCurrentArtist] = useState('');
-    const [currentImage, setCurrentImage] = useState('');
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [progressbar, setProgressbar] = useState(0);
-    const [currentTime, setCurrentTime] = useState('00:00');
-    const [totalTime, setTotalTime] = useState('00:00');
-    const [loop, setLoop] = useState(false);
-    const [shuffle, setShuffle] = useState(false);
-    const [listen, setListen] = useState(null);
-    const [listen_min, setListenMin] = useState(null);
-    const [songId, setSongId] = useState(null);
-    const [pres_listened, setPresListened] = useState(false);
-    const [listened, setListened] = useState(false);
-    const [set_of_beats_name, setSetOfBeatsName] = useState(false);
-    const [history, setHistory] = useState([]);
-    const [player] = useState(new Audio());
+        this.history = [];
+        this.player = new Audio();
+        _this = this
+    }
 
-    const toStartPlayer = (songId) => {
+    toStartPlayer = (songId) => {
         if (this.state.songId === songId) {
             this.PlayOrPause();
         } else {
@@ -55,7 +61,7 @@ function Players(props) {
         }
     };
 
-    const startPlayer = (index) => {
+    startPlayer = (index) => {
         const currentSong = this.state.list[index ? index: this.state.currentIndex];
         this.player.src = currentSong.link;
         this.setState({
@@ -68,28 +74,29 @@ function Players(props) {
         this.setState({IsPlaying: true}, () => this.player.play())
     };
 
-    const PlayOrPause = (run) => {
-        if (player.paused && songId) {
-            setIsPlaying(true);
-            if (run) {
-                player.play();
-            } else {
-                playPlayer(currentIndex , "beats", _that , set_of_beats_name);
-            }
+    PlayOrPause = (run) => {
+        if (this.player.paused && this.state.songId) {
+            this.setState({IsPlaying: true}, () => {
+                if (run) {
+                    this.player.play();
+                } else {
+                    playPlayer(this.state.currentIndex, this.state.height_div, this.state.set_of_beats_name, this.state.component_props, this.state.component_states, this.state.component_state_value);
+                }
+            })
         } else if (this.state.songId) {
             this.setState({IsPlaying: false}, () => {
-                this.props.pausePlayer(this.state._that , this.state.set_of_beats_name);
+                pausePlayer(this.state.height_div, this.state.set_of_beats_name, this.state.component_props, this.state.component_states, this.state.component_state_value);
                 this.player.pause()
             })
         }
     };
 
-    const playNext = () => {
+    playNext = () => {
         this.setState({tmp: 0, listen: false}, () => {
             if (this.state.shuffle) {
                 this.history.push(this.state.currentIndex);
                 this.setState({currentIndex: Math.floor(Math.random() * this.state.list.length)}, function() {
-                    this.props.changeIndex(this.state.currentIndex, this.state._that);
+                    changeIndex(this.state.currentIndex, this.state._that);
                     this.startPlayer()
                 })
             } else {
@@ -99,7 +106,7 @@ function Players(props) {
                 } else {
                     this.history.push(this.state.currentIndex);
                     this.setState({currentIndex: this.state.currentIndex + 1}, function next () {
-                        this.props.changeIndex(this.state.currentIndex, this.state._that);
+                        changeIndex(this.state.currentIndex, this.state._that);
                         this.startPlayer()
                     });
                 }
@@ -107,11 +114,11 @@ function Players(props) {
         })
     };
 
-    const playPrev = () => {
+    playPrev = () => {
         this.setState({tmp: 0, listen: false}, () => {
             if (this.history[this.history.length - 1] >= 0) {
                 this.setState({currentIndex: this.history.pop()}, function prev() {
-                    this.props.changeIndex(this.state.currentIndex, this.state._that);
+                    changeIndex(this.state.currentIndex, this.state._that);
                     this.startPlayer()
                 });
             } else {
@@ -121,7 +128,7 @@ function Players(props) {
         });
     };
 
-    const convertTime = (seconds) => {
+    convertTime = (seconds) => {
         let min = Math.floor(seconds / 60);
         let sec = seconds % 60;
         min = (min < 10) ? "0" + min : min;
@@ -129,7 +136,7 @@ function Players(props) {
         this.setState({currentTime: min + ":" + sec});
     };
 
-    const totalOfTime = (seconds) => {
+    totalTime = (seconds) => {
         let min = Math.floor(seconds / 60);
         let sec = seconds % 60;
         min = (min < 10) ? "0" + min : min;
@@ -143,24 +150,24 @@ function Players(props) {
         }
     };
 
-    const onBarClick = (e) => {
+    onBarClick = (e) => {
         const offsetX = e.nativeEvent.offsetX;
         const offsetWidth = e.nativeEvent.target.offsetWidth;
         const percent = offsetX / offsetWidth;
         this.player.currentTime = percent * this.player.duration;
     };
 
-    const toggleLoop = () => {
+    toggleLoop = () => {
         this.setState({loop: !this.state.loop}, function(){
             this.player.loop = this.state.loop
         });
     };
 
-    const toggleShuffle = () => {
+    toggleShuffle = () => {
         this.setState({shuffle: !this.state.shuffle})
     };
 
-    const SongListened = (listened, pres_listened) => {
+    SongListened = (listened, pres_listened) => {
         let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
         let headers = {
             'Content-Type': 'application/json',
@@ -178,155 +185,172 @@ function Players(props) {
         }
     };
 
-    Players.startPlayerComponent = (index, type_, run, height_div, set_of_beats_name, component_props, states, state_value) => {
-        useEffect( () => {
-            setHeightDiv(height_div);
-            setComponentStates(states);
-            setSetOfBeatsName(set_of_beats_name);
-            setComponentProps(component_props);
-            setComponentStateValue(state_value);
+    componentDidMount(index, type_, run, height_div, set_of_beats_name, props, states, state_value) {
+        this.setState({
+            isMounted: true , type_: type_, set_of_beats_name: set_of_beats_name, height_div: height_div,
+            component_props: props, component_states: states, component_state_value: state_value,
+        }, () => {
             if (set_of_beats_name) {
-                if (run) PlayOrPause();
-                else startPlayer(index);
-                player.addEventListener('timeupdate', function() {
-                    setTmp(tmp + 1);
-                    let position = this.currentTime / this.duration;
-                    that.setState({progressbar: position * 100});
-                    that.convertTime(Math.round(this.currentTime));
-                    that.totalTime(Math.round(this.duration));
-                    if (that.state.tmp === 10 && !that.state.pres_listened) {
-                        _this.setState({pres_listened: true});
-                        _this.SongListened(false, true);
-                    }
-                    if (that.state.tmp === that.state.listen_min && !that.state.listened) {
-                        _this.setState({listened: true});
-                        _this.SongListened(true);
-                    }
-                    if (this.ended) {
-                        that.state.tmp = 0;
-                        that.playNext()
-                    }
-                });
+                const that = this;
+                this.setState({list: this.props.list, listInfo: this.props.listInfo}, () => {
+                    if (run) this.PlayOrPause();
+                    else this.startPlayer(index);
+                    this.player.addEventListener('volumechange', function() {
+                        that.setState({VolumeBar: this.volume * 100})
+                    }, false);
+                    this.player.addEventListener('timeupdate', function() {
+                        that.state.tmp = that.state.tmp + 1;
+                        let position = this.currentTime / this.duration;
+                        that.setState({progressbar: position * 100});
+                        that.convertTime(Math.round(this.currentTime));
+                        that.totalTime(Math.round(this.duration));
+                        if (that.state.tmp === 10 && !that.state.pres_listened) {
+                            _this.setState({pres_listened: true});
+                            _this.SongListened(false, true);
+                        }
+                        if (that.state.tmp === that.state.listen_min && !that.state.listened) {
+                            _this.setState({listened: true});
+                            _this.SongListened(true);
+                        }
+                        if (this.ended) {
+                            that.state.tmp = 0;
+                            that.playNext()
+                        }
+                    });
+                })
             }
+        });
+    }
 
-            return () => {
-                isMounted.current = true
-            };
-        }, []);
-    };
+    componentWillUnmount() {
+        this.setState({ isMounted: false });
+    }
 
-    Players.pauseOrPlayPlayer = (run) => {
-        PlayOrPause(run);
-    };
-
-    return (
-        <div key={this.props.key}>
-            <aside className="control-sidebar fixed " style={{height: "100%"}}>
-                <div className="slimScroll">
-                    <div className="sidebar-header">
-                        <h4>Beats Playlist</h4>
-                        <a href="/#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
-                    </div>
-                    <div className="p-3">
-                        <ul id="playlist" className="playlist" style={{height: "100%"}}>
-                            {this.state.songId ? this.state.list.map((val, index) =>
-                                <li className="list-group-item my-1" key={index}>
-                                    <div className="no-ajaxy media-url">
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            {this.state.songId === val['id'] && this.state.IsPlaying ?
-                                                <i className="icon-pause s-28" onClick={() => this.toStartPlayer(val['id'])} /> :
-                                                <i className="icon-play s-28" onClick={() => this.toStartPlayer(val['id'])} />}
-                                            <figure className="avatar-md float-left mr-3 mt-1">
-                                                <img className="r-5" src={val['photo']} alt="" />
-                                            </figure>
-                                            <div>
-                                                <h6>{val['artist']}</h6>{val['title']}
+    render() {
+        return (
+            <div key={this.props.key}>
+                <aside className="control-sidebar fixed " style={{height: "100%"}}>
+                    <div className="slimScroll">
+                        <div className="sidebar-header">
+                            <h4>Beats Playlist</h4>
+                            <a href="/#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
+                        </div>
+                        <div className="p-3">
+                            <ul id="playlist" className="playlist" style={{height: "100%"}}>
+                                {this.state.songId ? this.state.list.map((val, index) =>
+                                    <li className="list-group-item my-1" key={index}>
+                                        <div className="no-ajaxy media-url">
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                {this.state.songId === val['id'] && this.state.IsPlaying ?
+                                                    <i className="icon-pause s-28" onClick={() => this.toStartPlayer(val['id'])} /> :
+                                                    <i className="icon-play s-28" onClick={() => this.toStartPlayer(val['id'])} />}
+                                                <figure className="avatar-md float-left mr-3 mt-1">
+                                                    <img className="r-5" src={val['photo']} alt="" />
+                                                </figure>
+                                                <div>
+                                                    <h6>{val['artist']}</h6>{val['title']}
+                                                </div>
+                                                <span className="badge badge-primary badge-pill">{val.time}</span>
                                             </div>
-                                            <span className="badge badge-primary badge-pill">{val.time}</span>
                                         </div>
-                                    </div>
-                                </li>): <h4 className="text-center">Playlist Empty</h4>}
-                        </ul>
+                                    </li>): <h4 className="text-center">Playlist Empty</h4>}
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </aside>
-            <nav className="navbar-wrapper navbar-bottom-fixed shadow">
-                <div className="navbar navbar-expand player-header justify-content-between  bd-navbar">
-                    <div className="d-flex align-items-center">
-                        <a href="/#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
-                            <i />
-                        </a>
-                        <a className="navbar-brand d-none d-lg-block" href="/beats">
-                            <div className="d-flex align-items-center s-14 l-s-2">
-                                <figure className="avatar-md float-left mr-3 mt-1">
-                                    <img className="r-5" src={logo} alt="" />
-                                </figure>
-                                <span>ISL CREATIVE</span>
-                            </div>
-                        </a>
-                    </div>
-                    {/*Player*/}
-                    <div id="mediaPlayer" className="player-bar col-lg-6 col-md-5" data-auto="true">
-                        <div className="row align-items-center d-block">
-                            <div className="col-md-10">
-                                <div className="d-block align-items-center">
-                                    <div className="text-center" style={{margin: "0 auto"}}>
-                                        <div className="d-none d-lg-inline-flex">
-                                            <small className="track-time mr-2 text-primary align-middle" style={{margin: "0 auto"}}>{this.state.currentTime}</small>
+                </aside>
+                <nav className="navbar-wrapper navbar-bottom-fixed shadow">
+                    <div className="navbar navbar-expand player-header justify-content-between  bd-navbar">
+                        <div className="d-flex align-items-center">
+                            <a href="/#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
+                                <i />
+                            </a>
+                            <a className="navbar-brand d-none d-lg-block" href="/beats">
+                                <div className="d-flex align-items-center s-14 l-s-2">
+                                    <figure className="avatar-md float-left mr-3 mt-1">
+                                        <img className="r-5" src={logo} alt="" />
+                                    </figure>
+                                    <span>ISL CREATIVE</span>
+                                </div>
+                            </a>
+                        </div>
+                        {/*Player*/}
+                        <div id="mediaPlayer" className="player-bar col-lg-6 col-md-5" data-auto="true">
+                            <div className="row align-items-center d-block">
+                                <div className="col-md-10">
+                                    <div className="d-block align-items-center">
+                                        <div className="text-center" style={{margin: "0 auto"}}>
+                                            <div className="d-none d-lg-inline-flex">
+                                                <small className="track-time mr-2 text-primary align-middle" style={{margin: "0 auto"}}>{this.state.currentTime}</small>
+                                            </div>
+                                            {this.state.shuffle ?
+                                                <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link" onClick={() => this.toggleShuffle()}>
+                                                    <i className="icon-shuffle s-14" />
+                                                </button>:
+                                                <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link text-light" onClick={() => this.toggleShuffle()}>
+                                                    <i className="icon-shuffle s-14"/>
+                                                </button>}
+                                            <button id="previousTrack" className="btn btn-link" onClick={this.state.songId ? this.playPrev: null}>
+                                                <i className="icon-back s-14" />
+                                            </button>
+                                            <button className="btn btn-link" id="playPause">
+                                                {!this.state.IsPlaying ?
+                                                    <span id="play" onClick={this.state.songId ? () => this.PlayOrPause(true): null}><i className="icon-play s-24"/></span> :
+                                                    <span id="pause" onClick={this.state.songId ? this.PlayOrPause: null}><i className="icon-pause s-24 text-primary"/></span>
+                                                }
+                                            </button>
+                                            <button id="nextTrack" className="btn btn-link" onClick={this.state.songId ? this.playNext: null}>
+                                                <i className="icon-next s-14" />
+                                            </button>
+                                            {this.state.loop ?
+                                                <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link" onClick={() => this.toggleLoop()}>
+                                                    <i className="icon-repeat s-14" />
+                                                </button>:
+                                                <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link text-light" onClick={() => this.toggleLoop()}>
+                                                    <i className="icon-repeat s-14"/>
+                                                </button>}
+                                            <div className="d-none d-lg-inline-flex">
+                                                <small className="track-time ml-2 mr-2 text-primary align-middle">{this.state.totalTime}</small>
+                                            </div>
                                         </div>
-                                        {this.state.shuffle ?
-                                            <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link" onClick={() => this.toggleShuffle()}>
-                                                <i className="icon-shuffle s-14" />
-                                            </button>:
-                                            <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link text-light" onClick={() => this.toggleShuffle()}>
-                                                <i className="icon-shuffle s-14"/>
-                                            </button>}
-                                        <button id="previousTrack" className="btn btn-link" onClick={this.state.songId ? this.playPrev: null}>
-                                            <i className="icon-back s-14" />
-                                        </button>
-                                        <button className="btn btn-link" id="playPause">
-                                            {!this.state.IsPlaying ?
-                                                <span id="play" onClick={this.state.songId ? () => this.PlayOrPause(true): null}><i className="icon-play s-24"/></span> :
-                                                <span id="pause" onClick={this.state.songId ? this.PlayOrPause: null}><i className="icon-pause s-24 text-primary"/></span>
-                                            }
-                                        </button>
-                                        <button id="nextTrack" className="btn btn-link" onClick={this.state.songId ? this.playNext: null}>
-                                            <i className="icon-next s-14" />
-                                        </button>
-                                        {this.state.loop ?
-                                            <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link" onClick={() => this.toggleLoop()}>
-                                                <i className="icon-repeat s-14" />
-                                            </button>:
-                                            <button id="shuffle" className="d-none d-lg-inline-flex btn btn-link text-light" onClick={() => this.toggleLoop()}>
-                                                <i className="icon-repeat s-14"/>
-                                            </button>}
-                                        <div className="d-none d-lg-inline-flex">
-                                            <small className="track-time ml-2 mr-2 text-primary align-middle">{this.state.totalTime}</small>
+                                        <div className="progress" style={{width: "100%", height: "4px"}} onClick={this.state.songId ? this.onBarClick : null}>
+                                            <div className="progress-bar relative bg-red" style={{width: this.state.progressbar + '%'}}/>
                                         </div>
-                                    </div>
-                                    <div className="progress" style={{width: "100%", height: "4px"}} onClick={this.state.songId ? this.onBarClick : null}>
-                                        <div className="progress-bar relative bg-red" style={{width: this.state.progressbar + '%'}}/>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {/*@Player*/}
+                        {/*Top Menu Start */}
+                        <div className="navbar-custom-menu">
+                            <ul className="nav navbar-nav">
+                                {/* User Playlist*/}
+                                <li className="d-none d-lg-inline-flex flex-column">
+                                    <a data-toggle="control-sidebar" href="/#">
+                                        <i className="icon icon-menu s-36" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    {/*@Player*/}
-                    {/*Top Menu Start */}
-                    <div className="navbar-custom-menu">
-                        <ul className="nav navbar-nav">
-                            {/* User Playlist*/}
-                            <li className="d-none d-lg-inline-flex flex-column">
-                                <a data-toggle="control-sidebar" href="/#">
-                                    <i className="icon icon-menu s-36" />
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    );
+                </nav>
+            </div>
+        );
+    }
+
+    static startPlayerComponent(index, type_, run, height_div, set_of_beats_name, props, states, state_value) {
+        _this.componentDidMount(index, type_, run, height_div, set_of_beats_name, props, states, state_value)
+    }
+
+    static  pauseOrPlayPlayer(run) {
+        _this.PlayOrPause(run);
+    }
 }
 
-export default Players;
+const mapStateToProps = state => {
+    return {
+        list: state.Player.list,
+        listInfo: state.Player.listInfo,
+    };
+};
+
+export default connect(mapStateToProps)(Players);
