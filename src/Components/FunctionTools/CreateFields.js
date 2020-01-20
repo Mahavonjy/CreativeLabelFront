@@ -40,6 +40,21 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
     } else return true
 };
 
+export const pausePlayer = (_that, set_of_beats_name) => {
+    CreateBeatsPlaylist(_that, set_of_beats_name);
+    return true;
+};
+
+export const playPlayer = (index, type_, _that, set_of_beats_name) => {
+    CreateBeatsPlaylist(_that, set_of_beats_name);
+    return true;
+};
+
+export const changeIndex = (index, _that) => {
+    _that.setState({index: index});
+    return true;
+};
+
 export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states, state_value) => {
 
     const dispatch = useDispatch();
@@ -50,14 +65,14 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
             states.setIndex(index);
             states.setTmp(index);
             await dispatch(addNewPlayerList(states.beats));
-            await props.ToPlay(index, type_, run, set_of_beats_name);
+            await props.ToPlay(index, type_, run, height_div, set_of_beats_name, props, states, state_value);
         } else {
             if (index !== states.index) {
                 let tmp;
                 if (states.index === states.tmp) tmp = true;
                 states.setIndex(index);
                 states.setTmp(index);
-                if (tmp) props.ToPlay(index, type_, run, set_of_beats_name);
+                if (tmp) props.ToPlay(index, type_, run, height_div, set_of_beats_name, props, states, state_value);
                 else IslPlayer.pauseOrPlayPlayer(true);
             } else {
                 await states.setTmp(null);
@@ -187,7 +202,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     {height_div !== "user_profile" ?
                                         <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"
                                            onClick={() => {
-                                               Tools.LikeOrFollow("like", val.id);
+                                               Tools.LikeOrFollow("like", val.id, states.user_credentials);
                                            }}/> :
                                         <div className="ml-auto">
                                             <i className="icon-edit s-24" id={val.id} data-tip="Modifier"
@@ -259,7 +274,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
     }
 };
 
-export const DisplayArtist = (artist_info) => {
+export const DisplayArtist = (artist_info, user_credentials) => {
     return (
         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 428}}>
             {artist_info.length !== 0 ? artist_info.map((val, index) =>
@@ -275,7 +290,7 @@ export const DisplayArtist = (artist_info) => {
                             </Link>
                         </div>
                         <i className="icon-user-plus ml-auto"
-                           onClick={() => Tools.LikeOrFollow("follow", val.id)}/>
+                           onClick={() => Tools.LikeOrFollow("follow", val.id, user_credentials)}/>
                         <Link to={"Profile/isl_artist_profile/" + val.id} className="ml-auto"><i
                             className="icon-user-circle"/></Link>
                     </div>
@@ -400,21 +415,6 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
             <Route path="/Profile/isl_artist_profile/:id(\d+)" component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
         </div>
     )
-};
-
-export const pausePlayer = (_that, set_of_beats_name) => {
-    CreateBeatsPlaylist(_that, set_of_beats_name);
-    return true;
-};
-
-export const playPlayer = (index, type_, _that, set_of_beats_name) => {
-    CreateBeatsPlaylist(_that, set_of_beats_name);
-    return true;
-};
-
-export const changeIndex = (index, _that) => {
-    _that.setState({index: index});
-    return true;
 };
 
 export const generateInput = (label, value, setValue, field_, type_, icon, tip, disable) => {

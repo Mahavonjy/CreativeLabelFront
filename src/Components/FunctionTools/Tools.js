@@ -1,7 +1,6 @@
 import React from "react";
 import Conf from "../../Config/tsconfig";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
 import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import Home from "../Home/Home";
@@ -97,9 +96,7 @@ export const AddToCart = (song_id, price, licenses_name, beat, props, special) =
     }
 };
 
-export const LikeOrFollow = (LikeOrFollow, id) => {
-    const user_credentials = useSelector(state => state.Home.user_credentials);
-
+export const LikeOrFollow = (LikeOrFollow, id, user_credentials) => {
     if (user_credentials.token === Conf.configs.TokenVisitor) {
         document.getElementById("LoginRequire").click();
     } else {

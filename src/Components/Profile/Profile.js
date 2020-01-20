@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import EditProfile from './Edit/EditProfile';
 import AddSingle from './AddMedia/AddSingle';
 import EditSingle from './Edit/EditSingle';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Conf from "../../Config/tsconfig";
 import PhotoD from '../../images/socials/profile.png';
 import PhotoTest from '../../images/Backgrounds/adult-banking-business-2254122.jpg';
@@ -51,7 +51,7 @@ function Profile (props) {
     const [popupAddEditSingle, setPopupAddEditSingle] = useState(-1);
     const [choiceArtistType, setChoiceArtistType] = useState(false);
     const [becomeArtistForm, setBecomeArtistForm] = useState(false);
-    const [artistType] = useState("Beatmaker");
+    const [artistType, setArtistType] = useState(user_role);
 
     const togglePopupEditProfile = async (success) => {
         setPopupEditProfile(!popupEditProfile);
@@ -132,6 +132,7 @@ function Profile (props) {
     };
 
     useEffect(() => {
+        console.log(user_role)
         try {
             headers['Isl-Token'] = user_credentials.token;
         } catch (e) {
@@ -156,7 +157,7 @@ function Profile (props) {
             {popupAddSingle && <AddSingle Type={"beats"} closePopup={(e, data) => togglePopupAddSingle(e, data)}/>}
             {popupEditProfile && <EditProfile closePopup={(e) => togglePopupEditProfile(e)} updateProfile={setProfileInfo}/>}
             {popupAddEditSingle !== -1 && <EditSingle Song={song} Type={type_} Success={(data) => {afterEditSingle(data).then(() => null)}} CloseEdit={() => setPopupAddEditSingle(-1)}/>}
-            {choiceArtistType && DifferentArtist(this)}
+            {choiceArtistType && DifferentArtist(setArtistType, setChoiceArtistType, setBecomeArtistForm)}
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="card no-b shadow no-r">
                     <div className="row no-gutters">
@@ -231,7 +232,7 @@ function Profile (props) {
                     <button className="ModalClose" onClick={() => setBecomeArtistForm(false)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
-                    <Form artistType={artistType}/>
+                    <Form artistType={artistType.charAt(0).toUpperCase() + artistType.slice(1)}/>
                 </div>
             </Modal>
             {/* end form become an artist*/}
@@ -260,15 +261,16 @@ function Profile (props) {
                                                 {loading && smallSpinner("absolute", "50px")}
                                                 <div className="mt-3">
                                                     <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1" role="tablist">
-                                                        {user_role === "beatmaker" ?
+                                                        {user_role === "beatmaker" &&
                                                             <li className="nav-item">
                                                                 <a className="nav-link active show" data-toggle="tab" href="#beats-tab" role="tab" aria-selected="true">Beats</a>
-                                                            </li> : null}
+                                                            </li>}
+                                                        {user_role !== "professional_auditor" &&
                                                         <li className="nav-item">
                                                             <a className={user_role !== "beatmaker" ? "nav-link active show" : "nav-link"} data-toggle="tab" href="#Prestations" role="tab" aria-selected="false">Mes prestations</a>
-                                                        </li>
+                                                        </li>}
                                                         <li className="nav-item">
-                                                            <a className="nav-link" data-toggle="tab" href="#Paiements-Reservations" role="tab" aria-selected="false">Paiements & Réservations</a>
+                                                            <a className={user_role === "professional_auditor" ? "nav-link active show" : "nav-link"} data-toggle="tab" href="#Paiements-Reservations" role="tab" aria-selected="false">Paiements & Réservations</a>
                                                         </li>
                                                         <li className="nav-item">
                                                             <a className="nav-link" data-toggle="tab" href="#Coordonnees-bancaires" role="tab" aria-selected="false">Coordonnées bancaires</a>
@@ -286,7 +288,7 @@ function Profile (props) {
                             </div>
                             <div className="card-body no-p">
                                 <div className="tab-content">
-                                    {user_role === "beatmaker" ?
+                                    {user_role === "beatmaker" &&
                                         <div className="tab-pane fade show active" id="beats-tab" role="tabpanel">
                                             {state_user_beats.length !== 0 ?
                                                 <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
@@ -295,11 +297,12 @@ function Profile (props) {
                                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
                                                     <p className="text-center">Pas d'instrumental</p>
                                                 </div>}
-                                        </div> : null}
+                                        </div>}
+                                    {user_role !== "professional_auditor" &&
                                     <div className={user_role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fade"} id="Prestations" role="tabpanel">
                                         <MyPrestations role={user_role}/>
-                                    </div>
-                                    <div className="tab-pane fade" id="Paiements-Reservations" role="tabpanel">
+                                    </div>}
+                                    <div className={user_role === "professional_auditor" ? "tab-pane fade show active" : "tab-pane fade"} id="Paiements-Reservations" role="tabpanel">
                                         <PaymentsAndReservations/>
                                     </div>
                                     <div className="tab-pane fade" id="Coordonnees-bancaires" role="tabpanel">

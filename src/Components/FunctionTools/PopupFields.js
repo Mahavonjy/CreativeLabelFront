@@ -5,7 +5,14 @@ import Loader from "react-loader-spinner";
 import Modal from "react-awesome-modal";
 import ReactTooltip from "react-tooltip";
 
-export const DifferentArtist = (that) => {
+export const DifferentArtist = (setArtistType, setChoiceArtistType, setBecomeArtistForm) => {
+
+    const setValue = (type_) => {
+        setArtistType(type_);
+        setBecomeArtistForm(true);
+        setChoiceArtistType(false);
+    };
+
     return (
         <Modal visible={true} width="400" height="230" animationType='slide'>
             <ReactTooltip/>
@@ -13,40 +20,40 @@ export const DifferentArtist = (that) => {
                 <h4 className="text-green text-monospace">Quelle genre d'artiste êtes vous ?</h4>
                 <div className="body row justify-content-center pt-2">
 
-                    <button className="col-md-6 m-2 text-light" onClick={() => that.setState({artist_type: "Spécialiste de l’audiovisuel", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-6 m-2 text-light" onClick={() => setValue("Spécialiste de l’audiovisuel")}
                             data-tip="Monteur vidéoclip, Cameraman, Photographes, Réalisateur clip vidéo, autres"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Spécialiste de l’audiovisuel</button>
 
-                    <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Beatmaker", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-3 m-2 text-light" onClick={() => setValue("Beatmaker")}
                             data-tip="Acapella, Afrobeat, Blues, Breakbeat, Classique, Dancehall, Electronica, Folk, Metal, Funk, Gospel, House, Jazz, Pop, Slam, Swing, Soul, Rap, Reggae, Rock, Rumba, Samba, Vakondrazana, Rumba, Kilalaky, Rnb, Ndombolo, Basesa, Hira gasy, Batrelaky, Reggae-muffin, Reggaeton, Remix, Goma, Kuduro, Afro-trap, Kawitri, Malesa, Tsapiky, Zafindraona, Slow, Coupé-Décalé"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Beatmaker</button>
 
-                    <button className="col-md-5 m-2 text-light" onClick={() => that.setState({artist_type: "Chanteur/Musicien", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-5 m-2 text-light" onClick={() => setValue("Chanteur/Musicien")}
                             data-tip="Acapella, Afrobeat, Blues, Breakbeat, Classique, Dancehall, Electronica, Folk, Metal, Funk, Gospel, House, Jazz, Pop, Slam, Swing, Soul, Rap, Reggae, Rock, Rumba, Samba, Vakondrazana, Rumba, Kilalaky, Rnb, Ndombolo, Basesa, Hira gasy, Batrelaky, Reggae-muffin, Reggaeton, Remix, Goma, Kuduro, Afro-trap, Kawitri, Malesa, Tsapiky, Zafindraona, Slow, Coupé-Décalé"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Chanteur/Musicien</button>
 
-                    <button className="col-md-6 m-2 text-light" onClick={() => that.setState({artist_type: "Cirque/Artistes de la Rue", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-6 m-2 text-light" onClick={() => setValue("Cirque/Artistes de la Rue")}
                             data-tip="acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur, marionnettiste, mime, autre"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Cirque/Artistes de la Rue</button>
 
-                    <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Comédiens", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-3 m-2 text-light" onClick={() => setValue("Comédiens")}
                             data-tip="Burlesque, Comédie, Conteur, Drame, expérimental, Humoriste, imitateur, Stand up, autre"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Comédiens</button>
 
-                    <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Danseurs", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-3 m-2 text-light" onClick={() => setValue("Danseurs")}
                             data-tip="Bachata, cabaret, capoeira, chachacha, classique, contemporain, ethnique, expérimental, hip hop, Improvisation, Jazz, Kizomba, Moderne, Oriental, Salsa, Samba, Tango, kilalaky, batrelaky, salegy, Ndombolo, Vakondrazana,zouk, Kawitri,Maloya, Kompas, autre"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Danseurs</button>
 
-                    <button className="col-md-3 m-2 text-light" onClick={() => that.setState({artist_type: "Magiciens", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-3 m-2 text-light" onClick={() => setValue("Magiciens")}
                             data-tip="Close-ups, Mentalistes, Prestidigitateurs, autre"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Magiciens</button>
 
-                    <button className="col-md-2 m-2 text-light" onClick={() => that.setState({artist_type: "Dj", becomeArtistForm: true, choiceArtistType: false})}
+                    <button className="col-md-2 m-2 text-light" onClick={() => setValue("Dj")}
                             data-tip="Animateur, Mix, Live set, DJ Set"
                             style={{borderRadius: 5, backgroundImage: "linear-gradient(to left top, #ed1c24, #b2102d, #77132a, #3d121d, #000000)"}}>Dj</button>
                 </div>
                 <div className="footer pt-3">
-                    <button className="btn btn-outline-danger btn-sm pl-4 pr-4" onClick={() => that.setState({choiceArtistType: false})}>Annuler&nbsp;<i className="icon icon-remove align-middle"/></button>
+                    <button className="btn btn-outline-danger btn-sm pl-4 pr-4" onClick={() => setChoiceArtistType(false)}>Annuler&nbsp;<i className="icon icon-remove align-middle"/></button>
                 </div>
             </div>
         </Modal>
@@ -82,10 +89,10 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                 <div className="row">
                                     <div className="col-md-10 offset-sm-1">
                                         <div className="row" style={{width:"300px", margin: "0 auto"}}>
-                                            <img src={val.photo} alt="/" style={{width:"300px", margin:"0 auto"}}/>
+                                            <img src={val.photo} alt="/" height={250} width="100%" style={{borderRadius: 10}}/>
                                             <h1 className="my-3 text-white" style={{margin: "0 auto"}}>{val.title}</h1>
-                                            <div className="col-md-9">
-                                                <div className="d-md-flex align-items-center justify-content-between">
+                                            <div className="col-md-12 text-center">
+                                                <div className=" align-items-center justify-content-between">
                                                     <div className="ml-auto mb-2">
                                                         <a href="/#" className="snackbar" data-text="Bookmark clicked" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-bookmark s-24" /></a>
                                                         <a href="/#" className="snackbar ml-3" data-text="You like that song" data-pos="top-right" data-showaction="true" data-actiontext="ok" data-actiontextcolor="#fff" data-backgroundcolor="#0c101b"><i className="icon-heart s-24" /></a>
@@ -161,30 +168,25 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                             </div>
                                         </div>
                                     </li>
-                                    {val.platinum_price &&
-                                        <li className="list-group-item">
-                                            <div
-                                                className="d-flex align-items-center ">
-                                                <div
-                                                    className="col-8 ">
-                                                    <h5> Platinum Lease</h5>
-                                                    <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>
-                                                        Unlimited + Exclusive
-                                                    </small>
-                                                </div>
-                                                <div className="ml-auto" onClick={async () => {
-                                                    await document.getElementById("closeOne" + val.id).click();
-                                                    Tools.AddToCart(val.id, val.platinum_price, "platinum_price", val, props)
-                                                }}>
-                                                    <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
-                                                        <div className="s-14">
-                                                            {val.platinum_price} $
-                                                        </div>
-                                                        <i className="icon-money"/>
+                                    {val.platinum_price ? <li className="list-group-item">
+                                        <div className="d-flex align-items-center ">
+                                            <div className="col-8 ">
+                                                <h5> Platinum Lease</h5>
+                                                <small className="mt-1"><i className="icon-placeholder-3 mr-1 "/>Unlimited + Exclusive</small>
+                                            </div>
+                                            <div className="ml-auto" onClick={async () => {
+                                                await document.getElementById("closeOne" + val.id).click();
+                                                Tools.AddToCart(val.id, val.platinum_price, "platinum_price", val, props)
+                                            }}>
+                                                <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
+                                                    <div className="s-14">
+                                                        {val.platinum_price} $
                                                     </div>
+                                                    <i className="icon-money"/>
                                                 </div>
                                             </div>
-                                        </li>}
+                                        </div>
+                                    </li>: null}
                                 </ul>
                             </div>
                         </div>

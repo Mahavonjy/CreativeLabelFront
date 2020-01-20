@@ -77,7 +77,7 @@ class Thematics extends Component {
     componentDidMount() {
         this.setState({ isMounted: true}, () => {
             const artistType = this.props.artistType;
-            let options_state = {...this.state.options};
+            let options_state = [...this.state.options];
             if (artistType === "Dj") options_state = djOptions;
             else if (artistType === "Magiciens") options_state = magicianOptions;
             else if (artistType === "Danseurs") options_state = DanceOptions;

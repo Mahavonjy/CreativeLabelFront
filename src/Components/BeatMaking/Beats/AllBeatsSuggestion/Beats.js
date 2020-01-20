@@ -219,7 +219,7 @@ function Beats(props) {
                                     </div>
                                 </div>
                                 {/* Here is top beatmakers */}
-                                {CreateFields.DisplayArtist(top_beatBaker)}
+                                {CreateFields.DisplayArtist(top_beatBaker, user_credentials)}
                                 {/* end of top beatmakers */}
                             </div>
                         </div>

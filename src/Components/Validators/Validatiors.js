@@ -1,10 +1,10 @@
 import * as Tools from "../FunctionTools/Tools";
 
-export const RegisterValidation = (state) => {
+export const RegisterValidation = (password, confirm_password) => {
     return () => {
-        if (state.password.length < 8)
+        if (password.length < 8)
             return {"error": true, message: "mot de passe trop court"};
-        if (state.password !== state.confirm_password)
+        if (password !== confirm_password)
             return {"error": true, message: "mot de passe different"};
         return {"error": false}
     };

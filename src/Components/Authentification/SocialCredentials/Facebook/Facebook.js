@@ -3,7 +3,7 @@ import { FacebookLogin } from 'react-facebook-login-component';
 import axios from "axios";
 import Conf from "../../../../Config/tsconfig";
 
-function LoginFacebook() {
+function LoginFacebook(props) {
 
     const isMounted = useRef(false);
 
@@ -39,8 +39,8 @@ function LoginFacebook() {
                        responseHandler={responseFacebook}
                        xfbml={true}
                        version="v2.5"
-                       className="p-10 special-color ml-2 r-10">
-            <i className="icon-facebook-f text-blue s-18"/>
+                       className="mt-3 border-0 special-color">
+            <button className="loginBtn loginBtn--facebook text-center">{props.Label}</button>
         </FacebookLogin>
     );
 }

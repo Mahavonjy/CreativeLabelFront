@@ -9,6 +9,15 @@ export function readyLatestBeats(data) {
     };
 }
 
+export function updateOtherBeatMakerBeats(data) {
+    return async dispatch => {
+        dispatch({
+            type: "UPDATE_OTHER_BEAT_MAKER_BEATS",
+            data: data
+        });
+    };
+}
+
 export function readyDiscoveryBeats(data) {
     return async dispatch => {
         dispatch({

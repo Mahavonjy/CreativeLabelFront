@@ -47,13 +47,13 @@ function Home () {
         setStateCart(state_cart - 1)
     };
 
-    const addToPlaylist = (index, type_, run, set_of_beats_name) => {
+    const addToPlaylist = (index, type_, run, height_div, set_of_beats_name, props, states, state_value) => {
         ifStopPlayer[key] = false;
         if (!ifStopPlayer[key]) {
             key = Math.floor(Math.random() * Math.floor(999999999));
             ifStopPlayer[key] = true;
         }
-        IslPlayer.startPlayerComponent(index, type_, run, set_of_beats_name);
+        IslPlayer.startPlayerComponent(index, type_, run, height_div, set_of_beats_name, props, states, state_value);
     };
 
     const ifConnectionError = (err) => {
@@ -93,7 +93,7 @@ function Home () {
                 setProfileChecked(resp.data['profile_checked']);
                 setUserData(resp.data['user_data']);
                 setLoading(false);
-            }).catch(() => {toast.error("Connection Error")})
+            }).catch(() => window.location.replace("/ArtistNotFound"))
         } else if (firstRouteParsing === 'Cart') {
             if (!state_cart)
                 window.location.replace('/beats');

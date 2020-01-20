@@ -3,7 +3,7 @@ import { GoogleLogin } from 'react-google-login-component';
 import axios from 'axios';
 import Conf from "../../../../Config/tsconfig";
 
-function LoginGoogle() {
+function LoginGoogle(props) {
 
     const isMounted = useRef(false);
 
@@ -35,12 +35,13 @@ function LoginGoogle() {
     }, []);
 
     return (
+
         <GoogleLogin socialId={Conf.configs.GoogleId}
-                     className="p-10 special-color ml-2 r-10"
                      scope="profile"
+                     className="mt-3 border-0 special-color"
                      fetchBasicProfile={false}
                      responseHandler={responseGoogle}>
-            <i className="icon-google-plus-square text-red s-18"/>
+            <button className="loginBtn loginBtn--google text-center">{props.Label}</button>
         </GoogleLogin>
     );
 }
