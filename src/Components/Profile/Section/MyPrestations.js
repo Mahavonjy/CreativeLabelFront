@@ -25,7 +25,7 @@ function MyPrestations(props) {
                 <small>• Vous pouvez personnaliser pour chaque prestation le frais de déplacement ou bien en fonction de la date aussi</small><br/><br/>
             </ReactTooltip>
             <ReactTooltip place="left" className="special-color-dark" id='copy_edit' aria-haspopup='true'>
-                <h5 className="text-center text-green">Explication</h5><br/>
+                <h5 className="text-center text-green">Dupliquer et Modifier</h5><br/>
 
                 <small>• Une autre façon de le dire: cloner en vue d’une modification </small><br/>
                 <small>• L’artiste ne peut pas publier une prestation dupliqué qui a le même prix, le même type d’évènement, même ville en même temps</small><br/>
@@ -70,15 +70,14 @@ function MyPrestations(props) {
                                 </div>
                             </div>
                             <div className="card__circle" />
-                            <div className="card__smallCircle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
-                                <button className="btn btn-outline-info" data-tip data-for="copy_edit">dupliquer & modifier</button>
+                                <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
-                                <button className="btn btn-outline-warning" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"><i className="icon-eye-slash s-24"/></button>
+                                <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
                             </div>
                         </div>
                         <div className="col-md-4 card-prestation m-2">
@@ -91,15 +90,14 @@ function MyPrestations(props) {
                                 </div>
                             </div>
                             <div className="card__circle" />
-                            <div className="card__smallCircle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
-                                <button className="btn btn-outline-info" data-tip data-for="copy_edit">dupliquer & modifier</button>
+                                <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
-                                <button className="btn btn-outline-warning" data-tip="Cette prestation est visible, les auditeurs pro peuvent le voir a partir de la recherche"><i className="icon-eye s-24"/></button>
+                                <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
                             </div>
                         </div>
                         <div className="col-md-4 card-prestation m-2">
@@ -112,15 +110,14 @@ function MyPrestations(props) {
                                 </div>
                             </div>
                             <div className="card__circle" />
-                            <div className="card__smallCircle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
-                                <button className="btn btn-outline-info" data-tip data-for="copy_edit">dupliquer & modifier</button>
+                                <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
-                                <button className="btn btn-outline-warning" data-tip="Cette prestation est visible, les auditeurs pro peuvent le voir a partir de la recherche"><i className="icon-eye s-24"/></button>
+                                <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
                             </div>
                         </div>
                         <div className="col-md-4 card-prestation m-2">
@@ -133,15 +130,14 @@ function MyPrestations(props) {
                                 </div>
                             </div>
                             <div className="card__circle" />
-                            <div className="card__smallCircle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
-                                <button className="btn btn-outline-info" data-tip data-for="copy_edit">dupliquer & modifier</button>
+                                <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
-                                <button className="btn btn-outline-warning" data-tip="Cette prestation est visible, les auditeurs pro peuvent le voir a partir de la recherche"><i className="icon-eye s-24"/></button>
+                                <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
                             </div>
                         </div>
                     </div>

@@ -81,11 +81,10 @@ export function updateBeats(data) {
     };
 }
 
-export function readyBeats(data) {
+export function readyBeats() {
     return async dispatch => {
         dispatch({
-            type: "BEATS_READY",
-            data: data
+            type: "BEATS_READY"
         });
     };
 }
@@ -94,6 +93,24 @@ export function addCarts(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_CART",
+            data: data
+        });
+    };
+}
+
+export function updateSimilarBeats(data) {
+    return async dispatch => {
+        dispatch({
+            type: "UPDATE_SIMILAR_BEATS",
+            data: data
+        });
+    };
+}
+
+export function updateBeatMakerBeats(data) {
+    return async dispatch => {
+        dispatch({
+            type: "UPDATE_BEAT_MAKER_BEATS",
             data: data
         });
     };

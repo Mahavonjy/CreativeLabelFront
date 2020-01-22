@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import * as Tools from "./Tools";
+import { AddToCart } from "./Tools";
 import SignInOrUp from "../Authentification/Login/Login";
 import Loader from "react-loader-spinner";
 import Modal from "react-awesome-modal";
 import ReactTooltip from "react-tooltip";
+import {useDispatch} from "react-redux";
 
 export const DifferentArtist = (setArtistType, setChoiceArtistType, setBecomeArtistForm) => {
 
@@ -63,6 +64,7 @@ export const DifferentArtist = (setArtistType, setChoiceArtistType, setBecomeArt
 export const ForAddToCard = (val, set_of_beats_name, props) => {
 
     const isMounted = useRef(false);
+    const dispatch = useDispatch();
 
     useEffect( () => {
         return () => {
@@ -121,7 +123,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                             </div>
                                             <div className="ml-auto" onClick={async () => {
                                                 await document.getElementById("closeOne" + val.id).click();
-                                                Tools.AddToCart(val.id, val.basic_price, "basic_price", val, props)}
+                                                await AddToCart(val.id, val.basic_price, "basic_price", val, props, dispatch)}
                                             }>
                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                     <div className="s-16">{val.basic_price} $</div>
@@ -140,7 +142,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                             </div>
                                             <div className="ml-auto" onClick={async () => {
                                                 await document.getElementById("closeOne" + val.id).click();
-                                                Tools.AddToCart(val.id, val.silver_price, "silver_price", val, props);
+                                                AddToCart(val.id, val.silver_price, "silver_price", val, props, dispatch);
                                             }}>
                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                     <div className="s-14">{val.silver_price} $</div>
@@ -159,7 +161,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                             </div>
                                             <div className="ml-auto" onClick={async () => {
                                                 await document.getElementById("closeOne" + val.id).click();
-                                                Tools.AddToCart(val.id, val.gold_price, "gold_price", val, props)
+                                                await AddToCart(val.id, val.gold_price, "gold_price", val, props, dispatch)
                                             }}>
                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                     <div className="s-14">{val.gold_price} $</div>
@@ -176,7 +178,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                             </div>
                                             <div className="ml-auto" onClick={async () => {
                                                 await document.getElementById("closeOne" + val.id).click();
-                                                Tools.AddToCart(val.id, val.platinum_price, "platinum_price", val, props)
+                                                await AddToCart(val.id, val.platinum_price, "platinum_price", val, props, dispatch)
                                             }}>
                                                 <div className="text-lg-center  bg-primary r-10 p-2 text-white primary-bg">
                                                     <div className="s-14">

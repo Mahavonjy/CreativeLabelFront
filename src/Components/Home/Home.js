@@ -6,11 +6,15 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import IslPlayer from "../Players/Players";
 import Conf from "../../Config/tsconfig";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import * as Tools from "../FunctionTools/Tools";
+import { FillInCartProps }  from "../FunctionTools/Tools";
+// import { saveUserCredentials } from "../FunctionTools/Tools";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import * as PopupFields from "../FunctionTools/PopupFields";
 import * as HomeProps from "../FunctionTools/FunctionProps";
+import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
+import { addTotalPrice, addCarts } from "../FunctionTools/FunctionProps";
+import { sessionService } from 'redux-react-session';
+// import { push } from 'connected-react-router';
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
@@ -23,54 +27,67 @@ function Home () {
 
     let user_credentials;
     const dispatch = useDispatch();
+    const carts = useSelector(state => state.Carts.carts);
+    const totalPrice = useSelector(state => state.Carts.total_price);
     const beats = useSelector(state => state.beats.beats);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [href] = useState(window.location.href.split("/"));
     const [single_beat, setSingleBeat] = useState('');
     const [beats_similar, setBeatsSimilar] = useState([]);
     const [profile_checked, setProfileChecked] = useState('');
     const [user_data, setUserData] = useState('');
-    const [state_cart, setStateCart] = useState(0);
+    const [state_cart_length, setStateCartLength] = useState(0);
     const [logout_class, setLogoutClass] = useState("icon icon-exit-2 s-24 mr-5");
     const [log_name, setLogName] = useState("logout");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
 
     Home.IncrementCart = (number) => {
         if (number)
-            setStateCart(number);
-        setStateCart(state_cart + 1)
+            setStateCartLength(number);
+        else setStateCartLength(state_cart_length + 1)
     };
 
     Home.Decrement = () => {
-        setStateCart(state_cart - 1)
+        setStateCartLength(state_cart_length - 1)
     };
 
-    const addToPlaylist = (index, type_, run, height_div, set_of_beats_name, props, states, state_value) => {
+    const addToPlaylist = async (index, type_, run, height_div, set_of_beats_name, states, state_value) => {
+        if (!isPlaying) {
+            await setIsPlaying(true);
+            CreateFields.CreateBeatsPlaylist.changeIndex(index);
+            if (height_div === "single")
+                OneBeat.PauseOrPlaySingle(index);
+        }
         ifStopPlayer[key] = false;
         if (!ifStopPlayer[key]) {
             key = Math.floor(Math.random() * Math.floor(999999999));
             ifStopPlayer[key] = true;
         }
-        IslPlayer.startPlayerComponent(index, type_, run, height_div, set_of_beats_name, props, states, state_value);
+        await IslPlayer.startPlayerComponent(index, type_, run, height_div, set_of_beats_name, states, state_value);
     };
 
-    const ifConnectionError = (err) => {
+    const ifConnectionError = (err, func) => {
         setConnexionReloaded(connexion_reloaded + 1);
         try {
             if (err.response.data === "Connection error") {
                 if (connexion_reloaded > 3) {
                     window.location.replace('/badConnexion')
                 } else {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    if (func) func();
+                    else
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 5000);
                 }
             } else if (err.response.data === "token invalid") {
                 logout();
             } else {
-                logout();
+                if (func) func();
+                else
+                    logout();
             }
         } catch (e) {
             //
@@ -86,7 +103,10 @@ function Home () {
                 dispatch(HomeProps.addSimilarBeats(resp.data['similar_beats']));
                 setSingleBeat(resp.data['single_beat']);
                 setLoading(false);
-            }).catch(() => window.location.replace('/NotFound'))
+            }).catch(() => {
+                console.log("donc");
+                // setLoading(false);
+            } )
         } else if (secondRouteParsing === "isl_artist_profile") {
             axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
                 dispatch(HomeProps.addOtherBeatMakerBeats(resp.data['user_beats']));
@@ -95,7 +115,7 @@ function Home () {
                 setLoading(false);
             }).catch(() => window.location.replace("/ArtistNotFound"))
         } else if (firstRouteParsing === 'Cart') {
-            if (!state_cart)
+            if (!state_cart_length)
                 window.location.replace('/beats');
             else setLoading(false);
         } else {
@@ -107,7 +127,12 @@ function Home () {
 
     const NotOnline = () => {
         try {
-            setStateCart(JSON.parse(localStorage.getItem("MyCarts")).length);
+            let tmp_carts = JSON.parse(localStorage.getItem("MyCarts"));
+            setStateCartLength(tmp_carts.length);
+            let tmp = 0;
+            for (let cart in tmp_carts) tmp = tmp + tmp_carts[cart].price;
+            dispatch(addCarts(tmp_carts));
+            dispatch(addTotalPrice(Math.round(tmp * 100) / 100));
         } catch (e) {
             //
         } finally {
@@ -175,14 +200,19 @@ function Home () {
                     Promise.all([
                         axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
                             dispatch(HomeProps.profileAddBeats(resp.data['beats']));
-                        }).catch(err => ifConnectionError(err)),
+                        }).catch(err => ifConnectionError(err, fetchUserData)),
                         axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
                             dispatch(HomeProps.profileInitialisationContract(resp.data));
-                        }).catch(err => ifConnectionError(err))
+                        }).catch(err => ifConnectionError(err, fetchUserData))
                     ]).then();
-                    Tools.AddPropsCart(headers, HomeProps).then(() => null);
-                } else Tools.AddPropsCart(headers, HomeProps).then(() => null);
-            }).catch(err => ifConnectionError(err)),
+                }
+                FillInCartProps(headers, {
+                    addTotalPrice: HomeProps.addTotalPrice,
+                    addCarts: HomeProps.addCarts,
+                    dispatch: dispatch,
+                    user_credentials: user_credentials
+                }).then(() => null);
+            }).catch(err => ifConnectionError(err, fetchUserData)),
             axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
                 dispatch(HomeProps.beatsInitialisationPricing(resp.data));
             }).catch(err => ifConnectionError(err))
@@ -195,11 +225,13 @@ function Home () {
                 document.getElementById("LoginRequire").click();
             } else {
                 axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: headers}).then(() => {
-                    localStorage.removeItem('Isl_Credentials');
+                    sessionService.deleteSession();
+                    sessionService.deleteUser();
                     window.location.replace('/beats');
                 }).catch(() => {
-                    localStorage.removeItem('Isl_Credentials');
-                    // window.location.replace('/beats');
+                    sessionService.deleteSession();
+                    sessionService.deleteUser();
+                    window.location.replace('/beats');
                 })
             }
         } catch (e) {
@@ -207,18 +239,19 @@ function Home () {
         }
     };
 
-    useEffect( () => {
-        setLoading(true);
-        user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
-        if (user_credentials) {
-            dispatch(HomeProps.addUserCredentials(user_credentials));
-            headers['Isl-Token'] = user_credentials.token;
-            if (beats.length === 0) Online();
-        } else {
-            dispatch(HomeProps.addUserCredentials({token: Conf.configs.TokenVisitor}));
-            headers['Isl-Token'] = Conf.configs.TokenVisitor;
-            if (beats.length === 0) NotOnline();
+    useEffect(() => {
+        async function fetchData() {
+            await sessionService.loadSession().then((currentSession) => {
+                headers['Isl-Token'] = currentSession.token;
+                if (beats.length === 0) Online();
+            }).catch(() => {
+                headers['Isl-Token'] = Conf.configs.TokenVisitor;
+                if (beats.length === 0) NotOnline();
+            });
         }
+        setLoading(true);
+        fetchData().then(() => null);
+
         return () => {
             isMounted.current = true
         };
@@ -238,7 +271,7 @@ function Home () {
                         <React.Fragment>
                             <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
                                 {/* SideBars with ICON */}
-                                {CreateFields.SideBars(state_cart, log_name, logout_class, location, history, headers, logout)}
+                                {CreateFields.SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying)}
                                 {/* End SideBars */}
                             </aside>
                             <main>
@@ -249,7 +282,7 @@ function Home () {
                         </React.Fragment>)}
                     />
                 </Router>
-                <IslPlayer/>
+                {isPlaying && <IslPlayer key={key}/>}
             </div>
         );
     }

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import * as Tools from "../../../FunctionTools/Tools";
+import { useDispatch, useSelector } from "react-redux";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
 import * as FunctionProps from "../../../FunctionTools/FunctionProps";
 import { getMediaLink } from "../../../FunctionTools/Tools";
 
 function Suggestion(props) {
 
+    const dispatch = useDispatch();
+    const carts = useSelector(state => state.Carts.carts);
+    const totalPrice = useSelector(state => state.Carts.total_price);
     const latest_beats = useSelector(state => state.beats.latest_beats);
     const discovery_beats = useSelector(state => state.beats.discovery_beats);
     const new_beatMaker = useSelector(state => state.beats.new_beatMaker);
@@ -35,32 +37,36 @@ function Suggestion(props) {
             addCarts: FunctionProps.addCarts,
             index: index,
             setIndex: setIndex,
+            carts: carts,
+            totalPrice: totalPrice,
             tmp: tmp,
             setTmp: setTmp,
         }
     };
 
-    useEffect(() => {
-        if (!ready_latest_beats) {
-            getMediaLink(setLinkLatestBeats, link_latest_beats, state_latest_beats, FunctionProps.updateLatestBeats).then(() => null);
+    const get_link_latest_beats = () => {
+        if (!ready_latest_beats && state_latest_beats.length !== 0) {
+            getMediaLink(setLinkLatestBeats, link_latest_beats, state_latest_beats, FunctionProps.updateLatestBeats, dispatch).then(() => null);
             FunctionProps.readyLatestBeats()
-        } else {
-            for (let row_ in latest_beats) setLinkLatestBeats(link_latest_beats => [...link_latest_beats, {row: true}]);
         }
+    };
 
-        if (!ready_discovery_beats) {
-            getMediaLink(setLinkDiscoveryBeats, link_discovery_beats, state_discovery_beats, FunctionProps.updateDiscoveryBeats).then(() => null);
+    const get_link_discovery_beats = () => {
+        if (!ready_discovery_beats && state_discovery_beats !== 0) {
+            getMediaLink(setLinkDiscoveryBeats, link_discovery_beats, state_discovery_beats, FunctionProps.updateDiscoveryBeats, dispatch).then(() => null);
             FunctionProps.readyDiscoveryBeats();
-        } else {
-            for (let row_ in discovery_beats) setLinkDiscoveryBeats(link_discovery_beats => [...link_discovery_beats, {row: true}]);
         }
+    };
 
-        if (!ready_isl_playlist) {
-            getMediaLink(setLinkIslPlaylist, link_isl_playlist, state_isl_playlist, FunctionProps.updateIslBeats).then(() => null);
+    const get_link_isl_playlist_beats = () => {
+        if (!ready_isl_playlist && state_isl_playlist.length !== 0) {
+            getMediaLink(setLinkIslPlaylist, link_isl_playlist, state_isl_playlist, FunctionProps.updateIslBeats, dispatch).then(() => null);
             FunctionProps.readyIslBeats();
-        } else {
-            for (let row_ in isl_playlist) setLinkIslPlaylist(link_isl_playlist => [...link_isl_playlist, {row: true}]);
         }
+    };
+
+    useEffect(() => {
+        Promise.all([get_link_discovery_beats(), get_link_isl_playlist_beats(), get_link_latest_beats()]).catch(() => window.location.reload());
 
         return () => {
             isMounted.current = true

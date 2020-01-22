@@ -39,8 +39,8 @@ function LoginFacebook(props) {
                        responseHandler={responseFacebook}
                        xfbml={true}
                        version="v2.5"
-                       className="mt-3 border-0 special-color">
-            <button className="loginBtn loginBtn--facebook text-center">{props.Label}</button>
+                       className="mt-3 border-0 bg-blue loginBtn loginBtn--facebook text-center">
+            {props.Label}
         </FacebookLogin>
     );
 }

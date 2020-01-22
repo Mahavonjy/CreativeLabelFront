@@ -76,7 +76,7 @@ function EditProfile (props) {
     }, []);
 
     return (
-        <Modal visible={true} width="650" height="550" effect="fadeInUp" onClickAway={(e) => props.closePopup(0)}>
+        <Modal visible={true} width="650" height="650" effect="fadeInUp">
             <ToastContainer/>
             {loading && smallSpinner("absolute", "0")}
             <img alt={"logo"} src={logo} className="center" style={{position: "absolute",width: 650, height: 550, opacity:0.4}}/>

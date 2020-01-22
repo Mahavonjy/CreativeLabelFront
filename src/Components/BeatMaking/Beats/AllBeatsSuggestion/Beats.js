@@ -9,13 +9,13 @@ import { getMediaLink } from "../../../FunctionTools/Tools";
 import Offers from "../Offers/Offers";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
 import * as BeatsProps from "../../../FunctionTools/FunctionProps";
-
-let set_of_beats_name = "AllBeat";
-let token = "";
+import { sessionService } from "redux-react-session";
 
 function Beats(props) {
 
     const dispatch = useDispatch();
+    const carts = useSelector(state => state.Carts.carts);
+    const totalPrice = useSelector(state => state.Carts.total_price);
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const beats = useSelector(state => state.beats.beats);
     const top_beatBaker = useSelector(state => state.beats.top_beatmaker);
@@ -23,33 +23,22 @@ function Beats(props) {
     const AllMediaGenre = useSelector(state => state.Home.AllMediaGenre);
 
     const isMounted = useRef(false);
-    const [samples, setSamples] = useState(false);
-    const [visibleOffers, setVisibleOffers] = useState(true);
     const [placeHolder, setPlaceHolder] = useState("Search");
-    const [loading, setLoading] = useState(false);
-    const [usingAdBlock, setUsingAdBlock] = useState(false);
-    const [genre, setGenre] = useState('');
+    const [genre] = useState('');
     const [state_beats, setStateBeats] = useState(beats);
-    const [song_id, setSongId] = useState('');
-    const [price, setPrice] = useState(0);
-    const [licenses_name, setLicensesName] = useState('');
     const [link_beats, setLinkBeats] = useState([]);
     const [index, setIndex] = useState(null);
     const [tmp, setTmp] = useState(null);
-    const [song_id_shared, setSongIdShared] = useState(null);
 
-    const changeGenre = (e) => {
-        setGenre(e.target.value);
-        getBeats("genre")
-    };
-
-    const getBeats = (type_) => {
+    const getBeats = (e, type_) => {
+        setLinkBeats([]);
+        let val = e.target.value;
         let url_;
         let key;
 
         if (type_ === "genre") {
             setPlaceHolder(genre);
-            url_ = "api/medias/genre/beats/" + genre;
+            url_ = "api/medias/genre/beats/" + val;
             key = "songs"
         } else {
             url_ = "api/beats/random";
@@ -59,16 +48,17 @@ function Beats(props) {
         let headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': "*",
-            'Isl-Token': token
+            'Isl-Token': user_credentials.token
         };
 
         axios.get(Conf.configs.ServerApi + url_, {headers: headers}).then(resp => {
-            const info = resp.data[key];
-            setGenre("");
-            for (let row in info) info[row]['link'] = "";
-            dispatch(BeatsProps.addBeats(info));
-            for (let row_ in beats)
-                getMediaLink(setLinkBeats, link_beats, state_beats, BeatsProps.updateBeats).then(() => null)
+            const data = resp.data[key];
+            dispatch(BeatsProps.addBeats(data));
+            setStateBeats(data);
+            if (key === "random") {
+                for (let beats in data)
+                    getMediaLink(setLinkBeats, link_beats, beats, BeatsProps.updateBeats).then(() => null)
+            } else for (let row_ in data) setLinkBeats(link_beats => [...link_beats, {row: true}]);
         }).catch(err => {
             console.log(err.response)
         })
@@ -76,7 +66,9 @@ function Beats(props) {
 
     let states = {
         link: link_beats,
-        beats: state_beats,
+        beats: beats,
+        carts: carts,
+        totalPrice: totalPrice,
         user_credentials: user_credentials,
         addNewPlayerList: BeatsProps.addNewPlayerList,
         addTotalPrice: BeatsProps.addTotalPrice,
@@ -88,16 +80,17 @@ function Beats(props) {
     };
 
     useEffect(() => {
-        try {
-            token = user_credentials.token;
-        } catch (e) {
-            token = Conf.configs.TokenVisitor;
-        } finally {
-            if (!ready) {
-                getMediaLink(setLinkBeats, link_beats, state_beats, BeatsProps.updateBeats).then(() => null);
-                dispatch(BeatsProps.readyBeats())
-            } else for (let row_ in beats) setLinkBeats(link_beats => [...link_beats, {row: true}]);
-        }
+        sessionService.loadSession().then((currentSession) => {
+            user_credentials['token'] = currentSession.token;
+        }).catch(() => {
+            user_credentials['token'] = Conf.configs.TokenVisitor;
+        });
+        if (!ready && state_beats.length !== 0) {
+            getMediaLink(setLinkBeats, link_beats, state_beats, BeatsProps.updateBeats, dispatch).then(() => null);
+            dispatch(BeatsProps.readyBeats());
+        } else if (state_beats.length !== 0)
+            for (let row_ in beats) setLinkBeats(link_beats => [...link_beats, {row: true}]);
+
         return () => {
             isMounted.current = true
         };
@@ -162,7 +155,7 @@ function Beats(props) {
                                                                  aria-labelledby="dropdownMenuButton">
                                                                 <button
                                                                     className="btn btn-outline-warning btn-fab-md"
-                                                                    onClick={() => getBeats("random")}>
+                                                                    onClick={(e) => getBeats(e, "random")}>
                                                                     <i className="icon-warning mr-2"/>Reset
                                                                 </button>
                                                                 <div className="md-form my-0">
@@ -170,7 +163,7 @@ function Beats(props) {
                                                                         className="input-group-text bg-mdb-color">Genre&nbsp;
                                                                         <input className="form-control" type="text"
                                                                                placeholder={placeHolder} value={genre}
-                                                                               onChange={(e) => changeGenre(e)}
+                                                                               onChange={(e) => getBeats(e, "genre")}
                                                                                list="music-genre"/>
                                                                     </div>
                                                                     <datalist id="music-genre">{AllMediaGenre.map((val, index) =>
@@ -189,15 +182,16 @@ function Beats(props) {
                                 {/* Here is all beats, random */}
                                 <div className="card-body no-p" style={{height: 400}}>
                                     <div className="tab-content" id="v-pills-tabContent1">
-                                        <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel"
-                                             aria-labelledby="w2-tab1">
+                                        <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
+
                                             {beats.length !== 0 ?
                                                 <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
-                                                    {CreateFields.CreateBeatsPlaylist("oneBeats", set_of_beats_name, props, states, "oneBeats")}
+                                                    {CreateFields.CreateBeatsPlaylist("oneBeats", "AllBeat", props, states, "oneBeats")}
                                                 </div>
                                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
                                                     <p className="text-center">Vide</p>
                                                 </div>}
+
                                         </div>
                                     </div>
                                 </div>

@@ -138,7 +138,7 @@ function AddSingle (props) {
     }, []);
 
     return (
-        <Modal visible={true} width="700" height="650" effect="fadeInUp" onClickAway={() => props.closePopup(0)}>
+        <Modal visible={true} width="700" height="750" effect="fadeInUp">
             <ReactTooltip/>
             <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Basic Lease (MP3) {contract['basic_lease']['price']}$ </h5>

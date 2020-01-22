@@ -64,19 +64,20 @@ function Profile (props) {
 
     const updateUserBeats = async (data, message, edit) => {
         let user_tmp_beats = [...state_user_beats];
-        if (edit) user_tmp_beats.splice(user_tmp_beats.indexOf(song), 1);
-        else setUserBeatsLink(user_beats_link => [...user_beats_link, {[user_beats_link.length]: true}]);
-        await user_tmp_beats.push(data);
-        await setStateUserBeats(user_tmp_beats);
+        if (edit) user_tmp_beats[user_tmp_beats.indexOf(song)] = data;
+        else await setUserBeatsLink(user_beats_link => [...user_beats_link, {[user_beats_link.length]: true}]);
+        if (!edit) await user_tmp_beats.push(data);
         await setActiveToast(true);
         await dispatch(profileAddBeats(user_tmp_beats));
+        await setStateUserBeats(user_tmp_beats);
         toast.success(message);
     };
 
     const togglePopupAddSingle = async (success, data) => {
         setPopupAddSingle(!popupAddSingle);
         await setActiveToast(false);
-        if (success === 1) updateUserBeats(data, "Ajout avec success", false).then(() => null);
+        if (success === 1)
+            updateUserBeats(data, "Ajout avec success", false).then(() => null);
     };
 
     const togglePopupEditSingle = async (index, type_) => {
@@ -110,7 +111,7 @@ function Profile (props) {
         axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + id, {headers: headers}).then(() => {
             setLoading(false);
             let new_beats_array = state_user_beats.filter((beat) => beat.id !== parseInt(id));
-            profileAddBeats(new_beats_array);
+            dispatch(profileAddBeats(new_beats_array));
             setStateUserBeats(new_beats_array);
             toast.success("Supprimé");
         }).catch(err => {
@@ -132,18 +133,16 @@ function Profile (props) {
     };
 
     useEffect(() => {
-        console.log(user_role)
         try {
             headers['Isl-Token'] = user_credentials.token;
         } catch (e) {
             //
         } finally {
-            if (ready_beats) {
-                Tools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats).then(() => null);
+            if (!ready_beats && user_beats.length !== 0) {
+                Tools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
                 dispatch(profileReadyBeats())
-            } else {
-                for (let row_ in user_beats)
-                    setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
+            } else if (user_beats.length !== 0) {
+                for (let row_ in user_beats) setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
             }
         }
         return () => {

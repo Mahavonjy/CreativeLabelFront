@@ -73,7 +73,7 @@ function Register () {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [isMounted]);
 
     return (
         <main style={{backgroundImage: "radial-gradient(circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, #232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)"}}>

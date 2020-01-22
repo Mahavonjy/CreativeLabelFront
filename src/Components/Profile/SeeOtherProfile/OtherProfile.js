@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import PhotoD from '../../../images/socials/profile.png';
 import * as Tools from "../../FunctionTools/Tools";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 import { getMediaLink } from "../../FunctionTools/Tools";
 import * as BeatsProps from "../../FunctionTools/FunctionProps";
@@ -9,6 +9,9 @@ import { ToastContainer } from "react-toastify";
 
 function OtherProfile(props) {
 
+    const dispatch = useDispatch();
+    const carts = useSelector(state => state.Carts.carts);
+    const totalPrice = useSelector(state => state.Carts.total_price);
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const other_beat_maker_beats = useSelector(state => state.beats.other_beat_maker_beats);
 
@@ -32,11 +35,14 @@ function OtherProfile(props) {
         index: index,
         setIndex: setIndex,
         tmp: tmp,
+        carts: carts,
+        totalPrice: totalPrice,
         setTmp: setTmp,
     };
 
     useEffect(() => {
-        getMediaLink(setLinkAllOtherArtistBeats, link_all_other_artist_beats, other_beat_maker_beats, BeatsProps.updateOtherBeatMakerBeats).then(() => null);
+        if (other_beat_maker_beats.length !== 0)
+            getMediaLink(setLinkAllOtherArtistBeats, link_all_other_artist_beats, other_beat_maker_beats, BeatsProps.updateOtherBeatMakerBeats, dispatch).then(() => null);
 
         return () => {
             isMounted.current = true

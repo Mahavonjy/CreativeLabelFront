@@ -3,7 +3,15 @@ import Conf from "../../Config/tsconfig";
 import axios from "axios";
 import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import { addTotalPrice, addCarts } from "./FunctionProps";
 import Home from "../Home/Home";
+import { sessionService } from 'redux-react-session';
+
+export const saveUserCredentials = (data) => {
+    console.log(data);
+    sessionService.saveSession({token : data.token});
+    sessionService.saveUser(data)
+};
 
 export const changeFields = (setState, e, up_props) => {
     let value = e.target.value;
@@ -11,72 +19,80 @@ export const changeFields = (setState, e, up_props) => {
     if (up_props) up_props(value)
 };
 
-export const AddForPlay = async (that, state_name, beat_props, up_props) => {
-    let all_call_api = [];
-    let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
-    for (let index in beat_props) {
-        await that.setState(prevState => ({[state_name]: {...prevState[state_name], [index]: true}}), () => {
-            all_call_api.push(
-                axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + beat_props[index]['id'], {headers:headers}).then(response => {
-                    up_props({"index": index, "link": response.data});
-                }).catch(error => {
-                    console.log(error.data);
-                })
-            )
-        });
-    }
-    return Promise.all(all_call_api).then(r => console.log(''))
-};
-
-export const AddPropsCart = async (headers, props) => {
-    try {
-        let carts = JSON.parse(localStorage.getItem("MyCarts"));
-        localStorage.removeItem("MyCarts");
-        for (let cart in carts) {
-            let tmp = carts[cart];
-            await AddToCart(tmp.song_id, tmp.price, tmp.licenses_name, null, null, true)
+export const FillInCartProps = (headers, props) => {
+    axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
+        let tmp = 0;
+        let cart_length = resp.data.length;
+        Home.IncrementCart(cart_length);
+        if (cart_length !== 0) {
+            for (let row in resp.data) tmp = tmp + resp.data[row]['price'];
+            props.dispatch(props.addTotalPrice(Math.round(tmp * 100) / 100));
+            props.dispatch(props.addCarts(resp.data));
         }
-    } finally {
-        FillInCartProps(headers, props);
-    }
+    }).catch(err => {
+        console.log(err)
+    });
 };
 
-export const AddToCart = (song_id, price, licenses_name, beat, props, special) => {
+export const AddToCart = async (song_id, price, licenses_name, beat, props, dispatch) => {
     const user_credentials = props.user_credentials;
 
-    let data = { "song_id": song_id, "price": price, "licenses_name": licenses_name };
+    let data_global = { "song_id": song_id, "price": price, "licenses_name": licenses_name };
     if (user_credentials.token !== Conf.configs.TokenVisitor) {
+        console.log(price);
         let headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': "*",
             'Isl-Token': user_credentials.token
         };
-        return axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data, {headers: headers}).then(resp => {
-            if (!special) {
-                AddPropsCart(headers, props).then(() => console.log());
-                toast.success(resp.data);
-            } else return true
-        }).catch(err => {
-            if (!special) toast.error(err.response.data);
-            else return false
-        })
-    } else {
-        const carts = JSON.parse(localStorage.getItem("MyCarts"));
-        if (!carts) {
-            localStorage.setItem("MyCarts",  JSON.stringify([{
+        return axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data_global, {headers: headers}).then(() => {
+            let tmp_cart = props.carts;
+            tmp_cart.push({
                 "media" : {
                     "photo": beat["photo"],
                     "artist": beat["artist"],
                     "title": beat["title"]
-                }, data
-            }]));
+                },
+                "song_id": song_id,
+                "price": price,
+                "licenses_name": licenses_name
+            });
+            dispatch(props.addTotalPrice(Math.round((props.totalPrice + price) * 100) / 100));
+            dispatch(props.addCarts(tmp_cart));
             Home.IncrementCart();
+            toast.success( "Ajout avec succès");
+        }).catch(err => {
+            try {
+                if (err.response.data === "cart existing")
+                    toast.error("Vous l'avez déja");
+                else toast.error(err.response.data)
+            } catch (e) {
+                console.log(err.response)
+            }
+        })
+    } else {
+        const carts = JSON.parse(localStorage.getItem("MyCarts"));
+        if (!carts) {
+            let data = [{
+                "media": {
+                    "photo": beat["photo"],
+                    "artist": beat["artist"],
+                    "title": beat["title"]
+                },
+                "song_id": song_id,
+                "price": price,
+                "licenses_name": licenses_name
+            }];
+            localStorage.setItem("MyCarts",  JSON.stringify(data));
+            Home.IncrementCart();
+            dispatch(addCarts(data));
+            dispatch(addTotalPrice(price));
             toast.success("Ajout avec succès");
         } else {
             const cart_S = carts.some(item => item.song_id === song_id);
             if (!cart_S) {
-                localStorage.removeItem("MyCarts");
-                carts.push({
+                await localStorage.removeItem("MyCarts");
+                let data = {
                     "media" : {
                         "photo": beat["photo"],
                         "artist": beat["artist"],
@@ -85,9 +101,12 @@ export const AddToCart = (song_id, price, licenses_name, beat, props, special) =
                     "song_id": song_id,
                     "price": price,
                     "licenses_name": licenses_name
-                });
-                localStorage.setItem("MyCarts",  JSON.stringify(carts));
-                Home.IncrementCart();
+                };
+                await carts.push(data);
+                await localStorage.setItem("MyCarts",  JSON.stringify(carts));
+                await Home.IncrementCart();
+                await dispatch(addCarts(carts));
+                await dispatch(addTotalPrice(Math.round((props.totalPrice + price) * 100) / 100));
                 toast.success("Ajout avec succès");
             } else {
                 toast.warn("Vous l'avez déja");
@@ -138,18 +157,6 @@ export const isNumber = (number_) => {
     return tmp === parseInt(tmp, 10);
 };
 
-export const FillInCartProps = (headers, props) => {
-    axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
-        let tmp = 0;
-        if (resp.data.length !== 0) Home.IncrementCart(resp.data.length);
-        for (let row in resp.data) {tmp = tmp + resp.data[row]['price']}
-        props.addTotalPrice(Math.round(tmp * 100) / 100);
-        props.addCarts(resp.data);
-    }).catch(err => {
-        console.log(err)
-    });
-};
-
 export const formatDate = (date) => {
     let day = date.getDate();
     let monthIndex = date.getMonth();
@@ -179,14 +186,14 @@ export const ImageClick = (e) => {
     if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
 };
 
-export const getMediaLink = (setState, state, medias, up_props) => {
+export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
     let all_call_api = [];
     let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
     for (let index in medias) {
         setState(state => [...state, {index: true}]);
         all_call_api.push(
             axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + medias[index]['id'], {headers:headers}).then(response => {
-                up_props({"index": index, "link": response.data});
+                dispatch(up_props({"index": index, "link": response.data}));
             }).catch(error => {
                 console.log(error.data);
             })

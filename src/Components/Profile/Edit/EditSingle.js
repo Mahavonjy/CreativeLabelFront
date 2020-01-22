@@ -37,10 +37,10 @@ function EditSingle(props) {
         document.getElementById(id).setAttribute("disabled", "disabled");
         setLoading(true);
         const bodyFormData = new FormData();
-        if (title) {
+        if (!title) {
             toast.error("title is required");
             disabledBtn(id)
-        } else if (artist) {
+        } else if (!artist) {
             toast.error("artist is required");
             disabledBtn(id)
         } else if (!genre) {
@@ -87,7 +87,7 @@ function EditSingle(props) {
     }, []);
 
     return (
-        <Modal visible={true} width="650" height="550" effect="fadeInUp" onClickAway={() => props.CloseEdit}>
+        <Modal visible={true} width="650" height="650" effect="fadeInUp" onClickAway={() => props.CloseEdit}>
             <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
             {loading && smallSpinner("absolute", "0")}
             <img alt={"logo"} src={logo} style={{position: "absolute", height: 550, width: 650, opacity:0.4}}/>
@@ -159,7 +159,7 @@ function EditSingle(props) {
                                            className="form-control" type="file" accept="audio/mpeg, .mp3"/>
                                 </div>
                             </div>}
-                        {this.props.Type === "beats" ?
+                        {props.Type === "beats" &&
                             <div>
                                 <div className="custom-float">
                                     <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
@@ -173,8 +173,7 @@ function EditSingle(props) {
                                                className="form-control" type="file" accept=".zip"/>
                                     </div>
                                 </div>
-                            </div>
-                            :null}
+                            </div>}
                         <div className="custom-float">
                             <div className="input-group-prepend center" style={{width: "90%"}}>
                                 <div className="input-group-text text-dark"><i className="icon-picture-o"/>&nbsp;photo</div>

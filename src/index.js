@@ -10,11 +10,13 @@ import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
 import playersReducer from "./reducer/Players";
 import kantoBizForm from "./reducer/KantoBiz/Form";
+import { sessionService, sessionReducer } from 'redux-react-session';
 import KantoBizSearchResults from "./reducer/KantoBiz/SearchResult";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from "redux-thunk"
 
 const Reducers = combineReducers({
+    session: sessionReducer,
     "beats": beatsReducer,
     "profile": profileReducer,
     "Home": PlaylistHomeReducer,
@@ -25,6 +27,9 @@ const Reducers = combineReducers({
 });
 
 const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));
+sessionService.initSessionService(store, { driver: 'COOKIES' })
+    .then(() => console.log('Redux React Session is ready and a session was refreshed from your storage'))
+    .catch(() => console.log('Redux React Session is ready and there is no session in your storage'));
 
 ReactDOM.render(
     <Provider store={store} >

@@ -5,8 +5,10 @@ import {toast, ToastContainer} from "react-toastify";
 import Modal from "react-awesome-modal";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 import * as Tools from "../../FunctionTools/Tools";
+import { saveUserCredentials } from "../../FunctionTools/Tools";
 import "./Sign.css"
 import {smallSpinner} from "../../FunctionTools/CreateFields";
+import {sessionService} from "redux-react-session";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -30,11 +32,13 @@ function Login() {
 
         let data = { email: email, password: password };
         setLoading(true);
-        axios.post(Conf.configs.ServerApi + "api/users/login", data, {headers: headers}).then(response =>{
-            localStorage.setItem("Isl_Credentials", JSON.stringify(response.data));
+        axios.post(Conf.configs.ServerApi + "api/users/login", data, {headers: headers}).then(async response => {
+            const { token } = response.data;
             setLoading(false);
             toast.success("Vous etes connecté");
             document.getElementsByClassName("close")[0].click();
+            await sessionService.saveSession({ token });
+            await sessionService.saveUser(response.data);
             setTimeout(() => {
                 window.location.reload();
             }, 2000);

@@ -35,13 +35,12 @@ function LoginGoogle(props) {
     }, []);
 
     return (
-
         <GoogleLogin socialId={Conf.configs.GoogleId}
                      scope="profile"
-                     className="mt-3 border-0 special-color"
+                     className="mt-3 border-0 danger-color loginBtn loginBtn--google text-center"
                      fetchBasicProfile={false}
                      responseHandler={responseGoogle}>
-            <button className="loginBtn loginBtn--google text-center">{props.Label}</button>
+            {props.Label}
         </GoogleLogin>
     );
 }

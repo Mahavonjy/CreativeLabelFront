@@ -1,11 +1,11 @@
 import React, {useEffect, useRef} from "react";
-import {Link, Route} from "react-router-dom";
+import {Link, Route, BrowserRouter, Switch} from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import {FacebookProvider, Feed} from "react-facebook";
 import Conf from "../../Config/tsconfig";
 import * as Tools from "./Tools";
 import TestImg from "../../assets/img/demo/a2.jpg";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import Register from "../Authentification/Register/Register";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
@@ -40,55 +40,47 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
     } else return true
 };
 
-export const pausePlayer = (height_div, set_of_beats_name, component_props, component_states, component_state_value) => {
-    CreateBeatsPlaylist(height_div, set_of_beats_name, component_props, component_states, component_state_value);
-    return true;
-};
-
-export const playPlayer = (index, height_div, set_of_beats_name, component_props, component_states, component_state_value) => {
-    component_states.setIndex(index);
-    CreateBeatsPlaylist(height_div, set_of_beats_name, component_props, component_states, component_state_value);
-    return true;
-};
-
-export const changeIndex = (index, setIndex) => {
-    setIndex(index);
-    return true;
-};
-
 export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states, state_value) => {
 
     const dispatch = useDispatch();
     const isMounted = useRef(false);
 
-    async function Play (index, type_, run) {
+    CreateBeatsPlaylist.changeIndex = (index) => {
+        states.setIndex(index);
+        states.setTmp(index);
+    };
+
+    CreateBeatsPlaylist.Play = async (index, type_, run) => {
         if (states.index !== index && states.tmp === null) {
-            states.setIndex(index);
-            states.setTmp(index);
+            await states.setIndex(index);
+            await states.setTmp(index);
             await dispatch(addNewPlayerList(states.beats));
-            await props.ToPlay(index, type_, run, height_div, set_of_beats_name, props, states, state_value);
+            await props.ToPlay(index, type_, run, height_div, set_of_beats_name, states, state_value);
         } else {
             if (index !== states.index) {
                 let tmp;
                 if (states.index === states.tmp) tmp = true;
-                states.setIndex(index);
-                states.setTmp(index);
-                if (tmp) props.ToPlay(index, type_, run, height_div, set_of_beats_name, props, states, state_value);
-                else IslPlayer.pauseOrPlayPlayer(true);
+                if (run) states.setIndex(states.tmp);
+                else {
+                    await states.setIndex(index);
+                    await states.setTmp(index);
+                }
+                if (tmp) await props.ToPlay(index, type_, run, height_div, set_of_beats_name, states, state_value);
+                else if (run === false) await IslPlayer.pauseOrPlayPlayer(true);
             } else {
                 await states.setTmp(null);
-                await pausePlayer(false)
+                await CreateBeatsPlaylist.pausePlayer(false).then(() => null)
             }
         }
-    }
+    };
 
-    async function pausePlayer(run) {
+    CreateBeatsPlaylist.pausePlayer = async (run) => {
         if (states.index !== null) {
             await states.setTmp(states.index);
             await states.setIndex(null);
             if (run) await IslPlayer.pauseOrPlayPlayer(false);
         }
-    }
+    };
 
     useEffect( () => {
         return () => {
@@ -100,26 +92,22 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
         return (
             <div>
                 {states.beats.map((val, index) =>
-                    <div className="list-group-item" key={index}>
+                    <div className="list-group-item scrollbar-isl" key={index}>
                         <div className="d-flex align-items-center">
                             <div>
                                 {state_value === "oneBeats" ?
                                     <div className="text-red">
                                         {states.index === index ?
                                             <i className="icon-pause s-28 text-danger"
-                                               onClick={() => pausePlayer(true)}/> :
-                                            <i className="icon-play s-28 text-danger" onClick={() => {
-                                                Play(index, "beats", false).then(() => null)
-                                            }}/>}
+                                               onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
+                                            <i className="icon-play s-28 text-danger" onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
                                     </div> : <div>
                                         {states.link[index] ?
                                             <div className="text-red">
                                                 {states.index === index ?
                                                     <i className="icon-pause s-28 text-danger"
-                                                       onClick={() => pausePlayer(true)}/> :
-                                                    <i className="icon-play s-28 text-danger" onClick={() => {
-                                                        Play(index, "beats", false).then(() => null)
-                                                    }}/>}
+                                                       onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
+                                                    <i className="icon-play s-28 text-danger" onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
                                             </div> :
                                             <div className="spinner-grow text-primary" role="status">
                                                 <span className="sr-only"/>
@@ -156,9 +144,9 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     <div>
                                         {states.index === index ?
                                             <i className="icon-pause s-28 text-danger"
-                                               onClick={() => pausePlayer(true)}/> :
+                                               onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
                                             <i className="icon-play s-28 text-danger"
-                                               onClick={() => Play(index, "beats", false)}/>}
+                                               onClick={() => CreateBeatsPlaylist.Play(index, "beats", false)}/>}
                                     </div>
                                     :
                                     <div className="spinner-grow text-primary" role="status">
@@ -340,10 +328,14 @@ export const CreativeHeaders = (Title, Description) => {
     )
 };
 
-export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout) => {
+export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying) => {
     return (
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
+            {!isPlaying &&
+            <a href="/#" data-toggle="push-menu" data-tip="Ouvrir ou le menu" className="paper-nav-toggle text-center pp-nav-toggle pt-5 ml-3">
+                <i />
+            </a>}
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
 
@@ -363,16 +355,15 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profile" onClick={() => {
                     if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                         document.getElementById("LoginRequire").click();
-                    }
-                    else if (location.pathname !== "/Profile") history.push("/Profile");
+                    } else if (location.pathname !== "/Profile") history.push("/Profile");
                 }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
                 </li>
 
                 {/* CART */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
-                    if (state_cart)
+                    if (state_cart > 0) {
                         if (location.pathname !== "/Cart") history.push("/Cart");
-                    else toast.warn("Your cart is empty")
+                    } else toast.warn("Veuillez remplir votre panier avant")
                 }}>
                     <div id="CartBadge">
                             <span className="p1 " data-count={state_cart}>
@@ -387,7 +378,6 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                     onClick={() => logout()}>
                     <i className={logout_class}/> <span>{log_name}</span>
                 </li>
-
             </ul>
         </div>
     )
