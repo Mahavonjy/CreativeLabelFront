@@ -318,7 +318,7 @@ export function profileReadyBeats(data) {
     };
 }
 
-// All Thematics Form function
+// All Thematics Form function and Kantobiz
 
 export function addStepsIndex(data) {
     return async dispatch => {
@@ -441,6 +441,42 @@ export function addUnitTimeOfService(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_UNIT_TIME_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function activeResultPage(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ACTIVE_RESULTS_PAGE",
+            data: data
+        });
+    };
+}
+
+export function activeEventAndThematicsPage(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ACTIVE_EVENT_AND_THEMATICS_PAGE",
+            data: data
+        });
+    };
+}
+
+export function activeDisplayServicePage(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ACTIVE_DISPLAY_SERVICE_PAGE",
+            data: data
+        });
+    };
+}
+
+export function addFilterEventSelected(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_FILTER_EVENTS_SELECTED",
             data: data
         });
     };

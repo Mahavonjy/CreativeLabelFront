@@ -129,7 +129,7 @@ function Register () {
                         </a>
                     </div>
                     {/* if user choice become an artist*/}
-                    {!becomeArtistForm && <Form artistType={artistType}/>}
+                    {becomeArtistForm && <Form artistType={artistType}/>}
                     {/* end form become an artist*/}
                     <div className="row">
                         <div className="col-md-10 mx-md-auto">

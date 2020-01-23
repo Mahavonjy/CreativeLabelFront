@@ -1,34 +1,36 @@
-import React, { Component } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../style/Results.css"
 
-class Pagination extends Component {
-    state = {
-        isMounted: false,
-        pager: {}
-    };
+/**
+ * @return {null}
+ */
+function Pagination(props) {
 
-    setPage = (page) => {
-        let items = this.props.items;
-        let pager = this.state.pager;
+    const isMounted = useRef(false);
+    const [pager, setPager] = useState({});
+
+    const setPage = (page) => {
+        let items = props.items;
+        let tmp_pager = {...pager};
 
         if (page < 1 || page > pager.totalPages) {
             return;
         }
 
         // get new pager object for specified page
-        pager = this.getPager(items.length, page);
+        tmp_pager = getPager(items.length, page);
 
         // get new page of items from items array
-        let pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+        let pageOfItems = items.slice(tmp_pager.startIndex, tmp_pager.endIndex + 1);
 
         // update state
-        this.setState({ pager: pager });
+        setPager(tmp_pager);
 
         // call change page function in parent component
-        this.props.onChangePage(pageOfItems);
+        props.onChangePage(pageOfItems);
     };
 
-    getPager = (totalItems, currentPage, pageSize) => {
+    const getPager = (totalItems, currentPage, pageSize) => {
         // default to first page
         currentPage = currentPage || 1;
 
@@ -78,50 +80,46 @@ class Pagination extends Component {
         };
     };
 
-    componentDidMount() {
-        this.setState({ isMounted: true}, () => {
-            if (this.props.items && this.props.items.length) {
-                this.setPage(this.props.initialPage);
-            }
-        })
-    }
+    useEffect(() => {
 
-    componentWillUnmount() {
-        this.setState({ isMounted: false });
-    }
-
-    render() {
-        let pager = this.state.pager;
-
-        if (!pager.pages || pager.pages.length <= 1) {
-            // don't display pager if there is only 1 page
-            return null;
+        if (props.items && props.items.length) {
+            setPage(props.initialPage);
         }
 
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
+
+    if (!pager.pages || pager.pages.length <= 1) {
+        // don't display pager if there is only 1 page
+        return null;
+    } else {
         return (
             <ul className="pagination row justify-content-center">
                 <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                    <button className="btn btn-outline-info" onClick={() => this.setPage(1)}>Première Page</button>
+                    <button className="btn btn-outline-info" onClick={() => setPage(1)}>Première Page</button>
                 </li>
                 <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                    <button className="btn btn-outline-success" onClick={() => this.setPage(pager.currentPage - 1)}>Précédent</button>
+                    <button className="btn btn-outline-success" onClick={() => setPage(pager.currentPage - 1)}>Précédent</button>
                 </li>
                 {pager.pages.map((page, index) =>
                     <li key={index}>
                         <button className={pager.currentPage === page ? 'btn text-red bg-info' : 'btn text-red btn-outline-light'}
-                                onClick={() => this.setPage(page)}>{page}
+                                onClick={() => setPage(page)}>{page}
                         </button>
                     </li>
                 )}
                 <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                    <button className="btn btn-outline-success" onClick={() => this.setPage(pager.currentPage + 1)}>Suivant</button>
+                    <button className="btn btn-outline-success" onClick={() => setPage(pager.currentPage + 1)}>Suivant</button>
                 </li>
                 <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                    <button className="btn btn-outline-info" onClick={() => this.setPage(pager.totalPages)}>Dernière Page</button>
+                    <button className="btn btn-outline-info" onClick={() => setPage(pager.totalPages)}>Dernière Page</button>
                 </li>
             </ul>
         );
     }
+
 }
 
 export default Pagination;
