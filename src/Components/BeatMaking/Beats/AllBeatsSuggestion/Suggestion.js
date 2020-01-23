@@ -94,7 +94,7 @@ function Suggestion(props) {
                             </div>
                         </div>
                         {isl_playlist.length !== 0 ?
-                            <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
+                            <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
                                 {CreateFields.CreateBeatsPlaylist("long_beats", "link_isl_playlist", props, generate_states(link_isl_playlist, state_isl_playlist), "long_beats")}
                             </div>
                             : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
@@ -120,7 +120,7 @@ function Suggestion(props) {
                             </div>
                         </div>
                         {discovery_beats.length !== 0 ?
-                            <div className="playlist pl-lg-3 pr-lg-3" style={{height: 328}}>
+                            <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 328}}>
                                 {CreateFields.CreateBeatsPlaylist("short_beats", "link_discovery_beats", props, generate_states(link_discovery_beats, state_discovery_beats), "short_beats")}
                             </div>
                             : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 328}}>
@@ -149,7 +149,7 @@ function Suggestion(props) {
                             </div>
                         </div>
                         {latest_beats.length !== 0 ?
-                            <div className="playlist pl-lg-3 pr-lg-3" style={{height: 434}}>
+                            <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 434}}>
                                 {CreateFields.CreateBeatsPlaylist("long_beats", "latest_beats", props, generate_states(link_latest_beats, state_latest_beats), "long_beats")}
                             </div>
                             : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 434}}>

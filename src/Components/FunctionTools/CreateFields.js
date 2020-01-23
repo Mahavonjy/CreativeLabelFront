@@ -1,11 +1,11 @@
-import React, {useEffect, useRef} from "react";
-import {Link, Route, BrowserRouter, Switch} from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Link, Route } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
-import {FacebookProvider, Feed} from "react-facebook";
+import { FacebookProvider, Feed } from "react-facebook";
 import Conf from "../../Config/tsconfig";
 import * as Tools from "./Tools";
 import TestImg from "../../assets/img/demo/a2.jpg";
-import {toast, ToastContainer} from "react-toastify";
+import { toast } from "react-toastify";
 import Register from "../Authentification/Register/Register";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
@@ -24,7 +24,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import SearchBar from "../KantoBiz/SearchBar";
 import { ForAddToCard } from "./PopupFields"
 import { addNewPlayerList } from "../FunctionTools/FunctionProps"
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -52,9 +52,9 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
 
     CreateBeatsPlaylist.Play = async (index, type_, run) => {
         if (states.index !== index && states.tmp === null) {
+            await dispatch(addNewPlayerList(states.beats));
             await states.setIndex(index);
             await states.setTmp(index);
-            await dispatch(addNewPlayerList(states.beats));
             await props.ToPlay(index, type_, run, height_div, set_of_beats_name, states, state_value);
         } else {
             if (index !== states.index) {
@@ -159,10 +159,10 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     <img className="r-3" src={val.photo} alt=""/>
                                 </figure>
                                 {height_div !== "user_profile" ?
-                                    <Link to={'beats/CheckThisBeat/' + val.id}>
+                                    <a href={'beats/CheckThisBeat/' + val.id}>
                                         <h6>{val.title}</h6>
                                         <small className="text-red">{val.artist}</small>
-                                    </Link> :
+                                    </a> :
                                     <div className="d-flex">
                                         <h6 className="ml-auto mr-2">{val.title}</h6>
                                         <small className="ml-auto mr-2">{val.time}</small>
@@ -176,8 +176,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     <small className="ml-auto">{val.bpm}/bpm</small>
                                     {height_div !== "user_profile" ?
                                         <FacebookProvider appId={Conf.configs.FacebookId}>
-                                            <Feed
-                                                link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
+                                            <Feed link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
                                                 {({handleClick}) => (
                                                     <div className="ml-auto transparent border-0">
                                                         <i className="icon-share-1 text-red" onClick={handleClick}/>
@@ -265,7 +264,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
 
 export const DisplayArtist = (artist_info, user_credentials) => {
     return (
-        <ul className="playlist list-group bg-dark list-group-flush" style={{height: 428}}>
+        <ul className="playlist scrollbar-isl list-group bg-dark list-group-flush scrollbar-isl" style={{height: 428}}>
             {artist_info.length !== 0 ? artist_info.map((val, index) =>
                 <li className="list-group-item" key={index}>
                     <div className="d-flex align-items-center">
@@ -275,7 +274,7 @@ export const DisplayArtist = (artist_info, user_credentials) => {
                                     <img src={val.photo || TestImg} alt=""/>
                                 </figure>
                                 <h6>{val.name}</h6>
-                                <small>5 Beats</small>
+                                <small>{val.number_of_beats} Instru</small>
                             </Link>
                         </div>
                         <i className="icon-user-plus ml-auto"
@@ -341,29 +340,25 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
 
                 {/* BEATS */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Instrumental" onClick={() => {
-                    if (location.pathname !== "/beats") history.push("/beats");
+                    (location.pathname !== "/beats") && history.push("/beats")
                 }}><i className="icon icon-heartbeat s-24"/> <span className="ml-5">BeatMaking</span>
                 </li>
 
                 {/* KantoBiz */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet KantoBiz" onClick={() => {
-                    if (location.pathname !== "/kantobiz") history.push("/kantobiz");
+                    location.pathname !== "/kantobiz" && history.push("/kantobiz")
                 }}><i className="icon icon-compact-disc-2 s-24"/> <span className="ml-5">KantoBiz</span>
                 </li>
 
                 {/* PROFILE */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profile" onClick={() => {
-                    if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
-                        document.getElementById("LoginRequire").click();
-                    } else if (location.pathname !== "/Profile") history.push("/Profile");
+                    headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile" ? document.getElementById("LoginRequire").click() : history.push("/Profile")
                 }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
                 </li>
 
                 {/* CART */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
-                    if (state_cart > 0) {
-                        if (location.pathname !== "/Cart") history.push("/Cart");
-                    } else toast.warn("Veuillez remplir votre panier avant")
+                    ((state_cart > 0 ) && (location.pathname !== "/Cart")) ? history.push("/Cart") : toast.warn("Veuillez remplir votre panier avant")
                 }}>
                     <div id="CartBadge">
                             <span className="p1 " data-count={state_cart}>
@@ -383,27 +378,19 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
     )
 };
 
-export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_checked, user_data) => {
+export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers) => {
     return (
         <div>
-            <Route path="/preference" exact component={() => {
-                if (JSON.parse(localStorage.getItem("Isl_Credentials")))
-                    return (<Preference/>);
-                else window.location.replace('/beats#LoginRequire')
-            }}/>
-            <Route exact path="/Profile" component={() => {
-                if (JSON.parse(localStorage.getItem("Isl_Credentials")))
-                    return (<Profile ToPlay={addToPlaylist}/>);
-                else window.location.replace('/beats#LoginRequire')
-            }}/>
+            <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
+            <Route path="/Profile" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Profile ToPlay={addToPlaylist}/>)}}/>
+            <Route path="/preference" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Preference/>)}}/>
             <Route path="/register" exact component={() => <Register/>}/>
             <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
             <Route path="/kantobiz" exact component={() => <KantoBiz/>}/>
-            <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
-            <Route path="/Cart" component={() => <Cart ToPlay={addToPlaylist}/>}/>
-            <Route path="/beats/CheckThisBeat/:id(\d+)" component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat} SimilarBeats={beats_similar}/>}/>
-            <Route path="/Profile/isl_artist_profile/:id(\d+)" component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
+            <Route path="/Cart" exact  component={() => <Cart ToPlay={addToPlaylist}/>}/>
+            <Route path="/beats/CheckThisBeat/:id(\d+)" exact component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat} SimilarBeats={beats_similar}/>}/>
+            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
         </div>
     )
 };

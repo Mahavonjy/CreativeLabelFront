@@ -133,18 +133,14 @@ function Profile (props) {
     };
 
     useEffect(() => {
-        try {
-            headers['Isl-Token'] = user_credentials.token;
-        } catch (e) {
-            //
-        } finally {
-            if (!ready_beats && user_beats.length !== 0) {
-                Tools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
-                dispatch(profileReadyBeats())
-            } else if (user_beats.length !== 0) {
-                for (let row_ in user_beats) setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
-            }
+        headers['Isl-Token'] = user_credentials.token;
+        if (!ready_beats && user_beats.length !== 0) {
+            Tools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
+            dispatch(profileReadyBeats())
+        } else if (user_beats.length !== 0) {
+            for (let row_ in user_beats) setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
         }
+
         return () => {
             isMounted.current = true
         };
@@ -290,7 +286,7 @@ function Profile (props) {
                                     {user_role === "beatmaker" &&
                                         <div className="tab-pane fade show active" id="beats-tab" role="tabpanel">
                                             {state_user_beats.length !== 0 ?
-                                                <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
+                                                <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 320}}>
                                                     {CreateBeatsPlaylist("user_profile", "user_profile", props, states, "user_profile")}
                                                 </div>
                                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>

@@ -14,6 +14,7 @@ import * as HomeProps from "../FunctionTools/FunctionProps";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import { addTotalPrice, addCarts } from "../FunctionTools/FunctionProps";
 import { sessionService } from 'redux-react-session';
+import {addUserCredentials} from "../FunctionTools/FunctionProps";
 // import { push } from 'connected-react-router';
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
@@ -103,10 +104,7 @@ function Home () {
                 dispatch(HomeProps.addSimilarBeats(resp.data['similar_beats']));
                 setSingleBeat(resp.data['single_beat']);
                 setLoading(false);
-            }).catch(() => {
-                console.log("donc");
-                // setLoading(false);
-            } )
+            }).catch(() => window.location.replace("/BeatsNotFound") )
         } else if (secondRouteParsing === "isl_artist_profile") {
             axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
                 dispatch(HomeProps.addOtherBeatMakerBeats(resp.data['user_beats']));
@@ -240,18 +238,27 @@ function Home () {
     };
 
     useEffect(() => {
+        setLoading(true);
         async function fetchData() {
             await sessionService.loadSession().then((currentSession) => {
+                sessionService.loadUser().then((data) => {
+                    let user_data = {
+                        name: data.name,
+                        email: data.email,
+                        token: currentSession.token
+                    };
+                    dispatch(addUserCredentials(user_data));
+                    user_credentials = user_data;
+                });
                 headers['Isl-Token'] = currentSession.token;
                 if (beats.length === 0) Online();
             }).catch(() => {
+                dispatch(addUserCredentials({ token: Conf.configs.TokenVisitor }));
                 headers['Isl-Token'] = Conf.configs.TokenVisitor;
                 if (beats.length === 0) NotOnline();
             });
         }
-        setLoading(true);
         fetchData().then(() => null);
-
         return () => {
             isMounted.current = true
         };
@@ -276,7 +283,7 @@ function Home () {
                             </aside>
                             <main>
                                 {/* Main of SideBars */}
-                                {CreateFields.SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data)}
+                                {CreateFields.SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers)}
                                 {/* End main of SideBars */}
                             </main>
                         </React.Fragment>)}

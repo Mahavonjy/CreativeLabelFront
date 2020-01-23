@@ -317,3 +317,131 @@ export function profileReadyBeats(data) {
         });
     };
 }
+
+// All Thematics Form function
+
+export function addStepsIndex(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_STEPS_INDEX",
+            data: data
+        });
+    };
+}
+
+export function addOptionSelected(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_THEMATICS_GENRE_SELECTED",
+            data: data
+        });
+    };
+}
+
+export function addTitleOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICE_TITLE",
+            data: data
+        });
+    };
+}
+
+export function addReferenceOfCity(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_REFERENCE_CITY_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function addOthersCityOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_OTHERS_CITY_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function addDescriptionOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_DESCRIPTION_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function addPicturesOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PICTURES_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function addEventSelected(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_EVENTS_SELECTED",
+            data: data
+        });
+    };
+}
+
+export function addServiceTime(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICE_TIME",
+            data: data
+        });
+    };
+}
+
+export function addPriceOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PRICE_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function addPreparationTime(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PREPARATION_TIME",
+            data: data
+        });
+    };
+}
+
+export function addNumberOfArtist(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_NUMBER_OF_ARTIST",
+            data: data
+        });
+    };
+}
+
+export function addUnitTimeOfPreparation(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_UNIT_TIME_OF_PREPARATION",
+            data: data
+        });
+    };
+}
+
+export function addUnitTimeOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_UNIT_TIME_OF_SERVICE",
+            data: data
+        });
+    };
+}

@@ -15,9 +15,9 @@ export const DifferentArtist = (setArtistType, setChoiceArtistType, setBecomeArt
     };
 
     return (
-        <Modal visible={true} width="400" height="230" animationType='slide'>
+        <Modal visible={true} width="400" height="350" animationType='slide'>
             <ReactTooltip/>
-            <div className="col text-center pt-4 pb-5" style={{height: 230, borderRadius: 5, background: "#58585a"}}>
+            <div className="col text-center pt-4 pb-5" style={{height: "100%", borderRadius: 5, background: "#58585a"}}>
                 <h4 className="text-green text-monospace">Quelle genre d'artiste êtes vous ?</h4>
                 <div className="body row justify-content-center pt-2">
 
@@ -113,7 +113,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                                 <div className="card-header transparent b-b">
                                     <strong>Prix</strong>
                                 </div>
-                                <ul className="playlist list-group list-group-flush">
+                                <ul className="playlist scrollbar-isl list-group list-group-flush">
                                     <li className="list-group-item" >
                                         <div className="d-flex align-items-center ">
                                             <div

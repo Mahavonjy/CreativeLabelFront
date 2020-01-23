@@ -6,6 +6,7 @@ import * as CreateFields from "../../FunctionTools/CreateFields";
 import { getMediaLink } from "../../FunctionTools/Tools";
 import * as BeatsProps from "../../FunctionTools/FunctionProps";
 import { ToastContainer } from "react-toastify";
+import MyPrestations from "../Section/MyPrestations";
 
 function OtherProfile(props) {
 
@@ -41,6 +42,7 @@ function OtherProfile(props) {
     };
 
     useEffect(() => {
+        console.log(props.UserData.role);
         if (other_beat_maker_beats.length !== 0)
             getMediaLink(setLinkAllOtherArtistBeats, link_all_other_artist_beats, other_beat_maker_beats, BeatsProps.updateOtherBeatMakerBeats, dispatch).then(() => null);
 
@@ -135,14 +137,16 @@ function OtherProfile(props) {
                                                 <h4 className="text-red">Prestattion & Beats & Others</h4>
                                                 <p>Tout les services proposer par cette artiste</p>
                                                 <div className="mt-3">
-                                                    <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1"
-                                                        role="tablist">
+                                                    <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1" role="tablist">
+                                                        {props.UserData.role === "beatmaker" &&
                                                         <li className="nav-item">
-                                                            <a className="nav-link active show"
-                                                               id="w3--tab2" data-toggle="tab"
-                                                               href="#w2-tab3" role="tab"
-                                                               aria-selected="true">Beats</a>
+                                                            <a className="nav-link active show" id="w3--tab2" data-toggle="tab" href="#artist-beats" role="tab" aria-selected="true">Beats</a>
+                                                        </li>}
+
+                                                        <li className="nav-item">
+                                                            <a className={props.UserData.role !== "beatmaker" ? "nav-link active show": "nav-link"} id="w3--tab2" data-toggle="tab" href="#artist-prestations" role="tab" aria-selected="true">Prestations</a>
                                                         </li>
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -152,16 +156,22 @@ function OtherProfile(props) {
                             </div>
                             <div className="card-body no-p">
                                 <div className="tab-content" id="v-pills-tabContent1">
-                                    <div className="tab-pane fade  show active" id="w2-tab3" role="tabpanel"
-                                         aria-labelledby="w2-tab3">
+
+                                    {props.UserData.role === "beatmaker" &&
+                                    <div className="tab-pane fade show active" id="artist-beats" role="tabpanel" aria-labelledby="w2-tab3">
                                         {other_beat_maker_beats.length !== 0 ?
-                                            <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
+                                            <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
                                                 {CreateFields.CreateBeatsPlaylist("longBeats", "userBeats", props, states, "longBeats")}
                                             </div>
-                                            : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
-                                                <p className="text-center"> Cette artist n'a pas d'instrumental</p>
+                                            : <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
+                                                <p className="text-center">Cette artist n'a pas d'instrumental</p>
                                             </div>}
+                                    </div>}
+
+                                    <div className={props.UserData.role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fadee"} id="artist-prestations" role="tabpanel" aria-labelledby="w2-tab3">
+                                        <MyPrestations read/>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

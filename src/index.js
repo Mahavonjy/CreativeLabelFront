@@ -27,9 +27,7 @@ const Reducers = combineReducers({
 });
 
 const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));
-sessionService.initSessionService(store, { driver: 'COOKIES' })
-    .then(() => console.log('Redux React Session is ready and a session was refreshed from your storage'))
-    .catch(() => console.log('Redux React Session is ready and there is no session in your storage'));
+sessionService.initSessionService(store, { driver: 'COOKIES' });
 
 ReactDOM.render(
     <Provider store={store} >

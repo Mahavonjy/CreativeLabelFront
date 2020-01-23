@@ -207,7 +207,11 @@ class Players extends Component {
                 this.setState({list: this.props.list, listInfo: this.props.listInfo}, () => {
                     if (run)
                         this.PlayOrPause();
-                    else this.startPlayer(index);
+                    else {
+                        if (this.state.IsPlaying)
+                            this.player.pause();
+                        this.startPlayer(index)
+                    }
                     this.player.addEventListener('timeupdate', function() {
                         that.state.tmp = that.state.tmp + 1;
                         let position = this.currentTime / this.duration;

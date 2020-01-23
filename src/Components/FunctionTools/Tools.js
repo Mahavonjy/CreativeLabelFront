@@ -5,26 +5,19 @@ import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import { addTotalPrice, addCarts } from "./FunctionProps";
 import Home from "../Home/Home";
-import { sessionService } from 'redux-react-session';
 
-export const saveUserCredentials = (data) => {
-    console.log(data);
-    sessionService.saveSession({token : data.token});
-    sessionService.saveUser(data)
-};
-
-export const changeFields = (setState, e, up_props) => {
+export const changeFields = (setState, e, up_props, dispatch) => {
     let value = e.target.value;
     setState(value);
-    if (up_props) up_props(value)
+    if (up_props && dispatch) dispatch(up_props(value))
 };
 
 export const FillInCartProps = (headers, props) => {
     axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
         let tmp = 0;
         let cart_length = resp.data.length;
-        Home.IncrementCart(cart_length);
         if (cart_length !== 0) {
+            Home.IncrementCart(cart_length);
             for (let row in resp.data) tmp = tmp + resp.data[row]['price'];
             props.dispatch(props.addTotalPrice(Math.round(tmp * 100) / 100));
             props.dispatch(props.addCarts(resp.data));
@@ -195,7 +188,7 @@ export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
             axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + medias[index]['id'], {headers:headers}).then(response => {
                 dispatch(up_props({"index": index, "link": response.data}));
             }).catch(error => {
-                console.log(error.data);
+                console.log(error);
             })
         )
     }

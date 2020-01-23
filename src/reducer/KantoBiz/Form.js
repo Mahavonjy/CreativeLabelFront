@@ -2,7 +2,6 @@ import Thematics from "../../Components/KantoBiz/Prestations/Form/Thematics";
 
 const initState = {
     // Thematics genre
-    Thematics_component: Thematics,
     thematics_options_selected: [],
     steps_index: 0,
     // End Thematics genre
@@ -30,11 +29,6 @@ const kantoBizForm = (state = initState, action) => {
             return {
                 ...state,
                 steps_index: action.data
-            };
-        case "ADD_STEP_COMPONENT":
-            return {
-                ...state,
-                Thematics_component: action.data
             };
         case "ADD_SERVICE_TITLE":
             return {

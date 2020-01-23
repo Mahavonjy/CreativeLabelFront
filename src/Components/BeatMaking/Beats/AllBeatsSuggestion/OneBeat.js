@@ -148,7 +148,7 @@ function OneBeat(props) {
                                     <div className="tab-pane fade active show" id="w2-tab1" role="tabpanel"
                                          aria-labelledby="w2-tab1">
                                         {beat_maker_beats.length !== 0 ?
-                                            <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
+                                            <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 320}}>
                                                 {CreateFields.CreateBeatsPlaylist("long_beats", "beat_maker_beats", props, generate_states(link_all_artist_beats, beat_maker_beats), "long_beats")}
                                             </div>
                                             : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
@@ -165,7 +165,7 @@ function OneBeat(props) {
                                 <strong className="text-red">Similar Beats</strong>
                             </div>
                             {beats_similar.length !== 0 ?
-                                <div className="playlist pl-lg-3 pr-lg-3" style={{height: 400}}>
+                                <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 400}}>
                                     {CreateFields.CreateBeatsPlaylist("short_beats", "SimilarBeats", props, generate_states(link_all_beats_similar, beats_similar), "short_beats")}
                                 </div>
                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 400}}>

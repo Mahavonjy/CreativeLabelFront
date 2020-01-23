@@ -43,6 +43,7 @@ function MyPrestations(props) {
             {/*</Modal>*/}
             {/* end form become an artist*/}
             <div className="row justify-content-center">
+                {!props.read &&
                 <div className="col-lg-2">
                     <h4 className="text-light text-center bolder pt-3 pb-2">Votre frais de déplacement générale est de:</h4>
                     <div className="col text-center pt-2 pb-3">
@@ -57,8 +58,9 @@ function MyPrestations(props) {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-lg-10">
+                </div>}
+
+                <div className={props.read ? "col-lg-12" : "col-lg-10"}>
                     <div className="row justify-content-center">
                         <div className="col-md-4 card-prestation m-2">
                             <div className="card__name bg-dark center-center">
@@ -72,13 +74,15 @@ function MyPrestations(props) {
                             <div className="card__circle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
+                            {!props.read &&
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
                                 <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
-                            </div>
+                            </div>}
+
                         </div>
                         <div className="col-md-4 card-prestation m-2">
                             <div className="card__name bg-dark center-center">
@@ -92,13 +96,14 @@ function MyPrestations(props) {
                             <div className="card__circle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
+                            {!props.read &&
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
                                 <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
-                            </div>
+                            </div>}
                         </div>
                         <div className="col-md-4 card-prestation m-2">
                             <div className="card__name bg-dark center-center">
@@ -112,13 +117,14 @@ function MyPrestations(props) {
                             <div className="card__circle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
+                            {!props.read &&
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
                                 <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
-                            </div>
+                            </div>}
                         </div>
                         <div className="col-md-4 card-prestation m-2">
                             <div className="card__name bg-dark center-center">
@@ -132,13 +138,14 @@ function MyPrestations(props) {
                             <div className="card__circle" />
                             <div className="card__orangeShine" />
                             <div className="card__greenShine" />
+                            {!props.read &&
                             <div className="card__outer-btn">
                                 <button className="btn btn-outline-info" data-tip="Modifier cette prestation"><i className="icon-edit-1 s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip data-for="copy_edit"><i className="icon-copy s-24"/>&nbsp;<i className="icon-edit s-24"/></button>
                                 <button className="btn btn-outline-info" data-tip="Visualiser cette prestation en mode auditeur pro">Afficher</button>
                                 <button className="btn btn-outline-danger" data-tip="supprimer cette prestation"><i className="icon-trash s-24"/></button>
                                 <i className="btn btn-outline-warning icon-eye-slash s-36 mt-1" data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>

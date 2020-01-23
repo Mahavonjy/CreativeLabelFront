@@ -9,7 +9,6 @@ import { getMediaLink } from "../../../FunctionTools/Tools";
 import Offers from "../Offers/Offers";
 import * as CreateFields from "../../../FunctionTools/CreateFields";
 import * as BeatsProps from "../../../FunctionTools/FunctionProps";
-import { sessionService } from "redux-react-session";
 
 function Beats(props) {
 
@@ -80,11 +79,6 @@ function Beats(props) {
     };
 
     useEffect(() => {
-        sessionService.loadSession().then((currentSession) => {
-            user_credentials['token'] = currentSession.token;
-        }).catch(() => {
-            user_credentials['token'] = Conf.configs.TokenVisitor;
-        });
         if (!ready && state_beats.length !== 0) {
             getMediaLink(setLinkBeats, link_beats, state_beats, BeatsProps.updateBeats, dispatch).then(() => null);
             dispatch(BeatsProps.readyBeats());
@@ -185,7 +179,7 @@ function Beats(props) {
                                         <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
 
                                             {beats.length !== 0 ?
-                                                <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
+                                                <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
                                                     {CreateFields.CreateBeatsPlaylist("oneBeats", "AllBeat", props, states, "oneBeats")}
                                                 </div>
                                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>

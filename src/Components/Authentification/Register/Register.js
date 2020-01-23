@@ -11,10 +11,11 @@ import * as CreateFields from "../../FunctionTools/CreateFields";
 import * as Tools from "../../FunctionTools/Tools";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import { DifferentArtist } from "../../FunctionTools/PopupFields";
+import { sessionService } from "redux-react-session";
+import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 
 function Register () {
 
-    let user_credentials;
     const isMounted = useRef(false);
     const [keys, setKeys] = useState("");
     const [name, setName] = useState("");
@@ -23,6 +24,7 @@ function Register () {
     const [confirm_password, setConfirmPassword] = useState("");
     const [isActive, setIsActive] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [user_credentials, setUserCredentials] = useState({});
     const [choiceArtistType, setChoiceArtistType] = useState(false);
     const [becomeArtistForm, setBecomeArtistForm] = useState(false);
     const [artistType, setArtistType] = useState("Beatmaker");
@@ -31,8 +33,10 @@ function Register () {
         e.preventDefault();
 
         const data = { email: email, keys: keys };
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(() =>{
-            localStorage.setItem("Isl_Credentials", JSON.stringify(user_credentials));
+        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then( async (data) =>{
+            await sessionService.saveSession({ token: user_credentials.token }).then(() => {
+                sessionService.saveUser(user_credentials);
+            });
             window.location.replace('/preference');
         }).catch(error =>{
             let errorMessage = Validators.checkErrorMessage(error);
@@ -57,7 +61,7 @@ function Register () {
                 toast.success("Un email vous a eté envoyé");
                 setIsActive(false);
                 setVisible(true);
-                user_credentials = response.data
+                setUserCredentials(response.data)
             }).catch(error => {
                 setIsActive(false);
                 let errorMessage = Validators.checkErrorMessage(error);
@@ -125,7 +129,7 @@ function Register () {
                         </a>
                     </div>
                     {/* if user choice become an artist*/}
-                    {becomeArtistForm && <Form artistType={artistType}/>}
+                    {!becomeArtistForm && <Form artistType={artistType}/>}
                     {/* end form become an artist*/}
                     <div className="row">
                         <div className="col-md-10 mx-md-auto">

@@ -121,7 +121,6 @@ function Cart(props) {
                                                         <h6 className="text-center">{val.media.artist || val.artist}</h6>
                                                         <p className="text-muted text-center">{val.media.title || val.title}</p>
                                                     </td>
-                                                    {console.log(val.price, val)}
                                                     <td className="text-muted text-center">{val.price} $</td>
                                                     <td className="text-muted text-center">
                                                         {remove === val.song_id ?
@@ -137,9 +136,8 @@ function Cart(props) {
                                                                         <div className="circle"/>
                                                                     </div>
                                                                 </div>
-                                                            </div> : <i className="icon-trash text-red s-24" onClick={() => deleteCart(val.song_id, val.id)}/>
-                                                        }
-
+                                                            </div> :
+                                                            <i className="icon-trash text-red s-24" onClick={() => deleteCart(val.song_id, val.id)}/>}
                                                     </td>
                                                 </tr>
                                             )}

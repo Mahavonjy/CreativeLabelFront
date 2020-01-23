@@ -4,6 +4,7 @@ import './music_genres.css';
 import Conf from "../../Config/tsconfig";
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector } from "react-redux";
+import {sessionService} from "redux-react-session";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -15,6 +16,7 @@ function Preference() {
     const AllMediaGenre = useSelector(state => state.Home.PrefAllMediaGenre);
 
     const isMounted = useRef(false);
+    const [user_credentials, setUserCredentials] = useState({});
     const [first_array, setFirstArray] = useState([]);
 
     const BooleanToChange = (index) => {
@@ -30,7 +32,6 @@ function Preference() {
     };
 
     const sendUserGenreToApi = () => {
-        let user_credentials = JSON.parse(localStorage.getItem("Isl_Credentials"));
         headers['Isl-Token'] = user_credentials.token;
         let user_genre_tmp = [];
         for (let row in first_array) if (first_array[row][1]) user_genre_tmp.push(first_array[row][2].genre);
@@ -47,6 +48,9 @@ function Preference() {
     };
 
     useEffect(() => {
+        sessionService.loadSession().then((currentSession) => {
+            setUserCredentials({token: currentSession.token});
+        });
         toast.warn("Veuillez choisir au moins 5 genres");
         for (let row in AllMediaGenre) {
             setFirstArray(first_array => [...first_array, ["#9DA6B1", false,  {

@@ -1,4 +1,5 @@
-import React, {Component} from "react";
+import React, {Component, useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 
 function MultiSelectList(props) {
     const {handleListItemClick, list} = props;
@@ -55,87 +56,81 @@ function MultiSelect(props) {
     )
 }
 
-class MultiSelectTools extends Component {
-    state = {
-        isMounted: false,
-        value: '',
-        isOpen: false,
-        list: this.props.list.filter(list => !this.props.tags.some(tag => tag === list)),
-        tags: this.props.tags,
-        tmp_list: []
-    };
+function MultiSelectTools(props) {
 
-    inputRef = React.createRef();
+    const dispatch = useDispatch();
 
-    handleBlur = (e) => {
+    const isMounted = useRef(false);
+    const [value, setValue] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const [list, setList] = useState(props.list.filter(list => !props.tags.some(tag => tag === list)));
+    const [tags, setTags] = useState(props.tags);
+    const [tmp_list, setTmpList] = useState([]);
+
+    const inputRef = React.createRef();
+
+    const handleBlur = (e) => {
         e.target.closest('.multiselect').classList.remove('multiselect-focus');
-        this.setState({isOpen: false});
+        setIsOpen(false);
     };
 
-    handleMouseDown = (e) => {
-        this.inputRef.current.focus();
+    const handleMouseDown = (e) => {
+        inputRef.current.focus();
         e.target.closest('.multiselect').classList.add('multiselect-focus');
-        this.setState(prevState => ({isOpen: true}));
+        setIsOpen(true);
         e.preventDefault();
     };
 
-    handleChange = (e) => {
+    const handleChange = async (e) => {
         const search = e.target.value;
         if (search) {
-            this.setState({tmp_list: this.props.list.filter(list => !this.props.tags.some(tag => tag === list))}, () => {
-                const filtered = this.state.list.filter(str => str.toLowerCase().indexOf(search.toLowerCase()) !== -1);
-                this.setState({value: search, list: filtered.length ? filtered : ["Non trouvable"]});
-            });
-        } else this.setState({list: this.props.list.filter(list => !this.props.tags.some(tag => tag === list)), value: ''})
-    };
-
-    handleTagClick = (index, val) => {
-        this.state.tags.splice(index, 1);
-        this.setState(prevState => ({list: [...prevState.list, val]}), () => {
-            if (this.props.funcToFillInProps) this.props.funcToFillInProps(this.state.tags)
-        });
-    };
-
-    handleListItemClick = (val) => {
-        if (this.state.value) {
-            this.setState({list: this.state.tmp_list}, () => {
-                this.state.list.splice(this.state.list.indexOf(val), 1);
-                this.setState(prevState => ({tags: [...prevState.tags, val], value: ''}), () => {
-                    if (this.props.funcToFillInProps) this.props.funcToFillInProps(this.state.tags)
-                });
-            })
+            await setTmpList(props.list.filter(list => !props.tags.some(tag => tag === list)));
+            const filtered = await list.filter(str => str.toLowerCase().indexOf(search.toLowerCase()) !== -1);
+            setValue(search);
+            setList(filtered.length ? filtered : ["Non trouvable"])
         } else {
-            this.state.list.splice(this.state.list.indexOf(val), 1);
-            this.setState(prevState => ({tags: [...prevState.tags, val], value: ''}), () => {
-                if (this.props.funcToFillInProps) this.props.funcToFillInProps(this.state.tags)
-            });
+            setList(props.list.filter(list => !props.tags.some(tag => tag === list)));
+            setValue('')
         }
     };
 
-    componentDidMount() {
-        this.setState({isMounted: true})
-    }
+    const handleTagClick = async (index, val) => {
+        await tags.splice(index, 1);
+        await setList(list => [...list, val]);
+        if (props.funcToFillInProps) await dispatch(props.funcToFillInProps(tags));
+    };
 
-    componentWillUnmount() {
-        this.setState({isMounted: false});
-    }
+    const handleListItemClick = async (val) => {
+        if (value) await setList(tmp_list);
+        await list.splice(list.indexOf(val), 1);
+        let tmp_tag = [...tags];
+        await tmp_tag.push(val);
+        await setTags(tmp_tag);
+        await setValue('');
+        if (props.funcToFillInProps) await dispatch(props.funcToFillInProps(tmp_tag))
+    };
 
-    render() {
-        return (
-            <MultiSelect onListItemClick={this.handleListItemClick}
-                         isOpen={this.state.isOpen}
-                         placeholder={this.props.placeholder}
-                         inputRef={this.inputRef}
-                         value={this.state.value}
-                         onChange={this.handleChange}
-                         onBlur={this.handleBlur}
-                         onTagClick={this.handleTagClick}
-                         list={this.state.isOpen ? this.state.list : this.state.list.sort()}
-                         onMouseDown={this.handleMouseDown}
-                         tags={this.state.tags}
-            />
-        )
-    }
+    useEffect(() => {
+
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
+
+    return (
+        <MultiSelect onListItemClick={handleListItemClick}
+                     isOpen={isOpen}
+                     placeholder={props.placeholder}
+                     inputRef={inputRef}
+                     value={value}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     onTagClick={handleTagClick}
+                     list={isOpen ? list : list.sort()}
+                     onMouseDown={handleMouseDown}
+                     tags={tags}
+        />
+    )
 }
 
 export default MultiSelectTools;
