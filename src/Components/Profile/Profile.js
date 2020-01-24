@@ -51,7 +51,7 @@ function Profile (props) {
     const [popupAddEditSingle, setPopupAddEditSingle] = useState(-1);
     const [choiceArtistType, setChoiceArtistType] = useState(false);
     const [becomeArtistForm, setBecomeArtistForm] = useState(false);
-    const [artistType, setArtistType] = useState(user_role);
+    const [artistType, setArtistType] = useState("");
 
     const togglePopupEditProfile = async (success) => {
         setPopupEditProfile(!popupEditProfile);
@@ -227,7 +227,7 @@ function Profile (props) {
                     <button className="ModalClose" onClick={() => setBecomeArtistForm(false)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
-                    <Form artistType={artistType.charAt(0).toUpperCase() + artistType.slice(1)}/>
+                    {becomeArtistForm && <Form artistType={artistType} noRegister/>}
                 </div>
             </Modal>
             {/* end form become an artist*/}
@@ -315,7 +315,7 @@ function Profile (props) {
                                             <button className="btn btn-outline-success" onClick={() => togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                         <div className="align-self-center">
-                                            <button className="btn btn-outline-success" onClick={() => setBecomeArtistForm(true)}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
+                                            <button className="btn btn-outline-success" onClick={() => {setBecomeArtistForm(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                     </div>
                                 </div> : null}

@@ -74,7 +74,7 @@ function Thematics(props) {
 
     useEffect(() => {
         try {
-            const artistType = props.artistType;
+            const artistType = props.var.artistType;
             let options_state = [...options];
             if (artistType === "Dj") options_state = djOptions;
             else if (artistType === "Magiciens") options_state = magicianOptions;

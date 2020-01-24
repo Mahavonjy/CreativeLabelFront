@@ -1,4 +1,3 @@
-import Thematics from "../../Components/KantoBiz/Prestations/Form/Thematics";
 
 const initState = {
     // Thematics genre

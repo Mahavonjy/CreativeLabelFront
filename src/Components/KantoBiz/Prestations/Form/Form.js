@@ -18,10 +18,10 @@ function Form (props) {
     const isMounted = useRef(false);
     const [state_steps_index, setStepsIndex] = useState(steps_index);
     const steps = [
-            {name: 'Choisir votre thematiques', component: <Thematics artistType={props.artistType}/>},
+            {name: 'Choisir votre thematiques', component: <Thematics var={props}/>},
             {name: 'Information de votre prestation', component: <PrestationInformation />},
             {name: 'Detail de votre prestation', component: <PrestationDetails />},
-            {name: 'Recaputilatif', component: <Recaputilatif artistType={props.artistType}/>},
+            {name: 'Recaputilatif', component: <Recaputilatif var={props}/>},
     ];
 
     const Next = async () => {
@@ -43,7 +43,6 @@ function Form (props) {
     };
 
     useEffect(() => {
-
         return () => {
             isMounted.current = true
         };
@@ -88,8 +87,10 @@ function Form (props) {
             <div className="NextOrPrevPageStepper mt-5">
                 {state_steps_index === 0 ? null : <span className="float-left" onClick={() => Prev()}><i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>}
                 {state_steps_index === component_steps.length - 1 ?
-                    <a href="#register" className="text-black float-right mr-5 m-b-50 bg-success pr-5 pl-5 text-center" style={{borderRadius: 5}}>Valider</a>:
-                    <span className="float-right" onClick={() => Next()}>Suivant&nbsp;<i className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></span>}
+                    <div>
+                        {props.noRegister ? <button className="btn btn-outline-success float-right pl-2 pr-3">Enregister</button>:
+                        <a href="#register" className="text-black float-right mr-5 m-b-50 bg-success pr-5 pl-5 text-center" style={{borderRadius: 5}}>Valider</a>}
+                    </div> : <span className="float-right" onClick={() => Next()}>Suivant&nbsp;<i className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></span>}
             </div>
         </div>
     );

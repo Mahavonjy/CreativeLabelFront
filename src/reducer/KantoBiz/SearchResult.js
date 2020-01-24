@@ -1,7 +1,7 @@
 const initState = {
     results: [],
-    ResultsPage: true,
-    DisplayService: false,
+    ResultsPage: false,
+    DisplayService: true,
     filter_events_selected: [],
     EventAndThematics: false
 };

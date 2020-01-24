@@ -40,7 +40,7 @@ function LoginFacebook(props) {
                        xfbml={true}
                        version="v2.5"
                        className="mt-3 border-0 bg-blue loginBtn loginBtn--facebook text-center">
-            {props.Label}
+            <small>{props.Label}</small>
         </FacebookLogin>
     );
 }

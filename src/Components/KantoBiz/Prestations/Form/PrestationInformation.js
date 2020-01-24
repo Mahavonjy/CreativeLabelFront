@@ -19,7 +19,6 @@ function PrestationInformation(props) {
     const Description = useSelector(state => state.KantoBizForm.description);
 
     const isMounted = useRef(false);
-    const [options, setOptions] = useState([]);
     const [title, setTitle] = useState(PropsTitle);
     const [city, setCity] = useState(PropsCityReference);
     const [description, setDescription] = useState(Description);
@@ -31,6 +30,7 @@ function PrestationInformation(props) {
 
     const onDrop = (e, file) => {
         e.preventDefault();
+
         let files = [];
         let tmp_file_state = [...files];
 
@@ -63,11 +63,11 @@ function PrestationInformation(props) {
     };
 
     PrestationInformation.validation = () => {
-        if (!title)
+        if (!PropsTitle)
             return {"error": true, "message": "veuillez choisir un titre "};
-        if (!city)
+        if (!PropsCityReference)
             return {"error": true, "message": "veuillez choisir une ville de reference "};
-        if (files.length <= 0)
+        if (PropsFiles.length <= 0)
             return {"error": true, "message": "veuillez choisir au moins une photo "};
         return {"error": false};
     };
@@ -92,7 +92,7 @@ function PrestationInformation(props) {
                         <div className="body">
                             <div className="form-group form-float">
                                 <div className="form-line" data-tip={!title && "Veuillez donnée un titre a votre prestation, ex: AnnivShow, ForaParty ..."}>
-                                    {CreateInput('title', title, (e) => {changeFields(setTitle, e, addTitleOfService, dispatch)}, "Titre de votre Prestation", "text", true)}
+                                    {CreateInput('title', title, (e) => changeFields(setTitle, e, addTitleOfService, dispatch), "Titre de votre Prestation", "text", true)}
                                 </div>
                             </div>
                             <div className="form-group form-float" data-tip={!description ? "Veuillez nous décrire cette prestation en quelques mots" : null}>
@@ -104,7 +104,7 @@ function PrestationInformation(props) {
                             <div className="form-group form-float" data-tip={!city && "Veuillez donnée une ville reference pour votre prestation"}>
                                 <div className="form-line">
                                     <input id="city" name="city" className="form-control" placeholder={city || "Veuillez choisir votre ville de reference"}
-                                           value={city} onChange={(e) => {changeFields(setCity, e, addReferenceOfCity, dispatch)}} list="city-type"/>
+                                           value={city} onChange={(e) => changeFields(setCity, e, addReferenceOfCity, dispatch)} list="city-type"/>
                                     <datalist id="city-type">
                                         <option value="Manakara">Manakara</option>
                                         <option value="Tolagnaro">Tolagnaro</option>

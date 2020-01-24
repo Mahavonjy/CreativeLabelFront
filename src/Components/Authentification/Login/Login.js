@@ -9,6 +9,8 @@ import { saveUserCredentials } from "../../FunctionTools/Tools";
 import "./Sign.css"
 import {smallSpinner} from "../../FunctionTools/CreateFields";
 import {sessionService} from "redux-react-session";
+import LoginGoogle from "../SocialCredentials/Google/Google";
+import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -237,8 +239,12 @@ function Login() {
                     <div className="tri-r tri-r4"/>
                     <div className="tri-r tri-r5"/>
                 </div>
+                <div className="col-md-6 right float-right m-t-150 pt-4 mr-2">
+                    <LoginGoogle Label="Connecter avec Google"/>
+                    <LoginFacebook Label="Connecter avec Facebook"/>
+                </div>
                 <small className="r-disc">Vous n'avez pas de compte ?</small>
-                <button className="r-btn btn btn-outline-danger" onClick={() => window.location.replace('/register')}>Inscription</button>
+                <button className="r-btn btn btn-outline-danger" onClick={() => window.location.replace('/register')}>Inscrivez vous ici</button>
             </div>
         </div>
     );

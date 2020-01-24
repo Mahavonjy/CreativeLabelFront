@@ -1,98 +1,72 @@
-import React, { Component } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import moment from "moment";
 import '../style/Calendar.css'
 import ReactTooltip from "react-tooltip";
 
-class Calendar extends Component {
-    state = {
-        isMounted: false,
-        selectedMonth: moment(),
-        selectedDay: moment().startOf("day"),
-        selectedMonthEvents: [],
-        showEvents: false,
-        noEdit: this.props.noEdit
+function Calendar(props) {
+
+    const isMounted = useRef(false);
+    const [selectedMonth, setSelectedMonth] = useState(moment());
+    const [selectedDay, setSelectedDay] = useState(moment().startOf("day"));
+    const [selectedMonthEvents, setSelectedMonthEvents] = useState([]);
+    const [showEvents, setShowEvents] = useState(false);
+
+    const previous = () => {
+        setSelectedMonth(selectedMonth.subtract(1, "months"));
     };
 
-    previous = () => {
-        const currentMonthView = this.state.selectedMonth;
-
-        this.setState({
-            selectedMonth: currentMonthView.subtract(1, "month")
-        });
+    const next = () => {
+        setSelectedMonth(selectedMonth.add(1, "months"));
     };
 
-    next = () => {
-        const currentMonthView = this.state.selectedMonth;
-
-        this.setState({
-            selectedMonth: currentMonthView.add(1, "month")
-        });
+    const select = (day) => {
+        setSelectedMonth(day.date);
+        setSelectedDay(day.date.clone());
+        setShowEvents(true)
     };
 
-    select = (day) => {
-        this.setState({
-            selectedMonth: day.date,
-            selectedDay: day.date.clone(),
-            showEvents: true
-        });
+    const goToCurrentMonthView = () => {
+        setSelectedMonth(moment())
     };
 
-    goToCurrentMonthView = () => {
-        this.setState({selectedMonth: moment()});
+    const showCalendar = () => {
+        setShowEvents(false);
     };
 
-    showCalendar = () => {
-        this.setState({
-            selectedMonth: this.state.selectedMonth,
-            selectedDay: this.state.selectedDay,
-            showEvents: false
-        });
-    };
-
-    renderMonthLabel = () => {
-        const currentMonthView = this.state.selectedMonth;
+    const renderMonthLabel = () => {
         return (
             <span className="box month-label">
-                {currentMonthView.format("MMMM YYYY")}
+                {selectedMonth.format("MMMM YYYY")}
             </span>
         );
     };
 
-    renderDayLabel = () => {
-        const currentSelectedDay = this.state.selectedDay;
+    const renderDayLabel = () => {
         return (
             <span className="col box month-label">
-                {currentSelectedDay.format("DD MMMM YYYY")}
+                {selectedDay.format("DD MMMM YYYY")}
             </span>
         );
     };
 
-    renderTodayLabel = () => {
+    const renderTodayLabel = () => {
         return (
-            <span className="box today-label" onClick={this.goToCurrentMonthView}>
+            <span className="box today-label" onClick={goToCurrentMonthView}>
                 Today
             </span>
         );
     };
 
-    renderWeeks = () => {
-        const currentMonthView = this.state.selectedMonth;
-        const currentSelectedDay = this.state.selectedDay;
-        const monthEvents = this.state.selectedMonthEvents;
-
+    const renderWeeks = () => {
         let weeks = [];
         let done = false;
-        let previousCurrentNextView = currentMonthView
-            .clone()
-            .startOf("month")
-            .subtract(1, "d")
-            .day("Monday");
+        let previousCurrentNextView = selectedMonth.clone().startOf("month").subtract(1, "d").day("Monday");
         let count = 0;
         let monthIndex = previousCurrentNextView.month();
 
         while (!done) {
-            weeks.push(this.Week(previousCurrentNextView.clone(), currentMonthView, currentSelectedDay, day => this.select(day), monthEvents));
+            weeks.push(Week(previousCurrentNextView.clone(), selectedMonth, selectedDay, day => select(day), selectedMonthEvents));
             previousCurrentNextView.add(1, "w");
             done = count++ > 2 && monthIndex !== previousCurrentNextView.month();
             monthIndex = previousCurrentNextView.month();
@@ -100,9 +74,8 @@ class Calendar extends Component {
         return weeks;
     };
 
-    handleAdd = () => {
-        const monthEvents = this.state.selectedMonthEvents;
-        const currentSelectedDate = this.state.selectedDay;
+    const handleAdd = () => {
+        const monthEvents = [...selectedMonthEvents];
 
         let newEvents = [];
 
@@ -118,7 +91,7 @@ class Calendar extends Component {
             default:
                 let newEvent = {
                     title: eventTitle,
-                    date: currentSelectedDate,
+                    date: selectedDay,
                     dynamic: true
                 };
 
@@ -128,30 +101,27 @@ class Calendar extends Component {
                     monthEvents.push(newEvents[i]);
                 }
 
-                this.setState({
-                    selectedMonthEvents: monthEvents
-                });
+                setSelectedMonthEvents(monthEvents);
                 break;
         }
     };
 
-    addEvent = () => {
-        const currentSelectedDate = this.state.selectedDay;
+    const addEvent = () => {
         let isAfterDay = moment().startOf("day").subtract(1, "d");
 
-        if (currentSelectedDate.isAfter(isAfterDay)) {
-            this.handleAdd();
+        if (selectedDay.isAfter(isAfterDay)) {
+            handleAdd();
         } else {
             // eslint-disable-next-line no-restricted-globals
             if (confirm("Are you sure you want to add an event in the past?")) {
-                this.handleAdd();
+                handleAdd();
             } else {
             } // end confirm past
         } //end is in the past
     };
 
-    removeEvent(i) {
-        const monthEvents = this.state.selectedMonthEvents.slice();
+    const removeEvent = (i) => {
+        const monthEvents = [...selectedMonthEvents.slice()];
         // eslint-disable-next-line no-restricted-globals
         if (confirm("Are you sure you want to remove this event?")) {
             let index = i;
@@ -162,17 +132,12 @@ class Calendar extends Component {
                 alert("No events to remove on this day!");
             }
 
-            this.setState({
-                selectedMonthEvents: monthEvents
-            });
+            setSelectedMonthEvents(monthEvents);
         }
-    }
+    };
 
-    Events = (selectedMonth, selectedDay, selectedMonthEvents, removeEvent) => {
-        const currentSelectedDay = selectedDay;
-        const monthEvents = selectedMonthEvents;
-
-        const monthEventsRendered = monthEvents.map((event, i) => {
+    const Events = (removeEvent) => {
+        const monthEventsRendered = selectedMonthEvents.map((event, i) => {
             return (
                 <div key={event.title} className="event-container" onClick={() => removeEvent(i)}>
                     <ReactCSSTransitionGroup
@@ -204,7 +169,7 @@ class Calendar extends Component {
         const dayEventsRendered = [];
 
         for (let i = 0; i < monthEventsRendered.length; i++) {
-            if (monthEvents[i].date.isSame(currentSelectedDay, "day")) {
+            if (selectedMonthEvents[i].date.isSame(selectedDay, "day")) {
                 dayEventsRendered.push(monthEventsRendered[i]);
             }
         }
@@ -216,7 +181,7 @@ class Calendar extends Component {
         );
     };
 
-    DayNames = () => {
+    const DayNames = () => {
         return (
             <div className="row days-header">
                 <span className="box day-name">Mon</span>
@@ -230,7 +195,7 @@ class Calendar extends Component {
         );
     };
 
-    Week = (previousCurrentNextView, currentMonthView, selected, select, monthEvents) => {
+    const Week = (previousCurrentNextView, currentMonthView, selected, select, monthEvents) => {
         let days = [];
         let date = previousCurrentNextView;
 
@@ -252,7 +217,7 @@ class Calendar extends Component {
                 hasEvents: dayHasEvents
             };
 
-            days.push(this.Day(day, selected, select));
+            days.push(Day(day, selected));
             date = date.clone();
             date.add(1, "d");
         }
@@ -263,7 +228,7 @@ class Calendar extends Component {
         );
     };
 
-    Day = (day, selected, select) => {
+    const Day = (day, selected) => {
         return (
             <div className={
                 "day" +
@@ -271,152 +236,125 @@ class Calendar extends Component {
                 (day.isCurrentMonth ? "" : " different-month") +
                 (day.date.isSame(selected) ? " selected" : "") +
                 (day.hasEvents ? " has-events" : "")
-            } onClick={!this.state.noEdit ? () => select(day): null}>
+            } onClick={!props.noEdit ? () => select(day): null}>
                 <div className="day-number">{day.number}</div>
             </div>
         );
     };
 
-    componentDidMount() {
-        this.setState({ isMounted: true}, () => {
-            const monthEvents = this.state.selectedMonthEvents;
+    useEffect(() => {
 
-            let allEvents = [];
+        const monthEvents = selectedMonthEvents;
 
-            let event1 = {
-                title: "Press the Add button and enter a name for your event. P.S you can delete me by pressing me!",
-                date: moment(),
-                dynamic: false
-            };
+        let allEvents = [];
 
-            let event2 = {
-                title: "Event 2 - Meeting",
-                date: moment().startOf("day").subtract(2, "d").add(2, "h"),
-                dynamic: false
-            };
+        allEvents.push({
+            title: "Press the Add button and enter a name for your event. P.S you can delete me by pressing me!",
+            date: moment(),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 2 - Meeting",
+            date: moment().startOf("day").subtract(2, "d").add(2, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 3 - Cinema",
+            date: moment().startOf("day").subtract(7, "d").add(18, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 4 - Theater",
+            date: moment().startOf("day").subtract(16, "d").add(20, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 5 - Drinks",
+            date: moment().startOf("day").subtract(2, "d").add(12, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 6 - Diving",
+            date: moment().startOf("day").subtract(2, "d").add(13, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 7 - Tennis",
+            date: moment().startOf("day").subtract(2, "d").add(14, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 8 - Swimmming",
+            date: moment().startOf("day").subtract(2, "d").add(17, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Event 9 - Chilling",
+            date: moment().startOf("day").subtract(2, "d").add(16, "h"),
+            dynamic: false
+        });
+        allEvents.push({
+            title: "Hello World",
+            date: moment().startOf("day").add(5, "h"),
+            dynamic: false
+        });
 
-            let event3 = {
-                title: "Event 3 - Cinema",
-                date: moment().startOf("day").subtract(7, "d").add(18, "h"),
-                dynamic: false
-            };
+        for (let i = 0; i < allEvents.length; i++) {
+            monthEvents.push(allEvents[i]);
+        }
 
-            let event4 = {
-                title: "Event 4 - Theater",
-                date: moment().startOf("day").subtract(16, "d").add(20, "h"),
-                dynamic: false
-            };
+        setSelectedMonthEvents(monthEvents);
 
-            let event5 = {
-                title: "Event 5 - Drinks",
-                date: moment().startOf("day").subtract(2, "d").add(12, "h"),
-                dynamic: false
-            };
+        return () => {
+            isMounted.current = true
+        };
+    }, []);
 
-            let event6 = {
-                title: "Event 6 - Diving",
-                date: moment().startOf("day").subtract(2, "d").add(13, "h"),
-                dynamic: false
-            };
-
-            let event7 = {
-                title: "Event 7 - Tennis",
-                date: moment().startOf("day").subtract(2, "d").add(14, "h"),
-                dynamic: false
-            };
-
-            let event8 = {
-                title: "Event 8 - Swimmming",
-                date: moment().startOf("day").subtract(2, "d").add(17, "h"),
-                dynamic: false
-            };
-
-            let event9 = {
-                title: "Event 9 - Chilling",
-                date: moment().startOf("day").subtract(2, "d").add(16, "h"),
-                dynamic: false
-            };
-
-            let event10 = {
-                title: "Hello World",
-                date: moment().startOf("day").add(5, "h"),
-                dynamic: false
-            };
-
-            allEvents.push(event1);
-            allEvents.push(event2);
-            allEvents.push(event3);
-            allEvents.push(event4);
-            allEvents.push(event5);
-            allEvents.push(event6);
-            allEvents.push(event7);
-            allEvents.push(event8);
-            allEvents.push(event9);
-            allEvents.push(event10);
-
-            for (let i = 0; i < allEvents.length; i++) {
-                monthEvents.push(allEvents[i]);
-            }
-
-            this.setState({
-                selectedMonthEvents: monthEvents
-            });
-        })
-    }
-
-    componentWillUnmount() {
-        this.setState({ isMounted: false });
-    }
-
-    render() {
-        const showEvents = this.state.showEvents;
-
-        return (
-            <div className="calendar-rectangle">
-                <ReactTooltip/>
-                <div id="calendar-content" className="calendar-content">
-                    {showEvents?
-                        <section className="main-calendar">
-                            <header className="calendar-header">
-                                <div className="row justify-content-center pt-5">
-                                    <i className="col icon icon-exit s-24 text-red" onClick={this.showCalendar}/>
-                                    {this.renderDayLabel()}
-                                    <i className="col icon icon-plus-circle s-24" onClick={this.addEvent}/>
-                                </div>
-                            </header>
-                            {this.Events(this.state.selectedMonth, this.state.selectedDay, this.state.selectedMonthEvents, i => this.removeEvent(i))}
-                        </section>
-                        :
-                        <section className="main-calendar">
-                            <header className="calendar-header">
-                                <div className="row justify-content-center pt-5">
-                                    <i className="col icon icon-arrow-left s-24" onClick={this.previous}/>
-                                    {this.renderTodayLabel()}
-                                    {this.renderMonthLabel()}
-                                    <i className="col icon icon-arrow-right text-right s-24" onClick={this.next} />
-                                </div>
-                                {this.DayNames}
-                            </header>
-                            <div className="days-container pt-2">
-                                {this.renderWeeks()}
-                                <div className='my-legend pt-3'>
-                                    <div className="legend-title text-light">Legend&nbsp;<i className="icon icon-info-circle" data-tip="Ceci pourraît vous aidez pour comprendre le calendrier"/></div>
-                                    <div className="legend-scale pt-3">
-                                        <ul className="row justify-content-center legend-labels">
-                                            <li><span style={{background: '#74A9CF'}}>Reserver&nbsp;<i className="icon icon-info" data-tip="L'artiste est indisponible car il va realiser une prestation"/></span></li>
-                                            <li><span style={{background: '#00c853'}}>Disponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est libre de pour un evenement"/></span></li>
-                                            <li><span style={{background: '#ef6c00'}}>Indifférent&nbsp;<i className="icon icon-info" data-tip="L'artiste est en vue de faire une prestation mais peut recevoir une reservation"/></span></li>
-                                            <li><span style={{background: '#ED1C24'}}>Indisponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est ne travail tout simplement pendant cette journée"/></span></li>
-                                        </ul>
-                                    </div>
+    return (
+        <div className="calendar-rectangle">
+            <ReactTooltip/>
+            <div id="calendar-content" className="calendar-content">
+                {showEvents?
+                    <section className="main-calendar">
+                        <header className="calendar-header">
+                            <div className="row justify-content-center pt-5">
+                                <i className="col icon icon-exit s-24 text-red" onClick={showCalendar}/>
+                                {renderDayLabel()}
+                                <i className="col icon icon-plus-circle s-24" onClick={addEvent}/>
+                            </div>
+                        </header>
+                        {Events(i => removeEvent(i))}
+                    </section>
+                    :
+                    <section className="main-calendar">
+                        <header className="calendar-header">
+                            <div className="row justify-content-center pt-5">
+                                <i className="col icon icon-arrow-left text-left ml-2 s-24" onClick={previous}/>
+                                {renderTodayLabel()}
+                                {renderMonthLabel()}
+                                <i className="col icon icon-arrow-right text-right mr-2 s-24" onClick={next} />
+                            </div>
+                            {DayNames}
+                        </header>
+                        <div className="days-container pt-2">
+                            {renderWeeks()}
+                            <div className='my-legend pt-3'>
+                                <div className="legend-title text-light">Legend&nbsp;<i className="icon icon-info-circle" data-tip="Ceci pourraît vous aidez pour comprendre le calendrier"/></div>
+                                <div className="legend-scale pt-3">
+                                    <ul className="row justify-content-center legend-labels">
+                                        <li><span style={{background: '#74A9CF'}}>Reserver&nbsp;<i className="icon icon-info" data-tip="L'artiste est indisponible car il va realiser une prestation"/></span></li>
+                                        <li><span style={{background: '#00c853'}}>Disponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est libre de pour un evenement"/></span></li>
+                                        <li><span style={{background: '#ef6c00'}}>Indifférent&nbsp;<i className="icon icon-info" data-tip="L'artiste est en vue de faire une prestation mais peut recevoir une reservation"/></span></li>
+                                        <li><span style={{background: '#ED1C24'}}>Indisponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est ne travail tout simplement pendant cette journée"/></span></li>
+                                    </ul>
                                 </div>
                             </div>
-                        </section>
-                    }
-                </div>
+                        </div>
+                    </section>
+                }
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default Calendar;

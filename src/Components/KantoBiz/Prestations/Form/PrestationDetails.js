@@ -55,23 +55,23 @@ function PrestationDetails(props) {
     };
 
     PrestationDetails.validation = () => {
-        if (!price_of_service)
+        if (!props_price_of_service)
             return {"error": true, "message": "veuillez remplir le prix de votre service "};
-        if (!service_time)
+        if (!props_service_time)
             return {"error": true, "message": "veuillez remplir votre durée de prestation "};
-        if (!preparation_time)
+        if (!props_preparation_time)
             return {"error": true, "message": "veuillez remplir votre temps de preparation "};
-        if (number_of_artist <= 0)
+        if (props_number_of_artist <= 0)
             return {"error": true, "message": "veuillez remplir le nombre d'artist "};
         let tmp_unit_time_of_service = false;
-        for (let row in unit_time_of_service) {
-            if (unit_time_of_service[row]) tmp_unit_time_of_service = true
+        for (let row in props_unit_time_of_service) {
+            if (props_unit_time_of_service[row]) tmp_unit_time_of_service = true
         }
         if (!tmp_unit_time_of_service)
             return {"error": true, "message": "veuillez choisir l'uniteé de temps de service "};
         let tmp_unit_time_of_preparation = false;
-        for (let row in unit_time_of_preparation) {
-            if (unit_time_of_preparation[row]) tmp_unit_time_of_preparation = true
+        for (let row in props_unit_time_of_preparation) {
+            if (props_unit_time_of_preparation[row]) tmp_unit_time_of_preparation = true
         }
         if (!tmp_unit_time_of_preparation)
             return {"error": true, "message": "veuillez choisir l'uniteé de temps de preparation "};

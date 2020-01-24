@@ -64,7 +64,6 @@ function Recaputilatif(props) {
             } catch (e) {}
         } catch (e) {
             //
-            console.log("ah", props)
         }
 
         return () => {
@@ -85,7 +84,7 @@ function Recaputilatif(props) {
             </div>
             <div className="row">
                 <div className="col-md-6">
-                    {createBigForm("Devenir", props.artistType, "icon-user")}
+                    {createBigForm("Devenir", props.var.artistType, "icon-user")}
                     {createBigForm( "Artiste de genre", props_thematics_options_selected.join(', '),  "icon-neuter")}
                     {createBigForm("Titre",PropsTitle, "icon-text-width")}
                     <div className="custom-float">

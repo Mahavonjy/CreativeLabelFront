@@ -74,6 +74,7 @@ function Cart(props) {
     };
 
     useEffect(() => {
+
         return () => {
             isMounted.current = true
         };

@@ -40,7 +40,7 @@ function LoginGoogle(props) {
                      className="mt-3 border-0 danger-color loginBtn loginBtn--google text-center"
                      fetchBasicProfile={false}
                      responseHandler={responseGoogle}>
-            {props.Label}
+            <small>{props.Label}</small>
         </GoogleLogin>
     );
 }
