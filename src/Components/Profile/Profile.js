@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from 'axios';
-import EditProfile from './Edit/EditProfile';
+import EditProfile from './Edits/EditProfile';
 import AddSingle from './AddMedia/AddSingle';
-import EditSingle from './Edit/EditSingle';
+import EditSingle from './Edits/EditSingle';
 import { useDispatch, useSelector } from 'react-redux';
 import Conf from "../../Config/tsconfig";
 import PhotoD from '../../images/socials/profile.png';
@@ -17,7 +17,7 @@ import PaymentsAndReservations from "./Section/PaymentsAndReservations";
 import BankingDetails from "./Section/BankingDetails";
 import RefundPolicy from "./Section/RefundPolicy";
 import MyPrestations from "./Section/MyPrestations";
-import EditPrestation from "./Section/EditPrestation";
+import EditPrestation from "./PrestationEdits/EditPrestation";
 import Modal from "react-awesome-modal";
 import { profileAddBeats, profileUpdateBeats, profileReadyBeats } from "../FunctionTools/FunctionProps";
 
@@ -232,7 +232,7 @@ function Profile (props) {
             </Modal>
             {/* end form become an artist*/}
 
-            <Modal visible={false} width="80%" height="80%" effect="fadeInUp">
+            <Modal visible={true} width="80%" height="80%" effect="fadeInUp">
                 <div className="bg-dark" style={{height:"100%"}}>
                     <button className="ModalClose">
                         <i className="icon-close s-24 text-warning"/>

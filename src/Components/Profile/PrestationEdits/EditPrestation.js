@@ -4,9 +4,11 @@ import { useSelector } from "react-redux";
 import PrestationInformation from "../../KantoBiz/Prestations/Form/PrestationInformation";
 import * as Tools from "../../FunctionTools/Tools";
 import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails";
-import RefundPolicy from "./RefundPolicy";
+import RefundPolicy from "../Section/RefundPolicy";
 import ReactTooltip from "react-tooltip";
 import Calendar from "../../KantoBiz/Calendar/Calendar";
+import Materials from "./Materials";
+import Options from "./Options";
 
 function EditPrestation(props) {
 
@@ -104,10 +106,10 @@ function EditPrestation(props) {
                                 <Calendar noEdit/>
                             </div>
                             <div className="tab-pane fade" id="v-pills-materials" role="tabpanel" aria-labelledby="v-pills-materials-tab">
-                                Materiels
+                                <Materials/>
                             </div>
                             <div className="tab-pane fade" id="v-pills-options-gestion" role="tabpanel" aria-labelledby="v-pills-options-gestion-tab">
-                                Les options
+                                <Options/>
                             </div>
                         </div>
                     </div>

@@ -4,7 +4,7 @@ import "../../style/KantoBiz.css"
 import "../../style/Results.css"
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import { useDispatch, useSelector } from "react-redux";
-import Pagination from "./Pagination";
+import Pagination from "../../../Pagination/Pagination";
 import ReactTooltip from 'react-tooltip';
 import {addFilterEventSelected} from "../../../FunctionTools/FunctionProps";
 

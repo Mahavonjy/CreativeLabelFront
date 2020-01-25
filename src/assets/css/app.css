@@ -22568,3 +22568,160 @@ nav.nav-flat .navbar-brand{
 .loginBtn--google:focus {
     background: #E74B37;
 }
+
+/* Edit input tags */
+
+.tag-editor {
+    width: 100%;
+    margin: 20px auto;
+    box-shadow: 0px 0px 10px 1px #9c9c9c;
+    border-radius: 10px;
+    overflow:hidden;
+    transition:linear 1s;
+}
+
+.tag-editor .tag-editor-inner .tag-editor-title {
+    background: #e1eec3; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #ED1C24, #58585a
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+            to left,
+            #ED1C24,
+            #58585a
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-radius: 8px 8px 0px 0px;
+    position:relative;
+}
+.tag-editor .tag-editor-inner .tag-editor-title h1 {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    font-weight: normal;
+    padding: 12px 20px 12px 20px;
+    font-size: 26px;
+    color: #111;
+    position: relative;
+    display:inline-block;
+}
+
+
+.tag-editor .tag-editor-tags {
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+}
+
+.tag-editor .tag-editor-tags ul {
+    padding: 0;
+    margin: 0;
+}
+
+.tag-editor .tag-editor-tags ul li {
+    list-style: none;
+    display: inline-block;
+    background: #eee;
+    margin-right: 20px;
+    margin-bottom:10px;
+    padding:3px 6px;
+    border-radius:3px;
+    font-family: "Montserrat", sans-serif;
+    font-size:13px;
+    border:1px solid #dedede;
+    transition:linear 0.3s;
+}
+
+.tag-editor .tag-editor-tags ul li span.removeTag {
+    font-size: 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight:700;
+    color:#444;
+}
+.tag-editor .tag-editor-tags ul li.inputlist{
+    background:none;
+    display: flex;
+    padding:0 0 0 0;
+    margin:0 0 15px 0;
+    border:none;
+}
+.tag-editor .tag-editor-tags input[type="text"] {
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    color: #555;
+    font-family: "Montserrat", sans-serif;
+    width: 100%;
+}
+
+.tag-editor .tag-editor-tags input[type="text"]::-webkit-input-placeholder {
+    font-size: 12px;
+}
+.tag-editor .tag-editor-tags input[type="text"]::-moz-placeholder {
+    font-size: 12px;
+}
+.tag-editor .tag-editor-tags input[type="text"]:-ms-input-placeholder {
+    font-size: 12px;
+}
+.tag-editor .tag-editor-tags input[type="text"]:-moz-placeholder {
+    font-size: 12px;
+}
+
+.animated{
+    -webkit-animation-duration: 0.7s;
+    animation-duration: 0.7s;
+}
+
+.tag-editor span.dots {
+    position: absolute;
+    background-color: #a21314;
+    border-radius: 5px;
+    font-size: 0;
+    padding: 5px;
+    right:10px;
+    top:23px;
+}
+
+.tag-editor span.dots:before {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    content: '';
+
+    background-color: #a21314;
+    border-radius: 5px;
+    font-size: 0;
+    padding: 5px;
+}
+
+.tag-editor span.dots:after {
+    position: absolute;
+    right: 40px;
+    top: 0;
+    content: '';
+    background-color: #a21314;
+    border-radius: 5px;
+    font-size: 0;
+    padding: 5px;
+}
+
+.tag-editor span.dots.empty, .tag-editor span.dots.empty:before, .tag-editor span.dots.empty:after{
+    background-color:#FFF;
+}
+
+@media screen and (max-width:500px){
+    .tag-editor
+    {
+        width:98%;
+    }
+    .tag-editor .tag-editor-inner .tag-editor-title h1 {
+        font-size:20px;
+    }
+    .tag-editor span.dots{
+        top:18px;
+        padding:4px;
+    }
+    .tag-editor span.dots:before, .tag-editor span.dots:after{
+        padding:4px;
+    }
+}

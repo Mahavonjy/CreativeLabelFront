@@ -172,7 +172,7 @@ function DisplayPrestation() {
                                             <table className="responsive-table border-0">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">Name&nbsp;<i className="icon icon-info" data-tip="Nom donner par l'artiste cette option"/></th>
+                                                    <th scope="col">Nom&nbsp;<i className="icon icon-info" data-tip="Nom donner par l'artiste cette option"/></th>
                                                     <th scope="col">Tag&nbsp;<i className="icon icon-info" data-tip="Le nom des autres artiste proposé avec"/></th>
                                                     <th scope="col">Prix&nbsp;<i className="icon icon-info" data-tip="Le prix de cette option en plus de la prestation"/></th>
                                                     <th scope="col">Description&nbsp;<i className="icon icon-info" data-tip="quelque description qui explique l'option"/></th>
