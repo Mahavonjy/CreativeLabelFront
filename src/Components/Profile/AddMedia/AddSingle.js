@@ -109,7 +109,7 @@ function AddSingle (props) {
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': user_credentials.token
             };
-            axios.post(Conf.configs.ServerApi + link, bodyFormData, {headers: headers}).then(resp => {
+            axios.post( link, bodyFormData, {headers: headers}).then(resp => {
                 setLoading(false);
                 props.closePopup(1, resp.data);
             }).catch(err => {

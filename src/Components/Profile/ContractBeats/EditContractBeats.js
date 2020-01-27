@@ -132,7 +132,7 @@ function EditContractBeats() {
             let tmp = contract_array[x];
             let response = generateData(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
             await tmp.push(
-                axios.put(Conf.configs.ServerApi + "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
+                axios.put( "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
                     let tmp = contract;
                     tmp[response.data['contract_name']] = response.data;
                     dispatch(profileInitialisationContract(tmp));
@@ -143,7 +143,7 @@ function EditContractBeats() {
         }
 
         Promise.all(tmp_call).then(() => {
-            axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
+            axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
                 dispatch(beatsInitialisationPricing(resp.data));
                 toast.success("Enregistrement avec success")
             }).catch(err => {

@@ -26,7 +26,7 @@ function Cart(props) {
     const [cart, setCart] = useState(carts);
     const [remove, setRemove] = useState(null);
 
-    const deleteCart = async (song_id, id) => {
+    const deleteCart = async (song_id) => {
         setRemove(song_id);
         if (user_credentials.token === Conf.configs.TokenVisitor) {
             let Carts = await JSON.parse(localStorage.getItem("MyCarts"));
@@ -47,7 +47,7 @@ function Cart(props) {
             if (carts_tmp.length === 0) window.location.replace('/beats');
         } else {
             headers['Isl-Token'] = user_credentials.token;
-            axios.delete(Conf.configs.ServerApi + "api/carts/delete/" + id , {headers: headers}).then(() => {
+            axios.delete( "api/carts/delete/" + song_id , {headers: headers}).then(() => {
                 let carts_tmp = [];
                 for (let cart in carts) {
                     if (carts[cart].song_id === song_id) {
@@ -138,7 +138,7 @@ function Cart(props) {
                                                                     </div>
                                                                 </div>
                                                             </div> :
-                                                            <i className="icon-trash text-red s-24" onClick={() => deleteCart(val.song_id, val.id)}/>}
+                                                            <i className="icon-trash text-red s-24" onClick={() => deleteCart(val.song_id)}/>}
                                                     </td>
                                                 </tr>
                                             )}

@@ -34,7 +34,7 @@ function Login() {
 
         let data = { email: email, password: password };
         setLoading(true);
-        axios.post(Conf.configs.ServerApi + "api/users/login", data, {headers: headers}).then(async response => {
+        axios.post( "api/users/login", data, {headers: headers}).then(async response => {
             const { token } = response.data;
             setLoading(false);
             toast.success("Vous etes connecté");
@@ -57,7 +57,7 @@ function Login() {
     const verifyKeysSubmit = () => {
         setLoading(true);
         let data = { email: email, password: password };
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
+        axios.post( "api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
             setLoading(false);
             setVisible(false);
             toast.success("validé, vous pouvez vous reconnecter")
@@ -69,7 +69,7 @@ function Login() {
 
     const verifyEmail = () => {
         setLoading(true);
-        axios.post(Conf.configs.ServerApi + "api/users/get_mail", {email: email}).then(() => {
+        axios.post( "api/users/get_mail", {email: email}).then(() => {
             setVisibility(false);
             setLoading(false);
             setResetPassword(true);
@@ -83,7 +83,7 @@ function Login() {
     const verifyKeysResetPass = () => {
         setLoading(true);
         let data = { email: email, keys: keys };
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then(() => {
+        axios.post("api/users/get_if_keys_validate", data).then(() => {
             setLoading(false);
             setResetPassword(false);
             setChangePass(true);
@@ -100,7 +100,7 @@ function Login() {
         if (password === confirm_password) {
             setLoading(true);
             let data = { email: email, password: password };
-            axios.put(Conf.configs.ServerApi + "api/users/reset_password", data, {headers: headers}).then(() => {
+            axios.put("api/users/reset_password", data, {headers: headers}).then(() => {
                 setLoading(false);
                 toast.success("Password updated");
                 setChangePass(false);

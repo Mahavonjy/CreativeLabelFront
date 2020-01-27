@@ -69,7 +69,7 @@ function EditSingle(props) {
                 'Access-Control-Allow-Origin': "*",
                 'Isl-Token': user_credentials.token
             };
-            axios.put(Conf.configs.ServerApi + link + id, bodyFormData, {headers: headers}).then(resp => {
+            axios.put( link + id, bodyFormData, {headers: headers}).then(resp => {
                 setLoading(false);
                 props.Success(resp.data);
             }).catch(err => {

@@ -194,9 +194,9 @@ class Players extends Component {
                 'Isl-Token': this.props.user_credentials.token
             };
             if (listened)
-                axios.put(Conf.configs.ServerApi + "api/medias/listened/" + this.state.songId, {}, {headers: headers}).then(resp => null);
+                axios.put( "api/medias/listened/" + this.state.songId, {}, {headers: headers}).then(resp => null);
             else if (pres_listened)
-                axios.put(Conf.configs.ServerApi + "api/medias/pres_listened/" + this.state.songId, {}, {headers: headers}).then(resp => null)
+                axios.put( "api/medias/pres_listened/" + this.state.songId, {}, {headers: headers}).then(resp => null)
         }
     };
 
@@ -244,13 +244,13 @@ class Players extends Component {
                 <aside className="control-sidebar fixed " style={{height: "100%"}}>
                     <div className="slimScroll">
                         <div className="sidebar-header">
-                            <h4>Beats Playlist</h4>
+                            <h4>Instrumental Playlist</h4>
                             <a href="/#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
                         </div>
                         <div className="p-3">
-                            <ul id="playlist" className="playlist" style={{height: "100%"}}>
+                            <ul id="playlist" className="playlist scrollbar-isl" style={{height: "100%"}}>
                                 {this.state.songId ? this.state.list.map((val, index) =>
-                                    <li className="list-group-item my-1" key={index}>
+                                    <li className="list-group-item my-1 scrollbar-isl" key={index}>
                                         <div className="no-ajaxy media-url">
                                             <div className="d-flex justify-content-between align-items-center">
                                                 {this.state.songId === val['id'] && this.state.IsPlaying ?

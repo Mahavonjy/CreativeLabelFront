@@ -78,7 +78,7 @@ function PurchaseInformation(props) {
         } catch (e) {
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
         } finally {
-            axios.post(Conf.configs.ServerApi + "api/beats/payment/beatShop", data,{headers: headers}).then(() => {
+            axios.post( "api/beats/payment/beatShop", data,{headers: headers}).then(() => {
                 setPaymentLoading(false);
                 window.location.replace('/CommandSuccess')
             }).catch(() => {

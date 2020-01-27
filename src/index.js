@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import profileReducer from './reducer/Profile';
+import profileReducer from './reducer/Profile/Profile';
+import profilePrestations from './reducer/Profile/Prestation';
 import beatsReducer from './reducer/Beats';
 import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
@@ -13,12 +14,17 @@ import kantoBizForm from "./reducer/KantoBiz/Form";
 import { sessionService, sessionReducer } from 'redux-react-session';
 import KantoBizSearchResults from "./reducer/KantoBiz/SearchResult";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
-import thunkMiddleware from "redux-thunk"
+import thunkMiddleware from "redux-thunk";
+import Conf from "./Config/tsconfig";
+import axios from 'axios';
+
+axios.defaults.baseURL = Conf.configs.ServerApi;
 
 const Reducers = combineReducers({
     session: sessionReducer,
     "beats": beatsReducer,
     "profile": profileReducer,
+    "profilePrestations": profilePrestations,
     "Home": PlaylistHomeReducer,
     "Player": playersReducer,
     "Carts": cartsReducer,

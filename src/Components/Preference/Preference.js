@@ -39,7 +39,7 @@ function Preference() {
             toast.warn("Veuillez choisir au moins 5 genres");
         } else {
             let data = {"user_genre_list": user_genre_tmp};
-            axios.post(Conf.configs.ServerApi + "api/medias/add_users_genre", data,{headers:headers}).then(() =>{
+            axios.post( "api/medias/add_users_genre", data,{headers:headers}).then(() =>{
                 window.location.replace("/beats")
             }).catch(error => {
                 toast.error(error.response.data);

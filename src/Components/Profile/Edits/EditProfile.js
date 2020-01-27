@@ -52,7 +52,7 @@ function EditProfile (props) {
             'Isl-Token': user_credentials.token
         };
 
-        axios.put(Conf.configs.ServerApi + "api/profiles/updateProfile", bodyFormData, {headers: headers}).then(resp => {
+        axios.put( "api/profiles/updateProfile", bodyFormData, {headers: headers}).then(resp => {
             let data = resp.data;
             dispatch(profileInitialisationInfo(data));
             props.updateProfile(data);

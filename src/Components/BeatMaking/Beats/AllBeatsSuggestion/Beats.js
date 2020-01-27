@@ -50,7 +50,7 @@ function Beats(props) {
             'Isl-Token': user_credentials.token
         };
 
-        axios.get(Conf.configs.ServerApi + url_, {headers: headers}).then(resp => {
+        axios.get( url_, {headers: headers}).then(resp => {
             const data = resp.data[key];
             dispatch(BeatsProps.addBeats(data));
             setStateBeats(data);

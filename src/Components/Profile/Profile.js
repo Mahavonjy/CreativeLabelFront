@@ -108,7 +108,7 @@ function Profile (props) {
         await setActiveToast(true);
         await document.getElementById(id).setAttribute("disabled", "disabled");
         await setLoading(true);
-        axios.delete(Conf.configs.ServerApi + "api/" + type_ + "/delete/" + id, {headers: headers}).then(() => {
+        axios.delete( "api/" + type_ + "/delete/" + id, {headers: headers}).then(() => {
             setLoading(false);
             let new_beats_array = state_user_beats.filter((beat) => beat.id !== parseInt(id));
             dispatch(profileAddBeats(new_beats_array));
@@ -231,16 +231,6 @@ function Profile (props) {
                 </div>
             </Modal>
             {/* end form become an artist*/}
-
-            <Modal visible={true} width="80%" height="80%" effect="fadeInUp">
-                <div className="bg-dark" style={{height:"100%"}}>
-                    <button className="ModalClose">
-                        <i className="icon-close s-24 text-warning"/>
-                    </button>
-                    <EditPrestation/>
-                </div>
-            </Modal>
-
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="row row-eq-height">
                     <div className="col-lg-12">
@@ -295,7 +285,7 @@ function Profile (props) {
                                         </div>}
                                     {user_role !== "professional_auditor" &&
                                     <div className={user_role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fade"} id="Prestations" role="tabpanel">
-                                        <MyPrestations role={user_role}/>
+                                        <MyPrestations role={user_role} profile/>
                                     </div>}
                                     <div className={user_role === "professional_auditor" ? "tab-pane fade show active" : "tab-pane fade"} id="Paiements-Reservations" role="tabpanel">
                                         <PaymentsAndReservations/>

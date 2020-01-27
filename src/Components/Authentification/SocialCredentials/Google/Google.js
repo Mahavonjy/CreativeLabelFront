@@ -22,7 +22,7 @@ function LoginGoogle(props) {
             "Access-Control-Allow-Origin": "*"
         };
 
-        axios.post(Conf.configs.ServerApi + "api/users/gCallback", data, {headers: headers}).then((response) => {
+        axios.post( "api/users/gCallback", data, {headers: headers}).then((response) => {
             localStorage.setItem("Isl_Credentials", JSON.stringify(response.data));
             window.location.replace('/beats')
         }).catch((error) => console.log(error));

@@ -1,6 +1,14 @@
 const initState = {
-    profile_info: '', albums: [], single: [], user_beats: [], contract: '',
-    role: '', follower: '', following: '', pricing_beats: '', ready_beats: false,
+    profile_info: '',
+    albums: [],
+    single: [],
+    user_beats: [],
+    contract: '',
+    role: '',
+    follower: '',
+    following: '',
+    pricing_beats: '',
+    ready_beats: false,
 };
 
 const profileReducer = (state = initState, action) => {

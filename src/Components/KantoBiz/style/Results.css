@@ -254,6 +254,18 @@
     margin: 1.5rem;
 }
 
+.card_kantoProfile {
+    cursor: pointer;
+    width: 320px;
+    height: 250px;
+    background: #58585a;
+    box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin: 1.5rem;
+}
+
 .kanto-list {
     max-height: 100px !important;
     border-radius: 10px;
@@ -265,6 +277,16 @@
 }
 
 .card_kanto .additional {
+    position: absolute;
+    width: 150px;
+    height: 100%;
+    background-image: linear-gradient(to right bottom, #1a171b, #242226, #2f2e31, #3b3a3d, #474749, #474749, #474749, #474749, #3b3a3d, #2f2e31, #242226, #1a171b);
+    transition: width 0.4s;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.card_kantoProfile .additionalProfile {
     position: absolute;
     width: 150px;
     height: 100%;
@@ -286,7 +308,24 @@
     float: left;
 }
 
+.card_kantoProfile .additionalProfile .user-card_kanto {
+    width: 150px;
+    height: 100%;
+    position: relative;
+    float: left;
+}
+
 .card_kanto .additional .user-card_kanto::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 10%;
+    right: -2px;
+    height: 80%;
+    border-left: 2px solid rgba(0,0,0,0.025);
+}
+
+.card_kantoProfile .additionalProfile .user-card_kanto::after {
     content: "";
     display: block;
     position: absolute;
@@ -309,7 +348,24 @@
     white-space: nowrap;
 }
 
+.card_kantoProfile .additionalProfile .user-card_kanto .level,
+.card_kantoProfile .additionalProfile .user-card_kanto .points {
+    top: 15%;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    font-weight: bold;
+    background: rgba(0,0,0,0.15);
+    padding: 0.125rem 0.75rem;
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
 .card_kanto .additional .user-card_kanto .points {
+    top: 85%;
+}
+
+.card_kantoProfile .additionalProfile .user-card_kanto .points {
     top: 85%;
 }
 
@@ -320,7 +376,6 @@
     left: 150px;
     height: 100%;
 }
-
 
 @media (max-width: 575px) {
     .card_kanto {
@@ -428,6 +483,43 @@
     right: 1rem;
     width: 92%;
     overflow: auto;
+    font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
+}
+
+.card_kantoProfile .generalProfile {
+    width: 312px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 0 1rem 1rem;
+}
+
+.card_kantoProfile .generalProfile img {
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0.4;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    z-index: -1;
+    position: absolute;
+}
+
+.card_kantoProfile .generalProfile .more {
+    position: absolute;
+    bottom: 3rem;
+    right: 1rem;
+    font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
+}
+
+.card_kantoProfile .generalProfile .more-genre {
+    position: absolute;
+    bottom: 1rem;
+    /*right: 1rem;*/
+    width: 100%;
+    /*overflow: auto;*/
     font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
 }
 

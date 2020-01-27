@@ -33,7 +33,7 @@ function EditOrAddNewOptions(props) {
 
     return (
         <div className="text-center">
-            <h4 className="text-red">{props.edit ? "Modification": "Nouvelle Option"}</h4>
+            <h4 className="text-red pt-3">{props.edit ? "Modification": "Nouvelle Option"}</h4>
             <div className="row justify-content-center mt-3">
                 <div className="col-md-4">
                     <div className="form-group form-float">

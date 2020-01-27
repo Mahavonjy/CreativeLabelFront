@@ -20,7 +20,7 @@ function LoginFacebook(props) {
             token_type: 'bearer',
         };
 
-        axios.post(Conf.configs.ServerApi + "api/users/login/authorized", data, {headers: headers}).then(response =>{
+        axios.post( "api/users/login/authorized", data, {headers: headers}).then(response =>{
             localStorage.setItem("Isl_Credentials", JSON.stringify(response.data));
             window.location.replace('/beats')
         }).catch(error => console.log(error.response))

@@ -33,7 +33,7 @@ function Register () {
         e.preventDefault();
 
         const data = { email: email, keys: keys };
-        axios.post(Conf.configs.ServerApi + "api/users/get_if_keys_validate", data).then( async (data) =>{
+        axios.post( "api/users/get_if_keys_validate", data).then( async (data) =>{
             await sessionService.saveSession({ token: user_credentials.token }).then(() => {
                 sessionService.saveUser(user_credentials);
             });
@@ -57,7 +57,7 @@ function Register () {
             setIsActive(true);
             let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
             let data = { name: name, email: email, password: password };
-            axios.post(Conf.configs.ServerApi + "api/users/register", data, {headers: headers}).then(response => {
+            axios.post( "api/users/register", data, {headers: headers}).then(response => {
                 toast.success("Un email vous a eté envoyé");
                 setIsActive(false);
                 setVisible(true);

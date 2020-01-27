@@ -1,32 +1,21 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactTooltip from "react-tooltip";
 import EditOrAddNewOptions from "./EditOrAddNewOption";
 import Modal from "react-awesome-modal";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function Options(props) {
+
+
+    const props_options = useSelector(state => state.profilePrestations.options);
 
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
     const [addNewOption, setAddNewOption] = useState(false);
     const [index, setIndex] = useState(null);
     const [data, setData] = useState(null);
-    const [options, setOptions] = useState([
-        {
-            name: "Featuring",
-            hidden: true,
-            tag: "Jazz MMC",
-            price: 899,
-            description: "Rien pour le moment"
-        },
-        {
-            name: "Show",
-            hidden: true,
-            tag: "Lôla",
-            price: 100,
-            description: "Rien pour le moment"
-        }
-    ]);
+    const [options, setOptions] = useState(props_options);
 
     const changeOptionsStatus = (index) => {
         let tmp_options = [...options];
@@ -43,6 +32,7 @@ function Options(props) {
             let tmp_options = [...options];
             tmp_options[index] = data;
             setOptions(tmp_options);
+            setEdit(false);
         }
     };
 
@@ -83,7 +73,7 @@ function Options(props) {
             {edit &&
             <Modal visible={true} width="500" height="auto" effect="fadeInUp">
                 <div className="bg-grey" style={{height:"100%"}}>
-                    <button className="ModalClose" onClick={() => edit ? setEdit(false) : setAddNewOption(false)}>
+                    <button className="ModalClose float-left" onClick={() => edit ? setEdit(false) : setAddNewOption(false)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
                     <EditOrAddNewOptions edit={addNewOption ? false : edit} func={addNewOption ? addOption : editOption} data={data}/>

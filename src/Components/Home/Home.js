@@ -99,14 +99,14 @@ function Home () {
         let firstRouteParsing = href[href.length - 1];
         let secondRouteParsing = href[href.length - 2];
         if (secondRouteParsing === "CheckThisBeat") {
-            axios.get(Conf.configs.ServerApi + "api/beats/OneBeat/" + firstRouteParsing, {headers: headers}).then(resp => {
+            axios.get("api/beats/OneBeat/" + firstRouteParsing, {headers: headers}).then(resp => {
                 dispatch(HomeProps.addBeatMakerBeats(resp.data['all_artist_beats']));
                 dispatch(HomeProps.addSimilarBeats(resp.data['similar_beats']));
                 setSingleBeat(resp.data['single_beat']);
                 setLoading(false);
             }).catch(() => window.location.replace("/BeatsNotFound") )
         } else if (secondRouteParsing === "isl_artist_profile") {
-            axios.get(Conf.configs.ServerApi + "api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
+            axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
                 dispatch(HomeProps.addOtherBeatMakerBeats(resp.data['user_beats']));
                 setProfileChecked(resp.data['profile_checked']);
                 setUserData(resp.data['user_data']);
@@ -135,13 +135,13 @@ function Home () {
             //
         } finally {
             Promise.all([
-                axios.get(Conf.configs.ServerApi + "api/medias/allMediaGenre", {headers: headers}).then(resp =>{
+                axios.get("api/medias/allMediaGenre", {headers: headers}).then(resp =>{
                     let tmp_arr = [];
                     for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
                     dispatch(HomeProps.addAllMediaGenre(tmp_arr));
                     dispatch(HomeProps.addPrefAllMediaGenre(resp.data));
                 }).catch(err => ifConnectionError(err)),
-                axios.get(Conf.configs.ServerApi + "api/beats/AllSuggestion", {headers: headers}).then(resp => {
+                axios.get( "api/beats/AllSuggestion", {headers: headers}).then(resp => {
                     dispatch(HomeProps.addBeats(resp.data["random"]));
                     dispatch(HomeProps.newBeatMaker(resp.data["new_beatMaker"]));
                     dispatch(HomeProps.topBeatMaker(resp.data["top_beatmaker"]));
@@ -159,7 +159,7 @@ function Home () {
             if (routeParsed === 'register') {
                 window.location.replace('/beats')
             } else if (routeParsed !== 'preference') {
-                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                axios.get( "api/users/if_choice_user_status", {headers: headers}).then(() => {
                     fetchUserData()
                 }).catch(err => {
                     try {
@@ -173,7 +173,7 @@ function Home () {
                     }
                 });
             } else {
-                axios.get(Conf.configs.ServerApi + "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                axios.get( "api/users/if_choice_user_status", {headers: headers}).then(() => {
                     fetchUserData()
                 }).catch(() => {
                     NotOnline()
@@ -189,17 +189,17 @@ function Home () {
 
     const fetchUserData = () => {
         Promise.all([
-            axios.get(Conf.configs.ServerApi + "api/profiles/my_profile", {headers: headers}).then(resp => {
+            axios.get( "api/profiles/my_profile", {headers: headers}).then(resp => {
                 dispatch(HomeProps.profileInitialisationInfo(resp.data['my_profile']));
                 dispatch(HomeProps.profileInitialisationRole(resp.data['role']));
                 dispatch(HomeProps.profileInitialisationFollower(resp.data['my_followers']));
                 dispatch(HomeProps.profileInitialisationFollowing(resp.data['my_followings']));
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
-                        axios.get(Conf.configs.ServerApi + "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
+                        axios.get( "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
                             dispatch(HomeProps.profileAddBeats(resp.data['beats']));
                         }).catch(err => ifConnectionError(err, fetchUserData)),
-                        axios.get(Conf.configs.ServerApi + "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
+                        axios.get( "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
                             dispatch(HomeProps.profileInitialisationContract(resp.data));
                         }).catch(err => ifConnectionError(err, fetchUserData))
                     ]).then();
@@ -211,7 +211,7 @@ function Home () {
                     user_credentials: user_credentials
                 }).then(() => null);
             }).catch(err => ifConnectionError(err, fetchUserData)),
-            axios.get(Conf.configs.ServerApi + "api/beats/pricing", {headers: headers}).then(resp => {
+            axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
                 dispatch(HomeProps.beatsInitialisationPricing(resp.data));
             }).catch(err => ifConnectionError(err))
         ]).then(() => NotOnline()).catch(() => fetchUserData())
@@ -222,7 +222,7 @@ function Home () {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
             } else {
-                axios.delete(Conf.configs.ServerApi + "api/users/logout", {headers: headers}).then(() => {
+                axios.delete( "api/users/logout", {headers: headers}).then(() => {
                     sessionService.deleteSession();
                     sessionService.deleteUser();
                     window.location.replace('/beats');

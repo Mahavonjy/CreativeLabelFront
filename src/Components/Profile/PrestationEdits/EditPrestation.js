@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 import { useSelector } from "react-redux";
 import PrestationInformation from "../../KantoBiz/Prestations/Form/PrestationInformation";
-import * as Tools from "../../FunctionTools/Tools";
+import { ImageClick, changeFields } from "../../FunctionTools/Tools";
 import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails";
 import RefundPolicy from "../Section/RefundPolicy";
 import ReactTooltip from "react-tooltip";
@@ -60,7 +60,7 @@ function EditPrestation(props) {
                                         <label className="custom-file-label text-black" htmlFor="inputGroupFile01">Importer ici la fiche technique de cette prestation</label>
                                     </div>
                                 </div>
-                                <Thematics artistType={role.charAt(0).toUpperCase() + role.slice(1)}/>
+                                <Thematics var={{artistType: role.charAt(0).toUpperCase() + role.slice(1)}}/>
                                 <PrestationInformation aartistType={role.charAt(0).toUpperCase() + role.slice(1)}/>
                                 <div className="pt-5 mb-2">
                                     <div className="cube-container">
@@ -74,12 +74,12 @@ function EditPrestation(props) {
                                         </div>
                                     </div>
                                     <div className="image-buttons">
-                                        <input onClick={(e) => Tools.ImageClick(e)} type="image" className="show-image-1" src="https://images.unsplash.com/photo-1445810694374-0a94739e4a03?w=100&h=100&fit=crop" alt=""/>
-                                        <input onClick={(e) => Tools.ImageClick(e)} type="image" className="show-image-2" src="https://images.unsplash.com/photo-1515260268569-9271009adfdb?w=100&h=100&fit=crop" alt=""/>
-                                        <input onClick={(e) => Tools.ImageClick(e)} type="image" className="show-image-3" src="https://images.unsplash.com/photo-1506045412240-22980140a405?w=100&h=100&fit=crop" alt=""/>
-                                        <input onClick={(e) => Tools.ImageClick(e)} type="image" className="show-image-4" src="https://images.unsplash.com/photo-1514041181368-bca62cceffcd?w=100&h=100&fit=crop" alt=""/>
-                                        <input onClick={(e) => Tools.ImageClick(e)} type="image" className="show-image-5" src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=100&h=100&fit=crop" alt=""/>
-                                        <input onClick={(e) => Tools.ImageClick(e)} type="image" className="show-image-6" src="https://images.unsplash.com/photo-1486334803289-1623f249dd1e?w=100&h=100&fit=crop" alt=""/>
+                                        <input onClick={(e) => ImageClick(e)} type="image" className="show-image-1" src="https://images.unsplash.com/photo-1445810694374-0a94739e4a03?w=100&h=100&fit=crop" alt=""/>
+                                        <input onClick={(e) => ImageClick(e)} type="image" className="show-image-2" src="https://images.unsplash.com/photo-1515260268569-9271009adfdb?w=100&h=100&fit=crop" alt=""/>
+                                        <input onClick={(e) => ImageClick(e)} type="image" className="show-image-3" src="https://images.unsplash.com/photo-1506045412240-22980140a405?w=100&h=100&fit=crop" alt=""/>
+                                        <input onClick={(e) => ImageClick(e)} type="image" className="show-image-4" src="https://images.unsplash.com/photo-1514041181368-bca62cceffcd?w=100&h=100&fit=crop" alt=""/>
+                                        <input onClick={(e) => ImageClick(e)} type="image" className="show-image-5" src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=100&h=100&fit=crop" alt=""/>
+                                        <input onClick={(e) => ImageClick(e)} type="image" className="show-image-6" src="https://images.unsplash.com/photo-1486334803289-1623f249dd1e?w=100&h=100&fit=crop" alt=""/>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@ function EditPrestation(props) {
                                             <div className="input-group-prepend d-inline-block center">
                                                 <div className="input-group-text text-dark"><i className="icon-money"/>&nbsp;Modifier le prix ici *</div>
                                                 <input className="form-control" type="number" id="global_price" name="global_price"
-                                                       onChange={(e) => Tools.changeFields(setGlobalPrice, e)}/>
+                                                       onChange={(e) => changeFields(setGlobalPrice, e)}/>
                                             </div>
                                         </div>
                                     </div>

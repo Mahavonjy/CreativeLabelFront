@@ -1,9 +1,9 @@
 const initState = {
     results: [],
     ResultsPage: false,
-    DisplayService: true,
+    DisplayService: false,
     filter_events_selected: [],
-    EventAndThematics: false
+    EventAndThematics: true
 };
 
 const KantoBizSearchResults = (state = initState, action) => {

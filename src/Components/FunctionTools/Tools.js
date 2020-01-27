@@ -13,7 +13,7 @@ export const changeFields = (setState, e, up_props, dispatch) => {
 };
 
 export const FillInCartProps = (headers, props) => {
-    axios.get(Conf.configs.ServerApi + "api/carts/MyCart", {headers: headers}).then(resp => {
+    axios.get( "api/carts/MyCart", {headers: headers}).then(resp => {
         let tmp = 0;
         let cart_length = resp.data.length;
         if (cart_length !== 0) {
@@ -38,7 +38,7 @@ export const AddToCart = async (song_id, price, licenses_name, beat, props, disp
             'Access-Control-Allow-Origin': "*",
             'Isl-Token': user_credentials.token
         };
-        return axios.post(Conf.configs.ServerApi + "api/carts/addToCart", data_global, {headers: headers}).then(() => {
+        return axios.post( "api/carts/addToCart", data_global, {headers: headers}).then(() => {
             let tmp_cart = props.carts;
             tmp_cart.push({
                 "media" : {
@@ -118,13 +118,13 @@ export const LikeOrFollow = (LikeOrFollow, id, user_credentials) => {
             'Isl-Token': user_credentials.token
         };
         if (LikeOrFollow === "like") {
-            axios.post(Conf.configs.ServerApi + "api/medias/admire/" + id, {},{headers: headers}).then(() =>{
+            axios.post( "api/medias/admire/" + id, {},{headers: headers}).then(() =>{
                 toast.success("liked")
             }).catch(() => {
                 toast.warn("already liked")
             });
         } else if (LikeOrFollow === "follow") {
-            axios.post(Conf.configs.ServerApi + "api/admiration/admire_user/" + id, {},{headers: headers}).then(() =>{
+            axios.post( "api/admiration/admire_user/" + id, {},{headers: headers}).then(() =>{
                 toast.success("followed");
                 OtherProfile.UpdateStateFollowed();
             }).catch(() => {
@@ -185,7 +185,7 @@ export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
     for (let index in medias) {
         setState(state => [...state, {index: true}]);
         all_call_api.push(
-            axios.get(Conf.configs.ServerApi + "api/medias/Streaming/" + medias[index]['id'], {headers:headers}).then(response => {
+            axios.get( "api/medias/Streaming/" + medias[index]['id'], {headers:headers}).then(response => {
                 dispatch(up_props({"index": index, "link": response.data}));
             }).catch(error => {
                 console.log(error);
