@@ -138,7 +138,7 @@ function AddSingle (props) {
     }, []);
 
     return (
-        <Modal visible={true} width="700" height="750" effect="fadeInUp">
+        <Modal visible={true} width="700" height="auto" effect="fadeInUp">
             <ReactTooltip/>
             <ReactTooltip className="special-color-dark" id='basic_price' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Basic Lease (MP3) {contract['basic_lease']['price']}$ </h5>
@@ -261,7 +261,7 @@ function AddSingle (props) {
                                           id="description" name="description" className="form-control" placeholder={"Ajouter une description"}/>
                             </div>
                         </div>
-                        <button id="add-music" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e)=> handleSubmit(e)}>{loading ? "Veuiller attendre ...": "Enregister"}</button>
+                        <button id="add-music" className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={(e)=> handleSubmit(e)}>{loading ? "Veuiller attendre ...": "Enregister"}</button>
                     </div>
                 </div>
             </div>

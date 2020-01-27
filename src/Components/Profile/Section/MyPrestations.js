@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactTooltip from "react-tooltip";
-import * as Tools from "../../FunctionTools/Tools";
+import { changeFields } from "../../FunctionTools/Tools";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 import Modal from "react-awesome-modal";
 import { useSelector } from "react-redux";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 function MyPrestations(props) {
 
     const props_prestation = useSelector(state => state.profilePrestations.prestations);
 
     const isMounted = useRef(false);
+    const [state_index, setStateIndex] = useState(null);
     const [global_price, setGlobalPrice] = useState(300);
     const [editPrestation, setEditPrestation] = useState(false);
     const [allPrestation, setAllPrestation] = useState(props_prestation);
@@ -21,6 +22,11 @@ function MyPrestations(props) {
         else if (val === "day")
             return "j";
         else return "h"
+    };
+
+    const toEditPrestation = async (index) => {
+        await setStateIndex(index);
+        await setEditPrestation(true)
     };
 
     const onChangeHidden = (index) => {
@@ -64,7 +70,7 @@ function MyPrestations(props) {
                     <button className="ModalClose float-left" onClick={() => setEditPrestation(false)}>
                         <i className="icon-close s-24 text-warning"/>
                     </button>
-                    <EditPrestation/>
+                    <EditPrestation data={allPrestation} index={state_index} setAllPrestation={setAllPrestation}/>
                 </div>
             </Modal>
             {/* end form become an artist */}
@@ -80,14 +86,14 @@ function MyPrestations(props) {
                                 <div className="input-group-text text-dark">
                                     <i className="icon-money"/>&nbsp;Modifier le prix ici *
                                 </div>
-                                <input className="form-control" type="number" id="global_price" name="global_price" onChange={(e) => Tools.changeFields(setGlobalPrice, e)}/>
+                                <input className="form-control" type="number" id="global_price" name="global_price" onChange={(e) => changeFields(setGlobalPrice, e)}/>
                             </div>
                         </div>
                     </div>
                 </div>}
 
                 <div className={props.read ? "col-lg-12" : "col-lg-10"}>
-                    <div className="row justify-content-center">
+                    <div className="row justify-content-center scrollbar-isl">
                         {allPrestation.map((val, index) =>
                             <div className={!props.profile ? "card_kanto" : "card_kantoProfile"} key={index}>
                                 <div className={!props.profile ? "additional": "additionalProfile"}>
@@ -100,7 +106,7 @@ function MyPrestations(props) {
                                             5&nbsp;<i className="icon icon-star"/>
                                         </div>:
                                             <div className="points center-result">
-                                                <i className="icon-edit text-red s-24 ml-1 mr-1" data-tip="Modifier cette prestation" onClick={() => setEditPrestation(true)}/>
+                                                <i className="icon-edit text-red s-24 ml-1 mr-1" data-tip="Modifier cette prestation" onClick={() => toEditPrestation(index)}/>
                                                 <i className="icon-trash text-red s-24 ml-1 mr-1" onClick={() => deletePrestations(index)} data-tip="supprimer cette prestation"/>
                                             </div>
                                         }
@@ -115,20 +121,20 @@ function MyPrestations(props) {
                                         <div className="row justify-content-center text-center" data-tip="Cliquer Moi">
                                             <div className="col text-light d-none d-sm-block">
                                                 <h4 className="text-light bolder">Genre</h4>
-                                                <ul className="bg-transparent kanto-list m-1">
+                                                <ul className="bg-transparent scrollbar-isl kanto-list m-1">
                                                     {val.thematics_options_selected.map((v, i) => <li key={i}>{v}</li>)}
                                                 </ul>
                                             </div>
                                             <div className="col text-light d-none d-sm-block">
                                                 <h4 className="text-light bolder">Ville</h4>
-                                                <ul className="bg-transparent kanto-list m-1">
+                                                <ul className="bg-transparent scrollbar-isl kanto-list m-1">
                                                     <li>{val.city_of_reference}</li>
                                                     {val.others_city.map((v, i) => <li key={i}>{v}</li>)}
                                                 </ul>
                                             </div>
                                             <div className="col ml-auto d-sm-none">
                                                 <h4 className="text-red">Evenements</h4>
-                                                <p className="events">
+                                                <p className="events scrollbar-isl">
                                                     {val.events_type.map((v) => v + " ,")}
                                                 </p>
 
@@ -136,7 +142,7 @@ function MyPrestations(props) {
                                                     <div className="col">
                                                         <small className="text-red">Ville</small>
                                                         <ul className="small-kanto-list">
-                                                            <ul className="bg-transparent kanto-list m-1">
+                                                            <ul className="bg-transparent scrollbar-isl kanto-list m-1">
                                                                 <li>{val.city_of_reference}</li>
                                                                 {val.others_city.map((v, i) => <li key={i}>{v}</li>)}
                                                             </ul>
@@ -149,7 +155,7 @@ function MyPrestations(props) {
                                                     </div>
                                                     <div className="col">
                                                         <small className="text-red">Genre</small>
-                                                        <ul className="small-kanto-list">
+                                                        <ul className="small-kanto-list scrollbar-isl">
                                                             {val.thematics_options_selected.map((v, i) => <li key={i}>{v}</li>)}
                                                         </ul>
                                                     </div>
@@ -185,23 +191,21 @@ function MyPrestations(props) {
                                     {props.profile &&
                                         <div>
                                             {val.hidden ?
-                                            <i className="float-right text-red icon-eye-slash s-36 mt-1"
-                                               onClick={() => onChangeHidden(index)}
+                                            <i className="float-right text-red icon-hide s-36 mt-1" onClick={() => onChangeHidden(index)}
                                                data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/> :
-                                            <i className="float-right text-red icon-eye s-36 mt-1"
-                                               onClick={() => onChangeHidden(index)}
+                                            <i className="float-right text-red icon-eye s-36 mt-1" onClick={() => onChangeHidden(index)}
                                                data-tip="Cette prestation est afficher, c'est a dire visible a la recherche des autieurs pro"/>}
-                                        </div>
-                                    }
+                                        </div>}
                                     {!props.profile && <img alt="" src={val.photo[0]} width="100%" height="100%"/>}
                                     {!props.profile && <h1 className="pt-2 ml-2 bolder text-red">Artist Name</h1>}
                                     {!props.profile && <p className="text-dark ml-2 font-weight-bold">{val.description}</p>}
-                                    <h1 className={!props.profile ? "more text-black bolder" : "more text-black bolder pb-3"}>{val.price}$</h1>
+                                    <h1 className={!props.profile ? "more text-black bolder" : "more text-black bolder pb-5"}>{val.price}$</h1>
                                     {!props.profile ?
-                                        <small className="more-genre pl-2 text-black">{val.thematics_options_selected.map((v) => v)}</small> :
-                                        <div style={{bottom: 0, right: 0}}>
+                                        <small className="more-genre scrollbar-isl pl-2 text-black">{val.thematics_options_selected.map((v) => v)}</small> :
+                                        <div className="more-icon text-red mt-4" data-tip data-for="copy_edit">
                                             <i className="icon-copy s-24"/>&nbsp;&&nbsp;<i className="icon-edit s-24"/>
                                         </div>}
+                                    {props.profile && <i className="icon-smartphone-11 text-red more-icon-phone s-36"/>}
                                 </div>
                             </div>
                         )}

@@ -108,7 +108,7 @@ function Profile (props) {
         await setActiveToast(true);
         await document.getElementById(id).setAttribute("disabled", "disabled");
         await setLoading(true);
-        axios.delete( "api/" + type_ + "/delete/" + id, {headers: headers}).then(() => {
+        axios.delete("api/" + type_ + "/delete/" + id, {headers: headers}).then(() => {
             setLoading(false);
             let new_beats_array = state_user_beats.filter((beat) => beat.id !== parseInt(id));
             dispatch(profileAddBeats(new_beats_array));

@@ -256,9 +256,9 @@
 
 .card_kantoProfile {
     cursor: pointer;
-    width: 320px;
+    width: 280px;
     height: 250px;
-    background: #58585a;
+    background-image: linear-gradient(to left, #bbbbbb, #a4a4a5, #8e8e8f, #78797a, #636466);
     box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
     border-radius: 10px;
     overflow: hidden;
@@ -474,7 +474,6 @@
     position: absolute;
     bottom: 3rem;
     right: 1rem;
-    font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
 }
 
 .card_kanto .general .more-genre {
@@ -483,7 +482,6 @@
     right: 1rem;
     width: 92%;
     overflow: auto;
-    font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
 }
 
 .card_kantoProfile .generalProfile {
@@ -511,16 +509,24 @@
     position: absolute;
     bottom: 3rem;
     right: 1rem;
-    font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
+}
+
+.card_kantoProfile .generalProfile .more-icon {
+    position: absolute;
+    bottom: 2rem;
+    right: 1rem;
+}
+
+.card_kantoProfile .generalProfile .more-icon-phone {
+    position: absolute;
+    bottom: 10rem;
+    right: 1.5rem;
 }
 
 .card_kantoProfile .generalProfile .more-genre {
     position: absolute;
     bottom: 1rem;
-    /*right: 1rem;*/
     width: 100%;
-    /*overflow: auto;*/
-    font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
 }
 
 button { cursor: pointer; }

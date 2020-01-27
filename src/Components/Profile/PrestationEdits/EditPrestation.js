@@ -60,7 +60,7 @@ function EditPrestation(props) {
                                         <label className="custom-file-label text-black" htmlFor="inputGroupFile01">Importer ici la fiche technique de cette prestation</label>
                                     </div>
                                 </div>
-                                <Thematics var={{artistType: role.charAt(0).toUpperCase() + role.slice(1)}}/>
+                                <Thematics var={{artistType: role.charAt(0).toUpperCase() + role.slice(1)}} prestation={props.data[props.index]} edit/>
                                 <PrestationInformation aartistType={role.charAt(0).toUpperCase() + role.slice(1)}/>
                                 <div className="pt-5 mb-2">
                                     <div className="cube-container">

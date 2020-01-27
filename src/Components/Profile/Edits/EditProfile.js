@@ -76,7 +76,7 @@ function EditProfile (props) {
     }, []);
 
     return (
-        <Modal visible={true} width="650" height="650" effect="fadeInUp">
+        <Modal visible={true} width="650" height="auto" effect="fadeInUp">
             <ToastContainer/>
             {loading && smallSpinner("absolute", "0")}
             <img alt={"logo"} src={logo} className="center" style={{position: "absolute",width: 650, height: 550, opacity:0.4}}/>
@@ -132,7 +132,7 @@ function EditProfile (props) {
                                 <input onChange={(e) => Tools.changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
                             </div>
                         </div>
-                        <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e) => {handleSubmitUpdateProfile(e)}}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>
+                        <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={(e) => handleSubmitUpdateProfile(e)}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>
                     </div>
                 </div>
             </div>

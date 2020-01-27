@@ -217,22 +217,19 @@ function Home () {
         ]).then(() => NotOnline()).catch(() => fetchUserData())
     };
 
-    const logout = () => {
+    const logout = async () => {
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
             } else {
-                axios.delete( "api/users/logout", {headers: headers}).then(() => {
-                    sessionService.deleteSession();
-                    sessionService.deleteUser();
-                    window.location.replace('/beats');
-                }).catch(() => {
-                    sessionService.deleteSession();
-                    sessionService.deleteUser();
-                    window.location.replace('/beats');
-                })
+                axios.delete("api/users/logout", {headers: headers}).then(() => null);
+                await sessionService.deleteSession().then(() => null);
+                await sessionService.deleteUser().then(() => null);
+                window.location.replace('/beats');
             }
         } catch (e) {
+            await sessionService.deleteSession().then(() => null);
+            await sessionService.deleteUser().then(() => null);
             window.location.reload()
         }
     };

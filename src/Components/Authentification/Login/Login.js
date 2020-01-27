@@ -197,7 +197,7 @@ function Login() {
 
             <div className="container-login">
                 <div className="absolute text-red ml-2" style={{zIndex: 99}}>
-                    <i className="icon-window-close s-36" onClick={() => document.getElementsByClassName("close")[0].click()}/>
+                    <i className="icon-close s-24" onClick={() => document.getElementsByClassName("close")[0].click()}/>
                 </div>
                 <div className="row l-form">
 

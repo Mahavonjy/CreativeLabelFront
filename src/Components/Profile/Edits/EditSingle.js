@@ -87,7 +87,7 @@ function EditSingle(props) {
     }, []);
 
     return (
-        <Modal visible={true} width="650" height="650" effect="fadeInUp" onClickAway={() => props.CloseEdit}>
+        <Modal visible={true} width="650" height="auto" effect="fadeInUp" onClickAway={() => props.CloseEdit}>
             <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
             {loading && smallSpinner("absolute", "0")}
             <img alt={"logo"} src={logo} style={{position: "absolute", height: 550, width: 650, opacity:0.4}}/>
