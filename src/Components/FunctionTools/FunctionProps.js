@@ -437,6 +437,60 @@ export function addUnitTimeOfPreparation(data) {
     };
 }
 
+export function addMaterialsOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_MATERIALS_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
+export function changeMovingPrice(data) {
+    return async dispatch => {
+        dispatch({
+            type: "CHANGE_MOVING_PRICE",
+            data: data
+        });
+    };
+}
+
+export function addServiceId(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICE_ID",
+            data: data
+        });
+    };
+}
+
+export function addAllUserOptions(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_USER_OPTIONS",
+            data: data
+        });
+    };
+}
+
+export function addAllUserPrestation(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_USER_PRESTATIONS",
+            data: data
+        });
+    };
+}
+
+export function changeStatusOfService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "CHANGE_STATUS_OF_SERVICE",
+            data: data
+        });
+    };
+}
+
 export function addUnitTimeOfService(data) {
     return async dispatch => {
         dispatch({

@@ -4,14 +4,29 @@ import Thematics from "./Thematics";
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
-import { addStepsIndex } from "../../../FunctionTools/FunctionProps"
+import { checkValueOfUnit } from "../../../FunctionTools/Tools";
+import { addStepsIndex, addAllUserPrestation } from "../../../FunctionTools/FunctionProps"
 import { useDispatch, useSelector } from "react-redux";
 import "../../style/Form.css"
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 function Form (props) {
 
     const dispatch = useDispatch();
+    const PropsFiles = useSelector(state => state.KantoBizForm.files);
+    const PropsTitle = useSelector(state => state.KantoBizForm.title);
+    const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
+    const PropsOthersCity = useSelector(state => state.KantoBizForm.others_city);
+    const PropsDescription = useSelector(state => state.KantoBizForm.description);
+    const props_events_selected = useSelector(state => state.KantoBizForm.events_selected);
+    const props_price_of_service = useSelector(state => state.KantoBizForm.price_of_service);
+    const props_preparation_time = useSelector(state => state.KantoBizForm.preparation_time);
+    const props_number_of_artist = useSelector(state => state.KantoBizForm.number_of_artist);
+    const props_unit_time_of_preparation = useSelector(state => state.KantoBizForm.unit_time_of_preparation);
+    const props_unit_time_of_service = useSelector(state => state.KantoBizForm.unit_time_of_service);
+    const props_service_time = useSelector(state => state.KantoBizForm.service_time);
+    const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected);
+
     const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif];
     const steps_index = useSelector(state => state.KantoBizForm.steps_index);
 
@@ -23,6 +38,34 @@ function Form (props) {
             {name: 'Detail de votre prestation', component: <PrestationDetails />},
             {name: 'Recaputilatif', component: <Recaputilatif var={props}/>},
     ];
+
+    const addNewPrestation = async () => {
+        await props.setActiveToast(true);
+        let tmp_prestation = { "preparation_time": {"time": null, "unit": null},  "service_time": {"time": null, "unit": null }};
+        tmp_prestation['id'] = 3;
+        tmp_prestation['hidden'] = true;
+        tmp_prestation['title'] = PropsTitle;
+        tmp_prestation['photo'] = PropsFiles;
+        tmp_prestation['city_of_reference'] = PropsCityReference;
+        tmp_prestation['others_city'] = PropsOthersCity;
+        tmp_prestation['description'] = PropsDescription;
+        tmp_prestation['events_type'] = props_events_selected;
+        tmp_prestation['price'] = props_price_of_service;
+        tmp_prestation['preparation_time']['time'] = props_preparation_time;
+        tmp_prestation['number_of_artist'] = props_number_of_artist;
+        tmp_prestation['service_time']['time'] = props_service_time;
+        tmp_prestation['thematics_options_selected'] = props_thematics_options_selected;
+        tmp_prestation['moving_price'] = 300;
+        tmp_prestation['materials'] = [];
+        tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props_unit_time_of_preparation);
+        tmp_prestation['service_time']['unit'] = checkValueOfUnit(props_unit_time_of_service);
+        let tmp = props.allPrestation;
+        tmp.push(tmp_prestation);
+        await props.setAllPrestation(tmp);
+        await dispatch(addAllUserPrestation(tmp));
+        await props.setBecomeArtistForm(false);
+        await props.close()
+    };
 
     const Next = async () => {
         let resp = component_steps[state_steps_index].validation();
@@ -43,6 +86,10 @@ function Form (props) {
     };
 
     useEffect(() => {
+
+        if (props.new)
+            props.setActiveToast(false);
+
         return () => {
             isMounted.current = true
         };
@@ -50,6 +97,7 @@ function Form (props) {
 
     return (
         <div className='step-progress bg-dark center'>
+            <ToastContainer/>
             <div className="mdl-card mdl-shadow--2dp">
                 <div className="mdl-card__supporting-text">
                     <div className="mdl-stepper-horizontal-alternative">
@@ -81,15 +129,17 @@ function Form (props) {
                 </div>
             </div>
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
-            <div className="row justify-content-center pt-5">
+            <div className="text-center pt-2">
                 <small className="text-center">Veuillez cliquer sur suivant si vous avez fini cette pages</small>
             </div>
-            <div className="NextOrPrevPageStepper mt-5">
-                {state_steps_index === 0 ? null : <span className="float-left" onClick={() => Prev()}><i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>}
+            <div className="text-center pt-2">
+                {state_steps_index === component_steps.length - 1 && <button className="btn btn-outline-success center pl-5 pr-5" onClick={() => addNewPrestation()}>Enregister</button>}
+            </div>
+            <div className="NextOrPrevPageStepper mt-4">
+                {state_steps_index !== 0 && <span className="float-left" onClick={() => Prev()}><i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>}
                 {state_steps_index === component_steps.length - 1 ?
                     <div>
-                        {props.noRegister ? <button className="btn btn-outline-success float-right pl-2 pr-3">Enregister</button>:
-                        <a href="#register" className="text-black float-right mr-5 m-b-50 bg-success pr-5 pl-5 text-center" style={{borderRadius: 5}}>Valider</a>}
+                        {!props.new && <a href="#register" className="text-black float-right mr-5 m-b-50 bg-success pr-5 pl-5 text-center" style={{borderRadius: 5}}>Valider</a>}
                     </div> : <span className="float-right" onClick={() => Next()}>Suivant&nbsp;<i className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></span>}
             </div>
         </div>

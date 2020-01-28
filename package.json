@@ -52,6 +52,7 @@
     "react-notification-system": "^0.2.17",
     "react-public-ip": "^1.0.0",
     "react-redux": "^7.1.0",
+    "react-reveal": "^1.2.2",
     "react-router": "^4.0.0",
     "react-router-dom": "^5.0.1",
     "react-router-redux": "^4.0.8",

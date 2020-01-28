@@ -1,6 +1,5 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from 'react-awesome-modal';
-import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import logo from "../../../images/Logo/ISL_logo.png";
@@ -181,7 +180,7 @@ function EditSingle(props) {
                                        className="form-control" type="file" accept="image/png, image/jpeg"/>
                             </div>
                         </div>
-                        <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={() => handleSubmitEditSingle(props.Song.id)}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>
+                        <button className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={() => handleSubmitEditSingle(props.Song.id)}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>
                     </div>
                 </div>
             </div>

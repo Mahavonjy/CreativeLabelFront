@@ -3,6 +3,7 @@ const initState = {
     // Thematics genre
     thematics_options_selected: [],
     steps_index: 0,
+    service_id: null,
     // End Thematics genre
     // Service Information
     title: '',
@@ -10,10 +11,13 @@ const initState = {
     others_city: [],
     description: '',
     files: [],
+    hidden: null,
+    moving_price: null,
     // End Service Information
     // Service Details
     events_selected: [],
     service_time: null,
+    materials: [],
     price_of_service: null,
     preparation_time: null,
     number_of_artist: 1,
@@ -28,6 +32,26 @@ const kantoBizForm = (state = initState, action) => {
             return {
                 ...state,
                 steps_index: action.data
+            };
+        case "ADD_MATERIALS_OF_SERVICE":
+            return {
+                ...state,
+                materials: action.data
+            };
+        case "ADD_SERVICE_ID":
+            return {
+                ...state,
+                service_id: action.data
+            };
+        case "CHANGE_MOVING_PRICE":
+            return {
+                ...state,
+                moving_price: action.data
+            };
+        case "CHANGE_STATUS_OF_SERVICE":
+            return {
+                ...state,
+                hidden: action.data
             };
         case "ADD_SERVICE_TITLE":
             return {

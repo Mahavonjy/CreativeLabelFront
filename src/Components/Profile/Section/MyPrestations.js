@@ -3,41 +3,103 @@ import ReactTooltip from "react-tooltip";
 import { changeFields } from "../../FunctionTools/Tools";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 import Modal from "react-awesome-modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import {
+    addUnitTimeOfService, addOptionSelected, addPicturesOfService, addTitleOfService, addReferenceOfCity,
+    addOthersCityOfService, addDescriptionOfService, addEventSelected, addServiceTime, addPriceOfService,
+    addPreparationTime, addNumberOfArtist, addUnitTimeOfPreparation, changeStatusOfService, changeMovingPrice,
+    addMaterialsOfService, addServiceId
+} from "../../FunctionTools/FunctionProps";
 
 function MyPrestations(props) {
 
-    const props_prestation = useSelector(state => state.profilePrestations.prestations);
+    const dispatch = useDispatch();
 
     const isMounted = useRef(false);
-    const [state_index, setStateIndex] = useState(null);
     const [global_price, setGlobalPrice] = useState(300);
+    const [state_index, setStateIndex] = useState(null);
     const [editPrestation, setEditPrestation] = useState(false);
-    const [allPrestation, setAllPrestation] = useState(props_prestation);
 
-    const checkUnit = (val) => {
+    const checkUnit = (val, opt) => {
         if (val === "min")
-            return "m";
+            if (opt)
+                return {"day": false, "hours": false, "min": true, "sec": false};
+            else return "m";
         else if (val === "day")
-            return "j";
-        else return "h"
+            if (opt)
+                return {"day": true, "hours": false, "min": false, "sec": false};
+            else return "j";
+        else if (val === "sec")
+            if (opt)
+                return {"day": false, "hours": false, "min": false, "sec": true};
+            else return "s";
+        if (opt)
+            return {"day": false, "hours": true, "min": false, "sec": false};
+        return "h";
+    };
+
+    const clearProps = async () => {
+        await dispatch(addServiceId(null));
+        await dispatch(addUnitTimeOfService({"day": false, "hours": false, "min": false, "sec": false}));
+        await dispatch(addOptionSelected([]));
+        await dispatch(addPicturesOfService([]));
+        await dispatch(addTitleOfService(""));
+        await dispatch(addReferenceOfCity(""));
+        await dispatch(addOthersCityOfService([]));
+        await dispatch(addDescriptionOfService(""));
+        await dispatch(addEventSelected([]));
+        await dispatch(addServiceTime(""));
+        await dispatch(addPriceOfService(null));
+        await dispatch(addPreparationTime(null));
+        await dispatch(addNumberOfArtist(1));
+        await dispatch(addUnitTimeOfPreparation({"day": false, "hours": false, "min": false, "sec": false}));
+        await dispatch(changeStatusOfService(null));
+        await dispatch(changeMovingPrice(null));
+        await dispatch(addMaterialsOfService([]));
+    };
+
+    const updated = async () => {
+        await props.setToast(true);
+        await setEditPrestation(false);
+        toast.success("success");
     };
 
     const toEditPrestation = async (index) => {
-        await setStateIndex(index);
+        props.setToast(false);
+        setStateIndex(index);
+        let tmp_prestation = props.allPrestation[index];
+        await dispatch(addServiceId(tmp_prestation.id));
+        await dispatch(addUnitTimeOfService(checkUnit(tmp_prestation.service_time.unit, true)));
+        await dispatch(addOptionSelected(tmp_prestation.thematics_options_selected));
+        await dispatch(addPicturesOfService(tmp_prestation.photo));
+        await dispatch(addTitleOfService(tmp_prestation.title));
+        await dispatch(addReferenceOfCity(tmp_prestation.city_of_reference));
+        await dispatch(addOthersCityOfService(tmp_prestation.others_city));
+        await dispatch(addDescriptionOfService(tmp_prestation.description));
+        await dispatch(addEventSelected(tmp_prestation.events_type));
+        await dispatch(addServiceTime(tmp_prestation.service_time.time));
+        await dispatch(addPriceOfService(tmp_prestation.price));
+        await dispatch(addPreparationTime(tmp_prestation.preparation_time.time));
+        await dispatch(addNumberOfArtist(tmp_prestation.number_of_artist));
+        await dispatch(addUnitTimeOfPreparation(checkUnit(tmp_prestation.preparation_time.unit, true)));
+        await dispatch(changeStatusOfService(tmp_prestation.hidden));
+        await dispatch(changeMovingPrice(tmp_prestation.moving_price));
+        await dispatch(addMaterialsOfService(tmp_prestation.materials));
         await setEditPrestation(true)
     };
 
     const onChangeHidden = (index) => {
-        let tmp_prestations = [...allPrestation];
-        tmp_prestations[index].hidden = !allPrestation[index].hidden;
-        setAllPrestation(tmp_prestations);
+        let tmp_prestations = [...props.allPrestation];
+        tmp_prestations[index].hidden = !props.allPrestation[index].hidden;
+        props.setAllPrestation(tmp_prestations);
     };
 
     const deletePrestations = (indexOfOption) => {
-        if (allPrestation.length > 1)
-            setAllPrestation(allPrestation.filter((option, index) => index !== indexOfOption));
+        if (props.allPrestation.length > 1) {
+            props.setAllPrestation(props.allPrestation.filter((option, index) => index !== indexOfOption));
+            toast.success("Supprimer avec succès")
+        }
         else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
 
@@ -67,10 +129,10 @@ function MyPrestations(props) {
             {/* if user choice edit one prestation */}
             <Modal visible={editPrestation} width="80%" height="80%" effect="fadeInUp">
                 <div className="bg-dark" style={{height:"100%"}}>
-                    <button className="ModalClose float-left" onClick={() => setEditPrestation(false)}>
+                    <button className="ModalClose float-left" onClick={() => {setEditPrestation(false); props.setToast(true); clearProps().then(r => null)}}>
                         <i className="icon-close s-24 text-warning"/>
                     </button>
-                    <EditPrestation data={allPrestation} index={state_index} setAllPrestation={setAllPrestation}/>
+                    {editPrestation && <EditPrestation updated={updated} setEditPrestation={setEditPrestation} setAllPrestation={props.setAllPrestation} index={state_index}/>}
                 </div>
             </Modal>
             {/* end form become an artist */}
@@ -94,7 +156,7 @@ function MyPrestations(props) {
 
                 <div className={props.read ? "col-lg-12" : "col-lg-10"}>
                     <div className="row justify-content-center scrollbar-isl">
-                        {allPrestation.map((val, index) =>
+                        {props.allPrestation.map((val, index) =>
                             <div className={!props.profile ? "card_kanto" : "card_kantoProfile"} key={index}>
                                 <div className={!props.profile ? "additional": "additionalProfile"}>
                                     <div className={props.profile ? "user-card_kanto" : "user-card_kanto d-none d-sm-block"} data-tip="Cliquer Moi">

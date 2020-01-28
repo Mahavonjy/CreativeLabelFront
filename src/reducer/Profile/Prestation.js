@@ -15,7 +15,7 @@ const profilePrestations = (state = initState, action) => {
         case "ADD_USER_PRESTATIONS":
             return {
                 ...state,
-                prestations: true
+                prestations: action.data
             };
         default:
             return state;

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from 'axios';
-import Conf from "../../../Config/tsconfig";
 import Modal from 'react-awesome-modal';
 import { ToastContainer, toast } from "react-toastify";
 import LoadingOverlay from 'react-loading-overlay';
@@ -12,7 +11,6 @@ import * as Tools from "../../FunctionTools/Tools";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import { DifferentArtist } from "../../FunctionTools/PopupFields";
 import { sessionService } from "redux-react-session";
-import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 
 function Register () {
 
@@ -100,8 +98,7 @@ function Register () {
             />
 
             <Modal visible={visible} width="400" height="150" animationType='slide'>
-                <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop
-                                closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
+                <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
                 <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
                     <div className="col text-center">
                         <div className="body">

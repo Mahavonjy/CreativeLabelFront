@@ -74,7 +74,6 @@ function Thematics(props) {
 
     useEffect(() => {
         try {
-            console.log(props.prestation);
             const artistType = props.var.artistType;
             let options_state = [...options];
             if (artistType === "Dj") options_state = djOptions;
@@ -85,8 +84,7 @@ function Thematics(props) {
             else if (artistType === "Chanteur/Musicien") options_state = ChantMusicOptions;
             else if (artistType === "Beatmaker") options_state = beatMakerOptions;
             else if (artistType === "Spécialiste de l’audiovisuel")  options_state = audioVisualOptions;
-            options_state.filter(option => !props_thematics_options_selected.some(selected => selected === option));
-            setOptions(options_state);
+            setOptions(options_state.filter(option => !props_thematics_options_selected.some(selected => selected === option)));
         } catch (e) {
             //
         }

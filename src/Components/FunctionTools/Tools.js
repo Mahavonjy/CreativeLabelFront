@@ -179,6 +179,16 @@ export const ImageClick = (e) => {
     if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
 };
 
+export const checkValueOfUnit = (val) => {
+    if (val["day"])
+        return "j";
+    else if (val['hours'])
+        return "h";
+    else if (val['min'])
+        return "m";
+    return "s";
+};
+
 export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
     let all_call_api = [];
     let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};

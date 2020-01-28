@@ -1,21 +1,30 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
+import {useDispatch, useSelector} from "react-redux";
+import { addMaterialsOfService } from "../../FunctionTools/FunctionProps";
 
 function Materials(props) {
 
+    const dispatch = useDispatch();
+    const materials = useSelector(state => state.KantoBizForm.materials);
+
     const isMounted = useRef(false);
-    const [tags, setTags] = useState(['Materiel1', 'Materiel2']);
+    const [tags, setTags] = useState(materials);
 
     const removeTag = (i) => {
         const newTags = [...tags];
         newTags.splice(i, 1);
         setTags(newTags);
+        dispatch(addMaterialsOfService(newTags));
     };
 
     const inputKeyDown = (e) => {
         const val = e.target.value;
         if (e.key === 'Enter' && val) {
             if (tags.find(tag => tag.toLowerCase() === val.toLowerCase())) return;
-            setTags(tags => [...tags, val]);
+            let tmp_tags = [...tags];
+            tmp_tags.push(val);
+            setTags(tmp_tags);
+            dispatch(addMaterialsOfService(tmp_tags));
             document.getElementsByClassName("input-add-tag")[0].value = null;
         } else if (e.key === 'Backspace' && !val) {
             removeTag(tags.length - 1);

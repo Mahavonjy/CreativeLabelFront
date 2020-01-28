@@ -4,12 +4,11 @@ import EditProfile from './Edits/EditProfile';
 import AddSingle from './AddMedia/AddSingle';
 import EditSingle from './Edits/EditSingle';
 import { useDispatch, useSelector } from 'react-redux';
-import Conf from "../../Config/tsconfig";
 import PhotoD from '../../images/socials/profile.png';
 import PhotoTest from '../../images/Backgrounds/adult-banking-business-2254122.jpg';
 import { ToastContainer, toast } from 'react-toastify';
 import EditContractBeats from "./ContractBeats/EditContractBeats";
-import * as Tools from "../FunctionTools/Tools";
+import { getMediaLink } from "../FunctionTools/Tools";
 import { CreateBeatsPlaylist, smallSpinner } from "../FunctionTools/CreateFields";
 import Form from "../KantoBiz/Prestations/Form/Form";
 import { DifferentArtist,  } from "../FunctionTools/PopupFields";
@@ -17,7 +16,6 @@ import PaymentsAndReservations from "./Section/PaymentsAndReservations";
 import BankingDetails from "./Section/BankingDetails";
 import RefundPolicy from "./Section/RefundPolicy";
 import MyPrestations from "./Section/MyPrestations";
-import EditPrestation from "./PrestationEdits/EditPrestation";
 import Modal from "react-awesome-modal";
 import { profileAddBeats, profileUpdateBeats, profileReadyBeats } from "../FunctionTools/FunctionProps";
 
@@ -29,6 +27,7 @@ const headers = {
 function Profile (props) {
 
     const dispatch = useDispatch();
+    const props_prestation = useSelector(state => state.profilePrestations.prestations);
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const redux_profile_info = useSelector(state => state.profile.profile_info);
     const ready_beats = useSelector(state => state.profile.ready_beats);
@@ -37,6 +36,7 @@ function Profile (props) {
     const user_role = useSelector(state => state.profile.role);
 
     const isMounted = useRef(false);
+    const [allPrestation, setAllPrestation] = useState(props_prestation);
     const [user_beats_link, setUserBeatsLink] = useState([]);
     const [song, setSong] = useState("");
     const [type_, setType_] = useState("");
@@ -58,7 +58,7 @@ function Profile (props) {
         setActiveToast(false);
         if (success === 1) {
             await setActiveToast(true);
-            toast.success("Profile updated");
+            toast.success("Profile mis a jour");
         }
     };
 
@@ -70,7 +70,7 @@ function Profile (props) {
         await setActiveToast(true);
         await dispatch(profileAddBeats(user_tmp_beats));
         await setStateUserBeats(user_tmp_beats);
-        toast.success(message);
+        await toast.success(message);
     };
 
     const togglePopupAddSingle = async (success, data) => {
@@ -135,7 +135,7 @@ function Profile (props) {
     useEffect(() => {
         headers['Isl-Token'] = user_credentials.token;
         if (!ready_beats && user_beats.length !== 0) {
-            Tools.getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
+            getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
             dispatch(profileReadyBeats())
         } else if (user_beats.length !== 0) {
             for (let row_ in user_beats) setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
@@ -151,7 +151,7 @@ function Profile (props) {
             {activeToast && <ToastContainer/>}
             {popupAddSingle && <AddSingle Type={"beats"} closePopup={(e, data) => togglePopupAddSingle(e, data)}/>}
             {popupEditProfile && <EditProfile closePopup={(e) => togglePopupEditProfile(e)} updateProfile={setProfileInfo}/>}
-            {popupAddEditSingle !== -1 && <EditSingle Song={song} Type={type_} Success={(data) => {afterEditSingle(data).then(() => null)}} CloseEdit={() => setPopupAddEditSingle(-1)}/>}
+            {popupAddEditSingle !== -1 && <EditSingle Song={song} Type={type_} Success={(data) => afterEditSingle(data).then(() => null)} CloseEdit={() => setPopupAddEditSingle(-1)}/>}
             {choiceArtistType && DifferentArtist(setArtistType, setChoiceArtistType, setBecomeArtistForm)}
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="card no-b shadow no-r">
@@ -194,9 +194,7 @@ function Profile (props) {
                                 </div>
                             </div>
                             <div className="text-center">
-                                <button className="btn btn-outline-primary btn-sm mt-3 pl-4 pr-4"
-                                        onClick={() => togglePopupEditProfile(0)}>Modifier mon profil
-                                </button>
+                                <button className="btn btn-outline-primary btn-sm mt-3 pl-4 pr-4" onClick={() => togglePopupEditProfile(0)}>Modifier mon profil</button>
                             </div>
                             {user_role !== "professional_auditor" ?
                                 <div className="text-center mt-2 mb-2">
@@ -227,7 +225,8 @@ function Profile (props) {
                     <button className="ModalClose" onClick={() => setBecomeArtistForm(false)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
-                    {becomeArtistForm && <Form artistType={artistType} noRegister/>}
+                    {becomeArtistForm && <Form artistType={user_role.charAt(0).toUpperCase() + user_role.slice(1)} close={() => toast.success("Ajouter avec succes")}
+                                               setActiveToast={setActiveToast} setAllPrestation={setAllPrestation} allPrestation={allPrestation} setBecomeArtistForm={setBecomeArtistForm} new/>}
                 </div>
             </Modal>
             {/* end form become an artist*/}
@@ -285,7 +284,7 @@ function Profile (props) {
                                         </div>}
                                     {user_role !== "professional_auditor" &&
                                     <div className={user_role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fade"} id="Prestations" role="tabpanel">
-                                        <MyPrestations role={user_role} profile/>
+                                        <MyPrestations role={user_role} setToast={setActiveToast} setAllPrestation={setAllPrestation} allPrestation={allPrestation} profile/>
                                     </div>}
                                     <div className={user_role === "professional_auditor" ? "tab-pane fade show active" : "tab-pane fade"} id="Paiements-Reservations" role="tabpanel">
                                         <PaymentsAndReservations/>
@@ -302,10 +301,10 @@ function Profile (props) {
                                 <div className="card-footer pb-2">
                                     <div className="d-flex justify-content-between">
                                         <div className="align-self-center">
-                                            <button className="btn btn-outline-success" onClick={() => togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
+                                            <button className="btn btn-outline-danger" onClick={() => togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                         <div className="align-self-center">
-                                            <button className="btn btn-outline-success" onClick={() => {setBecomeArtistForm(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
+                                            <button className="btn btn-outline-danger" onClick={() => {setBecomeArtistForm(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                     </div>
                                 </div> : null}

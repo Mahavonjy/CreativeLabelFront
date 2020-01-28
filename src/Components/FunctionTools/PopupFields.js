@@ -4,7 +4,8 @@ import SignInOrUp from "../Authentification/Login/Login";
 import Loader from "react-loader-spinner";
 import Modal from "react-awesome-modal";
 import ReactTooltip from "react-tooltip";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
+import Fade from 'react-reveal/Fade';
 
 export const DifferentArtist = (setArtistType, setChoiceArtistType, setBecomeArtistForm) => {
 
@@ -223,6 +224,12 @@ export const Login = () => {
 
 export const LoadingHome = () => {
     return (
-        <div className="absolute center-center"><Loader type="Bars" color="#ED1C24" height={150} width={150}/></div>
+        <div className="center-center">
+            <Loader type="Bars" height={150} width={150} color="#ED1C24"/>
+            <Fade bottom>
+                <h2 className="text-red">Independance Sound Label</h2>
+                <h3 className="text-red">Creative</h3>
+            </Fade>
+        </div>
     )
 };

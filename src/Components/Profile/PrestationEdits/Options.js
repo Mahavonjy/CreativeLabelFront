@@ -3,12 +3,14 @@ import ReactTooltip from "react-tooltip";
 import EditOrAddNewOptions from "./EditOrAddNewOption";
 import Modal from "react-awesome-modal";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addAllUserOptions } from "../../FunctionTools/FunctionProps";
 
 function Options(props) {
 
-
+    const dispatch = useDispatch();
     const props_options = useSelector(state => state.profilePrestations.options);
+    const service_id = useSelector(state => state.KantoBizForm.service_id);
 
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
@@ -17,10 +19,25 @@ function Options(props) {
     const [data, setData] = useState(null);
     const [options, setOptions] = useState(props_options);
 
-    const changeOptionsStatus = (index) => {
-        let tmp_options = [...options];
-        tmp_options[index].hidden = !options[index].hidden;
-        setOptions(tmp_options);
+    const changeOptionsStatus = (index, opt) => {
+        let tmp = [...options];
+        if (opt) tmp[index]['service_id_who_is_active'] = props_options[index]['service_id_who_is_active'].filter(id => !service_id === id);
+        else {
+            let option_tmp = props_options[index]['service_id_who_is_active'];
+            option_tmp.push(service_id);
+            tmp[index]['service_id_who_is_active'] = option_tmp;
+        }
+        setOptions(tmp);
+        dispatch(addAllUserOptions(tmp));
+    };
+
+    const checkIfHidden = (value) => {
+        let tmp = false;
+        for (let index in value) {
+            if (value[index] === service_id)
+                tmp = true;
+        }
+        return tmp;
     };
 
     const deleteOptions = (indexOfOption) => {
@@ -100,8 +117,8 @@ function Options(props) {
                 {options.map((val, index) =>
                         <tr key={index}>
                             <th className="text-center small bolder border-left-0 border-bottom-0" scope="row">
-                                {val.hidden ? <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation" onClick={() => changeOptionsStatus(index)}/>:
-                                <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion n'est pas activer pour cette prestation" onClick={() => changeOptionsStatus(index)}/> }
+                                {checkIfHidden(val.service_id_who_is_active) ? <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation" onClick={() => changeOptionsStatus(index, true)}/>:
+                                <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion n'est pas activer pour cette prestation" onClick={() => changeOptionsStatus(index, false)}/> }
                             </th>
                             <th className="text-center small bolder border-left-0 border-bottom-0" scope="row">{val.name}</th>
                             <td className="small" data-title="Tag">{val.tag}</td>

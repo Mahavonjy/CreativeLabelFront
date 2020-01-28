@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import Conf from "../../../Config/tsconfig";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import * as Tools from "../../FunctionTools/Tools";
 import { changeFields } from "../../FunctionTools/Tools";
 import { profileInitialisationContract, beatsInitialisationPricing } from "../../FunctionTools/FunctionProps"
