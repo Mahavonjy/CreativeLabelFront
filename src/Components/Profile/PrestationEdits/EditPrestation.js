@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 import {useDispatch, useSelector} from "react-redux";
 import PrestationInformation from "../../KantoBiz/Prestations/Form/PrestationInformation";
-import { ImageClick, changeFields, checkValueOfUnit } from "../../FunctionTools/Tools";
+import {ImageClick, changeFields, checkValueOfUnit, createNewPrestation} from "../../FunctionTools/Tools";
 import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails";
 import RefundPolicy from "../Section/RefundPolicy";
 import ReactTooltip from "react-tooltip";
@@ -16,7 +16,7 @@ function EditPrestation(props) {
 
     const dispatch = useDispatch();
     const role = useSelector(state => state.profile.role);
-    const props_files = useSelector(state => state.KantoBizForm.files);
+    const PropsFiles = useSelector(state => state.KantoBizForm.files);
     const props_prestation = useSelector(state => state.profilePrestations.prestations);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
     const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
@@ -35,7 +35,7 @@ function EditPrestation(props) {
     const props_materials = useSelector(state => state.KantoBizForm.materials);
 
     const isMounted = useRef(false);
-    const [files, setFiles] = useState((props_files));
+    const [files, setFiles] = useState((PropsFiles));
     const [global_price, setGlobalPrice] = useState(300);
 
     const deleteImage = (indexImage) => {
@@ -66,6 +66,19 @@ function EditPrestation(props) {
         tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props_unit_time_of_preparation);
         tmp_prestation['service_time']['unit'] = checkValueOfUnit(props_unit_time_of_service);
         await props.updated();
+    };
+
+    const createPrestation = () => {
+        createNewPrestation(
+            props.setActiveToast, props_prestation, props.setAllPrestation, props.setAddNewPrestation, dispatch,
+            props.close, { PropsTitle, PropsFiles, PropsCityReference, PropsOthersCity, PropsDescription,
+            props_events_selected, props_price_of_service, props_preparation_time, props_number_of_artist, props_service_time,
+            props_thematics_options_selected, props_unit_time_of_preparation, props_unit_time_of_service }
+        ).then(resp => {
+            if (!resp)
+                toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
+            else props.updated(true);
+        });
     };
 
     useEffect(() => {
@@ -157,7 +170,8 @@ function EditPrestation(props) {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-outline-danger pl-5 pr-5 center mb-2 mt-3" onClick={() => updatePrestation()}>mettre a jour</button>
+                {props.copyEdit ? <button className="btn btn-outline-danger pl-5 pr-5 center mb-2 mt-3" onClick={() => createPrestation()}>Créer après modification</button>:
+                <button className="btn btn-outline-danger pl-5 pr-5 center mb-2 mt-3" onClick={() => updatePrestation()}>mettre a jour</button>}
             </div>
         </div>
     );

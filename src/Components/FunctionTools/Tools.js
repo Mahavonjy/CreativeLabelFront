@@ -3,7 +3,7 @@ import Conf from "../../Config/tsconfig";
 import axios from "axios";
 import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import { addTotalPrice, addCarts } from "./FunctionProps";
+import { addTotalPrice, addCarts, addAllUserPrestation } from "./FunctionProps";
 import Home from "../Home/Home";
 
 export const changeFields = (setState, e, up_props, dispatch) => {
@@ -203,4 +203,43 @@ export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
         )
     }
     return Promise.all(all_call_api).then(() => null)
+};
+
+export const createNewPrestation = async (setActiveToast, allPrestation, setAllPrestation, setAddNewPrestation, dispatch, close, props) => {
+    let secure = false;
+    for (let row in allPrestation) {
+        if (allPrestation[row]['title'] === props.PropsTitle && allPrestation[row]['city_of_reference'] === props.PropsCityReference) {
+            secure = true;
+        } else if (allPrestation[row]['title'] === props.PropsTitle && JSON.stringify(allPrestation[row]['events_type']) === JSON.stringify(props.props_events_selected)) {
+            secure = true;
+        }
+    }
+    if (secure)
+        return false;
+    await setActiveToast(true);
+    let tmp_prestation = { "preparation_time": {"time": null, "unit": null},  "service_time": {"time": null, "unit": null }};
+    tmp_prestation['id'] = 3;
+    tmp_prestation['moving_price'] = 300;
+    tmp_prestation['materials'] = [];
+    tmp_prestation['hidden'] = true;
+    tmp_prestation['title'] = props.PropsTitle;
+    tmp_prestation['photo'] = props.PropsFiles;
+    tmp_prestation['city_of_reference'] = props.PropsCityReference;
+    tmp_prestation['others_city'] = props.PropsOthersCity;
+    tmp_prestation['description'] = props.PropsDescription;
+    tmp_prestation['events_type'] = props.props_events_selected;
+    tmp_prestation['price'] = props.props_price_of_service;
+    tmp_prestation['preparation_time']['time'] = props.props_preparation_time;
+    tmp_prestation['number_of_artist'] = props.props_number_of_artist;
+    tmp_prestation['service_time']['time'] = props.props_service_time;
+    tmp_prestation['thematics_options_selected'] = props.props_thematics_options_selected;
+    tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props.props_unit_time_of_preparation);
+    tmp_prestation['service_time']['unit'] = checkValueOfUnit(props.props_unit_time_of_service);
+    let tmp = allPrestation;
+    tmp.push(tmp_prestation);
+    await setAllPrestation(tmp);
+    await dispatch(addAllUserPrestation(tmp));
+    await setAddNewPrestation(false);
+    await close();
+    return true;
 };

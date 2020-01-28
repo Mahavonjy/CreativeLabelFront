@@ -3,7 +3,7 @@ import ReactTooltip from "react-tooltip";
 import { changeFields } from "../../FunctionTools/Tools";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 import Modal from "react-awesome-modal";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import {
     addUnitTimeOfService, addOptionSelected, addPicturesOfService, addTitleOfService, addReferenceOfCity,
@@ -19,6 +19,7 @@ function MyPrestations(props) {
     const isMounted = useRef(false);
     const [global_price, setGlobalPrice] = useState(300);
     const [state_index, setStateIndex] = useState(null);
+    const [copyEdit, setCopyEdit] = useState(false);
     const [editPrestation, setEditPrestation] = useState(false);
 
     const checkUnit = (val, opt) => {
@@ -59,14 +60,17 @@ function MyPrestations(props) {
         await dispatch(addMaterialsOfService([]));
     };
 
-    const updated = async () => {
+    const updated = async (opt) => {
         await props.setToast(true);
         await setEditPrestation(false);
-        toast.success("success");
+        if (!opt)
+            toast.success("success");
     };
 
-    const toEditPrestation = async (index) => {
+    const addToPropsToEdit = async (index, copy_) => {
         props.setToast(false);
+        if (copy_)
+            await setCopyEdit(true);
         setStateIndex(index);
         let tmp_prestation = props.allPrestation[index];
         await dispatch(addServiceId(tmp_prestation.id));
@@ -129,10 +133,11 @@ function MyPrestations(props) {
             {/* if user choice edit one prestation */}
             <Modal visible={editPrestation} width="80%" height="80%" effect="fadeInUp">
                 <div className="bg-dark" style={{height:"100%"}}>
-                    <button className="ModalClose float-left" onClick={() => {setEditPrestation(false); props.setToast(true); clearProps().then(r => null)}}>
+                    <button className="ModalClose float-left" onClick={() => {setEditPrestation(false); props.setToast(true); clearProps().then(r => null); setCopyEdit(false)}}>
                         <i className="icon-close s-24 text-warning"/>
                     </button>
-                    {editPrestation && <EditPrestation updated={updated} setEditPrestation={setEditPrestation} setAllPrestation={props.setAllPrestation} index={state_index}/>}
+                    {editPrestation && <EditPrestation updated={updated} copyEdit={copyEdit} setEditPrestation={setEditPrestation} close={props.close} setActiveToast={props.setActiveToast}
+                                                       setAllPrestation={props.setAllPrestation} setAddNewPrestation={props.setAddNewPrestation} index={state_index}/>}
                 </div>
             </Modal>
             {/* end form become an artist */}
@@ -168,7 +173,7 @@ function MyPrestations(props) {
                                             5&nbsp;<i className="icon icon-star"/>
                                         </div>:
                                             <div className="points center-result">
-                                                <i className="icon-edit text-red s-24 ml-1 mr-1" data-tip="Modifier cette prestation" onClick={() => toEditPrestation(index)}/>
+                                                <i className="icon-edit text-red s-24 ml-1 mr-1" data-tip="Modifier cette prestation" onClick={() => addToPropsToEdit(index)}/>
                                                 <i className="icon-trash text-red s-24 ml-1 mr-1" onClick={() => deletePrestations(index)} data-tip="supprimer cette prestation"/>
                                             </div>
                                         }
@@ -264,7 +269,7 @@ function MyPrestations(props) {
                                     <h1 className={!props.profile ? "more text-black bolder" : "more text-black bolder pb-5"}>{val.price}$</h1>
                                     {!props.profile ?
                                         <small className="more-genre scrollbar-isl pl-2 text-black">{val.thematics_options_selected.map((v) => v)}</small> :
-                                        <div className="more-icon text-red mt-4" data-tip data-for="copy_edit">
+                                        <div className="more-icon text-red mt-4" onClick={() => addToPropsToEdit(index, true)} data-tip data-for="copy_edit">
                                             <i className="icon-copy s-24"/>&nbsp;&&nbsp;<i className="icon-edit s-24"/>
                                         </div>}
                                     {props.profile && <i className="icon-smartphone-11 text-red more-icon-phone s-36"/>}

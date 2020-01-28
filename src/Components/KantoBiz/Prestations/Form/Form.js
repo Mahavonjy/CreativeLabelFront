@@ -4,8 +4,8 @@ import Thematics from "./Thematics";
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
-import { checkValueOfUnit } from "../../../FunctionTools/Tools";
-import { addStepsIndex, addAllUserPrestation } from "../../../FunctionTools/FunctionProps"
+import { createNewPrestation } from "../../../FunctionTools/Tools";
+import { addStepsIndex } from "../../../FunctionTools/FunctionProps"
 import { useDispatch, useSelector } from "react-redux";
 import "../../style/Form.css"
 import { toast, ToastContainer } from "react-toastify";
@@ -39,32 +39,16 @@ function Form (props) {
             {name: 'Recaputilatif', component: <Recaputilatif var={props}/>},
     ];
 
-    const addNewPrestation = async () => {
-        await props.setActiveToast(true);
-        let tmp_prestation = { "preparation_time": {"time": null, "unit": null},  "service_time": {"time": null, "unit": null }};
-        tmp_prestation['id'] = 3;
-        tmp_prestation['hidden'] = true;
-        tmp_prestation['title'] = PropsTitle;
-        tmp_prestation['photo'] = PropsFiles;
-        tmp_prestation['city_of_reference'] = PropsCityReference;
-        tmp_prestation['others_city'] = PropsOthersCity;
-        tmp_prestation['description'] = PropsDescription;
-        tmp_prestation['events_type'] = props_events_selected;
-        tmp_prestation['price'] = props_price_of_service;
-        tmp_prestation['preparation_time']['time'] = props_preparation_time;
-        tmp_prestation['number_of_artist'] = props_number_of_artist;
-        tmp_prestation['service_time']['time'] = props_service_time;
-        tmp_prestation['thematics_options_selected'] = props_thematics_options_selected;
-        tmp_prestation['moving_price'] = 300;
-        tmp_prestation['materials'] = [];
-        tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props_unit_time_of_preparation);
-        tmp_prestation['service_time']['unit'] = checkValueOfUnit(props_unit_time_of_service);
-        let tmp = props.allPrestation;
-        tmp.push(tmp_prestation);
-        await props.setAllPrestation(tmp);
-        await dispatch(addAllUserPrestation(tmp));
-        await props.setBecomeArtistForm(false);
-        await props.close()
+    const addNewPrestation = () => {
+        createNewPrestation(
+            props.setActiveToast, props.allPrestation, props.setAllPrestation, props.setAddNewPrestation, dispatch,
+            props.close, { PropsTitle, PropsFiles, PropsCityReference, PropsOthersCity, PropsDescription,
+            props_events_selected, props_price_of_service, props_preparation_time, props_number_of_artist, props_service_time,
+            props_thematics_options_selected, props_unit_time_of_preparation, props_unit_time_of_service }
+        ).then(resp => {
+            if (!resp)
+                toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer")
+        });
     };
 
     const Next = async () => {
@@ -132,9 +116,10 @@ function Form (props) {
             <div className="text-center pt-2">
                 <small className="text-center">Veuillez cliquer sur suivant si vous avez fini cette pages</small>
             </div>
+            {props.new &&
             <div className="text-center pt-2">
                 {state_steps_index === component_steps.length - 1 && <button className="btn btn-outline-success center pl-5 pr-5" onClick={() => addNewPrestation()}>Enregister</button>}
-            </div>
+            </div>}
             <div className="NextOrPrevPageStepper mt-4">
                 {state_steps_index !== 0 && <span className="float-left" onClick={() => Prev()}><i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>}
                 {state_steps_index === component_steps.length - 1 ?

@@ -18,6 +18,7 @@ import RefundPolicy from "./Section/RefundPolicy";
 import MyPrestations from "./Section/MyPrestations";
 import Modal from "react-awesome-modal";
 import { profileAddBeats, profileUpdateBeats, profileReadyBeats } from "../FunctionTools/FunctionProps";
+import CalendarManagement from "./Section/CalendarManagement";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ function Profile (props) {
     const [popupAddSingle, setPopupAddSingle] = useState(false);
     const [popupAddEditSingle, setPopupAddEditSingle] = useState(-1);
     const [choiceArtistType, setChoiceArtistType] = useState(false);
-    const [becomeArtistForm, setBecomeArtistForm] = useState(false);
+    const [addNewPrestation, setAddNewPrestation] = useState(false);
     const [artistType, setArtistType] = useState("");
 
     const togglePopupEditProfile = async (success) => {
@@ -152,7 +153,7 @@ function Profile (props) {
             {popupAddSingle && <AddSingle Type={"beats"} closePopup={(e, data) => togglePopupAddSingle(e, data)}/>}
             {popupEditProfile && <EditProfile closePopup={(e) => togglePopupEditProfile(e)} updateProfile={setProfileInfo}/>}
             {popupAddEditSingle !== -1 && <EditSingle Song={song} Type={type_} Success={(data) => afterEditSingle(data).then(() => null)} CloseEdit={() => setPopupAddEditSingle(-1)}/>}
-            {choiceArtistType && DifferentArtist(setArtistType, setChoiceArtistType, setBecomeArtistForm)}
+            {choiceArtistType && DifferentArtist(setArtistType, setChoiceArtistType, setAddNewPrestation)}
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="card no-b shadow no-r">
                     <div className="row no-gutters">
@@ -220,13 +221,15 @@ function Profile (props) {
                 </div>
             </div>
             {/* if user choice become an artist*/}
-            <Modal visible={becomeArtistForm} width="80%" height="80%" effect="fadeInUp" onClickAway={() => setBecomeArtistForm(false)}>
+            <Modal visible={addNewPrestation} width="80%" height="80%" effect="fadeInUp" onClickAway={() => setAddNewPrestation(false)}>
                 <div className="bg-dark" style={{height:"100%"}}>
-                    <button className="ModalClose" onClick={() => setBecomeArtistForm(false)}>
+                    <button className="ModalClose" onClick={() => setAddNewPrestation(false)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
-                    {becomeArtistForm && <Form artistType={user_role.charAt(0).toUpperCase() + user_role.slice(1)} close={() => toast.success("Ajouter avec succes")}
-                                               setActiveToast={setActiveToast} setAllPrestation={setAllPrestation} allPrestation={allPrestation} setBecomeArtistForm={setBecomeArtistForm} new/>}
+                    {addNewPrestation && <Form artistType={user_role.charAt(0).toUpperCase() + user_role.slice(1)}
+                                               close={() => toast.success("Ajouter avec succes")}
+                                               setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
+                                               allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation} new/>}
                 </div>
             </Modal>
             {/* end form become an artist*/}
@@ -259,10 +262,14 @@ function Profile (props) {
                                                         <li className="nav-item">
                                                             <a className="nav-link" data-toggle="tab" href="#Coordonnees-bancaires" role="tab" aria-selected="false">Coordonnées bancaires</a>
                                                         </li>
-                                                        {user_role !== "professional_auditor" ?
+                                                        {user_role !== "professional_auditor" &&
                                                             <li className="nav-item">
                                                                 <a className="nav-link" data-toggle="tab" href="#Refund-Policy" role="tab" aria-selected="false">Politique de remboursement </a>
-                                                            </li> : null}
+                                                            </li>}
+                                                        {user_role !== "professional_auditor" &&
+                                                        <li className="nav-item">
+                                                            <a className="nav-link" data-toggle="tab" href="#Calendar-Management" role="tab" aria-selected="false">Gestion de Calendrier</a>
+                                                        </li>}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -284,7 +291,9 @@ function Profile (props) {
                                         </div>}
                                     {user_role !== "professional_auditor" &&
                                     <div className={user_role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fade"} id="Prestations" role="tabpanel">
-                                        <MyPrestations role={user_role} setToast={setActiveToast} setAllPrestation={setAllPrestation} allPrestation={allPrestation} profile/>
+                                        <MyPrestations role={user_role} setToast={setActiveToast} setAllPrestation={setAllPrestation}
+                                                       close={() => toast.success("Ajouter avec succes")} setActiveToast={setActiveToast}
+                                                       allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation} profile/>
                                     </div>}
                                     <div className={user_role === "professional_auditor" ? "tab-pane fade show active" : "tab-pane fade"} id="Paiements-Reservations" role="tabpanel">
                                         <PaymentsAndReservations/>
@@ -295,6 +304,10 @@ function Profile (props) {
                                     <div className="tab-pane fade" id="Refund-Policy" role="tabpanel">
                                         <RefundPolicy/>
                                     </div>
+                                    {user_role !== "professional_auditor" &&
+                                    <div className="tab-pane fade" id="Calendar-Management" role="tabpanel">
+                                        <CalendarManagement/>
+                                    </div>}
                                 </div>
                             </div>
                             {user_role === "beatmaker" ?
@@ -304,7 +317,7 @@ function Profile (props) {
                                             <button className="btn btn-outline-danger" onClick={() => togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                         <div className="align-self-center">
-                                            <button className="btn btn-outline-danger" onClick={() => {setBecomeArtistForm(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
+                                            <button className="btn btn-outline-danger" onClick={() => {setAddNewPrestation(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                     </div>
                                 </div> : null}
