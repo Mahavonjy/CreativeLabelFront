@@ -7,15 +7,18 @@ import IslPlayer from "../Players/Players";
 import Conf from "../../Config/tsconfig";
 import { useSelector, useDispatch } from "react-redux";
 import { FillInCartProps }  from "../FunctionTools/Tools";
-// import { saveUserCredentials } from "../FunctionTools/Tools";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import * as PopupFields from "../FunctionTools/PopupFields";
-import * as HomeProps from "../FunctionTools/FunctionProps";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
-import { addTotalPrice, addCarts } from "../FunctionTools/FunctionProps";
 import { sessionService } from 'redux-react-session';
-import {addUserCredentials} from "../FunctionTools/FunctionProps";
-// import { push } from 'connected-react-router';
+import { addUserCredentials, addOtherUserOptions, addOtherUserService } from "../FunctionTools/FunctionProps";
+import { exOptions, exService } from "../../reducer/Profile/Exemples";
+import {
+    addBeatMakerBeats, addSimilarBeats, addOtherBeatMakerBeats, addAllMediaGenre, addPrefAllMediaGenre,
+    addBeats, newBeatMaker, topBeatMaker, latestBeats, discoveryBeats, islBeats, profileInitialisationInfo,
+    profileInitialisationRole, profileInitialisationFollower, profileInitialisationFollowing, profileAddBeats,
+    profileInitialisationContract, addTotalPrice, addCarts, beatsInitialisationPricing
+} from "../FunctionTools/FunctionProps";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
@@ -100,14 +103,16 @@ function Home () {
         let secondRouteParsing = href[href.length - 2];
         if (secondRouteParsing === "CheckThisBeat") {
             axios.get("api/beats/OneBeat/" + firstRouteParsing, {headers: headers}).then(resp => {
-                dispatch(HomeProps.addBeatMakerBeats(resp.data['all_artist_beats']));
-                dispatch(HomeProps.addSimilarBeats(resp.data['similar_beats']));
+                dispatch(addBeatMakerBeats(resp.data['all_artist_beats']));
+                dispatch(addSimilarBeats(resp.data['similar_beats']));
                 setSingleBeat(resp.data['single_beat']);
                 setLoading(false);
             }).catch(() => window.location.replace("/BeatsNotFound") )
         } else if (secondRouteParsing === "isl_artist_profile") {
             axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
-                dispatch(HomeProps.addOtherBeatMakerBeats(resp.data['user_beats']));
+                dispatch(addOtherBeatMakerBeats(resp.data['user_beats']));
+                dispatch(addOtherUserOptions(exOptions));
+                dispatch(addOtherUserService(exService));
                 setProfileChecked(resp.data['profile_checked']);
                 setUserData(resp.data['user_data']);
                 setLoading(false);
@@ -138,16 +143,16 @@ function Home () {
                 axios.get("api/medias/allMediaGenre", {headers: headers}).then(resp =>{
                     let tmp_arr = [];
                     for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
-                    dispatch(HomeProps.addAllMediaGenre(tmp_arr));
-                    dispatch(HomeProps.addPrefAllMediaGenre(resp.data));
+                    dispatch(addAllMediaGenre(tmp_arr));
+                    dispatch(addPrefAllMediaGenre(resp.data));
                 }).catch(err => ifConnectionError(err)),
                 axios.get( "api/beats/AllSuggestion", {headers: headers}).then(resp => {
-                    dispatch(HomeProps.addBeats(resp.data["random"]));
-                    dispatch(HomeProps.newBeatMaker(resp.data["new_beatMaker"]));
-                    dispatch(HomeProps.topBeatMaker(resp.data["top_beatmaker"]));
-                    dispatch(HomeProps.latestBeats(resp.data["latest_beats"]));
-                    dispatch(HomeProps.discoveryBeats(resp.data["discovery_beats"]));
-                    dispatch(HomeProps.islBeats(resp.data["isl_playlist"]));
+                    dispatch(addBeats(resp.data["random"]));
+                    dispatch(newBeatMaker(resp.data["new_beatMaker"]));
+                    dispatch(topBeatMaker(resp.data["top_beatmaker"]));
+                    dispatch(latestBeats(resp.data["latest_beats"]));
+                    dispatch(discoveryBeats(resp.data["discovery_beats"]));
+                    dispatch(islBeats(resp.data["isl_playlist"]));
                 }).catch(err => ifConnectionError(err))
             ]).then(() => CheckSpecialRoute()).catch(() => NotOnline());
         }
@@ -190,29 +195,29 @@ function Home () {
     const fetchUserData = () => {
         Promise.all([
             axios.get( "api/profiles/my_profile", {headers: headers}).then(resp => {
-                dispatch(HomeProps.profileInitialisationInfo(resp.data['my_profile']));
-                dispatch(HomeProps.profileInitialisationRole(resp.data['role']));
-                dispatch(HomeProps.profileInitialisationFollower(resp.data['my_followers']));
-                dispatch(HomeProps.profileInitialisationFollowing(resp.data['my_followings']));
+                dispatch(profileInitialisationInfo(resp.data['my_profile']));
+                dispatch(profileInitialisationRole(resp.data['role']));
+                dispatch(profileInitialisationFollower(resp.data['my_followers']));
+                dispatch(profileInitialisationFollowing(resp.data['my_followings']));
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
                         axios.get( "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-                            dispatch(HomeProps.profileAddBeats(resp.data['beats']));
+                            dispatch(profileAddBeats(resp.data['beats']));
                         }).catch(err => ifConnectionError(err, fetchUserData)),
                         axios.get( "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
-                            dispatch(HomeProps.profileInitialisationContract(resp.data));
+                            dispatch(profileInitialisationContract(resp.data));
                         }).catch(err => ifConnectionError(err, fetchUserData))
                     ]).then();
                 }
                 FillInCartProps(headers, {
-                    addTotalPrice: HomeProps.addTotalPrice,
-                    addCarts: HomeProps.addCarts,
+                    addTotalPrice: addTotalPrice,
+                    addCarts: addCarts,
                     dispatch: dispatch,
                     user_credentials: user_credentials
                 }).then(() => null);
             }).catch(err => ifConnectionError(err, fetchUserData)),
             axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
-                dispatch(HomeProps.beatsInitialisationPricing(resp.data));
+                dispatch(beatsInitialisationPricing(resp.data));
             }).catch(err => ifConnectionError(err))
         ]).then(() => NotOnline()).catch(() => fetchUserData())
     };

@@ -8,7 +8,7 @@ import "../../style/Results.css"
 import ReactTooltip from "react-tooltip";
 import PurchaseInformation from "../../../Cart/PurchaseInformation";
 
-function DisplayPrestation() {
+function DisplayPrestation(props) {
 
     const isMounted = useRef(false);
     const [event_date, setEventDate] = useState(new Date()); // synchroniser avec la recherche après
@@ -18,11 +18,13 @@ function DisplayPrestation() {
     const [rating, setRating] = useState(1);
 
     const Reserve = () => {
-        let new_date = formatDate(event_date);
-        let now = formatDate(new Date());
-        if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
-        else if (parseInt(new_date) - parseInt(now) <= 0) toast.error("Veuillez mettre une autre date");
-        else setReservation(true)
+        if (!props.read) {
+            let new_date = formatDate(event_date);
+            let now = formatDate(new Date());
+            if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
+            else if (parseInt(new_date) - parseInt(now) <= 0) toast.error("Veuillez mettre une autre date");
+            else setReservation(true)
+        }
     };
 
     const ImageClick = (e) => {
@@ -85,7 +87,7 @@ function DisplayPrestation() {
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
                                     <StarRatings rating={rating}
                                                  starRatedColor="red"
-                                                 changeRating={newRating => setRating(newRating)}
+                                                 changeRating={newRating => { if (!props.read) setRating(newRating)}}
                                                  numberOfStars={5}
                                                  starDimension="20px"
                                                  starSpacing="10px"
@@ -115,7 +117,7 @@ function DisplayPrestation() {
                                                         <div className="input-group-text text-dark">
                                                             <i className="icon-clock-1"/>&nbsp;Editer la date ici *&nbsp;<i className="icon icon-info" data-tip="La date et l'heure exact du déroulement de votre evenement"/></div>
                                                         <DatePicker selected={event_date}
-                                                                    onChange={date => setEventDate(date)}
+                                                                    onChange={date => {if (!props.read) setEventDate(date)}}
                                                                     className="form-control"
                                                                     style={{zIndex: 99}}
                                                                     dateFormat="MMMM d, yyyy"/>
@@ -131,7 +133,7 @@ function DisplayPrestation() {
                                                         <input type="text" value={address} id="address"
                                                                placeholder="Ecrire ici l'adresse de votre evenement"
                                                                name="address" className="form-control"
-                                                               onChange={(e) => changeFields(setAddress, e)} />
+                                                               onChange={(e) => {if (!props.read) changeFields(setAddress, e)}} />
                                                     </div>
                                                 </div>
                                             </div>

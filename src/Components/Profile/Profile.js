@@ -248,13 +248,17 @@ function Profile (props) {
                                                 {loading && smallSpinner("absolute", "50px")}
                                                 <div className="mt-3">
                                                     <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1" role="tablist">
+                                                        {user_role !== "professional_auditor" &&
+                                                        <li className="nav-item">
+                                                            <a className="nav-link active show" data-toggle="tab" href="#Calendar-Management" role="tab" aria-selected="false">Gestion de Calendrier</a>
+                                                        </li>}
                                                         {user_role === "beatmaker" &&
                                                             <li className="nav-item">
-                                                                <a className="nav-link active show" data-toggle="tab" href="#beats-tab" role="tab" aria-selected="true">Beats</a>
+                                                                <a className="nav-link" data-toggle="tab" href="#beats-tab" role="tab" aria-selected="true">Beats</a>
                                                             </li>}
                                                         {user_role !== "professional_auditor" &&
                                                         <li className="nav-item">
-                                                            <a className={user_role !== "beatmaker" ? "nav-link active show" : "nav-link"} data-toggle="tab" href="#Prestations" role="tab" aria-selected="false">Mes prestations</a>
+                                                            <a className="nav-link" data-toggle="tab" href="#Prestations" role="tab" aria-selected="false">Mes prestations</a>
                                                         </li>}
                                                         <li className="nav-item">
                                                             <a className={user_role === "professional_auditor" ? "nav-link active show" : "nav-link"} data-toggle="tab" href="#Paiements-Reservations" role="tab" aria-selected="false">Paiements & Réservations</a>
@@ -266,10 +270,6 @@ function Profile (props) {
                                                             <li className="nav-item">
                                                                 <a className="nav-link" data-toggle="tab" href="#Refund-Policy" role="tab" aria-selected="false">Politique de remboursement </a>
                                                             </li>}
-                                                        {user_role !== "professional_auditor" &&
-                                                        <li className="nav-item">
-                                                            <a className="nav-link" data-toggle="tab" href="#Calendar-Management" role="tab" aria-selected="false">Gestion de Calendrier</a>
-                                                        </li>}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -279,8 +279,12 @@ function Profile (props) {
                             </div>
                             <div className="card-body no-p">
                                 <div className="tab-content">
+                                    {user_role !== "professional_auditor" &&
+                                    <div className="tab-pane fade show active" id="Calendar-Management" role="tabpanel">
+                                        <CalendarManagement/>
+                                    </div>}
                                     {user_role === "beatmaker" &&
-                                        <div className="tab-pane fade show active" id="beats-tab" role="tabpanel">
+                                        <div className="tab-pane fade" id="beats-tab" role="tabpanel">
                                             {state_user_beats.length !== 0 ?
                                                 <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 320}}>
                                                     {CreateBeatsPlaylist("user_profile", "user_profile", props, states, "user_profile")}
@@ -290,7 +294,7 @@ function Profile (props) {
                                                 </div>}
                                         </div>}
                                     {user_role !== "professional_auditor" &&
-                                    <div className={user_role !== "beatmaker" ? "tab-pane fade show active" : "tab-pane fade"} id="Prestations" role="tabpanel">
+                                    <div className="tab-pane fade" id="Prestations" role="tabpanel">
                                         <MyPrestations role={user_role} setToast={setActiveToast} setAllPrestation={setAllPrestation}
                                                        close={() => toast.success("Ajouter avec succes")} setActiveToast={setActiveToast}
                                                        allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation} profile/>
@@ -304,23 +308,20 @@ function Profile (props) {
                                     <div className="tab-pane fade" id="Refund-Policy" role="tabpanel">
                                         <RefundPolicy/>
                                     </div>
-                                    {user_role !== "professional_auditor" &&
-                                    <div className="tab-pane fade" id="Calendar-Management" role="tabpanel">
-                                        <CalendarManagement/>
-                                    </div>}
                                 </div>
                             </div>
-                            {user_role === "beatmaker" ?
+                            {user_role !== "professional_auditor" &&
                                 <div className="card-footer pb-2">
                                     <div className="d-flex justify-content-between">
+                                        {user_role === "beatmaker" &&
                                         <div className="align-self-center">
                                             <button className="btn btn-outline-danger" onClick={() => togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
-                                        </div>
+                                        </div>}
                                         <div className="align-self-center">
                                             <button className="btn btn-outline-danger" onClick={() => {setAddNewPrestation(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
                                         </div>
                                     </div>
-                                </div> : null}
+                                </div>}
                         </div>
                     </div>
                 </div>

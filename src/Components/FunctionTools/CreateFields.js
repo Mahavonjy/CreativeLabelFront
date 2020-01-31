@@ -98,15 +98,13 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                 {state_value === "oneBeats" ?
                                     <div className="text-red">
                                         {states.index === index ?
-                                            <i className="icon-pause s-28 text-danger"
-                                               onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
+                                            <i className="icon-pause s-28 text-danger" onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
                                             <i className="icon-play s-28 text-danger" onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
                                     </div> : <div>
                                         {states.link[index] ?
                                             <div className="text-red">
                                                 {states.index === index ?
-                                                    <i className="icon-pause s-28 text-danger"
-                                                       onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
+                                                    <i className="icon-pause s-28 text-danger" onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
                                                     <i className="icon-play s-28 text-danger" onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
                                             </div> :
                                             <div className="spinner-grow text-primary" role="status">

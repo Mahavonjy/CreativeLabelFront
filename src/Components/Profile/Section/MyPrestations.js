@@ -3,7 +3,7 @@ import ReactTooltip from "react-tooltip";
 import { changeFields } from "../../FunctionTools/Tools";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 import Modal from "react-awesome-modal";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { toast } from "react-toastify";
 import {
     addUnitTimeOfService, addOptionSelected, addPicturesOfService, addTitleOfService, addReferenceOfCity,
@@ -11,16 +11,20 @@ import {
     addPreparationTime, addNumberOfArtist, addUnitTimeOfPreparation, changeStatusOfService, changeMovingPrice,
     addMaterialsOfService, addServiceId
 } from "../../FunctionTools/FunctionProps";
+import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestation";
 
 function MyPrestations(props) {
 
     const dispatch = useDispatch();
+    const other_user_prestations = useSelector(state => state.profilePrestations.other_user_prestations);
 
     const isMounted = useRef(false);
     const [global_price, setGlobalPrice] = useState(300);
     const [state_index, setStateIndex] = useState(null);
     const [copyEdit, setCopyEdit] = useState(false);
+    const [showOne, setShowOne] = useState(false);
     const [editPrestation, setEditPrestation] = useState(false);
+    const [allPrestation, setAllPrestation] = useState(other_user_prestations);
 
     const checkUnit = (val, opt) => {
         if (val === "min")
@@ -72,7 +76,7 @@ function MyPrestations(props) {
         if (copy_)
             await setCopyEdit(true);
         setStateIndex(index);
-        let tmp_prestation = props.allPrestation[index];
+        let tmp_prestation = allPrestation[index];
         await dispatch(addServiceId(tmp_prestation.id));
         await dispatch(addUnitTimeOfService(checkUnit(tmp_prestation.service_time.unit, true)));
         await dispatch(addOptionSelected(tmp_prestation.thematics_options_selected));
@@ -94,20 +98,23 @@ function MyPrestations(props) {
     };
 
     const onChangeHidden = (index) => {
-        let tmp_prestations = [...props.allPrestation];
-        tmp_prestations[index].hidden = !props.allPrestation[index].hidden;
+        let tmp_prestations = [...allPrestation];
+        tmp_prestations[index].hidden = !allPrestation[index].hidden;
         props.setAllPrestation(tmp_prestations);
     };
 
     const deletePrestations = (indexOfOption) => {
-        if (props.allPrestation.length > 1) {
-            props.setAllPrestation(props.allPrestation.filter((option, index) => index !== indexOfOption));
+        if (allPrestation.length > 1) {
+            props.setAllPrestation(allPrestation.filter((option, index) => index !== indexOfOption));
             toast.success("Supprimer avec succès")
         }
         else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
 
     useEffect(() => {
+        if (props.allPrestation)
+            setAllPrestation(allPrestation);
+
         return () => {
             isMounted.current = true
         };
@@ -141,6 +148,16 @@ function MyPrestations(props) {
                 </div>
             </Modal>
             {/* end form become an artist */}
+            {/* if user choice become an artist*/}
+            <Modal visible={showOne} width="80%" height="80%" effect="fadeInUp" onClickAway={() => setShowOne(false)}>
+                <div className="bg-dark overflow-auto scrollbar-isl" style={{height:"100%"}}>
+                    <button className="ModalClose" style={{position: "fixed", left: 0, top: 0}} onClick={() => setShowOne(false)}>
+                        <i className="icon-close s-24" style={{color:"orange"}} />
+                    </button>
+                    {showOne && <DisplayPrestation read/>}
+                </div>
+            </Modal>
+            {/* end form become an artist*/}
             <div className="row justify-content-center">
                 {!props.read &&
                 <div className="col-lg-2">
@@ -161,7 +178,7 @@ function MyPrestations(props) {
 
                 <div className={props.read ? "col-lg-12" : "col-lg-10"}>
                     <div className="row justify-content-center scrollbar-isl">
-                        {props.allPrestation.map((val, index) =>
+                        {allPrestation.map((val, index) =>
                             <div className={!props.profile ? "card_kanto" : "card_kantoProfile"} key={index}>
                                 <div className={!props.profile ? "additional": "additionalProfile"}>
                                     <div className={props.profile ? "user-card_kanto" : "user-card_kanto d-none d-sm-block"} data-tip="Cliquer Moi">
@@ -272,7 +289,7 @@ function MyPrestations(props) {
                                         <div className="more-icon text-red mt-4" onClick={() => addToPropsToEdit(index, true)} data-tip data-for="copy_edit">
                                             <i className="icon-copy s-24"/>&nbsp;&&nbsp;<i className="icon-edit s-24"/>
                                         </div>}
-                                    {props.profile && <i className="icon-smartphone-11 text-red more-icon-phone s-36"/>}
+                                    {props.profile && <i className="icon-smartphone-11 text-red more-icon-phone s-36" onClick={() => setShowOne(true)}/>}
                                 </div>
                             </div>
                         )}

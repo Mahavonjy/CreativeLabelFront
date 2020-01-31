@@ -9,10 +9,18 @@ const initState = {
     following: '',
     pricing_beats: '',
     ready_beats: false,
+    week_days_and_week_end : {
+        "Monday": true, "Tuesday": true, "Wednesday": true, "Thursday": true, "Friday": true, "Saturday": true, "Sunday": false
+    }
 };
 
 const profileReducer = (state = initState, action) => {
     switch (action.type) {
+        case "ADD_USER_DAY_OF_AVAILABILITY":
+            return {
+                ...state,
+                week_days_and_week_end: action.data
+            };
         case "ADD_PROFILE_INFO":
             return {
                 ...state,

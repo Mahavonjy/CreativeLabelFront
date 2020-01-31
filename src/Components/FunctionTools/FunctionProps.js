@@ -500,10 +500,37 @@ export function addUnitTimeOfService(data) {
     };
 }
 
+export function addOtherUserOptions(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_OTHER_USER_OPTIONS",
+            data: data
+        });
+    };
+}
+
+export function addOtherUserService(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_OTHER_USER_PRESTATIONS",
+            data: data
+        });
+    };
+}
+
 export function activeResultPage(data) {
     return async dispatch => {
         dispatch({
             type: "ACTIVE_RESULTS_PAGE",
+            data: data
+        });
+    };
+}
+
+export function addDayOfAvailability(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_USER_DAY_OF_AVAILABILITY",
             data: data
         });
     };

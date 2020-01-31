@@ -1,10 +1,10 @@
 import React from "react";
 import Conf from "../../Config/tsconfig";
 import axios from "axios";
+import Home from "../Home/Home";
 import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import { addTotalPrice, addCarts, addAllUserPrestation } from "./FunctionProps";
-import Home from "../Home/Home";
 
 export const changeFields = (setState, e, up_props, dispatch) => {
     let value = e.target.value;
@@ -152,10 +152,9 @@ export const isNumber = (number_) => {
 
 export const formatDate = (date) => {
     let day = date.getDate();
-    let monthIndex = date.getMonth();
+    let monthIndex = date.getMonth() + 1;
     let year = date.getFullYear();
-
-    return day + '-' + monthIndex + '-' + year;
+    return monthIndex + '/' + day + '/' + year;
 };
 
 export const changeBoolFields = (setState, e, up_props) => {
@@ -187,6 +186,12 @@ export const checkValueOfUnit = (val) => {
     else if (val['min'])
         return "m";
     return "s";
+};
+
+export const ChangeDate = (date, setStartDate) => {
+    let new_date = new Date(formatDate(date));
+    let now = new Date(formatDate(new Date()));
+    if (now < new_date) setStartDate(date);
 };
 
 export const getMediaLink = (setState, state, medias, up_props, dispatch) => {

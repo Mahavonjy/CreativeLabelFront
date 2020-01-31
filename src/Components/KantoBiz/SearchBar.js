@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import ReactTooltip from 'react-tooltip';
-import { formatDate, changeFields } from "../FunctionTools/Tools";
+import { changeFields, ChangeDate } from "../FunctionTools/Tools";
 import { validatorSearch } from "../Validators/Validatiors"
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 function SearchBar() {
 
@@ -25,12 +25,6 @@ function SearchBar() {
     const [state_thematics, setThematics] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [country, setCountry] = useState("Madagascar");
-
-    const ChangeDate = (date) => {
-        let new_date = formatDate(date);
-        let now = formatDate(new Date());
-        if (parseInt(new_date) - parseInt(now) >= 0) setStartDate(date);
-    };
 
     const Search = () => {
         let if_errors = validatorSearch(city, state_thematics, state_events, startDate);
@@ -130,8 +124,13 @@ function SearchBar() {
                 </div>
 
                 <div className=" col-sm-2 d-inline-block border border-primary text-center " style={{borderRadius: "5px", width: "94%"}}>
-                    <DatePicker className="bg-transparent text-center text-white border-0" selected={startDate} onChange={ChangeDate}/>
-                    <label className="input-group-addon bg-transparent"><i className="icon-calendar text-center text-red"/><span className="ml-2 text-white" data-tip="La date de votre Evenement"><i className="icon icon-info"/></span></label>
+                    <DatePicker className="bg-transparent text-center text-white border-0" selected={startDate} onChange={(e) => ChangeDate(e, setStartDate)}/>
+                    <label className="input-group-addon bg-transparent">
+                        <i className="icon-calendar text-center text-red"/>
+                        <span className="ml-2 text-white" data-tip="La date de votre Evenement">
+                            <i className="icon icon-info"/>
+                        </span>
+                    </label>
                 </div>
 
                 <div className="col-md-10" style={{width: "90%"}}>
