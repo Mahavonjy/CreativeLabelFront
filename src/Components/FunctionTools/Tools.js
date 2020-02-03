@@ -4,7 +4,7 @@ import axios from "axios";
 import Home from "../Home/Home";
 import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import { addTotalPrice, addCarts, addAllUserPrestation } from "./FunctionProps";
+import {addTotalPrice, addCarts, addAllUserPrestation, addMaterialsOfService} from "./FunctionProps";
 
 export const changeFields = (setState, e, up_props, dispatch) => {
     let value = e.target.value;
@@ -157,6 +157,27 @@ export const formatDate = (date) => {
     return monthIndex + '/' + day + '/' + year;
 };
 
+export const addSpecialDateToData = (tmp_data, selectedMonth, selectedDay, selectedYear, index, date_key) => {
+    let key = !date_key ? selectedMonth + "/" + selectedDay + "/" + selectedYear : date_key
+    function addToSpecialIndex(i) {
+        if (!tmp_data[i]["special_date"][key]) {
+            let tmp = {...tmp_data[i]};
+            delete tmp["special_date"];
+            tmp_data[i]["special_date"][key] = tmp
+        }
+    }
+    if (index) addToSpecialIndex(index);
+    else for (let r in tmp_data) addToSpecialIndex(r);
+};
+
+export const checkIfHidden = (value, idPrestation) => {
+    let tmp = false;
+    for (let index in value)
+        if (value[index] === idPrestation)
+            tmp = true;
+    return tmp;
+};
+
 export const changeBoolFields = (setState, e, up_props) => {
     let value = e.target.value;
     if (value === true || value === "true") setState(false);
@@ -188,10 +209,13 @@ export const checkValueOfUnit = (val) => {
     return "s";
 };
 
+export const calculateNumberDaysBetweenDates = (date1, date2) => {
+    return (date1 - date2) / (1000 * 3600 * 24)
+};
+
 export const ChangeDate = (date, setStartDate) => {
-    let new_date = new Date(formatDate(date));
-    let now = new Date(formatDate(new Date()));
-    if (now < new_date) setStartDate(date);
+    if (new Date() < date)
+        setStartDate(date);
 };
 
 export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
@@ -210,12 +234,16 @@ export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
     return Promise.all(all_call_api).then(() => null)
 };
 
+export const compareArrays = (first_array, second_array) => {
+    return JSON.stringify(first_array) === JSON.stringify(second_array)
+};
+
 export const createNewPrestation = async (setActiveToast, allPrestation, setAllPrestation, setAddNewPrestation, dispatch, close, props) => {
     let secure = false;
     for (let row in allPrestation) {
         if (allPrestation[row]['title'] === props.PropsTitle && allPrestation[row]['city_of_reference'] === props.PropsCityReference) {
             secure = true;
-        } else if (allPrestation[row]['title'] === props.PropsTitle && JSON.stringify(allPrestation[row]['events_type']) === JSON.stringify(props.props_events_selected)) {
+        } else if (allPrestation[row]['title'] === props.PropsTitle && compareArrays(allPrestation[row]['events_type'], props.props_events_selected)) {
             secure = true;
         }
     }

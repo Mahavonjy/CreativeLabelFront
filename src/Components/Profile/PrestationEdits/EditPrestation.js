@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 import {useDispatch, useSelector} from "react-redux";
 import PrestationInformation from "../../KantoBiz/Prestations/Form/PrestationInformation";
-import {ImageClick, changeFields, checkValueOfUnit, createNewPrestation} from "../../FunctionTools/Tools";
+import { ImageClick, changeFields, checkValueOfUnit, createNewPrestation } from "../../FunctionTools/Tools";
 import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails";
 import RefundPolicy from "../Section/RefundPolicy";
 import ReactTooltip from "react-tooltip";

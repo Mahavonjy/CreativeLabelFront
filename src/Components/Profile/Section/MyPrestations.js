@@ -16,7 +16,7 @@ import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestat
 function MyPrestations(props) {
 
     const dispatch = useDispatch();
-    const other_user_prestations = useSelector(state => state.profilePrestations.other_user_prestations);
+    const prestations = useSelector(state => state.profilePrestations.prestations);
 
     const isMounted = useRef(false);
     const [global_price, setGlobalPrice] = useState(300);
@@ -24,7 +24,7 @@ function MyPrestations(props) {
     const [copyEdit, setCopyEdit] = useState(false);
     const [showOne, setShowOne] = useState(false);
     const [editPrestation, setEditPrestation] = useState(false);
-    const [allPrestation, setAllPrestation] = useState(other_user_prestations);
+    const [allPrestation, setAllPrestation] = useState(prestations);
 
     const checkUnit = (val, opt) => {
         if (val === "min")

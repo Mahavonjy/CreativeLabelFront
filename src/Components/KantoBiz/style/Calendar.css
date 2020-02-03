@@ -12,42 +12,24 @@
     position: relative;
     height: inherit;
 }
-.outer .wrapper .flip-container-left .flipper .btn,
-.outer .wrapper .flip-container-right .flipper .btn {
-    width: 4vw;
-    height: 4vw;
-    cursor: pointer;
-    border-radius: 50%;
-}
-.outer .wrapper .flip-container-left .flipper .btn:hover,
-.outer .wrapper .flip-container-right .flipper .btn:hover {
-    opacity: 0.5;
-}
-.outer .wrapper .flip-container-left .flipper .btn-prev,
-.outer .wrapper .flip-container-left .flipper .btn-next,
-.outer .wrapper .flip-container-right .flipper .btn-prev,
-.outer .wrapper .flip-container-right .flipper .btn-next {
-    border: 0.25vw #58585a solid;
-    font-weight: bold;
-    font-size: 1vw;
-}
+
 .outer .wrapper .flip-container-left .flipper .select-month,
 .outer .wrapper .flip-container-right .flipper .select-month {
     height: 2vw;
     cursor: pointer;
-    font-size: 1.5vw;
+    font-size: 1vw;
     border: none;
-    border-left: 0.25vw solid #58585a;
-    border-right: 0.25vw solid #58585a;
+    border-left: 0.1vw solid #58585a;
+    border-right: 0.1vw solid #58585a;
 }
 .outer .wrapper .flip-container-left .flipper .input-year,
 .outer .wrapper .flip-container-right .flipper .input-year {
     width: 4vw;
     height: 2vw;
-    font-size: 1.5vw;
+    font-size: 1vw;
     text-align: center;
     border: none;
-    border-bottom: 0.25vw solid #58585a;
+    border-bottom: 0.1vw solid #58585a;
 }
 .outer .wrapper .flip-container-left .flipper .container-event,
 .outer .wrapper .flip-container-right .flipper .container-event {
@@ -66,10 +48,7 @@
     border: none;
     border-bottom: 0.25vw solid #58585a;
 }
-.outer .wrapper .flip-container-left .flipper .container-event .btn-submit,
-.outer .wrapper .flip-container-right .flipper .container-event .btn-submit {
-    border: 0.25vw #58585a solid;
-}
+
 .outer .wrapper .flip-container-left .flipper .input-event,
 .outer .wrapper .flip-container-right .flipper .input-event {
     margin-top: 1vw;
@@ -89,16 +68,16 @@
 .outer .wrapper .flip-container-left .flipper .back-left,
 .outer .wrapper .flip-container-right .flipper .front-left,
 .outer .wrapper .flip-container-right .flipper .back-left {
-    border-bottom-left-radius: 3vw;
-    border-top-left-radius: 3vw;
+    border-bottom-left-radius: 1vw;
+    border-top-left-radius: 1vw;
 }
 
 .outer .wrapper .flip-container-left .front-right,
 .outer .wrapper .flip-container-left .back-right,
 .outer .wrapper .flip-container-right .front-right,
 .outer .wrapper .flip-container-right .back-right {
-    border-bottom-right-radius: 3vw;
-    border-top-right-radius: 3vw;
+    border-bottom-right-radius: 1vw;
+    border-top-right-radius: 1vw;
 }
 .outer .wrapper .flip-container-left .back,
 .outer .wrapper .flip-container-right .back {
@@ -124,11 +103,6 @@
     align-items: center;
     justify-content: center;
 }
-.outer .flip-container-left .flipper .front * {
-    background-color: #58585a;
-    color: #ED1C24;
-}
-
 .outer .flip-container-left .flipper .front h1 {
     margin: 0;
     font-size: 9vw;
@@ -172,7 +146,7 @@
     overflow: hidden;
 }
 .outer .flip-container-right .flipper .front * {
-    background-color: #eeeeee;
+    background-color: transparent;
     color: #58585a;
 }
 .outer .flip-container-right .flipper .front * {
@@ -201,22 +175,24 @@
 }
 .outer .flip-container-right .flipper .front .container-day .day-block {
     cursor: pointer;
-    border: 0.7vw solid #eeeeee;
+    border: 0.2vw solid #eeeeee;
     border-radius: 50%;
-    transition: 1s;
+    transition: 0.5s;
 }
 .outer .flip-container-right .flipper .front .container-day .day-block .inner {
-    transition: background-color 1s;
+    transition: background-color 0.5s;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
 }
 .outer .flip-container-right .flipper .front .container-day .active {
-    background-color: #58585a;
-    border: 0.7vw solid #58585a;
+    border: 0.1vw solid #ED1C24;
     border-radius: 50%;
 }
-
+.outer .flip-container-right .flipper .front .container-day .inactive {
+    border: 0.1vw solid #1a171b;
+    border-radius: 50%;
+}
 .outer .flip-container-right .flipper .back {
     background-color: #58585a;
     overflow: hidden;

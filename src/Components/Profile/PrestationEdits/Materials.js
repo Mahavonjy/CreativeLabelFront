@@ -33,13 +33,18 @@ function Materials(props) {
 
     useEffect(() => {
 
+        if (props.value) {
+            dispatch(addMaterialsOfService(props.value));
+            setTags(props.value);
+        }
+
         return () => {
             isMounted.current = true
         };
     }, []);
 
     return (
-        <div className="card no-b">
+        <div className={!props.noExemple && "card no-b"}>
             <div className="tag-editor">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">
@@ -61,6 +66,7 @@ function Materials(props) {
                     </div>
                 </span>
             </div>
+            {!props.noExemple &&
             <div className="tag-editor">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">
@@ -79,7 +85,8 @@ function Materials(props) {
                         </div>
                     </div>
                 </span>
-            </div>
+            </div>}
+
         </div>
     );
 }

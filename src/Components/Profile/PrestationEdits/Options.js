@@ -5,6 +5,7 @@ import Modal from "react-awesome-modal";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addAllUserOptions } from "../../FunctionTools/FunctionProps";
+import { checkIfHidden } from "../../FunctionTools/Tools";
 
 function Options(props) {
 
@@ -29,15 +30,6 @@ function Options(props) {
         }
         setOptions(tmp);
         dispatch(addAllUserOptions(tmp));
-    };
-
-    const checkIfHidden = (value) => {
-        let tmp = false;
-        for (let index in value) {
-            if (value[index] === service_id)
-                tmp = true;
-        }
-        return tmp;
     };
 
     const deleteOptions = (indexOfOption) => {
@@ -117,7 +109,7 @@ function Options(props) {
                 {options.map((val, index) =>
                         <tr key={index}>
                             <th className="text-center small bolder border-left-0 border-bottom-0" scope="row">
-                                {checkIfHidden(val.service_id_who_is_active) ? <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation" onClick={() => changeOptionsStatus(index, true)}/>:
+                                {checkIfHidden(val.service_id_who_is_active, service_id) ? <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation" onClick={() => changeOptionsStatus(index, true)}/>:
                                 <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion n'est pas activer pour cette prestation" onClick={() => changeOptionsStatus(index, false)}/> }
                             </th>
                             <th className="text-center small bolder border-left-0 border-bottom-0" scope="row">{val.name}</th>
@@ -132,8 +124,7 @@ function Options(props) {
                                 }} data-tip={"Modifier la prestation " + val.name}/>
                                 <i className="icon icon-trash text-red s-24 ml-1 mr-1" onClick={() => deleteOptions(index)} data-tip="Supprimer pour tout"/>
                             </td>
-                        </tr>
-                )}
+                        </tr>)}
                 </tbody>
             </table>
             {options.length === 0 && <h4 className="text-center text-red pt-3">Vous n'avez pas d'option</h4>}

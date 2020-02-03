@@ -258,6 +258,27 @@ summary{
 template{
     display:none
 }
+
+.right-0 {
+    right: 0;
+}
+
+.left-0 {
+    left: 0;
+}
+
+.top-0 {
+    top: 0;
+}
+
+.bottom-0 {
+    bottom: 0;
+}
+
+.border1 {
+    border-radius: 10px !important;
+}
+
 [hidden]{
     display:none!important
 }
@@ -22350,18 +22371,21 @@ nav.nav-flat .navbar-brand{
  */
 
 .scrollbar-isl::-webkit-scrollbar-track  {
-    border-radius: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-color: transparent;
 }
 
 .scrollbar-isl::-webkit-scrollbar {
     width: 7px;
-    border-radius: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-color: #58585a;
 }
 
 .scrollbar-isl::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-image: radial-gradient(circle, #1a171b, #3a1f35, #642046, #91174c, #bd0344, #bd0344, #bd0344, #bd0344, #91174c, #642046, #3a1f35, #1a171b);
 }
 
@@ -22707,4 +22731,41 @@ nav.nav-flat .navbar-brand{
     to {
           transform: rotateY(360deg);
     }
+}
+
+/* Remove IE arrow */
+select::-ms-expand {
+    display: none;
+}
+/* Custom Select */
+.selecto {
+    position: relative;
+    display: flex;
+    min-width: 20em;
+    margin-right: 1px;
+    margin-left: 1px;
+    height: 3em;
+    line-height: 3;
+    background: #2c3e50;
+    overflow: hidden;
+    border-radius: .25em;
+}
+
+/* Arrow */
+.selecto::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #34495e;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+}
+/* Transition */
+.selecto:hover::after {
+    color: #f39c12;
 }

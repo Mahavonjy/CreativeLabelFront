@@ -1,10 +1,10 @@
 import { exOptions, exService } from "./Exemples"
 
 const initState = {
-    options: exOptions,
-    prestations: exService,
-    other_user_options: exOptions,
-    other_user_prestations: exService,
+    options: exOptions, // option of user logged
+    prestations: exService, // service of user logged
+    other_user_options: exOptions, // option of user not logged
+    other_user_prestations: exService, // service of user not logged
 };
 
 const profilePrestations = (state = initState, action) => {
