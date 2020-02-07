@@ -22769,3 +22769,25 @@ select::-ms-expand {
 .selecto:hover::after {
     color: #f39c12;
 }
+
+.cardHome {
+    box-shadow: 2px 2px 5px rgb(0, 0, 0);
+    border-radius: 30px;
+    background: #000000;
+}
+
+.cardHome-body {
+    background: #000000;
+}
+
+.cardHome-footer {
+    background: #171717;
+    border-bottom-left-radius: 30px !important;
+    border-bottom-right-radius: 30px !important;
+}
+
+.cardHome-header {
+    border-radius: 30px !important;
+    border: 0px;
+    background: #000000;
+}
