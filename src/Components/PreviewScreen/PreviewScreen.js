@@ -1386,7 +1386,7 @@ function PreviewScreen(props) {
                                                                                                                             Réalisation
                                                                                                                             Cynthion
                                                                                                                             Mahavonjy &amp; Mickaël
-                                                                                                                            Lango</strong>
+                                                                                                                            Lango Collet</strong>
                                                                                                                     </p>
                                                                                                                 </div>
                                                                                                             </div>
