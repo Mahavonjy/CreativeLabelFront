@@ -522,11 +522,8 @@ function PreviewScreen(props) {
                                                                     </div>
                                                                     <div className="cardHome-body">
                                                                         <h2 className="cardHome-title text-red">ISL BEATMAKING</h2>
-                                                                        <p className="cardHome-text">With
-                                                                            supporting text below as
-                                                                            a natural lead-in
-                                                                            to additional
-                                                                            content.</p>
+                                                                        <p className="cardHome-text">
+                                                                            Les meilleures instrus afrotropicales pour vos projets musicaux</p>
                                                                     </div>
                                                                     <div className="cardHome-footer text-muted mt-5 mb-5">
                                                                         <button className="btn btn-outline-danger pl-5 pr-5">C'est parti</button>
@@ -539,11 +536,7 @@ function PreviewScreen(props) {
                                                                     </div>
                                                                     <div className="cardHome-body">
                                                                         <h2 className="cardHome-title text-red">ISL KANTOBIZ</h2>
-                                                                        <p className="cardHome-text">With
-                                                                            supporting text below as
-                                                                            a natural lead-in
-                                                                            to additional
-                                                                            content.</p>
+                                                                        <p className="cardHome-text"> Réservez les meilleurs artistes et profitez des meilleures représentations afrotropicales pour vos évènements</p>
                                                                     </div>
                                                                     <div className="cardHome-footer text-muted mt-5 mb-5">
                                                                        <button className="btn btn-outline-danger pl-5 pr-5">C'est parti</button>
@@ -733,13 +726,13 @@ function PreviewScreen(props) {
                                                                             </div>
                                                                             <div className="elementor-element elementor-element-5aa4ab2 elementor-widget elementor-widget-text-editor" data-id="5aa4ab2" data-element_type="widget" data-widget_type="text-editor.default">
                                                                                 <div className="elementor-widget-container">
-                                                                                    <div className="elementor-text-editor elementor-clearfix"><p>Découvrez toutes les instrumentales afro sur ISL Beatmaking.&nbsp;Nous travaillons avec les meilleurs Beatmakers à travers le monde pour vous offrir les meilleures créations afro tropicales. Découvrez une large diversité de sons et rendez vos créations encore plus originales.&nbsp;</p></div>
+                                                                                    <div className="elementor-text-editor elementor-clearfix"><p>Découvrez toutes les instrumentales afro sur ISL Beatmaking.&nbsp;Nous travaillons avec les meilleurs Beatmakers à travers le monde pour vous offrir les meilleures créations afrotropicales. Découvrez une large diversité de sons et rendez vos créations encore plus originales.&nbsp;</p></div>
                                                                                 </div>
                                                                             </div>
                                                                             <div className="elementor-element elementor-element-449b841 elementor-widget elementor-widget-text-editor" data-id="449b841" data-element_type="widget" data-widget_type="text-editor.default">
                                                                                 <div className="elementor-widget-container">
-                                                                                    <div className="elementor-text-editor elementor-clearfix"><p>Types de beats sur ISL Beatmaking:Afrobeat, Afropop, Afro-trap, Reggaeton,  Ndombolo, Kuduro, Rnb', Hip-hop, Kilalaky, Slow, Zouk-love, Kompas, Rap,
-                                                                                        Salegy, , Batrelaky, Reggae, Reggae-muffin, Maloya, Coupé-Décalé, Kizomba,  Makossa, Rumba, Pop, Techno, Dubstep, Folk, Rock,
+                                                                                    <div className="elementor-text-editor elementor-clearfix"><p>Types de beats sur ISL Beatmaking:Afrobeat, Afropop, Afro-trap, Reggaeton, Ndombolo, Reggae-muffin, Kuduro, Reggae, Rnb, Hip-hop, Kilalaky, Slow, Zouk-love, Kompas, Rap,
+                                                                                        Salegy, Batrelaky, Maloya, Coupé-Décalé, Kizomba, Makossa, Rumba, Pop, Techno, Dubstep, Folk, Rock,
                                                                                         Tsapiky, Basesa, Malesa, Kawitri, Vakodrazana, Goma, Zafindraona, Hira-gasy, Dancehall, Remix &nbsp;</p></div>
 
                                                                                     <div className="text-center mt-5">
@@ -924,18 +917,11 @@ function PreviewScreen(props) {
                                                                                     className="elementor-widget-container">
                                                                                     <div
                                                                                         className="elementor-text-editor elementor-clearfix">
-                                                                                        <p>Click edit button to change
-                                                                                            this text. Lorem ipsum dolor
-                                                                                            sit amet, consectetur
-                                                                                            adipiscing elit. Ut elit
-                                                                                            tellus, luctus nec
-                                                                                            ullamcorper mattis, pulvinar
-                                                                                            dapibus leo.&nbsp;Proin
-                                                                                            gravida nibh vel velit
-                                                                                            auctor aliquet. Aenean
-                                                                                            sollicitudin, lorem quis
-                                                                                            bibendum auctor, nisi elit
-                                                                                            consequat ipsum.&nbsp;</p>
+                                                                                        <p>Réservez les meilleurs artistes et profitez des meilleures représentations afrotropicales pour vos évènements. <br/>
+                                                                                            Ensemble nous répondons à vos besoins spécifiques en termes d’animation afin de vous faire vivre une expérience unique.
+                                                                                            Les performances des artistes de ISL KantoBiz ont lieu chez vous, au sein de votre organisation lors d’un évènement spécifique
+                                                                                            (mariage, fête traditionnelle, anniversaire, show-case, business launch ou lancement de produits, incentives, seminaires, appreciation events ou évènement de remerciement, etc…).
+                                                                                            ISL KantoBiz offre des moments d’évasion, de convivialité et de partage.&nbsp;</p>
                                                                                     </div>
                                                                                     <div className="text-center mt-5">
                                                                                         <button className="btn btn-danger pt-3 pb-3 pl-5 pr-5">ISL Kantobiz</button>
