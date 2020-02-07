@@ -19,8 +19,9 @@ function About() {
                         <main id="main" className="site-main">
                             <article className="post-553 page type-page status-publish ast-article-single" id="post-553"
                                      itemType="https://schema.org/CreativeWork" itemScope="itemscope">
-                                <header className="entry-header ast-no-thumbnail ast-no-meta">
-                                    <h1 className="entry-title" itemProp="headline">À propos</h1></header>
+                                <header className="text-center m-5">
+                                    <h1 className="text-red">A Propos de nous</h1>
+                                </header>
                                 {/* .entry-header */}
                                 <div className="entry-content clear" itemProp="text">
                                     <div data-elementor-type="wp-page" data-elementor-id={553}
@@ -34,7 +35,8 @@ function About() {
                                                     <div className="elementor-background-overlay"/>
                                                     <div className="elementor-container elementor-column-gap-default">
                                                         <div className="elementor-row">
-                                                            <div className="has_eae_slider elementor-element elementor-element-a40332c elementor-column elementor-col-33 elementor-top-column"
+                                                            <div
+                                                                className="has_eae_slider elementor-element elementor-element-a40332c elementor-column elementor-col-33 elementor-top-column"
                                                                 data-id="a40332c" data-element_type="column"
                                                                 data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
                                                                 <div className="elementor-column-wrap">
@@ -59,7 +61,10 @@ function About() {
                                                                                     <p style={{
                                                                                         textAlign: 'justify',
                                                                                         textJustify: 'inter-ideograph'
-                                                                                    }}><span style={{fontSize: '12.0pt', lineHeight: '115%'}}>
+                                                                                    }}><span style={{
+                                                                                        fontSize: '12.0pt',
+                                                                                        lineHeight: '115%'
+                                                                                    }}>
                                                                                         ISL Creative (Independance Sound Label Creative) est une entreprise spécialisée dans les
                                                                                         projets musicaux qui propose une large gamme de services dans le domaine de la musique&nbsp;:</span>
                                                                                     </p><p style={{
@@ -119,44 +124,46 @@ function About() {
                                                                                     fontWeight: 400
                                                                                 }}>ISL Kantobiz:&nbsp;KantoBiz est un module de ISL Creative spécialisé dans la mise en relation des artistes (Chanteurs, DJs, Comédiens,…) et du business (les entreprises de l’évènementiel, les évènements familiaux, évènements d’entreprise, évènements associatives, etc…). Notre rôle est d’assurer une relation pérenne entre le monde de l’entreprise et le monde du spectacle en mettant à disposition des artistes divers et variés</span>.
                                                                                 </p>
-                                                                                    <h3>Isl Creative se spécialise sur le marché afro-tropical incluant l’Afrique subsaharienne et l’Océan Indien</h3>
+                                                                                    <h3>Isl Creative se spécialise sur
+                                                                                        le marché afro-tropical incluant
+                                                                                        l’Afrique subsaharienne et
+                                                                                        l’Océan Indien</h3>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div className="elementor-element elementor-element-86caf90 elementor-widget elementor-widget-text-editor"
+                                                                        <div
+                                                                            className="elementor-element elementor-element-86caf90 elementor-widget elementor-widget-text-editor"
                                                                             data-id="86caf90" data-element_type="widget"
                                                                             data-widget_type="text-editor.default">
                                                                             <div className="elementor-widget-container">
                                                                                 <div
                                                                                     className="elementor-text-editor elementor-clearfix">
-                                                                                    <p><b><i><u><span style={{
-                                                                                        fontSize: '12.0pt',
-                                                                                        lineHeight: '115%'
-                                                                                    }}>Les valeurs de&nbsp; l’entreprise&nbsp;: </span></u></i></b>
-                                                                                    </p><p style={{
-                                                                                    textIndent: '-18.0pt',
-                                                                                    msoList: 'l0 level1 lfo1'
-                                                                                }}>{/* [if !supportLists]*/}<span
-                                                                                    style={{
-                                                                                        fontSize: '12.0pt',
-                                                                                        lineHeight: '115%',
-                                                                                        fontFamily: '"Courier New"',
-                                                                                        msoFareastFontFamily: '"Courier New"'
-                                                                                    }}>o<span style={{
-                                                                                    fontStyle: 'normal',
-                                                                                    fontVariantNumeric: 'normal',
-                                                                                    fontVariantEastAsian: 'normal',
-                                                                                    fontWeight: 'normal',
-                                                                                    fontStretch: 'normal',
-                                                                                    fontSize: '7pt',
-                                                                                    lineHeight: 'normal',
-                                                                                    fontFamily: '"Times New Roman"'
-                                                                                }}>&nbsp; &nbsp;</span></span><b><i><u><span
-                                                                                    style={{
-                                                                                        fontSize: '12.0pt',
-                                                                                        lineHeight: '115%'
-                                                                                    }}>Respect&nbsp;:</span></u></i></b>
-                                                                                </p><p><span style={{
+                                                                                    <h3 className="text-red m-5">Les
+                                                                                        valeurs de l’entreprise</h3>
+                                                                                    <p style={{
+                                                                                        textIndent: '-18.0pt',
+                                                                                        msoList: 'l0 level1 lfo1'
+                                                                                    }}>{/* [if !supportLists]*/}<span
+                                                                                        style={{
+                                                                                            fontSize: '12.0pt',
+                                                                                            lineHeight: '115%',
+                                                                                            fontFamily: '"Courier New"',
+                                                                                            msoFareastFontFamily: '"Courier New"'
+                                                                                        }}>o<span style={{
+                                                                                        fontStyle: 'normal',
+                                                                                        fontVariantNumeric: 'normal',
+                                                                                        fontVariantEastAsian: 'normal',
+                                                                                        fontWeight: 'normal',
+                                                                                        fontStretch: 'normal',
+                                                                                        fontSize: '7pt',
+                                                                                        lineHeight: 'normal',
+                                                                                        fontFamily: '"Times New Roman"'
+                                                                                    }}>&nbsp; &nbsp;</span></span><b><i><u><span
+                                                                                        style={{
+                                                                                            fontSize: '12.0pt',
+                                                                                            lineHeight: '115%'
+                                                                                        }} className="text-red">Respect&nbsp;:</span></u></i></b>
+                                                                                    </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
                                                                                 }}>Le respect est une notion primordiale de la réflexion morale d’une<br/>personne. C’est une prise en considération des actes, des paroles et des<br/>actions des autres. Avoir du respect, c’est admettre l’idée que les autres sont<br/>différents tout en étant nos égaux et c’est également s’interdire de juger,<br/>s’interdire de manipuler autrui pour quelque raison que ce soit. Le respect de<br/>soi et d’autrui est indispensable pour développer un sens de l’empathie et<br/>il&nbsp; permet de comprendre et de<br/>reconnaitre que ses paroles et actions ont une portée, un impact et des<br/>conséquences sur les autres. Evoluant dans le domaine de la création, la valeur<br/>de respect est pour nous primordiale car elle nous élève, nous rend plus<br/>responsable et attentifs aux autres et à notre environnement. <b><i><u/></i></b></span>
@@ -182,7 +189,7 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }}>Intégrité&nbsp;:</span></u></i></b>
+                                                                                    }} className="text-red">Intégrité&nbsp;:</span></u></i></b>
                                                                                 </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
@@ -196,10 +203,10 @@ function About() {
                                                                                         lineHeight: '115%',
                                                                                         fontFamily: '"Courier New"',
                                                                                         msoFareastFontFamily: '"Courier New"'
-                                                                                    }}>oI</span><b><i><u><span style={{
+                                                                                    }}>o</span><b><i><u><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
-                                                                                }}>Indépendance&nbsp;: </span></u></i></b>
+                                                                                }}className="text-red">Indépendance&nbsp;: </span></u></i></b>
                                                                                 </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
@@ -226,7 +233,7 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }}>La Solidarité&nbsp;: </span></u></i></b>
+                                                                                    }} className="text-red">La Solidarité&nbsp;: </span></u></i></b>
                                                                                 </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
@@ -253,7 +260,7 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }}>L’Equité</span></u></i></b></p><p
+                                                                                    }}className="text-red">L’Equité :</span></u></i></b></p><p
                                                                                     style={{
                                                                                         textIndent: '-18.0pt',
                                                                                         msoList: 'l0 level1 lfo1'
@@ -307,7 +314,7 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }}>Excellence</span></u></i></b></p>
+                                                                                    }} className="text-red">Excellence :</span></u></i></b></p>
                                                                                     <p style={{
                                                                                         textIndent: '-18.0pt',
                                                                                         msoList: 'l0 level1 lfo1'
