@@ -41,29 +41,29 @@
             }
         }
         .progress{
-            background-color: black;
+            background-color: transparent !important;
             color: white!important;
             .bar{
-                background-color: $progress-bg;
-                border-radius: 2px;
-                display: flex;
-                height: 4px;
-                width: 100%;
-                flex: 1 100%;
-                cursor: pointer;
+                background-color: $progress-bg !important;;
+                border-radius: 2px !important;;
+                display: flex !important;;
+                height: 4px !important;;
+                width: 100% !important;;
+                flex: 1 100% !important;;
+                cursor: pointer !important;;
                 div {
-                    border-radius: 2px;
-                    height: 4px;
-                    width: 50%;
-                    background: $current-progress-color;
+                    border-radius: 2px !important;;
+                    height: 4px !important;;
+                    width: 50% !important;;
+                    background: $current-progress-color !important;;
                 }
             }
             .progress-time{
-                font-size: 11px;
-                line-height: 16px;
-                letter-spacing: .015em;
-                min-width: 40px;
-                text-align: center;
+                font-size: 11px !important;;
+                line-height: 16px !important;;
+                letter-spacing: .015em !important;;
+                min-width: 40px !important;;
+                text-align: center !important;;
             }
         }
     }
@@ -72,91 +72,6 @@
         height: 15px;
         margin-left: 8%;
     }
-.PlayListPlayer {
-    .PlayList_information {
-        display: flex !important;
-        margin: 10px 3%;
-        background-image: linear-gradient(to right, #0099b2, #127894, #195974, #183c53, #112233);
-        border-radius: 10px;
-
-        .Playlist-img {
-            margin-top: 6px;
-            margin-bottom: 4px;
-            width: 95px;
-            height: 95px;
-            border-radius: 10px;
-        }
-
-        .PlayListMore-info {
-            margin: 6px auto;
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            .Artist-Playlist {
-                color: wheat;
-                font-weight: lighter;
-                font-family: "Droid Sans Mono Slashed for Powerline", fantasy;
-            }
-        }
-    }
-    #list-music::-webkit-scrollbar-track
-    {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        background-color: transparent;
-        border-radius: 10px;
-    }
-
-    #list-music::-webkit-scrollbar {
-        width: 5px;
-        background-color: transparent;
-    }
-
-    #list-music::-webkit-scrollbar-thumb {
-        background-image: linear-gradient(to right, #0099b2, #127894, #195974, #183c53, #112233);
-        border-radius: 10px;
-    }
-   .music-list {
-       scroll-behavior: auto;
-       max-height: 400px;
-       overflow: auto;
-
-       .miniMusic {
-           display: flex !important;
-           margin: 5px 3%;
-           height: 35px;
-
-           .song-info {
-               display: flex;
-               margin-top: auto;
-               margin-bottom: auto;
-
-               .artist {
-                   margin-left: 5px;
-                   font-family: 'Josefin Sans', sans-serif;
-                   font-size: revert;
-                   color: wheat;
-               }
-
-               .pipe {
-                   margin-left: 2px;
-                   margin-right: 2px;
-                   font-family: "Courier New", Courier, monospace;
-               }
-
-               .Title {
-                   font-family: AppleMyungjo, fantasy;
-               }
-           }
-
-           .song-img {
-               width: 28px;
-               height: 28px;
-               border-radius: 3px;
-               margin-left: auto;
-           }
-       }
-   }
-}
     .now-playing, .volume-bar{
         display: flex;
         width: 20%;

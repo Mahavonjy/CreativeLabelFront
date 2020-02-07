@@ -1,0 +1,404 @@
+*:focus {
+    outline: none !important;
+}
+.filter {
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
+.container-login {
+    height: 300px;
+    width: 500px;
+    background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #721e49, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
+    position: absolute;
+    top:50%;
+    left:50%;
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    box-shadow: 5px 5px #111;
+    z-index: 2;
+}
+@media only screen and (max-width: 600px) {
+    .container-login {
+        zoom: 0.7;
+        -moz-transform: scale(0.7);
+    }
+}
+.l-overlay {
+    filter: url(#gooeyness);
+    height: 300px;
+    width: 600px;
+    background-color: #58585a;
+    transform: rotate(-31deg) translate(-660px, -184px);
+    position: absolute;
+    transition: transform 0.4s ease-in-out;
+}
+.tri-l {
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-bottom: solid 30px #58585a;
+    border-left: solid 30px transparent;
+    border-right: solid 30px transparent;
+    transform: rotate(90deg);
+    position: absolute;
+}
+.tri-l1 {
+    right: -59px;
+    top: 5px;
+}
+.tri-l2 {
+    right: -59px;
+    top: 65px;
+}
+.tri-l3 {
+    right: -59px;
+    top: 124px;
+}
+.tri-l4 {
+    right: -59px;
+    top: 185px;
+}
+.tri-l5 {
+    right: -59px;
+    top: 245px;
+}
+.r-overlay {
+    filter: url(#gooeyness);
+    height: 300px;
+    width: 600px;
+    /*background-color: #58585a;*/
+    background-image: linear-gradient(to left, #1a171b, #47203c, #821b4b, #bd0344, #ed1c24);
+    transform: rotate(-31deg) translate(-50px, 116px);
+    position: absolute;
+    transition: transform 0.4s ease-in-out;
+}
+.tri-r {
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-bottom: solid 30px #58585a;
+    border-left: solid 30px transparent;
+    border-right: solid 30px transparent;
+    transform: rotate(90deg);
+    position: absolute;
+}
+.tri-r1 {
+    right: -59px;
+    top: 5px;
+}
+.tri-r2 {
+    right: -59px;
+    top: 65px;
+}
+.tri-r3 {
+    right: -59px;
+    top: 124px;
+}
+.tri-r4 {
+    right: -59px;
+    top: 185px;
+}
+.tri-r5 {
+    right: -59px;
+    top: 245px;
+}
+
+.r-btn , .l-btn {
+    width: 230px;
+    height: 30px;
+    border-radius: 50px;
+    border: 2px solid white;
+    color: white;
+    padding-bottom: 10px;
+    position: absolute;
+    box-shadow: 2px 3px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+}
+.r-btn {
+    bottom: 128px;
+    right: 10px;
+    display: block;
+}
+.l-btn {
+    top: 50px;
+    left: 50px;
+    display: none;
+}
+*:focus {
+    outline: none;
+}
+button:hover {
+    cursor: pointer;
+}
+
+.l-form {
+    position: absolute;
+    left: 30px;
+    top: 40px;
+}
+.l-form input {
+    display: list-item;
+    border: 3px solid #58585a;
+    background-color: transparent;
+    border-radius: 50px;
+    height: 30px;
+    margin-bottom: 5px;
+    color: white;
+    padding: 0 10px 0 10px;
+    box-shadow: 2px 5px #222;
+}
+.l-form label {
+    color: white;
+}
+.l-usr {
+    width: 250px;
+    position: absolute;
+}
+.l-pass .pass {
+    height: 30px;
+    width: 190px !important;
+}
+.l-pass {
+    position: absolute;
+    top: 50px;
+}
+.l-go {
+    background-color: #58585a;
+    border: none;
+    border-radius: 50px;
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    top: 105px;
+    color: white;
+    box-shadow: 2px 5px #222;
+}
+
+
+.r-form {
+    position: absolute;
+    right: 175px;
+    bottom: 190px;
+}
+.r-form input {
+    display: list-item;
+    border: 3px solid #58585a;
+    background-color: transparent;
+    border-radius: 50px;
+    height: 30px;
+    margin-bottom: 5px;
+    color: white;
+    padding: 0 10px 0 10px;
+    width: 150px;
+    box-shadow: 2px 5px #222;
+}
+.r-form label {
+    color: white;
+}
+.r-usr {
+    position: absolute;
+    top: -12px;
+    right: -170px;
+    width: 170px !important;
+}
+.r-pass .pass {
+    width: 235px !important;
+}
+.r-pass {
+    position: absolute;
+    top: 70px;
+    right: -170px;
+}
+.r-con .pass {
+    width: 235px !important;
+}
+.r-con {
+    position: absolute;
+    top: 110px;
+    right: -170px;
+}
+
+.r-email {
+    position: absolute;
+    top: 30px;
+    right: -170px;
+    width: 235px !important;
+}
+
+.r-go {
+    background-color: #58585a;
+    border: none;
+    border-radius: 50px;
+    width: 160px;
+    height: 30px;
+    position: absolute;
+    top: 150px;
+    right: -150px;
+    color: #333;
+    box-shadow: 2px 5px #222;
+}
+
+.l-disc {
+    color: #fff;
+    position: absolute;
+    top: 25px;
+    left: 50px;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.f-p {
+    color: #fff;
+    position: absolute;
+    top: 155px;
+    left: 5px;
+    width: 100px;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.r-disc {
+    color: #fff;
+    position: absolute;
+    bottom: 170px;
+    right: 50px;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.pass-wrap {
+    height: 30px;
+    position: absolute;
+}
+.pass {
+    background-color: transparent;
+    border: 3px solid #58585a;
+    border-radius: 50px;
+    width: 180px;
+    padding: 0 10px 0 10px;
+    color: white;
+}
+.pass-view {
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    right: 5px;
+    bottom: 0;
+}
+.pass-wrap i {
+    color: #58585a;
+    position: absolute;
+    right: 5px;
+    top: 8px;
+}
+.pass-wrap:hover i {
+    color: #58585a;
+}
+
+@keyframes animate {
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+
+/*IGNORE THIS*/
+*:focus {
+    outline: none;
+}
+#title-text {
+    margin-bottom: 20px;
+    color: #444;
+    font-weight: bold;
+    text-shadow: 2px 2px #111;
+}
+
+#my-btn-contain {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0 0 20px 20px;
+    z-index: 3;
+}
+
+#more-btn {
+    border: 1px solid #58585a;
+    background-color: #58585a;
+    padding: 5px 10px 5px 10px;
+    font-weight: bold;
+    color: red;
+    display: inline;
+    outline: none;
+    box-shadow: 5px 5px #111;
+    margin-right: 5px;
+}
+#more-btn:hover {
+    cursor: pointer;
+    background-color: #57aa84;
+    border: 1px solid #57aa84;
+    color: #257a53;
+    box-shadow: 3px 3px #111;
+    transition: 0.5s;
+}
+.profile {
+    color: #444;
+    display: inline;
+    font-weight: bold;
+    font-size: 19px;
+}
+.profile:hover {
+    cursor: pointer;
+    color: #333;
+}
+
+/*DONT WORRY ABOUT THIS, I JUST LIKE TO ADD THIS FOR MY SAKE*/
+/* CUSTOM SCROLLBAR */
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    cursor: pointer;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #222;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #000;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #111;
+    cursor: pointer;
+}
+/*
+-
+-
+-
+-
+-
+-
+*/
+/*NO SELECTION BACKGROUND HIGHLIGHT*/
+::selection {
+    background: transparent;
+}
+::-moz-selection {
+    background: transparent;
+}

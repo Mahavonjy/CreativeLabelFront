@@ -4,21 +4,39 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import {combineReducers, createStore} from 'redux';
-import profileReducer from './reducer/Profile';
+import profileReducer from './reducer/Profile/Profile';
+import profilePrestations from './reducer/Profile/Prestation';
 import beatsReducer from './reducer/Beats';
 import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
+import playersReducer from "./reducer/Players";
+import kantoBizForm from "./reducer/KantoBiz/Form";
+import { sessionService, sessionReducer } from 'redux-react-session';
+import KantoBizSearchResults from "./reducer/KantoBiz/SearchResult";
+import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import thunkMiddleware from "redux-thunk";
+import Conf from "./Config/tsconfig";
+import axios from 'axios';
+
+axios.defaults.baseURL = Conf.configs.ServerApi;
 
 const Reducers = combineReducers({
+    session: sessionReducer,
     "beats": beatsReducer,
     "profile": profileReducer,
+    "profilePrestations": profilePrestations,
     "Home": PlaylistHomeReducer,
-    "Carts": cartsReducer
+    "Player": playersReducer,
+    "Carts": cartsReducer,
+    "KantoBizForm": kantoBizForm,
+    "KantobizSearch": KantoBizSearchResults
 });
 
+const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));
+sessionService.initSessionService(store, { driver: 'COOKIES' });
+
 ReactDOM.render(
-    <Provider store={createStore(Reducers)} >
+    <Provider store={store} >
         <App />
     </Provider>
     , document.getElementById('app')

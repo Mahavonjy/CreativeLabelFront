@@ -1,0 +1,719 @@
+.cube-container {
+    position: relative;
+    width: 25rem;
+    height: 25rem;
+    margin: 5rem auto 6rem;
+    perspective: 100rem;
+}
+
+.cube {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.32, 0.05, 0.35, 1.6);
+}
+
+.cube-face-image {
+    display: block;
+    position: absolute;
+    box-shadow: 0 0 0.5rem #fff,
+    0 0 1.5rem,
+    0 0 3rem;
+}
+
+.image-buttons input {
+    border: 0.2rem solid #fafafa;
+}
+
+.image-buttons input:focus {
+    outline: none;
+    border: 0.2rem solid;
+}
+
+/* Transform images to create cube */
+
+.image-1 {
+    transform: translateZ(15rem);
+}
+
+.image-2 {
+    transform: rotateX(-180deg) translateZ(15rem);
+}
+
+.image-3 {
+    transform: rotateY(90deg) translateZ(15rem);
+}
+
+.image-4 {
+    transform: rotateY(-90deg) translateZ(15rem);
+}
+
+.image-5 {
+    transform: rotateX(90deg) translateZ(15rem);
+}
+
+.image-6 {
+    transform: rotateX(-90deg) translateZ(15rem);
+}
+
+/* Transform cube to show correct image */
+
+.cube.initial-position {
+    transform: translateZ(-15rem) translateY(-2rem) rotateX(-15deg) rotateY(18deg) rotateZ(2deg);
+}
+
+.cube.show-image-1 {
+    transform: translateZ(-15rem);
+}
+
+.cube.show-image-2 {
+    transform: translateZ(-15rem) rotateX(180deg);
+}
+
+.cube.show-image-3 {
+    transform: translateZ(-15rem) rotateY(-90deg);
+}
+
+.cube.show-image-4 {
+    transform: translateZ(-15rem) rotateY(90deg);
+}
+
+.cube.show-image-5 {
+    transform: translateZ(-15rem) rotateX(-90deg);
+}
+
+.cube.show-image-6 {
+    transform: translateZ(-15rem) rotateX(90deg);
+}
+
+/* Fiche */
+
+.profile-page .page-header {
+    height: 380px;
+    background-position:center;
+}
+
+.page-header {
+    height: 100vh;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: flex;
+    align-items: center;
+}
+
+.main-raised {
+    border-radius: 10px;
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+}
+
+.main {
+    position: relative;
+    z-index: 3;
+}
+
+.profile-page .profile {
+    text-align: center;
+}
+
+.profile-page .profile img {
+    max-width: 160px;
+    width: 100%;
+    margin: 0 auto;
+    -webkit-transform: translate3d(0,-50%,0);
+    -moz-transform: translate3d(0,-50%,0);
+    -o-transform: translate3d(0,-50%,0);
+    -ms-transform: translate3d(0,-50%,0);
+    transform: translate3d(0,-50%,0);
+}
+
+.img-raised {
+    box-shadow: 0 5px 15px -8px rgba(0,0,0,.24), 0 8px 10px -5px rgba(0,0,0,.2);
+}
+
+.rounded-circle {
+    border-radius: 50%!important;
+}
+
+.img-fluid, .img-thumbnail {
+    max-width: 100%;
+    height: auto;
+}
+
+.title {
+    margin-top: 30px;
+    margin-bottom: 25px;
+    min-height: 32px;
+    font-weight: 700;
+    font-family: "Roboto Slab","Times New Roman",serif;
+}
+
+.profile-page .description {
+    margin: 1.071rem auto 0;
+    max-width: 600px;
+    color: #999;
+    font-weight: 300;
+}
+
+.profile-page .profile-tabs {
+    margin-top: 4.284rem;
+}
+
+.nav-pills, .nav-tabs {
+    border: 0;
+    border-radius: 3px;
+    padding: 0 15px;
+}
+
+.nav .nav-item {
+    position: relative;
+    margin: 0 2px;
+}
+
+.nav-pills.nav-pills-icons .nav-item .nav-link {
+    border-radius: 4px;
+}
+
+.nav-pills .nav-item .nav-link.active {
+    color: #fff;
+    background-color: #ED1C24;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,.2), 0 10px 10px -11px #ED1C24;
+}
+
+.nav-pills .nav-item .nav-link {
+    line-height: 24px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 100px;
+    color: #58585a;
+    transition: all .3s;
+    border-radius: 30px;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.nav-pills .nav-item .nav-link:not(.active):hover {
+    background-color: rgba(200,200,200,.2);
+}
+
+
+.nav-pills .nav-item i {
+    display: block;
+    font-size: 30px;
+    padding: 15px 0;
+}
+
+.tab-space {
+    padding: 20px 0 50px;
+}
+
+.profile-page .gallery {
+    margin-top: 3.213rem;
+    padding-bottom: 50px;
+}
+
+.profile-page .gallery img {
+    width: 100%;
+    margin-bottom: 2.142rem;
+}
+
+.profile-page .profile .name{
+    margin-top: -80px;
+}
+
+.tab-content>.active {
+    display: block;
+}
+
+/*Test*/
+
+.img-full{
+    position: relative;
+    min-width: 100%;
+    height: 250px;
+}
+
+.center-result {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+}
+
+.card_kanto {
+    cursor: pointer;
+    width: 450px;
+    height: 250px;
+    background: linear-gradient(#f8f8f8, #fff);
+    box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    margin: 1.5rem;
+}
+
+.card_kantoProfile {
+    cursor: pointer;
+    width: 280px;
+    height: 250px;
+    background-image: linear-gradient(to left, #bbbbbb, #a4a4a5, #8e8e8f, #78797a, #636466);
+    box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin: 1.5rem;
+}
+
+.kanto-list {
+    max-height: 100px !important;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.card_kanto h1 {
+    text-align: center;
+}
+
+.card_kanto .additional {
+    position: absolute;
+    width: 150px;
+    height: 100%;
+    background-image: linear-gradient(to right bottom, #1a171b, #242226, #2f2e31, #3b3a3d, #474749, #474749, #474749, #474749, #3b3a3d, #2f2e31, #242226, #1a171b);
+    transition: width 0.4s;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.card_kantoProfile .additionalProfile {
+    position: absolute;
+    width: 150px;
+    height: 100%;
+    background-image: linear-gradient(to right bottom, #1a171b, #242226, #2f2e31, #3b3a3d, #474749, #474749, #474749, #474749, #3b3a3d, #2f2e31, #242226, #1a171b);
+    transition: width 0.4s;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.card_kanto:hover .additional {
+    width: 100%;
+    border-radius: 0 5px 5px 0;
+}
+
+.card_kanto .additional .user-card_kanto {
+    width: 150px;
+    height: 100%;
+    position: relative;
+    float: left;
+}
+
+.card_kantoProfile .additionalProfile .user-card_kanto {
+    width: 150px;
+    height: 100%;
+    position: relative;
+    float: left;
+}
+
+.card_kanto .additional .user-card_kanto::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 10%;
+    right: -2px;
+    height: 80%;
+    border-left: 2px solid rgba(0,0,0,0.025);
+}
+
+.card_kantoProfile .additionalProfile .user-card_kanto::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 10%;
+    right: -2px;
+    height: 80%;
+    border-left: 2px solid rgba(0,0,0,0.025);
+}
+
+.card_kanto .additional .user-card_kanto .level,
+.card_kanto .additional .user-card_kanto .points {
+    top: 15%;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    font-weight: bold;
+    background: rgba(0,0,0,0.15);
+    padding: 0.125rem 0.75rem;
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+.card_kantoProfile .additionalProfile .user-card_kanto .level,
+.card_kantoProfile .additionalProfile .user-card_kanto .points {
+    top: 15%;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    font-weight: bold;
+    background: rgba(0,0,0,0.15);
+    padding: 0.125rem 0.75rem;
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+.card_kanto .additional .user-card_kanto .points {
+    top: 85%;
+}
+
+.card_kantoProfile .additionalProfile .user-card_kanto .points {
+    top: 85%;
+}
+
+.card_kanto .additional .more-info {
+    width: 300px;
+    float: left;
+    position: absolute;
+    left: 150px;
+    height: 100%;
+}
+
+@media (max-width: 575px) {
+    .card_kanto {
+        width: 280px;
+    }
+
+    .card_kanto .additional {
+        width: 100%;
+        border-radius: 0 5px 5px 0;
+    }
+
+    .card_kanto .additional .more-info {
+        width: 300px;
+        margin-left: -155px;
+        position: absolute;
+        height: 100%;
+    }
+
+    .card_kanto .additional .user-card_kanto {
+        width: 0;
+        height: 0;
+        position: absolute;
+        float: left;
+    }
+
+    .small-kanto-list {
+        max-height: 50px !important;
+        overflow: auto;
+        font-size: small;
+    }
+}
+
+.card_kanto .additional .more-info h1 {
+    color: #fff;
+    margin-bottom: 0;
+}
+
+.card_kanto .additional .stats {
+    font-size: 2rem;
+    display: flex;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    top: auto;
+    color: #fff;
+}
+
+.card_kanto .additional .stats > div {
+    flex: 1;
+    text-align: center;
+}
+
+.card_kanto .additional .stats i {
+    display: block;
+}
+
+.card_kanto .additional .stats div.title {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.card_kanto .additional .stats div.value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1.5rem;
+}
+
+.card_kanto .additional .stats div.value.infinity {
+    font-size: 2.5rem;
+}
+
+.card_kanto .general {
+    width: 312px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 0 1rem 1rem;
+}
+
+.card_kanto .general img {
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0.4;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    z-index: -1;
+    position: absolute;
+}
+
+.card_kanto .general .more {
+    position: absolute;
+    bottom: 3rem;
+    right: 1rem;
+}
+
+.card_kanto .general .more-genre {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 92%;
+    overflow: auto;
+}
+
+.card_kantoProfile .generalProfile {
+    width: 312px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 0 1rem 1rem;
+}
+
+.card_kantoProfile .generalProfile img {
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0.4;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    z-index: -1;
+    position: absolute;
+}
+
+.card_kantoProfile .generalProfile .more {
+    position: absolute;
+    bottom: 3rem;
+    right: 1rem;
+}
+
+.card_kantoProfile .generalProfile .more-icon {
+    position: absolute;
+    bottom: 2rem;
+    right: 1rem;
+}
+
+.card_kantoProfile .generalProfile .more-icon-phone {
+    position: absolute;
+    bottom: 10rem;
+    right: 1.5rem;
+}
+
+.card_kantoProfile .generalProfile .more-genre {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+}
+
+button { cursor: pointer; }
+
+/* Table */
+
+.responsive-table {
+    width: 100%;
+    margin-bottom: 1.5em;
+    border-spacing: 0;
+}
+@media (min-width: 48em) {
+    .responsive-table {
+        font-size: 0.9em;
+    }
+}
+@media (min-width: 62em) {
+    .responsive-table {
+        font-size: 1em;
+    }
+}
+.responsive-table thead {
+    position: absolute;
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+@media (min-width: 48em) {
+    .responsive-table thead {
+        position: relative;
+        clip: auto;
+        height: auto;
+        width: auto;
+        overflow: auto;
+    }
+}
+
+.responsive-table thead th {
+    background-color: #58585a;
+    font-weight: normal;
+    text-align: center;
+    color: white;
+}
+.responsive-table thead th:first-of-type {
+    text-align: left;
+}
+.responsive-table tbody,
+.responsive-table tr,
+.responsive-table th,
+.responsive-table td {
+    display: block;
+    padding: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: left;
+    white-space: normal;
+}
+@media (min-width: 48em) {
+    .responsive-table tr {
+        display: table-row;
+    }
+}
+.responsive-table th,
+.responsive-table td {
+    padding: 0.5em;
+    vertical-align: middle;
+}
+@media (min-width: 30em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.75em 0.5em;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table th,
+    .responsive-table td {
+        display: table-cell;
+        padding: 0.5em;
+    }
+}
+@media (min-width: 62em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.75em 0.5em;
+    }
+}
+@media (min-width: 75em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: 0.75em;
+    }
+}
+.responsive-table caption {
+    margin-bottom: 1em;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+@media (min-width: 48em) {
+    .responsive-table caption {
+        font-size: 1.5em;
+    }
+}
+.responsive-table tfoot {
+    font-size: 0.8em;
+    font-style: italic;
+}
+@media (min-width: 62em) {
+    .responsive-table tfoot {
+        font-size: 0.9em;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody {
+        display: table-row-group;
+    }
+}
+.responsive-table tbody tr {
+    margin-bottom: 1em;
+}
+@media (min-width: 48em) {
+    .responsive-table tbody tr {
+        display: table-row;
+        border-width: 1px;
+    }
+}
+.responsive-table tbody tr:last-of-type {
+    margin-bottom: 0;
+}
+@media (min-width: 48em) {
+    .responsive-table tbody tr:nth-of-type(even) {
+        background-color: rgba(94, 93, 82, 0.1);
+    }
+}
+.responsive-table tbody th[scope="row"] {
+    background-color: #1d96b2;
+    color: white;
+}
+@media (min-width: 30em) {
+    .responsive-table tbody th[scope="row"] {
+        border-left: 1px solid #58585a;
+        border-bottom: 1px solid #58585a;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody th[scope="row"] {
+        background-color: transparent;
+        color: #5e5d52;
+        text-align: left;
+    }
+}
+.responsive-table tbody td {
+    text-align: right;
+}
+@media (min-width: 48em) {
+    .responsive-table tbody td {
+        border-left: 1px solid #58585a;
+        border-bottom: 1px solid #58585a;
+        text-align: center;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody td:last-of-type {
+        border-right: 1px solid #58585a;
+    }
+}
+.responsive-table tbody td[data-type="currency"] {
+    text-align: right;
+}
+.responsive-table tbody td[data-title]:before {
+    content: attr(data-title);
+    float: left;
+    font-size: 0.8em;
+    color: rgba(94, 93, 82, 0.75);
+}
+@media (min-width: 30em) {
+    .responsive-table tbody td[data-title]:before {
+        font-size: 0.9em;
+    }
+}
+@media (min-width: 48em) {
+    .responsive-table tbody td[data-title]:before {
+        content: none;
+    }
+}

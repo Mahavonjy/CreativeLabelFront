@@ -1,10 +1,6 @@
 import React, { Component } from "react";
-import beats from '../Beats/Beats';
-import profile from '../Profile/Profile';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import logo from "../../images/Logo/ISL_logo.png"
-import "../../assets/css/app.css";
-import Cookies from 'universal-cookie';
 import Conf from "../../Config/tsconfig";
 import './styles/main.scss'
 import './styles/_global.scss'
@@ -12,9 +8,8 @@ import './styles/_player.scss'
 import './styles/_variables.scss'
 import './styles/style.css'
 import axios from 'axios';
-import Suggestion from "../Beats/Suggestion";
-import OneBeat from "../Beats/OneBeat";
-import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import { CreateBeatsPlaylist } from "../FunctionTools/CreateFields";
+import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 
 let _this;
 
@@ -22,14 +17,28 @@ class Players extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentIndex: 0, currentTitle: '', currentArtist: '', currentImage: '',
-            IsPlaying: false, progressbar: 0, VolumeBar: 100, VolumeUp: true,
-            currentTime: '00:00', totalTime: '00:00', loop: false, shuffle: false,
-            component: null, listInfo: null, tmp: 0, listen: false, listen_min: null,
-            isMounted: false , userPlaylist: [], songId: null, pres_listened: false,
-            listened: false, type_: ''
+            tmp: 0,
+            type_: '',
+            currentIndex: 0,
+            currentTitle: '',
+            currentArtist: '',
+            currentImage: '',
+            IsPlaying: false,
+            progressbar: 0,
+            currentTime: '00:00',
+            totalTime: '00:00',
+            loop: false,
+            shuffle: false,
+            listInfo: null,
+            listen: false,
+            listen_min: null,
+            isMounted: false ,
+            songId: null,
+            pres_listened: false,
+            listened: false,
+            set_of_beats_name: ''
         };
-        this.history = [];
+
         this.player = new Audio();
         _this = this
     }
@@ -49,114 +58,93 @@ class Players extends Component {
     };
 
     startPlayer = (index) => {
-        const currentSong = this.state.list[index ? index: this.state.currentIndex];
+        const currentSong = this.state.list[index];
         this.player.src = currentSong.link;
         this.setState({
             currentTitle: currentSong.title,
             currentArtist: currentSong.artist,
             currentImage: currentSong.photo,
             songId : currentSong.id,
+            currentIndex: index,
             IsPlaying: true
         });
         this.setState({IsPlaying: true}, () => this.player.play())
     };
 
-    PlayOrPause = (run) => {
+    PlayOrPause = (run, rerun) => {
         if (this.player.paused && this.state.songId) {
             this.setState({IsPlaying: true}, () => {
                 if (run) {
-                    this.player.play();
-                } else {
-                    if (this.state.component === "beats") beats.playPlayer(this.state.currentIndex , "beats");
-                    if (this.state.component === "OneBeats") OneBeat.playPlayer(this.state.currentIndex , "beats");
-                    if (this.state.component === "OtherProfile") OtherProfile.playPlayer(this.state.currentIndex , "beats");
+                    if (rerun && this.state.set_of_beats_name !== "single")
+                        CreateBeatsPlaylist.Play(this.state.currentIndex, this.state.type_, true).then(() => null);
+                    else if (this.state.set_of_beats_name === "single")
+                        OneBeat.PauseOrPlaySingle(0);
+                    this.player.play().then(() => null);
                 }
             })
         } else if (this.state.songId) {
             this.setState({IsPlaying: false}, () => {
-                if (this.state.component === "OneBeats") {
-                    OneBeat.pausePlayer();
-                    this.player.pause()
-                } else if (this.state.component === "OtherProfile") {
-                    OtherProfile.pausePlayer();
-                    this.player.pause()
-                }
-                if (this.state.type_ === "OneBeats") {
-                    OneBeat.PauseOrPlaySingle();
-                    this.player.pause()
-                } else {
-                    beats.pausePlayer();
-                    this.player.pause()
-                }
+                this.player.pause();
+                if (run === null && this.state.set_of_beats_name !== "single")
+                    CreateBeatsPlaylist.pausePlayer(false).then(() => null);
+                else if (this.state.set_of_beats_name === "single")
+                    OneBeat.PauseOrPlaySingle(0);
             })
         }
     };
 
     playNext = () => {
-        this.state.tmp = 0;
-        this.state.listen = false;
-        if (this.state.shuffle) {
-            this.history.push(this.state.currentIndex);
-            this.setState({currentIndex: Math.floor(Math.random() * this.state.list.length)}, function() {
-                if (this.state.component === "beats") {
-                    beats.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "profile") {
-                    profile.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "suggestion") {
-                    Suggestion.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "OneBeats") {
-                    OneBeat.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "OtherProfile") {
-                    OtherProfile.changeIndex(this.state.currentIndex)
-                }
-                this.startPlayer()
-            })
-        } else {
-            if(this.state.currentIndex === this.state.list.length - 1){
-                this.player.pause();
-                this.setState({IsPlaying: false});
+        this.setState({tmp: 0, listen: false}, () => {
+            if (this.state.shuffle) {
+                this.setState({currentIndex: Math.floor(Math.random() * this.state.list.length)}, function() {
+                    if (this.state.set_of_beats_name !== "single")
+                        CreateBeatsPlaylist.changeIndex(this.state.currentIndex);
+                    this.startPlayer(this.state.currentIndex)
+                })
             } else {
-                this.history.push(this.state.currentIndex);
-                this.setState({currentIndex: this.state.currentIndex + 1}, function(){
-                    if (this.state.component === "beats") {
-                        beats.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "profile") {
-                        profile.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "suggestion") {
-                        Suggestion.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "OneBeats") {
-                        OneBeat.changeIndex(this.state.currentIndex)
-                    } else if (this.state.component === "OtherProfile") {
-                        OtherProfile.changeIndex(this.state.currentIndex)
+                if (this.state.currentIndex === this.state.list.length - 1) {
+                    if (this.state.loop) {
+                        this.setState({currentIndex: 0}, () => {
+                            this.startPlayer(0);
+                            if (this.state.set_of_beats_name !== "single")
+                                CreateBeatsPlaylist.changeIndex(0);
+                        })
+                    } else {
+                        this.player.pause();
+                        this.setState({IsPlaying: false});
                     }
-                    this.startPlayer()
-                });
+                } else {
+                    this.setState({currentIndex: this.state.currentIndex + 1}, function next () {
+                        if (this.state.set_of_beats_name !== "single")
+                            CreateBeatsPlaylist.changeIndex(this.state.currentIndex);
+                        this.startPlayer(this.state.currentIndex)
+                    });
+                }
             }
-        }
+        })
     };
 
     playPrev = () => {
-        this.state.tmp = 0;
-        this.state.listen = false;
-        if (this.history[this.history.length - 1]>= 0) {
-            this.setState({currentIndex: this.history.pop()}, function(){
-                if (this.state.component === "beats") {
-                    beats.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "profile") {
-                    profile.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "suggestion") {
-                    Suggestion.changeIndex(this.state.currentIndex)
-                } else if (this.state.component === "OneBeats") {
-                    OneBeat.changeIndex(this.state.currentIndex)
-                }  else if (this.state.component === "OtherProfile") {
-                    OtherProfile.changeIndex(this.state.currentIndex)
+        this.setState({tmp: 0, listen: false}, () => {
+            if (this.state.currentIndex !== 0) {
+                this.setState({currentIndex: this.state.currentIndex - 1}, function prev() {
+                    if (this.state.set_of_beats_name !== "single")
+                        CreateBeatsPlaylist.changeIndex(this.state.currentIndex);
+                    this.startPlayer(this.state.currentIndex)
+                });
+            } else {
+                if (this.state.loop && this.state.currentIndex === 0) {
+                    this.setState({currentIndex: this.state.list.length - 1}, () => {
+                        this.startPlayer(this.state.list.length - 1);
+                        if (this.state.set_of_beats_name !== "single")
+                            CreateBeatsPlaylist.changeIndex(this.state.list.length - 1);
+                    })
+                } else {
+                    this.player.pause();
+                    this.setState({IsPlaying: false});
                 }
-                this.startPlayer()
-            });
-        } else {
-            this.player.pause();
-            this.setState({IsPlaying: false});
-        }
+            }
+        });
     };
 
     convertTime = (seconds) => {
@@ -188,12 +176,6 @@ class Players extends Component {
         this.player.currentTime = percent * this.player.duration;
     };
 
-    onVolumeClick = (e) => {
-        const offsetX = e.nativeEvent.offsetX;
-        const offsetWidth = e.nativeEvent.target.offsetWidth;
-        this.player.volume = offsetX / offsetWidth;
-    };
-
     toggleLoop = () => {
         this.setState({loop: !this.state.loop}, function(){
             this.player.loop = this.state.loop
@@ -204,92 +186,51 @@ class Players extends Component {
         this.setState({shuffle: !this.state.shuffle})
     };
 
-    toggleVolume = () => {
-        this.setState({VolumeUp: !this.state.VolumeUp}, function(){
-            if(!this.state.VolumeUp){
-                this.player.volume = 0;
-            }else{
-                this.player.volume = 1;
-            }
-        })
-    };
-
     SongListened = (listened, pres_listened) => {
-        let cookies = new Cookies();
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*"
-        };
-        try {
-            headers['Isl-Token'] = cookies.get("Isl_Creative_pass")["Isl_Token"]
-        } catch (e) {
-            headers['Isl-Token'] = Conf.configs.TokenVisitor;
-        } finally {
+        if (this.props.user_credentials.token !== Conf.configs.TokenVisitor) {
+            let headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*",
+                'Isl-Token': this.props.user_credentials.token
+            };
             if (listened)
-                axios.put(Conf.configs.ServerApi + "api/medias/listened/" + this.state.songId, {}, {headers: headers}).then(resp => null);
+                axios.put( "api/medias/listened/" + this.state.songId, {}, {headers: headers}).then(resp => null);
             else if (pres_listened)
-                axios.put(Conf.configs.ServerApi + "api/medias/pres_listened/" + this.state.songId, {}, {headers: headers}).then(resp => null)
+                axios.put( "api/medias/pres_listened/" + this.state.songId, {}, {headers: headers}).then(resp => null)
         }
     };
 
-    componentDidMount(index, type_, component) {
-        this.setState({ isMounted: true , component: component, type_: type_}, () => {
-            const that = this;
-            if (type_ === "beats" && component === "beats") {
-                this.state.list = this.props.beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (type_ === "beats" && component === "profile") {
-                this.state.list = this.props.profile_beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (type_ === "latest_beats" && component === "suggestion") {
-                this.state.list = this.props.latest_beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            }  else if (type_ === "discovery_beats" && component === "suggestion") {
-                this.state.list = this.props.discovery_beats;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (component === "OtherProfile") {
-                this.state.list = type_;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (component === "suggestion") {
-                this.state.list = type_;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (component === "OneBeats") {
-                this.state.list = type_;
-                this.state.listInfo = null;
-                this.startPlayer(index);
-            } else if (type_ === "OneBeats" ) {
-                this.state.list = component;
-                this.state.listInfo = null;
-                this.startPlayer(index);
+    componentDidMount(index, type_, run, set_of_beats_name, states, state_value) {
+        this.setState({isMounted: true , type_: type_, set_of_beats_name: set_of_beats_name}, () => {
+            if (set_of_beats_name) {
+                const that = this;
+                this.setState({list: this.props.list, listInfo: this.props.listInfo}, () => {
+                    if (run)
+                        this.PlayOrPause();
+                    else {
+                        if (this.state.IsPlaying)
+                            this.player.pause();
+                        this.startPlayer(index)
+                    }
+                    this.player.addEventListener('timeupdate', function() {
+                        that.state.tmp = that.state.tmp + 1;
+                        let position = this.currentTime / this.duration;
+                        that.setState({progressbar: position * 100});
+                        that.convertTime(Math.round(this.currentTime));
+                        that.totalTime(Math.round(this.duration));
+                        if (that.state.tmp === 10 && !that.state.pres_listened) {
+                            _this.setState({pres_listened: true});
+                            _this.SongListened(false, true);
+                        }
+                        if (that.state.tmp === that.state.listen_min && !that.state.listened) {
+                            _this.setState({listened: true});
+                            _this.SongListened(true);
+                        }
+                        let tmp = this.ended;
+                        if (tmp) that.playNext()
+                    });
+                })
             }
-            this.player.addEventListener('volumechange', function() {
-                that.setState({VolumeBar: this.volume * 100})
-            }, false);
-            this.player.addEventListener('timeupdate', function() {
-                that.state.tmp = that.state.tmp + 1;
-                let position = this.currentTime / this.duration;
-                that.setState({progressbar: position * 100});
-                that.convertTime(Math.round(this.currentTime));
-                that.totalTime(Math.round(this.duration));
-                if (that.state.tmp === 10 && !that.state.pres_listened) {
-                    _this.setState({pres_listened: true});
-                    _this.SongListened(false, true);
-                }
-                if (that.state.tmp === that.state.listen_min && !that.state.listened) {
-                    _this.setState({listened: true});
-                    _this.SongListened(true);
-                }
-                if (this.ended) {
-                    that.state.tmp = 0;
-                    that.playNext()
-                }
-            });
         });
     }
 
@@ -297,53 +238,19 @@ class Players extends Component {
         this.setState({ isMounted: false });
     }
 
-    getPlayList = () => {
-        let cookies = new Cookies();
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-
-        axios.get(Conf.configs.ServerApi + "api/playlists/userPlaylist", {headers:headers}).then(resp =>{
-            const info = resp.data['users_playlist'];
-            for (let row in info) {
-                this.setState(prevState => ({
-                    userPlaylist: [...prevState.userPlaylist, info[row]]
-                }))
-            }
-        }).catch(error => {
-            console.log(error);
-        })
-    };
-
-    addToPlaylist = (playlist_id) => {
-        let cookies = new Cookies();
-        let new_headers = {
-            'Content-Type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': cookies.get("Isl_Creative_pass")["Isl_Token"]
-        };
-        axios.post(Conf.configs.ServerApi + "api/playlists/addInPlaylist/" + playlist_id + "/" + this.state.songId , {},{headers: new_headers}).then(resp =>{
-            console.log(resp.data);
-        }).catch(err => {
-            console.log(err.response)
-        })
-    };
-
     render() {
         return (
             <div key={this.props.key}>
                 <aside className="control-sidebar fixed " style={{height: "100%"}}>
                     <div className="slimScroll">
                         <div className="sidebar-header">
-                            <h4>Beats Playlist</h4>
-                            <a href="#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
+                            <h4>Instrumental Playlist</h4>
+                            <a href="/#" data-toggle="control-sidebar" className="paper-nav-toggle  active"><i /></a>
                         </div>
                         <div className="p-3">
-                            <ul id="playlist" className="playlist" style={{height: "100%"}}>
+                            <ul id="playlist" className="playlist scrollbar-isl" style={{height: "100%"}}>
                                 {this.state.songId ? this.state.list.map((val, index) =>
-                                    <li className="list-group-item my-1" key={index}>
+                                    <li className="list-group-item my-1 scrollbar-isl" key={index}>
                                         <div className="no-ajaxy media-url">
                                             <div className="d-flex justify-content-between align-items-center">
                                                 {this.state.songId === val['id'] && this.state.IsPlaying ?
@@ -366,10 +273,10 @@ class Players extends Component {
                 <nav className="navbar-wrapper navbar-bottom-fixed shadow">
                     <div className="navbar navbar-expand player-header justify-content-between  bd-navbar">
                         <div className="d-flex align-items-center">
-                            <a href="#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
+                            <a href="/#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
                                 <i />
                             </a>
-                            <a className="navbar-brand d-none d-lg-block" href="/home">
+                            <a className="navbar-brand d-none d-lg-block" href="/beats">
                                 <div className="d-flex align-items-center s-14 l-s-2">
                                     <figure className="avatar-md float-left mr-3 mt-1">
                                         <img className="r-5" src={logo} alt="" />
@@ -399,8 +306,8 @@ class Players extends Component {
                                             </button>
                                             <button className="btn btn-link" id="playPause">
                                                 {!this.state.IsPlaying ?
-                                                    <span id="play" onClick={this.state.songId ? () => this.PlayOrPause(true): null}><i className="icon-play s-24"/></span> :
-                                                    <span id="pause" onClick={this.state.songId ? this.PlayOrPause: null}><i className="icon-pause s-24 text-primary"/></span>
+                                                    <span id="play" onClick={this.state.songId ? () => this.PlayOrPause(true, true): null}><i className="icon-play s-24"/></span> :
+                                                    <span id="pause" onClick={this.state.songId ? () => this.PlayOrPause(null): null}><i className="icon-pause s-24 text-primary"/></span>
                                                 }
                                             </button>
                                             <button id="nextTrack" className="btn btn-link" onClick={this.state.songId ? this.playNext: null}>
@@ -417,9 +324,8 @@ class Players extends Component {
                                                 <small className="track-time ml-2 mr-2 text-primary align-middle">{this.state.totalTime}</small>
                                             </div>
                                         </div>
-                                        <div className="progress" style={{width: "100%", height: "4px"}}
-                                             onClick={this.state.songId ? this.onBarClick : null}>
-                                            <div className="bar" style={{width: this.state.progressbar + '%', background: "red"}}/>
+                                        <div className="progress" style={{width: "100%", height: "4px"}} onClick={this.state.songId ? this.onBarClick : null}>
+                                            <div className="progress-bar relative bg-red" style={{width: this.state.progressbar + '%'}}/>
                                         </div>
                                     </div>
                                 </div>
@@ -431,7 +337,7 @@ class Players extends Component {
                             <ul className="nav navbar-nav">
                                 {/* User Playlist*/}
                                 <li className="d-none d-lg-inline-flex flex-column">
-                                    <a data-toggle="control-sidebar">
+                                    <a data-toggle="control-sidebar" href="/#">
                                         <i className="icon icon-menu s-36" />
                                     </a>
                                 </li>
@@ -443,24 +349,20 @@ class Players extends Component {
         );
     }
 
-    static startPlayerComponent(index, type_, component) {
-        _this.componentDidMount(index, type_, component)
+    static startPlayerComponent(index, type_, run, set_of_beats_name) {
+        _this.componentDidMount(index, type_, run, set_of_beats_name)
     }
 
-    static  pauseOrPlayPlayer() {
-        _this.PlayOrPause();
+    static pauseOrPlayPlayer(run) {
+        _this.PlayOrPause(run);
     }
 }
 
 const mapStateToProps = state => {
     return {
-        beats: state.beats.beats,
-        profile_beats: state.profile.beats,
-        top_beats: state.beats.top_beats,
-        latest_beats: state.beats.latest_beats,
-        discovery_beats: state.beats.discovery_beats,
-        new_beatMaker: state.beats.new_beatMaker,
-        isl_playlist: state.beats.isl_playlist,
+        list: state.Player.list,
+        listInfo: state.Player.listInfo,
+        user_credentials: state.Home.user_credentials,
     };
 };
 

@@ -1,6 +1,8 @@
 const initState = {
     PlayList: [],
+    user_credentials: {},
     AllMediaGenre: [],
+    PrefAllMediaGenre: [],
     PlaListInfo : null,
     playMusic: false,
     redirect: false,
@@ -10,10 +12,10 @@ const initState = {
 
 const PlaylistHomeReducer = (state = initState, action) => {
     switch (action.type) {
-        case "EDIT_AUTH":
+        case "ADD_USER_CREDENTIALS":
             return {
                 ...state,
-                auth: action.data
+                user_credentials: action.data
             };
         case "ADD_PLAYLIST_INFO":
             return {
@@ -29,6 +31,11 @@ const PlaylistHomeReducer = (state = initState, action) => {
             return {
                 ...state,
                 AllMediaGenre: action.data
+            };
+        case "ADD_ALL_MEDIA_GENRE_PREF":
+            return {
+                ...state,
+                PrefAllMediaGenre: action.data
             };
         case "ACTIVE_OR_NO_PLAYER":
             return {

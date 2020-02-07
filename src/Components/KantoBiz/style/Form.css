@@ -1,0 +1,550 @@
+.expand-trigger {
+    color: white !important;
+}
+
+.multi-step {
+    min-height: 512px !important;
+}
+
+.step-progress {
+    border-radius: 10px;
+}
+
+.progtrckr {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#next-button {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#prev-button {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.progtrckr li {
+    margin-bottom: 10px;
+}
+
+.progtrckr:disabled,
+ol.progtrckr {
+    list-style-type: none;
+    padding: 0;
+}
+
+ol.progtrckr li {
+    display: inline-block;
+    text-align: center;
+    line-height: 4.5rem;
+    cursor: pointer;
+}
+
+ol.progtrckr li span {
+    padding: 0 1.5rem;
+}
+
+@media (max-width: 650px) {
+    .progtrckr li span {
+        display: none;
+    }
+}
+.progtrckr em {
+    display: none;
+    font-weight: 700;
+    padding-left: 1rem;
+}
+
+@media (max-width: 650px) {
+    .progtrckr em {
+        display: inline;
+    }
+}
+
+ol.progtrckr li.progtrckr-todo {
+    color: silver;
+    border-bottom: 2px solid silver;
+}
+
+ol.progtrckr li.progtrckr-doing {
+    color: green;
+    border-bottom: 2px solid #CCCCCC;
+}
+
+ol.progtrckr li.progtrckr-done {
+    color: greenyellow;
+    border-bottom: 2px solid #5cb85c;
+}
+
+ol.progtrckr li:after {
+    content: "\00a0\00a0";
+}
+
+ol.progtrckr li:before {
+    position: relative;
+    bottom: -3.7rem;
+    float: left;
+    border-radius: 5px;
+    left: 50%;
+}
+
+ol.progtrckr li.progtrckr-todo:before {
+    content: "\039F";
+    color: silver;
+    background-color: white;
+    width: 1.2em;
+    line-height: 1.4em;
+}
+
+ol.progtrckr li.progtrckr-todo:hover:before {
+    color: #ff4500;
+}
+
+ol.progtrckr li.progtrckr-doing:before {
+    content: "\2022";
+    color: white;
+    background-color: #CCCCCC;
+    width: 1.2em;
+    line-height: 1.2em;
+    border-radius: 1.2em;
+}
+
+ol.progtrckr li.progtrckr-doing:hover:before {
+    color: #ff4500;
+}
+
+ol.progtrckr li.progtrckr-done:before {
+    content: "\2713";
+    color: white;
+    background-color: #5cb85c;
+    width: 1.2em;
+    line-height: 1.2em;
+    border-radius: 1.2em;
+}
+
+ol.progtrckr li.progtrckr-done:hover:before {
+    color: #333;
+}
+
+.footer-buttons {
+    margin-top: 30px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+/* overwrite the stepzilla styles */
+ol.progtrckr li.progtrckr-todo:before {
+    background-color: #f2f9ff;
+}
+
+/*  Multiselect */
+
+.multiselect {
+    width: 100%;
+    overflow: hidden;
+    font: 14px 'Lato';
+    border-radius: 3px;
+    background: white;
+    padding: 10px 0 0;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.multiselect-focus {
+    box-shadow: inset 0px 0px .5px .5px #0066CC, 0px 0px 5px 0px #0066CC;
+}
+
+.multiselect__search {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    position: relative;
+}
+
+.multiselect__search-input {
+    width: 100%;
+    padding: 0 10px;
+    line-height: 2rem;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background: none;
+    position: relative;
+}
+
+.multiselect__search-input::placeholder {
+    opacity: .5;
+}
+
+.multiselect__open-btn {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    width: 30px;
+    height: 32px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.multiselect__open-icon {
+    width: 7px;
+    height: 7px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.multiselect__tags {
+    padding: 0 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.multiselect-tag {
+    display: flex;
+    align-items: center;
+    background: black;
+    color: white;
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+
+.multiselect-tag:not(:last-of-type) {
+    margin-right: 4px;
+}
+
+.multiselect-tag__text {
+    border-radius: inherit;
+    white-space: nowrap;
+    padding: 1px 5px;
+    transition: opacity .25s ease;
+}
+
+.multiselect-tag__remove-btn {
+    border-radius: 0 3px 3px 0;
+    height: 100%;
+    font-size: 14px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: opacity .25s ease;
+}
+
+.multiselect-tag:hover .multiselect-tag__text,
+.multiselect-tag:hover .multiselect-tag__remove-btn {
+    opacity: 0.8;
+}
+
+.multiselect-tag__remove-icon {
+    position: relative;
+    width: 10px;
+    height: 10px;
+}
+
+.multiselect-tag__remove-icon:before, .multiselect-tag__remove-icon:after {
+    position: absolute;
+    left: 4px;
+    content: ' ';
+    height: 10px;
+    width: 2px;
+    background-color: #fff;
+}
+
+.multiselect-tag__remove-icon:before {
+    transform: rotate(45deg);
+}
+
+.multiselect-tag__remove-icon:after {
+    transform: rotate(-45deg);
+}
+
+.multiselect__list {
+    margin-top: 50px;
+    width: 93%!important;:
+    padding: 0;
+    color: #0c101b;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 100px !important;
+    position: absolute;
+    background: white;
+    z-index: 99;
+    border-radius: inherit;
+    overflow: auto;
+}
+
+.multiselect__list-item {
+    list-style-type: none;
+    border-radius: inherit;
+    color: #0c101b;
+    padding: 10px;
+    transition: opacity .25s ease;
+}
+
+.multiselect__list-item:hover {
+    opacity: .5;
+    cursor: pointer;
+}
+
+/* cadre drag and drop */
+
+.buttonStyle {
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 50px;
+    height: 150px;
+    width: 100%;
+    max-width: 200px;
+    color: whitesmoke;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-left: 2px solid #ED1C24;
+}
+
+.buttonStyle .icon {
+    padding-top: 10px !important;
+}
+
+.buttonStyle span {
+    position: absolute;
+    transition: all 200ms ease-in-out;
+}
+
+.buttonStyle span.line-1 {
+    top: 0;
+    left: 0;
+    width: 158px;
+    height: 2px;
+    background: #ED1C24;
+    transform: translateX(-48px);
+}
+
+.buttonStyle span.line-2 {
+    bottom: 0;
+    right: 0;
+    width: 130px;
+    height: 2px;
+    background: #ED1C24;
+    transform: translateX(-25px);
+}
+.buttonStyle span.line-3 {
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 2px;
+    background: #ED1C24;
+    transform: translateX(20px);
+}
+.buttonStyle span.line-4 {
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 2px;
+    background: #ED1C24;
+    transform: translateX(95px);
+}
+.buttonStyle span.line-5 {
+    bottom: 0;
+    right: 0;
+    width: 2px;
+    height: 50px;
+    background: #ED1C24;
+    transform: translateY(0px);
+}
+.buttonStyle span.line-6 {
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 8px;
+    background: #ED1C24;
+    transform: translateY(-48px);
+}
+.buttonStyle:hover .line-1 {
+    transform: translateX(0px);
+}
+.buttonStyle:hover .line-2 {
+    transform: translateX(-65px);
+}
+.buttonStyle:hover .line-3 {
+    transform: translateX(60px);
+}
+.buttonStyle:hover .line-4 {
+    transform: translateX(55px);
+}
+.buttonStyle:hover .line-5 {
+    transform: translateY(44px);
+}
+.buttonStyle:hover .line-6 {
+    transform: translateY(-2px);
+}
+
+/****/
+
+/* Simple setup for this demo */
+
+.mdl-card {
+    width: auto;
+    min-height: 0;
+    margin: 10px auto;
+}
+
+.mdl-card__supporting-text {
+    width: 100%;
+    padding: 0;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step {
+    width: 25%;
+    /* 100 / no_of_steps */
+}
+
+
+/* Begin actual mdl-stepper css styles */
+
+.mdl-stepper-horizontal-alternative {
+    display: table;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step {
+    display: table-cell;
+    position: relative;
+    padding: 24px;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:hover,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:active {
+    background-color: rgba(0, 0, 0, .06);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:active {
+    border-radius: 15% / 75%;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:first-child:active {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:last-child:active {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:hover .mdl-stepper-circle {
+    background-color: #757575;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:first-child .mdl-stepper-bar-left,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:last-child .mdl-stepper-bar-right {
+    display: none;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-circle {
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+    background-color: #9E9E9E;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 2em;
+    font-size: 12px;
+    color: white;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-circle {
+    background-color: #ED1C24;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.success-step .mdl-stepper-circle {
+    background-color: limegreen;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.step-done .mdl-stepper-circle:before {
+    content: "\2714";
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.step-done .mdl-stepper-circle *,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle * {
+    display: none;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle {
+    -moz-transform: scaleX(-1);
+    /* Gecko */
+    -o-transform: scaleX(-1);
+    /* Opera */
+    -webkit-transform: scaleX(-1);
+    /* Webkit */
+    transform: scaleX(-1);
+    /* Standard */
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle:before {
+    content: "\270E";
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-title {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-title,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-optional {
+    text-align: center;
+    color: rgba(0, 0, 0, .26);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-title {
+    font-weight: 500;
+    color: rgba(0, 0, 0, .87);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step.step-done .mdl-stepper-title,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step.editable-step .mdl-stepper-title {
+    font-weight: 300;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-optional {
+    font-size: 12px;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-optional {
+    color: rgba(0, 0, 0, .54);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-left,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-right {
+    position: absolute;
+    top: 36px;
+    height: 1px;
+    border-top: 1px solid #BDBDBD;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-right {
+    right: 0;
+    left: 50%;
+    margin-left: 20px;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-left {
+    left: 0;
+    right: 50%;
+    margin-right: 20px;
+}

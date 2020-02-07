@@ -1,0 +1,228 @@
+.outer .wrapper {
+    margin: 0 auto;
+    width: auto;
+    height: auto;
+}
+
+/* Part left */
+
+.outer .wrapper .flip-container-left .flipper,
+.outer .wrapper .flip-container-right .flipper {
+    transform-style: preserve-3d;
+    position: relative;
+    height: inherit;
+}
+
+.outer .wrapper .flip-container-left .flipper .select-month,
+.outer .wrapper .flip-container-right .flipper .select-month {
+    height: 2vw;
+    cursor: pointer;
+    font-size: 1vw;
+    border: none;
+    border-left: 0.1vw solid #58585a;
+    border-right: 0.1vw solid #58585a;
+}
+.outer .wrapper .flip-container-left .flipper .input-year,
+.outer .wrapper .flip-container-right .flipper .input-year {
+    width: 4vw;
+    height: 2vw;
+    font-size: 1vw;
+    text-align: center;
+    border: none;
+    border-bottom: 0.1vw solid #58585a;
+}
+.outer .wrapper .flip-container-left .flipper .container-event,
+.outer .wrapper .flip-container-right .flipper .container-event {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.outer .wrapper .flip-container-left .flipper .container-event .input-time,
+.outer .wrapper .flip-container-right .flipper .container-event .input-time {
+    width: 4vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    text-align: center;
+    border: none;
+    border-bottom: 0.25vw solid #58585a;
+}
+
+.outer .wrapper .flip-container-left .flipper .input-event,
+.outer .wrapper .flip-container-right .flipper .input-event {
+    margin-top: 1vw;
+    width: 16vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    text-align: center;
+    border: none;
+    border-bottom: 0.25vw solid #58585a;
+}
+.outer .wrapper .flip-container-left .flipper .option-month,
+.outer .wrapper .flip-container-right .flipper .option-month {
+    color: #ED1C24;
+    background-color: #58585a;
+}
+.outer .wrapper .flip-container-left .flipper .front-left,
+.outer .wrapper .flip-container-left .flipper .back-left,
+.outer .wrapper .flip-container-right .flipper .front-left,
+.outer .wrapper .flip-container-right .flipper .back-left {
+    border-bottom-left-radius: 1vw;
+    border-top-left-radius: 1vw;
+}
+
+.outer .wrapper .flip-container-left .front-right,
+.outer .wrapper .flip-container-left .back-right,
+.outer .wrapper .flip-container-right .front-right,
+.outer .wrapper .flip-container-right .back-right {
+    border-bottom-right-radius: 1vw;
+    border-top-right-radius: 1vw;
+}
+.outer .wrapper .flip-container-left .back,
+.outer .wrapper .flip-container-right .back {
+    transform: rotateX(180deg);
+}
+.outer .wrapper .flip-container-left .front,
+.outer .wrapper .flip-container-left .back,
+.outer .wrapper .flip-container-right .front,
+.outer .wrapper .flip-container-right .back {
+    backface-visibility: hidden;
+    position: absolute;
+}
+.outer .flip-container-left .toggle {
+    transform: rotateX(180deg);
+}
+.outer .flip-container-left .flipper {
+    transition: 1s ease-out;
+}
+.outer .flip-container-left .flipper .front {
+    background-color: #58585a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.outer .flip-container-left .flipper .front h1 {
+    margin: 0;
+    font-size: 9vw;
+    font-family: arial;
+    font-weight: normal;
+}
+.outer .flip-container-left .flipper .front h2 {
+    margin: 0;
+    font-size: 1.5vw;
+    font-family: arial;
+    font-weight: normal;
+}
+.outer .flip-container-left .flipper .back {
+    background-color: #eeeeee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    background-color: #eeeeee;
+    color: #58585a;
+}
+.outer .flip-container-left .flipper .back * {
+    color: black;
+}
+
+/* Part right */
+
+.outer .flip-container-right .toggle {
+    transform: rotateX(180deg);
+}
+.outer .flip-container-right .flipper {
+    transition: 1s ease-in;
+}
+.outer .flip-container-right .flipper .front {
+    background-color: #eeeeee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-around;
+    overflow: hidden;
+}
+.outer .flip-container-right .flipper .front * {
+    background-color: transparent;
+    color: #58585a;
+}
+.outer .flip-container-right .flipper .front * {
+    overflow: hidden;
+}
+.outer .flip-container-right .flipper .front .container-date-picker {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.outer .flip-container-right .flipper .front .container-day {
+    display: grid;
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(7, 3.4vw);
+}
+.outer .flip-container-right .flipper .front .container-day .weekday,
+.outer .flip-container-right .flipper .front .container-day .day-block {
+    height: 3vw;
+    font-weight: normal;
+    font-size: 1vw;
+}
+.outer .flip-container-right .flipper .front .container-day .day-block {
+    cursor: pointer;
+    border: 0.2vw solid #eeeeee;
+    border-radius: 50%;
+    transition: 0.5s;
+}
+.outer .flip-container-right .flipper .front .container-day .day-block .inner {
+    transition: background-color 0.5s;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.outer .flip-container-right .flipper .front .container-day .active {
+    border: 0.1vw solid #ED1C24;
+    border-radius: 50%;
+}
+.outer .flip-container-right .flipper .front .container-day .inactive {
+    border: 0.1vw solid #1a171b;
+    border-radius: 50%;
+}
+.outer .flip-container-right .flipper .back {
+    background-color: #58585a;
+    overflow: hidden;
+}
+
+.outer .flip-container-right .flipper .back .event {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+    border-bottom: 0.1vw #ED1C24 solid;
+}
+.outer .flip-container-right .flipper .back .event .event-time {
+    padding-left: 1vw;
+    min-width: 4vw;
+    flex-grow: 0;
+}
+.outer .flip-container-right .flipper .back .event .event-name {
+    flex-grow: 2;
+}
+.outer .flip-container-left,
+.outer .front-left,
+.outer .back-left {
+    width: 19vw;
+    height: 28vw;
+}
+.outer .flip-container-right,
+.outer .front-right,
+.outer .back-right {
+    width: 50vw;
+    height: 28vw;
+}
