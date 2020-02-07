@@ -44,8 +44,8 @@ function Home () {
     const [profile_checked, setProfileChecked] = useState('');
     const [user_data, setUserData] = useState('');
     const [state_cart_length, setStateCartLength] = useState(0);
-    const [logout_class, setLogoutClass] = useState("icon icon-exit-2 s-24 mr-5");
-    const [log_name, setLogName] = useState("logout");
+    const [logout_class, setLogoutClass] = useState("icon icon-login s-24 mr-5");
+    const [log_name, setLogName] = useState("Login");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
 
     Home.IncrementCart = (number) => {
@@ -171,7 +171,7 @@ function Home () {
                         if (err.response.data === "no choice music genre") {
                             window.location.replace('/preference');
                         } else if (err.response.data === "token invalid") {
-                            logout()
+                            logout().then(() => null)
                         } else NotOnline()
                     } catch(e) {
                         window.location.replace('/badConnexion')
@@ -185,8 +185,8 @@ function Home () {
                 });
             }
         } catch (e) {
-            setLogoutClass("icon icon-login s-24 mr-5");
-            setLogName("Login");
+            setLogoutClass("icon icon-exit-2 s-24 mr-5");
+            setLogName("logout");
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
             NotOnline(headers)
         }

@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import { Link, Route } from "react-router-dom";
+import React, {useEffect, useRef} from "react";
+import {Link, Route} from "react-router-dom";
 import ReactTooltip from "react-tooltip";
-import { FacebookProvider, Feed } from "react-facebook";
+import {FacebookProvider, Feed} from "react-facebook";
 import Conf from "../../Config/tsconfig";
 import * as Tools from "./Tools";
 import TestImg from "../../assets/img/demo/a2.jpg";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import Register from "../Authentification/Register/Register";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
@@ -22,9 +22,10 @@ import TestImageOne from "../../assets/img/demo/a7.jpg";
 import TestImageThree from "../../assets/img/demo/a5.jpg";
 import "react-datepicker/dist/react-datepicker.css"
 import SearchBar from "../KantoBiz/SearchBar";
-import { ForAddToCard } from "./PopupFields"
-import { addNewPlayerList } from "../FunctionTools/FunctionProps"
-import { useDispatch } from "react-redux";
+import {ForAddToCard} from "./PopupFields"
+import {addNewPlayerList} from "../FunctionTools/FunctionProps"
+import {useDispatch} from "react-redux";
+import About from "../About/about";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -82,7 +83,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
         }
     };
 
-    useEffect( () => {
+    useEffect(() => {
         return () => {
             isMounted.current = true
         };
@@ -98,14 +99,18 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                 {state_value === "oneBeats" ?
                                     <div className="text-red">
                                         {states.index === index ?
-                                            <i className="icon-pause s-28 text-danger" onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
-                                            <i className="icon-play s-28 text-danger" onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
+                                            <i className="icon-pause s-28 text-danger"
+                                               onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
+                                            <i className="icon-play s-28 text-danger"
+                                               onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
                                     </div> : <div>
                                         {states.link[index] ?
                                             <div className="text-red">
                                                 {states.index === index ?
-                                                    <i className="icon-pause s-28 text-danger" onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
-                                                    <i className="icon-play s-28 text-danger" onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
+                                                    <i className="icon-pause s-28 text-danger"
+                                                       onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
+                                                    <i className="icon-play s-28 text-danger"
+                                                       onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
                                             </div> :
                                             <div className="spinner-grow text-primary" role="status">
                                                 <span className="sr-only"/>
@@ -167,14 +172,16 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     </div>
                                 }
                             </div>
-                            <div className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
+                            <div
+                                className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
                                 <div className="d-flex">
                                     {height_div !== "user_profile" ?
                                         <small className="ml-auto">{val.silver_price}$</small> : null}
                                     <small className="ml-auto">{val.bpm}/bpm</small>
                                     {height_div !== "user_profile" ?
                                         <FacebookProvider appId={Conf.configs.FacebookId}>
-                                            <Feed link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
+                                            <Feed
+                                                link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
                                                 {({handleClick}) => (
                                                     <div className="ml-auto transparent border-0">
                                                         <i className="icon-share-1 text-red" onClick={handleClick}/>
@@ -251,7 +258,8 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                 </div>
                             </div>
                             {/* Here is Popup for add to cart */}
-                            {height_div !== "user_profile" && <div> {ForAddToCard(val, set_of_beats_name, states)} </div>}
+                            {height_div !== "user_profile" &&
+                            <div> {ForAddToCard(val, set_of_beats_name, states)} </div>}
                         </div>
                     </div>
                 )}
@@ -330,12 +338,12 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
             {!isPlaying &&
-            <a href="/#" data-toggle="push-menu" data-tip="Ouvrir ou le menu" className="paper-nav-toggle text-center pp-nav-toggle pt-5 ml-3">
-                <i />
+            <a href="/#" data-toggle="push-menu" data-tip="Ouvrir ou le menu"
+               className="paper-nav-toggle text-center pp-nav-toggle pt-5 ml-3">
+                <i/>
             </a>}
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
-
                 {/* BEATS */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Instrumental" onClick={() => {
                     (location.pathname !== "/beats") && history.push("/beats")
@@ -356,7 +364,7 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
 
                 {/* CART */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
-                    ((state_cart > 0 ) && (location.pathname !== "/Cart")) ? history.push("/Cart") : toast.warn("Veuillez remplir votre panier avant")
+                    ((state_cart > 0) && (location.pathname !== "/Cart")) ? history.push("/Cart") : toast.warn("Veuillez remplir votre panier avant")
                 }}>
                     <div id="CartBadge">
                             <span className="p1 " data-count={state_cart}>
@@ -365,8 +373,14 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                     </div>
                 </li>
 
+                {/* About */}
+                <li style={{margin: "0 0 20px 11px"}} data-tip="A propos de nous" onClick={() => {
+                    (location.pathname !== "/about") && history.push("/about")
+                }}><i className="icon icon-info-circle s-24"/> <span className="ml-5">A propos de nous</span>
+                </li>
+
                 {/* LOGOUT OR LOGIN */}
-                <li style={{margin: "0 0 20px 10px"}}
+                <li style={logout_class === "icon icon-login s-24 mr-5" ? {margin: "50px 0 20px 8px"} : {margin: "50px 0 20px 12px"}}
                     data-tip={logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se deconnecter"}
                     onClick={() => logout()}>
                     <i className={logout_class}/> <span>{log_name}</span>
@@ -380,15 +394,26 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
     return (
         <div>
             <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
-            <Route path="/Profile" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Profile ToPlay={addToPlaylist}/>)}}/>
-            <Route path="/preference" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Preference/>)}}/>
+            <Route path="/Profile" exact component={() => {
+                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
+                    <Profile ToPlay={addToPlaylist}/>)
+            }}/>
+            <Route path="/preference" exact component={() => {
+                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
+                    <Preference/>)
+            }}/>
             <Route path="/register" exact component={() => <Register/>}/>
             <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
             <Route path="/kantobiz" exact component={() => <KantoBiz/>}/>
-            <Route path="/Cart" exact  component={() => <Cart ToPlay={addToPlaylist}/>}/>
-            <Route path="/beats/CheckThisBeat/:id(\d+)" exact component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat} SimilarBeats={beats_similar}/>}/>
-            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
+            <Route path="/Cart" exact component={() => <Cart ToPlay={addToPlaylist}/>}/>
+            <Route path="/beats/CheckThisBeat/:id(\d+)" exact
+                   component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat}
+                                             SimilarBeats={beats_similar}/>}/>
+            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact
+                   component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked}
+                                                  UserData={user_data}/>}/>
+            <Route path="/about" exact component={() => <About/>}/>
         </div>
     )
 };
@@ -398,7 +423,8 @@ export const generateInput = (label, value, setValue, field_, type_, icon, tip, 
         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
             <div className="input-group-text black-text bolder" data-tip={tip}><i className={icon}/>&nbsp;{label}</div>
             <input value={value} onChange={(e) => Tools.changeFields(setValue, e)}
-                   id={field_} name={field_} placeholder={field_} className="form-control" type={type_} disabled={disable}/>
+                   id={field_} name={field_} placeholder={field_} className="form-control" type={type_}
+                   disabled={disable}/>
         </div>
     );
 };
