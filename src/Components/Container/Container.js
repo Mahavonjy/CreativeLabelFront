@@ -64,6 +64,9 @@ function Container() {
                 <Route path="/CommandError">
                     <Home/>
                 </Route>
+                <Route path="/about">
+                    <Home/>
+                </Route>
                 {/* NOT FOUND */}
                 <Route component={NotFound}/>
             </Switch>

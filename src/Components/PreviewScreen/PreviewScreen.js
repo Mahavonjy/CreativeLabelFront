@@ -1109,8 +1109,7 @@ function PreviewScreen(props) {
                                                                                 data-element_type="widget"
                                                                                 data-settings="{&quot;slides_to_show&quot;:&quot;4&quot;,&quot;slides_to_scroll&quot;:&quot;10&quot;,&quot;slides_to_show_mobile&quot;:&quot;3&quot;,&quot;slides_to_scroll_mobile&quot;:&quot;10&quot;,&quot;navigation&quot;:&quot;both&quot;,&quot;autoplay&quot;:&quot;yes&quot;,&quot;pause_on_hover&quot;:&quot;yes&quot;,&quot;pause_on_interaction&quot;:&quot;yes&quot;,&quot;autoplay_speed&quot;:5000,&quot;infinite&quot;:&quot;yes&quot;,&quot;speed&quot;:500,&quot;direction&quot;:&quot;ltr&quot;}"
                                                                                 data-widget_type="image-carousel.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
+                                                                                <div className="elementor-widget-container">
                                                                                     <div className="entire-content-isl">
                                                                                         <div
                                                                                             className="content-carrousel-isl">
