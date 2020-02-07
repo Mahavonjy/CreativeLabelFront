@@ -151,6 +151,7 @@ function EditSingle(props) {
                                            className="form-control" type="file" accept="audio/mpeg, .mp3"/>
                                 </div>
                             </div>
+
                             : <div className="custom-float">
                                 <div className="input-group-prepend center" style={{width: "90%"}}>
                                     <div className="input-group-text text-dark"><i className="icon-music"/>&nbsp;Mp3 ou mpeg</div>
