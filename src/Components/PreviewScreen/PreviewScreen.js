@@ -25,7 +25,7 @@ import "./Content/plugins/elementor/assets/lib/font-awesome/css/regular.minad76.
 import "./Content/plugins/elementor/assets/lib/font-awesome/css/solid.minad76.css";
 
 
-function PreviewScreen() {
+function PreviewScreen(props) {
 
     return (
         <div>
@@ -315,33 +315,20 @@ function PreviewScreen() {
                                                                                 data-id="ec10498"
                                                                                 data-element_type="widget"
                                                                                 data-widget_type="eae-dual-button.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div
-                                                                                        className="eae-dual-button-main-wrapper">
-                                                                                        <div
-                                                                                            className="eae-dual-button-wrapper button-style-horizontal">
-                                                                                            <div
-                                                                                                className="eae-button1">
-                                                                                                <a className="eae-button-1-wrapper eae-bounce-top"
-                                                                                                   href="Localhost:3000/beats">
-                                                                                                    <div
-                                                                                                        className="eae-button-1 icon-">
-                                                                                                        <div
-                                                                                                            className="eae-button-text"> KantoBiz
-                                                                                                        </div>
+                                                                                <div className="elementor-widget-container">
+                                                                                    <div className="eae-dual-button-main-wrapper">
+                                                                                        <div className="eae-dual-button-wrapper button-style-horizontal">
+                                                                                            <div className="eae-button1">
+                                                                                                <a className="eae-button-1-wrapper eae-bounce-top" href="/Kantobiz">
+                                                                                                    <div className="eae-button-1 icon-">
+                                                                                                        <div className="eae-button-text"> KantoBiz</div>
                                                                                                     </div>
                                                                                                 </a>
                                                                                             </div>
-                                                                                            <div
-                                                                                                className="eae-button2">
-                                                                                                <a className="eae-button-2-wrapper eae-bounce-bottom"
-                                                                                                   href="Localhost:3000/beats">
-                                                                                                    <div
-                                                                                                        className="eae-button-2 icon-">
-                                                                                                        <div
-                                                                                                            className="eae-button-text">Beatmaking
-                                                                                                        </div>
+                                                                                            <div className="eae-button2">
+                                                                                                <a className="eae-button-2-wrapper eae-bounce-bottom" href="/beats">
+                                                                                                    <div className="eae-button-2 icon-">
+                                                                                                        <div className="eae-button-text">Beatmaking</div>
                                                                                                     </div>
                                                                                                 </a>
                                                                                             </div>
@@ -349,16 +336,13 @@ function PreviewScreen() {
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div
-                                                                                className="elementor-element elementor-element-df8893b elementor-widget elementor-widget-wts-AnimatedText"
-                                                                                data-id="df8893b"
-                                                                                data-element_type="widget"
-                                                                                data-settings="{&quot;_animation_tablet&quot;:&quot;none&quot;}"
-                                                                                data-widget_type="wts-AnimatedText.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div id="eae-at-df8893b"
-                                                                                         className="eae-animtext-wrapper">
+                                                                            <div className="elementor-element elementor-element-df8893b elementor-widget elementor-widget-wts-AnimatedText"
+                                                                                 data-id="df8893b"
+                                                                                 data-element_type="widget"
+                                                                                 data-settings="{&quot;_animation_tablet&quot;:&quot;none&quot;}"
+                                                                                 data-widget_type="wts-AnimatedText.default">
+                                                                                <div className="elementor-widget-container">
+                                                                                    <div id="eae-at-df8893b" className="eae-animtext-wrapper">
                                                                                         <div
                                                                                             className="eae-at-animation type letters">
                                                                                             <span
