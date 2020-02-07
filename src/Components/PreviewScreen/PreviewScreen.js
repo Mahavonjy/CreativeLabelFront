@@ -25,7 +25,7 @@ import "./Content/plugins/elementor/assets/lib/font-awesome/css/regular.minad76.
 import "./Content/plugins/elementor/assets/lib/font-awesome/css/solid.minad76.css";
 
 
-function PreviewScreen() {
+function PreviewScreen(props) {
 
     return (
         <div>
@@ -315,33 +315,20 @@ function PreviewScreen() {
                                                                                 data-id="ec10498"
                                                                                 data-element_type="widget"
                                                                                 data-widget_type="eae-dual-button.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div
-                                                                                        className="eae-dual-button-main-wrapper">
-                                                                                        <div
-                                                                                            className="eae-dual-button-wrapper button-style-horizontal">
-                                                                                            <div
-                                                                                                className="eae-button1">
-                                                                                                <a className="eae-button-1-wrapper eae-bounce-top"
-                                                                                                   href="Localhost:3000/beats">
-                                                                                                    <div
-                                                                                                        className="eae-button-1 icon-">
-                                                                                                        <div
-                                                                                                            className="eae-button-text"> KantoBiz
-                                                                                                        </div>
+                                                                                <div className="elementor-widget-container">
+                                                                                    <div className="eae-dual-button-main-wrapper">
+                                                                                        <div className="eae-dual-button-wrapper button-style-horizontal">
+                                                                                            <div className="eae-button1">
+                                                                                                <a className="eae-button-1-wrapper eae-bounce-top" href="/Kantobiz">
+                                                                                                    <div className="eae-button-1 icon-">
+                                                                                                        <div className="eae-button-text"> KantoBiz</div>
                                                                                                     </div>
                                                                                                 </a>
                                                                                             </div>
-                                                                                            <div
-                                                                                                className="eae-button2">
-                                                                                                <a className="eae-button-2-wrapper eae-bounce-bottom"
-                                                                                                   href="Localhost:3000/beats">
-                                                                                                    <div
-                                                                                                        className="eae-button-2 icon-">
-                                                                                                        <div
-                                                                                                            className="eae-button-text">Beatmaking
-                                                                                                        </div>
+                                                                                            <div className="eae-button2">
+                                                                                                <a className="eae-button-2-wrapper eae-bounce-bottom" href="/beats">
+                                                                                                    <div className="eae-button-2 icon-">
+                                                                                                        <div className="eae-button-text">Beatmaking</div>
                                                                                                     </div>
                                                                                                 </a>
                                                                                             </div>
@@ -349,16 +336,13 @@ function PreviewScreen() {
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div
-                                                                                className="elementor-element elementor-element-df8893b elementor-widget elementor-widget-wts-AnimatedText"
-                                                                                data-id="df8893b"
-                                                                                data-element_type="widget"
-                                                                                data-settings="{&quot;_animation_tablet&quot;:&quot;none&quot;}"
-                                                                                data-widget_type="wts-AnimatedText.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div id="eae-at-df8893b"
-                                                                                         className="eae-animtext-wrapper">
+                                                                            <div className="elementor-element elementor-element-df8893b elementor-widget elementor-widget-wts-AnimatedText"
+                                                                                 data-id="df8893b"
+                                                                                 data-element_type="widget"
+                                                                                 data-settings="{&quot;_animation_tablet&quot;:&quot;none&quot;}"
+                                                                                 data-widget_type="wts-AnimatedText.default">
+                                                                                <div className="elementor-widget-container">
+                                                                                    <div id="eae-at-df8893b" className="eae-animtext-wrapper">
                                                                                         <div
                                                                                             className="eae-at-animation type letters">
                                                                                             <span
@@ -738,8 +722,7 @@ function PreviewScreen() {
                                                                                 data-widget_type="heading.default">
                                                                                 <div
                                                                                     className="elementor-widget-container">
-                                                                                    <h2 className="elementor-heading-title elementor-size-default">ISL
-                                                                                        Beatmaking</h2></div>
+                                                                                    <h2 className="elementor-heading-title elementor-size-default text-red">ISL Beatmaking</h2></div>
                                                                             </div>
                                                                             <div className="elementor-element elementor-element-5aa4ab2 elementor-widget elementor-widget-text-editor" data-id="5aa4ab2" data-element_type="widget" data-widget_type="text-editor.default">
                                                                                 <div className="elementor-widget-container">
@@ -751,73 +734,10 @@ function PreviewScreen() {
                                                                                     <div className="elementor-text-editor elementor-clearfix"><p>Types de beats sur ISL Beatmaking:Afrobeat, Afropop, Afro-trap, Reggaeton, Ndombolo, Reggae-muffin, Kuduro, Reggae, Rnb, Hip-hop, Kilalaky, Slow, Zouk-love, Kompas, Rap,
                                                                                         Salegy, Batrelaky, Maloya, Coupé-Décalé, Kizomba, Makossa, Rumba, Pop, Techno, Dubstep, Folk, Rock,
                                                                                         Tsapiky, Basesa, Malesa, Kawitri, Vakodrazana, Goma, Zafindraona, Hira-gasy, Dancehall, Remix &nbsp;</p></div>
-                                                                            <div
-                                                                                className="elementor-element elementor-element-5aa4ab2 elementor-widget elementor-widget-text-editor"
-                                                                                data-id="5aa4ab2"
-                                                                                data-element_type="widget"
-                                                                                data-widget_type="text-editor.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div
-                                                                                        className="elementor-text-editor elementor-clearfix">
-                                                                                        <p>Click edit button to change
-                                                                                            this text. Lorem ipsum dolor
-                                                                                            sit amet, consectetur
-                                                                                            adipiscing elit. Ut elit
-                                                                                            tellus, luctus nec
-                                                                                            ullamcorper mattis, pulvinar
-                                                                                            dapibus leo.&nbsp;Proin
-                                                                                            gravida nibh vel velit
-                                                                                            auctor aliquet. Aenean
-                                                                                            sollicitudin, lorem quis
-                                                                                            bibendum auctor, nisi elit
-                                                                                            consequat ipsum.&nbsp;</p>
+
+                                                                                    <div className="text-center mt-5">
+                                                                                        <button className="btn btn-danger pt-3 pb-3 pl-5 pr-5">ISL Beatmaking</button>
                                                                                     </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div
-                                                                                className="elementor-element elementor-element-449b841 elementor-widget elementor-widget-text-editor"
-                                                                                data-id="449b841"
-                                                                                data-element_type="widget"
-                                                                                data-widget_type="text-editor.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div
-                                                                                        className="elementor-text-editor elementor-clearfix">
-                                                                                        <p>Click edit button to change
-                                                                                            this text. Lorem ipsum dolor
-                                                                                            sit amet, consectetur
-                                                                                            adipiscing elit. Ut elit
-                                                                                            tellus, luctus nec
-                                                                                            ullamcorper mattis, pulvinar
-                                                                                            dapibus leo.&nbsp;Proin
-                                                                                            gravida nibh vel velit
-                                                                                            auctor aliquet. Aenean
-                                                                                            sollicitudin, lorem quis
-                                                                                            bibendum auctor, nisi elit
-                                                                                            consequat ipsum.&nbsp;</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div
-                                                                                className="elementor-element elementor-element-2ab2022 elementor-align-center elementor-widget elementor-widget-button"
-                                                                                data-id="2ab2022"
-                                                                                data-element_type="widget"
-                                                                                data-widget_type="button.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div
-                                                                                        className="elementor-button-wrapper">
-                                                                                        <a href="#"
-                                                                                           className="elementor-button-link elementor-button elementor-size-sm"
-                                                                                           role="button">
-                                                <span className="elementor-button-content-wrapper">
-                                                  <span className="elementor-button-text"> ISL Beatmaking</span>
-                                                </span>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -986,8 +906,7 @@ function PreviewScreen() {
                                                                                 data-widget_type="heading.default">
                                                                                 <div
                                                                                     className="elementor-widget-container">
-                                                                                    <h2 className="elementor-heading-title elementor-size-default">ISL
-                                                                                        KantoBiz</h2></div>
+                                                                                    <h2 className="elementor-heading-title elementor-size-default text-red">ISL KantoBiz</h2></div>
                                                                             </div>
                                                                             <div
                                                                                 className="elementor-element elementor-element-657df77 elementor-widget elementor-widget-text-editor"
@@ -1004,26 +923,8 @@ function PreviewScreen() {
                                                                                             (mariage, fête traditionnelle, anniversaire, show-case, business launch ou lancement de produits, incentives, seminaires, appreciation events ou évènement de remerciement, etc…).
                                                                                             ISL KantoBiz offre des moments d’évasion, de convivialité et de partage.&nbsp;</p>
                                                                                     </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div
-                                                                                className="elementor-element elementor-element-8336355 elementor-align-center elementor-widget elementor-widget-button"
-                                                                                data-id={8336355}
-                                                                                data-element_type="widget"
-                                                                                data-widget_type="button.default">
-                                                                                <div
-                                                                                    className="elementor-widget-container">
-                                                                                    <div
-                                                                                        className="elementor-button-wrapper">
-                                                                                        <a href="#"
-                                                                                           className="elementor-button-link elementor-button elementor-size-sm"
-                                                                                           role="button">
-                                                                                            <span
-                                                                                                className="elementor-button-content-wrapper">
-                                                                                                <span
-                                                                                                    className="elementor-button-text"> ISL KANTOBIZ</span>
-                                                                                            </span>
-                                                                                        </a>
+                                                                                    <div className="text-center mt-5">
+                                                                                        <button className="btn btn-danger pt-3 pb-3 pl-5 pr-5">ISL Kantobiz</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
