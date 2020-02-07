@@ -665,7 +665,9 @@ function PreviewScreen() {
                                                                             </div>
                                                                             <div className="elementor-element elementor-element-449b841 elementor-widget elementor-widget-text-editor" data-id="449b841" data-element_type="widget" data-widget_type="text-editor.default">
                                                                                 <div className="elementor-widget-container">
-                                                                                    <div className="elementor-text-editor elementor-clearfix"><p>Types de beats sur ISL Beatmaking: &nbsp;</p></div>
+                                                                                    <div className="elementor-text-editor elementor-clearfix"><p>Types de beats sur ISL Beatmaking:Afrobeat, Afropop, Afro-trap, Reggaeton,  Ndombolo, Kuduro, Rnb', Hip-hop, Kilalaky, Slow, Zouk-love, Kompas, Rap,
+                                                                                        Salegy, , Batrelaky, Reggae, Reggae-muffin, Maloya, Coupé-Décalé, Kizomba,  Makossa, Rumba, Pop, Techno, Dubstep, Folk, Rock,
+                                                                                        Tsapiky, Basesa, Malesa, Kawitri, Vakodrazana, Goma, Zafindraona, Hira-gasy, Dancehall, Remix &nbsp;</p></div>
                                                                                 </div>
                                                                             </div>
                                                                             <div className="elementor-element elementor-element-2ab2022 elementor-align-center elementor-widget elementor-widget-button" data-id="2ab2022" data-element_type="widget" data-widget_type="button.default">
