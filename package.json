@@ -59,7 +59,7 @@
     "universal-cookie": "^4.0.2",
     "vinyl-ftp": "^0.6.0",
     "vinyl-named": "^1.1.0",
-    "webpack-stream": "^4.0.3"
+    "webpack-stream": "^5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
