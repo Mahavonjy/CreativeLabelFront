@@ -30,15 +30,12 @@ function PreviewScreen(props) {
     return (
         <div>
             <div className="hfeed site" id="page">
-                <a className="skip-link screen-reader-text" href="#content">Aller au contenu</a>
                 <div id="content" className="site-content">
                     <div className="ast-container">
                         <div id="primary" className="content-area primary">
                             <main id="main" className="site-main">
                                 <article className="post-360 page type-page status-publish ast-article-single"
                                          id="post-360" itemType="https://schema.org/CreativeWork" itemScope="itemscope">
-                                    <header className="entry-header ast-header-without-markup">
-                                    </header>
                                     {/* .entry-header */}
                                     <div className="entry-content clear" itemProp="text">
                                         <div data-elementor-type="wp-post" data-elementor-id={360}
@@ -318,20 +315,23 @@ function PreviewScreen(props) {
                                                                                 <div className="elementor-widget-container">
                                                                                     <div className="eae-dual-button-main-wrapper">
                                                                                         <div className="eae-dual-button-wrapper button-style-horizontal">
-                                                                                            <div className="eae-button1">
-                                                                                                <a className="eae-button-1-wrapper eae-bounce-top" href="/Kantobiz">
+
+                                                                                            <div className="eae-button1 m-2">
+                                                                                                <a className="eae-button-1-wrapper eae-bounce-top" style={{borderRadius: "5px"}} href="/Kantobiz">
                                                                                                     <div className="eae-button-1 icon-">
-                                                                                                        <div className="eae-button-text"> KantoBiz</div>
+                                                                                                        <div className="eae-button-text border1"> KantoBiz</div>
                                                                                                     </div>
                                                                                                 </a>
                                                                                             </div>
-                                                                                            <div className="eae-button2">
-                                                                                                <a className="eae-button-2-wrapper eae-bounce-bottom" href="/beats">
+
+                                                                                            <div className="eae-button2 m-2">
+                                                                                                <a className="eae-button-2-wrapper eae-bounce-bottom" style={{borderRadius: "5px"}} href="/beats">
                                                                                                     <div className="eae-button-2 icon-">
                                                                                                         <div className="eae-button-text">Beatmaking</div>
                                                                                                     </div>
                                                                                                 </a>
                                                                                             </div>
+
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -525,7 +525,7 @@ function PreviewScreen(props) {
                                                                         <p className="cardHome-text">
                                                                             Les meilleures instrus afrotropicales pour vos projets musicaux</p>
                                                                     </div>
-                                                                    <div className="cardHome-footer text-muted mt-5 mb-5">
+                                                                    <div className="cardHome-footer text-muted mt-5 mb-5" onClick={() => window.location.replace('/beats')}>
                                                                         <button className="btn btn-outline-danger pl-5 pr-5">C'est parti</button>
                                                                     </div>
                                                                 </div>
@@ -538,7 +538,7 @@ function PreviewScreen(props) {
                                                                         <h2 className="cardHome-title text-red">ISL KANTOBIZ</h2>
                                                                         <p className="cardHome-text"> Réservez les meilleurs artistes pour vos évènements</p>
                                                                     </div>
-                                                                    <div className="cardHome-footer text-muted mt-5 mb-5">
+                                                                    <div className="cardHome-footer text-muted mt-5 mb-5" onClick={() => window.location.replace('/Kantobiz')}>
                                                                        <button className="btn btn-outline-danger pl-5 pr-5">C'est parti</button>
                                                                     </div>
                                                                 </div>
@@ -1194,12 +1194,14 @@ function PreviewScreen(props) {
                                                                 <div className="elementor-widget-container">
                                                                     <div className="elementor-social-icons-wrapper">
                                                                         <a href="https://www.facebook.com/IndependanceSoundLabel/"
+                                                                           style={{borderRadius: "10px"}}
                                                                            className="elementor-icon elementor-social-icon elementor-social-icon-facebook elementor-repeater-item-2d15071"
                                                                            target="_blank">
                                                                             <span
                                                                                 className="elementor-screen-only">Facebook</span>
                                                                             <i className="fab fa-facebook"/> </a>
                                                                         <a href="https://www.instagram.com/isl_creative/"
+                                                                           style={{borderRadius: "10px"}}
                                                                            className="elementor-icon elementor-social-icon elementor-social-icon-instagram elementor-repeater-item-f2664d3"
                                                                            target="_blank">
                                                                             <span
