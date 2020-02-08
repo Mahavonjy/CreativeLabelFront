@@ -45,7 +45,7 @@ function Calendar (props) {
             <ReactTooltip/>
             <div className="wrapper justify-content-center">
                 {!props.noEdit && <LeftBlock arrDays={arrDays} date={date} handleToUpdate={handleToUpdate} prestations={prestations}/>}
-                <RightBlock arrDays={arrDays} date={date} toggle={toggle} handleToUpdateDate={handleToUpdateDate} prestations={prestations}/>
+                <RightBlock arrDays={arrDays} date={date} toggle={toggle} handleToUpdateDate={handleToUpdateDate} prestations={prestations} noEdit={props.noEdit && props.noEdit}/>
             </div>
         </div>
     );

@@ -35,7 +35,6 @@ function RightBlock (props) {
     ));
 
     const fillProps = async (i, opt, day) => {
-        console.log(prestations, props_options);
         let daySelected;
         if (day || day === 0) {
             setSelectedDay(day);
@@ -150,7 +149,7 @@ function RightBlock (props) {
             arrNo.push(<div className="day-block" />);
         for (let i = 1; i < Object.values(arrMonth)[selectedMonth] + 1; i++)
             arrNo.push(
-                <div data-id={i} onClick={() => fillProps(0,false, i)} data-tip="Cliquer pour faire une modification"
+                <div data-id={i} onClick={!props.noEdit ? () => fillProps(0,false, i) : null} data-tip="Cliquer pour faire une modification"
                      className={`day-block ${i === selectedDay && props.date.getMonth() + 1 === selectedMonth + 1 && props.date.getFullYear() === selectedYear ? "active" : "inactive"}`}>
                     <div className="inner">{i}</div>
                 </div>
