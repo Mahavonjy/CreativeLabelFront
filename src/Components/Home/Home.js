@@ -160,6 +160,8 @@ function Home () {
 
     const Online = () => {
         try {
+            setLogName("logout");
+            setLogoutClass("icon icon-exit-2 s-24 mr-5");
             let routeParsed = href[href.length - 1];
             if (routeParsed === 'register') {
                 window.location.replace('/beats')
@@ -185,8 +187,6 @@ function Home () {
                 });
             }
         } catch (e) {
-            setLogoutClass("icon icon-exit-2 s-24 mr-5");
-            setLogName("logout");
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
             NotOnline(headers)
         }
