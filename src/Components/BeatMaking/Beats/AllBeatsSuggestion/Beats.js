@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Conf from "../../../../Config/tsconfig";
 import { ToastContainer } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import ReactTooltip from 'react-tooltip';
@@ -179,10 +178,10 @@ function Beats(props) {
                                         <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
 
                                             {beats.length !== 0 ?
-                                                <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
+                                                <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
                                                     {CreateFields.CreateBeatsPlaylist("oneBeats", "AllBeat", props, states, "oneBeats")}
                                                 </div>
-                                                : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 350}}>
+                                                : <div className="playlist bg-dark pl-lg-3 pr-lg-3" style={{height: 350}}>
                                                     <p className="text-center">Vide</p>
                                                 </div>}
 
