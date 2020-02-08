@@ -201,16 +201,16 @@ function Login() {
                 </div>
                 <div className="row l-form">
 
-                    <input className="l-usr" placeholder="You email" name="email" id="login-email"
+                    <input className="l-usr" placeholder="email" name="email" id="login-email"
                            value={email} onChange={(e) => {Tools.changeFields(setEmail, e)}}/>
 
                     <div className="pass-wrap l-pass">
-                        <input className="pass" placeholder="password" type="password" id="login-password"
+                        <input className="pass" placeholder="Mot de passe" type="password" id="login-password"
                                name="password" value={password} onChange={(e) => {Tools.changeFields(setPassword, e)}}/>
                     </div>
 
                     <button className="l-go btn btn-outline-success" onClick={(e) => sendLoginCredentials(e)}>Connexion</button>
-                    <small className="f-p" onClick={() => setVisibility(true)}>Forgot password?</small>
+                    <small className="f-p" onClick={() => setVisibility(true)}>Mot de passe oublié?</small>
                 </div>
                 {loading &&
                 <div className="absolute preloader-wrapper small active" style={{marginLeft: 400}}>
@@ -243,8 +243,8 @@ function Login() {
                     <LoginGoogle Label="Connecter avec Google"/>
                     <LoginFacebook Label="Connecter avec Facebook"/>
                 </div>
-                <small className="r-disc">Vous n'avez pas de compte ?</small>
-                <button className="r-btn btn btn-outline-danger" onClick={() => window.location.replace('/register')}>Inscrivez vous ici</button>
+                <small className="r-disc">Vous n'avez pas de compte ISL Creative?</small>
+                <button className="r-btn btn btn-outline-danger" onClick={() => window.location.replace('/register')}>Créer un compte</button>
             </div>
         </div>
     );

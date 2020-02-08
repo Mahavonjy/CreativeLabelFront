@@ -45,18 +45,19 @@ export const EventAndThematics = () => {
                     <p>Voici tout les differentes enevements dans KantoBiz</p>
                 </div>
                 <div className="card-container">
-                    {generatorEventCard("card-left", "Mariage", "L'artiste fait un show dans un mariage", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-top", "Fête traditionnelle", "Show dans une fête tratditionnelle comme les fetes de famille. Ex: Circoncision ou autres", "https://images.pexels.com/photos/1011334/pexels-photo-1011334.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-right", "Anniversaire", "Animer votre anniversaire", "https://images.pexels.com/photos/701855/pexels-photo-701855.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-right", "Show-case", "Show case dans votre entreprise, boîte ou autres", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-right", "Festival & défilé", "Animer un festival de votre ville ou national", "https://images.pexels.com/photos/668295/pexels-photo-668295.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-bottom", "Événement sportif", "Animer votre evenement de type sportif", "https://images.pexels.com/photos/63238/pexels-photo-63238.jpeg?auto=compress&cs=tinysrgb&h=750&w=126")}
-                    {generatorEventCard("card-top", "Montage vidéo", "Reserver pour une reslisation de clip ou montage video", "https://images.pexels.com/photos/279376/pexels-photo-279376.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-bottom", "Évènement d’entreprise", "Animer votre salons, Congrès, expositions, gala, lancement, réception, team building ou autres", "https://images.pexels.com/photos/997725/pexels-photo-997725.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-top", "Évènement associative", "Animer un evenement dans votre association", "https://images.pexels.com/photos/585581/pexels-photo-585581.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-bottom", "Création d’instrumentale", "Permettra de commander un instrumental specialement pour vous", "https://images.pexels.com/photos/532561/pexels-photo-532561.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-left", "Information", "D'autres sont en train d'etre créer, ne vous inquieter pas si vous ne trouvez pas tout", "https://images.pexels.com/photos/532561/pexels-photo-532561.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
-                    {generatorEventCard("card-right", "Proposition", "Vous pouvez nous proposer des evenement si cela vous semble utile en cliquant sur cette carte", "https://images.pexels.com/photos/997725/pexels-photo-997725.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+
+                    {generatorEventCard("card-left", "Mariage", "Un show pour vous rien que pour vous", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-top", "Fête traditionnelle", "Un évènement particulier, des artistes particuliers", "https://images.pexels.com/photos/1011334/pexels-photo-1011334.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-right", "Anniversaire", "Allumez le feu lors de votre anniversaire", "https://images.pexels.com/photos/701855/pexels-photo-701855.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-right", "Show-case", "Pour une animation réussie", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-right", "Festival & défilé", "L'expérience musicale qui vous transcende", "https://images.pexels.com/photos/668295/pexels-photo-668295.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-bottom", "Événement sportif", "Sport & Musique comme Roméo & Juliette", "https://images.pexels.com/photos/63238/pexels-photo-63238.jpeg?auto=compress&cs=tinysrgb&h=750&w=126")}
+                    {generatorEventCard("card-top", "Montage vidéo", "Pour un service personnalisé en montage vidéo", "https://images.pexels.com/photos/279376/pexels-photo-279376.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-bottom", "Évènement d’entreprise", "Animer un salon, un congrès, une exposition, un gala, un évènement de lancement, une réception, un team building, etc...", "https://images.pexels.com/photos/997725/pexels-photo-997725.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-top", "Évènement associative", "Pour un évènement associatif réussi", "https://images.pexels.com/photos/585581/pexels-photo-585581.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-bottom", "Création d’instrumentale", "Des beatmakers à votre disposition pour créer des instrus personnalisés ", "https://images.pexels.com/photos/532561/pexels-photo-532561.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+                    {generatorEventCard("card-left", "Autres évènements", "Voir d'autres évènements ", "https://images.pexels.com/photos/997725/pexels-photo-997725.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
+
                 </div>
             </div>
             {/* End type of Events */}

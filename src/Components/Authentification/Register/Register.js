@@ -148,7 +148,7 @@ function Register () {
                                                 </div>
                                                 <div className="form-group form-float">
                                                     <div className="form-line">
-                                                        {CreateFields.CreateInput('password', password, (e) => Tools.changeFields(setPassword, e), "Au moins 8 caractères", "password", true)}
+                                                        {CreateFields.CreateInput('password', password, (e) => Tools.changeFields(setPassword, e), "Mot de passe (au moins 8 caractères)", "password", true)}
                                                     </div>
                                                 </div>
                                                 <div className="form-group form-float">

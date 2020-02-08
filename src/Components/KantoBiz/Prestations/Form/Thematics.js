@@ -98,12 +98,12 @@ function Thematics(props) {
         <div className="Base">
             <div className="card mb-3" style={{height: 438}}>
                 <div className="card-header transparent b-b">
-                    <strong className="text-red">Précisez nous votre style</strong>
+                    <strong className="text-red">Définir une ou plusieurs sous-catégories pour ma thématique</strong>
                 </div>
                 <ReactTooltip/>
                 <div className="row">
                     <div className="col border" style={{borderRadius: 10, background: "#58585a", height: 400}}>
-                        <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Options&nbsp;<i className="icon icon-info text-red" data-tip="Les options sont les genres de prestations que vous pouvez realiser"/></h4>
+                        <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Choisir parmi les options&nbsp;<i className="icon icon-info text-red" data-tip="Sélectionner vos spécialités en accord avec la thématique"/></h4>
                         <div className="overflow-auto row justify-content-center" style={{maxHeight: 350}} data-tip="Veuillez cliquer pour l'ajouter">
                             {options.map((val, index) =>
                                 <span key={index} className="bg-brown m-1 text-center"
@@ -115,7 +115,7 @@ function Thematics(props) {
                     </div>
                     <i className="icon icon-more-2 s-36 text-red ml-2 mr-2 d-none d-sm-block" style={{paddingTop: 180}}/>
                     <div className="col border" style={{borderRadius: 10, background: "#58585a", height: 400}}>
-                        <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Choisis&nbsp;<i className="icon icon-info text-red" data-tip="Les options placés sont ce que vous avez choisi, ce que vous voulez faire pour cette prestation"/></h4>
+                        <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>Mes choix&nbsp;<i className="icon icon-info text-red" data-tip="La liste des spécialités que vous avez choisi en accord avec la thématique"/></h4>
                         <div className="overflow-auto row justify-content-center" style={{maxHeight: 350, cursor: "not-allowed"}} data-tip="Veuillez cliquer pour le supprimer">
                             {thematics_options_selected.map((val, index) =>
                                 <span key={index} className="bg-brown m-1 text-center"

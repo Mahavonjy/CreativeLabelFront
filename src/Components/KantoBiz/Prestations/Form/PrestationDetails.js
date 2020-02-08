@@ -91,7 +91,7 @@ function PrestationDetails(props) {
         <div className="Base">
             <ReactTooltip/>
             <div className="card-header transparent b-b">
-                <strong className="text-red">Precisez nous quelques details</strong>
+                <strong className="text-red">Préciser les détails de votre prestation</strong>
             </div>
             <div className="row justify-content-center">
                 <div className="form-group pt-5">
@@ -99,7 +99,7 @@ function PrestationDetails(props) {
                         <label className="col-sm-12 col-form-label text-center pb-3 text-light">Prix de la prestation</label>
                         <div className="col-sm-12">
                             <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Ceci est le prix HT">?&nbsp;</span>
+                                <span className="text-info pt-2" data-tip="Prix HT de la prestation ">?&nbsp;</span>
                                 <input value={price_of_service} id="price_of_service" name="price_of_service"
                                        onChange={(e) => changeFields(setPriceOfService, e, addPriceOfService, dispatch)}
                                        className="form-control" placeholder="Prix " type="number" style={{width: "100%"}} required/>
@@ -112,7 +112,7 @@ function PrestationDetails(props) {
                         <label className="col-sm-12 col-form-label text-center pb-3 text-light">La durée de votre prestaion</label>
                         <div className="col-sm-12">
                             <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Durée de votre prestation, exemple: 12 min ou 1 heures de durée de prestation">?&nbsp;</span>
+                                <span className="text-info pt-2" data-tip="Définir la durée de la prestation">?&nbsp;</span>
                                 <input value={service_time} id="service_time" name="service_time"
                                        onChange={(e) => changeFields(setServiceTime, e, addServiceTime, dispatch)}
                                        className="form-control" type="number" placeholder="Durée d'execution" style={{width: "100%"}} required/>
@@ -128,7 +128,7 @@ function PrestationDetails(props) {
                         <label className="col-sm-12 col-form-label text-center pb-3 text-light">Temps de préparation</label>
                         <div className="col-sm-12">
                             <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Temp de préparation, exemple: 12 min de preparation ou 1 heures de preparation">?&nbsp;</span>
+                                <span className="text-info pt-2" data-tip="Définir le temps de préparation nécessaire à la préparation de votre prestation">?&nbsp;</span>
                                 <input value={preparation_time} id="preparation_time" name="preparation_time"
                                        onChange={(e) => changeFields(setPreparationTime, e, addPreparationTime, dispatch)}
                                        className="form-control" placeholder="Préparation" type="number" style={{width: "100%"}} required/>
@@ -141,10 +141,10 @@ function PrestationDetails(props) {
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Nombre d'artist</label>
+                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Nombre d'artiste</label>
                         <div className="col-sm-12">
                             <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Le nombre de votre equipe pour cette prestation">?&nbsp;</span>
+                                <span className="text-info pt-2" data-tip="Le nombre de personnes impliquées dans la prestation  ">?&nbsp;</span>
                                 <input value={number_of_artist} id="number_of_artist" name="number_of_artist"
                                        onChange={(e) => changeFields(setNumberOfArtist, e, addNumberOfArtist, dispatch)}
                                        className="form-control" placeholder="Nombre d'artist" type="number" style={{width: "100%"}}/>
@@ -154,11 +154,11 @@ function PrestationDetails(props) {
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Type d'evenement</label>
+                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Type(s) d'évènement(s)</label>
                         <div className="col-sm-12">
                             <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Exemple: Pour un Mariage, anniversaire ou autres">?&nbsp;</span>
-                                <MultiSelectTools funcToFillInProps={addEventSelected} tags={props_events_selected} list={events_type} placeholder="Ajouter un evenement"/>
+                                <span className="text-info pt-2" data-tip="Définir les évènements pour lesquels vous souhaiter réaliser la prestation">?&nbsp;</span>
+                                <MultiSelectTools funcToFillInProps={addEventSelected} tags={props_events_selected} list={events_type} placeholder="Ajouter un ou plusieurs évènements"/>
                             </div>
                         </div>
                     </div>

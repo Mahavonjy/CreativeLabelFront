@@ -79,22 +79,22 @@ function Recaputilatif(props) {
             </Modal>
 
             <div className="relative mb-5">
-                <h3 className="mb-2 text-primary">Voici un resumer de votre premiere prestation</h3>
-                <p>Vous pouvez revenir au precedent en cas d'envie de changer</p>
+                <h3 className="mb-2 text-primary">Le récapitulatif de votre prestation</h3>
+
             </div>
             <div className="row">
                 <div className="col-md-6">
-                    {createBigForm("Devenir", props.var.artistType, "icon-user")}
-                    {createBigForm( "Artiste de genre", props_thematics_options_selected.join(', '),  "icon-neuter")}
-                    {createBigForm("Titre",PropsTitle, "icon-text-width")}
+                    {createBigForm("Type d'artiste", props.var.artistType, "icon-user")}
+                    {createBigForm( "Thématique", props_thematics_options_selected.join(', '),  "icon-neuter")}
+                    {createBigForm("Titre de votre prestation",PropsTitle, "icon-text-width")}
                     <div className="custom-float">
                         <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                             <div className="input-group-text text-dark">
-                                <i className="icon-text-width"/>&nbsp;	Description</div>
-                            <textarea value={PropsDescription} id="Description" name="Description" className="form-control"  disabled/>
+                                <i className="icon-text-width"/>&nbsp; Description</div>
+                            <textarea value={PropsDescription} id="Description de votre prestation" name="Description de votre prestation" className="form-control"  disabled/>
                         </div>
                     </div>
-                    {createBigForm("Ensemble de ville choisi pour cette prestation", allCity, "icon-map-marker\n")}
+                    {createBigForm("Les villes annexes pour votre prestation", allCity, "icon-map-marker\n")}
                 </div>
                 <div className="col-md-6">
                     <div className="justify-content-center" style={{display: "flex"}}>
@@ -102,21 +102,21 @@ function Recaputilatif(props) {
                         {createSmallForm("Nombre d'artiste", props_number_of_artist, "auto", "icon-view")}
                     </div>
                     <div className="justify-content-center" style={{display: "flex"}}>
-                        {createSmallForm("Preparation", props_preparation_time + ' ' + unit_time_of_preparation, "auto", "icon-alarm-clock-1")}
-                        {createSmallForm("Durée", props_service_time + ' ' + unit_time_of_service, "115px", "icon-clock")}
+                        {createSmallForm("Temps de préparation", props_preparation_time + ' ' + unit_time_of_preparation, "auto", "icon-alarm-clock-1")}
+                        {createSmallForm("Durée de la prestation", props_service_time + ' ' + unit_time_of_service, "115px", "icon-clock")}
                     </div>
                     <div className="justify-content-center" style={{display: "flex"}}>
                         <div className="custom-float m-1">
                             <div className="input-group-prepend d-inline-block center" style={{width: "222px"}}>
                                 <div className="input-group-text text-dark font-weight-bold">
-                                    <i className="icon-bitbucket-square"/>&nbsp;Type d'evenement</div>
+                                    <i className="icon-bitbucket-square"/>&nbsp;Type(s) d'evenement(s) sélectionné(s)</div>
                                 <div className="input-group-text text-light success-color" id="events">
                                     <input value={props_events_selected.join(', ')} className="center text-center border-0 bg-transparent" style={{width: "200px"}} id="events"/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p className="text-red text-center">Le photos de votre prestation</p>
+                    <p className="text-red text-center">Les images de votre prestation</p>
                     <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner" style={{height: 110, width: "100%", borderRadius: 5}}>
                             {PropsFiles.map((photo, index) =>
@@ -128,8 +128,8 @@ function Recaputilatif(props) {
                                 </div>
                             )}
                         </div>
-                        <a className="carousel-control-prev bg-dark" href="#islCreativeCarousel" role="button" data-slide="prev">prev</a>
-                        <a className="carousel-control-next bg-dark" href="#islCreativeCarousel" role="button" data-slide="next">next</a>
+                        <a className="carousel-control-prev bg-dark" href="#islCreativeCarousel" role="button" data-slide="prev">précédent</a>
+                        <a className="carousel-control-next bg-dark" href="#islCreativeCarousel" role="button" data-slide="next">Suivant</a>
                     </div>
                 </div>
             </div>

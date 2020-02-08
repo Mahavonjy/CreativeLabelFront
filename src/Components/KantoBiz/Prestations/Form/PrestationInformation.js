@@ -83,7 +83,7 @@ function PrestationInformation(props) {
         <div className="Base">
             <ReactTooltip/>
             <div className="card-header transparent b-b">
-                <strong className="text-red">Donnez les informations generale de votre prestation</strong>
+                <strong className="text-red">Les informations générales sur votre prestation</strong>
             </div>
             <div className="row" style={{height: 450}}>
                 <div className="col-md-7 card p-5">
@@ -91,19 +91,19 @@ function PrestationInformation(props) {
                         {/* Input */}
                         <div className="body">
                             <div className="form-group form-float">
-                                <div className="form-line" data-tip={!title && "Veuillez donnée un titre a votre prestation, ex: AnnivShow, ForaParty ..."}>
+                                <div className="form-line" data-tip={!title && "Veuillez donner un titre à votre prestation..."}>
                                     {CreateInput('title', title, (e) => changeFields(setTitle, e, addTitleOfService, dispatch), "Titre de votre Prestation", "text", true)}
                                 </div>
                             </div>
-                            <div className="form-group form-float" data-tip={!description ? "Veuillez nous décrire cette prestation en quelques mots" : null}>
+                            <div className="form-group form-float" data-tip={!description ? "Décrire la prestation en quelques mots" : null}>
                                 <div className="form-line">
-                                        <textarea defaultValue={description} id="desc" name="desc" className="form-control" style={{height: 100}} placeholder="Quelques ligne de description de votre prestaion"
+                                        <textarea defaultValue={description} id="desc" name="desc" className="form-control" style={{height: 100}} placeholder="Description de la prestation"
                                                   onChange={(e) => changeFields(setDescription, e, addDescriptionOfService, dispatch)}/>
                                 </div>
                             </div>
-                            <div className="form-group form-float" data-tip={!city && "Veuillez donnée une ville reference pour votre prestation"}>
+                            <div className="form-group form-float" data-tip={!city && "La ville de référence est la ville dans laquelle vous proposez la prestation"}>
                                 <div className="form-line">
-                                    <input id="city" name="city" className="form-control" placeholder={city || "Veuillez choisir votre ville de reference"}
+                                    <input id="city" name="city" className="form-control" placeholder={city || "Veuillez choisir une ville de référence pour votre prestation"}
                                            value={city} onChange={(e) => changeFields(setCity, e, addReferenceOfCity, dispatch)} list="city-type"/>
                                     <datalist id="city-type">
                                         <option value="Manakara">Manakara</option>
@@ -113,7 +113,7 @@ function PrestationInformation(props) {
                                     </datalist>
                                 </div>
                             </div>
-                            <div className="form-group form-float" data-tip={!PropsOthersCity && "Veuillez donnez quelques ville ou vous pouvez executé cette même prestation"}>
+                            <div className="form-group form-float" data-tip={"Veuillez ajouter une ou plusieurs villes annexes dans lesquelles vous pouvez réaliser votre prestation "}>
                                 <div className="form-line">
                                     <MultiSelectTools tags={PropsOthersCity} list={['Manakara', 'Toliara', 'Toamasina', 'Mahajanga']} funcToFillInProps={addOthersCityOfService} placeholder="Ajouter d'autres villes" sort />
                                 </div>
@@ -123,11 +123,11 @@ function PrestationInformation(props) {
                     </div>
                 </div>
                 <div className="col-md-5 text-center p-5">
-                    <span className="font-weight-lighter">Faites glisser votre image ou naviguez</span>
+                    <span className="font-weight-lighter">Faire un glisser/déposer des images</span>
                     <div className="form-group pt-5">
                         <div className="custom-file" data-tip="C'est ici que vous cherchez vos images dans votre appareil">
                             <input onChange={(e) => onDrop(e, true)} type="file" accept="image/*" className="custom-file-input" />
-                            <label className="custom-file-label" htmlFor="inputGroupFile01">Choisir une image</label>
+                            <label className="custom-file-label" htmlFor="inputGroupFile01">Télécharger des fichiers</label>
                         </div>
                     </div>
                     <div className="file has-name is-boxed d-none d-sm-block" data-tip="C'est ici que vous déplacerai vos images">
@@ -153,7 +153,7 @@ function PrestationInformation(props) {
                                         </span>
                                 </li>
                             )}
-                        </ul> : <small>Vous n'avez importez aucune images</small>}
+                        </ul> : <small>Vous n'avez importé aucune image</small>}
                 </div>
             </div>
         </div>

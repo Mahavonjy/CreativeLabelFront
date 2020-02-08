@@ -137,27 +137,27 @@ function Results(props) {
     return (
         <div className="row row-eq-height p-b-100">
             <div className="col-lg-3 pt-5">
-                <h4 className="text-red text-center">Filter Le résultat</h4>
+                <h4 className="text-red text-center">Filtrer le résultat</h4>
                 <div className="text-center ml-5 mr-5">
-                    <label className="pb-3 pt-4">Evenement</label>
+                    <label className="pb-3 pt-4">Évènement</label>
                     <MultiSelectTools funcToFillInProps={addFilterEventSelected} tags={filter_events_selected} list={events_type} placeholder="Ajouter un evenement"/>
                 </div>
                 <div className="text-center ml-5 mr-5">
-                    <label className="pb-3 pt-4">Prix</label>
+                    <label className="pb-3 pt-4">Prix de la prestation</label>
                     <InputRange draggableTrack maxValue={1000} minValue={0} formatLabel={value => `${value} $`}
                                 onChange={value => setPrice(value)}
                                 onChangeComplete={value => setPrice(value)}
                                 value={price} />
                 </div>
                 <div className="text-center ml-5 mr-5">
-                    <label className="pb-3 pt-4">Durée</label>
+                    <label className="pb-3 pt-4">Durée de la prestation</label>
                     <InputRange draggableTrack maxValue={1000} minValue={0} formatLabel={value => `${value} min`}
                                 onChange={value => setDuration(value)}
                                 onChangeComplete={value => setDuration(value)}
                                 value={duration} />
                 </div>
                 <div className="text-center ml-5 mr-5">
-                    <label className="pb-3 pt-4">Recommendation</label>
+                    <label className="pb-3 pt-4">Notation (nombre d'étoile)</label>
                     <InputRange draggableTrack maxValue={5} minValue={0} formatLabel={value => `${value}✰`}
                                 onChange={value => setStarts(value)}
                                 onChangeComplete={value => setStarts(value)}
@@ -165,7 +165,7 @@ function Results(props) {
                 </div>
             </div>
             <div className="col-lg-9 pt-5">
-                <h4 className="text-red text-center">Resultat de votre recherche</h4>
+                <h4 className="text-red text-center">Résultat(s) de votre recherche</h4>
                 <div className="row justify-content-center">
                     {pageOfItems.map(item =><div key={item.id}>{item.name}</div>)}
                 </div>

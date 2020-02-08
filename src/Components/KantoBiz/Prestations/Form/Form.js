@@ -33,7 +33,7 @@ function Form (props) {
     const isMounted = useRef(false);
     const [state_steps_index, setStepsIndex] = useState(steps_index);
     const steps = [
-            {name: 'Choisir votre thematiques', component: <Thematics var={props}/>},
+            {name: 'Choisir votre thématique', component: <Thematics var={props}/>},
             {name: 'Information de votre prestation', component: <PrestationInformation />},
             {name: 'Detail de votre prestation', component: <PrestationDetails />},
             {name: 'Recaputilatif', component: <Recaputilatif var={props}/>},
@@ -87,25 +87,25 @@ function Form (props) {
                     <div className="mdl-stepper-horizontal-alternative">
                         <div className={state_steps_index === 0 ? "mdl-stepper-step active-step" : "mdl-stepper-step success-step"}>
                             <div className="mdl-stepper-circle"><span>1</span></div>
-                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Choisir la thematiques</small></div>
+                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Définir une thématique</small></div>
                             <div className="mdl-stepper-bar-left" />
                             <div className="mdl-stepper-bar-right" />
                         </div>
                         <div className={(state_steps_index === 1 && "mdl-stepper-step active-step") || (state_steps_index < 1 && "mdl-stepper-step") || (state_steps_index > 1 && "mdl-stepper-step success-step")}>
                             <div className="mdl-stepper-circle"><span>2</span></div>
-                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Information de la prestation</small></div>
+                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Informations sur la prestation</small></div>
                             <div className="mdl-stepper-bar-left" />
                             <div className="mdl-stepper-bar-right" />
                         </div>
                         <div className={(state_steps_index === 2 && "mdl-stepper-step active-step") || (state_steps_index < 2 && "mdl-stepper-step") || (state_steps_index > 2 && "mdl-stepper-step success-step")}>
                             <div className="mdl-stepper-circle"><span>3</span></div>
-                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Detail de la prestation</small></div>
+                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Détails de la prestation</small></div>
                             <div className="mdl-stepper-bar-left" />
                             <div className="mdl-stepper-bar-right" />
                         </div>
                         <div className={(state_steps_index === 3 && "mdl-stepper-step active-step") || (state_steps_index < 3 && "mdl-stepper-step") || (state_steps_index > 3 && "mdl-stepper-step success-step")}>
                             <div className="mdl-stepper-circle"><span>4</span></div>
-                            <div className="mdl-stepper-title text-light d-none d-lg-block"><small className="d-none d-lg-block">Recaputilatif</small></div>
+                            <div className="mdl-stepper-title text-light d-none d-lg-block"><small className="d-none d-lg-block">Récaputilatif</small></div>
                             <div className="mdl-stepper-bar-left" />
                             <div className="mdl-stepper-bar-right" />
                         </div>
@@ -114,7 +114,7 @@ function Form (props) {
             </div>
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             <div className="text-center pt-2">
-                <small className="text-center">Veuillez cliquer sur suivant si vous avez fini cette pages</small>
+                <small className="text-center">Cliquer sur suivant pour passer à la page suivante</small>
             </div>
             {props.new &&
             <div className="text-center pt-2">
