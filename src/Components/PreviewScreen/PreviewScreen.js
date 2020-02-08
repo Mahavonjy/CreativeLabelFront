@@ -535,7 +535,9 @@ function PreviewScreen(props) {
                                                                         <i className="icon icon-compact-disc-2 s-256"/>
                                                                     </div>
                                                                     <div className="cardHome-body">
-                                                                        <h2 className="cardHome-title text-red">ISL KANTOBIZ</h2>
+
+                                                                        <h2 className="cardHome-title text-red">CREATIVE KANTOBIZ</h2>
+
                                                                         <p className="cardHome-text"> Réservez les meilleurs artistes pour vos évènements</p>
                                                                     </div>
                                                                     <div className="cardHome-footer text-muted mt-5 mb-5" onClick={() => window.location.replace('/Kantobiz')}>
