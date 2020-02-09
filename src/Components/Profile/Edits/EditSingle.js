@@ -95,7 +95,7 @@ function EditSingle(props) {
                     <i className="icon-close s-24" style={{color:"orange"}} />
                 </button>
                 <div className="col text-center">
-                    <h4 className="text-green text-monospace">Modifier</h4>
+                    <h4 className="text-green text-monospace">Charger vos beats</h4>
                     <div className="body">
                         <div className="custom-float">
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>

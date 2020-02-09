@@ -21,7 +21,7 @@ function Beats(props) {
     const AllMediaGenre = useSelector(state => state.Home.AllMediaGenre);
 
     const isMounted = useRef(false);
-    const [placeHolder, setPlaceHolder] = useState("Search");
+    const [placeHolder, setPlaceHolder] = useState("Rechercher");
     const [genre] = useState('');
     const [state_beats, setStateBeats] = useState(beats);
     const [link_beats, setLinkBeats] = useState([]);
@@ -149,7 +149,7 @@ function Beats(props) {
                                                                 <button
                                                                     className="btn btn-outline-warning btn-fab-md"
                                                                     onClick={(e) => getBeats(e, "random")}>
-                                                                    <i className="icon-warning mr-2"/>Reset
+                                                                    <i className="icon-warning mr-2"/>réinitialiser
                                                                 </button>
                                                                 <div className="md-form my-0">
                                                                     <div

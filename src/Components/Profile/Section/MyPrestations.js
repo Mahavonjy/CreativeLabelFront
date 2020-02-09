@@ -124,11 +124,11 @@ function MyPrestations(props) {
         <div className="text-center" style={{minHeight: 320}}>
             <ReactTooltip/>
             <ReactTooltip place="right" className="special-color-dark" id='global_price' aria-haspopup='true'>
-                <h5 className="text-center text-green"> Frais de déplacement génerale</h5><br/>
+                <h5 className="text-center text-green"> Ce montant correspond aux frais de transport général</h5><br/>
 
-                <small>• Ce prix sera le frais de déplacement globale de chaque nouvelle préstation </small><br/>
-                <small>• Au début ce prix sera synchroniser avec votre première préstation</small><br/>
-                <small>• Vous pouvez personnaliser pour chaque prestation le frais de déplacement ou bien en fonction de la date aussi</small><br/><br/>
+                <small>• Il s'agit de vos frais de transport par défaut applicable à toutes vos prestations </small><br/>
+                <small>• Le frais de transport général par défaut est de 0 et est personnalisable en fonction de vos estimations</small><br/>
+                <small>• Vous pouvez également indiquer un frais de transport spécifique par prestation et par date de prestation</small><br/><br/>
             </ReactTooltip>
             <ReactTooltip place="left" className="special-color-dark" id='copy_edit' aria-haspopup='true'>
                 <h5 className="text-center text-green">Dupliquer et Modifier</h5><br/>
@@ -161,14 +161,14 @@ function MyPrestations(props) {
             <div className="row justify-content-center">
                 {!props.read &&
                 <div className="col-lg-2">
-                    <h4 className="text-light text-center bolder pt-3 pb-2">Votre frais de déplacement générale est de:</h4>
+                    <h4 className="text-light text-center bolder pt-3 pb-2">Mon frais de transport est de:</h4>
                     <div className="col text-center pt-2 pb-3">
                         <h2 className="text-red">{global_price} $&nbsp;
                             <i className="icon icon-info text-red" data-tip data-for="global_price" /></h2>
                         <div className="custom-float">
                             <div className="input-group-prepend d-inline-block center">
                                 <div className="input-group-text text-dark">
-                                    <i className="icon-money"/>&nbsp;Modifier le prix ici *
+                                    <i className="icon-money"/>&nbsp;Modifier le prix *
                                 </div>
                                 <input className="form-control" type="number" id="global_price" name="global_price" onChange={(e) => changeFields(setGlobalPrice, e)}/>
                             </div>

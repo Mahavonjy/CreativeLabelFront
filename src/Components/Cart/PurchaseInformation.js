@@ -249,7 +249,7 @@ function PurchaseInformation(props) {
                                         <div className="form-group form-float">
                                             <div className="form-line">
                                                 <input type="text" id="address" className="form-control"
-                                                       placeholder="Votre address" name="address"
+                                                       placeholder="Votre addresse" name="address"
                                                        value={address || ''}
                                                        onChange={(e) => changeFields(setAddress, e)}
                                                        required/>
@@ -266,7 +266,7 @@ function PurchaseInformation(props) {
                                         <div className="form-group form-float">
                                             <div className="form-line">
                                                 <input type="text" id="city" className="form-control"
-                                                       placeholder="votre ville" name="city"
+                                                       placeholder="Votre ville" name="city"
                                                        value={city || ''}
                                                        onChange={(e) => changeFields(setCity, e)} required/>
                                             </div>
@@ -274,7 +274,7 @@ function PurchaseInformation(props) {
                                         <div className="form-group form-float">
                                             <div className="form-line">
                                                 <input type="number" id="phone" className="form-control"
-                                                       placeholder="votre telephone" name="phone"
+                                                       placeholder="Votre téléphone" name="phone"
                                                        value={phone || ''}
                                                        onChange={(e) => changeFields(setPhone, e)}/>
                                             </div>

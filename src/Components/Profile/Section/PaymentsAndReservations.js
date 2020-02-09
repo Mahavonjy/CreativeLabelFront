@@ -9,15 +9,15 @@ function PaymentsAndReservations() {
     const isMounted = useRef(false);
 
     const auditor_pro_canceled = () => {
-        console.log("L'auditeur annule la prestation");
+        console.log("L'auditeur pro annule la prestation");
     };
 
     const artist_accepted = () => {
-        console.log("L'artist accept la prestation");
+        console.log("L'artiste accepte la prestation");
     };
 
     const artist_canceled = () => {
-        console.log("L'artist annule la prestation");
+        console.log("L'artiste annule la prestation");
     };
 
     const tableGenerator = (status, action) => {
@@ -25,18 +25,18 @@ function PaymentsAndReservations() {
             <table className="responsive-table mt-4">
                 <thead>
                 <tr>
-                    <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisi"/></th>
-                    <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Ceci est la date ou votre evenement va se dérouler"/></th>
+                    <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisie"/></th>
+                    <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Date de l'évènement"/></th>
                     {role !== "professional_auditor" ?
-                        <th scope="col">Auditeur&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'auditeur qui a fait cette reservation"/></th>:
-                        <th scope="col">Artist&nbsp;<i className="icon icon-info" data-tip="Ceci est le nom de l'artist concerné par l'evenement avec un lien qui va direct sur son profile"/></th>}
-                    <th scope="col">Évènenment&nbsp;<i className="icon icon-info" data-tip="Ceci sera le type d'evenement de l'autideur qui a reserver "/></th>
-                    <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="Ceci est l'adresse choisi par l'auditeur ou se déroulera l'evenement"/></th>
-                    <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Ici sera le montant HT de la prestation (Choisi par l'artiste)"/></th>
-                    {status ? <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Ici s'affichera le status de votre réservation qui sera varier"/></th>
+                        <th scope="col">Auditeur Pro&nbsp;<i className="icon icon-info" data-tip="Le nom de l'auditeur pro qui a fait la réservation"/></th>:
+                        <th scope="col">Artiste&nbsp;<i className="icon icon-info" data-tip="Le nom de l'artiste concerné par l'évènement "/></th>}
+                    <th scope="col">Évènement&nbsp;<i className="icon icon-info" data-tip="Le type d'évènement de l'auditeur pro "/></th>
+                    <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="L'adresse où se déroulera l'évènement"/></th>
+                    <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Montant HT de la prestation (fixé par l'artiste)"/></th>
+                    {status ? <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Le statut de la réservation de l'auditeur pro."/></th>
                         : <th scope="col">Facture&nbsp;<i className="icon icon-info" data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/></th>}
                     {action ? <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip={role === "professional_auditor" ?
-                        "Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec" : "La politique de réservation de base étant flexible, vous pouvez modifier votre politique de remboursement sous la rubrique « politique de remboursement"}/></th> : null}
+                        "Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec" : "La politique de réservation de base étant flexible, vous pouvez modifier votre politique de remboursement sous la rubrique politique de remboursement"}/></th> : null}
                 </tr>
                 </thead>
 
@@ -50,13 +50,12 @@ function PaymentsAndReservations() {
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-yellow" data-title="Status">En attente</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
-                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter la personne qui a fait cette reservation">Noter</td>}
+                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>}
                     {action ?
                         <td className="text-center border-bottom-0 border-right-0">
                             <button className="btn btn-outline-danger text-center mt-2" onClick={role === "professional_auditor" ? () => auditor_pro_canceled() : () => artist_canceled() }>Annuler</button>
                             {role !== "professional_auditor" ? <button className="btn btn-outline-success text-center mt-2"
-                                                                                  data-tip="Lorsque vous accepter une reservaton, vos coordonnées (e-mail, téléphone…) seront envoyées à l’auditeur affecté a la reservation, afin de vous contacter."
-                                                                                  onClick={() => artist_accepted()}>Accept</button> : null}
+                                                                                  onClick={() => artist_accepted()}>Accepter</button> : null}
                         </td>: null}
                 </tr>
                 <tr>
@@ -66,13 +65,13 @@ function PaymentsAndReservations() {
                     <td className="small" data-title="Évènenment">Anniversaire</td>
                     <td className="small" data-title="Adresse">Lot 1M 30 Andragnovato-Est</td>
                     <td className="small" data-title="Montant">$875,742,326</td>
-                    {status ? <td className="small text-red" data-title="Status">Echec</td>
+                    {status ? <td className="small text-red" data-title="Status">Échec</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
-                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter la personne qui a fait cette reservation">Noter</td>}
+                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>}
                     {action ?
                         <td className="text-center border-bottom-0 border-right-0">
                             <button className="btn btn-outline-danger" disabled>Annuler</button>
-                            {role !== "professional_auditor" && <button className="btn btn-outline-success text-center mt-2" onClick={() => artist_accepted()} disabled>Accept</button>}
+                            {role !== "professional_auditor" && <button className="btn btn-outline-success text-center mt-2" onClick={() => artist_accepted()} disabled>Accepter</button>}
                         </td>: null}
                 </tr>
                 <tr>
@@ -84,11 +83,11 @@ function PaymentsAndReservations() {
                     <td className="small" data-title="Montant">$875,742,326</td>
                     {status ? <td className="small text-green" data-title="Status">Validé</td>
                         : <td className="small text-red" data-title="Status">télécharger</td>}
-                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Noter le niveau d’accueil de la personne qui a fait cette reservation">Noter</td>}
+                    {status ? null : <td className="small text-red border-top" data-title="Status" data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>}
                     {action ?
                         <td className="text-center border-bottom-0 border-right-0">
-                            <button className="btn btn-outline-success text-center mt-2" onClick={role === "professional_auditor" ? () => auditor_pro_canceled() : () => artist_canceled()}>Annuler</button>
-                            {role !== "professional_auditor" && <button className="btn btn-outline-success text-center mt-2" onClick={() => artist_accepted()} disabled>Accept</button>}
+                            <button className="btn btn-outline-danger text-center mt-2" onClick={role === "professional_auditor" ? () => auditor_pro_canceled() : () => artist_canceled()}>Annuler</button>
+                            {role !== "professional_auditor" && <button className="btn btn-outline-success text-center mt-2" onClick={() => artist_accepted()} disabled>Accepter</button>}
                         </td>: null}
                 </tr>
                 </tbody>
@@ -117,7 +116,7 @@ function PaymentsAndReservations() {
                                     Paiements effectués
                                 </a>
                                 <a className="nav-link" id="v-pills-payment-repaid-tab" data-toggle="pill" href="#v-pills-payment-repaid" role="tab" aria-controls="v-pills-payment-repaid" aria-selected="false">
-                                    Paiement remboursés
+                                    Paiements remboursés
                                 </a>
                             </div>
                         </div>

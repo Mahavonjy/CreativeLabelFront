@@ -11,6 +11,7 @@ import {
     calculateNumberDaysBetweenDates,
     addSpecialDateToData,
 } from "../../FunctionTools/Tools";
+import ReactTooltip from "react-tooltip";
 
 function CalendarManagement() {
 
@@ -100,8 +101,8 @@ function CalendarManagement() {
     useEffect(() => {
         const list_of_prestations = prestations.map((val, index) => <option key={index} value={index}>{val.title}</option>);
         const list_of_options = props_options.map((val, index) => <option key={index} value={index}>{val.name}&nbsp;({val.tag})</option>);
-        list_of_prestations.push(<option key={prestations.length} value="all">Tout (Modif sur toutes les prestations)</option>);
-        list_of_options.push(<option key={props_options.length} value="all">Tout (Modif sur toutes les options)</option>);
+        list_of_prestations.push(<option key={prestations.length} value="all">Tout (appliquer à toutes les prestations)</option>);
+        list_of_options.push(<option key={props_options.length} value="all">Tout (appliquer à toutes les options)</option>);
         setPrestationLists(list_of_prestations);
         setOptionLists(list_of_options);
 
@@ -112,20 +113,27 @@ function CalendarManagement() {
 
     return (
         <div>
+            <ReactTooltip place="right" className="special-color-dark" id='statut' aria-haspopup='true'>
+                <h5 className="text-center text-green"> Les applications de mon statut </h5><br/>
+
+                <small>• Choisir les prestations et les options sur lesquelles s'appliquent mon statut (Disponible ou non) </small><br/>
+                <small>• Le statut peut s'appliquer sur une seule prestation, sur plusieurs prestations séléctionnées ou sur toutes les prestations</small><br/>
+            </ReactTooltip>
+
             <div className="d-md-flex align-items-center">
                 <div className="ml-5 pl-5">
-                    <h2 className="font-weight-lighter h3 my-3 text-primary">Gérer La disponibilités</h2>
+                    <h2 className="font-weight-lighter h3 my-3 text-primary">Gérer mes disponibilités</h2>
                     <ul className="align-baseline list-inline">
-                        <li className="list-inline-item"><i className="icon-folder text-primary mr-2"/>Des préstations
+                        <li className="list-inline-item"><i className="icon-folder text-primary mr-2"/>Pour mes prestations
                         </li>
-                        <li className="list-inline-item"><i className="icon-list-1 text-primary mr-2"/>Des options</li>
+                        <li className="list-inline-item"><i className="icon-list-1 text-primary mr-2"/>Pour mes options</li>
                     </ul>
                 </div>
             </div>
             <div className="list-group-item">
                 <div className="row">
                     <div className="col text-center">
-                        <h4 className="text-red bolder pb-4">Votre jour de disponibilitê</h4>
+                        <h4 className="text-red bolder pb-4">Je suis disponible chaque </h4>
                         <div className="countDown">
                             <div className="bg-secondary">
                                 <span onClick={() => changeDayOfAvailability("Monday")}>
@@ -182,7 +190,7 @@ function CalendarManagement() {
 
                 <div className="form-row justify-content-center">
                     <div className="form-group text-center col-md-8 border-top pt-3">
-                        <h4 className="text-red bolder pb-4">Choisissez une date</h4>
+                        <h4 className="text-red bolder pb-4">Définir une période</h4>
                         <div className="row justify-content-center">
                             <label className="col-md-2 input-group-addon bg-transparent pt-3">
                                 <h4 className="text-red">Début<i className="icon ml-2 icon-info"
@@ -199,11 +207,11 @@ function CalendarManagement() {
                         </div>
                     </div>
                     <div className="form-group text-center col-md-8 pt-3">
-                        <h4 className="text-red bolder pb-3">Choisir un status</h4>
+                        <h4 className="text-red bolder pb-3">Mon statut</h4>
                         <div className="row justify-content-center">
                             <div className="selecto">
                                 <select name="slct" id="slct" style={selectStyle} onChange={editEnable}>
-                                    <option selected disabled>Choisir le status de ce changement</option>
+                                    <option selected disabled>Choisir mon statut pour cette période</option>
                                     <option value={false}>Disponible</option>
                                     <option value={true}>Indisponible</option>
                                 </select>
@@ -211,7 +219,8 @@ function CalendarManagement() {
                         </div>
                     </div>
                     <div className="form-group text-center col-md-8 border-bottom pb-3">
-                        <h4 className="text-red bolder pb-3">L'Options/Prestations a modifier</h4>
+                        <h4 className="text-red bolder pb-3">Appliquer mon statut<i className="icon ml-2 icon-info"
+                                                                                    data-tip data-for="statut"/></h4>
                         <div className="row justify-content-center">
                             <div className="col selecto">
                                 <select name="slct" id="slct" style={selectStyle} onChange={(e) => changeFields(setSelectedPrestation, e)}>

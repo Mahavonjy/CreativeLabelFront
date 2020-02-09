@@ -108,7 +108,7 @@ function OneBeat(props) {
                                         <i className="icon-pause-1 s-36 text-red ml-3 mr-2" onClick={() => {PlaySingle(0, "OneBeats").then(() => null)}} />:
                                         <i className="icon-play-button-1 s-36 text-red ml-3 mr-2" onClick={() => {PlaySingle(0, "OneBeats").then(() => null)}} />}
                                     <button className="btn btn-primary btn-lg" data-toggle="modal"
-                                            data-target={"#SingleBeats" + props.SingleBeat.id}>Buy Now
+                                            data-target={"#SingleBeats" + props.SingleBeat.id}>Acheter maintenant
                                     </button>
                                 </div>
                             </div>
@@ -126,8 +126,8 @@ function OneBeat(props) {
                                         <div className="d-flex">
                                             <i className="icon-music s-36 mr-3  mt-2"/>
                                             <div>
-                                                <h4 className="text-red">All beats of this beatmaker</h4>
-                                                <p>Checkout What's new</p>
+                                                <h4 className="text-red">Toutes les créations de {props.SingleBeat.artist}</h4>
+                                                <p>Sur Creative BeatMaking</p>
                                                 <div className="mt-3">
                                                     <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1"
                                                         role="tablist">
@@ -152,7 +152,7 @@ function OneBeat(props) {
                                                 {CreateFields.CreateBeatsPlaylist("long_beats", "beat_maker_beats", props, generate_states(link_all_artist_beats, beat_maker_beats), "long_beats")}
                                             </div>
                                             : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
-                                                <p className="text-center">L'artiste n'a pas d'autres instrumental</p>
+                                                <p className="text-center">L'artiste n'a pas d'autres beats</p>
                                             </div>}
                                     </div>
                                 </div>
@@ -162,14 +162,14 @@ function OneBeat(props) {
                     <div className="col-lg-4">
                         <div className="card mb-3">
                             <div className="card-header transparent b-b">
-                                <strong className="text-red">Similar Beats</strong>
+                                <strong className="text-red">Beats similaires</strong>
                             </div>
                             {beats_similar.length !== 0 ?
                                 <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 400}}>
                                     {CreateFields.CreateBeatsPlaylist("short_beats", "SimilarBeats", props, generate_states(link_all_beats_similar, beats_similar), "short_beats")}
                                 </div>
                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 400}}>
-                                    <p className="text-center">Pas d'instrumental similaire</p>
+                                    <p className="text-center">Pas de beats similaires</p>
                                 </div>}
                         </div>
                     </div>

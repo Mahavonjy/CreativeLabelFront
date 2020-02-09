@@ -80,7 +80,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                 <div className="modal-content" style={{height: "100%"}}>
 
                     <div className="modal-header">
-                        <h3 className="getlaid text-dark" id="trackModalLabel">Add To Cart</h3>
+                        <h3 className="getlaid text-dark" id="trackModalLabel">Ajouter au panier</h3>
                         <button id={"closeOne" + val.id} type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -112,7 +112,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                         <div className="p-lg-5" style={{background:"black", height:"500px"}}>
                             <div className="mb-3 card no-b p-3">
                                 <div className="card-header transparent b-b">
-                                    <strong>Prix</strong>
+                                    <strong>Prix du beat</strong>
                                 </div>
                                 <ul className="playlist scrollbar-isl list-group list-group-flush">
                                     <li className="list-group-item" >

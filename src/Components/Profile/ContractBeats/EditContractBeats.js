@@ -163,7 +163,7 @@ function EditContractBeats() {
                 <div className="card-header pb-0">
                     <div className="d-flex justify-content-between">
                         <div className="align-self-center">
-                            <h3 className="text-red">Personnaliser les contrats</h3>
+                            <h3 className="text-red">Personnalisation de contrats</h3>
                         </div>
                         <div className="align-self-center">
                             <ul className="nav nav-pills mb-3" role="tablist">

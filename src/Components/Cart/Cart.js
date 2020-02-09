@@ -89,14 +89,14 @@ function Cart(props) {
                         <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                             Total: {total_price}$
                         </h3>
-                        <h4><i className="icon-cart-arrow-down mr-2 mb-5" />Your Cart</h4>
+                        <h4><i className="icon-cart-arrow-down mr-2 mb-5" />Votre panier</h4>
 
                         <div className="d-flex justify-content-between">
                             <div className="align-self-end">
                                 <ul className="nav nav-material nav-material-white card-header-tabs" role="tablist">
                                     <li className="nav-item">
                                         <a className="nav-link active show" id="w6--tab1" data-toggle="tab" href="#w6-tab1" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">
-                                            List
+                                            Liste
                                         </a>
                                     </li>
                                 </ul>
@@ -143,7 +143,7 @@ function Cart(props) {
                                                 </tr>
                                             )}
                                             </tbody>
-                                            : <p className="p-t-100 text-center text-light align-content-center"> Your Cart is empty </p>}
+                                            : <p className="p-t-100 text-center text-light align-content-center"> Votre panier est vide </p>}
                                     </table>
                                 </div>
                             </div>
@@ -159,9 +159,9 @@ function Cart(props) {
                             </div>
                             <div>
                                 <div>
-                                    <h4 className="text-primary">Same Artist</h4>
+                                    <h4 className="text-primary">Beatmakers similaires</h4>
                                 </div>
-                                <small>Artist with the same beats</small>
+                                <small>D'autres créations similaires</small>
                             </div>
                         </div>
                         <ul className="playlist list-group bg-dark list-group-flush" style={{height: 388}}>

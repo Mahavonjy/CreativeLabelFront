@@ -48,7 +48,7 @@ function Materials(props) {
             <div className="tag-editor">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">
-                        <h1 className="text-light">Materiels a disposition&nbsp;<i className="icon icon-info s-18"/></h1>
+                        <h1 className="text-light">Matériels nécessaires&nbsp;<i className="icon icon-info s-18"/></h1>
                     </div>
                     <div className="tag-editor-tags">
                         <div className="input-tag">

@@ -38,19 +38,19 @@ function BankingDetails() {
                                 <div className="body">
                                     <div className="form-group form-float">
                                         <div className="form-line">
-                                            <input type="text" id="name" className="form-control" placeholder="Nom du proprietaire" name="name"
+                                            <input type="text" id="name" className="form-control" placeholder="Nom du propriétaire" name="name"
                                                    value={name || ''} onChange={(e) => Tools.changeFields(setName, e)}/>
                                         </div>
                                     </div>
                                     <div className="form-group form-float">
                                         <div className="form-line">
-                                            <input type="text" id="lastname" className="form-control" placeholder="Prénom du proprietaire" name="lastname"
+                                            <input type="text" id="lastname" className="form-control" placeholder="Prénom du propriétaire" name="lastname"
                                                    value={lastname} onChange={(e) => Tools.changeFields(setLastname, e)} required/>
                                         </div>
                                     </div>
                                     <div className="form-group form-float">
                                         <div className="form-line">
-                                            <input type="email" id="p-email" className="form-control" placeholder="Email du proprietaire"
+                                            <input type="email" id="p-email" className="form-control" placeholder="Email du propriétaire"
                                                    name="email" value={email || ''} onChange={(e) => Tools.changeFields(setEmail, e)} required/>
                                         </div>
                                     </div>
@@ -67,13 +67,13 @@ function BankingDetails() {
                                 <div className="body">
                                     <div className="form-group form-float">
                                         <div className="form-line">
-                                            <input type="text" id="country" className="form-control" placeholder="Pays du proprietaire"
+                                            <input type="text" id="country" className="form-control" placeholder="Pays du propriétaire"
                                                    name="country" value={country || ''} onChange={(e) => Tools.changeFields(setCountry, e)}/>
                                         </div>
                                     </div>
                                     <div className="form-group form-float">
                                         <div className="form-line">
-                                            <input type="number" id="phone" className="form-control" placeholder="Telephone du proprietaire" name="phone"
+                                            <input type="number" id="phone" className="form-control" placeholder="Téléphone du propriétaire" name="phone"
                                                    value={phone || ''} onChange={(e) => Tools.changeFields(setPhone, e)}/>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@ function BankingDetails() {
                         </div>
                         <div className="card-body text-center">
                             <div className="card-header transparent">
-                                <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>Vos données sont sécurisé crypté en SSL.</strong></h4>
+                                <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>Vos données sont sécurisé & crypté en SSL.</strong></h4>
                             </div>
                             <div className="form-material pb-md-5">
                                 {/* Input */}

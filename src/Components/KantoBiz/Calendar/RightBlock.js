@@ -170,11 +170,11 @@ function RightBlock (props) {
                 {!props.toggle && getHidePrestation()}
                 <div className="row justify-content-center pt-5 mr-4">
                     <div className="col-md-4">
-                        <h4 className="text-red text-center">Les Prix d'aujourd'hui</h4>
+                        <h4 className="text-red text-center">Mes prix pour cette date</h4>
                         <div className="text-center">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
-                                    <div className="input-group-text text-dark">Modifier le prix&nbsp;<i className="icon icon-info text-red" data-tip="Ceci est le prix de la prestation pour ce jour"/></div>
+                                    <div className="input-group-text text-dark">Prix pour cette date&nbsp;<i className="icon icon-info text-red" data-tip="Ceci est le prix de la prestation pour ce jour"/></div>
                                     <input className="form-control" type="number" id="global_price" name="global_price" value={price}
                                            onChange={(e) => changeFields(setPrice, e)}/>
                                 </div>
@@ -183,7 +183,7 @@ function RightBlock (props) {
                         <div className="text-center">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
-                                    <div className="input-group-text text-dark">Modifier le frais&nbsp;<i className="icon icon-info text-red" data-tip="Ceci est le prix du frais de transport ce jour"/></div>
+                                    <div className="input-group-text text-dark">Frais pour cette date&nbsp;<i className="icon icon-info text-red" data-tip="Ceci est le prix du frais de transport ce jour"/></div>
                                     <input className="form-control" type="number" id="global_price" name="global_price" value={moving_price}
                                            onChange={(e) => changeFields(setMovingPrice, e)}/>
                                 </div>
@@ -191,9 +191,9 @@ function RightBlock (props) {
                         </div>
                     </div>
                     <div className="col-md-8">
-                        <h4 className="text-red text-center">Les options</h4>
+                        <h4 className="text-red text-center">Mes options pour cette date</h4>
                         {getTableOfOptions()}
-                        <h4 className="text-red text-center">Les materiels</h4>
+                        <h4 className="text-red text-center">Mes materiels pour cette date</h4>
                         {!props.toggle && loadMaterials && <Materials value={state_materials} noExemple edit/>}
                     </div>
                 </div>
@@ -268,13 +268,13 @@ function RightBlock (props) {
                         {props.toggle && getDayBlocks()}
                     </div>
                     <div className='my-legend pt-1 text-center'>
-                        <div className="legend-title text-black">Legend&nbsp;<i className="icon icon-info-circle" data-tip="Ceci pourraît vous aidez pour comprendre le calendrier"/></div>
+                        <div className="legend-title text-black">Légende</div>
                         <div className="legend-scale text-black pt-3">
                             <ul className="row justify-content-center legend-labels border1">
-                                <li><span className="bolder" style={{background: '#74A9CF'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reserver&nbsp;<i className="icon-info" data-tip="L'artiste est indisponible car il va realiser une prestation"/></span></li>
-                                <li><span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est libre de pour un evenement"/></span></li>
-                                <li><span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;<i className="icon icon-info" data-tip="L'artiste est en vue de faire une prestation mais peut recevoir une reservation"/></span></li>
-                                <li><span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est ne travail tout simplement pendant cette journée"/></span></li>
+                                <li><span className="bolder" style={{background: '#74A9CF'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Réservé&nbsp;<i className="icon-info" data-tip="L'artiste a été réservé"/></span></li>
+                                <li><span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est disponible"/></span></li>
+                                <li><span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;<i className="icon icon-info" data-tip="Réservation(s) en attente de validation par l'artiste"/></span></li>
+                                <li><span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;<i className="icon icon-info" data-tip="l'artiste est indisponible"/></span></li>
                             </ul>
                         </div>
                     </div>

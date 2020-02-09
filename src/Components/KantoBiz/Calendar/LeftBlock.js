@@ -66,7 +66,7 @@ function LeftBlock (props) {
                         <i className="icon-long-arrow-left bg-transparent text-red s-24" data-tip="revenir au calendrier" onClick={LeftBlock.handleClick}/>
                     </span>
                     <div className="text-center mt-4" style={{width: "100%", height: "100px"}}>
-                        <h4 className="text-red bolder mb-4">Prestation d'aujourd'hui</h4>
+                        <h4 className="text-red bolder mb-4">Mes prestation pour cette date</h4>
                         <table className="table">
                             <tbody>
                             {allPrestation.map((val, index) =>

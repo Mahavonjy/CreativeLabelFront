@@ -85,7 +85,7 @@ function EditProfile (props) {
                     <i className="icon-close s-24" style={{color:"orange"}} />
                 </button>
                 <div className="col text-center">
-                    <h4 className="text-green text-monospace">Modifier votre profile</h4>
+                    <h4 className="text-green text-monospace">Modifier mon profil</h4>
                     <div className="body">
                         <div className="custom-float">
                             {generateInput("nom", name, setName, "name", "text", "icon-user")}
@@ -96,7 +96,7 @@ function EditProfile (props) {
                             {generateInput("Date de naissance", birth, setBirth, "birth", "date", "icon-birthday-cake")}
                         </div>
                         <div className="custom-float">
-                            {generateInput("adresse", address, setAddress, "address", "text", "icon-address-book")}
+                            {generateInput("adresse", address, setAddress, "addresse", "text", "icon-address-book")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-map-location"/>&nbsp;Pays</div>
                                 <select className="selectpicker form-control" id="country" name="country" value={country} onChange={(e) => Tools.changeFields(setCountry, e)}>
@@ -109,7 +109,7 @@ function EditProfile (props) {
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-street-view"/>&nbsp;Ville</div>
                                 <select className="selectpicker form-control" id="city" name="city" value={city} onChange={(e) => Tools.changeFields(setCity, e)}>
-                                    <option value="">Veuillez choisir</option>
+                                    <option value="">Veuillez choisir une ville</option>
                                     <option value="Manakara">Manakara</option>
                                     <option value="Tamatave">Tamatave</option>
                                     <option value="Toliara">Toliara</option>
@@ -128,7 +128,7 @@ function EditProfile (props) {
                         </div>
                         <div className="custom-float">
                             <div className="input-group-prepend center" style={{width: "90%"}}>
-                                <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de profile</div>
+                                <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de profil</div>
                                 <input onChange={(e) => Tools.changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
                             </div>
                         </div>

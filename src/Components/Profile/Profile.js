@@ -165,12 +165,12 @@ function Profile (props) {
                                 </button>
                                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <div>
-                                        <p className="dropdown-item text-blue" onClick={() => setChoiceArtistType(true)}><i className="icon-user-plus mr-3"/>Changer de status</p>
+                                        <p className="dropdown-item text-blue" onClick={() => setChoiceArtistType(true)}><i className="icon-user-plus mr-3"/>Changer de statut</p>
                                     </div>
                                     <li className="dropdown-item list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <i className="icon icon-cogs text-blue mr-3" />
-                                            <small className="mr-3">Send Notification by mail</small>
+                                            <small className="mr-3">Envoyer une notification par mail</small>
                                         </div>
                                         <div className="material-switch">
                                             <input id="sw2" name="someSwitchOption001" type="checkbox" />
@@ -254,7 +254,7 @@ function Profile (props) {
                                                         </li>}
                                                         {user_role === "beatmaker" &&
                                                             <li className="nav-item">
-                                                                <a className="nav-link" data-toggle="tab" href="#beats-tab" role="tab" aria-selected="true">Beats</a>
+                                                                <a className="nav-link" data-toggle="tab" href="#beats-tab" role="tab" aria-selected="true">Beats & contrats</a>
                                                             </li>}
                                                         {user_role !== "professional_auditor" &&
                                                         <li className="nav-item">
@@ -286,11 +286,14 @@ function Profile (props) {
                                     {user_role === "beatmaker" &&
                                         <div className="tab-pane fade" id="beats-tab" role="tabpanel">
                                             {state_user_beats.length !== 0 ?
-                                                <div className="playlist pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 320}}>
-                                                    {CreateBeatsPlaylist("user_profile", "user_profile", props, states, "user_profile")}
+                                                <div>
+                                                    <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 320}}>
+                                                        {CreateBeatsPlaylist("user_profile", "user_profile", props, states, "user_profile")}
+                                                    </div>
+                                                    {contract && <EditContractBeats/>}
                                                 </div>
                                                 : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
-                                                    <p className="text-center">Pas d'instrumental</p>
+                                                    <p className="text-center">Pas de beat</p>
                                                 </div>}
                                         </div>}
                                     {user_role !== "professional_auditor" &&
@@ -315,7 +318,7 @@ function Profile (props) {
                                     <div className="d-flex justify-content-between">
                                         {user_role === "beatmaker" &&
                                         <div className="align-self-center">
-                                            <button className="btn btn-outline-danger" onClick={() => togglePopupAddSingle(0)}>Ajouter un instrumental&nbsp;<i className="icon-plus-circle"/></button>
+                                            <button className="btn btn-outline-danger" onClick={() => togglePopupAddSingle(0)}>Ajouter un beat&nbsp;<i className="icon-plus-circle"/></button>
                                         </div>}
                                         <div className="align-self-center">
                                             <button className="btn btn-outline-danger" onClick={() => {setAddNewPrestation(true)}}>Créer une prestation &nbsp;<i className="icon-plus-circle"/></button>
@@ -326,7 +329,6 @@ function Profile (props) {
                     </div>
                 </div>
             </div>
-            {contract && <EditContractBeats/>}
         </div>
     )
 }

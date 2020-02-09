@@ -78,42 +78,42 @@ function OtherProfile(props) {
                         <div className="col-md-8">
                             <div className="p5 b-b">
                                 <div className="pl-8 mt-4">
-                                    <h3>Official Information</h3>
+                                    <h3>Informations officielles </h3>
                                 </div>
                                 <div className="row">
                                     <div className="col-md-4">
                                         <div className="p-4">
-                                            <h5>Age</h5>
+                                            <h5>Âge</h5>
                                             <span>{props.ProfileChecked.age || "Age"}</span>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="p-4">
-                                            <h5>Gender</h5>
+                                            <h5>Genre</h5>
                                             <span>{props.ProfileChecked.gender || "Gender"}</span>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="p-4">
-                                            <h5>Birth day</h5>
+                                            <h5>Anniversaire</h5>
                                             <span>{props.ProfileChecked.birth || "0000-00-00"}</span>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="p-4">
-                                            <h5>Biography</h5>
+                                            <h5>Biographie</h5>
                                             <span>{props.ProfileChecked.description || "no biography"}</span>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="p-4">
-                                            <h5>Artist Name</h5>
+                                            <h5>Nom de l'artiste</h5>
                                             <span>{props.ProfileChecked.artist_name || "no artist name"}</span>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="p-4">
-                                            <h5>Country</h5>
+                                            <h5>Pays</h5>
                                             <span>{"Country"}</span>
                                         </div>
                                     </div>
@@ -134,8 +134,8 @@ function OtherProfile(props) {
                                         <div className="d-flex">
                                             <i className="icon-music s-36 mr-3  mt-2"/>
                                             <div>
-                                                <h4 className="text-red">Prestattion & Beats & Others</h4>
-                                                <p>Tout les services proposer par cette artiste</p>
+                                                <h4 className="text-red">Toutes les créations et prestations</h4>
+                                                <p>L'ensemble des prestations et/ou créations proposées par {props.ProfileChecked.name}</p>
                                                 <div className="mt-3">
                                                     <ul className="nav nav-tabs card-header-tabs nav-material responsive-tab mb-1" role="tablist">
                                                         {props.UserData.role === "beatmaker" &&

@@ -112,11 +112,8 @@ function Suggestion(props) {
                                 <div>
                                     <h4 className="text-primary">Les découvertes</h4>
                                 </div>
-                                <small> Des instrus uniques pour donner de la singularité à vos projets</small>
-                                <div className="mt-2">
-                                    <i className="icon-clock-o mr-1"/>
-                                    Beats Performing
-                                </div>
+                                <small> Des beats uniques pour donner de la singularité à vos projets</small>
+
                             </div>
                         </div>
                         {discovery_beats.length !== 0 ?

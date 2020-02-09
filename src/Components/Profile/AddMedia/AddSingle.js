@@ -194,17 +194,17 @@ function AddSingle (props) {
                     <i className="icon-close s-24" style={{color:"orange"}} />
                 </button>
                 <div className="col text-center">
-                    <h4 className="text-green text-monospace"> Uploader vos instrus</h4>
+                    <h4 className="text-green text-monospace"> Charger vos beats</h4>
                     <div className="body">
                         <div className="custom-float">
-                            {generateInput("Titre *", title, setTitle, "title", "text", "icon-text-width", "Le titre ve votre song")}
-                            {generateInput("Artiste *", artist, setArtist, "artist", "text", "icon-text-width", "Le titre ve votre song", true)}
+                            {generateInput("Titre *", title, setTitle, "titre du beat", "text", "icon-text-width", "Le titre de votre beat")}
+                            {generateInput("Artiste *", artist, setArtist, "artist", "text", "icon-text-width", "Le titre de votre beat", true)}
                         </div>
                         <div className="custom-float">
-                            {generateInput("Tags", artist_tag, setArtistTag, "artist_tag", "text", "icon-user", "Si vous voulez tagger un artist")}
+                            {generateInput("Tags", artist_tag, setArtistTag, "Tags", "text", "icon-user", "Pour tagger d'autres artistes")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                <div className="input-group-text text-dark" data-tip="Your beats genre"><i className="icon-text-width"/>&nbsp;	Genre *</div>
-                                <input id="genre" name="genre" className="form-control"
+                                <div className="input-group-text text-dark" data-tip="Définir le(s) genre(s) du beat"><i className="icon-text-width"/>&nbsp;	Genre *</div>
+                                <input id="genre" name="genre" className="form-control" placeholder="Sélectionner le(s) genre(s)"
                                        value={genre} onChange={(e) => {Tools.changeFields(setGenre, e)}} list="music-genre" required/>
                                 <datalist id="music-genre">
                                     {AllMediaGenre.map((val, index) => <option key={index} value={val}/>)}
@@ -213,7 +213,7 @@ function AddSingle (props) {
                         </div>
                         <div className="custom-float">
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-                                <div className="input-group-text text-dark" data-tip="For now, it's only beats type"><i className="icon-text-width"/>&nbsp;	Type</div>
+                                <div className="input-group-text text-dark" data-tip="sélectionner le type de son"><i className="icon-text-width"/>&nbsp;	Type de son</div>
                                 <input id="genre_musical" name="genre_musical" className="form-control"
                                        value={genre_musical} onChange={(e) => {Tools.changeFields(setGenreMusical, e)}}
                                        list="music-type" required disabled/>
@@ -222,7 +222,7 @@ function AddSingle (props) {
                                     <option value="beats">beats</option>
                                 </datalist>
                             </div>
-                            {beats && generateInput("Bpm", bpm, setBpm, "bpm", "bpm", "icon-stack-exchange", "Si vous voulez ajouter le BPM manuelement")}
+                            {beats && generateInput("BPM", bpm, setBpm, "bpm", "Bpm", "icon-stack-exchange", "Définir le BPM du son")}
                         </div>
                         <div className="custom-float">
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>

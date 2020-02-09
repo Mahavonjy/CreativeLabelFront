@@ -345,19 +345,19 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Instrumental" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative BeatMaking" onClick={() => {
                     (location.pathname !== "/beats") && history.push("/beats")
                 }}><i className="icon icon-heartbeat s-24"/> <span className="ml-5">BeatMaking</span>
                 </li>
 
                 {/* KantoBiz */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet KantoBiz" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative KantoBiz" onClick={() => {
                     location.pathname !== "/kantobiz" && history.push("/kantobiz")
                 }}><i className="icon icon-compact-disc-2 s-24"/> <span className="ml-5">KantoBiz</span>
                 </li>
 
                 {/* PROFILE */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profile" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profil" onClick={() => {
                     headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile" ? document.getElementById("LoginRequire").click() : history.push("/Profile")
                 }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
                 </li>
@@ -374,14 +374,14 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 </li>
 
                 {/* About */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="A propos de nous" onClick={() => {
+                <li style={{margin: "0 0 20px 11px"}} data-tip="Onglet à propos" onClick={() => {
                     (location.pathname !== "/about") && history.push("/about")
-                }}><i className="icon icon-info-circle s-24"/> <span className="ml-5">A propos de nous</span>
+                }}><i className="icon icon-info-circle s-24"/> <span className="ml-5">À propos</span>
                 </li>
 
                 {/* LOGOUT OR LOGIN */}
                 <li style={logout_class === "icon icon-login s-24 mr-5" ? {margin: "50px 0 20px 8px"} : {margin: "50px 0 20px 12px"}}
-                    data-tip={logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se deconnecter"}
+                    data-tip={logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se déconnecter"}
                     onClick={() => logout()}>
                     <i className={logout_class}/> <span>{log_name}</span>
                 </li>

@@ -25,7 +25,7 @@ function RefundPolicy () {
     return (
         <div className="text-center" style={{minHeight: 320}}>
             <section className="section section--aava">
-                <h4 className="text-center pt-4 pb-4">Veuillez choisir la politique qui vous convflexibleient</h4>
+                <h4 className="text-center pt-4 pb-4">Veuillez choisir votre politique de remboursement</h4>
                 <div className="toggle-button toggle-button--aava">
                     <input id="toggleButton" type="checkbox" checked={flexible}/>
                     <label className="flexible" htmlFor="toggleButton" data-on-text="Flexible" data-off-text="Flexible" onClick={() => Flexible()}/>

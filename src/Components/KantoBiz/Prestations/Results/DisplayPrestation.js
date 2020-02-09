@@ -102,7 +102,7 @@ function DisplayPrestation(props) {
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">{price}$&nbsp;<i className="icon icon-info" data-tip="Ceci est le prix HT de la prestation"/></h2>
-                                            <h4 className="col text-primary">Durée de la préparation : 1j&nbsp;<i className="icon icon-info" data-tip="Ceci est le temps de preparation de l'artiste"/></h4>
+                                            <h4 className="col text-primary">Temps de préparation : 1j&nbsp;<i className="icon icon-info" data-tip="Ceci est le temps de preparation de l'artiste"/></h4>
                                             <h4 className="col text-primary">Durée de la prestation : 1j&nbsp;<i className="icon icon-info" data-tip="Ceci est le durée de l'evenement"/></h4>
                                             <div className="col">
                                                 <div className="s-24">09</div>
@@ -115,7 +115,7 @@ function DisplayPrestation(props) {
                                                 <div className="custom-float">
                                                     <div className="input-group-prepend d-inline-block center">
                                                         <div className="input-group-text text-dark">
-                                                            <i className="icon-clock-1"/>&nbsp;Editer la date ici *&nbsp;<i className="icon icon-info" data-tip="La date et l'heure exact du déroulement de votre evenement"/></div>
+                                                            <i className="icon-clock-1"/>&nbsp;Date de l'évènement *&nbsp;<i className="icon icon-info" data-tip="Indiquer la date et l'heure de l'évènement"/></div>
                                                         <DatePicker selected={event_date}
                                                                     onChange={date => {if (!props.read) setEventDate(date)}}
                                                                     className="form-control"
@@ -124,36 +124,36 @@ function DisplayPrestation(props) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <small><i className="icon-map-marker"/>&nbsp;{address ? address : "Veuiller nous renseigner en bas l'adresse de votre evenenment"}</small>
+
                                             <div className="col pt-2 pb-2">
                                                 <div className="custom-float">
                                                     <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                                                         <div className="input-group-text text-dark">
-                                                            <i className="icon-map-marker"/>&nbsp;Ajouter une adresse ici *</div>
+                                                            <i className="icon-map-marker"/>&nbsp;Adresse de l'évènement *</div>
                                                         <input type="text" value={address} id="address"
-                                                               placeholder="Ecrire ici l'adresse de votre evenement"
+                                                               placeholder="Indiquer l'adresse de l'évènement"
                                                                name="address" className="form-control"
                                                                onChange={(e) => {if (!props.read) changeFields(setAddress, e)}} />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button className="btn btn-outline-success" onClick={Reserve}>Reserver</button>
+                                        <button className="btn btn-outline-success" onClick={Reserve}>Réserver</button>
                                     </div>
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Plus de détails</h2>
                                             <h4 className="col"><strong>Politique d’annulation  :</strong> flexible&nbsp;<i className="icon icon-info" data-tip data-for='refund'/></h4>
                                             <h4 className="col"><strong>Catégorie :</strong> rien</h4>
-                                            <h4 className="col"><strong>Type d’évènement(s) :</strong> Mariage, Anniversaire</h4>
-                                            <h4 className="col"><strong>Nombre d'artiste(s) :</strong> 1</h4>
-                                            <h4 className="col"><strong>Lieu de base :</strong> Manakara</h4>
-                                            <h4 className="col"><strong>Lieu d’intérêt(s) :</strong> Toliara, Tamatave</h4>
+                                            <h4 className="col"><strong>Type(s) d’évènement(s) :</strong> Mariage, Anniversaire</h4>
+                                            <h4 className="col"><strong>Nombre d'artistes :</strong> 1</h4>
+                                            <h4 className="col"><strong>Ville de référence :</strong> Manakara</h4>
+                                            <h4 className="col"><strong>Ville(s) annexe(s) :</strong> Toliara, Tamatave</h4>
                                         </div>
                                     </div>
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i className="icon icon-info" data-tip="Les outils dont il a besoin pour mener à bien sa représentation artistique"/></h2>
+                                            <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i className="icon icon-info" data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique. La liste complète des matériels nécessaires se trouve dans la fiche technique"/></h2>
                                             <div className="col">
                                                 <ul>
                                                     <li><i className="icon icon-success text-green"/>Sonorisation</li>
@@ -169,7 +169,7 @@ function DisplayPrestation(props) {
                                     </div> :
                                     <div className="col-md-8">
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Options&nbsp;<i className="icon icon-info" data-tip data-for="option"/></h2>
+                                            <h2 className="col text-primary pb-3">Option(s) pour la prestation&nbsp;<i className="icon icon-info" data-tip data-for="option"/></h2>
 
                                             <table className="responsive-table border-0">
                                                 <thead>
@@ -202,7 +202,7 @@ function DisplayPrestation(props) {
 
                                         </div>
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Galeries&nbsp;<i className="icon icon-info" data-tip="Quelques photo de l'artiste sur cette prestation"/></h2>
+                                            <h2 className="col text-primary pb-3">Galerie d'images&nbsp;<i className="icon icon-info" data-tip="Quelques photo de l'artiste sur cette prestation"/></h2>
                                             <div>
                                                 <div className="cube-container">
                                                     <div className="cube initial-position">
@@ -225,7 +225,7 @@ function DisplayPrestation(props) {
                                             </div>
                                         </div>
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Calendrier&nbsp;<i className="icon icon-info" data-tip="Le planing de d'artiste sur cette prestation"/></h2>
+                                            <h2 className="col text-primary pb-3">Calendrier de la prestation&nbsp;<i className="icon icon-info" data-tip="Le planing de d'artiste sur cette prestation"/></h2>
                                             <Calendar noEdit/>
                                         </div>
                                     </div>}
