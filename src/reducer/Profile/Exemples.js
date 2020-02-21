@@ -6,7 +6,7 @@ export const exOptions = [
         "tag": "Jazz MMC",
         "price": 899,
         "service_id_who_is_active": [2],
-        "special_date": {},
+        "special_dates": {},
         "description": "Rien pour le moment"
     }, {
         "id": 2,
@@ -14,7 +14,7 @@ export const exOptions = [
         "name": "Show",
         "tag": "Lôla",
         "price": 100,
-        "special_date": {},
+        "special_dates": {},
         "service_id_who_is_active": [1],
         "description": "Rien pour le moment"
     }
@@ -24,7 +24,7 @@ export const exService = [
     {
         "id": 1,
         "hidden": true,
-        "special_date": {},
+        "special_dates": {},
         "title": "First",
         "price": 80,
         "number_of_artist": 2,
@@ -49,7 +49,7 @@ export const exService = [
         "hidden": false,
         "title": "Second",
         "price": 20,
-        "special_date": {},
+        "special_dates": {},
         "number_of_artist": 1,
         "events_type": ["Fête traditionnelle", "Évènement d’entreprise", "Évènement associative"],
         "materials": ["couteau", "Feu", "Fusil"],

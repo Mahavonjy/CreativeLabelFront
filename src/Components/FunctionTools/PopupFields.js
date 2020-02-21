@@ -80,7 +80,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
                 <div className="modal-content" style={{height: "100%"}}>
 
                     <div className="modal-header">
-                        <h3 className="getlaid text-dark" id="trackModalLabel">Ajouter au panier</h3>
+                        <h2 className="getlaid text-dark" id="trackModalLabel">Ajouter au panier</h2>
                         <button id={"closeOne" + val.id} type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
