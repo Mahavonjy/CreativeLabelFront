@@ -9,6 +9,7 @@ import profilePrestations from './reducer/Profile/Prestation';
 import beatsReducer from './reducer/Beats';
 import PlaylistHomeReducer from "./reducer/Home";
 import cartsReducer from "./reducer/Carts";
+import Others from "./reducer/Others/Others";
 import playersReducer from "./reducer/Players";
 import kantoBizForm from "./reducer/KantoBiz/Form";
 import { sessionService, sessionReducer } from 'redux-react-session';
@@ -21,6 +22,7 @@ import axios from 'axios';
 axios.defaults.baseURL = Conf.configs.ServerApi;
 
 const Reducers = combineReducers({
+    "Others": Others,
     session: sessionReducer,
     "beats": beatsReducer,
     "profile": profileReducer,

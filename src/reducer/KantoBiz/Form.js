@@ -7,6 +7,7 @@ const initState = {
     // End Thematics genre
     // Service Information
     title: '',
+    country: '',
     city_reference: '',
     others_city: [],
     description: '',
@@ -57,6 +58,11 @@ const kantoBizForm = (state = initState, action) => {
             return {
                 ...state,
                 title: action.data
+            };
+        case "ADD_SERVICE_COUNTRY":
+            return {
+                ...state,
+                country: action.data
             };
         case "ADD_REFERENCE_CITY_OF_SERVICE":
             return {

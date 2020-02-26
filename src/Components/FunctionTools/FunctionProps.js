@@ -154,6 +154,12 @@ export function addBeatMakerBeats(data) {
     };
 }
 
+export function arrayRemove (arr, value)  {
+    return arr.filter( function(elem){
+        return elem !== value;
+    });
+};
+
 export function addSimilarBeats(data) {
     return async dispatch => {
         dispatch({
@@ -558,6 +564,51 @@ export function addFilterEventSelected(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_FILTER_EVENTS_SELECTED",
+            data: data
+        });
+    };
+}
+
+export function addAllArtistTypes(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ALL_ARTIST_TYPE",
+            data: data
+        });
+    };
+}
+
+export function addAllCountryAllowed(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ALL_COUNTRY_ALLOWED",
+            data: data
+        });
+    };
+}
+
+export function addServiceCountry(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICE_COUNTRY",
+            data: data
+        });
+    };
+}
+
+export function addTmpArtistSelected(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_TMP_ARTIST_SELECTED",
+            data: data
+        });
+    };
+}
+
+export function displayBecomeArtistForm(data) {
+    return async dispatch => {
+        dispatch({
+            type: "DISPLAY_BECOME_ARTIST_FORM",
             data: data
         });
     };

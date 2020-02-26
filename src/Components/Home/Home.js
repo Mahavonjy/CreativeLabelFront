@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import IslPlayer from "../Players/Players";
 import Conf from "../../Config/tsconfig";
 import { useSelector, useDispatch } from "react-redux";
-import { FillInCartProps }  from "../FunctionTools/Tools";
+import { FillInCartProps } from "../FunctionTools/Tools";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import * as PopupFields from "../FunctionTools/PopupFields";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
@@ -17,7 +17,8 @@ import {
     addBeatMakerBeats, addSimilarBeats, addOtherBeatMakerBeats, addAllMediaGenre, addPrefAllMediaGenre,
     addBeats, newBeatMaker, topBeatMaker, latestBeats, discoveryBeats, islBeats, profileInitialisationInfo,
     profileInitialisationRole, profileInitialisationFollower, profileInitialisationFollowing, profileAddBeats,
-    profileInitialisationContract, addTotalPrice, addCarts, beatsInitialisationPricing
+    profileInitialisationContract, addTotalPrice, addCarts, beatsInitialisationPricing, addAllArtistTypes,
+    addAllCountryAllowed
 } from "../FunctionTools/FunctionProps";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
@@ -140,13 +141,19 @@ function Home () {
             //
         } finally {
             Promise.all([
-                axios.get("api/medias/allMediaGenre", {headers: headers}).then(resp =>{
+                axios.get("api/medias/allMediaGenre").then(resp =>{
                     let tmp_arr = [];
                     for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
                     dispatch(addAllMediaGenre(tmp_arr));
                     dispatch(addPrefAllMediaGenre(resp.data));
                 }).catch(err => ifConnectionError(err)),
-                axios.get( "api/beats/AllSuggestion", {headers: headers}).then(resp => {
+                axios.get("api/artist_types/all").then(resp => {
+                    dispatch(addAllArtistTypes(resp.data.artist_types));
+                }).catch(err => ifConnectionError(err)),
+                axios.get("api/flags/check_country_and_city").then(resp => {
+                    dispatch(addAllCountryAllowed(resp.data));
+                }).catch(err => ifConnectionError(err)),
+                axios.get( "api/beats/AllSuggestion").then(resp => {
                     dispatch(addBeats(resp.data["random"]));
                     dispatch(newBeatMaker(resp.data["new_beatMaker"]));
                     dispatch(topBeatMaker(resp.data["top_beatmaker"]));

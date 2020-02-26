@@ -115,7 +115,7 @@ function MultiSelectTools(props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [list, tags]);
 
     return (
         <MultiSelect onListItemClick={handleListItemClick}

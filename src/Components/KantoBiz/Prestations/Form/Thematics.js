@@ -3,49 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactTooltip from 'react-tooltip';
 import { addOptionSelected } from "../../../FunctionTools/FunctionProps";
 
-const audioVisualOptions = [
-        'Monteur vidéoclip', 'Cameraman', 'Photographes', 'Réalisateur clip vidéo', 'autres'
-    ];
-
-const beatMakerOptions = [
-        'Acapella', 'Afrobeat', 'Blues', 'Breakbeat', 'Classique', 'Dancehall', 'Electronica', 'Folk', 'Metal', 'Funk',
-        'Gospel', 'House', 'Jazz', 'Pop', 'Slam', 'Swing', 'Soul', 'Rap', 'Reggae', 'Rock', 'Rumba', 'Samba',
-        'Vakondrazana', 'Rumba', 'Kilalaky', 'Rnb', 'Ndombolo', 'Basesa', 'Hira gasy', 'Batrelaky', 'Reggae-muffin',
-        'Reggaeton', 'Remix', 'Goma', 'Kuduro', 'Afro-trap', 'Kawitri', 'Malesa', 'Tsapiky', 'Zafindraona', 'Slow', 'Coupé-Décalé'
-    ];
-
-const ChantMusicOptions = [
-        'Acapella', 'Afrobeat', 'Blues', 'Breakbeat', 'Classique', 'Dancehall', 'Electronica', 'Folk', 'Metal', 'Funk',
-        'Gospel', 'House', 'Jazz', 'Pop', 'Slam', 'Swing', 'Soul', 'Rap', 'Reggae', 'Rock', 'Rumba', 'Samba',
-        'Vakondrazana', 'Rumba', 'Kilalaky', 'Rnb', 'Ndombolo', 'Basesa', 'Hira gasy', 'Batrelaky', 'Reggae-muffin',
-        'Reggaeton', 'Remix', 'Goma', 'Kuduro', 'Afro-trap', 'Kawitri', 'Malesa', 'Tsapiky', 'Zafindraona', 'Slow', 'Coupé-Décalé'
-    ];
-
-const cirqueOrChildOptions = [
-        'acrobate', 'clown', 'cracheur de feu', 'dompteur Equilibriste', 'jongleur', 'marionnettiste', 'mime', 'autre'
-    ];
-
-const comedyOptions = [
-        'Burlesque', 'Comédie', 'Conteur', 'Drame', 'expérimental', 'Humoriste', 'imitateur', 'Stand up', 'autre'
-    ];
-
-const djOptions = [
-        'Animateur', 'Mix', 'Live set',' DJ Set'
-    ];
-
-const DanceOptions = [
-        'Bachata', 'cabaret', 'capoeira', 'chachacha', 'classique', 'contemporain', 'ethnique', 'expérimental', 'hip hop',
-        'Improvisation', 'Jazz', 'Kizomba', 'Moderne', 'Oriental', 'Salsa', 'Samba', 'Tango', 'kilalaky', 'batrelaky',
-        'salegy', 'Ndombolo', 'Vakondrazana', 'zouk', 'Kawitri', 'Maloya', 'Kompas', 'autre'
-    ];
-
-const magicianOptions = [
-        'Close-ups', 'Mentalistes', 'Prestidigitateurs', 'autre'
-    ];
-
 function Thematics(props) {
 
     const dispatch = useDispatch();
+    const artist_types = useSelector(state => state.Others.artist_types);
     const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected);
 
     const isMounted = useRef(false);
@@ -75,15 +36,7 @@ function Thematics(props) {
     useEffect(() => {
         try {
             const artistType = props.var.artistType;
-            let options_state = [...options];
-            if (artistType === "Dj") options_state = djOptions;
-            else if (artistType === "Magiciens") options_state = magicianOptions;
-            else if (artistType === "Danseurs") options_state = DanceOptions;
-            else if (artistType === "Comédiens") options_state = comedyOptions;
-            else if (artistType === "Cirque/Artistes de la Rue") options_state = cirqueOrChildOptions;
-            else if (artistType === "Chanteur/Musicien") options_state = ChantMusicOptions;
-            else if (artistType === "Beatmaker") options_state = beatMakerOptions;
-            else if (artistType === "Spécialiste de l’audiovisuel")  options_state = audioVisualOptions;
+            let options_state = artist_types[artist_types.findIndex(tmp => tmp.name === artistType)]['description'];
             setOptions(options_state.filter(option => !props_thematics_options_selected.some(selected => selected === option)));
         } catch (e) {
             //

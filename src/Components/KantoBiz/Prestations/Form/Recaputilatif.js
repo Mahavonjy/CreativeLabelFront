@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
 function Recaputilatif(props) {
 
@@ -44,7 +44,7 @@ function Recaputilatif(props) {
             <div className="custom-float">
                 <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                     <div className="input-group-text text-dark">
-                        <i className={icon}/>&nbsp;	{Title}</div>
+                        <i className={icon}/>&nbsp;    {Title}</div>
                     <input value={values} id={Title} name={Title} className="form-control" type="text" disabled/>
                 </div>
             </div>
@@ -61,7 +61,8 @@ function Recaputilatif(props) {
                 let tmp = [...allCity];
                 tmp.push(PropsCityReference);
                 setAllCity(tmp.join(', '));
-            } catch (e) {}
+            } catch (e) {
+            }
         } catch (e) {
             //
         }
@@ -85,13 +86,15 @@ function Recaputilatif(props) {
             <div className="row">
                 <div className="col-md-6">
                     {createBigForm("Type d'artiste", props.var.artistType, "icon-user")}
-                    {createBigForm( "Thématique", props_thematics_options_selected.join(', '),  "icon-neuter")}
-                    {createBigForm("Titre de votre prestation",PropsTitle, "icon-text-width")}
+                    {createBigForm("Thématique", props_thematics_options_selected.join(', '), "icon-neuter")}
+                    {createBigForm("Titre de votre prestation", PropsTitle, "icon-text-width")}
                     <div className="custom-float">
                         <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                             <div className="input-group-text text-dark">
-                                <i className="icon-text-width"/>&nbsp; Description</div>
-                            <textarea value={PropsDescription} id="Description de votre prestation" name="Description de votre prestation" className="form-control"  disabled/>
+                                <i className="icon-text-width"/>&nbsp; Description
+                            </div>
+                            <textarea value={PropsDescription} id="Description de votre prestation"
+                                      name="Description de votre prestation" className="form-control" disabled/>
                         </div>
                     </div>
                     {createBigForm("Les villes annexes pour votre prestation", allCity, "icon-map-marker\n")}
@@ -109,9 +112,12 @@ function Recaputilatif(props) {
                         <div className="custom-float m-1">
                             <div className="input-group-prepend d-inline-block center" style={{width: "222px"}}>
                                 <div className="input-group-text text-dark font-weight-bold">
-                                    <i className="icon-bitbucket-square"/>&nbsp;Type(s) d'evenement(s) sélectionné(s)</div>
+                                    <i className="icon-bitbucket-square"/>&nbsp;Type(s) d'evenement(s) sélectionné(s)
+                                </div>
                                 <div className="input-group-text text-light success-color" id="events">
-                                    <input value={props_events_selected.join(', ')} className="center text-center border-0 bg-transparent" style={{width: "200px"}} id="events"/>
+                                    <input value={props_events_selected.join(', ')}
+                                           className="center text-center border-0 bg-transparent"
+                                           style={{width: "200px"}} id="events"/>
                                 </div>
                             </div>
                         </div>
@@ -121,15 +127,17 @@ function Recaputilatif(props) {
                         <div className="carousel-inner" style={{height: 110, width: "100%", borderRadius: 5}}>
                             {PropsFiles.map((photo, index) =>
                                 <div className={index === 0 ? "carousel-item active" : "carousel-item"} key={index}>
-                                    <img className="d-block w-100" src={photo.url} onClick={ async () => {
+                                    <img className="d-block w-100" src={photo.url} onClick={async () => {
                                         await setImageToDisplay(photo.url);
                                         await setOpenLightBox(true);
                                     }} alt={photo.name}/>
                                 </div>
                             )}
                         </div>
-                        <a className="carousel-control-prev bg-dark" href="#islCreativeCarousel" role="button" data-slide="prev">précédent</a>
-                        <a className="carousel-control-next bg-dark" href="#islCreativeCarousel" role="button" data-slide="next">Suivant</a>
+                        <a className="carousel-control-prev bg-dark" href="#islCreativeCarousel" role="button"
+                           data-slide="prev">précédent</a>
+                        <a className="carousel-control-next bg-dark" href="#islCreativeCarousel" role="button"
+                           data-slide="next">Suivant</a>
                     </div>
                 </div>
             </div>
