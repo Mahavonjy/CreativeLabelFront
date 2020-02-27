@@ -9,14 +9,31 @@ import * as CreateFields from "../../FunctionTools/CreateFields";
 import {addTmpArtistSelected, displayBecomeArtistForm} from "../../FunctionTools/FunctionProps";
 import {DifferentArtist} from "../../FunctionTools/PopupFields";
 import * as Tools from "../../FunctionTools/Tools";
+import {checkUnit} from "../../FunctionTools/Tools";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import * as Validators from "../../Validators/Validatiors";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import LoginGoogle from "../SocialCredentials/Google/Google";
 
+const style_ = "radial-gradient(circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, #232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)";
+
 function Register() {
 
     const dispatch = useDispatch();
+    const PropsCountry = useSelector(state => state.KantoBizForm.country);
+    const PropsFiles = useSelector(state => state.KantoBizForm.files);
+    const PropsTitle = useSelector(state => state.KantoBizForm.title);
+    const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
+    const PropsOthersCity = useSelector(state => state.KantoBizForm.others_city);
+    const PropsDescription = useSelector(state => state.KantoBizForm.description);
+    const props_events_selected = useSelector(state => state.KantoBizForm.events_selected);
+    const props_price_of_service = useSelector(state => state.KantoBizForm.price_of_service);
+    const props_preparation_time = useSelector(state => state.KantoBizForm.preparation_time);
+    const props_number_of_artist = useSelector(state => state.KantoBizForm.number_of_artist);
+    const props_unit_time_of_preparation = useSelector(state => state.KantoBizForm.unit_time_of_preparation);
+    const props_unit_time_of_service = useSelector(state => state.KantoBizForm.unit_time_of_service);
+    const props_service_time = useSelector(state => state.KantoBizForm.service_time);
+    const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected);
     const artist_types = useSelector(state => state.Others.artist_types);
     const tmpArtistTypeSelected = useSelector(state => state.Others.tmpArtistTypeSelected);
     const becomeArtistForm = useSelector(state => state.Others.becomeArtistForm);
@@ -47,6 +64,11 @@ function Register() {
         })
     };
 
+    const generateBodyFormOfGallery = (bodyFormData) => {
+        for (let row in PropsFiles)
+            bodyFormData.append('gallery_'+row, PropsFiles[row]['file']);
+    };
+
     const sendUserInfoToSingUp = (e) => {
         e.preventDefault();
 
@@ -58,9 +80,34 @@ function Register() {
             document.getElementById("register").removeAttribute("disabled");
         } else {
             setIsActive(true);
-            let headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': "*"};
-            let data = {name: name, email: email, password: password};
-            axios.post("api/users/register", data, {headers: headers}).then(response => {
+            let headers = {'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': "*"};
+            let bodyFormData = new FormData();
+            bodyFormData.append('name', name);
+            bodyFormData.append('email', email);
+            bodyFormData.append('password', password);
+            if (tmpArtistTypeSelected) {
+                generateBodyFormOfGallery(bodyFormData);
+                bodyFormData.append('user_type', tmpArtistTypeSelected);
+                bodyFormData.append('services', JSON.stringify({
+                    "title": PropsTitle,
+                    "price": props_price_of_service,
+                    "hidden": false,
+                    "country": PropsCountry,
+                    "thematics": props_thematics_options_selected,
+                    "description": PropsDescription,
+                    "reference_city": PropsCityReference,
+                    "travel_expenses": 0,
+                    "number_of_artists": props_number_of_artist,
+                    "preparation_time": props_preparation_time,
+                    "events": props_events_selected,
+                    "others_city": PropsOthersCity,
+                    "duration_of_the_service": props_service_time,
+                    "special_dates": {},
+                    "unit_duration_of_the_service": checkUnit(props_unit_time_of_service),
+                    "unit_of_the_preparation_time": checkUnit(props_unit_time_of_preparation),
+                }));
+            }
+            axios.post("api/users/register", bodyFormData, {headers: headers}).then(response => {
                 toast.success("Un email vous a eté envoyé");
                 setIsActive(false);
                 setVisible(true);
@@ -85,7 +132,7 @@ function Register() {
     }, [isMounted, tmpArtistTypeSelected]);
 
     return (
-        <main style={{backgroundImage: "radial-gradient(circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, #232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)"}}>
+        <main style={{backgroundImage: style_}}>
             {!visible && <ToastContainer/>}
             <LoadingOverlay active={isActive}
                             spinner text="Nous sommes en train de vous envoyer un email de confirmation ..."
@@ -131,7 +178,7 @@ function Register() {
                 <div className="container">
                     <div className="text-center s-14 l-s-2 my-5">
                         <a className="my-5" href="/">
-                            <span>ISL CREATIVE</span>
+                            <h2 className="text-red">ISL CREATIVE</h2>
                         </a>
                     </div>
                     {/* if user choice become an artist*/}
@@ -145,8 +192,8 @@ function Register() {
                                         <div className="form-material">
                                             {/* Input */}
                                             <div className="body">
-                                                <h3 className="font-weight-lighter mb-3 text-center bolder">Formulaire
-                                                    d'inscription</h3>
+                                                <h4 className="font-weight-lighter pb-4 text-center bolder">Formulaire
+                                                    d'inscription</h4>
                                                 <div className="form-group form-float">
                                                     <div className="form-line">
                                                         {CreateFields.CreateInput('name', name, (e) => Tools.changeFields(setName, e), "Votre nom", "text", true)}
@@ -180,7 +227,7 @@ function Register() {
                                         </div>
                                     </div>
                                     <div className="col-md-5 pt-5 text-center">
-                                        <h3 className="font-weight-lighter bolder">Vous possédez déjà un compte?</h3>
+                                        <h4 className="font-weight-lighter bolder pb-3">Vous possédez déjà un compte?</h4>
                                         <div className="pt-3">
                                             <button className="btn btn-outline-primary mt-4 btn-xl pl-5 pr-5 mr-5 ml-5"
                                                     onClick={() => window.location.replace('/beats#LoginRequire')}>

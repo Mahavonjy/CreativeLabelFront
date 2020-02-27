@@ -250,7 +250,7 @@ function Profile(props) {
                     <button className="ModalClose" onClick={() => setAddNewPrestation(false)}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
-                    {addNewPrestation && <Form artistType={user_role.charAt(0).toUpperCase() + user_role.slice(1)}
+                    {addNewPrestation && <Form artistType={user_role}
                                                close={() => toast.success("Ajouter avec succes")}
                                                setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
                                                allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation}
@@ -324,20 +324,18 @@ function Profile(props) {
                                     {user_role === "beatmaker" &&
                                     <div className="tab-pane fade" id="beats-tab" role="tabpanel">
                                         {state_user_beats.length !== 0 ?
-                                            <div>
-                                                <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl"
-                                                     style={{height: 320}}>
-                                                    {CreateBeatsPlaylist("user_profile", "user_profile", props, states, "user_profile")}
-                                                </div>
-                                                {contract && <EditContractBeats/>}
-                                            </div>
-                                            : <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
-                                                <p className="text-center">Pas de beat</p>
+                                            <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl"
+                                                 style={{height: 320}}>
+                                                {CreateBeatsPlaylist("user_profile", "user_profile", props, states, "user_profile")}
+                                            </div> :
+                                            <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
+                                                <p className="text-center pt-5 text-red">Pas de beat</p>
                                             </div>}
+                                        {contract && <EditContractBeats/>}
                                     </div>}
                                     {user_role !== "professional_auditor" &&
                                     <div className="tab-pane fade" id="Prestations" role="tabpanel">
-                                        <MyPrestations role={user_role} setToast={setActiveToast}
+                                        <MyPrestations role={user_role} setToast={setActiveToast} headers={headers}
                                                        setAllPrestation={setAllPrestation}
                                                        close={() => toast.success("Ajouter avec succes")}
                                                        setActiveToast={setActiveToast}

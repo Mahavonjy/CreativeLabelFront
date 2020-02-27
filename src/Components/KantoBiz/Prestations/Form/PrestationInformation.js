@@ -39,27 +39,27 @@ function PrestationInformation(props) {
         e.preventDefault();
     };
 
-    const changeCountry = (e) => {
+    const changeCountry = async (e) => {
         let value = e.target.value;
-        setCountry(value);
-        setCity("");
-        dispatch(addReferenceOfCity(""));
-        dispatch(addServiceCountry(value));
+        await setCountry(value);
+        await setCity("");
+        await dispatch(addReferenceOfCity(""));
+        await dispatch(addServiceCountry(value));
         let tmpList;
         try {
             tmpList = country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"]
         } catch (e) {
             tmpList = []
         }
-        setListOfCity(tmpList);
-        setTmpListOfCity(tmpList);
+        await setListOfCity(tmpList);
+        await setTmpListOfCity(tmpList);
     };
 
-    const changeCity = (e) => {
+    const changeCity = async (e) => {
         let value = e.target.value;
-        setCity(value);
-        dispatch(addReferenceOfCity(value));
-        setListOfCity(arrayRemove(tmpListOfCity, value));
+        await setCity(value);
+        await dispatch(addReferenceOfCity(value));
+        await setListOfCity(arrayRemove(tmpListOfCity, value));
     };
 
     const onDrop = (e, file) => {
@@ -110,7 +110,7 @@ function PrestationInformation(props) {
         return () => {
             isMounted.current = true
         };
-    }, [listOfCity]);
+    }, [city]);
 
     return (
         <div className="Base">

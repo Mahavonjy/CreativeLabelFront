@@ -71,7 +71,7 @@ function LeftBlock (props) {
                             <tbody>
                             {allPrestation.map((val, index) =>
                                 <tr className={clicked[index] ? "bg-green" : "bg-secondary"} key={index} onClick={() => changeClicked(index)}>
-                                    <td><img src={val.photo[0]} width="20" height="20" alt="prestation-image"/></td>
+                                    <td><img src={val.galleries[0]} width="20" height="20" alt="prestation-image"/></td>
                                     <td><small className="bolder">{val.title}</small></td>
                                     <td><small className="bolder">{val.price}$</small></td>
                                 </tr>)}

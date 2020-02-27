@@ -1,10 +1,10 @@
-import React from "react";
-import Conf from "../../Config/tsconfig";
 import axios from "axios";
+import React from "react";
+import {toast} from "react-toastify";
+import Conf from "../../Config/tsconfig";
 import Home from "../Home/Home";
-import { toast } from "react-toastify";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import {addTotalPrice, addCarts, addAllUserPrestation, addMaterialsOfService} from "./FunctionProps";
+import {addAllUserPrestation, addCarts, addTotalPrice} from "./FunctionProps";
 
 export const changeFields = (setState, e, up_props, dispatch) => {
     let value = e.target.value;
@@ -13,7 +13,7 @@ export const changeFields = (setState, e, up_props, dispatch) => {
 };
 
 export const FillInCartProps = (headers, props) => {
-    axios.get( "api/carts/MyCart", {headers: headers}).then(resp => {
+    axios.get("api/carts/MyCart", {headers: headers}).then(resp => {
         let tmp = 0;
         let cart_length = resp.data.length;
         if (cart_length !== 0) {
@@ -30,7 +30,7 @@ export const FillInCartProps = (headers, props) => {
 export const AddToCart = async (song_id, price, licenses_name, beat, props, dispatch) => {
     const user_credentials = props.user_credentials;
 
-    let data_global = { "song_id": song_id, "price": price, "licenses_name": licenses_name };
+    let data_global = {"song_id": song_id, "price": price, "licenses_name": licenses_name};
     if (user_credentials.token !== Conf.configs.TokenVisitor) {
         console.log(price);
         let headers = {
@@ -38,10 +38,10 @@ export const AddToCart = async (song_id, price, licenses_name, beat, props, disp
             'Access-Control-Allow-Origin': "*",
             'Isl-Token': user_credentials.token
         };
-        return axios.post( "api/carts/addToCart", data_global, {headers: headers}).then(() => {
+        return axios.post("api/carts/addToCart", data_global, {headers: headers}).then(() => {
             let tmp_cart = props.carts;
             tmp_cart.push({
-                "media" : {
+                "media": {
                     "photo": beat["photo"],
                     "artist": beat["artist"],
                     "title": beat["title"]
@@ -53,7 +53,7 @@ export const AddToCart = async (song_id, price, licenses_name, beat, props, disp
             dispatch(props.addTotalPrice(Math.round((props.totalPrice + price) * 100) / 100));
             dispatch(props.addCarts(tmp_cart));
             Home.IncrementCart();
-            toast.success( "Ajout avec succès");
+            toast.success("Ajout avec succès");
         }).catch(err => {
             try {
                 if (err.response.data === "cart existing")
@@ -76,7 +76,7 @@ export const AddToCart = async (song_id, price, licenses_name, beat, props, disp
                 "price": price,
                 "licenses_name": licenses_name
             }];
-            localStorage.setItem("MyCarts",  JSON.stringify(data));
+            localStorage.setItem("MyCarts", JSON.stringify(data));
             Home.IncrementCart();
             dispatch(addCarts(data));
             dispatch(addTotalPrice(price));
@@ -86,7 +86,7 @@ export const AddToCart = async (song_id, price, licenses_name, beat, props, disp
             if (!cart_S) {
                 await localStorage.removeItem("MyCarts");
                 let data = {
-                    "media" : {
+                    "media": {
                         "photo": beat["photo"],
                         "artist": beat["artist"],
                         "title": beat["title"]
@@ -96,7 +96,7 @@ export const AddToCart = async (song_id, price, licenses_name, beat, props, disp
                     "licenses_name": licenses_name
                 };
                 await carts.push(data);
-                await localStorage.setItem("MyCarts",  JSON.stringify(carts));
+                await localStorage.setItem("MyCarts", JSON.stringify(carts));
                 await Home.IncrementCart();
                 await dispatch(addCarts(carts));
                 await dispatch(addTotalPrice(Math.round((props.totalPrice + price) * 100) / 100));
@@ -118,19 +118,20 @@ export const LikeOrFollow = (LikeOrFollow, id, user_credentials) => {
             'Isl-Token': user_credentials.token
         };
         if (LikeOrFollow === "like") {
-            axios.post( "api/medias/admire/" + id, {},{headers: headers}).then(() =>{
+            axios.post("api/medias/admire/" + id, {}, {headers: headers}).then(() => {
                 toast.success("liked")
             }).catch(() => {
                 toast.warn("already liked")
             });
         } else if (LikeOrFollow === "follow") {
-            axios.post( "api/admiration/admire_user/" + id, {},{headers: headers}).then(() =>{
+            axios.post("api/admiration/admire_user/" + id, {}, {headers: headers}).then(() => {
                 toast.success("followed");
                 OtherProfile.UpdateStateFollowed();
             }).catch(() => {
                 toast.warn("already followed");
             });
-        };
+        }
+        ;
     }
 };
 
@@ -159,6 +160,7 @@ export const formatDate = (date) => {
 
 export const addSpecialDateToData = (tmp_data, selectedMonth, selectedDay, selectedYear, index, date_key) => {
     let key = !date_key ? selectedMonth + "/" + selectedDay + "/" + selectedYear : date_key
+
     function addToSpecialIndex(i) {
         if (!tmp_data[i]["special_date"][key]) {
             let tmp = {...tmp_data[i]};
@@ -166,6 +168,7 @@ export const addSpecialDateToData = (tmp_data, selectedMonth, selectedDay, selec
             tmp_data[i]["special_date"][key] = tmp
         }
     }
+
     if (index) addToSpecialIndex(index);
     else for (let r in tmp_data) addToSpecialIndex(r);
 };
@@ -224,7 +227,7 @@ export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
     for (let index in medias) {
         setState(state => [...state, {index: true}]);
         all_call_api.push(
-            axios.get( "api/medias/Streaming/" + medias[index]['id'], {headers:headers}).then(response => {
+            axios.get("api/medias/Streaming/" + medias[index]['id'], {headers: headers}).then(response => {
                 dispatch(up_props({"index": index, "link": response.data}));
             }).catch(error => {
                 console.log(error);
@@ -250,7 +253,10 @@ export const createNewPrestation = async (setActiveToast, allPrestation, setAllP
     if (secure)
         return false;
     await setActiveToast(true);
-    let tmp_prestation = { "preparation_time": {"time": null, "unit": null},  "service_time": {"time": null, "unit": null }};
+    let tmp_prestation = {
+        "preparation_time": {"time": null, "unit": null},
+        "service_time": {"time": null, "unit": null}
+    };
     tmp_prestation['id'] = 3;
     tmp_prestation['moving_price'] = 300;
     tmp_prestation['materials'] = [];
@@ -275,4 +281,36 @@ export const createNewPrestation = async (setActiveToast, allPrestation, setAllP
     await setAddNewPrestation(false);
     await close();
     return true;
+};
+
+export const checkUnit = (object) => {
+
+    return Object.keys(object).filter(function (key) {
+        return object[key]
+    })[0]
+};
+
+export const serviceToFormData = (object) => {
+
+    let bodyFormData = new FormData();
+    bodyFormData.append("title", object.title);
+    bodyFormData.append("price", object.price);
+    bodyFormData.append("hidden", object.hidden);
+    bodyFormData.append("country", object.country);
+    bodyFormData.append("user_id", object.user_id);
+    bodyFormData.append("description", object.description);
+    bodyFormData.append("materials_id", object.materials_id);
+    bodyFormData.append("events", JSON.stringify(object.events));
+    bodyFormData.append("reference_city", object.reference_city);
+    bodyFormData.append("travel_expenses", object.travel_expenses);
+    bodyFormData.append("preparation_time", object.preparation_time);
+    bodyFormData.append("galleries", JSON.stringify(object.galleries));
+    bodyFormData.append("number_of_artists", object.number_of_artists);
+    bodyFormData.append("thematics", JSON.stringify(object.thematics));
+    bodyFormData.append("others_city", JSON.stringify(object.others_city));
+    bodyFormData.append("special_dates", JSON.stringify(object.special_dates));
+    bodyFormData.append("duration_of_the_service", object.duration_of_the_service);
+    bodyFormData.append("unit_duration_of_the_service", object.unit_duration_of_the_service);
+    bodyFormData.append("unit_of_the_preparation_time", object.unit_of_the_preparation_time);
+    return bodyFormData;
 };

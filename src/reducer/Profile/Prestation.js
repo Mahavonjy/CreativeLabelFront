@@ -1,10 +1,8 @@
-import { exOptions, exService } from "./Exemples"
-
 const initState = {
-    options: exOptions, // option of user logged
-    prestations: exService, // service of user logged
-    other_user_options: exOptions, // option of user not logged
-    other_user_prestations: exService, // service of user not logged
+    options: [], // option of user logged
+    prestations: [], // service of user logged
+    other_user_options: [], // option of user not logged
+    other_user_prestations: [], // service of user not logged
 };
 
 const profilePrestations = (state = initState, action) => {

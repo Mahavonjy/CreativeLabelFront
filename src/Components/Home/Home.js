@@ -11,14 +11,14 @@ import * as CreateFields from "../FunctionTools/CreateFields";
 import * as PopupFields from "../FunctionTools/PopupFields";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import { sessionService } from 'redux-react-session';
-import { addUserCredentials, addOtherUserOptions, addOtherUserService } from "../FunctionTools/FunctionProps";
-import { exOptions, exService } from "../../reducer/Profile/Exemples";
 import {
     addBeatMakerBeats, addSimilarBeats, addOtherBeatMakerBeats, addAllMediaGenre, addPrefAllMediaGenre,
     addBeats, newBeatMaker, topBeatMaker, latestBeats, discoveryBeats, islBeats, profileInitialisationInfo,
     profileInitialisationRole, profileInitialisationFollower, profileInitialisationFollowing, profileAddBeats,
     profileInitialisationContract, addTotalPrice, addCarts, beatsInitialisationPricing, addAllArtistTypes,
-    addAllCountryAllowed
+    addAllCountryAllowed, addOtherUserService, addOtherUserOptions, addUserCredentials, addAllUserPrestation,
+    addAllUserOptions
+
 } from "../FunctionTools/FunctionProps";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
@@ -112,8 +112,8 @@ function Home () {
         } else if (secondRouteParsing === "isl_artist_profile") {
             axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
                 dispatch(addOtherBeatMakerBeats(resp.data['user_beats']));
-                dispatch(addOtherUserOptions(exOptions));
-                dispatch(addOtherUserService(exService));
+                dispatch(addOtherUserOptions(resp.data['user_options']));
+                dispatch(addOtherUserService(resp.data['user_services']));
                 setProfileChecked(resp.data['profile_checked']);
                 setUserData(resp.data['user_data']);
                 setLoading(false);
@@ -225,6 +225,10 @@ function Home () {
             }).catch(err => ifConnectionError(err, fetchUserData)),
             axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
                 dispatch(beatsInitialisationPricing(resp.data));
+            }).catch(err => ifConnectionError(err)),
+            axios.get( "api/artist_services/my_services", {headers: headers}).then(resp => {
+                dispatch(addAllUserOptions(resp.data['user_options']));
+                dispatch(addAllUserPrestation(resp.data['user_services']));
             }).catch(err => ifConnectionError(err))
         ]).then(() => NotOnline()).catch(() => fetchUserData())
     };

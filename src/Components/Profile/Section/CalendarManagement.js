@@ -42,7 +42,7 @@ function CalendarManagement() {
         padding: "0 .5em",
         color: "#fff",
         cursor: "pointer"
-    }
+    };
 
     const changeDayOfAvailability = (day) => {
         let tmp = {...weekday};

@@ -92,7 +92,8 @@ function Form(props) {
     }, []);
 
     return (
-        <div className='step-progress bg-dark center'>
+        <div className='step-progress bg-dark center' tabIndex="0"
+             onKeyDown={(e) => {e.key === "Enter" && Next()}}>
             <ToastContainer/>
             {props.register &&
             <button className="ModalClose absolute" data-tip="Annuler" onClick={() => props.close()}>

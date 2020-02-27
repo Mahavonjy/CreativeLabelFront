@@ -130,6 +130,10 @@ function EditContractBeats() {
         for (let x = 0; x < contract_array.length; x++) {
             let tmp = contract_array[x];
             let response = generateData(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
+            delete response.data['id'];
+            delete response.data['user_id'];
+            delete response.data['created_at'];
+            delete response.data['modified_at'];
             await tmp.push(
                 axios.put( "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
                     let tmp = contract;
@@ -148,7 +152,7 @@ function EditContractBeats() {
             }).catch(err => {
                 console.log(err)
             })
-        }).catch(() => toast.error("Veuillez re enregistrer"))
+        }).catch((error) => toast.error("Veuillez re enregistrer"))
     };
 
     useEffect(() => {

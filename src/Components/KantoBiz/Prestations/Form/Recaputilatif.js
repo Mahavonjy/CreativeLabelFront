@@ -74,9 +74,9 @@ function Recaputilatif(props) {
 
     return (
         <div className="Base">
-            <Modal visible={openLightBox} width="400" height="400" animationType='slide'>
+            <Modal visible={openLightBox} width="400" height="auto" animationType='slide'>
                 <i className="icon icon-error s-36 absolute m-2 text-red" onClick={() => setOpenLightBox(false)}/>
-                <img alt="show" src={imageToDisplay} width={400} height={400} style={{borderRadius: 4}}/>
+                <img alt="show" src={imageToDisplay} width="auto" height="auto" style={{borderRadius: 4}}/>
             </Modal>
 
             <div className="relative mb-5">
