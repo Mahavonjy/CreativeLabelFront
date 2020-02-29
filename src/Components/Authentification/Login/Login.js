@@ -1,16 +1,14 @@
-import React, { useState } from "react";
 import axios from "axios";
-import Conf from "../../../Config/tsconfig";
-import {toast, ToastContainer} from "react-toastify";
+import React, {useState} from "react";
 import Modal from "react-awesome-modal";
-import * as CreateFields from "../../FunctionTools/CreateFields";
-import * as Tools from "../../FunctionTools/Tools";
-import { saveUserCredentials } from "../../FunctionTools/Tools";
-import "./Sign.css"
-import {smallSpinner} from "../../FunctionTools/CreateFields";
+import {toast, ToastContainer} from "react-toastify";
 import {sessionService} from "redux-react-session";
-import LoginGoogle from "../SocialCredentials/Google/Google";
+import * as CreateFields from "../../FunctionTools/CreateFields";
+import {smallSpinner} from "../../FunctionTools/CreateFields";
+import * as Tools from "../../FunctionTools/Tools";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
+import LoginGoogle from "../SocialCredentials/Google/Google";
+import "./Sign.css"
 
 let headers = {
     'Content-Type': 'application/json',
@@ -32,36 +30,40 @@ function Login() {
     const sendLoginCredentials = (e) => {
         e.preventDefault();
 
-        let data = { email: email, password: password };
-        setLoading(true);
-        axios.post( "api/users/login", data, {headers: headers}).then(async response => {
-            const { token } = response.data;
-            setLoading(false);
-            toast.success("Vous etes connecté");
-            document.getElementsByClassName("close")[0].click();
-            await sessionService.saveSession({ token });
-            await sessionService.saveUser(response.data);
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        }).catch(error => {
-            setLoading(false);
-            let response = JSON.stringify(error.response.data).replace(/"/g, '');
-            if (response === "Veuillez activer votre compte") {
-                setVisible(true);
-                toast.error(response)
-            } else toast.error("email ou mot de passe incorrect")
-        })
+        if (!email || !password) {
+            toast.warn("email et/ou mot de passe non remplis")
+        } else {
+            let data = {email, password};
+            setLoading(true);
+            axios.post("api/users/login", data, {headers: headers}).then(async response => {
+                const {token} = response.data;
+                setLoading(false);
+                toast.success("Vous etes connecté");
+                document.getElementsByClassName("close")[0].click();
+                await sessionService.saveSession({token});
+                await sessionService.saveUser(response.data);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }).catch(error => {
+                setLoading(false);
+                let response = JSON.stringify(error.response.data).replace(/"/g, '');
+                if (response === "Veuillez activer votre compte") {
+                    setVisible(true);
+                    toast.error(response)
+                } else toast.error("email ou mot de passe incorrect")
+            })
+        }
     };
 
     const verifyKeysSubmit = () => {
         setLoading(true);
-        let data = { email: email, password: password };
-        axios.post( "api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
+        let data = {email: email, password: password};
+        axios.post("api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
             setLoading(false);
             setVisible(false);
             toast.success("validé, vous pouvez vous reconnecter")
-        }).catch(error =>{
+        }).catch(error => {
             setLoading(false);
             toast.error(error.response.data);
         })
@@ -69,11 +71,11 @@ function Login() {
 
     const verifyEmail = () => {
         setLoading(true);
-        axios.post( "api/users/get_mail", {email: email}).then(() => {
+        axios.post("api/users/get_mail", {email: email}).then(() => {
             setVisibility(false);
             setLoading(false);
             setResetPassword(true);
-        }).catch(error =>{
+        }).catch(error => {
             setLoading(false);
             let response = JSON.stringify(error.response.data);
             toast.error(response.replace(/"/g, ''));
@@ -82,12 +84,12 @@ function Login() {
 
     const verifyKeysResetPass = () => {
         setLoading(true);
-        let data = { email: email, keys: keys };
+        let data = {email: email, keys: keys};
         axios.post("api/users/get_if_keys_validate", data).then(() => {
             setLoading(false);
             setResetPassword(false);
             setChangePass(true);
-        }).catch(error =>{
+        }).catch(error => {
             setLoading(false);
             let response = JSON.stringify(error.response.data);
             toast.error(response.replace(/"/g, ''));
@@ -99,7 +101,7 @@ function Login() {
 
         if (password === confirm_password) {
             setLoading(true);
-            let data = { email: email, password: password };
+            let data = {email: email, password: password};
             axios.put("api/users/reset_password", data, {headers: headers}).then(() => {
                 setLoading(false);
                 toast.success("Password updated");
@@ -121,27 +123,33 @@ function Login() {
     };
 
     return (
-        <div>
+        <div tabIndex="0" onKeyDown={(e) => {e.key === "Enter" && sendLoginCredentials(e)}}>
             {!changePass && !resetPassword && !visibility && !visible && <ToastContainer/>}
 
             <Modal visible={changePass} width="400" height="300" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
-                <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
-                <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
+                                rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Crée votre nouveau mot de passe</h3>
                             <div className="custom-float">
-                                <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>Nouveau mot de passe</label><br/>
+                                <label className="ModalFormField__Label" style={{paddingTop: "10px", color: "black"}}>Nouveau
+                                    mot de passe</label><br/>
                                 {CreateFields.CreateInput('password', password, (e) => {Tools.changeFields(setPassword, e)}, "Au moins 8 caractères", "password", true)}
                             </div>
 
                             <div className="custom-float">
-                                <label className="ModalFormField__Label" style={{paddingTop: "10px", color:"black"}}>confirmer</label> <br/>
+                                <label className="ModalFormField__Label"
+                                       style={{paddingTop: "10px", color: "black"}}>confirmer</label> <br/>
                                 {CreateFields.CreateInput('confirm_password', confirm_password, (e) => {Tools.changeFields(setConfirmPassword, e)}, "Entrez le mot de passe à nouveau", "password", true)}
                             </div>
 
-                            <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={(e) => changeMyPassword(e)}>Envoyer</button>
+                            <button className="btn btn-outline-success btn-sm pl-4 pr-4"
+                                    onClick={(e) => changeMyPassword(e)}>Envoyer
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -149,14 +157,17 @@ function Login() {
 
             <Modal visible={resetPassword} width="400" height="100" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
-                <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
                                 {CreateFields.CreateInput('keys', keys, (e) => {Tools.changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
                             </div>
-                            <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={() => verifyKeysResetPass()}>Verifier</button>
+                            <button className="btn btn-outline-success btn-sm pl-4 pr-4"
+                                    onClick={() => verifyKeysResetPass()}>Verifier
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -164,9 +175,10 @@ function Login() {
 
             <Modal visible={visibility} width="400" height="150" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
-                <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <button className="ModalClose" onClick={(e) => setVisibility(false)}>
-                        <i className="icon-close s-24" style={{color:"orange"}} />
+                        <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     <div className="col text-center">
                         <div className="body">
@@ -174,7 +186,9 @@ function Login() {
                             <div className="custom-float center">
                                 {CreateFields.CreateInput('email', email, (e) => {Tools.changeFields(setEmail, e)}, "E-mail", "email", true)}
                             </div>
-                            <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={() => verifyEmail()}>Envoyer</button>
+                            <button className="btn btn-outline-success btn-sm pl-4 pr-4"
+                                    onClick={() => verifyEmail()}>Envoyer
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -182,14 +196,17 @@ function Login() {
 
             <Modal visible={visible} width="400" height="100" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
-                <div className="form-material" style={{background:"lightslategray", height:"100%", borderRadius:"5px"}}>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
                                 {CreateFields.CreateInput('keys', keys, (e) => {Tools.changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
                             </div>
-                            <button className="btn btn-outline-success btn-sm pl-4 pr-4" onClick={() => verifyKeysSubmit()}>Envoyer</button>
+                            <button className="btn btn-outline-success btn-sm pl-4 pr-4"
+                                    onClick={() => verifyKeysSubmit()}>Envoyer
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -209,15 +226,23 @@ function Login() {
                                name="password" value={password} onChange={(e) => {Tools.changeFields(setPassword, e)}}/>
                     </div>
 
-                    <button className="l-go btn btn-outline-success" onClick={(e) => sendLoginCredentials(e)}>Connexion</button>
+                    <button className="l-go btn btn-outline-success"
+                            onClick={(e) => sendLoginCredentials(e)}>Connexion
+                    </button>
                     <small className="f-p" onClick={() => setVisibility(true)}>Mot de passe oublié?</small>
                 </div>
                 {loading &&
                 <div className="absolute preloader-wrapper small active" style={{marginLeft: 400}}>
                     <div className="spinner-layer spinner-red-only">
-                        <div className="circle-clipper left"><div className="circle"/></div>
-                        <div className="gap-patch"><div className="circle"/></div>
-                        <div className="circle-clipper right"><div className="circle"/></div>
+                        <div className="circle-clipper left">
+                            <div className="circle"/>
+                        </div>
+                        <div className="gap-patch">
+                            <div className="circle"/>
+                        </div>
+                        <div className="circle-clipper right">
+                            <div className="circle"/>
+                        </div>
                     </div>
                 </div>}
 
@@ -244,7 +269,9 @@ function Login() {
                     <LoginFacebook Label="Connecter avec Facebook"/>
                 </div>
                 <small className="r-disc">Vous n'avez pas de compte ISL Creative?</small>
-                <button className="r-btn btn btn-outline-danger" onClick={() => window.location.replace('/register')}>Créer un compte</button>
+                <button className="r-btn btn btn-outline-danger"
+                        onClick={() => window.location.replace('/register')}>Créer un compte
+                </button>
             </div>
         </div>
     );

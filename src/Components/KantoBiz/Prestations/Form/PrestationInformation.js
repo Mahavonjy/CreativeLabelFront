@@ -51,8 +51,8 @@ function PrestationInformation(props) {
         } catch (e) {
             tmpList = []
         }
-        await setListOfCity(tmpList);
-        await setTmpListOfCity(tmpList);
+        await setListOfCity([...new Set(tmpList)]);
+        await setTmpListOfCity([...new Set(tmpList)]);
     };
 
     const changeCity = async (e) => {

@@ -9,7 +9,7 @@ import * as CreateFields from "../../FunctionTools/CreateFields";
 import {addTmpArtistSelected, displayBecomeArtistForm} from "../../FunctionTools/FunctionProps";
 import {DifferentArtist} from "../../FunctionTools/PopupFields";
 import * as Tools from "../../FunctionTools/Tools";
-import {checkUnit} from "../../FunctionTools/Tools";
+import {checkUnit, generateBodyFormOfGallery} from "../../FunctionTools/Tools";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import * as Validators from "../../Validators/Validatiors";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
@@ -64,11 +64,6 @@ function Register() {
         })
     };
 
-    const generateBodyFormOfGallery = (bodyFormData) => {
-        for (let row in PropsFiles)
-            bodyFormData.append('gallery_'+row, PropsFiles[row]['file']);
-    };
-
     const sendUserInfoToSingUp = (e) => {
         e.preventDefault();
 
@@ -86,7 +81,7 @@ function Register() {
             bodyFormData.append('email', email);
             bodyFormData.append('password', password);
             if (tmpArtistTypeSelected) {
-                generateBodyFormOfGallery(bodyFormData);
+                generateBodyFormOfGallery(bodyFormData, PropsFiles);
                 bodyFormData.append('user_type', tmpArtistTypeSelected);
                 bodyFormData.append('services', JSON.stringify({
                     "title": PropsTitle,
@@ -132,7 +127,8 @@ function Register() {
     }, [isMounted, tmpArtistTypeSelected]);
 
     return (
-        <main style={{backgroundImage: style_}}>
+        <main style={{backgroundImage: style_}} tabIndex="0"
+              onKeyDown={(e) => {e.key === "Enter" && !becomeArtistForm && sendUserInfoToSingUp(e)}}>
             {!visible && <ToastContainer/>}
             <LoadingOverlay active={isActive}
                             spinner text="Nous sommes en train de vous envoyer un email de confirmation ..."
@@ -227,7 +223,8 @@ function Register() {
                                         </div>
                                     </div>
                                     <div className="col-md-5 pt-5 text-center">
-                                        <h4 className="font-weight-lighter bolder pb-3">Vous possédez déjà un compte?</h4>
+                                        <h4 className="font-weight-lighter bolder pb-3">Vous possédez déjà un
+                                            compte?</h4>
                                         <div className="pt-3">
                                             <button className="btn btn-outline-primary mt-4 btn-xl pl-5 pr-5 mr-5 ml-5"
                                                     onClick={() => window.location.replace('/beats#LoginRequire')}>

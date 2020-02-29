@@ -250,7 +250,7 @@ function Profile(props) {
                     <button className="ModalClose" onClick={() => setAddNewPrestation(false)}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
-                    {addNewPrestation && <Form artistType={user_role}
+                    {addNewPrestation && <Form artistType={user_role} headers={headers}
                                                close={() => toast.success("Ajouter avec succes")}
                                                setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
                                                allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation}

@@ -1,20 +1,21 @@
 import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import StepZilla from "react-stepzilla";
-import Thematics from "./Thematics";
+import {toast, ToastContainer} from "react-toastify";
+import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
+import {createNewPrestation, resetPropsForm} from "../../../FunctionTools/Tools";
+import "../../style/Form.css"
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
-import {createNewPrestation} from "../../../FunctionTools/Tools";
-import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
-import {useDispatch, useSelector} from "react-redux";
-import "../../style/Form.css"
-import {toast, ToastContainer} from "react-toastify";
+import Thematics from "./Thematics";
 
 function Form(props) {
 
     const dispatch = useDispatch();
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
+    const PropsCountry = useSelector(state => state.KantoBizForm.country);
     const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
     const PropsOthersCity = useSelector(state => state.KantoBizForm.others_city);
     const PropsDescription = useSelector(state => state.KantoBizForm.description);
@@ -40,9 +41,7 @@ function Form(props) {
     ];
 
     const addNewPrestation = () => {
-        createNewPrestation(
-            props.setActiveToast, props.allPrestation, props.setAllPrestation, props.setAddNewPrestation, dispatch,
-            props.close, {
+        createNewPrestation(props, dispatch, {
                 PropsTitle,
                 PropsFiles,
                 PropsCityReference,
@@ -55,11 +54,12 @@ function Form(props) {
                 props_service_time,
                 props_thematics_options_selected,
                 props_unit_time_of_preparation,
-                props_unit_time_of_service
+                props_unit_time_of_service,
+                PropsCountry
             }
         ).then(resp => {
-            if (!resp)
-                toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer")
+            if (!resp) toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
+            else resetPropsForm(dispatch)
         });
     };
 

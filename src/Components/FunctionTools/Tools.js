@@ -4,7 +4,29 @@ import {toast} from "react-toastify";
 import Conf from "../../Config/tsconfig";
 import Home from "../Home/Home";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import {addAllUserPrestation, addCarts, addTotalPrice} from "./FunctionProps";
+import * as Validators from "../Validators/Validatiors";
+import {
+    addAllUserPrestation,
+    addCarts,
+    addDescriptionOfService,
+    addEventSelected,
+    addMaterialsOfService,
+    addNumberOfArtist,
+    addOptionSelected,
+    addOthersCityOfService,
+    addPicturesOfService,
+    addPreparationTime,
+    addPriceOfService,
+    addReferenceOfCity,
+    addServiceCountry,
+    addServiceTime,
+    addTitleOfService,
+    addTotalPrice,
+    addUnitTimeOfPreparation,
+    addUnitTimeOfService,
+    changeMovingPrice,
+    changeStatusOfService
+} from "./FunctionProps";
 
 export const changeFields = (setState, e, up_props, dispatch) => {
     let value = e.target.value;
@@ -241,45 +263,48 @@ export const compareArrays = (first_array, second_array) => {
     return JSON.stringify(first_array) === JSON.stringify(second_array)
 };
 
-export const createNewPrestation = async (setActiveToast, allPrestation, setAllPrestation, setAddNewPrestation, dispatch, close, props) => {
+export const createNewPrestation = async (_props, dispatch, props) => {
     let secure = false;
-    for (let row in allPrestation) {
-        if (allPrestation[row]['title'] === props.PropsTitle && allPrestation[row]['city_of_reference'] === props.PropsCityReference) {
+    for (let row in _props.allPrestation) {
+        if (_props.allPrestation[row]['title'] === props.PropsTitle && _props.allPrestation[row]['reference_city'] === props.PropsCityReference) {
             secure = true;
-        } else if (allPrestation[row]['title'] === props.PropsTitle && compareArrays(allPrestation[row]['events_type'], props.props_events_selected)) {
+        } else if (_props.allPrestation[row]['title'] === props.PropsTitle && compareArrays(_props.allPrestation[row]['events'], props.props_events_selected)) {
             secure = true;
         }
     }
     if (secure)
         return false;
-    await setActiveToast(true);
-    let tmp_prestation = {
-        "preparation_time": {"time": null, "unit": null},
-        "service_time": {"time": null, "unit": null}
-    };
-    tmp_prestation['id'] = 3;
-    tmp_prestation['moving_price'] = 300;
-    tmp_prestation['materials'] = [];
-    tmp_prestation['hidden'] = true;
+    await _props.setActiveToast(true);
+    let tmp_prestation = {};
+    let headers = _props.headers;
+    headers['Content-Type'] = 'multipart/form-data';
+    tmp_prestation['special_dates'] = {};
     tmp_prestation['title'] = props.PropsTitle;
-    tmp_prestation['photo'] = props.PropsFiles;
-    tmp_prestation['city_of_reference'] = props.PropsCityReference;
+    tmp_prestation['country'] = props.PropsCountry;
+    tmp_prestation['reference_city'] = props.PropsCityReference;
     tmp_prestation['others_city'] = props.PropsOthersCity;
     tmp_prestation['description'] = props.PropsDescription;
-    tmp_prestation['events_type'] = props.props_events_selected;
+    tmp_prestation['events'] = props.props_events_selected;
     tmp_prestation['price'] = props.props_price_of_service;
-    tmp_prestation['preparation_time']['time'] = props.props_preparation_time;
-    tmp_prestation['number_of_artist'] = props.props_number_of_artist;
-    tmp_prestation['service_time']['time'] = props.props_service_time;
-    tmp_prestation['thematics_options_selected'] = props.props_thematics_options_selected;
-    tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props.props_unit_time_of_preparation);
-    tmp_prestation['service_time']['unit'] = checkValueOfUnit(props.props_unit_time_of_service);
-    let tmp = allPrestation;
-    tmp.push(tmp_prestation);
-    await setAllPrestation(tmp);
-    await dispatch(addAllUserPrestation(tmp));
-    await setAddNewPrestation(false);
-    await close();
+    tmp_prestation['preparation_time'] = props.props_preparation_time;
+    tmp_prestation['number_of_artists'] = props.props_number_of_artist;
+    tmp_prestation['duration_of_the_service'] = props.props_service_time;
+    tmp_prestation['thematics'] = props.props_thematics_options_selected;
+    tmp_prestation['unit_of_the_preparation_time'] = checkUnit(props.props_unit_time_of_preparation);
+    tmp_prestation['unit_duration_of_the_service'] = checkUnit(props.props_unit_time_of_service);
+
+    axios.post("api/artist_services/newService", serviceToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+        let tmp = _props.allPrestation;
+        tmp.push(resp.data);
+        _props.setAllPrestation(tmp);
+        dispatch(addAllUserPrestation(tmp));
+        _props.setAddNewPrestation(false);
+        _props.close();
+        props.setAllPrestation(tmp);
+    }).catch((error) => {
+        let errorMessage = Validators.checkErrorMessage(error);
+        toast.error(errorMessage.message)
+    });
     return true;
 };
 
@@ -290,27 +315,44 @@ export const checkUnit = (object) => {
     })[0]
 };
 
-export const serviceToFormData = (object) => {
+export const generateBodyFormOfGallery = (bodyFormData, PropsFiles) => {
+    for (let row in PropsFiles)
+        bodyFormData.append('gallery_' + row, PropsFiles[row]['file']);
+};
 
+export const serviceToFormData = (object, PropsFiles) => {
     let bodyFormData = new FormData();
-    bodyFormData.append("title", object.title);
-    bodyFormData.append("price", object.price);
-    bodyFormData.append("hidden", object.hidden);
-    bodyFormData.append("country", object.country);
-    bodyFormData.append("user_id", object.user_id);
-    bodyFormData.append("description", object.description);
-    bodyFormData.append("materials_id", object.materials_id);
-    bodyFormData.append("events", JSON.stringify(object.events));
-    bodyFormData.append("reference_city", object.reference_city);
-    bodyFormData.append("travel_expenses", object.travel_expenses);
-    bodyFormData.append("preparation_time", object.preparation_time);
-    bodyFormData.append("galleries", JSON.stringify(object.galleries));
-    bodyFormData.append("number_of_artists", object.number_of_artists);
-    bodyFormData.append("thematics", JSON.stringify(object.thematics));
-    bodyFormData.append("others_city", JSON.stringify(object.others_city));
-    bodyFormData.append("special_dates", JSON.stringify(object.special_dates));
-    bodyFormData.append("duration_of_the_service", object.duration_of_the_service);
-    bodyFormData.append("unit_duration_of_the_service", object.unit_duration_of_the_service);
-    bodyFormData.append("unit_of_the_preparation_time", object.unit_of_the_preparation_time);
+
+    for (let property in object) {
+        if (object.hasOwnProperty(property)) {
+            if (typeof object[property] === 'object' && !(object[property] instanceof File)) {
+                if (object[property] && property !== 'materials')
+                    bodyFormData.append(property, JSON.stringify(object[property]));
+            } else
+                bodyFormData.append(property, object[property]);
+        }
+    }
+    if (PropsFiles)
+        generateBodyFormOfGallery(bodyFormData, PropsFiles);
     return bodyFormData;
+};
+
+export const resetPropsForm = (dispatch) => {
+    dispatch(addOptionSelected([]));
+    dispatch(addTitleOfService(''));
+    dispatch(addServiceCountry(''));
+    dispatch(addReferenceOfCity(''));
+    dispatch(addOthersCityOfService([]));
+    dispatch(addDescriptionOfService(''));
+    dispatch(addPicturesOfService([]));
+    dispatch(changeStatusOfService(null));
+    dispatch(changeMovingPrice(null));
+    dispatch(addEventSelected([]));
+    dispatch(addServiceTime(null));
+    dispatch(addMaterialsOfService([]));
+    dispatch(addPriceOfService(null));
+    dispatch(addPreparationTime(null));
+    dispatch(addNumberOfArtist(1));
+    dispatch(addUnitTimeOfPreparation({"day": false, "hours": false, "min": false, "sec": false}));
+    dispatch(addUnitTimeOfService({"day": false, "hours": false, "min": false, "sec": false}));
 };
