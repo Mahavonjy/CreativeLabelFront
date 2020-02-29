@@ -306,6 +306,15 @@ export function profileInitialisationFollower(data) {
     };
 }
 
+export function addServiceToShow(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICE_TO_SHOW",
+            data: data
+        });
+    };
+}
+
 export function profileShowBankingDetails(data) {
     return async dispatch => {
         dispatch({

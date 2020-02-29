@@ -1,5 +1,6 @@
 const initState = {
     results: [],
+    service_to_show: {},
     ResultsPage: false,
     DisplayService: false,
     filter_events_selected: [],
@@ -12,6 +13,11 @@ const KantoBizSearchResults = (state = initState, action) => {
             return {
                 ...state,
                 results: action.data
+            };
+        case "ADD_SERVICE_TO_SHOW":
+            return {
+                ...state,
+                service_to_show: action.data
             };
         case "ADD_FILTER_EVENTS_SELECTED":
             return {

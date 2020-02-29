@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker"
+import {useDispatch, useSelector} from "react-redux";
 import StarRatings from 'react-star-ratings';
 import Calendar from "../../Calendar/Calendar";
-import { formatDate, changeFields } from "../../../FunctionTools/Tools";
+import {formatDate, changeFields, checkUnit, checkUnitKey} from "../../../FunctionTools/Tools";
 import { toast } from "react-toastify";
 import "../../style/Results.css"
 import ReactTooltip from "react-tooltip";
 import PurchaseInformation from "../../../Cart/PurchaseInformation";
 
 function DisplayPrestation(props) {
+
+    const dispatch = useDispatch();
+    const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
 
     const isMounted = useRef(false);
     const [event_date, setEventDate] = useState(new Date()); // synchroniser avec la recherche après
@@ -62,7 +66,7 @@ function DisplayPrestation(props) {
                 <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br/><br/>
             </ReactTooltip>
             <div className="profile-page">
-                <div className="page-header header-filter" data-parallax="true" style={{backgroundImage: 'url("http://wallpapere.org/wp-content/uploads/2012/02/black-and-white-city-night.png")'}} />
+                <div className="page-header header-filter" data-parallax="true" style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}} />
                 <div className="main bg-dark main-raised ml-3 mr-3">
                     <div className="profile-content">
                         <div className="container">
@@ -70,11 +74,11 @@ function DisplayPrestation(props) {
                                 <div className="col-md-6 ml-auto mr-auto">
                                     <div className="profile">
                                         <div className="avatar-plain">
-                                            <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTU0NjQzOTk4OTQ4OTkyMzQy/ansel-elgort-poses-for-a-portrait-during-the-baby-driver-premiere-2017-sxsw-conference-and-festivals-on-march-11-2017-in-austin-texas-photo-by-matt-winkelmeyer_getty-imagesfor-sxsw-square.jpg" alt="Circle" className="img-raised rounded-circle img-fluid" />
+                                            <img src={service_to_show.galleries.length > 1 ? service_to_show.galleries[1]: service_to_show.galleries[0]} alt="Circle" className="img-raised rounded-circle img-fluid" />
                                         </div>
                                         <div className="name pt-5">
-                                            <h3 className="title text-red text-center" data-tip="Titre de la Prestation">Thematic Title</h3>
-                                            <h6 className="pb-2" data-tip="Different genre produit par l'artiste">Kilalaky, Rap, Batrelaky, Afro-Trap</h6>
+                                            <h3 className="title text-red text-center" data-tip="Titre de la Prestation">{service_to_show.title}</h3>
+                                            <h6 className="pb-2" data-tip="Different genre produit par l'artiste">{service_to_show.thematics.join(", ")}</h6>
                                             <button className="btn btn-link btn-outline-info icon-instagram" data-tip="Partager Cette Prestation sur Instagram"/>
                                             <button className="btn btn-link btn-outline-info icon-facebook" data-tip="Partager Cette Prestation sur Facebook"/>
                                             <button className="btn btn-link btn-outline-info icon-twitter" data-tip="Partager Cette Prestation sur Twitter"/>
@@ -83,7 +87,7 @@ function DisplayPrestation(props) {
                                 </div>
                             </div>
                             <div className="description text-center">
-                                <p data-tip="Description">An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. </p>
+                                <p data-tip="Description">{service_to_show.description}</p>
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
                                     <StarRatings rating={rating}
                                                  starRatedColor="red"
@@ -101,9 +105,9 @@ function DisplayPrestation(props) {
                                 <div className="col-md-4">
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">{price}$&nbsp;<i className="icon icon-info" data-tip="Ceci est le prix HT de la prestation"/></h2>
-                                            <h4 className="col text-primary">Temps de préparation : 1j&nbsp;<i className="icon icon-info" data-tip="Ceci est le temps de preparation de l'artiste"/></h4>
-                                            <h4 className="col text-primary">Durée de la prestation : 1j&nbsp;<i className="icon icon-info" data-tip="Ceci est le durée de l'evenement"/></h4>
+                                            <h2 className="col text-primary pb-3">{service_to_show.price}$&nbsp;<i className="icon icon-info" data-tip="Ceci est le prix HT de la prestation"/></h2>
+                                            <h4 className="col text-primary">Temps de préparation : {service_to_show.preparation_time}{checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;<i className="icon icon-info" data-tip="Ceci est le temps de preparation de l'artiste"/></h4>
+                                            <h4 className="col text-primary">Durée de la prestation : {service_to_show.duration_of_the_service}{checkUnitKey(service_to_show.unit_duration_of_the_service)}&nbsp;<i className="icon icon-info" data-tip="Ceci est le durée de l'evenement"/></h4>
                                             <div className="col">
                                                 <div className="s-24">09</div>
                                                 <span>March 2019</span>
@@ -143,22 +147,24 @@ function DisplayPrestation(props) {
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Plus de détails</h2>
-                                            <h4 className="col"><strong>Politique d’annulation  :</strong> flexible&nbsp;<i className="icon icon-info" data-tip data-for='refund'/></h4>
-                                            <h4 className="col"><strong>Catégorie :</strong> rien</h4>
-                                            <h4 className="col"><strong>Type(s) d’évènement(s) :</strong> Mariage, Anniversaire</h4>
-                                            <h4 className="col"><strong>Nombre d'artistes :</strong> 1</h4>
-                                            <h4 className="col"><strong>Ville de référence :</strong> Manakara</h4>
-                                            <h4 className="col"><strong>Ville(s) annexe(s) :</strong> Toliara, Tamatave</h4>
+                                            <h4 className="col"><strong>Politique d’annulation  :</strong> {service_to_show.refund_policy}&nbsp;<i className="icon icon-info" data-tip data-for='refund'/></h4>
+                                            <h4 className="col"><strong>Catégorie :</strong> {service_to_show.thematics.join(", ")}</h4>
+                                            <h4 className="col"><strong>Type(s) d’évènement(s) :</strong> {service_to_show.events.join(", ")}</h4>
+                                            <h4 className="col"><strong>Nombre d'artistes :</strong> {service_to_show.number_of_artists}</h4>
+                                            <h4 className="col"><strong>Ville de référence :</strong> {service_to_show.reference_city}</h4>
+                                            <h4 className="col"><strong>Ville(s) annexe(s) :</strong> {service_to_show.others_city.join(", ")}</h4>
                                         </div>
                                     </div>
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i className="icon icon-info" data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique. La liste complète des matériels nécessaires se trouve dans la fiche technique"/></h2>
                                             <div className="col">
+                                                {service_to_show.materials.list_of_materials.length !== 0 ?
                                                 <ul>
-                                                    <li><i className="icon icon-success text-green"/>Sonorisation</li>
-                                                    <li><i className="icon icon-success text-green"/>Accessoires de scène</li>
-                                                </ul>
+                                                    {service_to_show['materials'].map((val, index) =>
+                                                        <li key={index}><i className="icon icon-success text-green"/>{val}</li>
+                                                    )}
+                                                </ul> : <p className="text-red">Pas de material necessaire</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -206,21 +212,15 @@ function DisplayPrestation(props) {
                                             <div>
                                                 <div className="cube-container">
                                                     <div className="cube initial-position">
-                                                        <img className="cube-face-image image-1" src="https://images.unsplash.com/photo-1445810694374-0a94739e4a03?w=300&h=300&fit=crop" alt=""/>
-                                                        <img className="cube-face-image image-2" src="https://images.unsplash.com/photo-1515260268569-9271009adfdb?w=300&h=300&fit=crop" alt=""/>
-                                                        <img className="cube-face-image image-3" src="https://images.unsplash.com/photo-1506045412240-22980140a405?w=300&h=300&fit=crop" alt=""/>
-                                                        <img className="cube-face-image image-4" src="https://images.unsplash.com/photo-1514041181368-bca62cceffcd?w=300&h=300&fit=crop" alt=""/>
-                                                        <img className="cube-face-image image-5" src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=300&h=300&fit=crop" alt=""/>
-                                                        <img className="cube-face-image image-6" src="https://images.unsplash.com/photo-1486334803289-1623f249dd1e?w=300&h=300&fit=crop" alt=""/>
+                                                        {service_to_show.galleries.map((val, index) =>
+                                                            <img key={index} className={"cube-face-image image-" + index} src={val} alt=""/>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <div className="image-buttons">
-                                                    <input onClick={ImageClick} type="image" className="show-image-1" src="https://images.unsplash.com/photo-1445810694374-0a94739e4a03?w=100&h=100&fit=crop" alt=""/>
-                                                    <input onClick={ImageClick} type="image" className="show-image-2" src="https://images.unsplash.com/photo-1515260268569-9271009adfdb?w=100&h=100&fit=crop" alt=""/>
-                                                    <input onClick={ImageClick} type="image" className="show-image-3" src="https://images.unsplash.com/photo-1506045412240-22980140a405?w=100&h=100&fit=crop" alt=""/>
-                                                    <input onClick={ImageClick} type="image" className="show-image-4" src="https://images.unsplash.com/photo-1514041181368-bca62cceffcd?w=100&h=100&fit=crop" alt=""/>
-                                                    <input onClick={ImageClick} type="image" className="show-image-5" src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=100&h=100&fit=crop" alt=""/>
-                                                    <input onClick={ImageClick} type="image" className="show-image-6" src="https://images.unsplash.com/photo-1486334803289-1623f249dd1e?w=100&h=100&fit=crop" alt=""/>
+                                                    {service_to_show.galleries.map((val, index) =>
+                                                        <input onClick={ImageClick} width={100} type="image" className={"show-image-" + index} src={val} alt=""/>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

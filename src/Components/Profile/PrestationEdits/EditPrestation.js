@@ -1,22 +1,35 @@
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 import {useDispatch, useSelector} from "react-redux";
 import PrestationInformation from "../../KantoBiz/Prestations/Form/PrestationInformation";
-import { ImageClick, changeFields, checkValueOfUnit, createNewPrestation } from "../../FunctionTools/Tools";
+import {
+    ImageClick,
+    changeFields,
+    checkValueOfUnit,
+    createNewPrestation,
+    deleteInObject, objectToFormData
+} from "../../FunctionTools/Tools";
 import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails";
+import {checkErrorMessage} from "../../Validators/Validatiors";
 import RefundPolicy from "../Section/RefundPolicy";
 import ReactTooltip from "react-tooltip";
 import Calendar from "../../KantoBiz/Calendar/Calendar";
 import Materials from "./Materials";
 import Options from "./Options";
 import { toast, ToastContainer } from "react-toastify";
-import { addPicturesOfService } from "../../FunctionTools/FunctionProps";
+import {
+    addMaterialsOfService,
+    addPicturesOfService,
+    profileShowBankingDetails
+} from "../../FunctionTools/FunctionProps";
 
 function EditPrestation(props) {
 
     const dispatch = useDispatch();
     const role = useSelector(state => state.profile.role);
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
+    const technical_sheet = useSelector(state => state.KantoBizForm.technical_sheet);
     const travel_expenses = useSelector(state => state.KantoBizForm.travel_expenses);
     const props_prestation = useSelector(state => state.profilePrestations.prestations);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
@@ -49,24 +62,41 @@ function EditPrestation(props) {
         else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
 
+    const updateMaterials = (material_id) => {
+        let tmp = {...props_materials};
+        tmp["technical_sheet"] = technical_sheet;
+        tmp = deleteInObject(tmp);
+        return axios.put('api/materials/update_service_material/' + material_id, objectToFormData(tmp), {headers: props.headers}).then((resp) => {
+            dispatch(addMaterialsOfService(resp.data));
+            return true;
+        }).catch((error) => {
+            let errorMessage = checkErrorMessage(error);
+            toast.error(errorMessage.message);
+            return false;
+        })
+    };
+
     const updatePrestation = async () => {
-        let tmp_prestation = props_prestation[props.index];
-        tmp_prestation['hidden'] = props_hidden;
-        tmp_prestation['title'] = PropsTitle;
-        tmp_prestation['city_of_reference'] = PropsCityReference;
-        tmp_prestation['others_city'] = PropsOthersCity;
-        tmp_prestation['description'] = PropsDescription;
-        tmp_prestation['events_type'] = props_events_selected;
-        tmp_prestation['price'] = props_price_of_service;
-        tmp_prestation['preparation_time']['time'] = props_preparation_time;
-        tmp_prestation['number_of_artist'] = props_number_of_artist;
-        tmp_prestation['service_time']['time'] = props_service_time;
-        tmp_prestation['thematics_options_selected'] = props_thematics_options_selected;
-        tmp_prestation['moving_price'] = props_moving_price;
-        tmp_prestation['materials'] = props_materials;
-        tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props_unit_time_of_preparation);
-        tmp_prestation['service_time']['unit'] = checkValueOfUnit(props_unit_time_of_service);
-        await props.updated();
+        let response_of_materials_update = await updateMaterials(props_materials.id);
+        if (!response_of_materials_update) return;
+        // let tmp_prestation = props_prestation[props.index];
+        // tmp_prestation['hidden'] = props_hidden;
+        // tmp_prestation['title'] = PropsTitle;
+        // tmp_prestation['city_of_reference'] = PropsCityReference;
+        // tmp_prestation['others_city'] = PropsOthersCity;
+        // tmp_prestation['description'] = PropsDescription;
+        // tmp_prestation['events_type'] = props_events_selected;
+        // tmp_prestation['price'] = props_price_of_service;
+        // tmp_prestation['preparation_time']['time'] = props_preparation_time;
+        // tmp_prestation['number_of_artist'] = props_number_of_artist;
+        // tmp_prestation['service_time']['time'] = props_service_time;
+        // tmp_prestation['thematics_options_selected'] = props_thematics_options_selected;
+        // tmp_prestation['moving_price'] = props_moving_price;
+        // tmp_prestation['materials'] = props_materials;
+        // tmp_prestation['preparation_time']['unit'] = checkValueOfUnit(props_unit_time_of_preparation);
+        // tmp_prestation['service_time']['unit'] = checkValueOfUnit(props_unit_time_of_service);
+        // await props.updated();
+        return true
     };
 
     const createPrestation = () => {

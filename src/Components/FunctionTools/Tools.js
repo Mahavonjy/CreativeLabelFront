@@ -297,7 +297,7 @@ export const createNewPrestation = async (_props, dispatch, props) => {
     tmp_prestation['thematics'] = props.props_thematics_options_selected;
     tmp_prestation['unit_of_the_preparation_time'] = checkUnit(props.props_unit_time_of_preparation);
     tmp_prestation['unit_duration_of_the_service'] = checkUnit(props.props_unit_time_of_service);
-    await axios.post("api/artist_services/newService", serviceToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+    await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
         let tmp = _props.allPrestation;
         tmp.push(resp.data);
         _props.setAllPrestation(tmp);
@@ -309,6 +309,24 @@ export const createNewPrestation = async (_props, dispatch, props) => {
         toast.error(errorMessage.message)
     });
     return true;
+};
+
+export const checkUnitKey = (val, opt) => {
+    if (val === "min")
+        if (opt)
+            return {"day": false, "hours": false, "min": true, "sec": false};
+        else return "m";
+    else if (val === "day")
+        if (opt)
+            return {"day": true, "hours": false, "min": false, "sec": false};
+        else return "j";
+    else if (val === "sec")
+        if (opt)
+            return {"day": false, "hours": false, "min": false, "sec": true};
+        else return "s";
+    if (opt)
+        return {"day": false, "hours": true, "min": false, "sec": false};
+    return "h";
 };
 
 export const checkUnit = (object) => {
@@ -331,7 +349,7 @@ export const generateBodyFormOfGallery = (bodyFormData, PropsFiles) => {
         bodyFormData.append('gallery_' + row, PropsFiles[row]['file']);
 };
 
-export const serviceToFormData = (object, PropsFiles) => {
+export const objectToFormData = (object, PropsFiles) => {
     let bodyFormData = new FormData();
 
     for (let property in object) {

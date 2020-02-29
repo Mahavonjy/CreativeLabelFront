@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import {
+    addAllUserPrestation,
     addDescriptionOfService,
     addEventSelected,
     addMaterialsOfService,
@@ -18,7 +19,7 @@ import {
     addServiceCountry,
     addServiceId,
     addServiceSpecialDate,
-    addServiceTime,
+    addServiceTime, addServiceToShow,
     addTitleOfService,
     addTravelExpenses,
     addUnitTimeOfPreparation,
@@ -27,7 +28,7 @@ import {
     changeStatusOfService,
     profileInitialisationCondition
 } from "../../FunctionTools/FunctionProps";
-import {deleteInObject, serviceToFormData} from "../../FunctionTools/Tools";
+import {checkUnitKey, deleteInObject, objectToFormData} from "../../FunctionTools/Tools";
 import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestation";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 
@@ -55,22 +56,11 @@ function MyPrestations(props) {
         axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => null)
     };
 
-    const checkUnit = (val, opt) => {
-        if (val === "min")
-            if (opt)
-                return {"day": false, "hours": false, "min": true, "sec": false};
-            else return "m";
-        else if (val === "day")
-            if (opt)
-                return {"day": true, "hours": false, "min": false, "sec": false};
-            else return "j";
-        else if (val === "sec")
-            if (opt)
-                return {"day": false, "hours": false, "min": false, "sec": true};
-            else return "s";
-        if (opt)
-            return {"day": false, "hours": true, "min": false, "sec": false};
-        return "h";
+    const displayService = (index) => {
+        let tmp = {...allPrestation[index]};
+        tmp['refund_policy'] = conditions['refund_policy'];
+        dispatch(addServiceToShow(tmp));
+        setShowOne(true);
     };
 
     const clearProps = async () => {
@@ -109,7 +99,7 @@ function MyPrestations(props) {
         await dispatch(addServiceId(tmp_prestation.id));
         await dispatch(addServiceCountry(tmp_prestation.country));
         await dispatch(addServiceSpecialDate(tmp_prestation.special_dates));
-        await dispatch(addUnitTimeOfService(checkUnit(tmp_prestation.unit_duration_of_the_service, true)));
+        await dispatch(addUnitTimeOfService(checkUnitKey(tmp_prestation.unit_duration_of_the_service, true)));
         await dispatch(addOptionSelected(tmp_prestation.thematics));
         await dispatch(addPicturesOfService(tmp_prestation.galleries));
         await dispatch(addTravelExpenses(tmp_prestation.travel_expenses));
@@ -122,7 +112,7 @@ function MyPrestations(props) {
         await dispatch(addPriceOfService(tmp_prestation.price));
         await dispatch(addPreparationTime(tmp_prestation.preparation_time));
         await dispatch(addNumberOfArtist(tmp_prestation.number_of_artists));
-        await dispatch(addUnitTimeOfPreparation(checkUnit(tmp_prestation.unit_of_the_preparation_time, true)));
+        await dispatch(addUnitTimeOfPreparation(checkUnitKey(tmp_prestation.unit_of_the_preparation_time, true)));
         await dispatch(changeStatusOfService(tmp_prestation.hidden));
         await dispatch(changeMovingPrice(tmp_prestation.moving_price));
         await dispatch(addMaterialsOfService(tmp_prestation.materials));
@@ -135,10 +125,15 @@ function MyPrestations(props) {
         update(tmp_prestations, index)
     };
 
-    const deletePrestations = (indexOfOption) => {
+    const deletePrestations = (indexOfService) => {
         if (allPrestation.length > 1) {
-            props.setAllPrestation(allPrestation.filter((option, index) => index !== indexOfOption));
-            toast.success("Supprimer avec succès")
+            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers:props.headers}).then(resp => {
+                toast.success("Supprimer avec succès");
+                let tmp = allPrestation.filter((service, index) => index !== indexOfService);
+                setAllPrestation(tmp)
+                props.setAllPrestation(tmp);
+                dispatch(addAllUserPrestation(tmp));
+            });
         } else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
 
@@ -149,7 +144,7 @@ function MyPrestations(props) {
         delete tmpData['modified_at'];
         let headers = props.headers;
         headers['Content-Type'] = 'multipart/form-data';
-        axios.put("api/artist_services/update/" + allServices[index]['id'], serviceToFormData(tmpData), {headers: headers}).then((resp) => {
+        axios.put("api/artist_services/update/" + allServices[index]['id'], objectToFormData(tmpData), {headers: headers}).then((resp) => {
             props.setAllPrestation(allServices);
             console.log(resp.data);
         }).catch((error) => {
@@ -164,7 +159,7 @@ function MyPrestations(props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [allPrestation]);
 
     return (
         <div className="text-center" style={{minHeight: 320}}>
@@ -202,7 +197,7 @@ function MyPrestations(props) {
                     {editPrestation &&
                     <EditPrestation updated={updated} copyEdit={copyEdit} setEditPrestation={setEditPrestation}
                                     close={props.close} setActiveToast={props.setActiveToast}
-                                    setAllPrestation={props.setAllPrestation}
+                                    setAllPrestation={props.setAllPrestation} headers={props.headers}
                                     setAddNewPrestation={props.setAddNewPrestation} index={state_index}/>}
                 </div>
             </Modal>
@@ -368,7 +363,7 @@ function MyPrestations(props) {
                                             <i className="icon-copy s-24"/>&nbsp;&&nbsp;<i className="icon-edit s-24"/>
                                         </div>}
                                     {props.profile && <i className="icon-smartphone-11 text-red more-icon-phone s-36"
-                                                         onClick={() => setShowOne(true)}/>}
+                                                         onClick={() => displayService(index)}/>}
                                 </div>
                             </div>
                         )}
