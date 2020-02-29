@@ -3,6 +3,7 @@ const initState = {
     albums: [],
     single: [],
     user_beats: [],
+    conditions: {},
     contract: '',
     role: '',
     follower: '',
@@ -20,6 +21,11 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 week_days_and_week_end: action.data
+            };
+        case "ADD_PROFILE_GLOBAL_CONDITION":
+            return {
+                ...state,
+                conditions: action.data
             };
         case "ADD_PROFILE_INFO":
             return {

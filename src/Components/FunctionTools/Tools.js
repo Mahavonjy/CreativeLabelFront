@@ -181,7 +181,7 @@ export const formatDate = (date) => {
 };
 
 export const addSpecialDateToData = (tmp_data, selectedMonth, selectedDay, selectedYear, index, date_key) => {
-    let key = !date_key ? selectedMonth + "/" + selectedDay + "/" + selectedYear : date_key
+    let key = !date_key ? selectedMonth + "/" + selectedDay + "/" + selectedYear : date_key;
 
     function addToSpecialIndex(i) {
         if (!tmp_data[i]["special_date"][key]) {
@@ -292,15 +292,13 @@ export const createNewPrestation = async (_props, dispatch, props) => {
     tmp_prestation['thematics'] = props.props_thematics_options_selected;
     tmp_prestation['unit_of_the_preparation_time'] = checkUnit(props.props_unit_time_of_preparation);
     tmp_prestation['unit_duration_of_the_service'] = checkUnit(props.props_unit_time_of_service);
-
-    axios.post("api/artist_services/newService", serviceToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+    await axios.post("api/artist_services/newService", serviceToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
         let tmp = _props.allPrestation;
         tmp.push(resp.data);
         _props.setAllPrestation(tmp);
         dispatch(addAllUserPrestation(tmp));
         _props.setAddNewPrestation(false);
         _props.close();
-        props.setAllPrestation(tmp);
     }).catch((error) => {
         let errorMessage = Validators.checkErrorMessage(error);
         toast.error(errorMessage.message)

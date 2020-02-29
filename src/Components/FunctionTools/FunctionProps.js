@@ -270,6 +270,15 @@ export function profileInitialisationInfo(data) {
     };
 }
 
+export function profileInitialisationCondition(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PROFILE_GLOBAL_CONDITION",
+            data: data
+        });
+    };
+}
+
 export function profileInitialisationRole(data) {
     return async dispatch => {
         dispatch({
@@ -609,6 +618,33 @@ export function displayBecomeArtistForm(data) {
     return async dispatch => {
         dispatch({
             type: "DISPLAY_BECOME_ARTIST_FORM",
+            data: data
+        });
+    };
+}
+
+export function addServiceSpecialDate(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SPECIAL_DATES",
+            data: data
+        });
+    };
+}
+
+export function addTravelExpenses(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_TRAVEL_EXPENSES",
+            data: data
+        });
+    };
+}
+
+export function addFileTechnicalSheet(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_TECHNICAL_SHEET",
             data: data
         });
     };

@@ -14,16 +14,16 @@ import {
     addPicturesOfService,
     addPreparationTime,
     addPriceOfService,
-    addReferenceOfCity,
-    addServiceId,
+    addReferenceOfCity, addServiceCountry,
+    addServiceId, addServiceSpecialDate,
     addServiceTime,
-    addTitleOfService,
+    addTitleOfService, addTravelExpenses,
     addUnitTimeOfPreparation,
     addUnitTimeOfService,
     changeMovingPrice,
     changeStatusOfService
 } from "../../FunctionTools/FunctionProps";
-import {changeFields, objectToFormData, serviceToFormData} from "../../FunctionTools/Tools";
+import {changeFields, serviceToFormData} from "../../FunctionTools/Tools";
 import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestation";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 
@@ -92,19 +92,22 @@ function MyPrestations(props) {
         setStateIndex(index);
         let tmp_prestation = allPrestation[index];
         await dispatch(addServiceId(tmp_prestation.id));
-        await dispatch(addUnitTimeOfService(checkUnit(tmp_prestation.service_time.unit, true)));
-        await dispatch(addOptionSelected(tmp_prestation.thematics_options_selected));
-        await dispatch(addPicturesOfService(tmp_prestation.photo));
+        await dispatch(addServiceCountry(tmp_prestation.country));
+        await dispatch(addServiceSpecialDate(tmp_prestation.special_dates));
+        await dispatch(addUnitTimeOfService(checkUnit(tmp_prestation.unit_duration_of_the_service, true)));
+        await dispatch(addOptionSelected(tmp_prestation.thematics));
+        await dispatch(addPicturesOfService(tmp_prestation.galleries));
+        await dispatch(addTravelExpenses(tmp_prestation.travel_expenses));
         await dispatch(addTitleOfService(tmp_prestation.title));
-        await dispatch(addReferenceOfCity(tmp_prestation.city_of_reference));
+        await dispatch(addReferenceOfCity(tmp_prestation.reference_city));
         await dispatch(addOthersCityOfService(tmp_prestation.others_city));
         await dispatch(addDescriptionOfService(tmp_prestation.description));
-        await dispatch(addEventSelected(tmp_prestation.events_type));
-        await dispatch(addServiceTime(tmp_prestation.service_time.time));
+        await dispatch(addEventSelected(tmp_prestation.events));
+        await dispatch(addServiceTime(tmp_prestation.duration_of_the_service));
         await dispatch(addPriceOfService(tmp_prestation.price));
-        await dispatch(addPreparationTime(tmp_prestation.preparation_time.time));
+        await dispatch(addPreparationTime(tmp_prestation.preparation_time));
         await dispatch(addNumberOfArtist(tmp_prestation.number_of_artists));
-        await dispatch(addUnitTimeOfPreparation(checkUnit(tmp_prestation.preparation_time.unit, true)));
+        await dispatch(addUnitTimeOfPreparation(checkUnit(tmp_prestation.unit_of_the_preparation_time, true)));
         await dispatch(changeStatusOfService(tmp_prestation.hidden));
         await dispatch(changeMovingPrice(tmp_prestation.moving_price));
         await dispatch(addMaterialsOfService(tmp_prestation.materials));

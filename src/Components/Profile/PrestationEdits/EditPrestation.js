@@ -17,6 +17,7 @@ function EditPrestation(props) {
     const dispatch = useDispatch();
     const role = useSelector(state => state.profile.role);
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
+    const travel_expenses = useSelector(state => state.KantoBizForm.travel_expenses);
     const props_prestation = useSelector(state => state.profilePrestations.prestations);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
     const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
@@ -120,14 +121,8 @@ function EditPrestation(props) {
                     <div className="col-lg-9 scrollbar-isl overflow-auto" style={{height: 600}}>
                         <div className="tab-content" id="v-pills-tabContent">
                             <div className="tab-pane text-center fade active show" id="v-pills-prestation" role="tabpanel" aria-labelledby="v-pills-prestation-tab">
-                                <div className="form-group pt-5">
-                                    <div className="custom-file" data-tip="Fiche technique en pdf">
-                                        <input type="file" accept="application/pdf" className="custom-file-input" />
-                                        <label className="custom-file-label text-black" htmlFor="inputGroupFile01">Importer ici la fiche technique de cette prestation</label>
-                                    </div>
-                                </div>
-                                <Thematics var={{artistType: role.charAt(0).toUpperCase() + role.slice(1)}} edit/>
-                                <PrestationInformation aartistType={role.charAt(0).toUpperCase() + role.slice(1)} edit/>
+                                <Thematics var={{artistType: role}} edit/>
+                                <PrestationInformation aartistType={role} edit/>
                                 <div className="pt-5 mb-2">
                                     <div className="cube-container">
                                         <div className="cube initial-position">

@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import StepZilla from "react-stepzilla";
 import {toast, ToastContainer} from "react-toastify";
+import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
 import {createNewPrestation, resetPropsForm} from "../../../FunctionTools/Tools";
 import "../../style/Form.css"
@@ -16,6 +17,7 @@ function Form(props) {
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
     const PropsCountry = useSelector(state => state.KantoBizForm.country);
+    const steps_index = useSelector(state => state.KantoBizForm.steps_index);
     const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
     const PropsOthersCity = useSelector(state => state.KantoBizForm.others_city);
     const PropsDescription = useSelector(state => state.KantoBizForm.description);
@@ -28,10 +30,9 @@ function Form(props) {
     const props_service_time = useSelector(state => state.KantoBizForm.service_time);
     const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected);
 
-    const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif];
-    const steps_index = useSelector(state => state.KantoBizForm.steps_index);
-
     const isMounted = useRef(false);
+    const [loading, setLoading] = useState(false);
+    const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif];
     const [state_steps_index, setStepsIndex] = useState(steps_index);
     const steps = [
         {name: 'Choisir votre thématique', component: <Thematics var={props}/>},
@@ -41,6 +42,7 @@ function Form(props) {
     ];
 
     const addNewPrestation = () => {
+        setLoading(true);
         createNewPrestation(props, dispatch, {
                 PropsTitle,
                 PropsFiles,
@@ -59,7 +61,8 @@ function Form(props) {
             }
         ).then(resp => {
             if (!resp) toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
-            else resetPropsForm(dispatch)
+            else resetPropsForm(dispatch);
+            setLoading(false);
         });
     };
 
@@ -67,7 +70,7 @@ function Form(props) {
         let resp = component_steps[state_steps_index].validation();
         if (resp.error) toast.error(resp.message);
         else {
-            let step_tmp = await state_steps_index + 1;
+            let step_tmp = state_steps_index + 1;
             await setStepsIndex(step_tmp);
             await dispatch(addStepsIndex(step_tmp));
             await document.getElementById("next-button").click();
@@ -89,7 +92,7 @@ function Form(props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [steps_index, state_steps_index]);
 
     return (
         <div className='step-progress bg-dark center' tabIndex="0"
@@ -139,14 +142,14 @@ function Form(props) {
             </div>
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             <div className="text-center pt-2">
-                <small className="text-center">Cliquer sur suivant pour passer à la page suivante</small>
+                <small className="text-center">Cliquer sur suivant ou tapoter sur 'ENTRER' pour passer à la page suivante</small>
             </div>
-            {props.new &&
+            {props.new && !loading ?
             <div className="text-center pt-2">
                 {state_steps_index === component_steps.length - 1 &&
                 <button className="btn btn-outline-success center pl-5 pr-5"
                         onClick={() => addNewPrestation()}>Enregister</button>}
-            </div>}
+            </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
             <div className="NextOrPrevPageStepper mt-4">
                 {state_steps_index !== 0 && <span className="float-left" onClick={() => Prev()}><i
                     className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>}

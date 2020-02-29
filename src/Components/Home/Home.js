@@ -206,12 +206,13 @@ function Home () {
                 dispatch(profileInitialisationRole(resp.data['role']));
                 dispatch(profileInitialisationFollower(resp.data['my_followers']));
                 dispatch(profileInitialisationFollowing(resp.data['my_followings']));
+                dispatch(profileInitialisationCondition(resp.data['conditions']));
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
                         axios.get( "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
                             dispatch(profileAddBeats(resp.data['beats']));
                         }).catch(err => ifConnectionError(err, fetchUserData)),
-                        axios.get( "api/beats/contract/user_artist_contact", {headers: headers}).then(resp => {
+                        axios.get( "api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
                             dispatch(profileInitialisationContract(resp.data));
                         }).catch(err => ifConnectionError(err, fetchUserData))
                     ]).then();

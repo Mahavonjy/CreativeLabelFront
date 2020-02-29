@@ -14,11 +14,14 @@ const initState = {
     files: [],
     hidden: null,
     moving_price: null,
+    travel_expenses: null,
     // End Service Information
     // Service Details
     events_selected: [],
     service_time: null,
-    materials: [],
+    materials: {},
+    special_dates: {},
+    technical_sheet: null,
     price_of_service: null,
     preparation_time: null,
     number_of_artist: 1,
@@ -33,6 +36,21 @@ const kantoBizForm = (state = initState, action) => {
             return {
                 ...state,
                 steps_index: action.data
+            };
+        case "ADD_TECHNICAL_SHEET":
+            return {
+                ...state,
+                technical_sheet: action.data
+            };
+        case "ADD_SPECIAL_DATES":
+            return {
+                ...state,
+                special_dates: action.data
+            };
+        case "ADD_TRAVEL_EXPENSES":
+            return {
+                ...state,
+                travel_expenses: action.data
             };
         case "ADD_MATERIALS_OF_SERVICE":
             return {
