@@ -288,10 +288,28 @@ export function profileInitialisationRole(data) {
     };
 }
 
+export function profileInitialisationBanking(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PROFILE_BANKING_OWNER_INFO",
+            data: data
+        });
+    };
+}
+
 export function profileInitialisationFollower(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_FOLLOWER",
+            data: data
+        });
+    };
+}
+
+export function profileShowBankingDetails(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SHOW_BANKING_DETAILS",
             data: data
         });
     };

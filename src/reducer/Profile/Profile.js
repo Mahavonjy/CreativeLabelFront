@@ -5,11 +5,13 @@ const initState = {
     user_beats: [],
     conditions: {},
     contract: '',
+    banking: {},
     role: '',
     follower: '',
     following: '',
     pricing_beats: '',
     ready_beats: false,
+    show_banking_details: false,
 };
 
 const profileReducer = (state = initState, action) => {
@@ -18,6 +20,16 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 conditions: action.data
+            };
+        case "ADD_SHOW_BANKING_DETAILS":
+            return {
+                ...state,
+                show_banking_details: action.data
+            };
+        case "ADD_PROFILE_BANKING_OWNER_INFO":
+            return {
+                ...state,
+                banking: action.data
             };
         case "ADD_PROFILE_INFO":
             return {

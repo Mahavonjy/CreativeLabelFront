@@ -28,10 +28,15 @@ import {
     changeStatusOfService
 } from "./FunctionProps";
 
-export const changeFields = (setState, e, up_props, dispatch) => {
+export const changeFields = (setState, e, up_props, dispatch, key, props) => {
     let value = e.target.value;
     setState(value);
-    if (up_props && dispatch) dispatch(up_props(value))
+    if (up_props && dispatch) {
+        if (key && props) {
+            props[key] = value;
+            dispatch(up_props(props))
+        } else dispatch(up_props(value))
+    }
 };
 
 export const FillInCartProps = (headers, props) => {
@@ -310,6 +315,14 @@ export const checkUnit = (object) => {
 
     return Object.keys(object).filter(function (key) {
         return object[key]
+    })[0]
+};
+
+export const checkKeyOfValue = (object, value) => {
+
+    return Object.keys(object).filter(function (key) {
+        if (object[key] === value)
+            return key
     })[0]
 };
 

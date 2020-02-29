@@ -1,3 +1,6 @@
+.blur {
+    filter: blur(10px);
+}
 .sidenav---sidenav---_2tBP {
     position: absolute;
     top: 0;

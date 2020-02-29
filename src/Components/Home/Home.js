@@ -28,7 +28,7 @@ import {
     islBeats,
     latestBeats,
     newBeatMaker,
-    profileAddBeats,
+    profileAddBeats, profileInitialisationBanking,
     profileInitialisationCondition,
     profileInitialisationContract,
     profileInitialisationFollower,
@@ -230,6 +230,7 @@ function Home() {
                 dispatch(profileInitialisationFollower(resp.data['my_followers']));
                 dispatch(profileInitialisationFollowing(resp.data['my_followings']));
                 dispatch(profileInitialisationCondition(resp.data['conditions']));
+                dispatch(profileInitialisationBanking(resp.data['banking']));
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
                         axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
