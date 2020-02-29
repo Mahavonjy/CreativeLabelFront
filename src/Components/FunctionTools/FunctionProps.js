@@ -542,15 +542,6 @@ export function activeResultPage(data) {
     };
 }
 
-export function addDayOfAvailability(data) {
-    return async dispatch => {
-        dispatch({
-            type: "ADD_USER_DAY_OF_AVAILABILITY",
-            data: data
-        });
-    };
-}
-
 export function activeEventAndThematicsPage(data) {
     return async dispatch => {
         dispatch({

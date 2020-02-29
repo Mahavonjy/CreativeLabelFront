@@ -319,7 +319,7 @@ function Profile(props) {
                                 <div className="tab-content">
                                     {user_role !== "professional_auditor" &&
                                     <div className="tab-pane fade show active" id="Calendar-Management" role="tabpanel">
-                                        <CalendarManagement/>
+                                        <CalendarManagement headers={headers}/>
                                     </div>}
                                     {user_role === "beatmaker" &&
                                     <div className="tab-pane fade" id="beats-tab" role="tabpanel">
@@ -331,7 +331,7 @@ function Profile(props) {
                                             <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
                                                 <p className="text-center pt-5 text-red">Pas de beat</p>
                                             </div>}
-                                        {contract && <EditContractBeats/>}
+                                        {contract && <EditContractBeats headers={headers}/>}
                                     </div>}
                                     {user_role !== "professional_auditor" &&
                                     <div className="tab-pane fade" id="Prestations" role="tabpanel">
@@ -345,13 +345,13 @@ function Profile(props) {
                                     <div
                                         className={user_role === "professional_auditor" ? "tab-pane fade show active" : "tab-pane fade"}
                                         id="Paiements-Reservations" role="tabpanel">
-                                        <PaymentsAndReservations/>
+                                        <PaymentsAndReservations headers={headers}/>
                                     </div>
                                     <div className="tab-pane fade" id="Coordonnees-bancaires" role="tabpanel">
-                                        <BankingDetails/>
+                                        <BankingDetails headers={headers}/>
                                     </div>
                                     <div className="tab-pane fade" id="Refund-Policy" role="tabpanel">
-                                        <RefundPolicy/>
+                                        <RefundPolicy headers={headers}/>
                                     </div>
                                 </div>
                             </div>

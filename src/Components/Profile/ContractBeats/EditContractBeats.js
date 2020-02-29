@@ -6,11 +6,10 @@ import * as Tools from "../../FunctionTools/Tools";
 import { changeFields } from "../../FunctionTools/Tools";
 import { profileInitialisationContract, beatsInitialisationPricing } from "../../FunctionTools/FunctionProps"
 
-function EditContractBeats() {
+function EditContractBeats(props) {
 
     const dispatch = useDispatch();
     const isMounted = useRef(false);
-    const user_credentials = useSelector(state => state.Home.user_credentials);
     const contract = useSelector(state => state.profile.contract);
 
     // basic contract
@@ -122,11 +121,6 @@ function EditContractBeats() {
             ["platinum", platinum, platinum_number_audio_stream, platinum_number_radio_station, platinum_number_of_distribution_copies, platinum_enable],
         ];
         let tmp_call = [];
-        let headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': "*",
-            'Isl-Token': user_credentials.token
-        };
         for (let x = 0; x < contract_array.length; x++) {
             let tmp = contract_array[x];
             let response = generateData(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
@@ -135,7 +129,7 @@ function EditContractBeats() {
             delete response.data['created_at'];
             delete response.data['modified_at'];
             await tmp.push(
-                axios.put( "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
+                axios.put( "api/beats/contract/" + response.url, response.data, {headers: props.headers}).then(() => {
                     let tmp = contract;
                     tmp[response.data['contract_name']] = response.data;
                     dispatch(profileInitialisationContract(tmp));
@@ -146,7 +140,7 @@ function EditContractBeats() {
         }
 
         Promise.all(tmp_call).then(() => {
-            axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
+            axios.get( "api/beats/pricing", {headers: props.headers}).then(resp => {
                 dispatch(beatsInitialisationPricing(resp.data));
                 toast.success("Enregistrement avec success")
             }).catch(err => {

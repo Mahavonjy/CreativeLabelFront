@@ -1,25 +1,46 @@
-import React, {useEffect, useRef, useState} from "react";
 import axios from 'axios';
-import './Home.css';
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {BrowserRouter as Router, Route} from "react-router-dom";
+import {sessionService} from 'redux-react-session';
 import "../../assets/css/app.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import IslPlayer from "../Players/Players";
 import Conf from "../../Config/tsconfig";
-import { useSelector, useDispatch } from "react-redux";
-import { FillInCartProps } from "../FunctionTools/Tools";
-import * as CreateFields from "../FunctionTools/CreateFields";
-import * as PopupFields from "../FunctionTools/PopupFields";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
-import { sessionService } from 'redux-react-session';
+import * as CreateFields from "../FunctionTools/CreateFields";
 import {
-    addBeatMakerBeats, addSimilarBeats, addOtherBeatMakerBeats, addAllMediaGenre, addPrefAllMediaGenre,
-    addBeats, newBeatMaker, topBeatMaker, latestBeats, discoveryBeats, islBeats, profileInitialisationInfo,
-    profileInitialisationRole, profileInitialisationFollower, profileInitialisationFollowing, profileAddBeats,
-    profileInitialisationContract, addTotalPrice, addCarts, beatsInitialisationPricing, addAllArtistTypes,
-    addAllCountryAllowed, addOtherUserService, addOtherUserOptions, addUserCredentials, addAllUserPrestation,
-    addAllUserOptions
-
+    addAllArtistTypes,
+    addAllCountryAllowed,
+    addAllMediaGenre,
+    addAllUserOptions,
+    addAllUserPrestation,
+    addBeatMakerBeats,
+    addBeats,
+    addCarts,
+    addOtherBeatMakerBeats,
+    addOtherUserOptions,
+    addOtherUserService,
+    addPrefAllMediaGenre,
+    addSimilarBeats,
+    addTotalPrice,
+    addUserCredentials,
+    beatsInitialisationPricing,
+    discoveryBeats,
+    islBeats,
+    latestBeats,
+    newBeatMaker,
+    profileAddBeats,
+    profileInitialisationCondition,
+    profileInitialisationContract,
+    profileInitialisationFollower,
+    profileInitialisationFollowing,
+    profileInitialisationInfo,
+    profileInitialisationRole,
+    topBeatMaker
 } from "../FunctionTools/FunctionProps";
+import * as PopupFields from "../FunctionTools/PopupFields";
+import {FillInCartProps} from "../FunctionTools/Tools";
+import IslPlayer from "../Players/Players";
+import './Home.css';
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
@@ -28,7 +49,7 @@ let headers = {
     'Access-Control-Allow-Origin': "*"
 };
 
-function Home () {
+function Home() {
 
     let user_credentials;
     const dispatch = useDispatch();
@@ -108,9 +129,9 @@ function Home () {
                 dispatch(addSimilarBeats(resp.data['similar_beats']));
                 setSingleBeat(resp.data['single_beat']);
                 setLoading(false);
-            }).catch(() => window.location.replace("/BeatsNotFound") )
+            }).catch(() => window.location.replace("/BeatsNotFound"))
         } else if (secondRouteParsing === "isl_artist_profile") {
-            axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp =>{
+            axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp => {
                 dispatch(addOtherBeatMakerBeats(resp.data['user_beats']));
                 dispatch(addOtherUserOptions(resp.data['user_options']));
                 dispatch(addOtherUserService(resp.data['user_services']));
@@ -141,9 +162,11 @@ function Home () {
             //
         } finally {
             Promise.all([
-                axios.get("api/medias/allMediaGenre").then(resp =>{
+                axios.get("api/medias/allMediaGenre").then(resp => {
                     let tmp_arr = [];
-                    for (let row in resp.data) {tmp_arr.push(resp.data[row].genre)}
+                    for (let row in resp.data) {
+                        tmp_arr.push(resp.data[row].genre)
+                    }
                     dispatch(addAllMediaGenre(tmp_arr));
                     dispatch(addPrefAllMediaGenre(resp.data));
                 }).catch(err => ifConnectionError(err)),
@@ -153,7 +176,7 @@ function Home () {
                 axios.get("api/flags/check_country_and_city").then(resp => {
                     dispatch(addAllCountryAllowed(resp.data));
                 }).catch(err => ifConnectionError(err)),
-                axios.get( "api/beats/AllSuggestion").then(resp => {
+                axios.get("api/beats/AllSuggestion").then(resp => {
                     dispatch(addBeats(resp.data["random"]));
                     dispatch(newBeatMaker(resp.data["new_beatMaker"]));
                     dispatch(topBeatMaker(resp.data["top_beatmaker"]));
@@ -173,7 +196,7 @@ function Home () {
             if (routeParsed === 'register') {
                 window.location.replace('/beats')
             } else if (routeParsed !== 'preference') {
-                axios.get( "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
                     fetchUserData()
                 }).catch(err => {
                     try {
@@ -182,12 +205,12 @@ function Home () {
                         } else if (err.response.data === "token invalid") {
                             logout().then(() => null)
                         } else NotOnline()
-                    } catch(e) {
+                    } catch (e) {
                         window.location.replace('/badConnexion')
                     }
                 });
             } else {
-                axios.get( "api/users/if_choice_user_status", {headers: headers}).then(() => {
+                axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
                     fetchUserData()
                 }).catch(() => {
                     NotOnline()
@@ -201,7 +224,7 @@ function Home () {
 
     const fetchUserData = () => {
         Promise.all([
-            axios.get( "api/profiles/my_profile", {headers: headers}).then(resp => {
+            axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
                 dispatch(profileInitialisationInfo(resp.data['my_profile']));
                 dispatch(profileInitialisationRole(resp.data['role']));
                 dispatch(profileInitialisationFollower(resp.data['my_followers']));
@@ -209,10 +232,10 @@ function Home () {
                 dispatch(profileInitialisationCondition(resp.data['conditions']));
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
-                        axios.get( "api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
+                        axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
                             dispatch(profileAddBeats(resp.data['beats']));
                         }).catch(err => ifConnectionError(err, fetchUserData)),
-                        axios.get( "api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
+                        axios.get("api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
                             dispatch(profileInitialisationContract(resp.data));
                         }).catch(err => ifConnectionError(err, fetchUserData))
                     ]).then();
@@ -224,10 +247,10 @@ function Home () {
                     user_credentials: user_credentials
                 }).then(() => null);
             }).catch(err => ifConnectionError(err, fetchUserData)),
-            axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
+            axios.get("api/beats/pricing", {headers: headers}).then(resp => {
                 dispatch(beatsInitialisationPricing(resp.data));
             }).catch(err => ifConnectionError(err)),
-            axios.get( "api/artist_services/my_services", {headers: headers}).then(resp => {
+            axios.get("api/artist_services/my_services", {headers: headers}).then(resp => {
                 dispatch(addAllUserOptions(resp.data['user_options']));
                 dispatch(addAllUserPrestation(resp.data['user_services']));
             }).catch(err => ifConnectionError(err))
@@ -253,6 +276,7 @@ function Home () {
 
     useEffect(() => {
         setLoading(true);
+
         async function fetchData() {
             await sessionService.loadSession().then((currentSession) => {
                 sessionService.loadUser().then((data) => {
@@ -267,11 +291,12 @@ function Home () {
                 headers['Isl-Token'] = currentSession.token;
                 if (beats.length === 0) Online();
             }).catch(() => {
-                dispatch(addUserCredentials({ token: Conf.configs.TokenVisitor }));
+                dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
                 headers['Isl-Token'] = Conf.configs.TokenVisitor;
                 if (beats.length === 0) NotOnline();
             });
         }
+
         fetchData().then(() => null);
         return () => {
             isMounted.current = true
@@ -288,7 +313,7 @@ function Home () {
                 {PopupFields.Login()}
                 {/* End of Popup */}
                 <Router>
-                    <Route render={({ location, history }) => (
+                    <Route render={({location, history}) => (
                         <React.Fragment>
                             <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
                                 {/* SideBars with ICON */}

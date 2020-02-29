@@ -354,3 +354,10 @@ export const resetPropsForm = (dispatch) => {
     dispatch(addUnitTimeOfPreparation({"day": false, "hours": false, "min": false, "sec": false}));
     dispatch(addUnitTimeOfService({"day": false, "hours": false, "min": false, "sec": false}));
 };
+
+export const deleteInObject = (object) => {
+    delete object['id'];
+    delete object['created_at'];
+    delete object['modified_at'];
+    return object
+};

@@ -14,31 +14,46 @@ import {
     addPicturesOfService,
     addPreparationTime,
     addPriceOfService,
-    addReferenceOfCity, addServiceCountry,
-    addServiceId, addServiceSpecialDate,
+    addReferenceOfCity,
+    addServiceCountry,
+    addServiceId,
+    addServiceSpecialDate,
     addServiceTime,
-    addTitleOfService, addTravelExpenses,
+    addTitleOfService,
+    addTravelExpenses,
     addUnitTimeOfPreparation,
     addUnitTimeOfService,
     changeMovingPrice,
-    changeStatusOfService
+    changeStatusOfService,
+    profileInitialisationCondition
 } from "../../FunctionTools/FunctionProps";
-import {changeFields, serviceToFormData} from "../../FunctionTools/Tools";
+import {deleteInObject, serviceToFormData} from "../../FunctionTools/Tools";
 import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestation";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 
 function MyPrestations(props) {
 
     const dispatch = useDispatch();
+    const conditions = useSelector(state => state.profile.conditions);
     const prestations = useSelector(state => state.profilePrestations.prestations);
 
     const isMounted = useRef(false);
-    const [global_price, setGlobalPrice] = useState(300);
+    const [global_price, setGlobalPrice] = useState(conditions['travel_expenses']);
     const [state_index, setStateIndex] = useState(null);
     const [copyEdit, setCopyEdit] = useState(false);
     const [showOne, setShowOne] = useState(false);
     const [editPrestation, setEditPrestation] = useState(false);
     const [allPrestation, setAllPrestation] = useState(prestations);
+
+    const changeGlobalPrice = (e) => {
+        let value = e.target.value;
+        setGlobalPrice(value);
+        let tmp = {...conditions};
+        tmp['travel_expenses'] = value;
+        dispatch(profileInitialisationCondition(tmp));
+        tmp = deleteInObject(tmp);
+        axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => null)
+    };
 
     const checkUnit = (val, opt) => {
         if (val === "min")
@@ -163,6 +178,7 @@ function MyPrestations(props) {
                     estimations</small><br/>
                 <small>• Vous pouvez également indiquer un frais de transport spécifique par prestation et par date de
                     prestation</small><br/><br/>
+                <small>• Celui ci est enregistrer automatiquement a chaque changement </small><br/>
             </ReactTooltip>
             <ReactTooltip place="left" className="special-color-dark" id='copy_edit' aria-haspopup='true'>
                 <h5 className="text-center text-green">Dupliquer et Modifier</h5><br/>
@@ -214,8 +230,9 @@ function MyPrestations(props) {
                                 <div className="input-group-text text-dark">
                                     <i className="icon-money"/>&nbsp;Modifier le prix *
                                 </div>
-                                <input className="form-control" type="number" id="global_price" name="global_price"
-                                       onChange={(e) => changeFields(setGlobalPrice, e)}/>
+                                <input className="form-control" value={global_price} type="number" id="global_price"
+                                       name="global_price"
+                                       onChange={(e) => changeGlobalPrice(e)}/>
                             </div>
                         </div>
                     </div>
