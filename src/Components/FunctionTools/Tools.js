@@ -305,7 +305,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
     tmp_prestation['unit_of_the_preparation_time'] = checkUnit(props.props_unit_time_of_preparation);
     tmp_prestation['unit_duration_of_the_service'] = checkUnit(props.props_unit_time_of_service);
 
-    let response;
+    let response = {};
     if (!update) {
         await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
             let tmp = _props.allPrestation;

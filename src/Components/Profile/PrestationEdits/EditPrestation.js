@@ -62,14 +62,14 @@ function EditPrestation(props) {
             setFiles(tmp);
             dispatch(addPicturesOfService(tmp));
             toast.success("Supprimer avec succès")
-        } else toast.error("Vous ne pouvez pas supprimer toute les prestations")
+        } else toast.error("Vous ne pouvez pas supprimer toute les photos")
     };
 
-    const updateMaterials = (material_id) => {
+    const updateMaterials = () => {
         let tmp = {...props_materials};
         tmp["technical_sheet"] = technical_sheet;
         tmp = deleteInObject(tmp);
-        return axios.put('api/materials/update_service_material/' + material_id, objectToFormData(tmp), {headers: props.headers}).then((resp) => {
+        return axios.put('api/materials/update_service_material/' + service_id, objectToFormData(tmp), {headers: props.headers}).then((resp) => {
             dispatch(addMaterialsOfService(resp.data));
             return true;
         }).catch((error) => {
@@ -97,9 +97,9 @@ function EditPrestation(props) {
     };
 
     const updatePrestation = async () => {
-        // updateOptions();
-        // let response_of_materials_update = await updateMaterials(props_materials.id);
-        // if (!response_of_materials_update) return;
+        updateOptions();
+        let response_of_materials_update = await updateMaterials();
+        if (!response_of_materials_update) return;
         createOrUpdatePrestation(props, dispatch, {
                 PropsTitle,
                 PropsFiles,
@@ -130,24 +130,43 @@ function EditPrestation(props) {
                 resetPropsForm(dispatch);
                 props.updated();
             }
-
         });
     };
 
     const createPrestation = () => {
-        // createOrUpdatePrestation(
-        //     props.setActiveToast, props_prestation, props.setAllPrestation, props.setAddNewPrestation, dispatch,
-        //     props.close, { PropsTitle, PropsFiles, PropsCityReference, PropsOthersCity, PropsDescription,
-        //     props_events_selected, props_price_of_service, props_preparation_time, props_number_of_artist, props_service_time,
-        //     props_thematics_options_selected, props_unit_time_of_preparation, props_unit_time_of_service }
-        // ).then(resp => {
-        //     if (!resp)
-        //         toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
-        //     else props.updated(true);
-        // });
+        createOrUpdatePrestation(props, dispatch, {
+                PropsTitle,
+                PropsFiles,
+                PropsCityReference,
+                PropsOthersCity,
+                PropsDescription,
+                props_events_selected,
+                props_price_of_service,
+                props_preparation_time,
+                props_number_of_artist,
+                props_service_time,
+                props_thematics_options_selected,
+                props_unit_time_of_preparation,
+                props_unit_time_of_service,
+                PropsCountry,
+                refund_policy,
+                travel_expenses,
+            }
+        ).then(resp => {
+            if (resp.error) {
+                if (!resp.message)
+                    toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
+                else toast.error(resp.message);
+            } else {
+                resetPropsForm(dispatch);
+                props.updated(true)
+            }
+        });
     };
 
     useEffect(() => {
+
+        console.log(service_id)
 
         return () => {
             isMounted.current = true
@@ -256,10 +275,9 @@ function EditPrestation(props) {
                         </div>
                     </div>
                 </div>
-                {props.copyEdit ? <button className="btn btn-outline-danger pl-5 pr-5 center mb-2 mt-3"
-                                          onClick={() => createPrestation()}>Créer après modification</button> :
-                    <button className="btn btn-outline-danger pl-5 pr-5 center mb-2 mt-3"
-                            onClick={() => updatePrestation()}>mettre a jour</button>}
+                <button className="btn btn-outline-danger pl-5 pr-5 center mb-2 mt-3"
+                        onClick={!props.copyEdit ? () => updatePrestation() : () => createPrestation()}>
+                    {!props.copyEdit ? "mettre a jour" : "Créer après modification"}</button>
             </div>
         </div>
     );
