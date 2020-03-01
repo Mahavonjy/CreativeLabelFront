@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import {profileInitialisationCondition} from "../../FunctionTools/FunctionProps";
+import {addServiceRefundPolicy, profileInitialisationCondition} from "../../FunctionTools/FunctionProps";
 import {deleteInObject} from "../../FunctionTools/Tools";
 
 function RefundPolicy (props) {
@@ -11,6 +11,7 @@ function RefundPolicy (props) {
 
     const isMounted = useRef(false);
     const conditions = useSelector(state => state.profile.conditions);
+    const service_refund_policy = useSelector(state => state.KantoBizForm.refund_policy);
     const [flexible, setFlexible] = useState(false);
     const [strict, setStrict] = useState(false);
 
@@ -27,18 +28,23 @@ function RefundPolicy (props) {
     };
 
     const updateCondition = (refund_policy) => {
-        let tmp = {...conditions};
-        tmp['refund_policy'] = refund_policy;
-        dispatch(profileInitialisationCondition(tmp));
-        tmp = deleteInObject(tmp);
-        axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => {
-            toast.success("enregistrer")
-        })
+        if (!props.edit) {
+            let tmp = {...conditions};
+            tmp['refund_policy'] = refund_policy;
+            dispatch(profileInitialisationCondition(tmp));
+            tmp = deleteInObject(tmp);
+            axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => {
+                toast.success("enregistrer")
+            })
+        } else dispatch(addServiceRefundPolicy(refund_policy));
     };
 
     useEffect(() => {
 
-        if (conditions['refund_policy'] === "flexible") setFlexible(true);
+        let valueOfRefundPolicy;
+        if (!props.edit) valueOfRefundPolicy = conditions['refund_policy'];
+        else valueOfRefundPolicy = service_refund_policy;
+        if (valueOfRefundPolicy === "flexible") setFlexible(true);
         else setStrict(true);
 
         return () => {

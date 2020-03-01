@@ -51,6 +51,7 @@ function PrestationInformation(props) {
         } catch (e) {
             tmpList = []
         }
+        dispatch(addOthersCityOfService([]));
         await setListOfCity([...new Set(tmpList)]);
         await setTmpListOfCity([...new Set(tmpList)]);
     };

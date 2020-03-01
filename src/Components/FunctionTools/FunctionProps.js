@@ -488,15 +488,6 @@ export function addMaterialsOfService(data) {
     };
 }
 
-export function changeMovingPrice(data) {
-    return async dispatch => {
-        dispatch({
-            type: "CHANGE_MOVING_PRICE",
-            data: data
-        });
-    };
-}
-
 export function addServiceId(data) {
     return async dispatch => {
         dispatch({
@@ -654,6 +645,24 @@ export function addTravelExpenses(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_TRAVEL_EXPENSES",
+            data: data
+        });
+    };
+}
+
+export function addServiceRefundPolicy(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICE_REFUND_POLICY",
+            data: data
+        });
+    };
+}
+
+export function addUserId(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_USER_ID",
             data: data
         });
     };

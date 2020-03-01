@@ -4,7 +4,7 @@ import StepZilla from "react-stepzilla";
 import {toast, ToastContainer} from "react-toastify";
 import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
-import {createNewPrestation, resetPropsForm} from "../../../FunctionTools/Tools";
+import {createOrUpdatePrestation, resetPropsForm} from "../../../FunctionTools/Tools";
 import "../../style/Form.css"
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
@@ -14,6 +14,7 @@ import Thematics from "./Thematics";
 function Form(props) {
 
     const dispatch = useDispatch();
+    const conditions = useSelector(state => state.profile.conditions);
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
     const PropsCountry = useSelector(state => state.KantoBizForm.country);
@@ -43,7 +44,7 @@ function Form(props) {
 
     const addNewPrestation = () => {
         setLoading(true);
-        createNewPrestation(props, dispatch, {
+        createOrUpdatePrestation(props, dispatch, {
                 PropsTitle,
                 PropsFiles,
                 PropsCityReference,
@@ -57,12 +58,19 @@ function Form(props) {
                 props_thematics_options_selected,
                 props_unit_time_of_preparation,
                 props_unit_time_of_service,
-                PropsCountry
+                PropsCountry,
+                "refund_policy": conditions['refund_policy'],
+                "travel_expenses": conditions['travel_expenses'],
             }
         ).then(resp => {
-            if (!resp) toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
-            else resetPropsForm(dispatch);
-            setLoading(false);
+            if (resp.error) {
+                if (!resp.message)
+                    toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
+                else toast.error(resp.message);
+            } else {
+                resetPropsForm(dispatch);
+                setLoading(false);
+            }
         });
     };
 

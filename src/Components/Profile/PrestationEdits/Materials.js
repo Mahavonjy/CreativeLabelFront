@@ -10,6 +10,7 @@ function Materials(props) {
     const isMounted = useRef(false);
     const [tags, setTags] = useState([...materials['list_of_materials']]);
     const [technicalSheet, setTechnicalSheet] = useState();
+    const [tagsSuggestion, setTagSuggestion] = useState(["Micro", "Piano"]);
 
     const removeTag = (i) => {
         const newTags = [...tags];
@@ -104,14 +105,12 @@ function Materials(props) {
                     <div className="tag-editor-tags">
                         <div className="input-tag">
                             <ul className="input-tag__tags text-center">
-                                <li>
-                                    <button type="button" className="pl-1 pr-1"
-                                            onClick={() => inputKeyDown(null, "Micro")}>Micro</button>
-                                </li>
-                                <li>
-                                    <button type="button" className="pl-1 pr-1"
-                                            onClick={() => inputKeyDown(null, "Piano")}>Piano</button>
-                                </li>
+                                {tagsSuggestion.map((val, index) =>
+                                    <li key={index}>
+                                        <button type="button" className="pl-1 pr-1"
+                                                onClick={() => inputKeyDown(null, val)}>{val}</button>
+                                    </li>
+                                )}
                             </ul>
                         </div>
                     </div>

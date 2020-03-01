@@ -18,17 +18,18 @@ import {
     addReferenceOfCity,
     addServiceCountry,
     addServiceId,
+    addServiceRefundPolicy,
     addServiceSpecialDate,
-    addServiceTime, addServiceToShow,
+    addServiceTime,
+    addServiceToShow,
     addTitleOfService,
     addTravelExpenses,
     addUnitTimeOfPreparation,
-    addUnitTimeOfService,
-    changeMovingPrice,
+    addUnitTimeOfService, addUserId,
     changeStatusOfService,
     profileInitialisationCondition
 } from "../../FunctionTools/FunctionProps";
-import {checkUnitKey, deleteInObject, objectToFormData} from "../../FunctionTools/Tools";
+import {checkUnitKey, deleteInObject, objectToFormData, resetPropsForm} from "../../FunctionTools/Tools";
 import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestation";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 
@@ -63,26 +64,6 @@ function MyPrestations(props) {
         setShowOne(true);
     };
 
-    const clearProps = async () => {
-        await dispatch(addServiceId(null));
-        await dispatch(addUnitTimeOfService({"day": false, "hours": false, "min": false, "sec": false}));
-        await dispatch(addOptionSelected([]));
-        await dispatch(addPicturesOfService([]));
-        await dispatch(addTitleOfService(""));
-        await dispatch(addReferenceOfCity(""));
-        await dispatch(addOthersCityOfService([]));
-        await dispatch(addDescriptionOfService(""));
-        await dispatch(addEventSelected([]));
-        await dispatch(addServiceTime(""));
-        await dispatch(addPriceOfService(null));
-        await dispatch(addPreparationTime(null));
-        await dispatch(addNumberOfArtist(1));
-        await dispatch(addUnitTimeOfPreparation({"day": false, "hours": false, "min": false, "sec": false}));
-        await dispatch(changeStatusOfService(null));
-        await dispatch(changeMovingPrice(null));
-        await dispatch(addMaterialsOfService([]));
-    };
-
     const updated = async (opt) => {
         await props.setToast(true);
         await setEditPrestation(false);
@@ -97,6 +78,7 @@ function MyPrestations(props) {
         setStateIndex(index);
         let tmp_prestation = allPrestation[index];
         await dispatch(addServiceId(tmp_prestation.id));
+        await dispatch(addUserId(tmp_prestation.user_id));
         await dispatch(addServiceCountry(tmp_prestation.country));
         await dispatch(addServiceSpecialDate(tmp_prestation.special_dates));
         await dispatch(addUnitTimeOfService(checkUnitKey(tmp_prestation.unit_duration_of_the_service, true)));
@@ -114,7 +96,7 @@ function MyPrestations(props) {
         await dispatch(addNumberOfArtist(tmp_prestation.number_of_artists));
         await dispatch(addUnitTimeOfPreparation(checkUnitKey(tmp_prestation.unit_of_the_preparation_time, true)));
         await dispatch(changeStatusOfService(tmp_prestation.hidden));
-        await dispatch(changeMovingPrice(tmp_prestation.moving_price));
+        await dispatch(addServiceRefundPolicy(tmp_prestation.refund_policy));
         await dispatch(addMaterialsOfService(tmp_prestation.materials));
         await setEditPrestation(true)
     };
@@ -127,7 +109,7 @@ function MyPrestations(props) {
 
     const deletePrestations = (indexOfService) => {
         if (allPrestation.length > 1) {
-            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers:props.headers}).then(resp => {
+            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers: props.headers}).then(resp => {
                 toast.success("Supprimer avec succès");
                 let tmp = allPrestation.filter((service, index) => index !== indexOfService);
                 setAllPrestation(tmp)
@@ -189,16 +171,16 @@ function MyPrestations(props) {
                     <button className="ModalClose float-left" onClick={() => {
                         setEditPrestation(false);
                         props.setToast(true);
-                        clearProps().then(r => null);
+                        resetPropsForm(dispatch);
                         setCopyEdit(false)
                     }}>
                         <i className="icon-close s-24 text-warning"/>
                     </button>
                     {editPrestation &&
                     <EditPrestation updated={updated} copyEdit={copyEdit} setEditPrestation={setEditPrestation}
-                                    close={props.close} setActiveToast={props.setActiveToast}
-                                    setAllPrestation={props.setAllPrestation} headers={props.headers}
-                                    setAddNewPrestation={props.setAddNewPrestation} index={state_index}/>}
+                                    close={props.close} setActiveToast={props.setActiveToast} index={state_index}
+                                    allPrestation={allPrestation} setAllPrestation={setAllPrestation}
+                                    headers={props.headers} setAddNewPrestation={props.setAddNewPrestation}/>}
                 </div>
             </Modal>
             {/* end form become an artist */}

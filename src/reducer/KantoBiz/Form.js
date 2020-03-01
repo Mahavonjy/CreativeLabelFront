@@ -4,6 +4,7 @@ const initState = {
     thematics_options_selected: [],
     steps_index: 0,
     service_id: null,
+    user_id: null,
     // End Thematics genre
     // Service Information
     title: '',
@@ -13,7 +14,6 @@ const initState = {
     description: '',
     files: [],
     hidden: null,
-    moving_price: null,
     travel_expenses: null,
     // End Service Information
     // Service Details
@@ -22,6 +22,7 @@ const initState = {
     materials: {},
     special_dates: {},
     technical_sheet: null,
+    refund_policy: null,
     price_of_service: null,
     preparation_time: null,
     number_of_artist: 1,
@@ -37,10 +38,20 @@ const kantoBizForm = (state = initState, action) => {
                 ...state,
                 steps_index: action.data
             };
+        case "ADD_SERVICE_REFUND_POLICY":
+            return {
+                ...state,
+                refund_policy: action.data
+            };
         case "ADD_TECHNICAL_SHEET":
             return {
                 ...state,
                 technical_sheet: action.data
+            };
+        case "ADD_USER_ID":
+            return {
+                ...state,
+                user_id: action.data
             };
         case "ADD_SPECIAL_DATES":
             return {
@@ -61,11 +72,6 @@ const kantoBizForm = (state = initState, action) => {
             return {
                 ...state,
                 service_id: action.data
-            };
-        case "CHANGE_MOVING_PRICE":
-            return {
-                ...state,
-                moving_price: action.data
             };
         case "CHANGE_STATUS_OF_SERVICE":
             return {

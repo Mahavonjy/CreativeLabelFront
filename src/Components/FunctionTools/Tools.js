@@ -18,13 +18,12 @@ import {
     addPreparationTime,
     addPriceOfService,
     addReferenceOfCity,
-    addServiceCountry,
+    addServiceCountry, addServiceRefundPolicy,
     addServiceTime,
     addTitleOfService,
-    addTotalPrice,
+    addTotalPrice, addTravelExpenses,
     addUnitTimeOfPreparation,
-    addUnitTimeOfService,
-    changeMovingPrice,
+    addUnitTimeOfService, addUserId,
     changeStatusOfService
 } from "./FunctionProps";
 
@@ -268,47 +267,69 @@ export const compareArrays = (first_array, second_array) => {
     return JSON.stringify(first_array) === JSON.stringify(second_array)
 };
 
-export const createNewPrestation = async (_props, dispatch, props) => {
+export const createOrUpdatePrestation = async (_props, dispatch, props, update) => {
     let secure = false;
     for (let row in _props.allPrestation) {
-        if (_props.allPrestation[row]['title'] === props.PropsTitle && _props.allPrestation[row]['reference_city'] === props.PropsCityReference) {
-            secure = true;
-        } else if (_props.allPrestation[row]['title'] === props.PropsTitle && compareArrays(_props.allPrestation[row]['events'], props.props_events_selected)) {
-            secure = true;
+        if (_props.allPrestation[row]["id"] !== props.service_id) {
+            if (_props.allPrestation[row]['title'] === props.PropsTitle && _props.allPrestation[row]['reference_city'] === props.PropsCityReference) {
+                secure = true;
+            } else if (_props.allPrestation[row]['title'] === props.PropsTitle && compareArrays(_props.allPrestation[row]['events'], props.props_events_selected)) {
+                secure = true;
+            }
         }
     }
     if (secure)
-        return false;
+        return {"error": true, message: null};
     await _props.setActiveToast(true);
     let tmp_prestation = {};
     let headers = _props.headers;
     headers['Content-Type'] = 'multipart/form-data';
+    if (update) {
+        tmp_prestation['user_id'] = props.user_id;
+        tmp_prestation['materials_id'] = props.materials_id;
+    }
     tmp_prestation['special_dates'] = {};
     tmp_prestation['title'] = props.PropsTitle;
     tmp_prestation['country'] = props.PropsCountry;
     tmp_prestation['reference_city'] = props.PropsCityReference;
     tmp_prestation['others_city'] = props.PropsOthersCity;
     tmp_prestation['description'] = props.PropsDescription;
+    tmp_prestation['refund_policy'] = props.refund_policy;
     tmp_prestation['events'] = props.props_events_selected;
     tmp_prestation['price'] = props.props_price_of_service;
+    tmp_prestation['travel_expenses'] = props.travel_expenses || 0.0;
     tmp_prestation['preparation_time'] = props.props_preparation_time;
     tmp_prestation['number_of_artists'] = props.props_number_of_artist;
     tmp_prestation['duration_of_the_service'] = props.props_service_time;
     tmp_prestation['thematics'] = props.props_thematics_options_selected;
     tmp_prestation['unit_of_the_preparation_time'] = checkUnit(props.props_unit_time_of_preparation);
     tmp_prestation['unit_duration_of_the_service'] = checkUnit(props.props_unit_time_of_service);
-    await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
-        let tmp = _props.allPrestation;
-        tmp.push(resp.data);
-        _props.setAllPrestation(tmp);
-        dispatch(addAllUserPrestation(tmp));
-        _props.setAddNewPrestation(false);
-        _props.close();
-    }).catch((error) => {
-        let errorMessage = Validators.checkErrorMessage(error);
-        toast.error(errorMessage.message)
-    });
-    return true;
+
+    let response;
+    if (!update) {
+        await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+            let tmp = _props.allPrestation;
+            tmp.push(resp.data);
+            _props.setAllPrestation(tmp);
+            dispatch(addAllUserPrestation(tmp));
+            _props.setAddNewPrestation(false);
+            _props.close();
+            response = {"error": false, message: null}
+        }).catch((error) => {
+            response = {"error": true, message: Validators.checkErrorMessage(error).message}
+        });
+    } else {
+        await axios.put("api/artist_services/update/" + props.service_id, objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+            let tmp = [..._props.allPrestation];
+            tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
+            _props.setAllPrestation(tmp);
+            dispatch(addAllUserPrestation(tmp));
+            response = {"error": false, message: null}
+        }).catch((error) => {
+            response = {"error": true, message: Validators.checkErrorMessage(error).message}
+        });
+    }
+    return response;
 };
 
 export const checkUnitKey = (val, opt) => {
@@ -345,8 +366,15 @@ export const checkKeyOfValue = (object, value) => {
 };
 
 export const generateBodyFormOfGallery = (bodyFormData, PropsFiles) => {
-    for (let row in PropsFiles)
-        bodyFormData.append('gallery_' + row, PropsFiles[row]['file']);
+    let galleries = [];
+    for (let row in PropsFiles) {
+        if (PropsFiles[row]['file'])
+            bodyFormData.append('gallery_' + row, PropsFiles[row]['file']);
+        if (typeof PropsFiles[row] === "string")
+            galleries.push(PropsFiles[row])
+    }
+    if (galleries.length !== 0)
+        bodyFormData.append('galleries', JSON.stringify(galleries));
 };
 
 export const objectToFormData = (object, PropsFiles) => {
@@ -367,6 +395,7 @@ export const objectToFormData = (object, PropsFiles) => {
 };
 
 export const resetPropsForm = (dispatch) => {
+    dispatch(addUserId(null));
     dispatch(addOptionSelected([]));
     dispatch(addTitleOfService(''));
     dispatch(addServiceCountry(''));
@@ -375,20 +404,22 @@ export const resetPropsForm = (dispatch) => {
     dispatch(addDescriptionOfService(''));
     dispatch(addPicturesOfService([]));
     dispatch(changeStatusOfService(null));
-    dispatch(changeMovingPrice(null));
+    dispatch(addTravelExpenses(0.0));
     dispatch(addEventSelected([]));
-    dispatch(addServiceTime(null));
-    dispatch(addMaterialsOfService([]));
-    dispatch(addPriceOfService(null));
-    dispatch(addPreparationTime(null));
+    dispatch(addServiceTime(0.0));
+    dispatch(addPriceOfService(0.0));
+    dispatch(addPreparationTime(0.0));
     dispatch(addNumberOfArtist(1));
+    dispatch(addNumberOfArtist(1));
+    dispatch(addServiceRefundPolicy(""));
     dispatch(addUnitTimeOfPreparation({"day": false, "hours": false, "min": false, "sec": false}));
     dispatch(addUnitTimeOfService({"day": false, "hours": false, "min": false, "sec": false}));
 };
 
-export const deleteInObject = (object) => {
+export const deleteInObject = (object, special_key) => {
     delete object['id'];
     delete object['created_at'];
     delete object['modified_at'];
+    if (special_key) for (let row in special_key) delete object[special_key[row]];
     return object
 };

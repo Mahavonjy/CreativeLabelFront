@@ -35,16 +35,28 @@ function Options(props) {
     };
 
     const deleteOptions = (indexOfOption) => {
-        setOptions(options.filter((option, index) => index !== indexOfOption))
+        axios.delete('api/options/delete/' + options[indexOfOption]['id'], {headers: props.headers}).then((resp) => {
+            let tmp = options.filter((option, index) => index !== indexOfOption);
+            setOptions(tmp);
+            dispatch(addAllUserOptions(tmp));
+            toast.success("supprimer avec succès");
+        }).catch((error) => toast.error(checkErrorMessage(error).message))
     };
 
     const editOption = (data) => {
         if (validation(data)) {
             let tmp_options = [...options];
-            tmp_options[index] = data;
-            console.log(tmp_options)
-            // setOptions(tmp_options);
-            // setEdit(false);
+            let option_id = tmp_options[index]['id'];
+            data["hidden"] = tmp_options[index]['hidden'];
+            data["services_id_list"] = tmp_options[index]['services_id_list'];
+            axios.put('api/options/update/' + option_id, data, {headers: props.headers}).then((resp) => {
+                tmp_options[index] = resp.data;
+                setOptions(tmp_options);
+                dispatch(addAllUserOptions(tmp_options));
+                setEdit(false);
+                setAddNewOption(false);
+                toast.success("modification enregister");
+            }).catch((error) => toast.error(checkErrorMessage(error).message))
         }
     };
 
@@ -60,11 +72,7 @@ function Options(props) {
                 setEdit(false);
                 setAddNewOption(false);
                 toast.success("crée avec succès");
-            }).catch((error) => {
-                let errorMessage = checkErrorMessage(error);
-                toast.error(errorMessage.message);
-                return false;
-            })
+            }).catch((error) => toast.error(checkErrorMessage(error).message))
         }
     };
 
