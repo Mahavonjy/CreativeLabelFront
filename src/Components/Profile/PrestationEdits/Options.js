@@ -1,11 +1,13 @@
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import ReactTooltip from "react-tooltip";
+import {checkErrorMessage} from "../../Validators/Validatiors";
 import EditOrAddNewOptions from "./EditOrAddNewOption";
 import Modal from "react-awesome-modal";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { addAllUserOptions } from "../../FunctionTools/FunctionProps";
-import { checkIfHidden } from "../../FunctionTools/Tools";
+import {addAllUserOptions, addMaterialsOfService} from "../../FunctionTools/FunctionProps";
+import {checkIfHidden, objectToFormData} from "../../FunctionTools/Tools";
 
 function Options(props) {
 
@@ -22,11 +24,11 @@ function Options(props) {
 
     const changeOptionsStatus = (index, opt) => {
         let tmp = [...options];
-        if (opt) tmp[index]['service_id_who_is_active'] = props_options[index]['service_id_who_is_active'].filter(id => !service_id === id);
+        if (opt) tmp[index]['services_id_list'] = props_options[index]['services_id_list'].filter(id => !service_id === id);
         else {
-            let option_tmp = props_options[index]['service_id_who_is_active'];
+            let option_tmp = props_options[index]['services_id_list'];
             option_tmp.push(service_id);
-            tmp[index]['service_id_who_is_active'] = option_tmp;
+            tmp[index]['services_id_list'] = option_tmp;
         }
         setOptions(tmp);
         dispatch(addAllUserOptions(tmp));
@@ -40,17 +42,29 @@ function Options(props) {
         if (validation(data)) {
             let tmp_options = [...options];
             tmp_options[index] = data;
-            setOptions(tmp_options);
-            setEdit(false);
+            console.log(tmp_options)
+            // setOptions(tmp_options);
+            // setEdit(false);
         }
     };
 
-    const addOption = (data) => {
+    const createOption = (data) => {
         if (validation(data)) {
             data['hidden'] = false;
-            setOptions(options => [...options, data]);
-            setEdit(false);
-            setAddNewOption(false);
+            data['services_id_list'] = [service_id];
+            axios.post('api/options/create', data, {headers: props.headers}).then((resp) => {
+                let tmp = [...props_options];
+                tmp.push(resp.data);
+                setOptions(tmp);
+                dispatch(addAllUserOptions(tmp));
+                setEdit(false);
+                setAddNewOption(false);
+                toast.success("crée avec succès");
+            }).catch((error) => {
+                let errorMessage = checkErrorMessage(error);
+                toast.error(errorMessage.message);
+                return false;
+            })
         }
     };
 
@@ -61,7 +75,7 @@ function Options(props) {
         } else if (!data.price) {
             toast.error("Veuillez precisez le prix");
             return false;
-        } else if (!data.tag) {
+        } else if (!data.artist_tagged) {
             toast.error("Veuillez precisez le tag");
             return false;
         }
@@ -85,7 +99,7 @@ function Options(props) {
                     <button className="ModalClose float-left" onClick={() => edit ? setEdit(false) : setAddNewOption(false)}>
                         <i className="icon-close s-24" style={{color:"orange"}} />
                     </button>
-                    <EditOrAddNewOptions edit={addNewOption ? false : edit} func={addNewOption ? addOption : editOption} data={data}/>
+                    <EditOrAddNewOptions edit={addNewOption ? false : edit} func={addNewOption ? createOption : editOption} data={data}/>
                 </div>
             </Modal>}
             {/* END */}
@@ -109,11 +123,11 @@ function Options(props) {
                 {options.map((val, index) =>
                         <tr key={index}>
                             <th className="text-center small bolder border-left-0 border-bottom-0" scope="row">
-                                {checkIfHidden(val.service_id_who_is_active, service_id) ? <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation" onClick={() => changeOptionsStatus(index, true)}/>:
+                                {checkIfHidden(val.services_id_list, service_id) ? <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation" onClick={() => changeOptionsStatus(index, true)}/>:
                                 <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion n'est pas activer pour cette prestation" onClick={() => changeOptionsStatus(index, false)}/> }
                             </th>
                             <th className="text-center small bolder border-left-0 border-bottom-0" scope="row">{val.name}</th>
-                            <td className="small" data-title="Tag">{val.tag}</td>
+                            <td className="small" data-title="Tag">{val.artist_tagged}</td>
                             <td className="small" data-title="Prix">{val.price}$</td>
                             <td className="small" data-title="Description">{val.description || "Pas de description"}</td>
                             <td className="small border-bottom-0 border-right-0" data-title="Ajouter">

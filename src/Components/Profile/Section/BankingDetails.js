@@ -87,7 +87,8 @@ function BankingDetails(props) {
 
     return (
         <div className="col">
-            <div className={!show_banking_details ? "row justify-content-center my-3 blur": "row justify-content-center my-3"}>
+            <div
+                className={!show_banking_details && banking['id'] ? "row justify-content-center my-3 blur" : "row justify-content-center my-3"}>
                 <div className="col-lg-6">
                     <div className="card">
                         <div className="card-header transparent">
@@ -215,9 +216,11 @@ function BankingDetails(props) {
                                     </div>
                                     {banking['id'] ?
                                         <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => dispatchFunc("update")}>Changer les informations</button> :
+                                                onClick={() => dispatchFunc("update")}>Changer les
+                                            informations</button> :
                                         <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => dispatchFunc("create")}>Ajouter les informations</button>}
+                                                onClick={() => dispatchFunc("create")}>Ajouter les
+                                            informations</button>}
                                 </div>
                                 {/* #END# Input */}
                             </div>
@@ -225,7 +228,7 @@ function BankingDetails(props) {
                     </div>
                 </div>
             </div>
-            {!show_banking_details &&
+            {!show_banking_details && banking['id'] &&
             <div className="absolute center-center col" tabIndex="0"
                  onKeyDown={(e) => {e.key === "Enter" && checkPassword()}}>
                 <i className="icon icon-locked s-24 text-red"/>

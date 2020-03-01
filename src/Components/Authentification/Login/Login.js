@@ -268,7 +268,7 @@ function Login() {
                     <LoginGoogle Label="Connecter avec Google"/>
                     <LoginFacebook Label="Connecter avec Facebook"/>
                 </div>
-                <small className="r-disc">Vous n'avez pas de compte ISL Creative?</small>
+                <small className="r-disc">Vous n'avez pas de compte ISL Creative ?</small>
                 <button className="r-btn btn btn-outline-danger"
                         onClick={() => window.location.replace('/register')}>Créer un compte
                 </button>

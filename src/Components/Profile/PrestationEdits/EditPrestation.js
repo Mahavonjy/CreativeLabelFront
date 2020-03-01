@@ -181,16 +181,16 @@ function EditPrestation(props) {
                                     </div>
                                 </div>
                                 {/* End */}
-                                <RefundPolicy edit/>
+                                <RefundPolicy headers={props.headers} edit/>
                                 <PrestationDetails edit/>
                                 <h2 className="text-center text-primary pb-3">Calendrier&nbsp;<i className="icon icon-info" data-tip="Ceci est un aperçu de votre planing"/></h2>
                                 <Calendar noEdit/>
                             </div>
                             <div className="tab-pane fade" id="v-pills-materials" role="tabpanel" aria-labelledby="v-pills-materials-tab">
-                                <Materials edit/>
+                                <Materials headers={props.headers} edit/>
                             </div>
                             <div className="tab-pane fade" id="v-pills-options-gestion" role="tabpanel" aria-labelledby="v-pills-options-gestion-tab">
-                                <Options edit/>
+                                <Options headers={props.headers} edit/>
                             </div>
                         </div>
                     </div>

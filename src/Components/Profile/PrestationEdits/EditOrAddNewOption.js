@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import {addDescriptionOfService} from "../../FunctionTools/FunctionProps";
 import { changeFields } from "../../FunctionTools/Tools";
 
 function EditOrAddNewOptions(props) {
@@ -6,20 +7,15 @@ function EditOrAddNewOptions(props) {
     const isMounted = useRef(false);
     const [name, setName] = useState("");
     const [price, setPrice] = useState(null);
-    const [tag, setTag] = useState("");
+    const [artist_tagged, setTag] = useState("");
     const [description, setDescription] = useState("");
 
-    let data = {
-        name: name,
-        tag: tag,
-        price: price,
-        description: description
-    };
+    let data = {name, artist_tagged, price, description};
 
     useEffect(() => {
         try {
             setName(props.data.name);
-            setTag(props.data.tag);
+            setTag(props.data.artist_tagged);
             setPrice(props.data.price);
             setDescription(props.data.description);
         } catch (e) {
@@ -54,23 +50,26 @@ function EditOrAddNewOptions(props) {
                         <label className="text-red">Tag</label>
                         <div className="form-line">
                             <input type="text" id="name" className="form-control" placeholder="Tag" name="name"
-                                   value={tag || ''} onChange={(e) => changeFields(setTag, e)} />
+                                   value={artist_tagged || ''} onChange={(e) => changeFields(setTag, e)} />
                         </div>
                     </div>
                 </div>
                 <div className="col-md-6">
                     <div className="form-group form-float">
                         <label className="text-red">Description</label>
-                        <div className="form-line">
-                                    <textarea name="message" rows="10" id="input-message" value={description}
-                                              onChange={(e) => changeFields(setDescription, e)}
-                                              placeholder="Description concernant cette option"/>
+                        <div className="form-group form-float">
+                            <div className="form-line">
+                                        <textarea defaultValue={description} id="desc" name="desc"
+                                                  className="form-control" style={{height: 164}} value={description}
+                                                  placeholder="Décrire l'option en quelques mots"
+                                                  onChange={(e) => changeFields(setDescription, e)}/>
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-            <button className="btn btn-outline-danger mt-3 mb-3 pl-5 pr-5" onClick={props.edit ? () => props.func(data) : () => props.func(data)}>{props.edit ? "Appliquer": "Crée"}</button>
+            <button className="btn btn-outline-danger mt-3 mb-3 pl-5 pr-5" onClick={() => props.func(data)}>{props.edit ? "Appliquer les changements": "Crée"}</button>
         </div>
     );
 }

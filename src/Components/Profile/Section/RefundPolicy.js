@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 import {profileInitialisationCondition} from "../../FunctionTools/FunctionProps";
 import {deleteInObject} from "../../FunctionTools/Tools";
 
@@ -30,7 +31,9 @@ function RefundPolicy (props) {
         tmp['refund_policy'] = refund_policy;
         dispatch(profileInitialisationCondition(tmp));
         tmp = deleteInObject(tmp);
-        axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => null)
+        axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => {
+            toast.success("enregistrer")
+        })
     };
 
     useEffect(() => {

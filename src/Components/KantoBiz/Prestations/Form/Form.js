@@ -144,9 +144,9 @@ function Form(props) {
             <div className="text-center pt-2">
                 <small className="text-center">Cliquer sur suivant ou tapoter sur 'ENTRER' pour passer à la page suivante</small>
             </div>
-            {props.new && !loading ?
+            {props.new || props.register && !loading ?
             <div className="text-center pt-2">
-                {state_steps_index === component_steps.length - 1 &&
+                {state_steps_index === component_steps.length - 1 && !props.register &&
                 <button className="btn btn-outline-success center pl-5 pr-5"
                         onClick={() => addNewPrestation()}>Enregister</button>}
             </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}

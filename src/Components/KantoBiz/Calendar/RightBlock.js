@@ -75,7 +75,7 @@ function RightBlock (props) {
             update().then(r => null)
         } else {
             for (let r in  editOptions) {
-                if (!compareArrays(editOptions[r]['service_id_who_is_active'], editOptions[r]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['service_id_who_is_active'])) {
+                if (!compareArrays(editOptions[r]['services_id_list'], editOptions[r]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'])) {
                     update().then(r => null);
                 }
             }
@@ -91,11 +91,11 @@ function RightBlock (props) {
 
     const changeOptionHide = (index, opt) => {
         let tmp_editOptions = [...editOptions];
-        let tmp_opt = tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['service_id_who_is_active'];
-        if (opt) tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['service_id_who_is_active'] = tmp_opt.filter(id => !editPrestation["id"] === id);
+        let tmp_opt = tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'];
+        if (opt) tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt.filter(id => !editPrestation["id"] === id);
         else {
             tmp_opt.push(editPrestation["id"]);
-            tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['service_id_who_is_active'] = tmp_opt;
+            tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt;
         }
         setEditOptions(tmp_editOptions);
     };
@@ -213,7 +213,7 @@ function RightBlock (props) {
                                 {val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"] ?
                                     <td><i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, false)}/></td> :
                                     <td>
-                                        {checkIfHidden(val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear].service_id_who_is_active, editPrestation["id"]) ?
+                                        {checkIfHidden(val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear].services_id_list, editPrestation["id"]) ?
                                             <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, true)}/>:
                                             <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, false)}/>}
                                     </td>}
