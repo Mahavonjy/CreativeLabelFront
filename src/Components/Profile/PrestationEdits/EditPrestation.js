@@ -166,8 +166,6 @@ function EditPrestation(props) {
 
     useEffect(() => {
 
-        console.log(service_id)
-
         return () => {
             isMounted.current = true
         };

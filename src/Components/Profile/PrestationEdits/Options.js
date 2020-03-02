@@ -6,8 +6,8 @@ import EditOrAddNewOptions from "./EditOrAddNewOption";
 import Modal from "react-awesome-modal";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import {addAllUserOptions, addMaterialsOfService} from "../../FunctionTools/FunctionProps";
-import {checkIfHidden, objectToFormData} from "../../FunctionTools/Tools";
+import {addAllUserOptions} from "../../FunctionTools/FunctionProps";
+import {checkIfHidden} from "../../FunctionTools/Tools";
 
 function Options(props) {
 
@@ -21,6 +21,7 @@ function Options(props) {
     const [index, setIndex] = useState(null);
     const [data, setData] = useState(null);
     const [options, setOptions] = useState(props_options);
+    const [headers, setHeaders] = useState({});
 
     const changeOptionsStatus = (index, opt) => {
         let tmp = [...options];
@@ -35,7 +36,7 @@ function Options(props) {
     };
 
     const deleteOptions = (indexOfOption) => {
-        axios.delete('api/options/delete/' + options[indexOfOption]['id'], {headers: props.headers}).then((resp) => {
+        axios.delete('api/options/delete/' + options[indexOfOption]['id'], {headers: headers}).then((resp) => {
             let tmp = options.filter((option, index) => index !== indexOfOption);
             setOptions(tmp);
             dispatch(addAllUserOptions(tmp));
@@ -49,7 +50,7 @@ function Options(props) {
             let option_id = tmp_options[index]['id'];
             data["hidden"] = tmp_options[index]['hidden'];
             data["services_id_list"] = tmp_options[index]['services_id_list'];
-            axios.put('api/options/update/' + option_id, data, {headers: props.headers}).then((resp) => {
+            axios.put('api/options/update/' + option_id, data, {headers: headers}).then((resp) => {
                 tmp_options[index] = resp.data;
                 setOptions(tmp_options);
                 dispatch(addAllUserOptions(tmp_options));
@@ -64,7 +65,7 @@ function Options(props) {
         if (validation(data)) {
             data['hidden'] = false;
             data['services_id_list'] = [service_id];
-            axios.post('api/options/create', data, {headers: props.headers}).then((resp) => {
+            axios.post('api/options/create', data, {headers: headers}).then((resp) => {
                 let tmp = [...props_options];
                 tmp.push(resp.data);
                 setOptions(tmp);
@@ -91,6 +92,10 @@ function Options(props) {
     };
 
     useEffect(() => {
+
+        let _headers = props.headers;
+        _headers['Content-Type'] = 'application/json';
+        setHeaders(_headers);
 
         return () => {
             isMounted.current = true

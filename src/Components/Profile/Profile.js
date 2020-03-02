@@ -15,7 +15,7 @@ import EditContractBeats from "./ContractBeats/EditContractBeats";
 import EditProfile from './Edits/EditProfile';
 import EditSingle from './Edits/EditSingle';
 import BankingDetails from "./Section/BankingDetails";
-import CalendarManagement from "./Section/CalendarManagement";
+import CalendarManagement from "./Section/CalendarProfile/CalendarManagement";
 import MyPrestations from "./Section/MyPrestations";
 import PaymentsAndReservations from "./Section/PaymentsAndReservations";
 import RefundPolicy from "./Section/RefundPolicy";
@@ -135,6 +135,7 @@ function Profile(props) {
 
     useEffect(() => {
         headers['Isl-Token'] = user_credentials.token;
+        headers['Content-Type'] = 'multipart/form-data';
         if (!ready_beats && user_beats.length !== 0) {
             getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
             dispatch(profileReadyBeats())

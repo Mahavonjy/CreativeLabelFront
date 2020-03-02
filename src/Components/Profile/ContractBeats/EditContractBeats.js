@@ -114,6 +114,8 @@ function EditContractBeats(props) {
     };
 
     const handleSubmitContractUpdate = async() => {
+        let headers = props.headers;
+        headers['Content-Type'] = 'application/json';
         let contract_array = [
             ["basic", basic, basic_number_audio_stream, basic_number_radio_station, basic_number_of_distribution_copies, basic_enable],
             ["silver", silver, silver_number_audio_stream, silver_number_radio_station, silver_number_of_distribution_copies, silver_enable],
@@ -129,7 +131,7 @@ function EditContractBeats(props) {
             delete response.data['created_at'];
             delete response.data['modified_at'];
             await tmp.push(
-                axios.put( "api/beats/contract/" + response.url, response.data, {headers: props.headers}).then(() => {
+                axios.put( "api/beats/contract/" + response.url, response.data, {headers: headers}).then(() => {
                     let tmp = contract;
                     tmp[response.data['contract_name']] = response.data;
                     dispatch(profileInitialisationContract(tmp));
@@ -140,7 +142,7 @@ function EditContractBeats(props) {
         }
 
         Promise.all(tmp_call).then(() => {
-            axios.get( "api/beats/pricing", {headers: props.headers}).then(resp => {
+            axios.get( "api/beats/pricing", {headers: headers}).then(resp => {
                 dispatch(beatsInitialisationPricing(resp.data));
                 toast.success("Enregistrement avec success")
             }).catch(err => {

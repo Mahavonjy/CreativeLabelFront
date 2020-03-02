@@ -47,9 +47,9 @@ function RightBlock (props) {
         await setEditOptions([...tmp_options]);
         await addSpecialDateToData(prestations, selectedMonth, daySelected, selectedYear);
         await setEditPrestation(prestations[i]);
-        await setPrice(prestations[i]["special_date"][selectedMonth + "/" + daySelected + "/" + selectedYear]["price"]);
-        await setMovingPrice(prestations[i]["special_date"][selectedMonth + "/" + daySelected + "/" + selectedYear]["moving_price"]);
-        setStateMaterials(prestations[i]["special_date"][selectedMonth + "/" + daySelected + "/" + selectedYear]["materials"]);
+        await setPrice(prestations[i]["special_dates"][selectedMonth + "/" + daySelected + "/" + selectedYear]["price"]);
+        await setMovingPrice(prestations[i]["special_dates"][selectedMonth + "/" + daySelected + "/" + selectedYear]["moving_price"]);
+        setStateMaterials(prestations[i]["special_dates"][selectedMonth + "/" + daySelected + "/" + selectedYear]["materials"]);
         await setLoadMaterials(true);
         if (!opt)
             await LeftBlock.handleClick(i)
@@ -58,9 +58,9 @@ function RightBlock (props) {
     const update = async () => {
         let tmp_originalPrestation = prestations;
         tmp_originalPrestation[index_] = {...editPrestation};
-        tmp_originalPrestation[index_]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["price"] = price;
-        tmp_originalPrestation[index_]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["moving_price"] = moving_price;
-        tmp_originalPrestation[index_]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["materials"] = materials;
+        tmp_originalPrestation[index_]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["price"] = price;
+        tmp_originalPrestation[index_]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["moving_price"] = moving_price;
+        tmp_originalPrestation[index_]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["materials"] = materials;
         await dispatch(addAllUserPrestation([...tmp_originalPrestation]));
         await dispatch(addAllUserOptions([...editOptions]));
     };
@@ -69,13 +69,13 @@ function RightBlock (props) {
         if (
             price !== editPrestation["price"]
             || moving_price !== editPrestation["moving_price"]
-            || editPrestation["hidden"] !== editPrestation["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"]
+            || editPrestation["hidden"] !== editPrestation["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"]
             || !compareArrays(editPrestation["materials"], materials)
         ) {
             update().then(r => null)
         } else {
             for (let r in  editOptions) {
-                if (!compareArrays(editOptions[r]['services_id_list'], editOptions[r]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'])) {
+                if (!compareArrays(editOptions[r]['services_id_list'], editOptions[r]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'])) {
                     update().then(r => null);
                 }
             }
@@ -84,18 +84,18 @@ function RightBlock (props) {
 
     const changePrestationHide = () => {
         let first_tmp = {...editPrestation};
-        let second_tmp = first_tmp["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'];
-        first_tmp["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'] = !second_tmp;
+        let second_tmp = first_tmp["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'];
+        first_tmp["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'] = !second_tmp;
         setEditPrestation(first_tmp);
     };
 
     const changeOptionHide = (index, opt) => {
         let tmp_editOptions = [...editOptions];
-        let tmp_opt = tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'];
-        if (opt) tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt.filter(id => !editPrestation["id"] === id);
+        let tmp_opt = tmp_editOptions[index]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'];
+        if (opt) tmp_editOptions[index]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt.filter(id => !editPrestation["id"] === id);
         else {
             tmp_opt.push(editPrestation["id"]);
-            tmp_editOptions[index]["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt;
+            tmp_editOptions[index]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt;
         }
         setEditOptions(tmp_editOptions);
     };
@@ -158,7 +158,7 @@ function RightBlock (props) {
     };
 
     const getHidePrestation = () => {
-        if (editPrestation["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'] && editPrestation["special_date"]["hidden"])
+        if (editPrestation["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'] && editPrestation["special_dates"]["hidden"])
             return (<i className="icon-eye absolute right-0 s-36 mr-3" onClick={changePrestationHide}/>);
         else return (<i className="icon-eye-slash absolute right-0 s-36 mr-3" onClick={changePrestationHide}/>)
     };
@@ -210,16 +210,16 @@ function RightBlock (props) {
                         <tbody>
                         {editOptions.map((val, index) =>
                             <tr className="bg-secondary" key={index}>
-                                {val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"] ?
+                                {val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"] ?
                                     <td><i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, false)}/></td> :
                                     <td>
-                                        {checkIfHidden(val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear].services_id_list, editPrestation["id"]) ?
+                                        {checkIfHidden(val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].services_id_list, editPrestation["id"]) ?
                                             <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, true)}/>:
                                             <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, false)}/>}
                                     </td>}
-                                <td><small className="bolder">{val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear].name}</small></td>
-                                <td><small className="bolder">{val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear].tag}</small></td>
-                                <td><small className="bolder">{val["special_date"][selectedMonth + "/" + selectedDay + "/" + selectedYear].price}$</small></td>
+                                <td><small className="bolder">{val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].name}</small></td>
+                                <td><small className="bolder">{val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].tag}</small></td>
+                                <td><small className="bolder">{val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].price}$</small></td>
                             </tr>)}
                         </tbody> : <div className="text-center"><small className="bolder">Vous n'avez pas d'options</small></div>}
                 </table>}

@@ -188,11 +188,13 @@ export const addSpecialDateToData = (tmp_data, selectedMonth, selectedDay, selec
     let key = !date_key ? selectedMonth + "/" + selectedDay + "/" + selectedYear : date_key;
 
     function addToSpecialIndex(i) {
-        if (!tmp_data[i]["special_date"][key]) {
-            let tmp = {...tmp_data[i]};
-            delete tmp["special_date"];
-            tmp_data[i]["special_date"][key] = tmp
-        }
+        let tmp = {...tmp_data[i]};
+        delete tmp["special_dates"];
+        if (!tmp_data[i]["special_dates"])
+            tmp_data[i]["special_dates"] = {};
+        tmp = deleteInObject(tmp);
+        tmp["materials"] = deleteInObject(tmp["materials"]);
+        tmp_data[i]["special_dates"][key] = tmp;
     }
 
     if (index) addToSpecialIndex(index);
@@ -282,8 +284,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
         return {"error": true, message: null};
     await _props.setActiveToast(true);
     let tmp_prestation = {};
-    let headers = _props.headers;
-    headers['Content-Type'] = 'multipart/form-data';
+
     if (update) {
         tmp_prestation['user_id'] = props.user_id;
         tmp_prestation['materials_id'] = props.materials_id;
@@ -307,7 +308,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
 
     let response = {};
     if (!update) {
-        await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+        await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: _props.headers}).then((resp) => {
             let tmp = _props.allPrestation;
             tmp.push(resp.data);
             _props.setAllPrestation(tmp);
@@ -319,7 +320,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
             response = {"error": true, message: Validators.checkErrorMessage(error).message}
         });
     } else {
-        await axios.put("api/artist_services/update/" + props.service_id, objectToFormData(tmp_prestation, props.PropsFiles), {headers: headers}).then((resp) => {
+        await axios.put("api/artist_services/update/" + props.service_id, objectToFormData(tmp_prestation, props.PropsFiles), {headers: _props.headers}).then((resp) => {
             let tmp = [..._props.allPrestation];
             tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
             _props.setAllPrestation(tmp);
