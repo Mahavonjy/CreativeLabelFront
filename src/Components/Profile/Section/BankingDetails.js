@@ -23,6 +23,7 @@ function BankingDetails(props) {
     const [swift_bic, setSwiftBic] = useState(banking['swift']);
     const [rules, setRules] = useState(banking["rules"]);
     const [password, setPassword] = useState("");
+    const [headersCustomed, setCustomHeaders] = useState({});
 
     const dispatchFunc = (func) => {
         let validate = validatorBanking(banking);
@@ -41,7 +42,7 @@ function BankingDetails(props) {
     };
 
     const checkPassword = () => {
-        axios.post('api/users/check_password', {password}, {headers: props.headers}).then((resp) => {
+        axios.post('api/users/check_password', {password}, {headers: headersCustomed}).then((resp) => {
             dispatch(profileShowBankingDetails(true));
         }).catch((error) => {
             let errorMessage = checkErrorMessage(error);
@@ -52,7 +53,8 @@ function BankingDetails(props) {
     const createBanking = () => {
         let tmp = {...banking};
         tmp = deleteInObject(tmp);
-        axios.post('api/banking/create', tmp, {headers: props.headers}).then((resp) => {
+        axios.post('api/banking/create', tmp, {headers: headersCustomed}).then((resp) => {
+            dispatch(profileShowBankingDetails(true));
             dispatch(profileInitialisationBanking(resp.data));
             toast.success("créer avec success")
         }).catch((error) => {
@@ -65,7 +67,7 @@ function BankingDetails(props) {
         let tmp = {...banking};
         tmp = deleteInObject(tmp);
         if (tmp["phone"] == null) tmp["phone"] = "";
-        axios.put('api/banking/update', tmp, {headers: props.headers}).then((resp) => {
+        axios.put('api/banking/update', tmp, {headers: headersCustomed}).then((resp) => {
             dispatch(profileInitialisationBanking(resp.data));
             toast.success("details mise a jour")
         }).catch((error) => {
@@ -79,11 +81,14 @@ function BankingDetails(props) {
         let tmp = [];
         for (const [key, value] of Object.entries(countryRegex)) tmp.push(value);
         setCountryReg(tmp);
+        let _headers = props.headers;
+        _headers['Content-Type'] = 'application/json';
+        setCustomHeaders(_headers);
 
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [headersCustomed]);
 
     return (
         <div className="col">

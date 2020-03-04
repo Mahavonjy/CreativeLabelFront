@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CreativeHeaders } from "../FunctionTools/CreateFields";
 import { EventAndThematics as EventAndThematics_ } from "./EventsAndThematics";
 import Results from "./Prestations/Results/Results";
-import "./style/KantoBiz.css";
+import "../../assets/css/style/KantoBiz.css";
 import DisplayPrestation from "./Prestations/Results/DisplayPrestation";
 import ReactTooltip from 'react-tooltip';
 import { activeDisplayServicePage, activeEventAndThematicsPage, activeResultPage } from "../FunctionTools/FunctionProps";

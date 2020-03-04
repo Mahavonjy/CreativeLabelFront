@@ -112,7 +112,7 @@ function MyPrestations(props) {
             axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers: props.headers}).then(resp => {
                 toast.success("Supprimer avec succès");
                 let tmp = allPrestation.filter((service, index) => index !== indexOfService);
-                setAllPrestation(tmp)
+                setAllPrestation(tmp);
                 props.setAllPrestation(tmp);
                 dispatch(addAllUserPrestation(tmp));
             });

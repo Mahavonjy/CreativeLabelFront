@@ -31,9 +31,11 @@ function RefundPolicy (props) {
         if (!props.edit) {
             let tmp = {...conditions};
             tmp['refund_policy'] = refund_policy;
+            let _headers = props.headers;
+            _headers['Content-Type'] = 'application/json';
             dispatch(profileInitialisationCondition(tmp));
             tmp = deleteInObject(tmp);
-            axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => {
+            axios.put('api/artist_conditions/update', tmp, {headers: _headers}).then((err) => {
                 toast.success("enregistrer")
             })
         } else dispatch(addServiceRefundPolicy(refund_policy));

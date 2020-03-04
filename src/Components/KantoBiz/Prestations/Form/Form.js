@@ -5,7 +5,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
 import {createOrUpdatePrestation, resetPropsForm} from "../../../FunctionTools/Tools";
-import "../../style/Form.css"
+import "../../../../assets/css/style/Form.css"
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
@@ -92,6 +92,12 @@ function Form(props) {
         await document.getElementById("prev-button").click();
     };
 
+    const checkProps = () => {
+        if (props.new) return true;
+        else if (props.register) return true;
+        return false;
+    };
+
     useEffect(() => {
 
         if (props.new)
@@ -100,11 +106,11 @@ function Form(props) {
         return () => {
             isMounted.current = true
         };
-    }, [steps_index, state_steps_index]);
+    }, [steps_index, state_steps_index, loading]);
 
     return (
         <div className='step-progress bg-dark center' tabIndex="0"
-             onKeyDown={(e) => {e.key === "Enter" && Next()}}>
+             onKeyDown={(e) => {e.key === "Enter" && console.log("")}}>
             <ToastContainer/>
             {props.register &&
             <button className="ModalClose absolute" data-tip="Annuler" onClick={() => props.close()}>
@@ -150,24 +156,26 @@ function Form(props) {
             </div>
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             <div className="text-center pt-2">
-                <small className="text-center">Cliquer sur suivant ou tapoter sur 'ENTRER' pour passer à la page suivante</small>
+                <small className="text-center">Cliquer sur suivant pour passer à l'étape suivante</small>
             </div>
-            {props.new || props.register && !loading ?
+            {checkProps() && !loading ?
             <div className="text-center pt-2">
                 {state_steps_index === component_steps.length - 1 && !props.register &&
                 <button className="btn btn-outline-success center pl-5 pr-5"
                         onClick={() => addNewPrestation()}>Enregister</button>}
             </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
-            <div className="NextOrPrevPageStepper mt-4">
-                {state_steps_index !== 0 && <span className="float-left" onClick={() => Prev()}><i
-                    className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent</span>}
+            <div className="NextOrPrevPageStepper mt-4 pb-5">
+                {state_steps_index !== 0 && <button className="btn btn-outline-light pr-5 mb-3 bolder float-left border-bottom-0 border-right-0"
+                                                    style={{marginLeft: "-25px!important"}}
+                                                    onClick={() => Prev()}><i
+                    className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>Precedent</button>}
                 {state_steps_index === component_steps.length - 1 ?
                     <div>
                         {!props.new && <a href="#register"
                                           className="text-black float-right mr-5 m-b-50 bg-success pr-5 pl-5 text-center"
                                           style={{borderRadius: 5}}>Valider</a>}
-                    </div> : <span className="float-right" onClick={() => Next()}>Suivant&nbsp;<i
-                        className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></span>}
+                    </div> : <button className="btn btn-outline-light pl-5 mb-3 bolder float-right border-bottom-0 border-left-0" onClick={() => Next()}>Suivant&nbsp;<i
+                        className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></button>}
             </div>
         </div>
     );

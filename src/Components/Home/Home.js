@@ -23,7 +23,7 @@ import {
     addSimilarBeats,
     addTotalPrice,
     addUserCredentials,
-    beatsInitialisationPricing,
+    beatsInitialisationPricing, changeUserGenreSelected,
     discoveryBeats,
     islBeats,
     latestBeats,
@@ -56,6 +56,7 @@ function Home() {
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
     const beats = useSelector(state => state.beats.beats);
+    const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -255,7 +256,7 @@ function Home() {
                 dispatch(addAllUserOptions(resp.data['user_options']));
                 dispatch(addAllUserPrestation(resp.data['user_services']));
             }).catch(err => ifConnectionError(err))
-        ]).then(() => NotOnline()).catch(() => fetchUserData())
+        ]).then(() => {dispatch(changeUserGenreSelected());NotOnline()}).catch(() => fetchUserData())
     };
 
     const logout = async () => {
@@ -281,11 +282,7 @@ function Home() {
         async function fetchData() {
             await sessionService.loadSession().then((currentSession) => {
                 sessionService.loadUser().then((data) => {
-                    let user_data = {
-                        name: data.name,
-                        email: data.email,
-                        token: currentSession.token
-                    };
+                    let user_data = {name: data.name, email: data.email, token: currentSession.token};
                     dispatch(addUserCredentials(user_data));
                     user_credentials = user_data;
                 });
@@ -302,7 +299,7 @@ function Home() {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [ifUserGenreSelected]);
 
     if (loading) {
         // Here is Loading page
@@ -318,7 +315,7 @@ function Home() {
                         <React.Fragment>
                             <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
                                 {/* SideBars with ICON */}
-                                {CreateFields.SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying)}
+                                {CreateFields.SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected)}
                                 {/* End SideBars */}
                             </aside>
                             <main>

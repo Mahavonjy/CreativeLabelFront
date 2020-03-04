@@ -154,12 +154,6 @@ export function addBeatMakerBeats(data) {
     };
 }
 
-export function arrayRemove (arr, value)  {
-    return arr.filter( function(elem){
-        return elem !== value;
-    });
-};
-
 export function addSimilarBeats(data) {
     return async dispatch => {
         dispatch({
@@ -709,6 +703,14 @@ export function addCurrentDateKey(data) {
         dispatch({
             type: "ADD_CURRENT_DATE_KEY",
             data: data
+        });
+    };
+}
+
+export function changeUserGenreSelected() {
+    return async dispatch => {
+        dispatch({
+            type: "IF_USER_GENRE_SELECTED",
         });
     };
 }

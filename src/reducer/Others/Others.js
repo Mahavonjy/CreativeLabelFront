@@ -7,10 +7,16 @@ const initState = {
     prestationCopy: [],
     optionsCopy: [],
     materialsCopy: [],
+    ifUserGenreSelected: false,
 };
 
 const Others = (state = initState, action) => {
     switch (action.type) {
+        case "IF_USER_GENRE_SELECTED":
+            return {
+                ...state,
+                ifUserGenreSelected: true
+            };
         case "ADD_CURRENT_DATE_KEY":
             return {
                 ...state,

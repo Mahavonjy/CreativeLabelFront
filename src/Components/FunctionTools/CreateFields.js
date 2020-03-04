@@ -333,7 +333,7 @@ export const CreativeHeaders = (Title, Description) => {
     )
 };
 
-export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying) => {
+export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected) => {
     return (
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
@@ -358,7 +358,11 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
 
                 {/* PROFILE */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profil" onClick={() => {
-                    headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile" ? document.getElementById("LoginRequire").click() : history.push("/Profile")
+                    if (headers['Isl-Token'] !== Conf.configs.TokenVisitor && !ifUserGenreSelected)
+                        toast.warn("Preference not defined");
+                    else headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile"
+                        ? document.getElementById("LoginRequire").click()
+                        : history.push("/Profile");
                 }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
                 </li>
 

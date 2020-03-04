@@ -5,7 +5,7 @@ import StarRatings from 'react-star-ratings';
 import Calendar from "../../Calendar/Calendar";
 import {formatDate, changeFields, checkUnit, checkUnitKey} from "../../../FunctionTools/Tools";
 import { toast } from "react-toastify";
-import "../../style/Results.css"
+import "../../../../assets/css/style/Results.css"
 import ReactTooltip from "react-tooltip";
 import PurchaseInformation from "../../../Cart/PurchaseInformation";
 

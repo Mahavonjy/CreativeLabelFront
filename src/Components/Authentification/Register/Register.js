@@ -40,6 +40,7 @@ function Register() {
 
     const isMounted = useRef(false);
     const [keys, setKeys] = useState("");
+    const [disable, setDisable] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -67,12 +68,12 @@ function Register() {
     const sendUserInfoToSingUp = (e) => {
         e.preventDefault();
 
-        document.getElementById("register").setAttribute("disabled", "disabled");
+        setDisable(true);
         const validator = Validators.RegisterValidation(password, confirm_password);
 
         if (validator.error) {
+            setDisable(false);
             toast.error(validator.message);
-            document.getElementById("register").removeAttribute("disabled");
         } else {
             setIsActive(true);
             let headers = {'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': "*"};
@@ -87,6 +88,7 @@ function Register() {
                     "title": PropsTitle,
                     "price": props_price_of_service,
                     "hidden": false,
+                    "refund_policy": "flexible",
                     "country": PropsCountry,
                     "thematics": props_thematics_options_selected,
                     "description": PropsDescription,
@@ -124,7 +126,7 @@ function Register() {
         return () => {
             isMounted.current = true
         };
-    }, [isMounted, tmpArtistTypeSelected]);
+    }, [isMounted, tmpArtistTypeSelected, disable]);
 
     return (
         <main style={{backgroundImage: style_}} tabIndex="0"
@@ -212,7 +214,7 @@ function Register() {
                                                 </div>
 
                                                 <div className="ml-1 mt-5 text-center">
-                                                    <button type="submit" id="register"
+                                                    <button type="submit" id="register" disabled={disable}
                                                             className="btn btn-outline-primary btn-fab-md pl-4 pr-4"
                                                             onClick={(e) => sendUserInfoToSingUp(e)}>Créer votre compte
                                                         ISL Creative

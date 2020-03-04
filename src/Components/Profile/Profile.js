@@ -8,7 +8,7 @@ import PhotoD from '../../images/socials/profile.png';
 import {CreateBeatsPlaylist, smallSpinner} from "../FunctionTools/CreateFields";
 import {profileAddBeats, profileReadyBeats, profileUpdateBeats} from "../FunctionTools/FunctionProps";
 import {DifferentArtist,} from "../FunctionTools/PopupFields";
-import {getMediaLink} from "../FunctionTools/Tools";
+import {getMediaLink, resetPropsForm} from "../FunctionTools/Tools";
 import Form from "../KantoBiz/Prestations/Form/Form";
 import AddSingle from './AddMedia/AddSingle';
 import EditContractBeats from "./ContractBeats/EditContractBeats";
@@ -146,7 +146,7 @@ function Profile(props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [props_prestation]);
 
     return (
         <div className="Base p-b-100">
@@ -248,7 +248,7 @@ function Profile(props) {
             <Modal visible={addNewPrestation} width="80%" height="80%" effect="fadeInUp"
                    onClickAway={() => setAddNewPrestation(false)}>
                 <div className="bg-dark" style={{height: "100%"}}>
-                    <button className="ModalClose" onClick={() => setAddNewPrestation(false)}>
+                    <button className="ModalClose" onClick={() => {resetPropsForm(dispatch);setAddNewPrestation(false)}}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     {addNewPrestation && <Form artistType={user_role} headers={headers}

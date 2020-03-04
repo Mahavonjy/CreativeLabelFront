@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import '../style/Calendar.css'
+import '../../../assets/css/style/Calendar.css'
 import ReactTooltip from "react-tooltip";
 import { useSelector } from "react-redux";
 import LeftBlock from "./LeftBlock";

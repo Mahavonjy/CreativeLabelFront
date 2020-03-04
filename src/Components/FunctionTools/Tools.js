@@ -316,6 +316,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
             dispatch(addAllUserPrestation(tmp));
             _props.setAddNewPrestation(false);
             _props.close();
+            resetPropsForm(dispatch);
             response = {"error": false, message: null}
         }).catch((error) => {
             response = {"error": true, message: Validators.checkErrorMessage(error).message}
@@ -325,6 +326,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
             let tmp = [..._props.allPrestation];
             tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
             _props.setAllPrestation(tmp);
+            resetPropsForm(dispatch);
             dispatch(addAllUserPrestation(tmp));
             response = {"error": false, message: null}
         }).catch((error) => {

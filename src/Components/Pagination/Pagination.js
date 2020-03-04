@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../KantoBiz/style/Results.css"
+import "../../assets/css/style/Results.css"
 
 /**
  * @return {null}

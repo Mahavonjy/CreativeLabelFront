@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import './music_genres.css';
-import Conf from "../../Config/tsconfig";
-import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from "react-redux";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {toast, ToastContainer} from 'react-toastify';
 import {sessionService} from "redux-react-session";
+import {changeUserGenreSelected} from "../FunctionTools/FunctionProps";
+import '../../assets/css/music_genres.css';
 
 let headers = {
     'Content-Type': 'application/json',
@@ -13,6 +13,7 @@ let headers = {
 
 function Preference() {
 
+    const dispatch = useDispatch();
     const AllMediaGenre = useSelector(state => state.Home.PrefAllMediaGenre);
 
     const isMounted = useRef(false);
@@ -39,7 +40,8 @@ function Preference() {
             toast.warn("Veuillez choisir au moins 5 genres");
         } else {
             let data = {"user_genre_list": user_genre_tmp};
-            axios.post( "api/medias/add_users_genre", data,{headers:headers}).then(() =>{
+            axios.post("api/medias/add_users_genre", data, {headers: headers}).then(() => {
+                dispatch(changeUserGenreSelected());
                 window.location.replace("/beats")
             }).catch(error => {
                 toast.error(error.response.data);
@@ -53,7 +55,7 @@ function Preference() {
         });
         toast.warn("Veuillez choisir au moins 5 genres");
         for (let row in AllMediaGenre) {
-            setFirstArray(first_array => [...first_array, ["#9DA6B1", false,  {
+            setFirstArray(first_array => [...first_array, ["#9DA6B1", false, {
                 "genre": AllMediaGenre[row]["genre"],
                 "image": AllMediaGenre[row]["image"],
             }]]);

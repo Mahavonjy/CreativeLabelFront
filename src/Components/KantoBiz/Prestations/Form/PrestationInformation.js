@@ -10,10 +10,11 @@ import {
     addReferenceOfCity,
     addServiceCountry,
     addTitleOfService,
-    arrayRemove
 } from "../../../FunctionTools/FunctionProps";
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {changeFields} from "../../../FunctionTools/Tools";
+import CreatableSelect from 'react-select/creatable';
+
 
 function PrestationInformation(props) {
 
@@ -29,6 +30,7 @@ function PrestationInformation(props) {
     const isMounted = useRef(false);
     const [title, setTitle] = useState(PropsTitle);
     const [country, setCountry] = useState(PropsCountry);
+    const [countryOption, setCountryOption] = useState([]);
     const [city, setCity] = useState(PropsCityReference);
     const [listOfCity, setListOfCity] = useState([]);
     const [tmpListOfCity, setTmpListOfCity] = useState([]);
@@ -43,24 +45,31 @@ function PrestationInformation(props) {
         let value = e.target.value;
         await setCountry(value);
         await setCity("");
-        await dispatch(addReferenceOfCity(""));
-        await dispatch(addServiceCountry(value));
-        let tmpList;
+        let tmpList = [];
         try {
             tmpList = country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"]
-        } catch (e) {
-            tmpList = []
-        }
-        dispatch(addOthersCityOfService([]));
-        await setListOfCity([...new Set(tmpList)]);
-        await setTmpListOfCity([...new Set(tmpList)]);
+        } catch (e) { /**/ }
+        new Promise(resolve => {
+            setTimeout(() => {
+                resolve(setListOfCity(tmpList));
+                resolve(setTmpListOfCity(tmpList));
+                resolve(dispatch(addReferenceOfCity("")));
+                resolve(dispatch(addServiceCountry(value)));
+                resolve(dispatch(addOthersCityOfService([])));
+            }, 1000)
+        })
     };
 
     const changeCity = async (e) => {
         let value = e.target.value;
         await setCity(value);
         await dispatch(addReferenceOfCity(value));
-        await setListOfCity(arrayRemove(tmpListOfCity, value));
+        let tmp = [];
+        await Promise.all(tmpListOfCity.map(element => {
+            if (element !== value) tmp.push(element)
+        })).then(() => {
+            setListOfCity(tmp)
+        });
     };
 
     const onDrop = (e, file) => {
@@ -108,10 +117,22 @@ function PrestationInformation(props) {
     };
 
     useEffect(() => {
+
+        let tmp = [];
+        for (let row in country_allowed) {
+            let cityTmp = [];
+            for (let index in country_allowed[row]["value"]) {
+                let tmpName = country_allowed[row]["value"][index];
+                cityTmp.push({value: tmpName, label: tmpName, index: index})
+            }
+            tmp.push({value: country_allowed[row]["name"], label: country_allowed[row]["name"], city: cityTmp});
+        }
+        setCountryOption(tmp);
+
         return () => {
             isMounted.current = true
         };
-    }, [city]);
+    }, [city, listOfCity]);
 
     return (
         <div className="Base">
@@ -139,8 +160,7 @@ function PrestationInformation(props) {
                                                   onChange={(e) => changeFields(setDescription, e, addDescriptionOfService, dispatch)}/>
                                 </div>
                             </div>
-                            <div className="form-group form-float"
-                                 data-tip="Le pays dans laquelle vous proposez la prestation">
+                            <div className="form-group form-float">
                                 <div className="form-line">
                                     <input id="country" name="country" className="form-control"
                                            placeholder="Veuillez choisir un pays de référence pour votre prestation"
@@ -151,8 +171,7 @@ function PrestationInformation(props) {
                                     </datalist>
                                 </div>
                             </div>
-                            <div className="form-group form-float"
-                                 data-tip={!city && "La ville de référence est la ville dans laquelle vous proposez la prestation"}>
+                            <div className="form-group form-float">
                                 <div className="form-line">
                                     <input id="city" name="city" className="form-control"
                                            placeholder={city || "Veuillez choisir une ville de référence pour votre prestation"}

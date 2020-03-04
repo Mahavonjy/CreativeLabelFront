@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import InputRange from "react-input-range";
-import "../../style/KantoBiz.css"
-import "../../style/Results.css"
+import "../../../../assets/css/style/KantoBiz.css"
+import "../../../../assets/css/style/Results.css"
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../../Pagination/Pagination";
