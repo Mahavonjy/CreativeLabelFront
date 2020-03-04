@@ -1,14 +1,22 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addFileTechnicalSheet, addMaterialsOfService} from "../../FunctionTools/FunctionProps";
+import {
+    addFileTechnicalSheet,
+    addMaterialsOfService,
+    addMaterialsCopy,
+    addServicesCopy
+} from "../../FunctionTools/FunctionProps";
 
 function Materials(props) {
 
     const dispatch = useDispatch();
+    const dateKey = useSelector(state => state.Others.dateKey);
+    const prestationCopy = useSelector(state => state.Others.prestationCopy);
+    const materialsCopy = useSelector(state => state.Others.materialsCopy);
     const materials = useSelector(state => state.KantoBizForm.materials);
 
     const isMounted = useRef(false);
-    const [tags, setTags] = useState([...materials['list_of_materials']]);
+    const [tags, setTags] = useState(props.index || props.index === 0 && props.edit ? [...materialsCopy['list_of_materials']] : [...materials['list_of_materials']]);
     const [technicalSheet, setTechnicalSheet] = useState();
     const [tagsSuggestion, setTagSuggestion] = useState(["Micro", "Piano"]);
 
@@ -16,9 +24,12 @@ function Materials(props) {
         const newTags = [...tags];
         newTags.splice(i, 1);
         setTags(newTags);
-        let origin_of_materials = {...materials};
+        let origin_of_materials;
+        if (props.index || props.index === 0 && props.edit) origin_of_materials = {...materialsCopy};
+        else origin_of_materials = {...materials};
         origin_of_materials['list_of_materials'] = newTags;
-        dispatch(addMaterialsOfService(origin_of_materials));
+        if (props.index || props.index === 0 && props.edit) updateServiceCopy(origin_of_materials);
+        else dispatch(addMaterialsOfService(origin_of_materials));
     };
 
     const addTechnicalSheet = (e) => {
@@ -27,6 +38,12 @@ function Materials(props) {
         dispatch(addFileTechnicalSheet(file))
     };
 
+    const updateServiceCopy = (origin_of_materials) => {
+        let prestationCopy_ = [...prestationCopy];
+        prestationCopy_[props.index]["special_dates"][dateKey]["materials"]["list_of_materials"] = origin_of_materials.list_of_materials;
+        dispatch(addServicesCopy(prestationCopy_));
+    }
+;
     const inputKeyDown = (e, attr_val) => {
 
         let key, val;
@@ -40,11 +57,14 @@ function Materials(props) {
             if (key === 'Enter' && val || attr_val) {
                 if (tags.find(tag => tag.toLowerCase() === val.toLowerCase())) return;
                 let tmp_tags = [...tags];
-                let origin_of_materials = {...materials};
+                let origin_of_materials;
+                if (props.index || props.index === 0 && props.edit) origin_of_materials = {...materialsCopy};
+                else origin_of_materials = {...materials};
                 tmp_tags.push(val);
                 setTags(tmp_tags);
                 origin_of_materials['list_of_materials'] = tmp_tags;
-                dispatch(addMaterialsOfService(origin_of_materials));
+                if (props.index || props.index === 0 && props.edit) updateServiceCopy(origin_of_materials);
+                else dispatch(addMaterialsOfService(origin_of_materials));
                 document.getElementsByClassName("input-add-tag")[0].value = null;
             } else if (key === 'Backspace' && !val) {
                 removeTag(tags.length - 1);
@@ -54,24 +74,20 @@ function Materials(props) {
 
     useEffect(() => {
 
-        if (props.value) {
-            dispatch(addMaterialsOfService(props.value));
-            setTags(props.value);
-        }
-
         return () => {
             isMounted.current = true
         };
-    }, [tags]);
+    }, [tags, prestationCopy]);
 
     return (
         <div className={!props.noExemple && "card no-b"}>
+            {!props.noExemple &&
             <div className="custom-file mt-3 mb-3" data-tip="Fiche technique en pdf">
                 <input type="file" accept="application/pdf" className="custom-file-input"
                        onChange={(e) => addTechnicalSheet(e)}/>
                 <label className="custom-file-label text-black" htmlFor="inputGroupFile01">Importer ici la fiche
                     technique de cette prestation</label>
-            </div>
+            </div>}
             <div className="tag-editor">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">

@@ -48,7 +48,6 @@ function Options(props) {
         if (validation(data)) {
             let tmp_options = [...options];
             let option_id = tmp_options[index]['id'];
-            data["hidden"] = tmp_options[index]['hidden'];
             data["services_id_list"] = tmp_options[index]['services_id_list'];
             axios.put('api/options/update/' + option_id, data, {headers: headers}).then((resp) => {
                 tmp_options[index] = resp.data;
@@ -63,7 +62,7 @@ function Options(props) {
 
     const createOption = (data) => {
         if (validation(data)) {
-            data['hidden'] = false;
+            data['special_dates'] = {};
             data['services_id_list'] = [service_id];
             axios.post('api/options/create', data, {headers: headers}).then((resp) => {
                 let tmp = [...props_options];

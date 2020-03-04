@@ -1,17 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import LeftBlock from "./LeftBlock";
-import Materials from "../../Profile/PrestationEdits/Materials";
-import { changeFields, checkIfHidden, compareArrays, addSpecialDateToData } from "../../FunctionTools/Tools";
-import { addAllUserPrestation, addAllUserOptions } from "../../FunctionTools/FunctionProps";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import ReactTooltip from "react-tooltip";
+import {addCurrentDateKey, addMaterialsCopy, addOptionCopy, addServicesCopy} from "../../FunctionTools/FunctionProps";
+import {addSpecialDateToData, checkIfHidden} from "../../FunctionTools/Tools";
+import Materials from "../../Profile/PrestationEdits/Materials";
+import LeftBlock from "./LeftBlock";
 
-function RightBlock (props) {
+function RightBlock(props) {
 
     const dispatch = useDispatch();
-    const materials = useSelector(state => state.KantoBizForm.materials);
     const prestations = useSelector(state => state.profilePrestations.prestations);
     const props_options = useSelector(state => state.profilePrestations.options);
+
+    const prestationCopy = useSelector(state => state.Others.prestationCopy);
+    const optionsCopy = useSelector(state => state.Others.optionsCopy);
+    const dateKey = useSelector(state => state.Others.dateKey);
 
     const isMounted = useRef(false);
     const [loadMaterials, setLoadMaterials] = useState(true);
@@ -19,20 +22,31 @@ function RightBlock (props) {
     const [selectedYear, setSelectedYear] = useState(props.date.getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(props.date.getMonth());
     const [selectedDay, setSelectedDay] = useState(props.date.getDate());
-    const [price, setPrice] = useState( null);
-    const [moving_price, setMovingPrice] = useState( null);
+    const [price, setPrice] = useState(null);
+    const [travel_expenses, setTravelExpenses] = useState(null);
     const [editPrestation, setEditPrestation] = useState({});
     const [editOptions, setEditOptions] = useState([]);
-    const [state_materials, setStateMaterials] = useState([]);
     const [arrMonth, setArrMonth] = useState({});
-
     const [index_, setIndex_] = useState(null);
+    const [key, setKey] = useState(dateKey);
     let handleToUpdateDate = props.handleToUpdateDate;
     let monthOptions = Object.keys(arrMonth).map(month => (
         <option className="option-month" selected={month === Object.keys(arrMonth)[selectedMonth] ? "selected" : ""}>
             {month}
         </option>
     ));
+
+    RightBlock.changeIndexPrestation = async (index) => {
+        await fillProps(index, true);
+    };
+
+    const updateDiffenrentPrice = async (e, setValue, key_) => {
+        let value = e.target.value;
+        setValue(value);
+        let tmpOriginalPrestation = [...prestationCopy];
+        tmpOriginalPrestation[index_]["special_dates"][key][key_] = value;
+        await dispatch(addServicesCopy(tmpOriginalPrestation));
+    };
 
     const fillProps = async (i, opt, day) => {
         let daySelected;
@@ -42,62 +56,35 @@ function RightBlock (props) {
         } else daySelected = selectedDay;
         await setLoadMaterials(false);
         await setIndex_(i);
-        let tmp_options = [...props_options];
-        await addSpecialDateToData([...tmp_options], selectedMonth, daySelected, selectedYear);
-        await setEditOptions([...tmp_options]);
-        await addSpecialDateToData(prestations, selectedMonth, daySelected, selectedYear);
-        await setEditPrestation(prestations[i]);
-        await setPrice(prestations[i]["special_dates"][selectedMonth + "/" + daySelected + "/" + selectedYear]["price"]);
-        await setMovingPrice(prestations[i]["special_dates"][selectedMonth + "/" + daySelected + "/" + selectedYear]["moving_price"]);
-        setStateMaterials(prestations[i]["special_dates"][selectedMonth + "/" + daySelected + "/" + selectedYear]["materials"]);
+        let key = selectedMonth + "/" + daySelected + "/" + selectedYear;
+        setKey(key);
+        dispatch(addCurrentDateKey(key));
+        let tmp_options = [...optionsCopy];
+        if (!prestationCopy[i]["special_dates"][key] || !opt) {
+            await addSpecialDateToData(tmp_options, selectedMonth, daySelected, selectedYear);
+            await addSpecialDateToData(prestationCopy, selectedMonth, daySelected, selectedYear);
+        }
+        await setEditOptions(tmp_options);
+        await setEditPrestation(prestationCopy[i]);
+        await setPrice(prestationCopy[i]["special_dates"][key]["price"]);
+        await setTravelExpenses(prestationCopy[i]["special_dates"][key]["travel_expenses"]);
+        await dispatch(addMaterialsCopy(prestationCopy[i]["special_dates"][key]["materials"]));
         await setLoadMaterials(true);
         if (!opt)
-            await LeftBlock.handleClick(i)
-    };
-
-    const update = async () => {
-        let tmp_originalPrestation = prestations;
-        tmp_originalPrestation[index_] = {...editPrestation};
-        tmp_originalPrestation[index_]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["price"] = price;
-        tmp_originalPrestation[index_]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["moving_price"] = moving_price;
-        tmp_originalPrestation[index_]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["materials"] = materials;
-        await dispatch(addAllUserPrestation([...tmp_originalPrestation]));
-        await dispatch(addAllUserOptions([...editOptions]));
-    };
-
-    const checkIfUpdate = () => {
-        if (
-            price !== editPrestation["price"]
-            || moving_price !== editPrestation["moving_price"]
-            || editPrestation["hidden"] !== editPrestation["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"]
-            || !compareArrays(editPrestation["materials"], materials)
-        ) {
-            update().then(r => null)
-        } else {
-            for (let r in  editOptions) {
-                if (!compareArrays(editOptions[r]['services_id_list'], editOptions[r]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'])) {
-                    update().then(r => null);
-                }
-            }
-        }
-    };
-
-    const changePrestationHide = () => {
-        let first_tmp = {...editPrestation};
-        let second_tmp = first_tmp["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'];
-        first_tmp["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'] = !second_tmp;
-        setEditPrestation(first_tmp);
+            await LeftBlock.handleClick(prestationCopy, key)
     };
 
     const changeOptionHide = (index, opt) => {
         let tmp_editOptions = [...editOptions];
-        let tmp_opt = tmp_editOptions[index]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'];
-        if (opt) tmp_editOptions[index]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt.filter(id => !editPrestation["id"] === id);
-        else {
+        let tmp_opt = tmp_editOptions[index]["special_dates"][key]['services_id_list'];
+        if (opt) {
+            tmp_editOptions[index]["special_dates"][key]['services_id_list'] = tmp_opt.filter(id => !editPrestation["id"] === id);
+        } else {
             tmp_opt.push(editPrestation["id"]);
-            tmp_editOptions[index]["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['services_id_list'] = tmp_opt;
+            tmp_editOptions[index]["special_dates"][key]['services_id_list'] = tmp_opt;
         }
         setEditOptions(tmp_editOptions);
+        dispatch(addOptionCopy(tmp_editOptions));
     };
 
     const updateMonth = (event) => {
@@ -109,7 +96,7 @@ function RightBlock (props) {
 
     const prevMonth = () => {
         if (selectedMonth - 1 < 0) {
-            handleToUpdateDate(selectedDay + "/" + 11 + "/" + selectedYear -1);
+            handleToUpdateDate(selectedDay + "/" + 11 + "/" + selectedYear - 1);
             setSelectedMonth(11);
             setSelectedYear(selectedYear - 1);
             setFirstDay(new Date(selectedYear - 1 + "-" + "12-01").getDay())
@@ -122,7 +109,7 @@ function RightBlock (props) {
 
     const nextMonth = () => {
         if (selectedMonth + 1 > 11) {
-            handleToUpdateDate(selectedDay + "/" +0 + "/" + selectedYear + 1);
+            handleToUpdateDate(selectedDay + "/" + 0 + "/" + selectedYear + 1);
             setSelectedMonth(0);
             setSelectedYear(selectedYear + 1);
             setFirstDay(new Date(selectedYear + 1 + "-" + "01-01").getDay());
@@ -145,11 +132,11 @@ function RightBlock (props) {
 
     const getDayBlocks = () => {
         let arrNo = [];
-        for (let n = 0; n < firstDay; n++)
-            arrNo.push(<div className="day-block" />);
+        for (let n = 0; n < firstDay; n++) arrNo.push(<div className="day-block"/>);
         for (let i = 1; i < Object.values(arrMonth)[selectedMonth] + 1; i++)
             arrNo.push(
-                <div data-id={i} onClick={!props.noEdit ? () => fillProps(0,false, i) : null} data-tip="Cliquer pour faire une modification"
+                <div data-id={i} onClick={!props.noEdit ? () => fillProps(0, false, i) : null}
+                     data-tip="Cliquer pour faire une modification"
                      className={`day-block ${i === selectedDay && props.date.getMonth() + 1 === selectedMonth + 1 && props.date.getFullYear() === selectedYear ? "active" : "inactive"}`}>
                     <div className="inner">{i}</div>
                 </div>
@@ -157,98 +144,97 @@ function RightBlock (props) {
         return arrNo;
     };
 
-    const getHidePrestation = () => {
-        if (editPrestation["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]['hidden'] && editPrestation["special_dates"]["hidden"])
-            return (<i className="icon-eye absolute right-0 s-36 mr-3" onClick={changePrestationHide}/>);
-        else return (<i className="icon-eye-slash absolute right-0 s-36 mr-3" onClick={changePrestationHide}/>)
-    };
-
-    const getEvents = () => {
+    const checkServiceOptionToEdit = () => {
         return (
             <div className="text-center">
                 <ReactTooltip/>
-                {!props.toggle && getHidePrestation()}
                 <div className="row justify-content-center pt-5 mr-4">
                     <div className="col-md-4">
                         <h4 className="text-red text-center">Mes prix pour cette date</h4>
                         <div className="text-center">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
-                                    <div className="input-group-text text-dark">Prix pour cette date&nbsp;<i className="icon icon-info text-red" data-tip="Ceci est le prix de la prestation pour ce jour"/></div>
-                                    <input className="form-control" type="number" id="global_price" name="global_price" value={price}
-                                           onChange={(e) => changeFields(setPrice, e)}/>
+                                    <div className="input-group-text text-dark">Prix pour cette date&nbsp;<i
+                                        className="icon icon-info text-red"
+                                        data-tip="Ceci est le prix de la prestation pour ce jour"/></div>
+                                    <input className="form-control" type="number" id="global_price" name="global_price"
+                                           value={price}
+                                           onChange={(e) => updateDiffenrentPrice(e, setPrice, "price")}/>
                                 </div>
                             </div>
                         </div>
                         <div className="text-center">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
-                                    <div className="input-group-text text-dark">Frais pour cette date&nbsp;<i className="icon icon-info text-red" data-tip="Ceci est le prix du frais de transport ce jour"/></div>
-                                    <input className="form-control" type="number" id="global_price" name="global_price" value={moving_price}
-                                           onChange={(e) => changeFields(setMovingPrice, e)}/>
+                                    <div className="input-group-text text-dark">Frais pour cette date&nbsp;<i
+                                        className="icon icon-info text-red"
+                                        data-tip="Ceci est le prix du frais de transport ce jour"/></div>
+                                    <input className="form-control" type="number" id="global_price" name="global_price"
+                                           value={travel_expenses}
+                                           onChange={(e) => updateDiffenrentPrice(e, setTravelExpenses, "travel_expenses")}/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-8">
                         <h4 className="text-red text-center">Mes options pour cette date</h4>
-                        {getTableOfOptions()}
+                        {checkAllOptionsOfServices()}
                         <h4 className="text-red text-center">Mes materiels pour cette date</h4>
-                        {!props.toggle && loadMaterials && <Materials value={state_materials} noExemple edit/>}
+                        {!props.toggle && loadMaterials && <Materials noExemple edit index={index_}/>}
                     </div>
                 </div>
             </div>
         );
     };
 
-    const getTableOfOptions = () => {
+    const checkAllOptionsOfServices = () => {
         return (
             <div>
                 {!props.toggle &&
-                <table className="table mt-2 mb-2">
+                <table className="table mt-4 mb-4">
                     {editOptions.length !== 0 ?
                         <tbody>
                         {editOptions.map((val, index) =>
                             <tr className="bg-secondary" key={index}>
-                                {val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear]["hidden"] ?
-                                    <td><i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, false)}/></td> :
-                                    <td>
-                                        {checkIfHidden(val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].services_id_list, editPrestation["id"]) ?
-                                            <i className="icon icon-eye s-24 text-red" data-tip="Cette Otpion est activer pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, true)}/>:
-                                            <i className="icon icon-eye-slash s-24 text-red" data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée" onClick={() => changeOptionHide(index, false)}/>}
-                                    </td>}
-                                <td><small className="bolder">{val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].name}</small></td>
-                                <td><small className="bolder">{val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].tag}</small></td>
-                                <td><small className="bolder">{val["special_dates"][selectedMonth + "/" + selectedDay + "/" + selectedYear].price}$</small></td>
+                                {checkIfHidden(optionsCopy[index]["special_dates"][key].services_id_list, editPrestation["id"]) ?
+                                    <i className="icon icon-eye s-24 text-red"
+                                       data-tip="Cette Otpion est activer pour cette prestation sur cette journée"
+                                       onClick={() => changeOptionHide(index, true)}/> :
+                                    <i className="icon icon-eye-slash s-24 text-red"
+                                       data-tip="Cette Otpion est déactiver pour cette prestation sur cette journée"
+                                       onClick={() => changeOptionHide(index, false)}/>}
+                                <td><small className="bolder">{val["special_dates"][key].name}</small></td>
+                                <td><small className="bolder">{val["special_dates"][key].artist_tagged}</small></td>
+                                <td><small className="bolder">{val["special_dates"][key].price}$</small></td>
                             </tr>)}
-                        </tbody> : <div className="text-center"><small className="bolder">Vous n'avez pas d'options</small></div>}
+                        </tbody> :
+                        <div className="text-center"><small className="bolder">Vous n'avez pas d'options</small></div>}
                 </table>}
             </div>
         )
     };
 
-    RightBlock.changeIndexPrestation = async (index) => {
-        await fillProps(index, true);
-    };
-
     useEffect(() => {
 
-        if (!props.toggle)
-            setTimeout(() => {checkIfUpdate()});
-        else {
-            function getDayInMonth (year, month) {
-                const isLeap = ((year % 4) === 0 && ((year % 100) !== 0 || (year % 400) === 0));
-                return [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
-            }
-            let months = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'], tmp = {};
-            for (let index in  months) tmp[months[index]] = getDayInMonth(selectedYear, index);
-            setArrMonth(tmp);
+        if (props.toggle && prestationCopy.length === 0) {
+            dispatch(addOptionCopy(props_options));
+            dispatch(addServicesCopy(prestations));
         }
+
+        function getDayInMonth(year, month) {
+            const isLeap = ((year % 4) === 0 && ((year % 100) !== 0 || (year % 400) === 0));
+            return [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
+        }
+
+        let months = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'];
+        let tmp = {};
+        for (let index in months) tmp[months[index]] = getDayInMonth(selectedYear, index);
+        setArrMonth(tmp);
 
         return () => {
             isMounted.current = true
         };
-    }, [price, moving_price, editPrestation, editOptions, materials, selectedYear, selectedDay, selectedMonth]);
+    }, [props_options, prestations, prestationCopy, optionsCopy]);
 
     return (
         <div className="flip-container-right">
@@ -256,31 +242,41 @@ function RightBlock (props) {
             <div className={`flipper ${props.toggle ? "" : "toggle"}`}>
                 <div className="front front-right">
                     <div className="container-date-picker">
-                        <button className="btn btn-outline-danger" data-tip="le mois precedent" onClick={prevMonth}><i className="text-red icon-long-arrow-left"/></button>
+                        <button className="btn btn-outline-danger" data-tip="le mois precedent" onClick={prevMonth}><i
+                            className="text-red icon-long-arrow-left"/></button>
                         <select className="select-month" onChange={updateMonth}>
                             {props.toggle && monthOptions}
                         </select>
-                        <input type="text" className="input-year" data-tip="changer manuelement l'année" onChange={updateYear} value={selectedYear} maxlength="4"/>
-                        <button className="btn btn-outline-danger" data-tip="le mois suivant" onClick={nextMonth}><i className="text-red icon-long-arrow-right"/></button>
+                        <input type="text" className="input-year" data-tip="changer manuelement l'année"
+                               onChange={updateYear} value={selectedYear} maxlength="4"/>
+                        <button className="btn btn-outline-danger" data-tip="le mois suivant" onClick={nextMonth}><i
+                            className="text-red icon-long-arrow-right"/></button>
                     </div>
                     <div className="container-day">
-                        {props.toggle && props.arrDays.map(day => (<div className="weekday text-red">{day.substring(0, 3)}</div>))}
+                        {props.toggle && props.arrDays.map(day => (
+                            <div className="weekday text-red">{day.substring(0, 3)}</div>))}
                         {props.toggle && getDayBlocks()}
                     </div>
                     <div className='my-legend pt-1 text-center'>
                         <div className="legend-title text-black">Légende</div>
                         <div className="legend-scale text-black pt-3">
                             <ul className="row justify-content-center legend-labels border1">
-                                <li><span className="bolder" style={{background: '#74A9CF'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Réservé&nbsp;<i className="icon-info" data-tip="L'artiste a été réservé"/></span></li>
-                                <li><span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;<i className="icon icon-info" data-tip="L'artiste est disponible"/></span></li>
-                                <li><span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;<i className="icon icon-info" data-tip="Réservation(s) en attente de validation par l'artiste"/></span></li>
-                                <li><span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;<i className="icon icon-info" data-tip="l'artiste est indisponible"/></span></li>
+                                <li><span className="bolder"
+                                          style={{background: '#74A9CF'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Réservé&nbsp;<i
+                                    className="icon-info" data-tip="L'artiste a été réservé"/></span></li>
+                                <li><span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;<i
+                                    className="icon icon-info" data-tip="L'artiste est disponible"/></span></li>
+                                <li><span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;<i
+                                    className="icon icon-info"
+                                    data-tip="Réservation(s) en attente de validation par l'artiste"/></span></li>
+                                <li><span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;<i
+                                    className="icon icon-info" data-tip="l'artiste est indisponible"/></span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div className="back back-right overflow-auto scrollbar-isl">
-                    {getEvents()}
+                    {checkServiceOptionToEdit()}
                 </div>
             </div>
         </div>

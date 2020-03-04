@@ -128,7 +128,6 @@ function MyPrestations(props) {
         headers['Content-Type'] = 'multipart/form-data';
         axios.put("api/artist_services/update/" + allServices[index]['id'], objectToFormData(tmpData), {headers: headers}).then((resp) => {
             props.setAllPrestation(allServices);
-            console.log(resp.data);
         }).catch((error) => {
             console.log(error.response.data)
         });

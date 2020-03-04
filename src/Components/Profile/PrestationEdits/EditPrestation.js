@@ -3,19 +3,15 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {
-    addAllUserOptions,
-    addMaterialsOfService,
-    addPicturesOfService,
-    addTravelExpenses
-} from "../../FunctionTools/FunctionProps";
+import {addMaterialsOfService, addPicturesOfService, addTravelExpenses} from "../../FunctionTools/FunctionProps";
 import {
     changeFields,
     createOrUpdatePrestation,
     deleteInObject,
     ImageClick,
     objectToFormData,
-    resetPropsForm
+    resetPropsForm,
+    updateAllOptions
 } from "../../FunctionTools/Tools";
 import Calendar from "../../KantoBiz/Calendar/Calendar";
 import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails";
@@ -68,8 +64,10 @@ function EditPrestation(props) {
     const updateMaterials = () => {
         let tmp = {...props_materials};
         tmp["technical_sheet"] = technical_sheet;
+        let _headers = props.headers;
+        _headers['Content-Type'] = 'multipart/form-data';
         tmp = deleteInObject(tmp);
-        return axios.put('api/materials/update_service_material/' + service_id, objectToFormData(tmp), {headers: props.headers}).then((resp) => {
+        return axios.put('api/materials/update_service_material/' + service_id, objectToFormData(tmp), {headers: _headers}).then((resp) => {
             dispatch(addMaterialsOfService(resp.data));
             return true;
         }).catch((error) => {
@@ -79,25 +77,8 @@ function EditPrestation(props) {
         })
     };
 
-    const updateOptions = () => {
-        let tmp_call = [];
-        let tmpAllOptions = [...props_options];
-        for (let row in props_options) {
-            let tmpOption = {...props_options[row]};
-            let option_id = tmpOption['id'];
-            tmpOption = deleteInObject(tmpOption, ["materials"]);
-            tmp_call.push(
-                axios.put('api/options/update/' + option_id, tmpOption, {headers: props.headers}).then((resp) => {
-                    tmpAllOptions[row] = resp.data;
-                    dispatch(addAllUserOptions(tmpAllOptions));
-                })
-            )
-        }
-        Promise.all(tmp_call).then(() => null)
-    };
-
     const updatePrestation = async () => {
-        updateOptions();
+        updateAllOptions(props_options, dispatch, props.headers);
         let response_of_materials_update = await updateMaterials();
         if (!response_of_materials_update) return;
         createOrUpdatePrestation(props, dispatch, {

@@ -676,3 +676,39 @@ export function addFileTechnicalSheet(data) {
         });
     };
 }
+
+export function addMaterialsCopy(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_MATERIALS_COPY",
+            data: data
+        });
+    };
+}
+
+export function addServicesCopy(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SERVICES_COPY",
+            data: data
+        });
+    };
+}
+
+export function addOptionCopy(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_OPTIONS_COPY",
+            data: data
+        });
+    };
+}
+
+export function addCurrentDateKey(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_CURRENT_DATE_KEY",
+            data: data
+        });
+    };
+}

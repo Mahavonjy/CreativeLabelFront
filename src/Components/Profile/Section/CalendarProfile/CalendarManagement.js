@@ -37,7 +37,7 @@ function CalendarManagement(props) {
                 </div>
             </div>
             <AvailabilityPeriod parentProps={props}/>
-            <Calendar/>
+            <Calendar headers={props.headers}/>
         </div>
     );
 }

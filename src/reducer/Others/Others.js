@@ -1,10 +1,36 @@
 const initState = {
-    tmpArtistTypeSelected: "", becomeArtistForm: false,
-    artist_types: [], country_allowed: []
+    dateKey: "",
+    tmpArtistTypeSelected: "",
+    becomeArtistForm: false,
+    artist_types: [],
+    country_allowed: [],
+    prestationCopy: [],
+    optionsCopy: [],
+    materialsCopy: [],
 };
 
 const Others = (state = initState, action) => {
     switch (action.type) {
+        case "ADD_CURRENT_DATE_KEY":
+            return {
+                ...state,
+                dateKey: action.data
+            };
+        case "ADD_MATERIALS_COPY":
+            return {
+                ...state,
+                materialsCopy: action.data
+            };
+        case "ADD_SERVICES_COPY":
+            return {
+                ...state,
+                prestationCopy: action.data
+            };
+        case "ADD_OPTIONS_COPY":
+            return {
+                ...state,
+                optionsCopy: action.data
+            };
         case "ADD_ALL_ARTIST_TYPE":
             return {
                 ...state,

@@ -6,6 +6,7 @@ import Home from "../Home/Home";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import * as Validators from "../Validators/Validatiors";
 import {
+    addAllUserOptions,
     addAllUserPrestation,
     addCarts,
     addDescriptionOfService,
@@ -189,12 +190,12 @@ export const addSpecialDateToData = (tmp_data, selectedMonth, selectedDay, selec
 
     function addToSpecialIndex(i) {
         let tmp = {...tmp_data[i]};
-        delete tmp["special_dates"];
-        if (!tmp_data[i]["special_dates"])
-            tmp_data[i]["special_dates"] = {};
-        tmp = deleteInObject(tmp);
-        tmp["materials"] = deleteInObject(tmp["materials"]);
-        tmp_data[i]["special_dates"][key] = tmp;
+        if (!tmp_data[i]["special_dates"][key]) {
+            delete tmp["special_dates"];
+            tmp = deleteInObject(tmp);
+            tmp["materials"] = deleteInObject(tmp["materials"]);
+            tmp_data[i]["special_dates"][key] = tmp;
+        }
     }
 
     if (index) addToSpecialIndex(index);
@@ -418,9 +419,67 @@ export const resetPropsForm = (dispatch) => {
 };
 
 export const deleteInObject = (object, special_key) => {
-    delete object['id'];
-    delete object['created_at'];
-    delete object['modified_at'];
-    if (special_key) for (let row in special_key) delete object[special_key[row]];
+
+    try {
+        delete object['id'];
+    } catch (e) {
+        //
+    }
+
+    try {
+        delete object['created_at'];
+    } catch (e) {
+        //
+    }
+
+    try {
+        delete object['modified_at'];
+    } catch (e) {
+        //
+    }
+
+    if (special_key) {
+        for (let row in special_key) {
+            try {
+                delete object[special_key[row]];
+            } catch (e) {
+                //
+            }
+        }
+    }
     return object
+};
+
+export const updateAllOptions = (optionToUpdate, dispatch, headers) => {
+    let tmp_call = [];
+    let tmpAllOptions = [...optionToUpdate];
+    for (let row in tmpAllOptions) {
+        let tmpOption = {...tmpAllOptions[row]};
+        let option_id = tmpOption['id'];
+        tmpOption = deleteInObject(tmpOption, ["materials"]);
+        tmp_call.push(
+            axios.put('api/options/update/' + option_id, tmpOption, {headers: headers}).then((resp) => {
+                tmpAllOptions[row] = resp.data;
+                dispatch(addAllUserOptions(tmpAllOptions));
+            })
+        )
+    }
+    Promise.all(tmp_call).then(() => null)
+};
+
+export const updateAllServices = (prestations, dispatch, headers) => {
+    let api_call_update = [];
+    let tmpPrestations = [...prestations];
+    for (let index in tmpPrestations) {
+        let prestation_id = tmpPrestations[index]["id"];
+        let prestation_selected = deleteInObject(tmpPrestations[index]);
+        api_call_update.push(
+            axios.put('api/artist_services/update/' + prestation_id, objectToFormData(prestation_selected), {headers: headers}).then((resp) => {
+                tmpPrestations[index] = resp.data;
+                dispatch(addAllUserPrestation(tmpPrestations));
+            })
+        )
+    }
+
+    Promise.all(api_call_update).then(() => null)
 };
