@@ -14,7 +14,7 @@ import {
     changeFields,
     deleteInObject,
     formatDate,
-    objectToFormData
+    objectToFormData, updateAllOptions, updateAllServices
 } from "../../../FunctionTools/Tools";
 
 function AvailabilityPeriod(props) {
@@ -87,12 +87,13 @@ function AvailabilityPeriod(props) {
     };
 
     const checkModification = () => {
-        let now = formatDate(new Date());
+        let nowDate = new Date();
+        let now = formatDate(nowDate);
         let start = formatDate(startDate);
         let end = formatDate(endDate);
         if (oneDate && start === now) toast.error("Ne pas choisir la date d'aujourd'hui");
-        else if (periodDate && start === now || periodDate && end === now) toast.error("date de debut et/ou de fin pour aujourd'hui n'eest pas valide");
-        else if (periodDate && start > end) toast.error("Date de Fin invalide");
+        else if (periodDate && startDate === nowDate || periodDate && endDate === nowDate) toast.error("date de debut et/ou de fin pour aujourd'hui n'est pas valide");
+        else if (periodDate && startDate > endDate) toast.error("Date de Fin invalide");
         else if (selectedOption === null && selectedPrestation === null) toast.error("Choisir une Prestation ou une option");
         else {
             let numberOfDaysDifference = calculateNumberDaysBetweenDates(new Date(end), new Date(start));
@@ -106,6 +107,13 @@ function AvailabilityPeriod(props) {
         let tmp = [...state_props];
         tmp[index] = val;
         dispatch(func(tmp));
+    };
+
+    const  cancelDate = () => {
+        setOneDate(false);
+        setPeriodDate(false);
+        setStatus(false);
+        setApplyStatus(false);
     };
 
     const updateOptionAndServiceWithSpecialDates = () => {
@@ -124,18 +132,8 @@ function AvailabilityPeriod(props) {
                     generateVariableAllOptionUpdated(resp.data, selectedOption, props_options, addAllUserOptions)
                 })
             )
-        } else if (selectedOption !== null) {
-            for (let index in props_options) {
-                let id = props_options[index]["id"];
-                let option_selected = deleteInObject(props_options[index]);
-                delete option_selected["materials"];
-                api_call_update.push(
-                    axios.put('api/options/update/' + id, option_selected, {headers: headers}).then((resp) => {
-                        generateVariableAllOptionUpdated(resp.data, index, props_options, addAllUserOptions)
-                    })
-                )
-            }
-        }
+        } else if (selectedOption !== null)
+            api_call_update.push(updateAllOptions(props_options, dispatch, headers));
 
         if (selectedPrestation !== "all" && selectedPrestation !== null) {
             let selectedPrestationToUpdate = {...prestations[selectedPrestation]};
@@ -146,17 +144,8 @@ function AvailabilityPeriod(props) {
                     generateVariableAllOptionUpdated(resp.data, selectedPrestation, prestations, addAllUserPrestation)
                 })
             )
-        } else if (selectedPrestation !== null) {
-            for (let index in prestations) {
-                let id = prestations[index]["id"];
-                let prestation_selected = deleteInObject(prestations[index]);
-                api_call_update.push(
-                    axios.put('api/artist_services/update/' + id, objectToFormData(prestation_selected), {headers: props.parentProps.headers}).then((resp) => {
-                        generateVariableAllOptionUpdated(resp.data, index, prestations, addAllUserPrestation)
-                    })
-                )
-            }
-        }
+        } else if (selectedPrestation !== null)
+            api_call_update.push(updateAllServices(prestations, dispatch, props.parentProps.headers));
 
         Promise.all(api_call_update).then(() => {
             toast.success("Changement pris en compte");
@@ -165,6 +154,7 @@ function AvailabilityPeriod(props) {
             setSelectedPrestation(null);
             setStartDate(new Date());
             setEndDate(new Date());
+            cancelDate();
         })
 
     };
@@ -264,7 +254,7 @@ function AvailabilityPeriod(props) {
                 </div>
 
                 <div className="form-group text-center col-md-8 border-top pt-3">
-                    <h4 className="text-red bolder pb-4">Définir une date ou une période d'indisponibilité ou de
+                    <h4 className="text-red bolder pb-4">Choisir une date ou une période d'indisponibilité ou de
                         disponibilité</h4>
                     <div className="row justify-content-center">
                         {oneDate || periodDate ? <div className="ml-2 mr-2">
@@ -335,12 +325,7 @@ function AvailabilityPeriod(props) {
                     </div>}
 
                     {periodDate || oneDate ? <button className="btn btn-outline-danger pl-5 pr-5 mt-4 ml-1 mr-1"
-                                                      onClick={() => {
-                                                          setOneDate(false);
-                                                          setPeriodDate(false);
-                                                          setStatus(false);
-                                                          setApplyStatus(false);
-                                                      }}>revenir</button>: null}
+                                                      onClick={() => cancelDate()}>revenir</button>: null}
                     {applyStatus &&
                     <button className="btn btn-outline-danger pl-5 pr-5 mt-4 ml-1 mr-1"
                             style={deActiveEdit ? cursorBlock : cursorResize}

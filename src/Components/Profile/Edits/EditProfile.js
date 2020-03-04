@@ -44,7 +44,7 @@ function EditProfile (props) {
         bodyFormData.append('description', description);
         bodyFormData.append('photo', photo);
         bodyFormData.append('phone', phone ? phone: 0);
-        bodyFormData.append('birth', birth ? birth: '01/01/1998');
+        bodyFormData.append('birth', birth ? birth: "1998-03-12");
 
         let headers = {
             'Content-Type': 'multipart/form-data',
