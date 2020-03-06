@@ -9,7 +9,7 @@ import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import {
     addAllArtistTypes,
-    addAllCountryAllowed,
+    addAllCountryAllowed, addAllEventsTypes,
     addAllMediaGenre,
     addAllUserOptions,
     addAllUserPrestation,
@@ -165,14 +165,13 @@ function Home() {
             Promise.all([
                 axios.get("api/medias/allMediaGenre").then(resp => {
                     let tmp_arr = [];
-                    for (let row in resp.data) {
-                        tmp_arr.push(resp.data[row].genre)
-                    }
+                    for (let row in resp.data) tmp_arr.push(resp.data[row].genre);
                     dispatch(addAllMediaGenre(tmp_arr));
                     dispatch(addPrefAllMediaGenre(resp.data));
                 }).catch(err => ifConnectionError(err)),
                 axios.get("api/artist_types/all").then(resp => {
                     dispatch(addAllArtistTypes(resp.data.artist_types));
+                    dispatch(addAllEventsTypes(resp.data.events));
                 }).catch(err => ifConnectionError(err)),
                 axios.get("api/flags/check_country_and_city").then(resp => {
                     dispatch(addAllCountryAllowed(resp.data));

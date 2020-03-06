@@ -485,3 +485,10 @@ export const updateAllServices = (prestations, dispatch, headers) => {
 
     Promise.all(api_call_update).then(() => null)
 };
+
+export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
+    let value = obj.value;
+    setState(value);
+    if (func && dispatch)
+        dispatch(func(value))
+};

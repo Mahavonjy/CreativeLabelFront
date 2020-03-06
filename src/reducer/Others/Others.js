@@ -4,6 +4,7 @@ const initState = {
     becomeArtistForm: false,
     artist_types: [],
     country_allowed: [],
+    events_allowed: [],
     prestationCopy: [],
     optionsCopy: [],
     materialsCopy: [],
@@ -16,6 +17,11 @@ const Others = (state = initState, action) => {
             return {
                 ...state,
                 ifUserGenreSelected: true
+            };
+        case "ADD_ALL_EVENTS_TYPES":
+            return {
+                ...state,
+                events_allowed: action.data
             };
         case "ADD_CURRENT_DATE_KEY":
             return {

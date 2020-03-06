@@ -714,3 +714,58 @@ export function changeUserGenreSelected() {
         });
     };
 }
+
+
+export function changeDateToSearch(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_DATE_TO_SEARCH",
+            data: data
+        });
+    };
+}
+
+export function changeCountryToSearch(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_COUNTRY_TO_SEARCH",
+            data: data
+        });
+    };
+}
+
+export function changeCityToSearch(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_CITY_TO_SEARCH",
+            data: data
+        });
+    };
+}
+
+export function changeThematicsToSearch(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_THEMATICS_TO_SEARCH",
+            data: data
+        });
+    };
+}
+
+export function changeEnventsToSearch(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_EVENTS_TO_SEARCH",
+            data: data
+        });
+    };
+}
+
+export function addAllEventsTypes(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ALL_EVENTS_TYPES",
+            data: data
+        });
+    };
+}

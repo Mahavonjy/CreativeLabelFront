@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { CreativeHeaders } from "../FunctionTools/CreateFields";
-import { EventAndThematics as EventAndThematics_ } from "./EventsAndThematics";
-import Results from "./Prestations/Results/Results";
-import "../../assets/css/style/KantoBiz.css";
-import DisplayPrestation from "./Prestations/Results/DisplayPrestation";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import ReactTooltip from 'react-tooltip';
-import { activeDisplayServicePage, activeEventAndThematicsPage, activeResultPage } from "../FunctionTools/FunctionProps";
+import "../../assets/css/style/KantoBiz.css";
+import {CreativeHeaders} from "../FunctionTools/CreateFields";
+import {activeDisplayServicePage, activeEventAndThematicsPage, activeResultPage} from "../FunctionTools/FunctionProps";
+import {EventAndThematics as EventAndThematics_} from "./EventsAndThematics";
+import DisplayPrestation from "./Prestations/Results/DisplayPrestation";
+import Results from "./Prestations/Results/Results";
 
 function KantoBiz(props) {
 
@@ -59,7 +59,7 @@ function KantoBiz(props) {
         <div>
             <ReactTooltip/>
             {/* Headers */}
-            {CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)")}
+            {CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)", props.headers)}
             {/* End Headers */}
 
             {/* This is a main of for show different component */}
@@ -68,19 +68,23 @@ function KantoBiz(props) {
                 {/* Navigation Page*/}
                 <div className="NextOrPrevPage">
                     {!eventAndThematics ?
-                        <span className="float-left" data-tip="Revenir a la page d'acceuil KantoBiz" onClick={prev}>
-                                <i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent
-                            </span> : null}
+                        <button className="float-left btn-custom btn-outline-light border-bottom-0 border-right-0"
+                                onClick={prev}>
+                            <i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent
+                        </button> : null}
                     {!displayService ?
-                        <span className="float-right" data-tip="Aller dernier resultat de recherche" onClick={next}>Suivant&nbsp;
+                        <button className="float-right btn-custom btn-outline-light border-bottom-0 border-left-0"
+                                onClick={next}>Suivant&nbsp;
                             <i className="icon icon-long-arrow-right mr-5 s-24 align-middle"/>
-                            </span> : null}
+                        </button> : null}
                 </div>
                 {/* End Navigation Page*/}
 
                 <div className="main-page">
                     {/* Show Different events/thematics or all Prestation result of search or Prestation selected*/}
-                    {(eventAndThematics && EventAndThematics_()) || (resultsPage && <Results/>) || (displayService && <DisplayPrestation/>)}
+                    {(eventAndThematics && EventAndThematics_())
+                    || (resultsPage && <Results/>)
+                    || (displayService && <DisplayPrestation/>)}
                     {/* End */}
                 </div>
 

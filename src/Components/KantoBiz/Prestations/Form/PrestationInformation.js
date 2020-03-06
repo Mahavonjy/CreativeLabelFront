@@ -13,7 +13,7 @@ import {
 } from "../../../FunctionTools/FunctionProps";
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {changeFields} from "../../../FunctionTools/Tools";
-import CreatableSelect from 'react-select/creatable';
+// import CreatableSelect from 'react-select/creatable';
 
 
 function PrestationInformation(props) {

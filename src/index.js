@@ -14,6 +14,7 @@ import playersReducer from "./reducer/Players";
 import kantoBizForm from "./reducer/KantoBiz/Form";
 import { sessionService, sessionReducer } from 'redux-react-session';
 import KantoBizSearchResults from "./reducer/KantoBiz/SearchResult";
+import KantoBizSearch from "./reducer/Search/KantoSearch";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from "redux-thunk";
 import Conf from "./Config/tsconfig";
@@ -31,7 +32,8 @@ const Reducers = combineReducers({
     "Player": playersReducer,
     "Carts": cartsReducer,
     "KantoBizForm": kantoBizForm,
-    "KantobizSearch": KantoBizSearchResults
+    "KantobizSearch": KantoBizSearchResults,
+    "KantobizSearchInfo": KantoBizSearch
 });
 
 const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));

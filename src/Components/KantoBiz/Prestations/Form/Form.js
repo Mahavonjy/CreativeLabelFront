@@ -166,7 +166,6 @@ function Form(props) {
             </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
             <div className="NextOrPrevPageStepper mt-4 pb-5">
                 {state_steps_index !== 0 && <button className="btn btn-outline-light pr-5 mb-3 bolder float-left border-bottom-0 border-right-0"
-                                                    style={{marginLeft: "-25px!important"}}
                                                     onClick={() => Prev()}><i
                     className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>Precedent</button>}
                 {state_steps_index === component_steps.length - 1 ?

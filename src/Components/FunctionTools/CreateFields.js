@@ -294,7 +294,7 @@ export const DisplayArtist = (artist_info, user_credentials) => {
     )
 };
 
-export const CreativeHeaders = (Title, Description) => {
+export const CreativeHeaders = (Title, Description, headers) => {
     return (
         <div>
             <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
@@ -322,12 +322,8 @@ export const CreativeHeaders = (Title, Description) => {
                             </div>
                         </div>
                     </div>
-                    {Title === "Creative KantoBiz" ? <SearchBar/> : null}
+                    {Title === "Creative KantoBiz" ? <SearchBar headers={headers}/> : null}
                 </div>
-                <a className="carousel-control-prev" href="#islCreativeCarousel" role="button" data-slide="prev"
-                   style={{fontSize: 0}}>prev</a>
-                <a className="carousel-control-next" href="#islCreativeCarousel" role="button" data-slide="next"
-                   style={{fontSize: 0}}>next</a>
             </div>
         </div>
     )
@@ -409,7 +405,7 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
             <Route path="/register" exact component={() => <Register/>}/>
             <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
-            <Route path="/kantobiz" exact component={() => <KantoBiz/>}/>
+            <Route path="/kantobiz" exact component={() => <KantoBiz headers={headers}/>}/>
             <Route path="/Cart" exact component={() => <Cart ToPlay={addToPlaylist}/>}/>
             <Route path="/beats/CheckThisBeat/:id(\d+)" exact
                    component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat}

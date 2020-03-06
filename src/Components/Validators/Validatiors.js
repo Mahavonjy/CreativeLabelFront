@@ -166,14 +166,12 @@ export const checkErrorMessage = (error) => {
     }
 };
 
-export const validatorSearch = (city, thematics, events, startDate) => {
-    if (!city)
-        return {"error": true, message: "veuillez choisir une ville"};
-    if (!thematics)
+export const validatorSearch = (thematics, startDate, country) => {
+    if (!country)
+        return {"error": true, message: "veuillez choisir pays"};
+    if (thematics.length === 0)
         return {"error": true, message: "veuillez choisir la thematique"};
-    if (!events)
-        return {"error": true, message: "le nom de votre evenements"};
-    if (parseInt(formatDate(startDate)) === parseInt(formatDate(new Date())))
+    if (formatDate(startDate) === formatDate(new Date()))
         return {"error": true, message: "veuillez choisir une autre date"};
     return {"error": false}
 };
