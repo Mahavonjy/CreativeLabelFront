@@ -11,6 +11,7 @@ import Results from "./Prestations/Results/Results";
 function KantoBiz(props) {
 
     const dispatch = useDispatch();
+    const results = useSelector(state => state.KantobizSearch.results);
     const ResultsPage = useSelector(state => state.KantobizSearch.ResultsPage);
     const EventAndThematics = useSelector(state => state.KantobizSearch.EventAndThematics);
     const DisplayService = useSelector(state => state.KantobizSearch.DisplayService);
@@ -50,10 +51,13 @@ function KantoBiz(props) {
 
     useEffect(() => {
 
+        if (results.length > 0)
+            if (!resultsPage) next();
+
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [results]);
 
     return (
         <div>
@@ -82,8 +86,8 @@ function KantoBiz(props) {
 
                 <div className="main-page">
                     {/* Show Different events/thematics or all Prestation result of search or Prestation selected*/}
-                    {(eventAndThematics && EventAndThematics_())
-                    || (resultsPage && <Results/>)
+                    {(eventAndThematics && EventAndThematics_(props.headers, dispatch))
+                    || (resultsPage && <Results next={next}/>)
                     || (displayService && <DisplayPrestation/>)}
                     {/* End */}
                 </div>

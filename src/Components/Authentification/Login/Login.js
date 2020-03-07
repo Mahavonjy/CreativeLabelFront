@@ -48,9 +48,9 @@ function Login() {
             }).catch(error => {
                 setLoading(false);
                 let response = JSON.stringify(error.response.data).replace(/"/g, '');
-                if (response === "Veuillez activer votre compte") {
+                if (response === "Active your account") {
                     setVisible(true);
-                    toast.error(response)
+                    toast.warn("Veuillez activer votre compte")
                 } else toast.error("email ou mot de passe incorrect")
             })
         }
@@ -126,18 +126,17 @@ function Login() {
         <div tabIndex="0" onKeyDown={(e) => {e.key === "Enter" && sendLoginCredentials(e)}}>
             {!changePass && !resetPassword && !visibility && !visible && <ToastContainer/>}
 
-            <Modal visible={changePass} width="400" height="300" animationType='slide'>
+            <Modal visible={changePass} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
                                 rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
-                <div className="form-material"
-                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
+                <div className="form-material" style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Crée votre nouveau mot de passe</h3>
                             <div className="custom-float">
-                                <label className="ModalFormField__Label" style={{paddingTop: "10px", color: "black"}}>Nouveau
-                                    mot de passe</label><br/>
+                                <label className="ModalFormField__Label" style={{paddingTop: "10px", color: "black"}}>
+                                    Nouveau mot de passe</label><br/>
                                 {CreateFields.CreateInput('password', password, (e) => {Tools.changeFields(setPassword, e)}, "Au moins 8 caractères", "password", true)}
                             </div>
 
@@ -155,7 +154,7 @@ function Login() {
                 </div>
             </Modal>
 
-            <Modal visible={resetPassword} width="400" height="100" animationType='slide'>
+            <Modal visible={resetPassword} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
@@ -173,7 +172,7 @@ function Login() {
                 </div>
             </Modal>
 
-            <Modal visible={visibility} width="400" height="150" animationType='slide'>
+            <Modal visible={visibility} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
@@ -194,7 +193,7 @@ function Login() {
                 </div>
             </Modal>
 
-            <Modal visible={visible} width="400" height="100" animationType='slide'>
+            <Modal visible={visible} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>

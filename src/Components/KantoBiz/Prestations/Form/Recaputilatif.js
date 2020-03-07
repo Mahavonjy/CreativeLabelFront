@@ -39,6 +39,10 @@ function Recaputilatif(props) {
         );
     };
 
+    Recaputilatif.validation = () => {
+        return {"error": false};
+    };
+
     const createBigForm = (Title, values, icon) => {
         return (
             <div className="custom-float">

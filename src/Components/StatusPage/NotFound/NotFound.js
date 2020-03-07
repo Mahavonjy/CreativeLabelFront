@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
-function NotFound() {
+function NotFound () {
+
     const isMounted = useRef(false);
 
     useEffect(() => {
@@ -16,7 +17,6 @@ function NotFound() {
                     <h1 className="text-primary">oops!</h1>
                     <p className="section-subtitle">Something went wrong. The page you are looking for is gone or you are not logged</p>
                     <p className="s-256">404</p>
-                    <a href="/beats">Return</a>
                 </div>
             </div>
         </div>

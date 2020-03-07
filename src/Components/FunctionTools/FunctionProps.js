@@ -769,3 +769,12 @@ export function addAllEventsTypes(data) {
         });
     };
 }
+
+export function addKantoBizSearchResults(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_KANTOBIZ_RESULTS",
+            data: data
+        });
+    };
+}

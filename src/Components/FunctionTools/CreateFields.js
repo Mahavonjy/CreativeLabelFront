@@ -1,31 +1,31 @@
 import React, {useEffect, useRef} from "react";
-import {Link, Route} from "react-router-dom";
-import ReactTooltip from "react-tooltip";
+import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
-import Conf from "../../Config/tsconfig";
-import * as Tools from "./Tools";
-import TestImg from "../../assets/img/demo/a2.jpg";
+import {useDispatch} from "react-redux";
+import {Link, Route} from "react-router-dom";
 import {toast} from "react-toastify";
+import ReactTooltip from "react-tooltip";
+import TestImg from "../../assets/img/demo/a2.jpg";
+import TestImageTwo from "../../assets/img/demo/a3.jpg"
+import TestImageThree from "../../assets/img/demo/a5.jpg";
+import TestImageOne from "../../assets/img/demo/a7.jpg";
+import Conf from "../../Config/tsconfig";
+import About from "../About/about";
 import Register from "../Authentification/Register/Register";
-import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
-import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
 import Beats from "../BeatMaking/Beats/AllBeatsSuggestion/Beats";
+import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import Cart from "../Cart/Cart";
+import {addNewPlayerList} from "../FunctionTools/FunctionProps"
+import KantoBiz from "../KantoBiz/KantoBiz";
+import SearchBar from "../KantoBiz/SearchBar";
+import IslPlayer from "../Players/Players";
 import Preference from "../Preference/Preference";
 import Profile from "../Profile/Profile";
-import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
-import IslPlayer from "../Players/Players";
-import KantoBiz from "../KantoBiz/KantoBiz";
-import TestImageTwo from "../../assets/img/demo/a3.jpg"
-import TestImageOne from "../../assets/img/demo/a7.jpg";
-import TestImageThree from "../../assets/img/demo/a5.jpg";
-import "react-datepicker/dist/react-datepicker.css"
-import SearchBar from "../KantoBiz/SearchBar";
+import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
+import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import {ForAddToCard} from "./PopupFields"
-import {addNewPlayerList} from "../FunctionTools/FunctionProps"
-import {useDispatch} from "react-redux";
-import About from "../About/about";
+import * as Tools from "./Tools";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -394,25 +394,15 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
     return (
         <div>
             <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
-            <Route path="/Profile" exact component={() => {
-                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
-                    <Profile ToPlay={addToPlaylist}/>)
-            }}/>
-            <Route path="/preference" exact component={() => {
-                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
-                    <Preference/>)
-            }}/>
             <Route path="/register" exact component={() => <Register/>}/>
             <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
             <Route path="/kantobiz" exact component={() => <KantoBiz headers={headers}/>}/>
             <Route path="/Cart" exact component={() => <Cart ToPlay={addToPlaylist}/>}/>
-            <Route path="/beats/CheckThisBeat/:id(\d+)" exact
-                   component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat}
-                                             SimilarBeats={beats_similar}/>}/>
-            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact
-                   component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked}
-                                                  UserData={user_data}/>}/>
+            <Route path="/beats/CheckThisBeat/:id(\d+)" exact component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat} SimilarBeats={beats_similar}/>}/>
+            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
+            <Route path="/Profile" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Profile ToPlay={addToPlaylist}/>)}}/>
+            <Route path="/preference" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Preference/>)}}/>
             <Route path="/about" exact component={() => <About/>}/>
         </div>
     )

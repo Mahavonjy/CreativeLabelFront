@@ -1,17 +1,18 @@
 import axios from "axios";
 import React from "react";
 import {toast} from "react-toastify";
+import ReactTooltip from "react-tooltip";
 import Conf from "../../Config/tsconfig";
 import Home from "../Home/Home";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import * as Validators from "../Validators/Validatiors";
 import {
+    activeDisplayServicePage,
     addAllUserOptions,
     addAllUserPrestation,
     addCarts,
     addDescriptionOfService,
     addEventSelected,
-    addMaterialsOfService,
     addNumberOfArtist,
     addOptionSelected,
     addOthersCityOfService,
@@ -20,7 +21,7 @@ import {
     addPriceOfService,
     addReferenceOfCity,
     addServiceCountry, addServiceRefundPolicy,
-    addServiceTime,
+    addServiceTime, addServiceToShow,
     addTitleOfService,
     addTotalPrice, addTravelExpenses,
     addUnitTimeOfPreparation,
@@ -491,4 +492,101 @@ export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
     setState(value);
     if (func && dispatch)
         dispatch(func(value))
+};
+
+export const generatePagination = (_array, dispatch, props) => {
+    return _array.map((val, index) => ({id: (index + 1), name:
+            <div onClick={() => {
+                props.next();
+                dispatch(activeDisplayServicePage());
+                dispatch(addServiceToShow(val))
+            }}>
+                <ReactTooltip/>
+                <div className="card_kanto">
+                    <div className="additional">
+                        <div className="user-card_kanto d-none d-sm-block" data-tip="Cliquer Moi">
+                            <div className="level center-result">{val.title}</div>
+                            <div className="points center-result">
+                                5&nbsp;<i className="icon icon-star"/>
+                            </div>
+                            <div className="text-center" style={{paddingTop: 70}}>
+                                <img className="border1" width={110} height={100} src={val.galleries[0]} alt=''/>
+                            </div>
+                        </div>
+                        <div className="more-info">
+                            <h1 className="pt-2">{val.artist_name}</h1>
+                            <div className="row justify-content-center text-center" data-tip="Cliquer Moi">
+                                <div className="col text-light d-none d-sm-block">
+                                    <h4 className="text-light bolder">Genre</h4>
+                                    <ul className="bg-transparent kanto-list m-1">
+                                        {val.thematics.map((val, index) => <li key={index}>{val}</li>)}
+                                    </ul>
+                                </div>
+                                <div className="col text-light d-none d-sm-block">
+                                    <h4 className="text-light bolder">Ville</h4>
+                                    <ul className="bg-transparent kanto-list m-1">
+                                        <li key={0}>{val.reference_city}</li>
+                                        {val.others_city.map((val, index) => <li key={index + 1}>{val}</li>)}
+                                    </ul>
+                                </div>
+                                <div className="col ml-auto d-sm-none">
+                                    <h4 className="text-red">Evenements</h4>
+                                    <p className="events">{val.events.join(", ")}</p>
+                                    <div className="row ml-2 mr-3">
+                                        <div className="col">
+                                            <small className="text-red">Ville</small>
+                                            <ul className="small-kanto-list">
+                                                <li key={0}>{val.reference_city}</li>
+                                                {val.others_city.map((val, index) => <li key={index + 1}>{val}</li>)}
+                                            </ul>
+                                        </div>
+                                        <div className="col">
+                                            <div className="text-center" style={{marginTop: 10, marginLeft: 10}}>
+                                                <img className="border1" src={val.galleries[0]} alt=''/>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <small className="text-red">Genre</small>
+                                            <ul className="small-kanto-list">
+                                                {val.thematics.map((val, index) => <li key={index}>{val}</li>)}
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div className="stats">
+                                <div data-tip="Le nombre d'artiste dans le groupe">
+                                    <i className="icon icon-adjust"/>
+                                    <div className="value">{val.number_of_artists}</div>
+                                </div>
+                                <div data-tip="La durée de la preparation">
+                                    <i className="icon icon-clock-1"/>
+                                    <div
+                                        className="value">{val.preparation_time}&nbsp;{checkUnitKey(val.unit_of_the_preparation_time)}</div>
+                                </div>
+                                <div data-tip="La durée de la prestation">
+                                    <i className="icon icon-clock-o"/>
+                                    <div
+                                        className="value">{val.duration_of_the_service}&nbsp;{checkUnitKey(val.unit_duration_of_the_service)}</div>
+                                </div>
+                                <div data-tip="Le prix de la prestation">
+                                    <i className="icon icon-money"/>
+                                    <div className="value">{val.price}$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="general d-none d-sm-block">
+                        <img alt=""
+                             src={val.galleries.length > 1 ? val.galleries[1] : "https://zupimages.net/up/19/42/zyu8.bmp"}
+                             width="100%" height="100%"/>
+                        <h1 className="pt-2 ml-2 bolder text-red">{val.artist_name}</h1>
+                        <p className="text-dark ml-2 font-weight-bold">{val.description}</p>
+                        <h1 className="more text-black bolder">{val.price}$</h1>
+                        <small className="more-genre pl-2 text-black">{val.thematics.join(", ")}</small>
+                    </div>
+                </div>
+            </div>
+    }));
 };

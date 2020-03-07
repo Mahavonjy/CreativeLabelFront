@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import StepZilla from "react-stepzilla";
 import {toast, ToastContainer} from "react-toastify";
+import RegisterForm from "../../../Authentification/Register/RegisterForm";
 import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
 import {createOrUpdatePrestation, resetPropsForm} from "../../../FunctionTools/Tools";
@@ -33,13 +34,14 @@ function Form(props) {
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
-    const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif];
+    const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif, RegisterForm];
     const [state_steps_index, setStepsIndex] = useState(steps_index);
     const steps = [
         {name: 'Choisir votre thématique', component: <Thematics var={props}/>},
         {name: 'Information de votre prestation', component: <PrestationInformation/>},
         {name: 'Detail de votre prestation', component: <PrestationDetails/>},
         {name: 'Recaputilatif', component: <Recaputilatif var={props}/>},
+        {name: 'Inscription', component: <RegisterForm tmpArtistTypeSelected={props.tmpArtistTypeSelected} setIsActive={props.setIsActive}/>}
     ];
 
     const addNewPrestation = () => {
@@ -151,6 +153,15 @@ function Form(props) {
                             <div className="mdl-stepper-bar-left"/>
                             <div className="mdl-stepper-bar-right"/>
                         </div>
+                        {props.register &&
+                            <div
+                                className={(state_steps_index === 4 && "mdl-stepper-step active-step") || (state_steps_index < 4 && "mdl-stepper-step") || (state_steps_index > 4 && "mdl-stepper-step success-step")}>
+                                <div className="mdl-stepper-circle"><span>5</span></div>
+                                <div className="mdl-stepper-title text-light d-none d-lg-block"><small
+                                    className="d-none d-lg-block">Inscription</small></div>
+                                <div className="mdl-stepper-bar-left"/>
+                                <div className="mdl-stepper-bar-right"/>
+                            </div>}
                     </div>
                 </div>
             </div>

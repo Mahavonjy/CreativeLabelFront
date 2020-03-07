@@ -7,6 +7,7 @@ import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import axios from "axios";
 import {
+    addKantoBizSearchResults,
     changeCityToSearch,
     changeCountryToSearch,
     changeEnventsToSearch,
@@ -49,7 +50,7 @@ function SearchBar(props) {
                 "event": state_events,
                 "thematics": state_thematics,
             }, {headers: props.headers}).then((resp) => {
-                console.log(resp.data)
+                dispatch(addKantoBizSearchResults(resp.data))
             }).catch((error) => {
 
             })
