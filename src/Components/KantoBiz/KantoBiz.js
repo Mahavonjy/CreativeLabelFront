@@ -96,7 +96,7 @@ function KantoBiz(props) {
                     <div>
                         {/* Show Different events/thematics or all Prestation result of search or Prestation selected*/}
                         {eventAndThematics && EventAndThematics_(props.headers, dispatch, setStateResult, displayOne) ||
-                        resultsPage && <Results next={next} setStateResult={setStateResult} stateResults={stateResults}/>}
+                        resultsPage && <Results next={next} displayOne={displayOne} setStateResult={setStateResult} stateResults={stateResults}/>}
                         {/* End */}
                     </div>
                 </div>

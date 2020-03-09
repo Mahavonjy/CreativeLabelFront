@@ -9,7 +9,6 @@ import axios from "axios";
 import {
     addKantoBizSearchResults,
     addSearchLoading,
-    addServiceToShow,
     changeCityToSearch,
     changeCountryToSearch,
     changeEventsToSearch,

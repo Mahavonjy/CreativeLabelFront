@@ -10,6 +10,7 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne)
     const SearchEvent = async (event) => {
         await dispatch(addSearchLoading(true));
         axios.get("api/service_search/moment/events/" + event, {headers: headers}).then(async (resp) => {
+            console.log(resp.data);
             await setStateResult(generatePagination(resp.data, displayOne));
             await dispatch(addKantoBizSearchResults(resp.data));
             await dispatch(addSearchLoading(false));
