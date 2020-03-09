@@ -235,3 +235,11 @@ export const LoadingHome = () => {
         </div>
     )
 };
+
+export const LoadingSearch = () => {
+    return (
+        <div className="text-center p-t-100">
+            <Loader type="Puff" height={100} width={100} color="#ED1C24"/>
+        </div>
+    )
+};

@@ -183,7 +183,6 @@ function MyPrestations(props) {
                 </div>
             </Modal>
             {/* end form become an artist */}
-            {/* if user choice become an artist*/}
             <Modal visible={showOne} width="80%" height="80%" effect="fadeInUp" onClickAway={() => setShowOne(false)}>
                 <div className="bg-dark overflow-auto scrollbar-isl" style={{height: "100%"}}>
                     <button className="ModalClose" style={{position: "fixed", left: 0, top: 0}}
@@ -193,7 +192,6 @@ function MyPrestations(props) {
                     {showOne && <DisplayPrestation read/>}
                 </div>
             </Modal>
-            {/* end form become an artist*/}
             <div className="row justify-content-center">
                 {!props.read &&
                 <div className="col-lg-2">

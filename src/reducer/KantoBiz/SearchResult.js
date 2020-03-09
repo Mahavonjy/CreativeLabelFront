@@ -1,8 +1,8 @@
 const initState = {
     results: [],
     service_to_show: {},
+    loading: false,
     ResultsPage: false,
-    DisplayService: false,
     filter_events_selected: [],
     EventAndThematics: true
 };
@@ -13,6 +13,11 @@ const KantoBizSearchResults = (state = initState, action) => {
             return {
                 ...state,
                 results: action.data
+            };
+        case "ADD_LOADING_SEARCH":
+            return {
+                ...state,
+                loading: action.data
             };
         case "ADD_SERVICE_TO_SHOW":
             return {
@@ -28,22 +33,13 @@ const KantoBizSearchResults = (state = initState, action) => {
             return {
                 ...state,
                 ResultsPage: true,
-                DisplayService: false,
                 EventAndThematics: false,
             };
         case "ACTIVE_EVENT_AND_THEMATICS_PAGE":
             return {
                 ...state,
                 ResultsPage: false,
-                DisplayService: false,
                 EventAndThematics: true
-            };
-        case "ACTIVE_DISPLAY_SERVICE_PAGE":
-            return {
-                ...state,
-                ResultsPage: false,
-                DisplayService: true,
-                EventAndThematics: false
             };
 
         default:

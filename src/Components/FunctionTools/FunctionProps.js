@@ -545,29 +545,18 @@ export function addOtherUserService(data) {
     };
 }
 
-export function activeResultPage(data) {
+export function activeResultPage() {
     return async dispatch => {
         dispatch({
-            type: "ACTIVE_RESULTS_PAGE",
-            data: data
+            type: "ACTIVE_RESULTS_PAGE"
         });
     };
 }
 
-export function activeEventAndThematicsPage(data) {
+export function activeEventAndThematicsPage() {
     return async dispatch => {
         dispatch({
-            type: "ACTIVE_EVENT_AND_THEMATICS_PAGE",
-            data: data
-        });
-    };
-}
-
-export function activeDisplayServicePage(data) {
-    return async dispatch => {
-        dispatch({
-            type: "ACTIVE_DISPLAY_SERVICE_PAGE",
-            data: data
+            type: "ACTIVE_EVENT_AND_THEMATICS_PAGE"
         });
     };
 }
@@ -752,7 +741,7 @@ export function changeThematicsToSearch(data) {
     };
 }
 
-export function changeEnventsToSearch(data) {
+export function changeEventsToSearch(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_EVENTS_TO_SEARCH",
@@ -774,6 +763,15 @@ export function addKantoBizSearchResults(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_KANTOBIZ_RESULTS",
+            data: data
+        });
+    };
+}
+
+export function addSearchLoading(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_LOADING_SEARCH",
             data: data
         });
     };

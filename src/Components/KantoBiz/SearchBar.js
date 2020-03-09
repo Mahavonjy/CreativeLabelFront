@@ -8,12 +8,14 @@ import ReactTooltip from 'react-tooltip';
 import axios from "axios";
 import {
     addKantoBizSearchResults,
+    addSearchLoading,
+    addServiceToShow,
     changeCityToSearch,
     changeCountryToSearch,
-    changeEnventsToSearch,
+    changeEventsToSearch,
     changeThematicsToSearch
 } from "../FunctionTools/FunctionProps";
-import {ChangeDate, onChangeListWithValueLabel,} from "../FunctionTools/Tools";
+import {ChangeDate, generatePagination, onChangeListWithValueLabel,} from "../FunctionTools/Tools";
 import {validatorSearch} from "../Validators/Validatiors"
 
 function SearchBar(props) {
@@ -22,6 +24,7 @@ function SearchBar(props) {
     const country_allowed = useSelector(state => state.Others.country_allowed);
     const events_allowed = useSelector(state => state.Others.events_allowed);
     const artist_types = useSelector(state => state.Others.artist_types);
+    const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
     const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
     const city_to_search = useSelector(state => state.KantobizSearchInfo.city_to_search);
     const country_to_search = useSelector(state => state.KantobizSearchInfo.country_to_search);
@@ -38,21 +41,25 @@ function SearchBar(props) {
     const [state_thematics, setThematics] = useState(thematics_to_search);
     const [startDate, setStartDate] = useState(date_to_search);
 
-    const Search = () => {
+    const Search = async () => {
+        await dispatch(addSearchLoading(true));
         let if_errors = validatorSearch(state_thematics, startDate, country);
         if (if_errors['error']) {
+            await dispatch(addSearchLoading(false));
             toast.error(if_errors['message'])
         } else {
-            axios.post("api/service_search/moment", {
+            await axios.post("api/service_search/moment", {
                 "country": country,
                 "city": city,
                 "event_date": startDate.toISOString(),
                 "event": state_events,
                 "thematics": state_thematics,
-            }, {headers: props.headers}).then((resp) => {
-                dispatch(addKantoBizSearchResults(resp.data))
-            }).catch((error) => {
-
+            }, {headers: props.headers}).then(async (resp) => {
+                let data = resp.data;
+                if (data.length === 0) toast.warn("Pas de presations");
+                await props.setStateResult(generatePagination(data, props.displayOne));
+                await dispatch(addKantoBizSearchResults(data));
+                await dispatch(addSearchLoading(false));
             })
         }
     };
@@ -93,7 +100,7 @@ function SearchBar(props) {
         return () => {
             isMounted.current = true
         };
-    }, [city, country, listOfCity]);
+    }, [city, country, listOfCity, service_to_show]);
 
     return (
         <div className="Base search-bar relative p-b-40 p-t-10">
@@ -109,8 +116,7 @@ function SearchBar(props) {
                                              resolve(dispatch(changeCityToSearch("")));
                                              resolve(onChangeListWithValueLabel(setCountry, obj, dispatch, changeCountryToSearch));
                                              resolve(changeCity(obj.value).then(r => null));
-                                         }).then(r => null);
-                                     }}
+                                         }).then(r => null)}}
                                      options={countryAllowed}/>
                 </div>
                 <div className=" col-lg-2 d-inline-block text-center">
@@ -129,8 +135,8 @@ function SearchBar(props) {
                 </div>
 
                 <div className=" col-lg-3 d-inline-block text-center">
-                    <Select options={listOfEvents} placeholder="Choisir le/les evenements" onChange={obj => {
-                        onChangeListWithValueLabel(setEvents, obj, dispatch, changeEnventsToSearch)
+                    <Select options={listOfEvents} placeholder="Choisir le/les evenements"
+                            onChange={obj => {onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
                     }}/>
                 </div>
 

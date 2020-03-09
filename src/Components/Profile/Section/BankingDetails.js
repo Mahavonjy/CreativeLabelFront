@@ -52,8 +52,7 @@ function BankingDetails(props) {
 
     const createBanking = () => {
         let tmp = {...banking};
-        tmp = deleteInObject(tmp);
-        axios.post('api/banking/create', tmp, {headers: headersCustomed}).then((resp) => {
+        axios.post('api/banking/create', deleteInObject(tmp), {headers: headersCustomed}).then((resp) => {
             dispatch(profileShowBankingDetails(true));
             dispatch(profileInitialisationBanking(resp.data));
             toast.success("créer avec success")

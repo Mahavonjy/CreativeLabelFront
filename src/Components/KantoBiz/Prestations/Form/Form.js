@@ -2,11 +2,11 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import StepZilla from "react-stepzilla";
 import {toast, ToastContainer} from "react-toastify";
+import "../../../../assets/css/style/Form.css"
 import RegisterForm from "../../../Authentification/Register/RegisterForm";
 import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
 import {createOrUpdatePrestation, resetPropsForm} from "../../../FunctionTools/Tools";
-import "../../../../assets/css/style/Form.css"
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
@@ -34,15 +34,14 @@ function Form(props) {
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
-    const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif, RegisterForm];
+    const [component_steps, setComponentSteps] = useState([Thematics, PrestationInformation, PrestationDetails, Recaputilatif]);
     const [state_steps_index, setStepsIndex] = useState(steps_index);
-    const steps = [
+    const [steps, setSteps] = useState([
         {name: 'Choisir votre thématique', component: <Thematics var={props}/>},
         {name: 'Information de votre prestation', component: <PrestationInformation/>},
         {name: 'Detail de votre prestation', component: <PrestationDetails/>},
-        {name: 'Recaputilatif', component: <Recaputilatif var={props}/>},
-        {name: 'Inscription', component: <RegisterForm tmpArtistTypeSelected={props.tmpArtistTypeSelected} setIsActive={props.setIsActive}/>}
-    ];
+        {name: 'Recaputilatif', component: <Recaputilatif var={props}/>}
+    ]);
 
     const addNewPrestation = () => {
         setLoading(true);
@@ -70,7 +69,6 @@ function Form(props) {
                     toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
                 else toast.error(resp.message);
             } else {
-                resetPropsForm(dispatch);
                 setLoading(false);
             }
         });
@@ -104,6 +102,18 @@ function Form(props) {
 
         if (props.new)
             props.setActiveToast(false);
+        if (props.register) {
+            let tmp = [...steps];
+            let tmpComponentSteps = [...component_steps];
+            tmp.push({
+                name: 'Inscription',
+                component: <RegisterForm tmpArtistTypeSelected={props.tmpArtistTypeSelected}
+                                         setIsActive={props.setIsActive}/>
+            });
+            tmpComponentSteps.push(RegisterForm);
+            setSteps(tmp);
+            setComponentSteps(tmpComponentSteps);
+        }
 
         return () => {
             isMounted.current = true
@@ -154,14 +164,14 @@ function Form(props) {
                             <div className="mdl-stepper-bar-right"/>
                         </div>
                         {props.register &&
-                            <div
-                                className={(state_steps_index === 4 && "mdl-stepper-step active-step") || (state_steps_index < 4 && "mdl-stepper-step") || (state_steps_index > 4 && "mdl-stepper-step success-step")}>
-                                <div className="mdl-stepper-circle"><span>5</span></div>
-                                <div className="mdl-stepper-title text-light d-none d-lg-block"><small
-                                    className="d-none d-lg-block">Inscription</small></div>
-                                <div className="mdl-stepper-bar-left"/>
-                                <div className="mdl-stepper-bar-right"/>
-                            </div>}
+                        <div
+                            className={(state_steps_index === 4 && "mdl-stepper-step active-step") || (state_steps_index < 4 && "mdl-stepper-step") || (state_steps_index > 4 && "mdl-stepper-step success-step")}>
+                            <div className="mdl-stepper-circle"><span>5</span></div>
+                            <div className="mdl-stepper-title text-light d-none d-lg-block">
+                                <small className="d-none d-lg-block">Inscription</small></div>
+                            <div className="mdl-stepper-bar-left"/>
+                            <div className="mdl-stepper-bar-right"/>
+                        </div>}
                     </div>
                 </div>
             </div>
@@ -170,21 +180,18 @@ function Form(props) {
                 <small className="text-center">Cliquer sur suivant pour passer à l'étape suivante</small>
             </div>
             {checkProps() && !loading ?
-            <div className="text-center pt-2">
-                {state_steps_index === component_steps.length - 1 && !props.register &&
-                <button className="btn btn-outline-success center pl-5 pr-5"
-                        onClick={() => addNewPrestation()}>Enregister</button>}
-            </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
+                <div className="text-center pt-2">
+                    {state_steps_index === component_steps.length - 1 && !props.register &&
+                    <button className="btn btn-outline-success center pl-5 pr-5"
+                            onClick={() => addNewPrestation()}>Enregister</button>}
+                </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
             <div className="NextOrPrevPageStepper mt-4 pb-5">
-                {state_steps_index !== 0 && <button className="btn btn-outline-light pr-5 mb-3 bolder float-left border-bottom-0 border-right-0"
-                                                    onClick={() => Prev()}><i
+                {state_steps_index !== 0 &&
+                <button className="btn btn-outline-light pr-5 mb-3 bolder float-left border-bottom-0 border-right-0"
+                        onClick={() => Prev()}><i
                     className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>Precedent</button>}
-                {state_steps_index === component_steps.length - 1 ?
-                    <div>
-                        {!props.new && <a href="#register"
-                                          className="text-black float-right mr-5 m-b-50 bg-success pr-5 pl-5 text-center"
-                                          style={{borderRadius: 5}}>Valider</a>}
-                    </div> : <button className="btn btn-outline-light pl-5 mb-3 bolder float-right border-bottom-0 border-left-0" onClick={() => Next()}>Suivant&nbsp;<i
+                {state_steps_index !== component_steps.length - 1 &&
+                    <button className="btn btn-outline-light pl-5 mb-3 bolder float-right border-bottom-0 border-left-0" onClick={() => Next()}>Suivant&nbsp;<i
                         className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></button>}
             </div>
         </div>

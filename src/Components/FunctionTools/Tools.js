@@ -4,10 +4,10 @@ import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Conf from "../../Config/tsconfig";
 import Home from "../Home/Home";
+import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import * as Validators from "../Validators/Validatiors";
 import {
-    activeDisplayServicePage,
     addAllUserOptions,
     addAllUserPrestation,
     addCarts,
@@ -315,6 +315,7 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
             tmp.push(resp.data);
             _props.setAllPrestation(tmp);
             dispatch(addAllUserPrestation(tmp));
+            _props.setActiveToast(true);
             _props.setAddNewPrestation(false);
             _props.close();
             resetPropsForm(dispatch);
@@ -494,15 +495,11 @@ export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
         dispatch(func(value))
 };
 
-export const generatePagination = (_array, dispatch, props) => {
+export const generatePagination = (_array, funcToDisplay) => {
     return _array.map((val, index) => ({id: (index + 1), name:
-            <div onClick={() => {
-                props.next();
-                dispatch(activeDisplayServicePage());
-                dispatch(addServiceToShow(val))
-            }}>
+            <div key={index}>
                 <ReactTooltip/>
-                <div className="card_kanto">
+                <div className="card_kanto" onClick={() => funcToDisplay(val)}>
                     <div className="additional">
                         <div className="user-card_kanto d-none d-sm-block" data-tip="Cliquer Moi">
                             <div className="level center-result">{val.title}</div>

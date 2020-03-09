@@ -294,7 +294,7 @@ export const DisplayArtist = (artist_info, user_credentials) => {
     )
 };
 
-export const CreativeHeaders = (Title, Description, headers) => {
+export const CreativeHeaders = (Title, Description, headers, setStateResult, next, displayOne) => {
     return (
         <div>
             <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
@@ -322,7 +322,7 @@ export const CreativeHeaders = (Title, Description, headers) => {
                             </div>
                         </div>
                     </div>
-                    {Title === "Creative KantoBiz" ? <SearchBar headers={headers}/> : null}
+                    {Title === "Creative KantoBiz" ? <SearchBar headers={headers} displayOne={displayOne} setStateResult={setStateResult} next={next}/> : null}
                 </div>
             </div>
         </div>
@@ -343,13 +343,17 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 {/* BEATS */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative BeatMaking" onClick={() => {
                     (location.pathname !== "/beats") && history.push("/beats")
-                }}><i className="icon icon-heartbeat s-24"/> <span className="ml-5">BeatMaking</span>
+                }}><i
+                    className={location.pathname === "/beats" ? "icon icon-heartbeat text-red s-24" : "icon icon-heartbeat s-24"}/>
+                    <span className="ml-5">BeatMaking</span>
                 </li>
 
                 {/* KantoBiz */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative KantoBiz" onClick={() => {
                     location.pathname !== "/kantobiz" && history.push("/kantobiz")
-                }}><i className="icon icon-compact-disc-2 s-24"/> <span className="ml-5">KantoBiz</span>
+                }}><i
+                    className={location.pathname === "/kantobiz" ? "icon icon-compact-disc-2 text-red s-24" : "icon icon-compact-disc-2 s-24"}/>
+                    <span className="ml-5">KantoBiz</span>
                 </li>
 
                 {/* PROFILE */}
@@ -359,7 +363,9 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                     else headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile"
                         ? document.getElementById("LoginRequire").click()
                         : history.push("/Profile");
-                }}><i className="icon icon-user s-24"/> <span className="ml-5">Profile</span>
+                }}><i
+                    className={location.pathname === "/Profile" ? "icon icon-user text-red s-24" : "icon icon-user s-24"}/>
+                    <span className="ml-5">Profile</span>
                 </li>
 
                 {/* CART */}
@@ -368,7 +374,8 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 }}>
                     <div id="CartBadge">
                             <span className="p1 " data-count={state_cart}>
-                                <i className="icon icon-cart-plus s-24 mr-5" data-count="4b"/> Cart
+                                <i className={location.pathname === "/Cart" ? "icon icon-cart-plus text-red s-24 mr-5" : "icon icon-cart-plus s-24 mr-5"}
+                                   data-count="4b"/> Cart
                             </span>
                     </div>
                 </li>
@@ -376,7 +383,9 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 {/* About */}
                 <li style={{margin: "0 0 20px 11px"}} data-tip="Onglet à propos" onClick={() => {
                     (location.pathname !== "/about") && history.push("/about")
-                }}><i className="icon icon-info-circle s-24"/> <span className="ml-5">À propos</span>
+                }}><i
+                    className={location.pathname === "/about" ? "icon text-red icon-info-circle s-24" : "icon icon-info-circle s-24"}/>
+                    <span className="ml-5">À propos</span>
                 </li>
 
                 {/* LOGOUT OR LOGIN */}
@@ -399,10 +408,20 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
             <Route path="/kantobiz" exact component={() => <KantoBiz headers={headers}/>}/>
             <Route path="/Cart" exact component={() => <Cart ToPlay={addToPlaylist}/>}/>
-            <Route path="/beats/CheckThisBeat/:id(\d+)" exact component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat} SimilarBeats={beats_similar}/>}/>
-            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked} UserData={user_data}/>}/>
-            <Route path="/Profile" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Profile ToPlay={addToPlaylist}/>)}}/>
-            <Route path="/preference" exact component={() => {return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (<Preference/>)}}/>
+            <Route path="/beats/CheckThisBeat/:id(\d+)" exact
+                   component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat}
+                                             SimilarBeats={beats_similar}/>}/>
+            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact
+                   component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked}
+                                                  UserData={user_data}/>}/>
+            <Route path="/Profile" exact component={() => {
+                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
+                    <Profile ToPlay={addToPlaylist}/>)
+            }}/>
+            <Route path="/preference" exact component={() => {
+                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
+                    <Preference/>)
+            }}/>
             <Route path="/about" exact component={() => <About/>}/>
         </div>
     )

@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../assets/css/style/Results.css"
+import {useSelector} from "react-redux";
 
 /**
  * @return {null}
  */
 function Pagination(props) {
 
+    const results = useSelector(state => state.KantobizSearch.results);
+
     const isMounted = useRef(false);
     const [pager, setPager] = useState({});
+    const loading = useSelector(state => state.KantobizSearch.loading);
 
     const setPage = (page) => {
         let items = props.items;
@@ -89,12 +93,12 @@ function Pagination(props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [loading, results]);
 
     if (!pager.pages || pager.pages.length <= 1) {
         // don't display pager if there is only 1 page
         if (props.items.length === 0)
-            return <p className="text-red center-center m-5">0 préstations trouvé</p>
+            return <p className="text-red center-center m-5">0 préstations trouvé</p>;
         return null;
     } else {
         return (

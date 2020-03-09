@@ -63,8 +63,7 @@ function Register() {
                         <div className="col-md-10 mx-md-auto">
                             <div className="mt-5">
                                 {!becomeArtistForm &&
-                                <RegisterForm setIsActive={setIsActive}
-                                              tmpArtistTypeSelected={tmpArtistTypeSelected}
+                                <RegisterForm setIsActive={setIsActive} tmpArtistTypeSelected={tmpArtistTypeSelected}
                                               setChoiceArtistType={setChoiceArtistType} noArtist/>}
                             </div>
                         </div>

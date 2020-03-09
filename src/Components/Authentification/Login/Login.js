@@ -3,9 +3,9 @@ import React, {useState} from "react";
 import Modal from "react-awesome-modal";
 import {toast, ToastContainer} from "react-toastify";
 import {sessionService} from "redux-react-session";
-import * as CreateFields from "../../FunctionTools/CreateFields";
-import {smallSpinner} from "../../FunctionTools/CreateFields";
-import * as Tools from "../../FunctionTools/Tools";
+import {CreateInput, smallSpinner} from "../../FunctionTools/CreateFields";
+import {changeFields} from "../../FunctionTools/Tools";
+import {checkErrorMessage} from "../../Validators/Validatiors";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import LoginGoogle from "../SocialCredentials/Google/Google";
 import "./Sign.css"
@@ -57,15 +57,16 @@ function Login() {
     };
 
     const verifyKeysSubmit = () => {
+        console.log("here");
         setLoading(true);
-        let data = {email: email, password: password};
+        let data = {email: email, keys: keys};
         axios.post("api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
             setLoading(false);
             setVisible(false);
             toast.success("validé, vous pouvez vous reconnecter")
         }).catch(error => {
             setLoading(false);
-            toast.error(error.response.data);
+            toast.error(checkErrorMessage(error).message)
         })
     };
 
@@ -77,8 +78,7 @@ function Login() {
             setResetPassword(true);
         }).catch(error => {
             setLoading(false);
-            let response = JSON.stringify(error.response.data);
-            toast.error(response.replace(/"/g, ''));
+            toast.error(checkErrorMessage(error).message)
         })
     };
 
@@ -91,8 +91,7 @@ function Login() {
             setChangePass(true);
         }).catch(error => {
             setLoading(false);
-            let response = JSON.stringify(error.response.data);
-            toast.error(response.replace(/"/g, ''));
+            toast.error(checkErrorMessage(error).message)
         })
     };
 
@@ -130,20 +129,21 @@ function Login() {
                 {loading && smallSpinner("absolute", "0")}
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
                                 rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
-                <div className="form-material" style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Crée votre nouveau mot de passe</h3>
                             <div className="custom-float">
                                 <label className="ModalFormField__Label" style={{paddingTop: "10px", color: "black"}}>
                                     Nouveau mot de passe</label><br/>
-                                {CreateFields.CreateInput('password', password, (e) => {Tools.changeFields(setPassword, e)}, "Au moins 8 caractères", "password", true)}
+                                {CreateInput('password', password, (e) => {changeFields(setPassword, e)}, "Au moins 8 caractères", "password", true)}
                             </div>
 
                             <div className="custom-float">
                                 <label className="ModalFormField__Label"
                                        style={{paddingTop: "10px", color: "black"}}>confirmer</label> <br/>
-                                {CreateFields.CreateInput('confirm_password', confirm_password, (e) => {Tools.changeFields(setConfirmPassword, e)}, "Entrez le mot de passe à nouveau", "password", true)}
+                                {CreateInput('confirm_password', confirm_password, (e) => {changeFields(setConfirmPassword, e)}, "Entrez le mot de passe à nouveau", "password", true)}
                             </div>
 
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
@@ -162,7 +162,7 @@ function Login() {
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
-                                {CreateFields.CreateInput('keys', keys, (e) => {Tools.changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
+                                {CreateInput('keys', keys, (e) => {changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
                             </div>
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyKeysResetPass()}>Verifier
@@ -183,7 +183,7 @@ function Login() {
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre adresse mail</h3>
                             <div className="custom-float center">
-                                {CreateFields.CreateInput('email', email, (e) => {Tools.changeFields(setEmail, e)}, "E-mail", "email", true)}
+                                {CreateInput('email', email, (e) => {changeFields(setEmail, e)}, "E-mail", "email", true)}
                             </div>
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyEmail()}>Envoyer
@@ -201,7 +201,7 @@ function Login() {
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
-                                {CreateFields.CreateInput('keys', keys, (e) => {Tools.changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
+                                {CreateInput('keys', keys, (e) => {changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
                             </div>
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyKeysSubmit()}>Envoyer
@@ -218,11 +218,11 @@ function Login() {
                 <div className="row l-form">
 
                     <input className="l-usr" placeholder="email" name="email" id="login-email"
-                           value={email} onChange={(e) => {Tools.changeFields(setEmail, e)}}/>
+                           value={email} onChange={(e) => {changeFields(setEmail, e)}}/>
 
                     <div className="pass-wrap l-pass">
                         <input className="pass" placeholder="Mot de passe" type="password" id="login-password"
-                               name="password" value={password} onChange={(e) => {Tools.changeFields(setPassword, e)}}/>
+                               name="password" value={password} onChange={(e) => {changeFields(setPassword, e)}}/>
                     </div>
 
                     <button className="l-go btn btn-outline-success"

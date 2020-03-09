@@ -100,8 +100,7 @@ function RegisterForm(props) {
             }).catch(error => {
                 setDisable(false);
                 props.setIsActive(false);
-                let errorMessage = Validators.checkErrorMessage(error);
-                toast.error(errorMessage.message)
+                toast.error(Validators.checkErrorMessage(error).message)
             })
         }
     };

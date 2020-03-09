@@ -2,20 +2,27 @@ import axios from "axios";
 import React from "react";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {addKantoBizSearchResults} from "../FunctionTools/FunctionProps";
+import {addKantoBizSearchResults, addSearchLoading} from "../FunctionTools/FunctionProps";
+import {generatePagination} from "../FunctionTools/Tools";
 
-export const EventAndThematics = (headers, dispatch) => {
+export const EventAndThematics = (headers, dispatch, setStateResult, displayOne) => {
 
-    const SearchEvent = (event) => {
-        axios.get("api/service_search/moment/events/" + event, {headers: headers}).then((resp) => {
-            dispatch(addKantoBizSearchResults(resp.data));
+    const SearchEvent = async (event) => {
+        await dispatch(addSearchLoading(true));
+        axios.get("api/service_search/moment/events/" + event, {headers: headers}).then(async (resp) => {
+            await setStateResult(generatePagination(resp.data, displayOne));
+            await dispatch(addKantoBizSearchResults(resp.data));
+            await dispatch(addSearchLoading(false));
             if (resp.data.length === 0) toast.warn("pas de prestations")
         })
     };
 
-    const SearchThematic = (thematic) => {
-        axios.get("api/service_search/moment/thematics/" + thematic, {headers: headers}).then((resp) => {
-            dispatch(addKantoBizSearchResults(resp.data));
+    const SearchThematic = async (thematic) => {
+        await dispatch(addSearchLoading(true));
+        axios.get("api/service_search/moment/thematics/" + thematic, {headers: headers}).then(async (resp) => {
+            await setStateResult(generatePagination(resp.data, displayOne));
+            await dispatch(addKantoBizSearchResults(resp.data));
+            await dispatch(addSearchLoading(false));
             if (resp.data.length === 0) toast.warn("pas de prestations")
         })
     };

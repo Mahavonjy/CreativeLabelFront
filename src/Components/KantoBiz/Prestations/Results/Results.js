@@ -5,15 +5,15 @@ import Select from "react-select";
 import ReactTooltip from 'react-tooltip';
 import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
-import {addFilterEventSelected, addKantoBizSearchResults} from "../../../FunctionTools/FunctionProps";
-import {checkUnitKey, generatePagination} from "../../../FunctionTools/Tools";
+import {addFilterEventSelected} from "../../../FunctionTools/FunctionProps";
+import {LoadingSearch} from "../../../FunctionTools/PopupFields";
 import Pagination from "../../../Pagination/Pagination";
 
 function Results(props) {
 
     const dispatch = useDispatch();
     const events_allowed = useSelector(state => state.Others.events_allowed);
-    const results = useSelector(state => state.KantobizSearch.results);
+    const loading = useSelector(state => state.KantobizSearch.loading);
     const filter_events_selected = useSelector(state => state.KantobizSearch.filter_events_selected);
 
     const isMounted = useRef(false);
@@ -23,8 +23,6 @@ function Results(props) {
     const [starts, setStarts] = useState({min: 0, max: 0});
     const [startsActive, setStartsActive] = useState(false);
     const [pageOfItems, setPageOfItems] = useState([]);
-    const [stateResults, setStateResult] = useState(results);
-    const itemResults =generatePagination(stateResults, dispatch, props);
 
     const onChangePage = (pageOfItems) => {
         // update state with new page of items
@@ -40,9 +38,9 @@ function Results(props) {
         // await setItemResults([]);
         // let tmp = [];
         // if (priceActive) {
-        //     for (let index in stateResults)
-        //         if (price["min"] <= stateResults[index]["price"] && stateResults[index]["price"] <= price["max"])
-        //             await tmp.push(stateResults[index])
+        //     for (let index in props.stateResults)
+        //         if (price["min"] <= props.stateResults[index]["price"] && props.stateResults[index]["price"] <= price["max"])
+        //             await tmp.push(props.stateResults[index])
         // }
         // dispatch(addKantoBizSearchResults(tmp));
     };
@@ -65,7 +63,7 @@ function Results(props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [loading, props.stateResults]);
 
     return (
         <div className="row row-eq-height p-b-100">
@@ -110,12 +108,16 @@ function Results(props) {
             </div>
             <div className="col-lg-9 pt-2">
                 <h4 className="text-red text-center">Résultat(s) de votre recherche</h4>
+
                 <div className="row justify-content-center">
                     {pageOfItems.map(item => <div key={item.id}>{item.name}</div>)}
                 </div>
+
+                {!loading ?
                 <div className="text-center">
-                    {itemResults.length !== 0 && <Pagination items={itemResults} onChangePage={onChangePage} initialPage={1}/>}
-                </div>
+                    {props.stateResults.length !== 0 ? <Pagination items={props.stateResults} onChangePage={onChangePage} initialPage={1}/> :
+                        <h3><p className="text-red center-center m-5">0 recherche</p></h3>}
+                </div>: <LoadingSearch/>}
             </div>
         </div>
     );
