@@ -203,7 +203,7 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
 export const Login = () => {
     return (
         <div>
-            <button type="button" id="LoginRequire" className="btn btn-primary LoginRequire" data-toggle="modal"
+            <button type="button" id="LoginRequire" className="btn btn-primary LoginRequire zIndex1" data-toggle="modal"
                     data-target="#exampleModal" hidden={true}/>
             <div aria-disabled={"false"} className="modal fade p-t-b-50" id="exampleModal" tabIndex={-1} role="dialog"
                  aria-labelledby="exampleModalLabel">

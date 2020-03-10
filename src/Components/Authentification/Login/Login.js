@@ -1,14 +1,16 @@
 import axios from "axios";
 import React, {useState} from "react";
 import Modal from "react-awesome-modal";
+import {useHistory} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import {sessionService} from "redux-react-session";
+import Home from "../../Home/Home";
 import {CreateInput, smallSpinner} from "../../FunctionTools/CreateFields";
 import {changeFields} from "../../FunctionTools/Tools";
 import {checkErrorMessage} from "../../Validators/Validatiors";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import LoginGoogle from "../SocialCredentials/Google/Google";
-import "./Sign.css"
+import "../../../assets/css/style/Sign.css"
 
 let headers = {
     'Content-Type': 'application/json',
@@ -16,6 +18,8 @@ let headers = {
 };
 
 function Login() {
+
+    const history = useHistory();
 
     const [loading, setLoading] = useState(false);
     const [keys, setKeys] = useState('');
@@ -43,7 +47,7 @@ function Login() {
                 await sessionService.saveSession({token});
                 await sessionService.saveUser(response.data);
                 setTimeout(() => {
-                    window.location.reload();
+                    Home.beforeDataLoad().then(() => null);
                 }, 2000);
             }).catch(error => {
                 setLoading(false);
@@ -57,7 +61,6 @@ function Login() {
     };
 
     const verifyKeysSubmit = () => {
-        console.log("here");
         setLoading(true);
         let data = {email: email, keys: keys};
         axios.post("api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
@@ -269,7 +272,11 @@ function Login() {
                 </div>
                 <small className="r-disc">Vous n'avez pas de compte ISL Creative ?</small>
                 <button className="r-btn btn btn-outline-danger"
-                        onClick={() => window.location.replace('/register')}>Créer un compte
+                        onClick={() => {
+                            document.getElementsByClassName("close")[0].click();
+                            history.push('/register');
+                            Home.beforeDataLoad().then(() => null);
+                        }}>Créer un compte
                 </button>
             </div>
         </div>

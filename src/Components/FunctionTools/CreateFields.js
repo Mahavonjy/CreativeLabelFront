@@ -17,6 +17,7 @@ import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import Cart from "../Cart/Cart";
 import {addNewPlayerList} from "../FunctionTools/FunctionProps"
 import KantoBiz from "../KantoBiz/KantoBiz";
+import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation";
 import SearchBar from "../KantoBiz/SearchBar";
 import IslPlayer from "../Players/Players";
 import Preference from "../Preference/Preference";
@@ -25,7 +26,7 @@ import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import {ForAddToCard} from "./PopupFields"
-import * as Tools from "./Tools";
+import {changeFields, LikeOrFollow} from "./Tools";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -195,7 +196,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     {height_div !== "user_profile" ?
                                         <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"
                                            onClick={() => {
-                                               Tools.LikeOrFollow("like", val.id, states.user_credentials);
+                                               LikeOrFollow("like", val.id, states.user_credentials);
                                            }}/> :
                                         <div className="ml-auto">
                                             <i className="icon-edit s-24" id={val.id} data-tip="Modifier"
@@ -284,7 +285,7 @@ export const DisplayArtist = (artist_info, user_credentials) => {
                             </Link>
                         </div>
                         <i className="icon-user-plus ml-auto"
-                           onClick={() => Tools.LikeOrFollow("follow", val.id, user_credentials)}/>
+                           onClick={() => LikeOrFollow("follow", val.id, user_credentials)}/>
                         <Link to={"Profile/isl_artist_profile/" + val.id} className="ml-auto"><i
                             className="icon-user-circle"/></Link>
                     </div>
@@ -399,7 +400,7 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
     )
 };
 
-export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers) => {
+export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show) => {
     return (
         <div>
             <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
@@ -422,6 +423,10 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
                 return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
                     <Preference/>)
             }}/>
+            <Route path="/show-service" exact component={() => {
+                if (service_to_show["id"]) return <DisplayPrestation  headers={headers}/>;
+                else window.location.replace("/KantoBiz")
+            }}/>
             <Route path="/about" exact component={() => <About/>}/>
         </div>
     )
@@ -431,7 +436,7 @@ export const generateInput = (label, value, setValue, field_, type_, icon, tip, 
     return (
         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
             <div className="input-group-text black-text bolder" data-tip={tip}><i className={icon}/>&nbsp;{label}</div>
-            <input value={value} onChange={(e) => Tools.changeFields(setValue, e)}
+            <input value={value} onChange={(e) => changeFields(setValue, e)}
                    id={field_} name={field_} placeholder={field_} className="form-control" type={type_}
                    disabled={disable}/>
         </div>

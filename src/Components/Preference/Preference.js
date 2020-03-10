@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 import {toast, ToastContainer} from 'react-toastify';
 import {sessionService} from "redux-react-session";
 import {changeUserGenreSelected} from "../FunctionTools/FunctionProps";
 import '../../assets/css/music_genres.css';
+import Home from "../Home/Home";
 
 let headers = {
     'Content-Type': 'application/json',
@@ -13,8 +15,10 @@ let headers = {
 
 function Preference() {
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const AllMediaGenre = useSelector(state => state.Home.PrefAllMediaGenre);
+    const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
 
     const isMounted = useRef(false);
     const [user_credentials, setUserCredentials] = useState({});
@@ -42,7 +46,9 @@ function Preference() {
             let data = {"user_genre_list": user_genre_tmp};
             axios.post("api/medias/add_users_genre", data, {headers: headers}).then(() => {
                 dispatch(changeUserGenreSelected());
-                window.location.replace("/beats")
+                if (service_to_show) {
+                    history.push("/show-service")
+                } else history.goBack();
             }).catch(error => {
                 toast.error(error.response.data);
             })

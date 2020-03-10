@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {addKantoBizSearchResults, addSearchLoading} from "../FunctionTools/FunctionProps";
+import {addKantoBizSearchResults, addSearchLoading, changeInitialized} from "../FunctionTools/FunctionProps";
 import {generatePagination} from "../FunctionTools/Tools";
 
 export const EventAndThematics = (headers, dispatch, setStateResult, displayOne) => {
@@ -10,7 +10,7 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne)
     const SearchEvent = async (event) => {
         await dispatch(addSearchLoading(true));
         axios.get("api/service_search/moment/events/" + event, {headers: headers}).then(async (resp) => {
-            console.log(resp.data);
+            await dispatch(changeInitialized(false));
             await setStateResult(generatePagination(resp.data, displayOne));
             await dispatch(addKantoBizSearchResults(resp.data));
             await dispatch(addSearchLoading(false));
@@ -21,6 +21,7 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne)
     const SearchThematic = async (thematic) => {
         await dispatch(addSearchLoading(true));
         axios.get("api/service_search/moment/thematics/" + thematic, {headers: headers}).then(async (resp) => {
+            await dispatch(changeInitialized(false));
             await setStateResult(generatePagination(resp.data, displayOne));
             await dispatch(addKantoBizSearchResults(resp.data));
             await dispatch(addSearchLoading(false));

@@ -11,7 +11,7 @@ import {
     addSearchLoading,
     changeCityToSearch,
     changeCountryToSearch,
-    changeEventsToSearch,
+    changeEventsToSearch, changeInitialized,
     changeThematicsToSearch
 } from "../FunctionTools/FunctionProps";
 import {ChangeDate, generatePagination, onChangeListWithValueLabel,} from "../FunctionTools/Tools";
@@ -42,6 +42,7 @@ function SearchBar(props) {
 
     const Search = async () => {
         await dispatch(addSearchLoading(true));
+        await dispatch(changeInitialized(false));
         let if_errors = validatorSearch(state_thematics, startDate, country);
         if (if_errors['error']) {
             await dispatch(addSearchLoading(false));

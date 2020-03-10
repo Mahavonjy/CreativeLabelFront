@@ -4,7 +4,6 @@ import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Conf from "../../Config/tsconfig";
 import Home from "../Home/Home";
-import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import * as Validators from "../Validators/Validatiors";
 import {
@@ -20,12 +19,15 @@ import {
     addPreparationTime,
     addPriceOfService,
     addReferenceOfCity,
-    addServiceCountry, addServiceRefundPolicy,
-    addServiceTime, addServiceToShow,
+    addServiceCountry,
+    addServiceRefundPolicy,
+    addServiceTime,
     addTitleOfService,
-    addTotalPrice, addTravelExpenses,
+    addTotalPrice,
+    addTravelExpenses,
     addUnitTimeOfPreparation,
-    addUnitTimeOfService, addUserId,
+    addUnitTimeOfService,
+    addUserId,
     changeStatusOfService
 } from "./FunctionProps";
 
@@ -246,9 +248,12 @@ export const calculateNumberDaysBetweenDates = (date1, date2) => {
     return (date1 - date2) / (1000 * 3600 * 24)
 };
 
-export const ChangeDate = (date, setStartDate) => {
-    if (new Date() < date)
+export const ChangeDate = (date, setStartDate, dispatch, func) => {
+    if (new Date() < date) {
         setStartDate(date);
+        if (dispatch && func)
+            dispatch(func(date))
+    }
 };
 
 export const getMediaLink = (setState, state, medias, up_props, dispatch) => {
@@ -484,7 +489,6 @@ export const updateAllServices = (prestations, dispatch, headers) => {
             })
         )
     }
-
     Promise.all(api_call_update).then(() => null)
 };
 
@@ -496,7 +500,8 @@ export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
 };
 
 export const generatePagination = (_array, funcToDisplay) => {
-    return _array.map((val, index) => ({id: (index + 1), name:
+    return _array.map((val, index) => ({
+        id: (index + 1), name:
             <div key={index}>
                 <ReactTooltip/>
                 <div className="card_kanto" onClick={() => funcToDisplay(val)}>

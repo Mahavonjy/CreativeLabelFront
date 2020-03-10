@@ -776,3 +776,21 @@ export function addSearchLoading(data) {
         });
     };
 }
+
+export function addReservationAddress(data) {
+    return async dispatch => {
+        dispatch({
+            type: "RESERVATION_ADDRESS",
+            data: data
+        });
+    };
+}
+
+export function changeInitialized(data) {
+    return async dispatch => {
+        dispatch({
+            type: "CHANGE_INITIALIZED",
+            data: data
+        });
+    };
+}

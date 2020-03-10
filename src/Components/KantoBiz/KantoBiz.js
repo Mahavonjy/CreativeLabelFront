@@ -1,31 +1,30 @@
 import React, {useEffect, useRef, useState} from "react";
-import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 import ReactTooltip from 'react-tooltip';
 import "../../assets/css/style/KantoBiz.css";
 import {CreativeHeaders} from "../FunctionTools/CreateFields";
 import {activeEventAndThematicsPage, activeResultPage, addServiceToShow} from "../FunctionTools/FunctionProps";
 import {EventAndThematics as EventAndThematics_} from "./EventsAndThematics";
-import DisplayPrestation from "./Prestations/Results/DisplayPrestation";
 import Results from "./Prestations/Results/Results";
 
 function KantoBiz(props) {
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const results = useSelector(state => state.KantobizSearch.results);
     const ResultsPage = useSelector(state => state.KantobizSearch.ResultsPage);
+    const loading = useSelector(state => state.KantobizSearch.loading);
     const EventAndThematics = useSelector(state => state.KantobizSearch.EventAndThematics);
-    // const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
 
     const isMounted = useRef(false);
     const [eventAndThematics, setEventAndThematics] = useState(EventAndThematics);
     const [resultsPage, setResultsPage] = useState(ResultsPage);
     const [stateResults, setStateResult] = useState([]);
-    const [showOne, setShowOne] = useState(false);
 
     const displayOne = async (val) => {
         await dispatch(addServiceToShow(val));
-        await setShowOne(true);
+        history.push("/show-service")
     };
 
     const next = () => {
@@ -52,20 +51,11 @@ function KantoBiz(props) {
         return () => {
             isMounted.current = true
         };
-    }, [results]);
+    }, [loading, results]);
 
     return (
         <div>
             <ReactTooltip/>
-            <Modal visible={showOne} width="100%" height="100%" effect="fadeInUp">
-                <div className="bg-dark overflow-auto scrollbar-isl" style={{height: "100%"}}>
-                    <button className="ModalClose" style={{position: "fixed", left: 0, top: 0}}
-                            onClick={() => setShowOne(false)}>
-                        <i className="icon-close s-24" style={{color: "orange"}}/>
-                    </button>
-                    {showOne && <DisplayPrestation/>}
-                </div>
-            </Modal>
             {/* Headers */}
             {CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)", props.headers, setStateResult, next, displayOne)}
             {/* End Headers */}

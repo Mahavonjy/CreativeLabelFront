@@ -67,6 +67,9 @@ function Container() {
                 <Route path="/about">
                     <Home/>
                 </Route>
+                <Route path="/show-service">
+                    <Home/>
+                </Route>
                 {/* NOT FOUND */}
                 <Route component={NotFound}/>
             </Switch>

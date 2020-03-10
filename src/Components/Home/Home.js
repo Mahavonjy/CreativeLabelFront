@@ -1,15 +1,17 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, useHistory} from "react-router-dom";
 import {sessionService} from 'redux-react-session';
 import "../../assets/css/app.css";
+import '../../assets/css/style/Home.css';
 import Conf from "../../Config/tsconfig";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import * as CreateFields from "../FunctionTools/CreateFields";
 import {
     addAllArtistTypes,
-    addAllCountryAllowed, addAllEventsTypes,
+    addAllCountryAllowed,
+    addAllEventsTypes,
     addAllMediaGenre,
     addAllUserOptions,
     addAllUserPrestation,
@@ -23,12 +25,14 @@ import {
     addSimilarBeats,
     addTotalPrice,
     addUserCredentials,
-    beatsInitialisationPricing, changeUserGenreSelected,
+    beatsInitialisationPricing,
+    changeUserGenreSelected,
     discoveryBeats,
     islBeats,
     latestBeats,
     newBeatMaker,
-    profileAddBeats, profileInitialisationBanking,
+    profileAddBeats,
+    profileInitialisationBanking,
     profileInitialisationCondition,
     profileInitialisationContract,
     profileInitialisationFollower,
@@ -40,7 +44,6 @@ import {
 import * as PopupFields from "../FunctionTools/PopupFields";
 import {FillInCartProps} from "../FunctionTools/Tools";
 import IslPlayer from "../Players/Players";
-import './Home.css';
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
@@ -52,11 +55,13 @@ let headers = {
 function Home() {
 
     let user_credentials;
+    const history = useHistory();
     const dispatch = useDispatch();
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
     const beats = useSelector(state => state.beats.beats);
     const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
+    const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -81,6 +86,23 @@ function Home() {
         setStateCartLength(state_cart_length - 1)
     };
 
+    Home.beforeDataLoad = async () => {
+        setLoading(true);
+        await sessionService.loadSession().then((currentSession) => {
+            sessionService.loadUser().then((data) => {
+                let user_data = {name: data.name, email: data.email, token: currentSession.token};
+                dispatch(addUserCredentials(user_data));
+                user_credentials = user_data;
+            });
+            headers['Isl-Token'] = currentSession.token;
+            if (beats.length === 0) Online();
+        }).catch(() => {
+            dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
+            headers['Isl-Token'] = Conf.configs.TokenVisitor;
+            if (beats.length === 0) NotOnline();
+        });
+    };
+
     const addToPlaylist = async (index, type_, run, height_div, set_of_beats_name, states, state_value) => {
         if (!isPlaying) {
             await setIsPlaying(true);
@@ -101,7 +123,8 @@ function Home() {
         try {
             if (err.response.data === "Connection error") {
                 if (connexion_reloaded > 3) {
-                    window.location.replace('/badConnexion')
+                    history.push("/badConnexion");
+                    setLoading(false);
                 } else {
                     if (func) func();
                     else
@@ -110,11 +133,11 @@ function Home() {
                         }, 5000);
                 }
             } else if (err.response.data === "token invalid") {
-                logout();
+                logout().then(r => null);
             } else {
                 if (func) func();
                 else
-                    logout();
+                    logout().then(r => null);
             }
         } catch (e) {
             //
@@ -130,7 +153,10 @@ function Home() {
                 dispatch(addSimilarBeats(resp.data['similar_beats']));
                 setSingleBeat(resp.data['single_beat']);
                 setLoading(false);
-            }).catch(() => window.location.replace("/BeatsNotFound"))
+            }).catch(() => {
+                history.push("/BeatsNotFound");
+                setLoading(false);
+            })
         } else if (secondRouteParsing === "isl_artist_profile") {
             axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp => {
                 dispatch(addOtherBeatMakerBeats(resp.data['user_beats']));
@@ -139,11 +165,15 @@ function Home() {
                 setProfileChecked(resp.data['profile_checked']);
                 setUserData(resp.data['user_data']);
                 setLoading(false);
-            }).catch(() => window.location.replace("/ArtistNotFound"))
+            }).catch(() => {
+                history.push("/ArtistNotFound");
+                setLoading(false);
+            })
         } else if (firstRouteParsing === 'Cart') {
-            if (!state_cart_length)
-                window.location.replace('/beats');
-            else setLoading(false);
+            if (!state_cart_length) {
+                history.push("/beats");
+                setLoading(false);
+            } else setLoading(false);
         } else {
             setLoading(false);
             if (firstRouteParsing === "beats#LoginRequire")
@@ -194,19 +224,22 @@ function Home() {
             setLogoutClass("icon icon-exit-2 s-24 mr-5");
             let routeParsed = href[href.length - 1];
             if (routeParsed === 'register') {
-                window.location.replace('/beats')
+                history.goBack();
+                setLoading(false);
+                return true
             } else if (routeParsed !== 'preference') {
                 axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
                     fetchUserData()
                 }).catch(err => {
                     try {
                         if (err.response.data === "no choice music genre") {
-                            window.location.replace('/preference');
+                            history.push("/preference");
+                            NotOnline()
                         } else if (err.response.data === "token invalid") {
                             logout().then(() => null)
                         } else NotOnline()
                     } catch (e) {
-                        window.location.replace('/badConnexion')
+                        history.push("/badConnexion");
                     }
                 });
             } else {
@@ -255,7 +288,10 @@ function Home() {
                 dispatch(addAllUserOptions(resp.data['user_options']));
                 dispatch(addAllUserPrestation(resp.data['user_services']));
             }).catch(err => ifConnectionError(err))
-        ]).then(() => {dispatch(changeUserGenreSelected());NotOnline()}).catch(() => fetchUserData())
+        ]).then(() => {
+            dispatch(changeUserGenreSelected());
+            NotOnline()
+        }).catch(() => fetchUserData())
     };
 
     const logout = async () => {
@@ -276,25 +312,9 @@ function Home() {
     };
 
     useEffect(() => {
-        setLoading(true);
 
-        async function fetchData() {
-            await sessionService.loadSession().then((currentSession) => {
-                sessionService.loadUser().then((data) => {
-                    let user_data = {name: data.name, email: data.email, token: currentSession.token};
-                    dispatch(addUserCredentials(user_data));
-                    user_credentials = user_data;
-                });
-                headers['Isl-Token'] = currentSession.token;
-                if (beats.length === 0) Online();
-            }).catch(() => {
-                dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
-                headers['Isl-Token'] = Conf.configs.TokenVisitor;
-                if (beats.length === 0) NotOnline();
-            });
-        }
+        Home.beforeDataLoad().then(() => null);
 
-        fetchData().then(() => null);
         return () => {
             isMounted.current = true
         };
@@ -319,7 +339,7 @@ function Home() {
                             </aside>
                             <main>
                                 {/* Main of SideBars */}
-                                {CreateFields.SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers)}
+                                {CreateFields.SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show)}
                                 {/* End main of SideBars */}
                             </main>
                         </React.Fragment>)}

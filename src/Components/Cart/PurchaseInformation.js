@@ -90,7 +90,17 @@ function PurchaseInformation(props) {
 
     const kantoBizHandleTokenStripe = (stripe_data) => {
         setPaymentLoading(true);
+        let data = {
+            "stripe_token": stripe_data,
+        };
         setTimeout(() => {
+            axios.post( "api/reservation/new", data,{headers: props.headers}).then(() => {
+
+
+            }).catch(() => {
+
+
+            });
             setPaymentLoading(false);
         }, 2000)
     };
@@ -202,7 +212,6 @@ function PurchaseInformation(props) {
                         <div className="card">
                             <div className="card-header transparent">
                                 {profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>
-
                                     : <h4 className="text-red"><strong>Vous avez déjà un compte ?
                                         <button className="border-top-0 border-left-0 border-right-0 text-red transparent" onClick={() =>  document.getElementById("LoginRequire").click()}>&nbsp;Se connecter</button></strong></h4>}
 

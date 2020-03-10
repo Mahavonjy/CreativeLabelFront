@@ -2,17 +2,20 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import {sessionService} from "redux-react-session";
 import * as CreateFields from "../../FunctionTools/CreateFields";
 import {checkUnit, generateBodyFormOfGallery} from "../../FunctionTools/Tools";
 import * as Tools from "../../FunctionTools/Tools";
+import Home from "../../Home/Home";
 import * as Validators from "../../Validators/Validatiors";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import LoginGoogle from "../SocialCredentials/Google/Google";
 
 function RegisterForm(props) {
 
+    const history = useHistory();
     const PropsCountry = useSelector(state => state.KantoBizForm.country);
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
@@ -44,9 +47,10 @@ function RegisterForm(props) {
         const data = {email: email, keys: keys};
         axios.post("api/users/get_if_keys_validate", data).then(async (data) => {
             await sessionService.saveSession({token: user_credentials.token}).then(() => {
-                sessionService.saveUser(user_credentials);
+                sessionService.saveUser(user_credentials).then(() => {
+                    Home.beforeDataLoad().then(() => null);
+                });
             });
-            window.location.replace('/preference');
         }).catch(error => {
             let errorMessage = Validators.checkErrorMessage(error);
             toast.error(errorMessage.message)
@@ -185,7 +189,10 @@ function RegisterForm(props) {
                     <h4 className="font-weight-lighter bolder pb-3">Vous possédez déjà un compte?</h4>
                     <div className="pt-3">
                         <button className="btn btn-outline-primary mt-4 btn-xl pl-5 pr-5 mr-5 ml-5"
-                                onClick={() => window.location.replace('/beats#LoginRequire')}> Identifiez-vous
+                                onClick={() => {
+                                    history.goBack();
+                                    document.getElementsByClassName("LoginRequire")[0].click();
+                                }}> Identifiez-vous
                         </button>
                         <button className="btn btn-outline-primary mt-4 btn-xl pl-5 pr-5 mr-5 ml-5"
                                 onClick={() => props.setChoiceArtistType(true)}> Devenir Artiste
