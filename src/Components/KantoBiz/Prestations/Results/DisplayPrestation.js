@@ -7,17 +7,30 @@ import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
 import PurchaseInformation from "../../../Cart/PurchaseInformation";
-import {addReservationAddress, changeDateToSearch, changeInitialized} from "../../../FunctionTools/FunctionProps";
-import {ChangeDate, changeFields, checkUnitKey, formatDate} from "../../../FunctionTools/Tools";
+import {
+    addListOfOptionsAdded,
+    addReservationAddress, addServiceToShow,
+    changeDateToSearch,
+    changeInitialized
+} from "../../../FunctionTools/FunctionProps";
+import {
+    ChangeDate,
+    changeFields,
+    checkUnitKey,
+    checkValueIfExistInArray,
+    formatDate
+} from "../../../FunctionTools/Tools";
 import Calendar from "../../Calendar/Calendar";
 
 function DisplayPrestation(props) {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const profile_info = useSelector(state => state.profile.profile_info);
     const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
     const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
     const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
+    const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
 
     const isMounted = useRef(false);
     const [event_date, setEventDate] = useState(date_to_search); // synchroniser avec la recherche après
@@ -26,11 +39,15 @@ function DisplayPrestation(props) {
     const [rating, setRating] = useState(1);
 
     const validReservation = () => {
-        let new_date = formatDate(event_date);
-        let now = formatDate(new Date());
-        if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
-        else if (new_date === now) toast.error("La date d'aujourd'hui n'est pas valide");
-        else setReservation(true)
+        if (!profile_info.name)
+            document.getElementById("LoginRequire").click();
+        else {
+            let new_date = formatDate(event_date);
+            let now = formatDate(new Date());
+            if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
+            else if (new_date === now) toast.error("La date d'aujourd'hui n'est pas valide");
+            else setReservation(true)
+        }
     };
 
     const ImageClick = (e) => {
@@ -41,6 +58,31 @@ function DisplayPrestation(props) {
         const targetClass = e.target.className;
 
         if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
+    };
+
+    const addOption = async (value) => {
+        let tmp = [...list_of_options_added];
+        let tmpService = {...service_to_show};
+        tmpService.price += value.price;
+        if (!checkValueIfExistInArray(value.id, tmp)) {
+            tmp.push(value.id);
+            await dispatch(addListOfOptionsAdded(tmp));
+            await dispatch(addServiceToShow(tmpService));
+            await toast.success("Option Ajouter avec succès");
+        }
+    };
+
+    const removeOption = async (value) => {
+        let tmp = [];
+        let tmpService = {...service_to_show};
+        Promise.all(list_of_options_added.map(elem => {
+            if (elem !== value.id) tmp.push(value.id);
+            else tmpService.price -= value.price;
+        })).then(r => {
+            dispatch(addListOfOptionsAdded(tmp));
+            dispatch(addServiceToShow(tmpService));
+            toast.warn("Option supprimer avec succès");
+        });
     };
 
     useEffect(() => {
@@ -77,7 +119,7 @@ function DisplayPrestation(props) {
                 <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br/><br/>
             </ReactTooltip>
             <div className="profile-page">
-
+                {!props.read &&
                 <button
                     onClick={() => {
                         dispatch(changeInitialized(false));
@@ -86,7 +128,7 @@ function DisplayPrestation(props) {
                     style={{position: "fixed", bottom: "5%", zIndex: 99}}
                     className="btn-custom btn-outline-light border-bottom-0 border-right-0">
                     <i className="icon icon-long-arrow-left s-24 align-middle"/>&nbsp;Precedent
-                </button>
+                </button>}
                 <div className="page-header header-filter border1" data-parallax="true"
                      style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}}/>
                 <div className="main bg-dark main-raised ml-3 mr-3">
@@ -204,7 +246,7 @@ function DisplayPrestation(props) {
                                             <div className="col">
                                                 {service_to_show.materials.list_of_materials.length !== 0 ?
                                                     <ul>
-                                                        {service_to_show['materials'].map((val, index) =>
+                                                        {service_to_show.materials.list_of_materials.map((val, index) =>
                                                             <li key={index}><i
                                                                 className="icon icon-success text-green"/>{val}</li>
                                                         )}
@@ -256,8 +298,16 @@ function DisplayPrestation(props) {
                                                             <td className="small"
                                                                 data-title="Description">{val.description || "Pas de description"}</td>
                                                             <td className="small border-bottom-0 border-right-0"
-                                                                data-title="Ajouter"><i className="icon icon-plus s-24"
-                                                                                        data-tip="Ajoute moi"/></td>
+                                                                data-title="Ajouter">
+                                                                {checkValueIfExistInArray(val.id, list_of_options_added) ?
+                                                                    <i className="icon icon-success text-green s-24"
+                                                                       onClick={() => removeOption(val)}
+                                                                       data-tip="Deja ajouté"/>
+                                                                    :
+                                                                <i className="icon icon-plus text-red s-24"
+                                                                                        onClick={() => addOption(val)}
+                                                                                        data-tip="Ajoute moi"/>}
+                                                            </td>
                                                         </tr>)}
                                                     </tbody>
                                                 </table> :

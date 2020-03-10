@@ -9,7 +9,7 @@ import * as CreateFields from "../../FunctionTools/CreateFields";
 import {checkUnit, generateBodyFormOfGallery} from "../../FunctionTools/Tools";
 import * as Tools from "../../FunctionTools/Tools";
 import Home from "../../Home/Home";
-import * as Validators from "../../Validators/Validatiors";
+import {checkErrorMessage, RegisterValidation} from "../../Validators/Validatiors";
 import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import LoginGoogle from "../SocialCredentials/Google/Google";
 
@@ -52,7 +52,7 @@ function RegisterForm(props) {
                 });
             });
         }).catch(error => {
-            let errorMessage = Validators.checkErrorMessage(error);
+            let errorMessage = checkErrorMessage(error);
             toast.error(errorMessage.message)
         })
     };
@@ -61,7 +61,7 @@ function RegisterForm(props) {
         e.preventDefault();
 
         setDisable(true);
-        const validator = Validators.RegisterValidation(password, confirm_password);
+        const validator = RegisterValidation(password, confirm_password);
 
         if (validator.error) {
             setDisable(false);
@@ -104,7 +104,7 @@ function RegisterForm(props) {
             }).catch(error => {
                 setDisable(false);
                 props.setIsActive(false);
-                toast.error(Validators.checkErrorMessage(error).message)
+                toast.error(checkErrorMessage(error).message)
             })
         }
     };

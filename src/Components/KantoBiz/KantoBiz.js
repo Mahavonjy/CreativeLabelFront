@@ -15,12 +15,17 @@ function KantoBiz(props) {
     const results = useSelector(state => state.KantobizSearch.results);
     const ResultsPage = useSelector(state => state.KantobizSearch.ResultsPage);
     const loading = useSelector(state => state.KantobizSearch.loading);
+    const events_allowed = useSelector(state => state.Others.events_allowed);
     const EventAndThematics = useSelector(state => state.KantobizSearch.EventAndThematics);
 
     const isMounted = useRef(false);
     const [eventAndThematics, setEventAndThematics] = useState(EventAndThematics);
     const [resultsPage, setResultsPage] = useState(ResultsPage);
     const [stateResults, setStateResult] = useState([]);
+    const [show, setShow] = useState(false);
+    const [eventType, setEventTypes] = useState([]);
+    const [event, setEvent] = useState("");
+    const [thematics, setThematics] = useState("");
 
     const displayOne = async (val) => {
         await dispatch(addServiceToShow(val));
@@ -47,6 +52,11 @@ function KantoBiz(props) {
 
         if (results.length > 0)
             if (!resultsPage) next();
+
+        let tmp = [];
+        Promise.all(events_allowed.map((value, row) => {
+            tmp.push({value: value, label: value, index: row})
+        })).then(r => setEventTypes(tmp));
 
         return () => {
             isMounted.current = true
@@ -85,7 +95,7 @@ function KantoBiz(props) {
                 <div className="main-page">
                     <div>
                         {/* Show Different events/thematics or all Prestation result of search or Prestation selected*/}
-                        {eventAndThematics && EventAndThematics_(props.headers, dispatch, setStateResult, displayOne) ||
+                        {eventAndThematics && EventAndThematics_(props.headers, dispatch, setStateResult, displayOne, setShow, show, eventType, setEvent, event, thematics, setThematics) ||
                         resultsPage && <Results next={next} displayOne={displayOne} setStateResult={setStateResult} stateResults={stateResults}/>}
                         {/* End */}
                     </div>

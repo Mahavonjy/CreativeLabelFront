@@ -794,3 +794,30 @@ export function changeInitialized(data) {
         });
     };
 }
+
+export function addListOfOptionsAdded(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_LIST_OF_OPTIONS_ADDED",
+            data: data
+        });
+    };
+}
+
+export function addAllUSerReservation(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ALL_USER_RESERVATION",
+            data: data
+        });
+    };
+}
+
+export function addAllUSerBookingReservation(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ALL_USER_BOOKING_RESERVATION",
+            data: data
+        });
+    };
+}

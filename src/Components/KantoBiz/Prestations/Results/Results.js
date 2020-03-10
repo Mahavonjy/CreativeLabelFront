@@ -8,7 +8,7 @@ import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
 import {addFilterEventSelected, addSearchLoading, changeInitialized} from "../../../FunctionTools/FunctionProps";
 import {LoadingSearch} from "../../../FunctionTools/PopupFields";
-import {generatePagination} from "../../../FunctionTools/Tools";
+import {checkValueIfExistInArray, generatePagination} from "../../../FunctionTools/Tools";
 import Pagination from "../../../Pagination/Pagination";
 
 function Results(props) {
@@ -32,14 +32,6 @@ function Results(props) {
     const onChangePage = (pageOfItems) => {
         // update state with new page of items
         setPageOfItems(pageOfItems);
-    };
-
-    const checkValueIfExistInArray = (val, array_) => {
-        let response = false;
-        Promise.all(array_.map(val_of_arr => {
-            if (val_of_arr === val) response = true;
-        })).then(r => null);
-        return response
     };
 
     const filterPrice = (value, arr) => {

@@ -12,9 +12,9 @@ import {
     addAllArtistTypes,
     addAllCountryAllowed,
     addAllEventsTypes,
-    addAllMediaGenre,
+    addAllMediaGenre, addAllUSerBookingReservation,
     addAllUserOptions,
-    addAllUserPrestation,
+    addAllUserPrestation, addAllUSerReservation,
     addBeatMakerBeats,
     addBeats,
     addCarts,
@@ -260,6 +260,8 @@ function Home() {
             axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
                 dispatch(profileInitialisationInfo(resp.data['my_profile']));
                 dispatch(profileInitialisationRole(resp.data['role']));
+                dispatch(addAllUSerReservation(resp.data['reservations_list']));
+                dispatch(addAllUSerBookingReservation(resp.data['reservations_booking_list']));
                 dispatch(profileInitialisationFollower(resp.data['my_followers']));
                 dispatch(profileInitialisationFollowing(resp.data['my_followings']));
                 dispatch(profileInitialisationCondition(resp.data['conditions']));
@@ -318,7 +320,7 @@ function Home() {
         return () => {
             isMounted.current = true
         };
-    }, [ifUserGenreSelected]);
+    }, []);
 
     if (loading) {
         // Here is Loading page

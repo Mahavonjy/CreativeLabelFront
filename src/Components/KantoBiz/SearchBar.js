@@ -11,7 +11,8 @@ import {
     addSearchLoading,
     changeCityToSearch,
     changeCountryToSearch,
-    changeEventsToSearch, changeInitialized,
+    changeEventsToSearch,
+    changeInitialized,
     changeThematicsToSearch
 } from "../FunctionTools/FunctionProps";
 import {ChangeDate, generatePagination, onChangeListWithValueLabel,} from "../FunctionTools/Tools";

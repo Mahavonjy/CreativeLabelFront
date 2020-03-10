@@ -1,22 +1,30 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { changeFields, isNumber } from "../FunctionTools/Tools";
-import { toast } from "react-toastify";
-import Modal from "react-awesome-modal";
 import axios from "axios";
+import React, {useEffect, useRef, useState} from "react";
+import Modal from "react-awesome-modal";
+import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 import Conf from "../../Config/tsconfig";
+import {addAllUSerBookingReservation} from "../FunctionTools/FunctionProps";
+import {changeFields, isNumber} from "../FunctionTools/Tools";
+import {checkErrorMessage} from "../Validators/Validatiors";
+
 let headers = {
-    "Content-Type":'application/json',
-    "Access-Control-Allow-Origin":'*',
-    'Isl-Token':  ''
+    "Content-Type": 'application/json',
+    "Access-Control-Allow-Origin": '*',
+    'Isl-Token': ''
 };
 
 function PurchaseInformation(props) {
 
-    // const dispatch = useDispatch();
-    // const user_credentials = useSelector(state => state.Home.user_credentials);
+    const dispatch = useDispatch();
     const cart = useSelector(state => state.Carts.carts);
     const profile_info = useSelector(state => state.profile.profile_info);
+    const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
+    const reservations_booking_list = useSelector(state => state.profile.reservations_booking_list);
+    const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
+    const events_to_search = useSelector(state => state.KantobizSearchInfo.events_to_search);
+    const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
+    const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
 
     const isMounted = useRef(false);
     const [cvc, setCvc] = useState("");
@@ -78,7 +86,7 @@ function PurchaseInformation(props) {
         } catch (e) {
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
         } finally {
-            axios.post( "api/beats/payment/beatShop", data,{headers: headers}).then(() => {
+            axios.post("api/beats/payment/beatShop", data, {headers: headers}).then(() => {
                 setPaymentLoading(false);
                 window.location.replace('/CommandSuccess')
             }).catch(() => {
@@ -92,17 +100,30 @@ function PurchaseInformation(props) {
         setPaymentLoading(true);
         let data = {
             "stripe_token": stripe_data,
+            "name": name,
+            "lastname": lastname,
+            "email": email,
+            "city": city,
+            "postal_code": postal_code,
+            "phone": phone && phone.toString() || "0",
+            "event": events_to_search,
+            "event_date": date_to_search,
+            "address": reservation_address,
+            "services_id": service_to_show.id,
+            "total_amount": service_to_show.price,
+            "options_id_list": list_of_options_added,
+            "artist_owner_id": service_to_show.user_id,
         };
-        setTimeout(() => {
-            axios.post( "api/reservation/new", data,{headers: props.headers}).then(() => {
-
-
-            }).catch(() => {
-
-
-            });
+        axios.post("api/reservation/new", data, {headers: props.headers}).then(async (resp) => {
+            let tmp = [...reservations_booking_list];
+            tmp.push(resp.data);
+            await dispatch(addAllUSerBookingReservation(tmp));
             setPaymentLoading(false);
-        }, 2000)
+            toast.success("Reservation prise en compte");
+        }).catch((error) => {
+            let errorMessage = checkErrorMessage(error);
+            toast.error(errorMessage.message)
+        });
     };
 
     const stateInvalid = (state, state_name) => {
@@ -114,7 +135,7 @@ function PurchaseInformation(props) {
     };
 
     const loadStripe = () => {
-        if(!window.document.getElementById('stripe-script')) {
+        if (!window.document.getElementById('stripe-script')) {
             let s = window.document.createElement("script");
             s.id = "stripe-script";
             s.type = "text/javascript";
@@ -211,9 +232,13 @@ function PurchaseInformation(props) {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-header transparent">
-                                {profile_info.name ? <h4 className="text-red"><strong>Informations personnelles</strong></h4>
+                                {profile_info.name ?
+                                    <h4 className="text-red"><strong>Informations personnelles</strong></h4>
                                     : <h4 className="text-red"><strong>Vous avez déjà un compte ?
-                                        <button className="border-top-0 border-left-0 border-right-0 text-red transparent" onClick={() =>  document.getElementById("LoginRequire").click()}>&nbsp;Se connecter</button></strong></h4>}
+                                        <button
+                                            className="border-top-0 border-left-0 border-right-0 text-red transparent"
+                                            onClick={() => document.getElementById("LoginRequire").click()}>&nbsp;Se
+                                            connecter</button></strong></h4>}
 
                             </div>
                             <div className="card-body text-center">
@@ -267,7 +292,8 @@ function PurchaseInformation(props) {
                                         <div className="form-group form-float">
                                             <div className="form-line">
                                                 <input type="number" id="postal_code" className="form-control"
-                                                       placeholder="Votre code postal" name="postal_code" value={postal_code || ''}
+                                                       placeholder="Votre code postal" name="postal_code"
+                                                       value={postal_code || ''}
                                                        onChange={(e) => changeFields(setPostalCode, e)}
                                                        required/>
                                             </div>
@@ -306,7 +332,8 @@ function PurchaseInformation(props) {
                             </div>
                             <div className="card-body text-center">
                                 <div className="card-header transparent">
-                                    <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>C’est un paiement sécurisé crypté en SSL.</strong></h4>
+                                    <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>C’est un
+                                        paiement sécurisé crypté en SSL.</strong></h4>
                                 </div>
                                 <div className="form-material pb-md-5">
                                     {/* Input */}
@@ -349,12 +376,16 @@ function PurchaseInformation(props) {
                                         <div className="form-group form-float">
                                             <div className="form-line">
                                                 <div className="material-switch">
-                                                    <input id="unlimited" name="unlimited" type="checkbox" onChange={() => setRules(!rules)}/>
-                                                    <label htmlFor="sw2" className="text-red text-monospace text-muted" > J'accepte les Conditions Générales d'Utilisation</label>
+                                                    <input id="unlimited" name="unlimited" type="checkbox"
+                                                           onChange={() => setRules(!rules)}/>
+                                                    <label htmlFor="sw2"
+                                                           className="text-red text-monospace text-muted"> J'accepte les
+                                                        Conditions Générales d'Utilisation</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4" onClick={() => {inputValidators()}} >{props.kantoBiz ? "Confirmer la reservation": "Commander"}</button>
+                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
+                                                onClick={() => {inputValidators()}}>{props.kantoBiz ? "Confirmer la reservation" : "Commander"}</button>
                                     </div>
                                     {/* #END# Input */}
                                 </div>

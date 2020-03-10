@@ -48,7 +48,7 @@ function Login() {
                 await sessionService.saveUser(response.data);
                 setTimeout(() => {
                     Home.beforeDataLoad().then(() => null);
-                }, 2000);
+                }, 1000);
             }).catch(error => {
                 setLoading(false);
                 let response = JSON.stringify(error.response.data).replace(/"/g, '');

@@ -1,26 +1,26 @@
 import axios from "axios";
 import React from "react";
-import {toast} from "react-toastify";
+import Modal from "react-awesome-modal";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable/dist/react-select.esm";
+import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {addKantoBizSearchResults, addSearchLoading, changeInitialized} from "../FunctionTools/FunctionProps";
-import {generatePagination} from "../FunctionTools/Tools";
+import {CreateInput, smallSpinner} from "../FunctionTools/CreateFields";
+import {
+    addKantoBizSearchResults,
+    addSearchLoading, changeCityToSearch, changeCountryToSearch,
+    changeEventsToSearch,
+    changeInitialized, changeThematicsToSearch
+} from "../FunctionTools/FunctionProps";
+import {changeFields, generatePagination, onChangeListWithValueLabel} from "../FunctionTools/Tools";
 
-export const EventAndThematics = (headers, dispatch, setStateResult, displayOne) => {
+export const EventAndThematics = (headers, dispatch, setStateResult, displayOne, setShow, show, listOfEvents, setEvents, events, thematics, setThematics) => {
 
-    const SearchEvent = async (event) => {
+    const searchService = async (key, value) => {
         await dispatch(addSearchLoading(true));
-        axios.get("api/service_search/moment/events/" + event, {headers: headers}).then(async (resp) => {
-            await dispatch(changeInitialized(false));
-            await setStateResult(generatePagination(resp.data, displayOne));
-            await dispatch(addKantoBizSearchResults(resp.data));
-            await dispatch(addSearchLoading(false));
-            if (resp.data.length === 0) toast.warn("pas de prestations")
-        })
-    };
-
-    const SearchThematic = async (thematic) => {
-        await dispatch(addSearchLoading(true));
-        axios.get("api/service_search/moment/thematics/" + thematic, {headers: headers}).then(async (resp) => {
+        if (key === "events")
+            dispatch(changeEventsToSearch(value));
+        axios.get("api/service_search/moment/" + key + "/" + value, {headers: headers}).then(async (resp) => {
             await dispatch(changeInitialized(false));
             await setStateResult(generatePagination(resp.data, displayOne));
             await dispatch(addKantoBizSearchResults(resp.data));
@@ -39,7 +39,7 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne)
                     <h3 className="text-red pb-2">{title}</h3>
                     <small className="bolder">{desc}</small>
                     <button className="btn btn-outline-info mt-2"
-                            onClick={() => SearchEvent(key)}
+                            onClick={() => searchService("events", key)}
                             data-tip="Cliquer moi pour voir les prestations de cette évenement">Les prestations</button>
                 </div>
             </div>
@@ -59,7 +59,9 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne)
                     <img alt={name} src={image} style={{width: "100%"}}/>
                 </div>
                 <button className="btn btn-outline-info relative align-middle"
-                        onClick={() => SearchThematic(key)}
+                        onClick={() => {
+                            setThematics(key);
+                            setShow(true);}}
                         data-tip="Cliquer moi pour voir les prestation de cette univer">Les prestations</button>
             </div>
         )
@@ -68,6 +70,29 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne)
     return (
         <div className="p-b-100">
             <ReactTooltip/>
+            <Modal visible={show} width="400" height="auto" animationType='slide'>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
+                    <button className="ModalClose" onClick={(e) => setShow(false)}>
+                        <i className="icon-close s-24" style={{color: "orange"}}/>
+                    </button>
+                    <div className="col text-center">
+                        <div className="body">
+                            <h3 className="text-light pt-5 mb-3">Vous le voulez pour quelle genre d'evenements ?</h3>
+                            <Select options={listOfEvents} placeholder="Choisir l'évenements"
+                                    onChange={obj => {onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)}}/>
+                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4"
+                                    onClick={() => {
+                                        if (events) {
+                                            setShow(false);
+                                            searchService("thematics", thematics).then(r => null);
+                                        } else toast.error("bitee")
+                                    }}>Envoyer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
             {/* Type of Events */}
             <div className="pt-5">
                 <div className="relative mb-5 p-t-10 p-b-10 ml-5 ">

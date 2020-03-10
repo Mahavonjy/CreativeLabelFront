@@ -2,6 +2,8 @@ const initState = {
     profile_info: '',
     albums: [],
     single: [],
+    reservations_list: [],
+    reservations_booking_list: [],
     user_beats: [],
     conditions: {},
     contract: '',
@@ -20,6 +22,16 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 conditions: action.data
+            };
+        case "ADD_ALL_USER_RESERVATION":
+            return {
+                ...state,
+                reservations: action.data
+            };
+        case "ADD_ALL_USER_BOOKING_RESERVATION":
+            return {
+                ...state,
+                reservations_booking_list: action.data
             };
         case "ADD_SHOW_BANKING_DETAILS":
             return {

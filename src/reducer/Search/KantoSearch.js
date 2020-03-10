@@ -5,11 +5,17 @@ const initState = {
     country_to_search: "",
     thematics_to_search: [],
     events_to_search: "",
+    list_of_options_added: [],
     initialized: false,
 };
 
 const KantoBizSearch = (state = initState, action) => {
     switch (action.type) {
+        case "ADD_LIST_OF_OPTIONS_ADDED":
+            return {
+                ...state,
+                list_of_options_added: action.data
+            };
         case "ADD_DATE_TO_SEARCH":
             return {
                 ...state,
