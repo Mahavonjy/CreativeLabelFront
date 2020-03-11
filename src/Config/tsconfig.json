@@ -8,7 +8,7 @@
     "node_modules"
   ],
   "configs": {
-    "ServerApi": "http://localhost:5000/",
+    "ServerApi": "http://35.184.246.59/",
     "GoogleId": "354503433014-dt8bat8cgaosk5ci76qquc13vgv2ofb9.apps.googleusercontent.com",
     "FacebookId": "423325871770542",
     "TokenVisitor": "visitor"
