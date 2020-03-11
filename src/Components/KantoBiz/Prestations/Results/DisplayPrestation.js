@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import DatePicker from "react-datepicker"
 import {useDispatch, useSelector} from "react-redux";
@@ -20,6 +21,7 @@ import {
     checkValueIfExistInArray,
     formatDate
 } from "../../../FunctionTools/Tools";
+import {checkErrorMessage} from "../../../Validators/Validatiors";
 import Calendar from "../../Calendar/Calendar";
 
 function DisplayPrestation(props) {
@@ -36,6 +38,10 @@ function DisplayPrestation(props) {
     const [event_date, setEventDate] = useState(date_to_search); // synchroniser avec la recherche après
     const [reservation, setReservation] = useState(false);
     const [address, setAddress] = useState(reservation_address);
+    const [tva, setTva] = useState(0.00);
+    const [ht_price, setHtPrice] = useState(0.00);
+    const [isl_amount, setIslAmount] = useState(0.00);
+    const [total_amount, setTotalAmount] = useState(0.00);
     const [rating, setRating] = useState(1);
 
     const validReservation = () => {
@@ -87,13 +93,20 @@ function DisplayPrestation(props) {
 
     useEffect(() => {
 
+        axios.post( "api/reservation/check_total_price", {price: service_to_show.price}, {headers: props.headers}).then((resp) => {
+            setTva(resp.data["tva"]);
+            setHtPrice(resp.data["ht_price"]);
+            setIslAmount(resp.data["isl_amount"]);
+            setTotalAmount(resp.data["total_amount"]);
+        });
+
         if (date_to_search && reservation_address)
             setReservation(true);
 
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [service_to_show]);
 
     return (
         <div className="Base pt-5 p-b-100 zIndex-1">
@@ -161,7 +174,7 @@ function DisplayPrestation(props) {
                                     <StarRatings rating={rating}
                                                  starRatedColor="red"
                                                  changeRating={newRating => { if (!props.read) setRating(newRating)}}
-                                                 numberOfStars={5}
+                                                 numberOfStars={service_to_show.notes}
                                                  starDimension="20px"
                                                  starSpacing="10px"
                                                  className="col"
@@ -171,11 +184,14 @@ function DisplayPrestation(props) {
                             </div>
                             <div className="row text-center pt-5">
                                 <div className="col-md-4">
+                                    <div className="mb-4 p-1 rounded" style={{border: "dashed 1px white"}}>
+                                        <h2 className="text-red border-bottom" >Details de la reservations</h2>
+                                        <h3 className="col"><small className="text-light">Prix HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info" data-tip="Ceci est le prix HT"/></h3>
+                                        <h3 className="col"><small className="text-light">Tva (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info" data-tip="Ceci est le tva du prix HT"/></h3>
+                                        <h3 className="col"><small className="text-light">Prix TTC:</small>&nbsp;{total_amount}$&nbsp;<i className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/></h3>
+                                    </div>
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">{service_to_show.price}$&nbsp;<i
-                                                className="icon icon-info"
-                                                data-tip="Ceci est le prix HT de la prestation"/></h2>
                                             <h4 className="col text-primary">Temps de préparation
                                                 : {service_to_show.preparation_time}{checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;
                                                 <i className="icon icon-info"

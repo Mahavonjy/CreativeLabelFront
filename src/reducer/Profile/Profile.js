@@ -9,6 +9,7 @@ const initState = {
     contract: '',
     banking: {},
     role: '',
+    notes: '',
     follower: '',
     following: '',
     pricing_beats: '',
@@ -23,10 +24,15 @@ const profileReducer = (state = initState, action) => {
                 ...state,
                 conditions: action.data
             };
+        case "ADD_USER_NOTES":
+            return {
+                ...state,
+                notes: action.data
+            };
         case "ADD_ALL_USER_RESERVATION":
             return {
                 ...state,
-                reservations: action.data
+                reservations_list: action.data
             };
         case "ADD_ALL_USER_BOOKING_RESERVATION":
             return {

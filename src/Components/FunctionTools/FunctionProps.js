@@ -264,6 +264,15 @@ export function profileInitialisationInfo(data) {
     };
 }
 
+export function addUserNote(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_USER_NOTES",
+            data: data
+        });
+    };
+}
+
 export function profileInitialisationCondition(data) {
     return async dispatch => {
         dispatch({
@@ -817,6 +826,15 @@ export function addAllUSerBookingReservation(data) {
     return async dispatch => {
         dispatch({
             type: "ADD_ALL_USER_BOOKING_RESERVATION",
+            data: data
+        });
+    };
+}
+
+export function addSuccessMessage(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_SUCCESS_MESSAGE",
             data: data
         });
     };

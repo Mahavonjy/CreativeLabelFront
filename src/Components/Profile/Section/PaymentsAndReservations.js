@@ -1,36 +1,58 @@
-import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import axios from "axios";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
+import {addAllUSerBookingReservation, addAllUSerReservation} from "../../FunctionTools/FunctionProps";
+import {checkErrorMessage} from "../../Validators/Validatiors";
 
-function PaymentsAndReservations() {
+function PaymentsAndReservations(props) {
 
+    const dispatch = useDispatch();
     const reservations_list = useSelector(state => state.profile.reservations_list);
     const reservations_booking_list = useSelector(state => state.profile.reservations_booking_list);
-
     const role = useSelector(state => state.profile.role);
 
     const isMounted = useRef(false);
+    const [headers, setHeaders] = useState({});
+
+    const replace_array_value = async (id_of_reservation, value, array_, func_to_dispatch) => {
+        let tmp = [];
+        await Promise.all(array_.map(element => {
+            if (element.id === id_of_reservation) tmp.push(value);
+            else tmp.push(element);
+        })).then( r => {
+            toast.success("Changement prise en compte");
+            dispatch(func_to_dispatch(tmp));
+        });
+    };
 
     const canceled_reservation_booked = (id_of_reservation) => {
-        console.log("Annuler une reservation qui a eté demander", id_of_reservation);
-    };
-    
-    const artist_accepted = () => {
-        console.log("L'artiste accepte la prestation");
+        axios.put( "api/reservation/auditor_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
+            replace_array_value(id_of_reservation, resp.data, reservations_booking_list, addAllUSerBookingReservation).then(r => null)
+        }).catch(error => toast.error(checkErrorMessage(error).message));
     };
 
-    const artist_canceled = () => {
-        console.log("L'artiste annule la prestation");
+    const accepted_reservation_demand = (id_of_reservation) => {
+        axios.put( "api/reservation/artist_accept/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
+            replace_array_value(id_of_reservation, resp.data, reservations_list, addAllUSerReservation).then(r => null)
+        }).catch(error => toast.error(checkErrorMessage(error).message));
     };
 
-    const tableGeneratorReservation = (val, demande) => {
+    const canceled_reservation_demand = (id_of_reservation) => {
+        axios.put( "api/reservation/artist_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
+            replace_array_value(id_of_reservation, resp.data, reservations_list, addAllUSerReservation).then(r => null)
+        }).catch(error => toast.error(checkErrorMessage(error).message));
+    };
+
+    const tableGenerator = (val, demand) => {
         return (
             <table className="responsive-table mt-4">
                 <thead>
                 <tr>
                     <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisie"/></th>
                     <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Date de l'évènement"/></th>
-                    {demande ? <th scope="col">Auditeur&nbsp;<i className="icon icon-info" data-tip="Le nom de l'auditeur concerné"/></th>
+                    {demand ? <th scope="col">Auditeur&nbsp;<i className="icon icon-info" data-tip="Le nom de l'auditeur concerné"/></th>
                         : <th scope="col">Artiste&nbsp;<i className="icon icon-info" data-tip="Le nom de l'artiste concerné par l'évènement"/></th>}
                     <th scope="col">Évènement&nbsp;<i className="icon icon-info" data-tip="Le type d'évènement de l'auditeur pro "/></th>
                     <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="L'adresse où se déroulera l'évènement"/></th>
@@ -47,7 +69,8 @@ function PaymentsAndReservations() {
                     <tr key={index}>
                         <th className="text-center small bolder" scope="row">{value.title}</th>
                         <td className="small" data-title="Date">{value.event_date.split("T")[0]}</td>
-                        <td className="small" data-title="Artist">{value.artist_name}</td>
+                        {demand ? <td className="small" data-title="Auditeur">{value.auditor_name}</td>:
+                            <td className="small" data-title="Artist">{value.artist_name}</td>}
                         <td className="small" data-title="Évènenment">{value.event}</td>
                         <td className="small" data-title="Adresse">{value.address}</td>
                         <td className="small" data-title="Montant">{value.total_amount}$</td>
@@ -57,10 +80,12 @@ function PaymentsAndReservations() {
                         <td className="small text-red border-top" data-title="Status" data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>
                         {value.status === "pending" ?
                             <td className="text-center border-bottom-0 border-right-0">
-                                <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_booked(val.id)}>Annuler</button>
-                            </td>:
+                                {!demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_booked(value.id)}>Annuler</button>}
+                                {demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_demand(value.id)}>Annuler</button>}
+                                {demand && <button className="btn btn-outline-success text-center mt-2" onClick={() => accepted_reservation_demand(value.id)}>Accepter</button>}
+                            </td> :
                             <td className="text-center border-bottom-0 border-right-0">
-                                <button className="btn btn-outline-danger text-center mt-2" disabled>Annuler</button>
+                                <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_demand(value.id)} disabled={!(value.status === "accepted")}>Annuler</button>
                             </td>
                         }
                     </tr>
@@ -71,6 +96,10 @@ function PaymentsAndReservations() {
     };
 
     useEffect(() => {
+
+        let headers = props.headers;
+        headers['Content-Type'] = 'application/json';
+        setHeaders(headers);
 
         return () => {
             isMounted.current = true
@@ -88,9 +117,10 @@ function PaymentsAndReservations() {
                                 <a className="nav-link active" data-toggle="pill" href="#v-pills-reservation" role="tab" aria-controls="v-pills-reservation" aria-selected="true">
                                     Mes réservations
                                 </a>
+                                {role !== "professional_auditor" &&
                                 <a className="nav-link" data-toggle="pill" href="#v-pills-demandes" role="tab" aria-controls="v-pills-demandes" aria-selected="false">
-                                    demandes de réservations
-                                </a>
+                                    Les demandes de réservations
+                                </a>}
                                 {/*<a className="nav-link" id="v-pills-payment-done-tab" data-toggle="pill" href="#v-pills-payment-done" role="tab" aria-controls="v-pills-payment-done" aria-selected="false">*/}
                                 {/*    Paiements effectués*/}
                                 {/*</a>*/}
@@ -102,13 +132,14 @@ function PaymentsAndReservations() {
                         <div className="col-lg-10">
                             <div className="tab-content" id="v-pills-tabContent">
                                 <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
-                                    {reservations_booking_list.length !== 0 ? tableGeneratorReservation(reservations_booking_list):
+                                    {reservations_booking_list.length !== 0 ? tableGenerator(reservations_booking_list):
                                         <h3 className="text-red center-center ">Vous n'avez pas de reservations</h3>}
                                 </div>
+                                {role !== "professional_auditor" &&
                                 <div className="tab-pane fade" id="v-pills-demandes" role="tabpanel" aria-labelledby="v-pills-demandes-tab">
-                                    {reservations_list.length !== 0 ? tableGeneratorReservation(reservations_list, true):
+                                    {reservations_list.length !== 0 ? tableGenerator(reservations_list, true):
                                         <h3 className="text-red center-center ">Vous n'avez pas de demandes de reservation</h3>}
-                                </div>
+                                </div>}
                                 {/*<div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">*/}
                                 {/*    {tableGenerator(false, false)}*/}
                                 {/*</div>*/}

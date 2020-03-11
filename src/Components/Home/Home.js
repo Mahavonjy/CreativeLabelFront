@@ -12,19 +12,21 @@ import {
     addAllArtistTypes,
     addAllCountryAllowed,
     addAllEventsTypes,
-    addAllMediaGenre, addAllUSerBookingReservation,
+    addAllMediaGenre,
+    addAllUSerBookingReservation,
     addAllUserOptions,
-    addAllUserPrestation, addAllUSerReservation,
+    addAllUserPrestation,
+    addAllUSerReservation,
     addBeatMakerBeats,
     addBeats,
     addCarts,
-    addOtherBeatMakerBeats,
+    addOtherBeatMakerBeats, addOthersCityOfService,
     addOtherUserOptions,
     addOtherUserService,
-    addPrefAllMediaGenre,
+    addPrefAllMediaGenre, addReferenceOfCity, addServiceCountry,
     addSimilarBeats,
     addTotalPrice,
-    addUserCredentials,
+    addUserCredentials, addUserNote,
     beatsInitialisationPricing,
     changeUserGenreSelected,
     discoveryBeats,
@@ -207,12 +209,14 @@ function Home() {
                     dispatch(addAllCountryAllowed(resp.data));
                 }).catch(err => ifConnectionError(err)),
                 axios.get("api/beats/AllSuggestion").then(resp => {
-                    dispatch(addBeats(resp.data["random"]));
-                    dispatch(newBeatMaker(resp.data["new_beatMaker"]));
-                    dispatch(topBeatMaker(resp.data["top_beatmaker"]));
-                    dispatch(latestBeats(resp.data["latest_beats"]));
-                    dispatch(discoveryBeats(resp.data["discovery_beats"]));
-                    dispatch(islBeats(resp.data["isl_playlist"]));
+                    new Promise(resolve => {
+                        resolve(dispatch(addBeats(resp.data["random"])));
+                        resolve(dispatch(newBeatMaker(resp.data["new_beatMaker"])));
+                        resolve(dispatch(topBeatMaker(resp.data["top_beatmaker"])));
+                        resolve(dispatch(latestBeats(resp.data["latest_beats"])));
+                        resolve(dispatch(discoveryBeats(resp.data["discovery_beats"])));
+                        resolve(dispatch(islBeats(resp.data["isl_playlist"])));
+                    }).then(r => null);
                 }).catch(err => ifConnectionError(err))
             ]).then(() => CheckSpecialRoute()).catch(() => NotOnline());
         }
@@ -258,14 +262,18 @@ function Home() {
     const fetchUserData = () => {
         Promise.all([
             axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
-                dispatch(profileInitialisationInfo(resp.data['my_profile']));
-                dispatch(profileInitialisationRole(resp.data['role']));
-                dispatch(addAllUSerReservation(resp.data['reservations_list']));
-                dispatch(addAllUSerBookingReservation(resp.data['reservations_booking_list']));
-                dispatch(profileInitialisationFollower(resp.data['my_followers']));
-                dispatch(profileInitialisationFollowing(resp.data['my_followings']));
-                dispatch(profileInitialisationCondition(resp.data['conditions']));
-                dispatch(profileInitialisationBanking(resp.data['banking']));
+                new Promise(resolve => {
+                    resolve(dispatch(addUserNote(resp.data['notes'])));
+                    resolve(dispatch(profileInitialisationInfo(resp.data['my_profile'])));
+                    resolve(dispatch(profileInitialisationRole(resp.data['role'])));
+                    resolve(dispatch(addAllUSerReservation(resp.data['reservations_list'])));
+                    resolve(dispatch(addAllUSerBookingReservation(resp.data['reservations_booking_list'])));
+                    resolve(dispatch(addAllUSerBookingReservation(resp.data['reservations_booking_list'])));
+                    resolve(dispatch(profileInitialisationFollower(resp.data['my_followers'])));
+                    resolve(dispatch(profileInitialisationFollowing(resp.data['my_followings'])));
+                    resolve(dispatch(profileInitialisationCondition(resp.data['conditions'])));
+                    resolve(dispatch(profileInitialisationBanking(resp.data['banking'])));
+                }).then(r => null);
                 if (resp.data['role'] === "beatmaker") {
                     Promise.all([
                         axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {

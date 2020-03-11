@@ -11,7 +11,7 @@ function RightBlock(props) {
     const dispatch = useDispatch();
     const prestations = useSelector(state => state.profilePrestations.prestations);
     const props_options = useSelector(state => state.profilePrestations.options);
-
+    const reservations_list = useSelector(state => state.profile.reservations_list);
     const prestationCopy = useSelector(state => state.Others.prestationCopy);
     const optionsCopy = useSelector(state => state.Others.optionsCopy);
     const dateKey = useSelector(state => state.Others.dateKey);
@@ -133,14 +133,26 @@ function RightBlock(props) {
     const getDayBlocks = () => {
         let arrNo = [];
         for (let n = 0; n < firstDay; n++) arrNo.push(<div className="day-block"/>);
-        for (let i = 1; i < Object.values(arrMonth)[selectedMonth] + 1; i++)
+        for (let i = 1; i < Object.values(arrMonth)[selectedMonth] + 1; i++) {
+            let bg_color = "";
+            Promise.all(reservations_list.map(element => {
+                let date_ = element.event_date.split("T")[0];
+                let year = date_.split("-")[0];
+                let month = date_.split("-")[1] - 1;
+                let day = date_.split("-")[2];
+                if (selectedYear === parseInt(year) && selectedMonth === parseInt(month) && i === parseInt(day)) {
+                    if (element.status === "pending") bg_color = "bg-warning";
+                    else if (element.status === "accepted") bg_color = "bg-info";
+                }
+            })).then(r => null);
             arrNo.push(
                 <div data-id={i} onClick={!props.noEdit ? () => fillProps(0, false, i) : null}
                      data-tip="Cliquer pour faire une modification"
-                     className={`day-block ${i === selectedDay && props.date.getMonth() + 1 === selectedMonth + 1 && props.date.getFullYear() === selectedYear ? "active" : "inactive"}`}>
+                     className={bg_color + " " + `day-block ${i === selectedDay && props.date.getMonth() + 1 === selectedMonth + 1 && props.date.getFullYear() === selectedYear ? "active" : "inactive"}`}>
                     <div className="inner">{i}</div>
                 </div>
             );
+        }
         return arrNo;
     };
 

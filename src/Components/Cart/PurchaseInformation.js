@@ -2,10 +2,12 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
 import Conf from "../../Config/tsconfig";
-import {addAllUSerBookingReservation} from "../FunctionTools/FunctionProps";
+import {addAllUSerBookingReservation, addSuccessMessage} from "../FunctionTools/FunctionProps";
 import {changeFields, isNumber} from "../FunctionTools/Tools";
+import Home from "../Home/Home";
 import {checkErrorMessage} from "../Validators/Validatiors";
 
 let headers = {
@@ -16,6 +18,7 @@ let headers = {
 
 function PurchaseInformation(props) {
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const cart = useSelector(state => state.Carts.carts);
     const profile_info = useSelector(state => state.profile.profile_info);
@@ -118,7 +121,10 @@ function PurchaseInformation(props) {
             let tmp = [...reservations_booking_list];
             tmp.push(resp.data);
             await dispatch(addAllUSerBookingReservation(tmp));
+            await dispatch(addSuccessMessage("Votre reservation a été prise en compte, veuillez voir votre email pour plus de details"))
             setPaymentLoading(false);
+            history.push("/CommandSuccess");
+            Home.beforeDataLoad().then(() => null);
             toast.success("Reservation prise en compte");
         }).catch((error) => {
             let errorMessage = checkErrorMessage(error);

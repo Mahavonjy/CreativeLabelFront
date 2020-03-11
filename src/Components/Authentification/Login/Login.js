@@ -51,7 +51,7 @@ function Login() {
                 }, 1000);
             }).catch(error => {
                 setLoading(false);
-                let response = JSON.stringify(error.response.data).replace(/"/g, '');
+                let response = checkErrorMessage(error).message;
                 if (response === "Active your account") {
                     setVisible(true);
                     toast.warn("Veuillez activer votre compte")

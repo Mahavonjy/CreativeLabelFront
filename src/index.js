@@ -15,6 +15,7 @@ import kantoBizForm from "./reducer/KantoBiz/Form";
 import { sessionService, sessionReducer } from 'redux-react-session';
 import KantoBizSearchResults from "./reducer/KantoBiz/SearchResult";
 import KantoBizSearch from "./reducer/Search/KantoSearch";
+import CommandSuccess from "./reducer/CommandSuccess/success";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from "redux-thunk";
 import Conf from "./Config/tsconfig";
@@ -32,6 +33,7 @@ const Reducers = combineReducers({
     "Player": playersReducer,
     "Carts": cartsReducer,
     "KantoBizForm": kantoBizForm,
+    "CommandSuccess": CommandSuccess,
     "KantobizSearch": KantoBizSearchResults,
     "KantobizSearchInfo": KantoBizSearch
 });

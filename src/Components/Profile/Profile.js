@@ -36,6 +36,7 @@ function Profile(props) {
     const contract = useSelector(state => state.profile.contract);
     const user_beats = useSelector(state => state.profile.user_beats);
     const user_role = useSelector(state => state.profile.role);
+    const notes = useSelector(state => state.profile.notes);
 
     const isMounted = useRef(false);
     const [allPrestation, setAllPrestation] = useState(props_prestation);
@@ -223,7 +224,7 @@ function Profile(props) {
                             </div>
                             {user_role !== "professional_auditor" ?
                                 <div className="text-center mt-2 mb-2">
-                                    <span className="text-red">Note:&nbsp;5&nbsp;<i className="icon-star-1"/></span>
+                                    <span className="text-red">Note:&nbsp;{notes}&nbsp;<i className="icon-star-1"/></span>
                                 </div> : null}
                         </div>
                         <div className="col-md-8">
