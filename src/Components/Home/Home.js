@@ -22,7 +22,7 @@ import {
     addCarts,
     addOtherBeatMakerBeats, addOthersCityOfService,
     addOtherUserOptions,
-    addOtherUserService,
+    addOtherUserService, addPaymentHistory,
     addPrefAllMediaGenre, addReferenceOfCity, addServiceCountry,
     addSimilarBeats,
     addTotalPrice,
@@ -264,6 +264,7 @@ function Home() {
             axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
                 new Promise(resolve => {
                     resolve(dispatch(addUserNote(resp.data['notes'])));
+                    resolve(dispatch(addPaymentHistory(resp.data['payment_history'])));
                     resolve(dispatch(profileInitialisationInfo(resp.data['my_profile'])));
                     resolve(dispatch(profileInitialisationRole(resp.data['role'])));
                     resolve(dispatch(addAllUSerReservation(resp.data['reservations_list'])));

@@ -839,3 +839,12 @@ export function addSuccessMessage(data) {
         });
     };
 }
+
+export function addPaymentHistory(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PAYMENT_HISTORY",
+            data: data
+        });
+    };
+}

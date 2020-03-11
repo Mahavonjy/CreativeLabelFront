@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
+import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {addAllUSerBookingReservation, addAllUSerReservation} from "../../FunctionTools/FunctionProps";
+import {smallSpinner} from "../../FunctionTools/CreateFields";
+import {addAllUSerBookingReservation, addAllUSerReservation, addPaymentHistory} from "../../FunctionTools/FunctionProps";
 import {checkErrorMessage} from "../../Validators/Validatiors";
 
 function PaymentsAndReservations(props) {
@@ -11,9 +13,16 @@ function PaymentsAndReservations(props) {
     const dispatch = useDispatch();
     const reservations_list = useSelector(state => state.profile.reservations_list);
     const reservations_booking_list = useSelector(state => state.profile.reservations_booking_list);
+    const payment_history = useSelector(state => state.profile.payment_history);
     const role = useSelector(state => state.profile.role);
 
     const isMounted = useRef(false);
+    const [load, setLoad] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [id_of_reservation, setIdOfReservation] = useState(false);
+    const [func, setFunc] = useState(null);
+    const [payment_accepted, setPaymentAccepted] = useState([]);
+    const [payment_refunded, setPaymentRefunded] = useState([]);
     const [headers, setHeaders] = useState({});
 
     const replace_array_value = async (id_of_reservation, value, array_, func_to_dispatch) => {
@@ -22,27 +31,40 @@ function PaymentsAndReservations(props) {
             if (element.id === id_of_reservation) tmp.push(value);
             else tmp.push(element);
         })).then( r => {
+            setLoad(false);
             toast.success("Changement prise en compte");
             dispatch(func_to_dispatch(tmp));
         });
     };
 
     const canceled_reservation_booked = (id_of_reservation) => {
-        axios.put( "api/reservation/auditor_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-            replace_array_value(id_of_reservation, resp.data, reservations_booking_list, addAllUSerBookingReservation).then(r => null)
-        }).catch(error => toast.error(checkErrorMessage(error).message));
+        if (id_of_reservation) {
+            setLoad(true);
+            axios.put( "api/reservation/auditor_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
+                dispatch(addPaymentHistory(resp.data['payment_history']));
+                replace_array_value(id_of_reservation, resp.data["reservations"], reservations_booking_list, addAllUSerBookingReservation).then(r => null)
+            }).catch(error => toast.error(checkErrorMessage(error).message));
+        }
     };
 
     const accepted_reservation_demand = (id_of_reservation) => {
-        axios.put( "api/reservation/artist_accept/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-            replace_array_value(id_of_reservation, resp.data, reservations_list, addAllUSerReservation).then(r => null)
-        }).catch(error => toast.error(checkErrorMessage(error).message));
+        if (id_of_reservation) {
+            setLoad(true);
+            axios.put( "api/reservation/artist_accept/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
+                dispatch(addPaymentHistory(resp.data['payment_history']));
+                replace_array_value(id_of_reservation, resp.data["reservations"], reservations_list, addAllUSerReservation).then(r => null)
+            }).catch(error => toast.error(checkErrorMessage(error).message));
+        }
     };
 
     const canceled_reservation_demand = (id_of_reservation) => {
-        axios.put( "api/reservation/artist_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-            replace_array_value(id_of_reservation, resp.data, reservations_list, addAllUSerReservation).then(r => null)
-        }).catch(error => toast.error(checkErrorMessage(error).message));
+        if (id_of_reservation) {
+            setLoad(true);
+            axios.put( "api/reservation/artist_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
+                dispatch(addPaymentHistory(resp.data['payment_history']));
+                replace_array_value(id_of_reservation, resp.data["reservations"], reservations_list, addAllUSerReservation).then(r => null)
+            }).catch(error => toast.error(checkErrorMessage(error).message));
+        }
     };
 
     const tableGenerator = (val, demand) => {
@@ -80,12 +102,28 @@ function PaymentsAndReservations(props) {
                         <td className="small text-red border-top" data-title="Status" data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>
                         {value.status === "pending" ?
                             <td className="text-center border-bottom-0 border-right-0">
-                                {!demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_booked(value.id)}>Annuler</button>}
-                                {demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_demand(value.id)}>Annuler</button>}
+
+                                {!demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
+                                    setVisible(true);
+                                    setFunc("canceled_reservation_booked");
+                                    setIdOfReservation(value.id);
+                                }}>Annuler</button>}
+
+                                {demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
+                                    setVisible(true);
+                                    setFunc("canceled_reservation_demand");
+                                    setIdOfReservation(value.id);
+                                }}>Annuler</button>}
+
                                 {demand && <button className="btn btn-outline-success text-center mt-2" onClick={() => accepted_reservation_demand(value.id)}>Accepter</button>}
                             </td> :
                             <td className="text-center border-bottom-0 border-right-0">
-                                <button className="btn btn-outline-danger text-center mt-2" onClick={() => canceled_reservation_demand(value.id)} disabled={!(value.status === "accepted")}>Annuler</button>
+                                <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
+                                    setVisible(true);
+                                    if (role !== "professional_auditor") setFunc("canceled_reservation_demand");
+                                    else setFunc("canceled_reservation_booked");
+                                    setIdOfReservation(value.id);
+                                }} disabled={!(value.status === "accepted")}>Annuler</button>
                             </td>
                         }
                     </tr>
@@ -95,11 +133,29 @@ function PaymentsAndReservations(props) {
         );
     };
 
+    const tablePaymentGenerator = (val) => {
+
+    };
+
     useEffect(() => {
 
         let headers = props.headers;
         headers['Content-Type'] = 'application/json';
         setHeaders(headers);
+
+        let tmpPaid = [];
+        let tmpRefund = [];
+        Promise.all(payment_history.map(element => {
+            if (element["paid"]) {
+                tmpPaid.push(element);
+            }
+            if (element["refund"]) {
+                tmpRefund.push(element);
+            }
+        })).then(() => {
+            setPaymentAccepted(tmpPaid);
+            setPaymentRefunded(tmpRefund);
+        });
 
         return () => {
             isMounted.current = true
@@ -109,6 +165,24 @@ function PaymentsAndReservations(props) {
     return (
         <div className="col" style={{minHeight: 320}}>
             <ReactTooltip/>
+            <Modal visible={visible} width="400" height="auto" animationType='slide'>
+                <div className="form-material"
+                     style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
+                    <div className="col text-center">
+                        <div className="body">
+                            <h3 className="text-light pt-5 mb-3">Etes vous sur de votre action ?</h3>
+                            <div className="row justify-content-center">
+                                <button className="btn btn-outline-danger btn-sm m-2 pl-5 pr-5" onClick={() => {
+                                    if (func === "canceled_reservation_booked") canceled_reservation_booked(id_of_reservation);
+                                    else if (func === "canceled_reservation_demand") canceled_reservation_demand(id_of_reservation);
+                                    setVisible(false)
+                                }}>Oui</button>
+                                <button className="btn btn-outline-success btn-sm m-2 pl-5 pr-5" onClick={() => setVisible(false)}>Non</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
             <div className="card no-b">
                 <div className="card-body">
                     <div className="row justify-content-center">
@@ -121,15 +195,16 @@ function PaymentsAndReservations(props) {
                                 <a className="nav-link" data-toggle="pill" href="#v-pills-demandes" role="tab" aria-controls="v-pills-demandes" aria-selected="false">
                                     Les demandes de réservations
                                 </a>}
-                                {/*<a className="nav-link" id="v-pills-payment-done-tab" data-toggle="pill" href="#v-pills-payment-done" role="tab" aria-controls="v-pills-payment-done" aria-selected="false">*/}
-                                {/*    Paiements effectués*/}
-                                {/*</a>*/}
-                                {/*<a className="nav-link" id="v-pills-payment-repaid-tab" data-toggle="pill" href="#v-pills-payment-repaid" role="tab" aria-controls="v-pills-payment-repaid" aria-selected="false">*/}
-                                {/*    Paiements remboursés*/}
-                                {/*</a>*/}
+                                <a className="nav-link" id="v-pills-payment-done-tab" data-toggle="pill" href="#v-pills-payment-done" role="tab" aria-controls="v-pills-payment-done" aria-selected="false">
+                                    Paiements effectués
+                                </a>
+                                <a className="nav-link" id="v-pills-payment-repaid-tab" data-toggle="pill" href="#v-pills-payment-repaid" role="tab" aria-controls="v-pills-payment-repaid" aria-selected="false">
+                                    Paiements remboursés
+                                </a>
                             </div>
                         </div>
                         <div className="col-lg-10">
+                            {load && smallSpinner("relative", "0")}
                             <div className="tab-content" id="v-pills-tabContent">
                                 <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
                                     {reservations_booking_list.length !== 0 ? tableGenerator(reservations_booking_list):
@@ -140,12 +215,16 @@ function PaymentsAndReservations(props) {
                                     {reservations_list.length !== 0 ? tableGenerator(reservations_list, true):
                                         <h3 className="text-red center-center ">Vous n'avez pas de demandes de reservation</h3>}
                                 </div>}
-                                {/*<div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">*/}
-                                {/*    {tableGenerator(false, false)}*/}
-                                {/*</div>*/}
-                                {/*<div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel" aria-labelledby="v-pills-payment-repaid-tab">*/}
-                                {/*    {tableGenerator(false, false)}*/}
-                                {/*</div>*/}
+                                <div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">
+                                    <h3 className="text-red center-center ">Vous n'avez pas de payment reussi</h3>
+                                    {/*{payment_accepted.length !== 0 ? tablePaymentGenerator(payment_accepted, true):*/}
+                                    {/*    <h3 className="text-red center-center ">Vous n'avez pas de payment reussi</h3>}*/}
+                                </div>
+                                <div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel" aria-labelledby="v-pills-payment-repaid-tab">
+                                    <h3 className="text-red center-center ">Vous n'avez pas de rembourssement reussi</h3>
+                                    {/*{payment_refunded.length !== 0 ? tablePaymentGenerator(payment_refunded, true):*/}
+                                    {/*    <h3 className="text-red center-center ">Vous n'avez pas de rembourssement reussi</h3>}*/}
+                                </div>
                             </div>
                         </div>
                     </div>

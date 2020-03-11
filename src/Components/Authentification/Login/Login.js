@@ -266,10 +266,10 @@ function Login() {
                     <div className="tri-r tri-r4"/>
                     <div className="tri-r tri-r5"/>
                 </div>
-                <div className="col-md-6 right float-right m-t-150 pt-4 mr-2">
-                    <LoginGoogle Label="Connecter avec Google"/>
-                    <LoginFacebook Label="Connecter avec Facebook"/>
-                </div>
+                {/*<div className="col-md-6 right float-right m-t-150 pt-4 mr-2">*/}
+                {/*    <LoginGoogle Label="Connecter avec Google"/>*/}
+                {/*    <LoginFacebook Label="Connecter avec Facebook"/>*/}
+                {/*</div>*/}
                 <small className="r-disc">Vous n'avez pas de compte ISL Creative ?</small>
                 <button className="r-btn btn btn-outline-danger"
                         onClick={() => {
