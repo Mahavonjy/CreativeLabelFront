@@ -334,11 +334,11 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
     return (
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
-            {!isPlaying &&
-            <a href="/#" data-toggle="push-menu" data-tip="Ouvrir ou le menu"
-               className="paper-nav-toggle text-center pp-nav-toggle pt-5 ml-3">
-                <i/>
-            </a>}
+            {/*{!isPlaying &&*/}
+            {/*<a href="/#" data-toggle="push-menu" data-tip="Ouvrir ou le menu"*/}
+            {/*   className="paper-nav-toggle text-center pp-nav-toggle pt-5 ml-3">*/}
+            {/*    <i/>*/}
+            {/*</a>}*/}
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
@@ -387,6 +387,11 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 }}><i
                     className={location.pathname === "/about" ? "icon text-red icon-info-circle s-24" : "icon icon-info-circle s-24"}/>
                     <span className="ml-5">À propos</span>
+                </li>
+
+                {/* About */}
+                <li style={{margin: "0 0 20px 11px"}} data-tip="Politique" ><i className="icon icon-flag s-24"/>
+                    <span className="ml-5">Politique</span>
                 </li>
 
                 {/* LOGOUT OR LOGIN */}

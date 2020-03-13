@@ -357,6 +357,7 @@ function Home() {
                     />
                 </Router>
                 {isPlaying && <IslPlayer key={key}/>}
+                <IslPlayer key={key}/>
             </div>
         );
     }
