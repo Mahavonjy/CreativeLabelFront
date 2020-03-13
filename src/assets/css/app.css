@@ -275,6 +275,10 @@ template{
     z-index: 1!important;
 }
 
+.zIndex99 {
+    z-index: 99!important;
+}
+
 .zIndex-1 {
     z-index: -1!important;
 }

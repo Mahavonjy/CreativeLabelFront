@@ -7,7 +7,7 @@ import "../../assets/css/app.css";
 import '../../assets/css/style/Home.css';
 import Conf from "../../Config/tsconfig";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
-import * as CreateFields from "../FunctionTools/CreateFields";
+import {CreateBeatsPlaylist, SideBars, SideBarsMain} from "../FunctionTools/CreateFields";
 import {
     addAllArtistTypes,
     addAllCountryAllowed,
@@ -20,13 +20,15 @@ import {
     addBeatMakerBeats,
     addBeats,
     addCarts,
-    addOtherBeatMakerBeats, addOthersCityOfService,
+    addOtherBeatMakerBeats,
     addOtherUserOptions,
-    addOtherUserService, addPaymentHistory,
-    addPrefAllMediaGenre, addReferenceOfCity, addServiceCountry,
+    addOtherUserService,
+    addPaymentHistory,
+    addPrefAllMediaGenre,
     addSimilarBeats,
     addTotalPrice,
-    addUserCredentials, addUserNote,
+    addUserCredentials,
+    addUserNote,
     beatsInitialisationPricing,
     changeUserGenreSelected,
     discoveryBeats,
@@ -64,6 +66,7 @@ function Home() {
     const beats = useSelector(state => state.beats.beats);
     const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
     const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
+    const auth = useSelector(state => state.session.authenticated);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -75,7 +78,7 @@ function Home() {
     const [user_data, setUserData] = useState('');
     const [state_cart_length, setStateCartLength] = useState(0);
     const [logout_class, setLogoutClass] = useState("icon icon-login s-24 mr-5");
-    const [log_name, setLogName] = useState("Login");
+    const [log_name, setLogName] = useState("Se Connecter");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
 
     Home.IncrementCart = (number) => {
@@ -108,7 +111,7 @@ function Home() {
     const addToPlaylist = async (index, type_, run, height_div, set_of_beats_name, states, state_value) => {
         if (!isPlaying) {
             await setIsPlaying(true);
-            CreateFields.CreateBeatsPlaylist.changeIndex(index);
+            CreateBeatsPlaylist.changeIndex(index);
             if (height_div === "single")
                 OneBeat.PauseOrPlaySingle(index);
         }
@@ -337,6 +340,19 @@ function Home() {
     } else {
         return (
             <div>
+                {!auth &&
+                <div className="absolute zIndex99 m-2" style={{right: 50}}>
+                    <div className="row justify-content-center">
+                        <button className="btn btn-outline-danger m-2"
+                                onClick={() => document.getElementById("LoginRequire").click()}>S'identifier
+                        </button>
+                        <button className="btn btn-outline-danger m-2" onClick={async () => {
+                            history.push("/register");
+                            Home.beforeDataLoad().then(() => null);
+                        }}>Créer votre compte ISL Creative
+                        </button>
+                    </div>
+                </div>}
                 {/* Popup Login */}
                 {PopupFields.Login()}
                 {/* End of Popup */}
@@ -345,19 +361,24 @@ function Home() {
                         <React.Fragment>
                             <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
                                 {/* SideBars with ICON */}
-                                {CreateFields.SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected)}
+                                {SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected)}
                                 {/* End SideBars */}
                             </aside>
                             <main>
                                 {/* Main of SideBars */}
-                                {CreateFields.SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show)}
+                                {SideBarsMain(addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show)}
                                 {/* End main of SideBars */}
                             </main>
                         </React.Fragment>)}
                     />
                 </Router>
-                {isPlaying && <IslPlayer key={key}/>}
-                <IslPlayer key={key}/>
+                {isPlaying ? <IslPlayer key={key}/> :
+                    <nav className="relative fixed fixed-bottom">
+                        <a href="/#" data-toggle="push-menu" data-tip="Ouvrir le menu"
+                           className="paper-nav-toggle pp-nav-toggle pl-2 ml-4">
+                            <i/>
+                        </a>
+                    </nav>}
             </div>
         );
     }
