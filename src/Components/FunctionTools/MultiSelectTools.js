@@ -32,7 +32,7 @@ function MultiSelectSearch(props) {
     return (
         <div className="multiselect__search">
             <input type="text" ref={inputRef} placeholder={placeholder} className="multiselect__search-input"
-                   onMouseDown={handleMouseDown} onChange={handleChange} value={value}/>
+                   onMouseDown={handleMouseDown} onChange={handleChange} autoComplete="off" value={value}/>
             {isOpen &&
             <div className="multiselect__open-btn" onClick={handleArrowClick}>
                 <i className="multiselect__open-icon"/>

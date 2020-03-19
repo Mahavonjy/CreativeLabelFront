@@ -7,6 +7,7 @@ function Thematics(props) {
 
     const dispatch = useDispatch();
     const artist_types = useSelector(state => state.Others.artist_types);
+    const tmpArtistTypeSelected = useSelector(state => state.Others.tmpArtistTypeSelected);
     const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected);
 
     const isMounted = useRef(false);
@@ -35,7 +36,7 @@ function Thematics(props) {
 
     useEffect(() => {
         try {
-            const artistType = props.var.artistType;
+            const artistType = props.var.artistType !== "professional_auditor" ? props.var.artistType : tmpArtistTypeSelected;
             let options_state = artist_types[artist_types.findIndex(tmp => tmp.name === artistType)]['description'];
             setOptions(options_state.filter(option => !props_thematics_options_selected.some(selected => selected === option)));
         } catch (e) {

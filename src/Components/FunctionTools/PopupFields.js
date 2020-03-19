@@ -1,17 +1,17 @@
 import React, {useEffect, useRef} from "react";
-import {addTmpArtistSelected, displayBecomeArtistForm} from "./FunctionProps";
-import {AddToCart} from "./Tools";
-import SignInOrUp from "../Authentification/Login/Login";
-import Loader from "react-loader-spinner";
 import Modal from "react-awesome-modal";
-import ReactTooltip from "react-tooltip";
+import Loader from "react-loader-spinner";
 import {useDispatch} from "react-redux";
 import Fade from 'react-reveal/Fade';
+import ReactTooltip from "react-tooltip";
+import SignInOrUp from "../Authentification/Login/Login";
+import {addTmpArtistSelected, displayBecomeArtistForm} from "./FunctionProps";
+import {AddToCart} from "./Tools";
 
 export const DifferentArtist = (dispatch, setChoiceArtistType, listOfArtistTypes, setAddNewPrestation) => {
 
-    const setValue = (type_) => {
-        dispatch(addTmpArtistSelected(type_));
+    const setValue = (type_of_artist) => {
+        dispatch(addTmpArtistSelected(type_of_artist));
         dispatch(displayBecomeArtistForm(true));
         if (setAddNewPrestation)
             setAddNewPrestation(true);
@@ -28,11 +28,9 @@ export const DifferentArtist = (dispatch, setChoiceArtistType, listOfArtistTypes
                 <h4 className="text-light text-monospace">Quelle genre d'artiste êtes vous ?</h4>
                 <div className="body row justify-content-center  pt-2">
                     {listOfArtistTypes.map((val, index) =>
-                        <button key={index} className="btn btn-outline-danger pt-2 pl-5 pr-5 ml-3 mr-3 mt-1 mb-1 col-lg-10"
-                                // style={{width: "250px"}}
-                                data-tip={val.description && val.description.join(', ')}
-                                onClick={() => setValue(val.name)}>{val.label}</button>
-                    )}
+                        <button className="btn btn-outline-danger pt-2 pl-5 pr-5 ml-3 mr-3 mt-1 mb-1 col-lg-10"
+                                data-tip={val.description && val.description.join(', ')} key={index}
+                                onClick={() => setValue(val.name)}>{val.label}</button>)}
                 </div>
             </div>
         </Modal>

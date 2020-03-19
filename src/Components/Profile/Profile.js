@@ -54,6 +54,8 @@ function Profile(props) {
     const [popupAddEditSingle, setPopupAddEditSingle] = useState(-1);
     const [choiceArtistType, setChoiceArtistType] = useState(false);
     const [addNewPrestation, setAddNewPrestation] = useState(false);
+    const [choiceArtistTypeToChange, setChoiceArtistTypeToChange] = useState(false);
+    const [addNewPrestationForNewArtist, setAddNewPrestationForNewArtist] = useState(false);
 
     const togglePopupEditProfile = async (success) => {
         setPopupEditProfile(!popupEditProfile);
@@ -92,17 +94,6 @@ function Profile(props) {
     const afterEditSingle = async (data) => {
         setPopupAddEditSingle(-1);
         await updateUserBeats(data, "Modification avec success", true);
-    };
-
-    const GenerateColInfo = (state_name, issue, index) => {
-        return (
-            <div className="col-md-4" key={index}>
-                <div className="p-4">
-                    <h5>{issue}</h5>
-                    <span>{profile_info[state_name] ? profile_info[state_name] : "Votre " + issue}</span>
-                </div>
-            </div>
-        );
     };
 
     const remove = async (e, type_) => {
@@ -159,26 +150,28 @@ function Profile(props) {
             <EditSingle Song={song} Type={type_} Success={(data) => afterEditSingle(data).then(() => null)}
                         CloseEdit={() => setPopupAddEditSingle(-1)}/>}
             {choiceArtistType && DifferentArtist(dispatch, setChoiceArtistType, artist_types, setAddNewPrestation)}
+            {choiceArtistTypeToChange && DifferentArtist(dispatch, setChoiceArtistTypeToChange, artist_types, setAddNewPrestationForNewArtist)}
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="card no-b shadow no-r">
                     <div className="row no-gutters">
                         <div className="col-md-4 b-r">
                             <div className="dropdown" style={{position: "absolute", paddingTop: "10px"}}>
-                                <button className="btn btn-outline-info btn-sm pt-3 pb-3" type="button"
+                                <button className="btn btn-outline-danger btn-sm pt-3 pb-3" type="button"
                                         data-tip="Plus d'options"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                     <i className="icon-more-1 s-12"/>
                                 </button>
                                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {user_role === "professional_auditor" &&
                                     <div>
-                                        <p className="dropdown-item text-blue"
-                                           onClick={() => setChoiceArtistType(true)}><i
-                                            className="icon-user-plus mr-3"/>Changer de statut</p>
-                                    </div>
+                                        <p className="dropdown-item text-red"
+                                           onClick={() => setChoiceArtistTypeToChange(true)}><i
+                                            className="icon-user-plus mr-3"/>Voulez vous devenir artiste sur ISL ?</p>
+                                    </div>}
                                     <li className="dropdown-item list-group-item d-flex justify-content-between align-items-center">
                                         <div>
-                                            <i className="icon icon-cogs text-blue mr-3"/>
+                                            <i className="icon icon-cogs text-red mr-3"/>
                                             <small className="mr-3">Envoyer une notification par mail</small>
                                         </div>
                                         <div className="material-switch">
@@ -219,26 +212,31 @@ function Profile(props) {
                             </div>
                             <div className="text-center">
                                 <button className="btn btn-outline-primary btn-sm mt-3 pl-4 pr-4"
-                                        onClick={() => togglePopupEditProfile(0)}>Modifier mon profil
+                                        onClick={() => togglePopupEditProfile(0)}>Modifier mon profile
                                 </button>
                             </div>
                             {user_role !== "professional_auditor" ?
                                 <div className="text-center mt-2 mb-2">
-                                    <span className="text-red">Note:&nbsp;{notes}&nbsp;<i className="icon-star-1"/></span>
+                                    <span className="text-red">Note:&nbsp;{notes}&nbsp;<i
+                                        className="icon-star-1"/></span>
                                 </div> : null}
                         </div>
                         <div className="col-md-8">
                             <div className="p5 b-b text-center">
                                 <div className="pl-8 mt-4">
-                                    <h3>Informations personnelles </h3>
+                                    <h3 className="text-red">Informations personnelles </h3>
                                 </div>
                                 <div className="row justify-content-center">
                                     {[
                                         ['email', 'Email'], ['age', 'Age'], ['gender', 'Genre'], ['birth', 'Anniversaire'],
                                         ['address', 'Adresse'], ['phone', 'Téléphone'], ['country', 'Pays'],
                                         ['region', 'Région'], ['city', 'Ville']].map((val, index) =>
-                                        GenerateColInfo(val[0], val[1], index))
-                                    }
+                                        <div className="col-md-4" key={index}>
+                                            <div className="p-4">
+                                                <h5 className="text-red">{val[1]}</h5>
+                                                <span>{profile_info[val[0]] ? profile_info[val[0]] : "Votre " + val[1]}</span>
+                                            </div>
+                                        </div>)}
                                 </div>
                             </div>
                         </div>
@@ -246,17 +244,22 @@ function Profile(props) {
                 </div>
             </div>
             {/* if user choice become an artist*/}
-            <Modal visible={addNewPrestation} width="80%" height="80%" effect="fadeInUp"
-                   onClickAway={() => setAddNewPrestation(false)}>
+            <Modal visible={(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist)} width="80%" height="80%"
+                   effect="fadeInUp"
+                   onClickAway={() => addNewPrestation ? setAddNewPrestation(false) : setAddNewPrestationForNewArtist(false)}>
                 <div className="bg-dark" style={{height: "100%"}}>
-                    <button className="ModalClose" onClick={() => {resetPropsForm(dispatch);setAddNewPrestation(false)}}>
+                    <button className="ModalClose" onClick={() => {
+                        resetPropsForm(dispatch);
+                        addNewPrestation ? setAddNewPrestation(false) : setAddNewPrestationForNewArtist(false)
+                    }}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
-                    {addNewPrestation && <Form artistType={user_role} headers={headers}
-                                               close={() => toast.success("Ajouter avec succes")}
-                                               setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
-                                               allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation}
-                                               new/>}
+                    {(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist) &&
+                        <Form artistType={user_role} headers={headers}
+                              close={() => toast.success("Ajouter avec succes")}
+                              setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
+                              allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation}
+                              setAddNewPrestationForNewArtist={setAddNewPrestationForNewArtist} new/>}
                 </div>
             </Modal>
             {/* end form become an artist*/}

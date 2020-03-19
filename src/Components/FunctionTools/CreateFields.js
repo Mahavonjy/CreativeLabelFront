@@ -323,7 +323,9 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                             </div>
                         </div>
                     </div>
-                    {Title === "Creative KantoBiz" ? <SearchBar headers={headers} displayOne={displayOne} setStateResult={setStateResult} next={next}/> : null}
+                    {Title === "Creative KantoBiz" ?
+                        <SearchBar headers={headers} displayOne={displayOne} setStateResult={setStateResult}
+                                   next={next}/> : null}
                 </div>
             </div>
         </div>
@@ -334,11 +336,6 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
     return (
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
-            {/*{!isPlaying &&*/}
-            {/*<a href="/#" data-toggle="push-menu" data-tip="Ouvrir ou le menu"*/}
-            {/*   className="paper-nav-toggle text-center pp-nav-toggle pt-5 ml-3">*/}
-            {/*    <i/>*/}
-            {/*</a>}*/}
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
@@ -390,8 +387,8 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 </li>
 
                 {/* About */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="Politique" ><i className="icon icon-flag s-24"/>
-                    <span className="ml-5">Politique</span>
+                <li style={{margin: "0 0 20px 11px"}} data-tip="Politique"><i className="icon icon-flag s-24"/>
+                    <span className="ml-5">Le mentions légales</span>
                 </li>
 
                 {/* LOGOUT OR LOGIN */}
@@ -429,7 +426,7 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
                     <Preference/>)
             }}/>
             <Route path="/show-service" exact component={() => {
-                if (service_to_show["id"]) return <DisplayPrestation  headers={headers}/>;
+                if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
                 else window.location.replace("/KantoBiz")
             }}/>
             <Route path="/about" exact component={() => <About/>}/>

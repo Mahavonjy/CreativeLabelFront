@@ -1,12 +1,15 @@
+import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import StepZilla from "react-stepzilla";
 import {toast, ToastContainer} from "react-toastify";
 import "../../../../assets/css/style/Form.css"
-import RegisterForm from "../../../Authentification/Register/RegisterForm";
+import Register from "../../../Authentification/Register/Register";
 import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
-import {createOrUpdatePrestation, resetPropsForm} from "../../../FunctionTools/Tools";
+import {createOrUpdatePrestation} from "../../../FunctionTools/Tools";
+import Home from "../../../Home/Home";
+import {checkErrorMessage} from "../../../Validators/Validatiors";
 import PrestationDetails from "./PrestationDetails";
 import PrestationInformation from "./PrestationInformation";
 import Recaputilatif from "./Recaputilatif";
@@ -20,9 +23,11 @@ function Form(props) {
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
     const PropsCountry = useSelector(state => state.KantoBizForm.country);
     const steps_index = useSelector(state => state.KantoBizForm.steps_index);
+    const becomeArtistForm = useSelector(state => state.Others.becomeArtistForm);
     const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
     const PropsOthersCity = useSelector(state => state.KantoBizForm.others_city);
     const PropsDescription = useSelector(state => state.KantoBizForm.description);
+    const tmpArtistTypeSelected = useSelector(state => state.Others.tmpArtistTypeSelected);
     const props_events_selected = useSelector(state => state.KantoBizForm.events_selected);
     const props_price_of_service = useSelector(state => state.KantoBizForm.price_of_service);
     const props_preparation_time = useSelector(state => state.KantoBizForm.preparation_time);
@@ -34,18 +39,18 @@ function Form(props) {
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
-    const [component_steps, setComponentSteps] = useState([Thematics, PrestationInformation, PrestationDetails, Recaputilatif]);
     const [state_steps_index, setStepsIndex] = useState(steps_index);
-    const [steps, setSteps] = useState([
+    const component_steps = [Thematics, PrestationInformation, PrestationDetails, Recaputilatif];
+    const steps = [
         {name: 'Choisir votre thématique', component: <Thematics var={props}/>},
         {name: 'Information de votre prestation', component: <PrestationInformation/>},
         {name: 'Detail de votre prestation', component: <PrestationDetails/>},
         {name: 'Recaputilatif', component: <Recaputilatif var={props}/>}
-    ]);
+    ];
 
     const addNewPrestation = () => {
         setLoading(true);
-        createOrUpdatePrestation(props, dispatch, {
+        return createOrUpdatePrestation(props, dispatch, {
                 PropsTitle,
                 PropsFiles,
                 PropsCityReference,
@@ -68,10 +73,26 @@ function Form(props) {
                 if (!resp.message)
                     toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
                 else toast.error(resp.message);
+                return false;
             } else {
                 setLoading(false);
+                return true
             }
         });
+    };
+
+    const auditorToArtist = () => {
+        setLoading(true);
+        axios.put("api/users/update_user_to/" + tmpArtistTypeSelected, {}, {headers: props.headers}).then(() => {
+            addNewPrestation().then(r => Home.beforeDataLoad().then(() => toast.success("Vous artiste maintenant")));
+            setLoading(true);
+        }).catch(error => {
+            let message = checkErrorMessage(error).message;
+            if (message === "You are already artist right now")
+                addNewPrestation().then(r => Home.beforeDataLoad().then(() => toast.success("Vous artiste maintenant")));
+            else toast.error(message);
+            setLoading(false);
+        })
     };
 
     const Next = async () => {
@@ -102,23 +123,11 @@ function Form(props) {
 
         if (props.new)
             props.setActiveToast(false);
-        if (props.register) {
-            let tmp = [...steps];
-            let tmpComponentSteps = [...component_steps];
-            tmp.push({
-                name: 'Inscription',
-                component: <RegisterForm tmpArtistTypeSelected={props.tmpArtistTypeSelected}
-                                         setIsActive={props.setIsActive}/>
-            });
-            tmpComponentSteps.push(RegisterForm);
-            setSteps(tmp);
-            setComponentSteps(tmpComponentSteps);
-        }
 
         return () => {
             isMounted.current = true
         };
-    }, [steps_index, state_steps_index, loading]);
+    }, [steps_index, state_steps_index, loading, becomeArtistForm]);
 
     return (
         <div className='step-progress bg-dark center' tabIndex="0"
@@ -163,18 +172,11 @@ function Form(props) {
                             <div className="mdl-stepper-bar-left"/>
                             <div className="mdl-stepper-bar-right"/>
                         </div>
-                        {props.register &&
-                        <div
-                            className={(state_steps_index === 4 && "mdl-stepper-step active-step") || (state_steps_index < 4 && "mdl-stepper-step") || (state_steps_index > 4 && "mdl-stepper-step success-step")}>
-                            <div className="mdl-stepper-circle"><span>5</span></div>
-                            <div className="mdl-stepper-title text-light d-none d-lg-block">
-                                <small className="d-none d-lg-block">Inscription</small></div>
-                            <div className="mdl-stepper-bar-left"/>
-                            <div className="mdl-stepper-bar-right"/>
-                        </div>}
                     </div>
                 </div>
             </div>
+            {props.register || props.artistType === "professional_auditor" &&
+            <h2 className="text-red text-center">Créer votre première prestaion pour devenir artiste sur ISL</h2>}
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             <div className="text-center pt-2">
                 <small className="text-center">Cliquer sur suivant pour passer à l'étape suivante</small>
@@ -183,7 +185,8 @@ function Form(props) {
                 <div className="text-center pt-2">
                     {state_steps_index === component_steps.length - 1 && !props.register &&
                     <button className="btn btn-outline-success center pl-5 pr-5"
-                            onClick={() => addNewPrestation()}>Enregister</button>}
+                            onClick={() => props.artistType === "professional_auditor" ? auditorToArtist() : addNewPrestation()}>
+                        {props.artistType === "professional_auditor" ? "Devenir Artiste" : "Enregister"}</button>}
                 </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
             <div className="NextOrPrevPageStepper mt-4 pb-5">
                 {state_steps_index !== 0 &&
@@ -191,8 +194,12 @@ function Form(props) {
                         onClick={() => Prev()}><i
                     className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>Precedent</button>}
                 {state_steps_index !== component_steps.length - 1 &&
-                    <button className="btn btn-outline-light pl-5 mb-3 bolder float-right border-bottom-0 border-left-0" onClick={() => Next()}>Suivant&nbsp;<i
-                        className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></button>}
+                <button className="btn btn-outline-light pl-5 mb-3 bolder float-right border-bottom-0 border-left-0"
+                        onClick={() => Next()}>Suivant&nbsp;<i
+                    className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></button>}
+                {state_steps_index === component_steps.length - 1 && props.register &&
+                <button className="btn btn-outline-success pl-5 mb-3 bolder float-right border-bottom-0 border-left-0"
+                        onClick={(e) => Register.sendUserInfoToSingUp(e)}>Inscription</button>}
             </div>
         </div>
     );

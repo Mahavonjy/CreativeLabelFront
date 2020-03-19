@@ -162,7 +162,7 @@ function PrestationInformation(props) {
                             </div>
                             <div className="form-group form-float">
                                 <div className="form-line">
-                                    <input id="country" name="country" className="form-control"
+                                    <input id="country" name="country" className="form-control" autoComplete="off"
                                            placeholder="Veuillez choisir un pays de référence pour votre prestation"
                                            value={country} onChange={(e) => changeCountry(e)} list="country-type"/>
                                     <datalist id="country-type">
@@ -173,7 +173,7 @@ function PrestationInformation(props) {
                             </div>
                             <div className="form-group form-float">
                                 <div className="form-line">
-                                    <input id="city" name="city" className="form-control"
+                                    <input id="city" name="city" className="form-control" autoComplete="off"
                                            placeholder={city || "Veuillez choisir une ville de référence pour votre prestation"}
                                            value={city} onChange={(e) => changeCity(e)} list="city-type"/>
                                     <datalist id="city-type">

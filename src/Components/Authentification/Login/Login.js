@@ -42,10 +42,10 @@ function Login() {
             axios.post("api/users/login", data, {headers: headers}).then(async response => {
                 const {token} = response.data;
                 setLoading(false);
-                toast.success("Vous etes connecté");
                 document.getElementsByClassName("close")[0].click();
                 await sessionService.saveSession({token});
                 await sessionService.saveUser(response.data);
+                toast.success("Vous etes connecté");
                 setTimeout(() => {
                     Home.beforeDataLoad().then(() => null);
                 }, 1000);

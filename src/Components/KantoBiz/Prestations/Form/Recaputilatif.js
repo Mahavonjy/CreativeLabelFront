@@ -6,6 +6,7 @@ function Recaputilatif(props) {
 
     const PropsFiles = useSelector(state => state.KantoBizForm.files);
     const PropsTitle = useSelector(state => state.KantoBizForm.title);
+    const tmpArtistTypeSelected = useSelector(state => state.Others.tmpArtistTypeSelected);
     const PropsCityReference = useSelector(state => state.KantoBizForm.city_reference);
     const PropsOthersCity = useSelector(state => state.KantoBizForm.others_city);
     const PropsDescription = useSelector(state => state.KantoBizForm.description);
@@ -89,7 +90,7 @@ function Recaputilatif(props) {
             </div>
             <div className="row">
                 <div className="col-md-6">
-                    {createBigForm("Type d'artiste", props.var.artistType, "icon-user")}
+                    {createBigForm("Type d'artiste", props.var.artistType !== "professional_auditor" ? props.var.artistType : tmpArtistTypeSelected, "icon-user")}
                     {createBigForm("Thématique", props_thematics_options_selected.join(', '), "icon-neuter")}
                     {createBigForm("Titre de votre prestation", PropsTitle, "icon-text-width")}
                     <div className="custom-float">
