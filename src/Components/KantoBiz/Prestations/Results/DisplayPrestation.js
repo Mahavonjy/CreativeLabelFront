@@ -100,9 +100,6 @@ function DisplayPrestation(props) {
             setTotalAmount(resp.data["total_amount"]);
         });
 
-        if (date_to_search && reservation_address)
-            setReservation(true);
-
         return () => {
             isMounted.current = true
         };
@@ -132,16 +129,17 @@ function DisplayPrestation(props) {
                 <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br/><br/>
             </ReactTooltip>
             <div className="profile-page">
-                {!props.read &&
                 <button
                     onClick={() => {
                         dispatch(changeInitialized(false));
-                        history.push("/KantoBiz")
+                        if (props.read)
+                            history.push("/Profile");
+                        else history.push("/KantoBiz");
                     }}
                     style={{position: "fixed", bottom: "5%", zIndex: 99}}
                     className="btn-custom btn-outline-light border-bottom-0 border-right-0">
                     <i className="icon icon-long-arrow-left s-24 align-middle"/>&nbsp;Precedent
-                </button>}
+                </button>
                 <div className="page-header header-filter border1" data-parallax="true"
                      style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}}/>
                 <div className="main bg-dark main-raised ml-3 mr-3">

@@ -21,7 +21,7 @@ import {
     addReferenceOfCity,
     addServiceCountry,
     addServiceRefundPolicy,
-    addServiceTime,
+    addServiceTime, addStepsIndex,
     addTitleOfService,
     addTotalPrice,
     addTravelExpenses,
@@ -415,6 +415,7 @@ export const objectToFormData = (object, PropsFiles) => {
 
 export const resetPropsForm = (dispatch) => {
     dispatch(addUserId(null));
+    dispatch(addStepsIndex(0));
     dispatch(addOptionSelected([]));
     dispatch(addTitleOfService(''));
     dispatch(addServiceCountry(''));
@@ -505,6 +506,11 @@ export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
     setState(value);
     if (func && dispatch)
         dispatch(func(value))
+};
+
+export const checkOnClickAwaySideBar = (e) => {
+    if (e.target.className !== "paper-nav-toggle pp-nav-toggle pl-2 ml-4" && Home.checkOpenSideBar)
+        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()
 };
 
 export const generatePagination = (_array, funcToDisplay) => {

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import {
@@ -30,20 +31,21 @@ import {
     profileInitialisationCondition
 } from "../../FunctionTools/FunctionProps";
 import {checkUnitKey, deleteInObject, objectToFormData, resetPropsForm} from "../../FunctionTools/Tools";
-import DisplayPrestation from "../../KantoBiz/Prestations/Results/DisplayPrestation";
+import Home from "../../Home/Home";
 import EditPrestation from "../PrestationEdits/EditPrestation";
 
 function MyPrestations(props) {
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const conditions = useSelector(state => state.profile.conditions);
     const prestations = useSelector(state => state.profilePrestations.prestations);
+    const props_options = useSelector(state => state.profilePrestations.options);
 
     const isMounted = useRef(false);
     const [global_price, setGlobalPrice] = useState(conditions['travel_expenses']);
     const [state_index, setStateIndex] = useState(null);
     const [copyEdit, setCopyEdit] = useState(false);
-    const [showOne, setShowOne] = useState(false);
     const [editPrestation, setEditPrestation] = useState(false);
     const [allPrestation, setAllPrestation] = useState(prestations);
 
@@ -57,11 +59,11 @@ function MyPrestations(props) {
         axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => null)
     };
 
-    const displayService = (index) => {
+    const displayService = async(index) => {
         let tmp = {...allPrestation[index]};
-        tmp['refund_policy'] = conditions['refund_policy'];
-        dispatch(addServiceToShow(tmp));
-        setShowOne(true);
+        tmp['options'] = props_options;
+        await dispatch(addServiceToShow(tmp));
+        history.push("/show-service-read")
     };
 
     const updated = async (opt) => {
@@ -109,12 +111,12 @@ function MyPrestations(props) {
 
     const deletePrestations = (indexOfService) => {
         if (allPrestation.length > 1) {
-            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers: props.headers}).then(resp => {
+            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers: props.headers}).then(async () => {
                 toast.success("Supprimer avec succès");
                 let tmp = allPrestation.filter((service, index) => index !== indexOfService);
                 setAllPrestation(tmp);
                 props.setAllPrestation(tmp);
-                dispatch(addAllUserPrestation(tmp));
+                await dispatch(addAllUserPrestation(tmp));
             });
         } else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
@@ -180,16 +182,6 @@ function MyPrestations(props) {
                                     close={props.close} setActiveToast={props.setActiveToast} index={state_index}
                                     allPrestation={allPrestation} setAllPrestation={setAllPrestation}
                                     headers={props.headers} setAddNewPrestation={props.setAddNewPrestation}/>}
-                </div>
-            </Modal>
-            {/* end form become an artist */}
-            <Modal visible={showOne} width="80%" height="80%" effect="fadeInUp" onClickAway={() => setShowOne(false)}>
-                <div className="bg-dark overflow-auto scrollbar-isl" style={{height: "100%"}}>
-                    <button className="ModalClose" style={{position: "fixed", left: 0, top: 0}}
-                            onClick={() => setShowOne(false)}>
-                        <i className="icon-close s-24" style={{color: "orange"}}/>
-                    </button>
-                    {showOne && <DisplayPrestation read/>}
                 </div>
             </Modal>
             <div className="row justify-content-center">

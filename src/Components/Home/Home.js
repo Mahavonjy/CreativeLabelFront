@@ -46,7 +46,7 @@ import {
     topBeatMaker,
 } from "../FunctionTools/FunctionProps";
 import * as PopupFields from "../FunctionTools/PopupFields";
-import {FillInCartProps} from "../FunctionTools/Tools";
+import {checkOnClickAwaySideBar, FillInCartProps} from "../FunctionTools/Tools";
 import IslPlayer from "../Players/Players";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
@@ -326,9 +326,12 @@ function Home() {
         }
     };
 
+    Home.checkOpenSideBar = openSideBar;
+
     useEffect(() => {
 
         Home.beforeDataLoad().then(() => null);
+        document.addEventListener('mousedown', (e) => checkOnClickAwaySideBar(e));
 
         return () => {
             isMounted.current = true
@@ -361,8 +364,8 @@ function Home() {
                     <Route render={({location, history}) => (
                         <React.Fragment>
                             <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas"
-                                   onMouseEnter={() => !openSideBar && document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
-                                   onMouseLeave={() => document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
+                                   // onMouseEnter={() => !openSideBar && document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
+                                   // onMouseLeave={() => document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
                             >
                                 {/* SideBars with ICON */}
                                 {SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected, openSideBar)}

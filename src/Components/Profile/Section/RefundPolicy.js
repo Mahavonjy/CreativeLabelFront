@@ -45,7 +45,7 @@ function RefundPolicy (props) {
 
         let valueOfRefundPolicy;
         if (!props.edit) valueOfRefundPolicy = conditions['refund_policy'];
-        else valueOfRefundPolicy = service_refund_policy;
+        else valueOfRefundPolicy = service_refund_policy ? service_refund_policy :  conditions['refund_policy'];
         if (valueOfRefundPolicy === "flexible") setFlexible(true);
         else setStrict(true);
 

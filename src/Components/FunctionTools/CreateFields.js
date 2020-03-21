@@ -429,6 +429,10 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
                 if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
                 else window.location.replace("/KantoBiz")
             }}/>
+            <Route path="/show-service-read" exact component={() => {
+                if (service_to_show["id"]) return <DisplayPrestation headers={headers} read/>;
+                else window.location.replace("/Profile")
+            }}/>
             <Route path="/about" exact component={() => <About/>}/>
         </div>
     )

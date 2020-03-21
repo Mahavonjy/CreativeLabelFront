@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
+import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../assets/css/style/KantoBiz.css";
 import {CreativeHeaders} from "../FunctionTools/CreateFields";
@@ -16,6 +17,7 @@ function KantoBiz(props) {
     const ResultsPage = useSelector(state => state.KantobizSearch.ResultsPage);
     const loading = useSelector(state => state.KantobizSearch.loading);
     const events_allowed = useSelector(state => state.Others.events_allowed);
+    const user_connected_prestations = useSelector(state => state.profilePrestations.prestations);
     const EventAndThematics = useSelector(state => state.KantobizSearch.EventAndThematics);
 
     const isMounted = useRef(false);
@@ -28,8 +30,18 @@ function KantoBiz(props) {
     const [thematics, setThematics] = useState("");
 
     const displayOne = async (val) => {
-        await dispatch(addServiceToShow(val));
-        history.push("/show-service")
+        let tmp = false;
+        await Promise.all(user_connected_prestations.map(element => {
+            if (element["id"] === val["id"]) tmp = true
+        })).then(async () => {
+            if (tmp) {
+                toast.warn("Vous ne pouvez pas acheter votre propre prestaion")
+            } else {
+                await dispatch(addServiceToShow(val));
+                history.push("/show-service")
+            }
+        });
+
     };
 
     const next = () => {

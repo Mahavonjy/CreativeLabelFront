@@ -32,7 +32,7 @@ function Calendar (props) {
         return () => {
             isMounted.current = true
         };
-    }, [toggle]);
+    }, [toggle, prestations]);
 
     return (
         <div className="outer">
