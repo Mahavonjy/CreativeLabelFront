@@ -35,7 +35,7 @@ function Calendar (props) {
     }, [toggle, prestations]);
 
     return (
-        <div className="outer">
+        <div className="outer zIndex99">
             <ReactTooltip/>
             <div className="wrapper justify-content-center">
                 {!props.noEdit && <LeftBlock headers={props.headers} arrDays={arrDays} date={date} handleToUpdate={handleToUpdate} prestations={prestations}/>}
