@@ -43,7 +43,7 @@ import {
     profileInitialisationFollowing,
     profileInitialisationInfo,
     profileInitialisationRole,
-    topBeatMaker
+    topBeatMaker,
 } from "../FunctionTools/FunctionProps";
 import * as PopupFields from "../FunctionTools/PopupFields";
 import {FillInCartProps} from "../FunctionTools/Tools";
@@ -71,6 +71,7 @@ function Home() {
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [openSideBar, setOpenSideBar] = useState(false);
     const [href] = useState(window.location.href.split("/"));
     const [single_beat, setSingleBeat] = useState('');
     const [beats_similar, setBeatsSimilar] = useState([]);
@@ -227,7 +228,7 @@ function Home() {
 
     const Online = () => {
         try {
-            setLogName("logout");
+            setLogName("Se déconnecter");
             setLogoutClass("icon icon-exit-2 s-24 mr-5");
             let routeParsed = href[href.length - 1];
             if (routeParsed === 'register') {
@@ -359,9 +360,12 @@ function Home() {
                 <Router>
                     <Route render={({location, history}) => (
                         <React.Fragment>
-                            <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
+                            <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas"
+                                   onMouseEnter={() => !openSideBar && document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
+                                   onMouseLeave={() => document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
+                            >
                                 {/* SideBars with ICON */}
-                                {SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected)}
+                                {SideBars(state_cart_length, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected, openSideBar)}
                                 {/* End SideBars */}
                             </aside>
                             <main>
@@ -375,6 +379,7 @@ function Home() {
                 {isPlaying ? <IslPlayer key={key}/> :
                     <nav className="relative fixed fixed-bottom">
                         <a href="/#" data-toggle="push-menu" data-tip="Ouvrir le menu"
+                           onClick={() => openSideBar ? setOpenSideBar(false): setOpenSideBar(true)}
                            className="paper-nav-toggle pp-nav-toggle pl-2 ml-4">
                             <i/>
                         </a>

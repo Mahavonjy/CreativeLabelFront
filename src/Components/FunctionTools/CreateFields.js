@@ -15,7 +15,7 @@ import Register from "../Authentification/Register/Register";
 import Beats from "../BeatMaking/Beats/AllBeatsSuggestion/Beats";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import Cart from "../Cart/Cart";
-import {addNewPlayerList} from "../FunctionTools/FunctionProps"
+import {addNewPlayerList, changeSidebarStatus} from "../FunctionTools/FunctionProps"
 import KantoBiz from "../KantoBiz/KantoBiz";
 import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation";
 import SearchBar from "../KantoBiz/SearchBar";
@@ -332,7 +332,7 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
     )
 };
 
-export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected) => {
+export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected, openSideBar) => {
     return (
         <div className="sidebar">
             <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>

@@ -366,8 +366,8 @@ function Profile(props) {
                                     {user_role === "beatmaker" &&
                                     <div className="align-self-center">
                                         <button className="btn btn-outline-danger"
-                                                onClick={() => togglePopupAddSingle(0)}>Ajouter un beat&nbsp;<i
-                                            className="icon-plus-circle"/></button>
+                                                onClick={() => togglePopupAddSingle(0)}>Ajouter un beat&nbsp;
+                                            <i className="icon-plus-circle"/></button>
                                     </div>}
                                     <div className="align-self-center">
                                         <button className="btn btn-outline-danger"

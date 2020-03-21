@@ -64,9 +64,23 @@ function Register() {
                     Home.beforeDataLoad().then(() => null);
                 });
             });
-        }).catch(error => {
-            toast.error(checkErrorMessage(error).message)
-        })
+        }).catch(error => {toast.error(checkErrorMessage(error).message)})
+    };
+
+    Register.registerButton = (toAuditor) => {
+        return (
+            <div className="text-center">
+                <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
+                        onClick={(e) => Register.sendUserInfoToSingUp(e, true)}>
+                    Créer votre compte Artiste
+                </button>
+                <button type="submit" id="register" disabled={disable}
+                        className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
+                        onClick={(e) => toAuditor ? Home.beforeDataLoad().then(() => null) : Register.sendUserInfoToSingUp(e)}>
+                    Créer votre compte Auditor Pro
+                </button>
+            </div>
+        );
     };
 
     Register.sendUserInfoToSingUp = (e, toArtist) => {
@@ -139,16 +153,9 @@ function Register() {
                             spinner text="Nous sommes en train de vous envoyer un email de confirmation ..."
                             styles={{
                                 spinner: (base) => ({
-                                    ...base,
-                                    width: '25px',
-                                    margin_bottom: '10px',
-                                    '& svg circle': {
-                                        stroke: '#A4B129'
-                                    }
+                                    ...base, width: '25px', margin_bottom: '10px', '& svg circle': {stroke: '#A4B129'}
                                 })
-                            }}
-            />
-
+                            }}/>
             {!visible && <ToastContainer/>}
             <Modal visible={visible} className="zIndex99" width="400" height="150" animationType='slide'>
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
@@ -218,16 +225,7 @@ function Register() {
                                                         {CreateInput('confirm_password', confirm_password, (e) => changeFields(setConfirmPassword, e), "Entrez le mot de passe à nouveau", "password", true)}
                                                     </div>
                                                 </div>
-
-                                                <div className="text-center">
-                                                    <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
-                                                            onClick={(e) => Register.sendUserInfoToSingUp(e, true)}> Créer votre compte Artiste
-                                                    </button>
-                                                    <button type="submit" id="register" disabled={disable}
-                                                            className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
-                                                            onClick={(e) => Register.sendUserInfoToSingUp(e)}>Créer votre compte Auditor Pro
-                                                    </button>
-                                                </div>
+                                                {Register.registerButton()}
                                             </div>
                                             {/* #END# Input */}
                                         </div>
@@ -241,8 +239,8 @@ function Register() {
                                                         document.getElementsByClassName("LoginRequire")[0].click();
                                                     }}> Identifiez-vous
                                             </button>
-                                            <LoginGoogle Label="S'inscrire avec Google"/>
-                                            <LoginFacebook Label="S'inscrire avec Facebook"/>
+                                            <LoginGoogle register Label="S'inscrire avec Google"/>
+                                            {/*<LoginFacebook register Label="S'inscrire avec Facebook"/>*/}
                                         </div>
                                     </div>
                                 </div>
