@@ -94,6 +94,7 @@ function Register() {
             toast.error(validator.message);
         } else {
             if (toArtist) {
+                setDisable(false);
                 setChoiceArtistType(true)
             } else {
                 setIsActive(true);
