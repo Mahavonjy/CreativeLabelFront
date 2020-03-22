@@ -48,7 +48,7 @@ function Preference() {
                 dispatch(changeUserGenreSelected());
                 if (service_to_show) {
                     history.push("/show-service")
-                } else history.goBack();
+                } else history.push("/Profile");
             }).catch(error => {
                 toast.error(error.response.data);
             })
