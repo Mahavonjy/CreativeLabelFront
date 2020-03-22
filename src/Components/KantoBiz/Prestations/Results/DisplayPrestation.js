@@ -38,10 +38,10 @@ function DisplayPrestation(props) {
     const [event_date, setEventDate] = useState(date_to_search); // synchroniser avec la recherche après
     const [reservation, setReservation] = useState(false);
     const [address, setAddress] = useState(reservation_address);
-    const [tva, setTva] = useState(0.00);
-    const [ht_price, setHtPrice] = useState(0.00);
-    const [isl_amount, setIslAmount] = useState(0.00);
-    const [total_amount, setTotalAmount] = useState(0.00);
+    const [tva, setTva] = useState(0);
+    const [ht_price, setHtPrice] = useState(0);
+    const [isl_amount, setIslAmount] = useState(0);
+    const [total_amount, setTotalAmount] = useState(0);
     const [rating, setRating] = useState(1);
 
     const validReservation = () => {
@@ -94,6 +94,7 @@ function DisplayPrestation(props) {
     useEffect(() => {
 
         axios.post( "api/reservation/check_total_price", {price: service_to_show.price}, {headers: props.headers}).then((resp) => {
+            console.log(resp.data), resp.data["tva"];
             setTva(resp.data["tva"]);
             setHtPrice(resp.data["ht_price"]);
             setIslAmount(resp.data["isl_amount"]);
