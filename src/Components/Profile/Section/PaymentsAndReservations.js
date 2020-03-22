@@ -143,19 +143,19 @@ function PaymentsAndReservations(props) {
         headers['Content-Type'] = 'application/json';
         setHeaders(headers);
 
-        let tmpPaid = [];
-        let tmpRefund = [];
-        Promise.all(payment_history.map(element => {
-            if (element["paid"]) {
-                tmpPaid.push(element);
-            }
-            if (element["refund"]) {
-                tmpRefund.push(element);
-            }
-        })).then(() => {
-            setPaymentAccepted(tmpPaid);
-            setPaymentRefunded(tmpRefund);
-        });
+        // let tmpPaid = [];
+        // let tmpRefund = [];
+        // Promise.all(payment_history.map(element => {
+        //     if (element["paid"]) {
+        //         tmpPaid.push(element);
+        //     }
+        //     if (element["refund"]) {
+        //         tmpRefund.push(element);
+        //     }
+        // })).then(() => {
+        //     setPaymentAccepted(tmpPaid);
+        //     setPaymentRefunded(tmpRefund);
+        // });
 
         return () => {
             isMounted.current = true
