@@ -139,7 +139,6 @@ function AvailabilityPeriod(props) {
             let selectedPrestationToUpdate = {...prestations[selectedPrestation]};
             let id = selectedPrestationToUpdate["id"];
             selectedPrestationToUpdate = deleteInObject(selectedPrestationToUpdate);
-            console.log(selectedPrestationToUpdate);
             api_call_update.push(
                 axios.put('api/artist_services/update/' + id, objectToFormData(selectedPrestationToUpdate), {headers: props.parentProps.headers}).then((resp) => {
                     generateVariableAllOptionUpdated(resp.data, selectedPrestation, prestations, addAllUserPrestation)
