@@ -142,7 +142,6 @@ function Profile(props) {
 
     return (
         <div className="Base p-b-100">
-            {activeToast && <ToastContainer/>}
             {popupAddSingle && <AddSingle Type={"beats"} closePopup={(e, data) => togglePopupAddSingle(e, data)}/>}
             {popupEditProfile &&
             <EditProfile closePopup={(e) => togglePopupEditProfile(e)} updateProfile={setProfileInfo}/>}

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {BrowserRouter as Router, Route, useHistory} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
 import {sessionService} from 'redux-react-session';
 import "../../assets/css/app.css";
 import '../../assets/css/style/Home.css';
@@ -344,6 +345,7 @@ function Home() {
     } else {
         return (
             <div>
+                <ToastContainer style={{zIndex: 999}}/>
                 {!auth &&
                 <div className="absolute zIndex99 m-2" style={{right: 50}}>
                     <div className="row justify-content-center">

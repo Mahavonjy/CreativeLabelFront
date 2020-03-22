@@ -42,7 +42,6 @@ function OtherProfile(props) {
     };
 
     useEffect(() => {
-        console.log(props.UserData.role);
         if (other_beat_maker_beats.length !== 0)
             getMediaLink(setLinkAllOtherArtistBeats, link_all_other_artist_beats, other_beat_maker_beats, BeatsProps.updateOtherBeatMakerBeats, dispatch).then(() => null);
 
@@ -53,7 +52,6 @@ function OtherProfile(props) {
 
     return (
         <div className="Base">
-            <ToastContainer/>
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="card no-b shadow no-r">
                     <div className="row no-gutters">

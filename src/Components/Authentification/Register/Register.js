@@ -157,7 +157,6 @@ function Register() {
                                     ...base, width: '25px', margin_bottom: '10px', '& svg circle': {stroke: '#A4B129'}
                                 })
                             }}/>
-            {!visible && <ToastContainer/>}
             <Modal visible={visible} className="zIndex99" width="400" height="150" animationType='slide'>
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
                                 rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>

@@ -92,7 +92,6 @@ function Beats(props) {
     return (
         <div>
             <ReactTooltip/>
-            <ToastContainer/>
             {/* Headers */}
             {CreateFields.CreativeHeaders("Creative BeatMaking", 'Des créations orginales qui font la différence <br/> ' + 'Pour les professionnels de la musique (artistes,producteurs, labels...)')}
             {/* End Headers */}

@@ -15,7 +15,7 @@ import Register from "../Authentification/Register/Register";
 import Beats from "../BeatMaking/Beats/AllBeatsSuggestion/Beats";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import Cart from "../Cart/Cart";
-import {addNewPlayerList, changeSidebarStatus} from "../FunctionTools/FunctionProps"
+import {addNewPlayerList} from "../FunctionTools/FunctionProps"
 import KantoBiz from "../KantoBiz/KantoBiz";
 import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation";
 import SearchBar from "../KantoBiz/SearchBar";
@@ -406,7 +406,6 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
     return (
         <div>
             <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
-            <Route path="/register" exact component={() => <Register/>}/>
             <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
             <Route path="/CommandError" exact component={() => <CommandError/>}/>
             <Route path="/kantobiz" exact component={() => <KantoBiz headers={headers}/>}/>
@@ -432,6 +431,9 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
             <Route path="/show-service-read" exact component={() => {
                 if (service_to_show["id"]) return <DisplayPrestation headers={headers} read/>;
                 else window.location.replace("/Profile")
+            }}/>
+            <Route path="/register" exact component={() => {
+                return headers['Isl-Token'] !== Conf.configs.TokenVisitor ? history.goBack() : (<Register/>)
             }}/>
             <Route path="/about" exact component={() => <About/>}/>
         </div>

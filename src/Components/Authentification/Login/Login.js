@@ -126,8 +126,6 @@ function Login() {
 
     return (
         <div tabIndex="0" onKeyDown={(e) => {e.key === "Enter" && sendLoginCredentials(e)}}>
-            {!changePass && !resetPassword && !visibility && !visible && <ToastContainer/>}
-
             <Modal visible={changePass} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick

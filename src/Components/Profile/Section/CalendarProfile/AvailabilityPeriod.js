@@ -186,7 +186,6 @@ function AvailabilityPeriod(props) {
         list_of_options.push(
             <option key={props_options.length} value="all">Tout (appliquer à toutes les options)</option>);
 
-        console.log(prestations[0]);
         setPrestationLists(list_of_prestations);
         setOptionLists(list_of_options);
 

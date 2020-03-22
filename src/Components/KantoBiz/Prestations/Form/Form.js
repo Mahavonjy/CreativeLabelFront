@@ -175,7 +175,7 @@ function Form(props) {
                     </div>
                 </div>
             </div>
-            {props.register || props.artistType === "professional_auditor" &&
+            {(props.register || props.artistType === "professional_auditor") &&
             <h2 className="text-red text-center">Créer votre première prestaion pour devenir artiste sur ISL</h2>}
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             <div className="text-center pt-2">

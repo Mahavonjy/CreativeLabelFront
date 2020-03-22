@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import './offers.css'
+import '../../../../assets/css/style/offers.css'
 
 class Offers extends Component {
     state = {

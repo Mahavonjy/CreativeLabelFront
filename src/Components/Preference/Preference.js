@@ -74,7 +74,6 @@ function Preference() {
 
     return (
         <div className="MusicChoiceTitle">
-            <ToastContainer/>
             <h1>Quelle genre de musique aimiez vous ?</h1>
             <button className="send-genre" onClick={() => sendUserGenreToApi()}>Valider</button>
             <div className="row-genre pb-lg-5">

@@ -82,7 +82,6 @@ function Cart(props) {
 
     return (
         <div className="Base">
-            <ToastContainer/>
             <div className="row no-gutters">
                 <div className="col-lg-6 no-b p-lg-3 m-t-10 ">
                     <div className="card-header dark-grey darken-1 text-white">

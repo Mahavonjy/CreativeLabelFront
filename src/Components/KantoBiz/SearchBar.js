@@ -105,7 +105,6 @@ function SearchBar(props) {
 
     return (
         <div className="Base search-bar relative p-b-40 p-t-10">
-            <ToastContainer/>
             {/* Input Search */}
             <h3 className="text-center text-red">Trouvez la meilleur prestation pour votre evenement</h3><br/>
             <div className="search-row row justify-content-center ml-2 mr-2">

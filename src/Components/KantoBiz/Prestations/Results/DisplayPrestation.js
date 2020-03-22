@@ -108,7 +108,6 @@ function DisplayPrestation(props) {
     return (
         <div className="Base pt-5 p-b-100 zIndex-1">
             <ReactTooltip/>
-            <ToastContainer/>
             <ReactTooltip className="special-color-dark" id='refund' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Details des rembouresement </h5><br/>
                 <h6 className="text-center text-info"> Rembouresement flexible</h6>
