@@ -94,7 +94,7 @@ function DisplayPrestation(props) {
     useEffect(() => {
 
         axios.post( "api/reservation/check_total_price", {price: service_to_show.price}, {headers: props.headers}).then((resp) => {
-            console.log(resp.data), resp.data["tva"];
+            console.log(resp.data, resp.data["tva"]);
             setTva(resp.data["tva"]);
             setHtPrice(resp.data["ht_price"]);
             setIslAmount(resp.data["isl_amount"]);
