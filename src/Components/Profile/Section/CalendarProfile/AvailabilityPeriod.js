@@ -80,10 +80,10 @@ function AvailabilityPeriod(props) {
 
         if (selectedOption !== "all" && selectedOption !== null)
             addOneNewSpecialDate(start, props_options, addAllUserOptions, selectedOption).then(() => null);
-        else addAllNewSpecialDateTo(start, props_options, addAllUserOptions);
+        else if (selectedOption !== null) addAllNewSpecialDateTo(start, props_options, addAllUserOptions);
         if (selectedPrestation !== "all" && selectedPrestation !== null)
             addOneNewSpecialDate(start, prestations, addAllUserPrestation, selectedPrestation).then(() => null);
-        else addAllNewSpecialDateTo(start, prestations, addAllUserPrestation);
+        else if (selectedPrestation !== null) addAllNewSpecialDateTo(start, prestations, addAllUserPrestation);
     };
 
     const checkModification = () => {
@@ -139,6 +139,7 @@ function AvailabilityPeriod(props) {
             let selectedPrestationToUpdate = {...prestations[selectedPrestation]};
             let id = selectedPrestationToUpdate["id"];
             selectedPrestationToUpdate = deleteInObject(selectedPrestationToUpdate);
+            console.log(selectedPrestationToUpdate);
             api_call_update.push(
                 axios.put('api/artist_services/update/' + id, objectToFormData(selectedPrestationToUpdate), {headers: props.parentProps.headers}).then((resp) => {
                     generateVariableAllOptionUpdated(resp.data, selectedPrestation, prestations, addAllUserPrestation)
@@ -186,6 +187,7 @@ function AvailabilityPeriod(props) {
         list_of_options.push(
             <option key={props_options.length} value="all">Tout (appliquer à toutes les options)</option>);
 
+        console.log(prestations[0]);
         setPrestationLists(list_of_prestations);
         setOptionLists(list_of_options);
 
