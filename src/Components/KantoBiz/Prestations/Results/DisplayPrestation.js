@@ -45,7 +45,7 @@ function DisplayPrestation(props) {
     const [rating, setRating] = useState(1);
 
     const validReservation = () => {
-        if (!profile_info.name)
+        if (!profile_info)
             document.getElementById("LoginRequire").click();
         else {
             let new_date = formatDate(event_date);
@@ -103,7 +103,7 @@ function DisplayPrestation(props) {
         return () => {
             isMounted.current = true
         };
-    }, [service_to_show]);
+    }, [service_to_show, profile_info]);
 
     return (
         <div className="Base pt-5 p-b-100 zIndex-1">
@@ -205,9 +205,7 @@ function DisplayPrestation(props) {
                                                             *&nbsp;<i className="icon icon-info"
                                                                       data-tip="Indiquer la date et l'heure de l'évènement"/>
                                                         </div>
-                                                        <DatePicker selected={event_date}
-                                                                    onChange={(date) => ChangeDate(date, setEventDate, dispatch, changeDateToSearch)}
-                                                                    className="form-control"/>
+                                                        <input type="date" className="form-control" onChange={(date) => ChangeDate(date, setEventDate, dispatch, changeDateToSearch)}/>
                                                     </div>
                                                 </div>
                                             </div>

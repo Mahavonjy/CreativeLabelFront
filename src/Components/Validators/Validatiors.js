@@ -146,8 +146,9 @@ export const allRegex = {
 };
 
 export const RegisterValidation = (password, confirm_password) => {
-    if (password.length < 8)
-        return {"error": true, message: "mot de passe trop court"};
+    const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.%^(;'\"\|`~,)?/!@#$&*]).{8,}$");
+    if (!re.test(password))
+        return {"error": true, message: "Votre Mot de passe devrait contenir au moins un Majuscule, Minuscule, Chiffre, Caractère est au moins 8"};
     if (password !== confirm_password)
         return {"error": true, message: "mot de passe different"};
     return {"error": false}

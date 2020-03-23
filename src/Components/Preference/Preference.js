@@ -49,6 +49,7 @@ function Preference() {
                 if (service_to_show) {
                     history.push("/show-service")
                 } else history.push("/Profile");
+                Home.beforeDataLoad().then(() => null);
             }).catch(error => {
                 toast.error(error.response.data);
             })

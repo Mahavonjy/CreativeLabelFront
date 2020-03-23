@@ -257,10 +257,11 @@ export const checkValueIfExistInArray = (val, array_) => {
 };
 
 export const ChangeDate = (date, setStartDate, dispatch, func) => {
-    if (new Date() < date) {
-        setStartDate(date);
+    let new_date = new Date(date.target.value);
+    if (new Date() < new_date) {
+        setStartDate(new_date);
         if (dispatch && func)
-            dispatch(func(date))
+            dispatch(func(new_date))
     }
 };
 

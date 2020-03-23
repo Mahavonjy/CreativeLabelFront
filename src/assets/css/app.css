@@ -29,6 +29,7 @@
     --font-family-sans-serif:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     --font-family-monospace:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
 }
+
 *,::after,::before{
     box-sizing:border-box
 }
@@ -22824,4 +22825,9 @@ select::-ms-expand {
 .special-date-picker {
     height: 38px!important;
     border-radius: 5px;
+}
+
+.required .control-label:after {
+    content:"*";
+    color:red;
 }

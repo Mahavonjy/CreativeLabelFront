@@ -42,13 +42,12 @@ function SearchBar(props) {
     const [startDate, setStartDate] = useState(date_to_search);
 
     const Search = async () => {
-        await dispatch(addSearchLoading(true));
-        await dispatch(changeInitialized(false));
         let if_errors = validatorSearch(state_thematics, startDate, country);
         if (if_errors['error']) {
-            await dispatch(addSearchLoading(false));
             toast.error(if_errors['message'])
         } else {
+            await dispatch(addSearchLoading(true));
+            await dispatch(changeInitialized(false));
             await axios.post("api/service_search/moment", {
                 "country": country,
                 "city": city,
@@ -104,11 +103,12 @@ function SearchBar(props) {
     }, [city, country, listOfCity, service_to_show]);
 
     return (
-        <div className="Base search-bar relative p-b-40 p-t-10">
+        <div className="Base search-bar relative p-b-40">
             {/* Input Search */}
             <h3 className="text-center text-red">Trouvez la meilleur prestation pour votre evenement</h3><br/>
             <div className="search-row row justify-content-center ml-2 mr-2">
-                <div className=" col-lg-2 d-inline-block text-center">
+                <div className="col-lg-2 d-inline-block text-center required">
+                    <label className="control-label">Pays</label>
                     <CreatableSelect placeholder="Choisir un pays"
                                      onChange={obj => {
                                          new Promise(resolve => {
@@ -120,12 +120,14 @@ function SearchBar(props) {
                                      options={countryAllowed}/>
                 </div>
                 <div className=" col-lg-2 d-inline-block text-center">
+                    <label className="control-label">Villes</label>
                     <CreatableSelect placeholder="Choisir une ville"
                                      onChange={obj => onChangeListWithValueLabel(setCity, obj, dispatch, changeCityToSearch)}
                                      options={listOfCity}/>
                 </div>
 
-                <div className=" col-lg-3 d-inline-block text-center">
+                <div className=" col-lg-3 d-inline-block text-center required">
+                    <label className="control-label">Thematics</label>
                     <Select isMulti options={artist_types} placeholder="Choisir le/les thematics" onChange={obj => {
                         let tmp = [];
                         for (let row in obj) tmp.push(obj[row]["value"]);
@@ -135,19 +137,17 @@ function SearchBar(props) {
                 </div>
 
                 <div className=" col-lg-3 d-inline-block text-center">
+                    <label className="control-label">Evenements</label>
                     <Select options={listOfEvents} placeholder="Choisir le/les evenements"
                             onChange={obj => {onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
                     }}/>
                 </div>
 
-                <div className=" col-lg-2 d-inline-block text-center">
+                <div className="col-lg-2 d-inline-block required">
                     <ReactTooltip/>
-                    <DatePicker selected={startDate} className="special-date-picker text-center"
-                                onChange={(e) => ChangeDate(e, setStartDate)}/>
-                    <label className="input-group-addon bg-transparent" data-tip="La date de votre Evenement">
-                        <i className="icon-calendar text-center text-red"/>
-                        <span className="ml-2 text-white"><i className="icon icon-info"/></span>
-                    </label>
+                    <label className="control-label">Date de votre evenement</label>
+                    <input type="date" className="special-date-picker text-center" onChange={(e) => ChangeDate(e, setStartDate)}/>
+                    {/*<i className="icon-calendar text-center ml-2 s-20 text-red" data-tip="Ceci est votre date d'Evenement"/>*/}
                 </div>
 
                 <div className="col-md-10">
