@@ -19,6 +19,7 @@ function EditProfile (props) {
 
     const isMounted = useRef(false);
     const [photo, setPhoto] = useState("");
+    const [cover_photo, setCoverPhoto] = useState("");
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(profile_info.name);
     const [email, setEmail] = useState(profile_info.email);
@@ -55,6 +56,7 @@ function EditProfile (props) {
         bodyFormData.append('city', city);
         bodyFormData.append('description', description);
         bodyFormData.append('photo', photo);
+        bodyFormData.append('cover_photo', cover_photo);
         bodyFormData.append('phone', phone ? phone: 0);
         bodyFormData.append('birth', birth ? birth: "1998-03-12");
 
@@ -139,6 +141,12 @@ function EditProfile (props) {
                             <div className="input-group-prepend center" style={{width: "90%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de profil</div>
                                 <input onChange={(e) => changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
+                            </div>
+                        </div>
+                        <div className="custom-float">
+                            <div className="input-group-prepend center" style={{width: "90%"}}>
+                                <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de couverture</div>
+                                <input onChange={(e) => changeFileFields(setCoverPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
                             </div>
                         </div>
                         <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={(e) => handleSubmitUpdateProfile(e)}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>

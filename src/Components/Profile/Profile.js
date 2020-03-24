@@ -138,7 +138,7 @@ function Profile(props) {
         return () => {
             isMounted.current = true
         };
-    }, [props_prestation]);
+    }, [props_prestation, profile_info]);
 
     return (
         <div className="Base p-b-100">
@@ -155,7 +155,7 @@ function Profile(props) {
                     <div className="row no-gutters">
                         <div className="col-md-4 b-r">
                             <div className="dropdown" style={{position: "absolute", paddingTop: "10px"}}>
-                                <button className="btn btn-outline-danger btn-sm pt-3 pb-3" type="button"
+                                <button className="btn btn-outline-danger btn-sm pt-3 pb-3 zIndex99" type="button"
                                         data-tip="Plus d'options"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
@@ -182,7 +182,7 @@ function Profile(props) {
                             </div>
 
                             <div className="text-center p-5 mt-5" style={{
-                                background: "url(" + PhotoTest + ")",
+                                background: "url(" + (profile_info["cover_photo"] ? profile_info["cover_photo"] : PhotoTest) + ")",
                                 backgroundSize: "80%",
                                 opacity: 0.5,
                                 backgroundRepeat: "no-repeat",
