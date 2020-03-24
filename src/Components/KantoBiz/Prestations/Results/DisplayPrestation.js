@@ -48,10 +48,8 @@ function DisplayPrestation(props) {
         if (!profile_info)
             document.getElementById("LoginRequire").click();
         else {
-            let new_date = formatDate(event_date);
-            let now = formatDate(new Date());
             if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
-            else if (new_date === now) toast.error("La date d'aujourd'hui n'est pas valide");
+            else if (formatDate(event_date) === formatDate(new Date())) toast.error("Veuillez choisir une autre date");
             else setReservation(true)
         }
     };

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import ReactTooltip from 'react-tooltip';
@@ -11,9 +12,11 @@ import * as BeatsProps from "../../../FunctionTools/FunctionProps";
 
 function Beats(props) {
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
+    const auth = useSelector(state => state.session.authenticated);
     const user_credentials = useSelector(state => state.Home.user_credentials);
     const beats = useSelector(state => state.beats.beats);
     const top_beatBaker = useSelector(state => state.beats.top_beatmaker);
@@ -93,7 +96,7 @@ function Beats(props) {
         <div>
             <ReactTooltip/>
             {/* Headers */}
-            {CreateFields.CreativeHeaders("Creative BeatMaking", 'Des créations orginales qui font la différence <br/> ' + 'Pour les professionnels de la musique (artistes,producteurs, labels...)')}
+            {CreateFields.CreativeHeaders("Creative BeatMaking", 'Des créations orginales qui font la différence <br/> ' + 'Pour les professionnels de la musique (artistes,producteurs, labels...)', null, null, null, null, auth, history)}
             {/* End Headers */}
             <div className="Base">
                 {/*PlayList & Events*/}

@@ -5,6 +5,7 @@ import Conf from "../../../Config/tsconfig";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import logo from "../../../images/Logo/ISL_logo.png";
+import {changeFields, changeFileFields} from "../../FunctionTools/Tools";
 import * as Tools from "../../FunctionTools/Tools";
 import { profileInitialisationInfo } from "../../FunctionTools/FunctionProps";
 import { smallSpinner, generateInput } from "../../FunctionTools/CreateFields";
@@ -14,6 +15,7 @@ function EditProfile (props) {
     const dispatch = useDispatch();
     const profile_info = useSelector(state => state.profile.profile_info);
     const user_credentials = useSelector(state => state.Home.user_credentials);
+    const country_allowed = useSelector(state => state.Others.country_allowed);
 
     const isMounted = useRef(false);
     const [photo, setPhoto] = useState("");
@@ -27,7 +29,17 @@ function EditProfile (props) {
     const [country, setCountry] = useState(profile_info.country);
     const [region, setRegion] = useState(profile_info.region);
     const [city, setCity] = useState(profile_info.city);
+    const [listOfCity, setListOfCity] = useState([]);
     const [description, setDescription] = useState(profile_info.description);
+
+    const changeCity = async (e) => {
+        setCity("");
+        let value = e.target.value;
+        let tmp = [];
+        await Promise.all(country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"].map(element => {
+            tmp.push(element)
+        })).then(() => setListOfCity(tmp));
+    };
 
     const handleSubmitUpdateProfile = (e) => {
         let id = e.target.id;
@@ -73,7 +85,7 @@ function EditProfile (props) {
         return () => {
             isMounted.current = true
         };
-    }, []);
+    }, [listOfCity, city]);
 
     return (
         <Modal visible={true} width="650" height="auto" effect="fadeInUp">
@@ -99,8 +111,8 @@ function EditProfile (props) {
                             {generateInput("adresse", address, setAddress, "addresse", "text", "icon-address-book")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-map-location"/>&nbsp;Pays</div>
-                                <select className="selectpicker form-control" id="country" name="country" value={country} onChange={(e) => Tools.changeFields(setCountry, e)}>
-                                    <option value="Madagascar">Madagascar</option>
+                                <select className="selectpicker form-control" id="country" name="country" value={country} onChange={(e) => changeCity(e)}>
+                                    {country_allowed.map((val, index) => <option key={index} value={val.name}>{val.name}</option>)}
                                 </select>
                             </div>
                         </div>
@@ -108,11 +120,8 @@ function EditProfile (props) {
                             {generateInput("Télephone", phone, setPhone, "phone", "number", "icon-smartphone-1")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-street-view"/>&nbsp;Ville</div>
-                                <select className="selectpicker form-control" id="city" name="city" value={city} onChange={(e) => Tools.changeFields(setCity, e)}>
-                                    <option value="">Veuillez choisir une ville</option>
-                                    <option value="Manakara">Manakara</option>
-                                    <option value="Tamatave">Tamatave</option>
-                                    <option value="Toliara">Toliara</option>
+                                <select className="selectpicker form-control" id="city" name="city" value={city} onChange={(e) => changeFields(setCity, e)}>
+                                    {listOfCity.map((val, index) => <option key={index} value={val}>{val}</option>)}
                                 </select>
                             </div>
                         </div>
@@ -120,7 +129,7 @@ function EditProfile (props) {
                             {generateInput("Description", description, setDescription, "description", "text", "icon-info-circle")}
                             <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-venus-double"/>&nbsp;Sexe</div>
-                                <select className="selectpicker form-control" id="gender" name="gender" value={gender} onChange={(e) => Tools.changeFields(setGender, e)}>
+                                <select className="selectpicker form-control" id="gender" name="gender" value={gender} onChange={(e) => changeFields(setGender, e)}>
                                     <option value="0">Femelle</option>
                                     <option value="1">male</option>
                                 </select>
@@ -129,7 +138,7 @@ function EditProfile (props) {
                         <div className="custom-float">
                             <div className="input-group-prepend center" style={{width: "90%"}}>
                                 <div className="input-group-text black-text bolder"><i className="icon-picture-o"/>&nbsp;Photo de profil</div>
-                                <input onChange={(e) => Tools.changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
+                                <input onChange={(e) => changeFileFields(setPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
                             </div>
                         </div>
                         <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={(e) => handleSubmitUpdateProfile(e)}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>

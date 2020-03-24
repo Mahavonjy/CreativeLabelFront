@@ -21,6 +21,7 @@ import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation
 import SearchBar from "../KantoBiz/SearchBar";
 import IslPlayer from "../Players/Players";
 import Preference from "../Preference/Preference";
+import Home from "../Home/Home";
 import Profile from "../Profile/Profile";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
@@ -295,7 +296,7 @@ export const DisplayArtist = (artist_info, user_credentials) => {
     )
 };
 
-export const CreativeHeaders = (Title, Description, headers, setStateResult, next, displayOne) => {
+export const CreativeHeaders = (Title, Description, headers, setStateResult, next, displayOne, auth, history) => {
     return (
         <div>
             <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
@@ -309,13 +310,26 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                     <div className="carousel-item">
                         <img className="d-block w-100" src={TestImageTwo} alt=""/>
                     </div>
+                    {!auth &&
+                    <div className="absolute zIndex99" style={{right: 10}}>
+                        <div className="row justify-content-center">
+                            <button className="btn btn-outline-danger m-2"
+                                    onClick={() => document.getElementById("LoginRequire").click()}>S'identifier
+                            </button>
+                            <button className="btn btn-outline-danger m-2" onClick={async () => {
+                                history.push("/register");
+                                Home.beforeDataLoad().then(() => null);
+                            }}>Créer votre compte ISL Creative
+                            </button>
+                        </div>
+                    </div>}
                     <div
                         className={Title === "Creative KantoBiz" ? "has-bottom-gradient d-none d-sm-block" : "has-bottom-gradient"}>
                         <div className="home-menu pl-md-5">
                             <div className="row">
                                 <div className="col-12 col-lg-10 animated">
                                     <div className="xv-slider-content clearfix color-white">
-                                        <h1 className="s-64 mt-5 font-weight-lighter"> {Title} </h1>
+                                        <h1 className="s-36 mt-5 pt-5 font-weight-lighter"> {Title} </h1>
                                         <p className="s-24 font-weight-lighter"
                                            dangerouslySetInnerHTML={{__html: Description}}/>
                                     </div>
@@ -392,8 +406,8 @@ export const SideBars = (state_cart, log_name, logout_class, location, history, 
                 </li>
 
                 {/* LOGOUT OR LOGIN */}
-                <li style={logout_class === "icon icon-login s-24 mr-5" ? {margin: "50px 0 20px 8px"} : {margin: "50px 0 20px 12px"}}
-                    data-tip={logout_class === "icon icon-login s-24 mr-5" ? "Se Connecter" : " Se déconnecter"}
+                <li style={logout_class === "icon icon-users-1 s-24 mr-5 text-red" ? {margin: "50px 0 20px 8px"} : {margin: "50px 0 20px 12px"}}
+                    data-tip={logout_class === "icon icon-users-1 s-24 mr-5 text-red" ? "Se Connecter" : " Se déconnecter"}
                     onClick={() => logout()}>
                     <i className={logout_class}/> <span>{log_name}</span>
                 </li>

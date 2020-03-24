@@ -101,28 +101,34 @@ function BankingDetails(props) {
                         <div className="card-body text-center">
                             <form className="form-material">
                                 {/* Input */}
-                                <div className="body">
-                                    <div className="form-group form-float">
-                                        <div className="form-line">
-                                            <input type="text" id="name" className="form-control"
-                                                   placeholder="Nom du propriétaire" name="name"
+                                <div className="body ">
+
+                                    <div className="form-group d-flex flex-wrap required">
+                                        <label className="col-sm-4 control-label">Nom</label>
+                                        <div className="col-sm-8 center">
+                                            <input type="text" id="name" className="form-control text-center"
+                                                   placeholder="le nom du propriétaire du compte en banque" name="name"
                                                    value={name || ''}
                                                    onChange={(e) => changeFields(setName, e, profileInitialisationBanking, dispatch, "name", banking)}/>
                                         </div>
                                     </div>
-                                    <div className="form-group form-float">
-                                        <div className="form-line">
-                                            <input type="text" id="lastname" className="form-control"
-                                                   placeholder="Prénom du propriétaire" name="lastname"
+
+                                    <div className="form-group d-flex flex-wrap">
+                                        <label className="col-sm-4 control-label">Prénom</label>
+                                        <div className="col-sm-8 center">
+                                            <input type="text" id="lastname" className="form-control text-center"
+                                                   placeholder="le prénom du propriétaire du compte en banque" name="lastname"
                                                    value={lastname}
                                                    onChange={(e) => changeFields(setLastname, e, profileInitialisationBanking, dispatch, "lastname", banking)}
                                                    required/>
                                         </div>
                                     </div>
-                                    <div className="form-group form-float">
-                                        <div className="form-line">
-                                            <input type="email" id="p-email" className="form-control"
-                                                   placeholder="Email du propriétaire"
+
+                                    <div className="form-group d-flex flex-wrap required">
+                                        <label className="col-sm-4 control-label">Email</label>
+                                        <div className="col-sm-8 center">
+                                            <input type="email" id="p-email" className="form-control text-center"
+                                                   placeholder="l'email du proprietaire du compte en banque"
                                                    name="email" value={email || ''}
                                                    onChange={(e) => changeFields(setEmail, e, profileInitialisationBanking, dispatch, "email", banking)}
                                                    required/>
@@ -139,10 +145,12 @@ function BankingDetails(props) {
                             <form className="form-material">
                                 {/* Input */}
                                 <div className="body">
-                                    <div className="form-group form-float">
-                                        <div className="form-line">
-                                            <input id="country" className="form-control"
-                                                   placeholder="Pays du propriétaire" list="country-regex"
+
+                                    <div className="form-group d-flex flex-wrap required">
+                                        <label className="col-sm-4 control-label">Pays</label>
+                                        <div className="col-sm-8 center">
+                                            <input id="country" className="form-control text-center"
+                                                   placeholder="Veuillez choisir ici le pays ou reside le compte en banque" list="country-regex"
                                                    name="country" value={country || ''}
                                                    onChange={(e) => changeFields(setCountry, e, profileInitialisationBanking, dispatch, "country", banking)}/>
                                             <datalist id="country-regex">
@@ -151,14 +159,17 @@ function BankingDetails(props) {
                                             </datalist>
                                         </div>
                                     </div>
-                                    <div className="form-group form-float">
-                                        <div className="form-line">
-                                            <input type="number" id="phone" className="form-control"
-                                                   placeholder="Téléphone du propriétaire" name="phone"
+
+                                    <div className="form-group d-flex flex-wrap">
+                                        <label className="col-sm-4 control-label">Téléphone</label>
+                                        <div className="col-sm-8 center">
+                                            <input type="number" id="phone" className="form-control text-center"
+                                                   placeholder="le téléphone du proprietaire du compte en banque" name="phone"
                                                    value={phone || ''}
                                                    onChange={(e) => changeFields(setPhone, e, profileInitialisationBanking, dispatch, "phone", banking)}/>
                                         </div>
                                     </div>
+
                                 </div>
                                 {/* #END# Input */}
                             </form>
@@ -184,23 +195,23 @@ function BankingDetails(props) {
                                 {/* Input */}
                                 <div className="body">
 
-                                    <div className="form-group row">
-                                        <label className="col-sm-4 col-form-label"><i
+                                    <div className="form-group d-flex flex-wrap required">
+                                        <label className="col-sm-4 control-label"><i
                                             className="icon icon-info text-red" data-tip="A remplir"/>&nbsp;IBAN</label>
-                                        <div className="col-sm-8">
+                                        <div className="col-sm-8 center">
                                             <input type="text" id="iban" className="form-control"
-                                                   placeholder="0000 0000 0000 0000" name="iban"
+                                                   placeholder="..........................................." name="iban"
                                                    value={iban || ''}
                                                    onChange={(e) => changeFields(setIban, e, profileInitialisationBanking, dispatch, "iban", banking)}
                                                    required/>
                                         </div>
                                     </div>
-                                    <div className="form-group row">
-                                        <label className="col-sm-4 col-form-label"><i
+                                    <div className="form-group d-flex flex-wrap required">
+                                        <label className="col-sm-4 control-label"><i
                                             className="icon icon-info text-red" data-tip="A remplir"/>&nbsp;SWIFT / BIC</label>
                                         <div className="col-sm-8">
                                             <input type="text" id="swift_bic" className="form-control"
-                                                   placeholder="0000 0000 0000 0000" name="swift_bic"
+                                                   placeholder="..........................................." name="swift_bic"
                                                    value={swift_bic || ''}
                                                    onChange={(e) => changeFields(setSwiftBic, e, profileInitialisationBanking, dispatch, "swift", banking)}
                                                    required/>

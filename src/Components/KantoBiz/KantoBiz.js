@@ -13,6 +13,7 @@ function KantoBiz(props) {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.session.authenticated);
     const results = useSelector(state => state.KantobizSearch.results);
     const ResultsPage = useSelector(state => state.KantobizSearch.ResultsPage);
     const loading = useSelector(state => state.KantobizSearch.loading);
@@ -79,7 +80,7 @@ function KantoBiz(props) {
         <div>
             <ReactTooltip/>
             {/* Headers */}
-            {CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)", props.headers, setStateResult, next, displayOne)}
+            {CreativeHeaders("Creative KantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)", props.headers, setStateResult, next, displayOne, auth, history)}
             {/* End Headers */}
 
             {/* This is a main of for show different component */}

@@ -67,7 +67,6 @@ function Home() {
     const beats = useSelector(state => state.beats.beats);
     const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
     const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
-    const auth = useSelector(state => state.session.authenticated);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -79,7 +78,7 @@ function Home() {
     const [profile_checked, setProfileChecked] = useState('');
     const [user_data, setUserData] = useState('');
     const [state_cart_length, setStateCartLength] = useState(0);
-    const [logout_class, setLogoutClass] = useState("icon icon-login s-24 mr-5");
+    const [logout_class, setLogoutClass] = useState("icon icon-users-1 s-24 mr-5 text-red");
     const [log_name, setLogName] = useState("Se Connecter");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
 
@@ -230,7 +229,7 @@ function Home() {
     const Online = () => {
         try {
             setLogName("Se déconnecter");
-            setLogoutClass("icon icon-exit-2 s-24 mr-5");
+            setLogoutClass("icon icon-shutdown s-24 mr-5 text-red");
             let routeParsed = href[href.length - 1];
             if (routeParsed === 'register') {
                 history.goBack();
@@ -346,19 +345,6 @@ function Home() {
         return (
             <div>
                 <ToastContainer style={{zIndex: 999}}/>
-                {!auth &&
-                <div className="absolute zIndex99 m-2" style={{right: 50}}>
-                    <div className="row justify-content-center">
-                        <button className="btn btn-outline-danger m-2"
-                                onClick={() => document.getElementById("LoginRequire").click()}>S'identifier
-                        </button>
-                        <button className="btn btn-outline-danger m-2" onClick={async () => {
-                            history.push("/register");
-                            Home.beforeDataLoad().then(() => null);
-                        }}>Créer votre compte ISL Creative
-                        </button>
-                    </div>
-                </div>}
                 {/* Popup Login */}
                 {PopupFields.Login()}
                 {/* End of Popup */}

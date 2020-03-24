@@ -18990,23 +18990,27 @@ a.btn-fab{
 .paper-nav-toggle i{
     position:relative;
     display:inline-block;
-    width:25px;
-    height:2px;
+    width:40px;
+    height:4px;
     color:#9ca8b0;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
     font:bold 14px/.4 Helvetica;
     text-transform:uppercase;
     text-indent:-55px;
-    background:#9ca8b0;
+    background:#ED1C24!important;
     transition:all .2s ease-out
 }
 .paper-nav-toggle i::after,.paper-nav-toggle i::before{
     content:'';
-    width:25px;
-    height:2px;
+    width:30px;
+    height:4px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
     background:#9ca8b0;
     position:absolute;
-    left:0;
-    transition:all .2s ease-out
+    left:-5px;
+    transition:all .2s ease-out;
 }
 .paper-nav-toggle.paper-nav-white>i{
     color:#fff;

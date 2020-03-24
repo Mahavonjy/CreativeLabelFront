@@ -133,10 +133,12 @@ function Results(props) {
             </div>
             <div className="col-lg-9 pt-2">
                 <h4 className="text-red text-center">Résultat(s) de votre recherche</h4>
+
                 {!loading ?
                     <div className="row justify-content-center">
-                        {pageOfItems.map(item => <div key={item.id}>{item.name}</div>)}
+                        {thisComponentResults.length !== 0 && pageOfItems.map(item => <div key={item.id}>{item.name}</div>)}
                     </div> : <LoadingSearch/>}
+
                 {!loading &&
                 <div className="text-center">
                     {thisComponentResults.length !== 0 ?

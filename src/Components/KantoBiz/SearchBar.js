@@ -55,7 +55,7 @@ function SearchBar(props) {
                 "event": state_events,
                 "thematics": state_thematics,
             }, {headers: props.headers}).then(async (resp) => {
-                let data = resp.data;
+                let data = resp.data || [];
                 if (data.length === 0) toast.warn("Pas de presations");
                 await props.setStateResult(generatePagination(data, props.displayOne));
                 await dispatch(addKantoBizSearchResults(data));

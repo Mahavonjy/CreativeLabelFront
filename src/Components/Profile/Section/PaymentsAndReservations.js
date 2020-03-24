@@ -118,12 +118,14 @@ function PaymentsAndReservations(props) {
                                 {demand && <button className="btn btn-outline-success text-center mt-2" onClick={() => accepted_reservation_demand(value.id)}>Accepter</button>}
                             </td> :
                             <td className="text-center border-bottom-0 border-right-0">
-                                <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
-                                    setVisible(true);
-                                    if (role !== "professional_auditor") setFunc("canceled_reservation_demand");
-                                    else setFunc("canceled_reservation_booked");
-                                    setIdOfReservation(value.id);
-                                }} disabled={!(value.status === "accepted")}>Annuler</button>
+                                {(value.status === "accepted") ?
+                                    <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
+                                        setVisible(true);
+                                        if (role !== "professional_auditor") setFunc("canceled_reservation_demand");
+                                        else setFunc("canceled_reservation_booked");
+                                        setIdOfReservation(value.id);
+                                    }}>Annuler</button>
+                                    : <i className="icon icon-multiply text-red s-24 mt-2"/>}
                             </td>
                         }
                     </tr>
