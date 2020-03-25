@@ -309,7 +309,7 @@ function Home() {
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
-            } else axios.delete("api/users/logout", {headers: headers}).then(() => null);
+            } else await axios.delete("api/users/logout", {headers: headers}).then(() => null);
         } catch (e) {
             //
         } finally {
