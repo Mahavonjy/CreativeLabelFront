@@ -180,11 +180,7 @@ function Home() {
                 history.push("/beats");
                 setLoading(false);
             } else setLoading(false);
-        } else {
-            setLoading(false);
-            if (firstRouteParsing === "beats#LoginRequire")
-                document.getElementsByClassName("LoginRequire")[0].click();
-        }
+        } else setLoading(false);
     };
 
     const NotOnline = () => {
@@ -313,23 +309,21 @@ function Home() {
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
-            } else {
-                axios.delete("api/users/logout", {headers: headers}).then(() => null);
-                await sessionService.deleteSession().then(() => null);
-                await sessionService.deleteUser().then(() => null);
-                window.location.replace('/beats');
-            }
+            } else axios.delete("api/users/logout", {headers: headers}).then(() => null);
         } catch (e) {
-            await sessionService.deleteSession().then(() => null);
-            await sessionService.deleteUser().then(() => null);
-            window.location.reload()
+            //
+        } finally {
+            await sessionService.deleteSession().then(async () => {
+                await sessionService.deleteUser().then(async () => {
+                    Home.beforeDataLoad().then(() => null);
+                })
+            });
         }
     };
 
     Home.checkOpenSideBar = openSideBar;
 
     useEffect(() => {
-
         Home.beforeDataLoad().then(() => null);
         document.addEventListener('mousedown', (e) => checkOnClickAwaySideBar(e));
 

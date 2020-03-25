@@ -30,12 +30,13 @@ function EditProfile (props) {
     const [country, setCountry] = useState(profile_info.country);
     const [region, setRegion] = useState(profile_info.region);
     const [city, setCity] = useState(profile_info.city);
-    const [listOfCity, setListOfCity] = useState([]);
+    const [listOfCity, setListOfCity] = useState(country_allowed[0]["value"]);
     const [description, setDescription] = useState(profile_info.description);
 
     const changeCity = async (e) => {
-        setCity("");
         let value = e.target.value;
+        setCity("");
+        setCountry(value);
         let tmp = [];
         await Promise.all(country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"].map(element => {
             tmp.push(element)
@@ -102,8 +103,8 @@ function EditProfile (props) {
                     <h4 className="text-green text-monospace">Modifier mon profil</h4>
                     <div className="body">
                         <div className="custom-float">
-                            {generateInput("nom", name, setName, "name", "text", "icon-user")}
-                            {generateInput("email", email, setEmail, "email", "text", "icon-envelope")}
+                            {generateInput("nom", name, setName, "name", "text", "icon-user", null, false, true)}
+                            {generateInput("email", email, setEmail, "email", "text", "icon-envelope",null, false, true)}
                         </div>
                         <div className="custom-float">
                             {generateInput("région", region, setRegion, "region", "text", "icon-location-arrow")}

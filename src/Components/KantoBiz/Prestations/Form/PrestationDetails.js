@@ -7,7 +7,7 @@ import {
     addEventSelected, addNumberOfArtist,
     addPreparationTime, addPriceOfService,
     addServiceTime, addUnitTimeOfPreparation,
-    addUnitTimeOfService
+    addUnitTimeOfService, profileInitialisationBanking
 } from "../../../FunctionTools/FunctionProps";
 
 function PrestationDetails(props) {
@@ -95,6 +95,18 @@ function PrestationDetails(props) {
             </div>
             <div className="row justify-content-center">
                 <div className="form-group pt-5">
+
+                    {/*<div className="form-group d-flex flex-wrap required">*/}
+                    {/*    <label className="col-sm-4 control-label">Prix de la prestation</label>*/}
+                    {/*    <div className="col-sm-8 center">*/}
+                    {/*        <span className="text-info pt-2" data-tip="Prix HT de la prestation ">?&nbsp;</span>*/}
+                    {/*        <input value={price_of_service} id="price_of_service" name="price_of_service"*/}
+                    {/*               onChange={(e) => changeFields(setPriceOfService, e, addPriceOfService, dispatch)}*/}
+                    {/*               className="form-control" placeholder="Prix " type="number" style={{width: "100%"}} required/>*/}
+                    {/*        <input className="custom-checkbox text-center text-black align-middle bg-light" placeholder="Euros" style={{width: 300}} disabled/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
                     <div className="form-group row">
                         <label className="col-sm-12 col-form-label text-center pb-3 text-light">Prix de la prestation</label>
                         <div className="col-sm-12">

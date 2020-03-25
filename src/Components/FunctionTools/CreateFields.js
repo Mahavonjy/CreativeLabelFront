@@ -300,15 +300,15 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
     return (
         <div>
             <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
-                <div className="carousel-inner" style={{height: 470}}>
+                <div className="carousel-inner" style={{height: "auto"}}>
                     <div className="carousel-item active">
-                        <img className="d-block w-100" src={TestImageThree} alt=""/>
+                        <img className="d-block w-100" height="470" src={TestImageThree} alt=""/>
                     </div>
                     <div className="carousel-item">
-                        <img className="d-block w-100" src={TestImageOne} alt=""/>
+                        <img className="d-block w-100" height="470" src={TestImageOne} alt=""/>
                     </div>
                     <div className="carousel-item">
-                        <img className="d-block w-100" src={TestImageTwo} alt=""/>
+                        <img className="d-block w-100" height="470" src={TestImageTwo} alt=""/>
                     </div>
                     {!auth &&
                     <div className="absolute zIndex99" style={{right: 10}}>
@@ -431,12 +431,11 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
                    component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked}
                                                   UserData={user_data}/>}/>
             <Route path="/Profile" exact component={() => {
-                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
+                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? history.goBack() : (
                     <Profile ToPlay={addToPlaylist}/>)
             }}/>
             <Route path="/preference" exact component={() => {
-                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? window.location.replace('/beats#LoginRequire') : (
-                    <Preference/>)
+                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? history.goBack() : (<Preference/>)
             }}/>
             <Route path="/show-service" exact component={() => {
                 if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
@@ -454,10 +453,10 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
     )
 };
 
-export const generateInput = (label, value, setValue, field_, type_, icon, tip, disable) => {
+export const generateInput = (label, value, setValue, field_, type_, icon, tip, disable, required) => {
     return (
         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-            <div className="input-group-text black-text bolder" data-tip={tip}><i className={icon}/>&nbsp;{label}</div>
+            <div className="input-group-text black-text bolder" data-tip={tip}><i className={icon}/>&nbsp;{label}{required && "*"}</div>
             <input value={value} onChange={(e) => changeFields(setValue, e)}
                    id={field_} name={field_} placeholder={field_} className="form-control" type={type_}
                    disabled={disable}/>

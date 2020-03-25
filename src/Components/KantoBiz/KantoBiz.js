@@ -84,7 +84,7 @@ function KantoBiz(props) {
             {/* End Headers */}
 
             {/* This is a main of for show different component */}
-            <div className="Base">
+            <div className="Base mt-5">
                 {/* Navigation Page*/}
 
                 <div className="NextOrPrevPage">

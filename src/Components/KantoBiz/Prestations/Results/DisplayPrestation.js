@@ -1,4 +1,5 @@
 import axios from "axios";
+import dateFormat from 'dateformat';
 import React, {useEffect, useRef, useState} from "react";
 import DatePicker from "react-datepicker"
 import {useDispatch, useSelector} from "react-redux";
@@ -35,7 +36,7 @@ function DisplayPrestation(props) {
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
 
     const isMounted = useRef(false);
-    const [event_date, setEventDate] = useState(date_to_search); // synchroniser avec la recherche après
+    const [event_date, setEventDate] = useState(dateFormat(date_to_search, "yyyy-mm-dd"));
     const [reservation, setReservation] = useState(false);
     const [address, setAddress] = useState(reservation_address);
     const [tva, setTva] = useState(0);
@@ -101,7 +102,7 @@ function DisplayPrestation(props) {
         return () => {
             isMounted.current = true
         };
-    }, [service_to_show, profile_info]);
+    }, [service_to_show, profile_info, date_to_search]);
 
     return (
         <div className="Base pt-5 p-b-100 zIndex-1">
@@ -203,7 +204,7 @@ function DisplayPrestation(props) {
                                                             *&nbsp;<i className="icon icon-info"
                                                                       data-tip="Indiquer la date et l'heure de l'évènement"/>
                                                         </div>
-                                                        <input type="date" className="form-control" onChange={(date) => ChangeDate(date, setEventDate, dispatch, changeDateToSearch)}/>
+                                                        <input type="date" value={event_date} className="form-control" onChange={(date) => ChangeDate(date, setEventDate, dispatch, changeDateToSearch)}/>
                                                     </div>
                                                 </div>
                                             </div>

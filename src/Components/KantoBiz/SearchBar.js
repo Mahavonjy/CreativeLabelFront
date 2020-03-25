@@ -10,7 +10,7 @@ import {
     addKantoBizSearchResults,
     addSearchLoading,
     changeCityToSearch,
-    changeCountryToSearch,
+    changeCountryToSearch, changeDateToSearch,
     changeEventsToSearch,
     changeInitialized,
     changeThematicsToSearch
@@ -103,7 +103,7 @@ function SearchBar(props) {
     }, [city, country, listOfCity, service_to_show]);
 
     return (
-        <div className="Base search-bar relative p-b-40">
+        <div className="Base search-bar relative p-b-40 mt-5">
             {/* Input Search */}
             <h3 className="text-center text-red">Trouvez la meilleur prestation pour votre evenement</h3><br/>
             <div className="search-row row justify-content-center ml-2 mr-2">
@@ -125,7 +125,6 @@ function SearchBar(props) {
                                      onChange={obj => onChangeListWithValueLabel(setCity, obj, dispatch, changeCityToSearch)}
                                      options={listOfCity}/>
                 </div>
-
                 <div className=" col-lg-3 d-inline-block text-center required">
                     <label className="control-label">Thematics</label>
                     <Select isMulti options={artist_types} placeholder="Choisir le/les thematics" onChange={obj => {
@@ -135,25 +134,23 @@ function SearchBar(props) {
                         dispatch(changeThematicsToSearch(tmp));
                     }}/>
                 </div>
-
-                <div className=" col-lg-3 d-inline-block text-center">
+                <div className=" col-lg-2 d-inline-block text-center">
                     <label className="control-label">Evenements</label>
                     <Select options={listOfEvents} placeholder="Choisir le/les evenements"
                             onChange={obj => {onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
                     }}/>
                 </div>
-
-                <div className="col-lg-2 d-inline-block required">
+                <div className="col-lg-2 d-inline-block text-center required">
                     <ReactTooltip/>
                     <label className="control-label">Date de votre evenement</label>
-                    <input type="date" className="special-date-picker text-center" onChange={(e) => ChangeDate(e, setStartDate)}/>
+                    <input type="date" className="special-date-picker text-center" onChange={(e) => ChangeDate(e, setStartDate, dispatch, changeDateToSearch)}/>
                     {/*<i className="icon-calendar text-center ml-2 s-20 text-red" data-tip="Ceci est votre date d'Evenement"/>*/}
                 </div>
-
-                <div className="col-md-10">
+                <div className="col-lg-10">
                     <button type="submit" onClick={Search}
-                            className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;<i
-                        className="icon-search-1 text-white"/></button>
+                            className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
+                        <i className="icon-search-1 text-white"/>
+                    </button>
                 </div>
             </div>
             {/* End Search */}

@@ -9,6 +9,7 @@
     "browser-sync": "^2.12.3",
     "chroma-js": "^2.1.0",
     "connected-react-router": "^6.6.1",
+    "dateformat": "^3.0.3",
     "del": "^3.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "fs-extra": "^4.0.1",
