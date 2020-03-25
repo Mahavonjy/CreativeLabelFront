@@ -306,6 +306,7 @@ function Home() {
     };
 
     const logout = async () => {
+        setLoading(true);
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
@@ -316,8 +317,8 @@ function Home() {
             await sessionService.deleteSession().then(async () => {
                 await sessionService.deleteUser().then(async () => {
                     Home.beforeDataLoad().then(() => null);
-                })
-            });
+                }).catch(() => Home.beforeDataLoad().then(() => null))
+            }).catch(() => Home.beforeDataLoad().then(() => null))
         }
     };
 
