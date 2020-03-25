@@ -2,6 +2,8 @@ const initState = {
     profile_info: '',
     albums: [],
     single: [],
+    payment_accepted: [],
+    payment_refunded: [],
     payment_history: [],
     reservations_list: [],
     reservations_booking_list: [],
@@ -34,6 +36,16 @@ const profileReducer = (state = initState, action) => {
             return {
                 ...state,
                 payment_history: action.data
+            };
+        case "ADD_PAYMENT_ACCEPTED":
+            return {
+                ...state,
+                payment_accepted: action.data
+            };
+        case "ADD_PAYMENT_REFUNDED":
+            return {
+                ...state,
+                payment_refunded: action.data
             };
         case "ADD_ALL_USER_RESERVATION":
             return {

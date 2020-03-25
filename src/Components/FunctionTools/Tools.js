@@ -14,7 +14,7 @@ import {
     addEventSelected,
     addNumberOfArtist,
     addOptionSelected,
-    addOthersCityOfService,
+    addOthersCityOfService, addPaymentAccepted, addPaymentRefunded,
     addPicturesOfService,
     addPreparationTime,
     addPriceOfService,
@@ -507,6 +507,18 @@ export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
     setState(value);
     if (func && dispatch)
         dispatch(func(value))
+};
+
+export const dispatchPayment= (payment_history, dispatch) => {
+    let tmpPaid = [];
+    let tmpRefund = [];
+    Promise.all(payment_history.map(element => {
+        if (element["paid"]) tmpPaid.push(element);
+        if (element["refund"]) tmpRefund.push(element);
+    })).then(() => {
+        dispatch(addPaymentRefunded(tmpRefund));
+        dispatch(addPaymentAccepted(tmpPaid));
+    });
 };
 
 export const checkOnClickAwaySideBar = (e) => {

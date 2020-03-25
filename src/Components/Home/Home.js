@@ -23,8 +23,8 @@ import {
     addCarts,
     addOtherBeatMakerBeats,
     addOtherUserOptions,
-    addOtherUserService,
-    addPaymentHistory,
+    addOtherUserService, addPaymentAccepted,
+    addPaymentHistory, addPaymentRefunded,
     addPrefAllMediaGenre,
     addSimilarBeats,
     addTotalPrice,
@@ -47,7 +47,7 @@ import {
     topBeatMaker,
 } from "../FunctionTools/FunctionProps";
 import * as PopupFields from "../FunctionTools/PopupFields";
-import {checkOnClickAwaySideBar, FillInCartProps} from "../FunctionTools/Tools";
+import {checkOnClickAwaySideBar, dispatchPayment, FillInCartProps} from "../FunctionTools/Tools";
 import IslPlayer from "../Players/Players";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
@@ -262,9 +262,11 @@ function Home() {
     const fetchUserData = () => {
         Promise.all([
             axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
+                let payment_history = resp.data['payment_history'];
+                dispatchPayment(payment_history, dispatch);
                 new Promise(resolve => {
                     resolve(dispatch(addUserNote(resp.data['notes'])));
-                    resolve(dispatch(addPaymentHistory(resp.data['payment_history'])));
+                    resolve(dispatch(addPaymentHistory(payment_history)));
                     resolve(dispatch(profileInitialisationInfo(resp.data['my_profile'])));
                     resolve(dispatch(profileInitialisationRole(resp.data['role'])));
                     resolve(dispatch(addAllUSerReservation(resp.data['reservations_list'])));

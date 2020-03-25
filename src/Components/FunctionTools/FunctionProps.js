@@ -848,3 +848,21 @@ export function addPaymentHistory(data) {
         });
     };
 }
+
+export function addPaymentAccepted(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PAYMENT_ACCEPTED",
+            data: data
+        });
+    };
+}
+
+export function addPaymentRefunded(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PAYMENT_REFUNDED",
+            data: data
+        });
+    };
+}

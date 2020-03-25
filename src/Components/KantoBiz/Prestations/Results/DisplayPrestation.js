@@ -36,7 +36,7 @@ function DisplayPrestation(props) {
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
 
     const isMounted = useRef(false);
-    const [event_date, setEventDate] = useState(dateFormat(date_to_search, "yyyy-mm-dd"));
+    const [event_date, setEventDate] = useState(null);
     const [reservation, setReservation] = useState(false);
     const [address, setAddress] = useState(reservation_address);
     const [tva, setTva] = useState(0);
@@ -50,7 +50,7 @@ function DisplayPrestation(props) {
             document.getElementById("LoginRequire").click();
         else {
             if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
-            else if (formatDate(event_date) === formatDate(new Date())) toast.error("Veuillez choisir une autre date");
+            else if (formatDate(date_to_search) === formatDate(new Date())) toast.error("Veuillez choisir une autre date");
             else setReservation(true)
         }
     };
@@ -92,6 +92,7 @@ function DisplayPrestation(props) {
 
     useEffect(() => {
 
+        setEventDate(dateFormat(date_to_search, "yyyy-mm-dd"));
         axios.post( "api/reservation/check_total_price", {price: service_to_show.price}, {headers: props.headers}).then((resp) => {
             setTva(resp.data["tva"]);
             setHtPrice(resp.data["ht_price"]);
@@ -167,14 +168,9 @@ function DisplayPrestation(props) {
                             <div className="description text-center">
                                 <p data-tip="Description">{service_to_show.description}</p>
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
-                                    <StarRatings rating={rating}
-                                                 starRatedColor="red"
-                                                 changeRating={newRating => { if (!props.read) setRating(newRating)}}
-                                                 numberOfStars={service_to_show.notes}
-                                                 starDimension="20px"
-                                                 starSpacing="10px"
-                                                 className="col"
-                                                 name='rating'/>
+                                    <StarRatings rating={service_to_show.notes} starRatedColor="red"
+                                                 numberOfStars={5} starDimension="20px"
+                                                 starSpacing="10px" className="col" name='rating'/>
                                     <span className="col pt-2">5&nbsp;✰</span>
                                 </div>
                             </div>

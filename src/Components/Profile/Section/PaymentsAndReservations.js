@@ -2,10 +2,12 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
+import StarRatings from "react-star-ratings";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import {smallSpinner} from "../../FunctionTools/CreateFields";
 import {addAllUSerBookingReservation, addAllUSerReservation, addPaymentHistory} from "../../FunctionTools/FunctionProps";
+import {dispatchPayment} from "../../FunctionTools/Tools";
 import {checkErrorMessage} from "../../Validators/Validatiors";
 
 function PaymentsAndReservations(props) {
@@ -14,16 +16,41 @@ function PaymentsAndReservations(props) {
     const reservations_list = useSelector(state => state.profile.reservations_list);
     const reservations_booking_list = useSelector(state => state.profile.reservations_booking_list);
     const payment_history = useSelector(state => state.profile.payment_history);
+    const payment_refunded = useSelector(state => state.profile.payment_refunded);
+    const payment_accepted = useSelector(state => state.profile.payment_accepted);
     const role = useSelector(state => state.profile.role);
 
     const isMounted = useRef(false);
+    const [rating, setRating] = useState(2);
     const [load, setLoad] = useState(false);
+    const [addNote, setAddNote] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [reservationToNote, setReservationToNote] = useState({});
     const [id_of_reservation, setIdOfReservation] = useState(false);
     const [func, setFunc] = useState(null);
-    const [payment_accepted, setPaymentAccepted] = useState([]);
-    const [payment_refunded, setPaymentRefunded] = useState([]);
+    const [your_reservation_demand, setYourReservationDemand] = useState(false);
     const [headers, setHeaders] = useState({});
+
+    const sendNote = () => {
+        if (reservationToNote["services_id"]) {
+            let data;
+            if (your_reservation_demand)
+                data = {"user_id": reservationToNote["buyer_id"]};
+            else data = {"service_id": reservationToNote["services_id"]};
+            data["note"] = [rating];
+            axios.put( "api/stars/update", data, {headers: headers}
+            ).then((resp) => {}).catch(error => toast.error(checkErrorMessage(error).message));
+        }
+        setAddNote(false);
+        toast.success("Merci a vous")
+    };
+
+    const addNoteToAuditorOrPrestation = async (value) => {
+        setReservationToNote(value);
+        await Promise.all(reservations_list.map(element => {
+            if (element.id === value.id) setYourReservationDemand(true)
+        })).then( r => setAddNote(true));
+    };
 
     const replace_array_value = async (id_of_reservation, value, array_, func_to_dispatch) => {
         let tmp = [];
@@ -41,7 +68,9 @@ function PaymentsAndReservations(props) {
         if (id_of_reservation) {
             setLoad(true);
             axios.put( "api/reservation/auditor_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-                dispatch(addPaymentHistory(resp.data['payment_history']));
+                let payment_history = resp.data['payment_history'];
+                dispatchPayment(payment_history, dispatch);
+                dispatch(addPaymentHistory(payment_history));
                 replace_array_value(id_of_reservation, resp.data["reservations"], reservations_booking_list, addAllUSerBookingReservation).then(r => null)
             }).catch(error => toast.error(checkErrorMessage(error).message));
         }
@@ -51,7 +80,9 @@ function PaymentsAndReservations(props) {
         if (id_of_reservation) {
             setLoad(true);
             axios.put( "api/reservation/artist_accept/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-                dispatch(addPaymentHistory(resp.data['payment_history']));
+                let payment_history = resp.data['payment_history'];
+                dispatchPayment(payment_history, dispatch);
+                dispatch(addPaymentHistory(payment_history));
                 replace_array_value(id_of_reservation, resp.data["reservations"], reservations_list, addAllUSerReservation).then(r => null)
             }).catch(error => toast.error(checkErrorMessage(error).message));
         }
@@ -61,7 +92,9 @@ function PaymentsAndReservations(props) {
         if (id_of_reservation) {
             setLoad(true);
             axios.put( "api/reservation/artist_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-                dispatch(addPaymentHistory(resp.data['payment_history']));
+                let payment_history = resp.data['payment_history'];
+                dispatchPayment(payment_history, dispatch);
+                dispatch(addPaymentHistory(payment_history));
                 replace_array_value(id_of_reservation, resp.data["reservations"], reservations_list, addAllUSerReservation).then(r => null)
             }).catch(error => toast.error(checkErrorMessage(error).message));
         }
@@ -80,8 +113,6 @@ function PaymentsAndReservations(props) {
                     <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="L'adresse où se déroulera l'évènement"/></th>
                     <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Montant HT de la prestation (fixé par l'artiste)"/></th>
                     <th scope="col">Status&nbsp;<i className="icon icon-info" data-tip="Le statut de la réservation de l'auditeur pro."/></th>
-                    <th scope="col">Facture&nbsp;<i className="icon icon-info" data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/></th>
-                    <th scope="col">Note&nbsp;<i className="icon icon-info" data-tip={"Donner une note a la cette prestaion"}/></th>
                     <th scope="col">Action&nbsp;<i className="icon icon-info" data-tip={"Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec"}/></th>
                 </tr>
                 </thead>
@@ -98,8 +129,6 @@ function PaymentsAndReservations(props) {
                         <td className="small" data-title="Montant">{value.total_amount}$</td>
                         {value.status === "pending" ? <td className="small text-yellow" data-title="Status">En attente</td>
                             : value.status === "accepted" ? <td className="small text-green" data-title="Status">Accepter</td> : <td className="small text-red" data-title="Status">Refuser</td>}
-                        {value.status === "pending" || val.status === "declined" ? <td className="small text-red" data-title="Status">pas de facture</td>: <td className="small text-red" data-title="Status">telecharger</td>}
-                        <td className="small text-red border-top" data-title="Status" data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>
                         {value.status === "pending" ?
                             <td className="text-center border-bottom-0 border-right-0">
 
@@ -135,8 +164,42 @@ function PaymentsAndReservations(props) {
         );
     };
 
-    const tablePaymentGenerator = (val) => {
-
+    const tablePaymentGenerator = (val, refund) => {
+        return(
+            <table className="responsive-table mt-4">
+                <thead>
+                <tr>
+                    <th scope="col-lg-4">Reference&nbsp;<i className="icon icon-info" data-tip="Ceci est la reference de votre reservation"/></th>
+                    <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Date de l'évènement"/></th>
+                    <th scope="col">Auditeur&nbsp;<i className="icon icon-info" data-tip="Le nom de l'auditeur qui a fait la reservation"/></th>
+                    <th scope="col">Artiste&nbsp;<i className="icon icon-info" data-tip="Le nom de l'artiste concerné par l'évènement"/></th>
+                    <th scope="col">Évènement&nbsp;<i className="icon icon-info" data-tip="Le type d'évènement de l'auditeur pro "/></th>
+                    <th scope="col">Adresse&nbsp;<i className="icon icon-info" data-tip="L'adresse où se déroulera l'évènement"/></th>
+                    {refund ? <th scope="col">Montant Remboursée&nbsp;<i className="icon icon-info" data-tip="Total des fond remboursées"/></th>:
+                        <th scope="col">Montant&nbsp;<i className="icon icon-info" data-tip="Montant TTC de la prestation"/></th>}
+                    <th scope="col">Facture&nbsp;<i className="icon icon-info" data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/></th>
+                    <th scope="col">Note&nbsp;<i className="icon icon-info" data-tip={"Donner une note a la cette prestaion"}/></th>
+                </tr>
+                </thead>
+                <tbody>
+                {val.map((value, index) =>
+                    <tr key={index}>
+                        <th className="text-center small bolder" scope="row">{value.reference}</th>
+                        <td className="small" data-title="Date">{value.modified_at.split("T")[0]}</td>
+                        <td className="small" data-title="Auditeur">{value.buyer_name}</td>
+                        <td className="small" data-title="Artist">{value.artist_name}</td>
+                        <td className="small" data-title="Évènenment">{value.event}</td>
+                        <td className="small" data-title="Adresse">{value.address}</td>
+                        {refund ? <td className="small" data-title="Montant Remboursée">{value.artist_amount}$</td>:
+                            <td className="small" data-title="Montant">{value.total_amount}$</td>}
+                        {<td className="small text-red" data-title="Status"><a href={value.invoice} target="_blank" download={!!value.invoice}>telecharger</a></td>}
+                        <td className="small text-red border-top" data-title="Status" onClick={() => addNoteToAuditorOrPrestation(value)}
+                            data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner une note</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
+        )
     };
 
     useEffect(() => {
@@ -145,28 +208,30 @@ function PaymentsAndReservations(props) {
         headers['Content-Type'] = 'application/json';
         setHeaders(headers);
 
-        // let tmpPaid = [];
-        // let tmpRefund = [];
-        // Promise.all(payment_history.map(element => {
-        //     if (element["paid"]) {
-        //         tmpPaid.push(element);
-        //     }
-        //     if (element["refund"]) {
-        //         tmpRefund.push(element);
-        //     }
-        // })).then(() => {
-        //     setPaymentAccepted(tmpPaid);
-        //     setPaymentRefunded(tmpRefund);
-        // });
-
         return () => {
             isMounted.current = true
         };
-    }, [reservations_list, reservations_booking_list]);
+    }, [reservations_list, reservations_booking_list, payment_refunded, payment_accepted, payment_history, your_reservation_demand]);
 
     return (
         <div className="col" style={{minHeight: 320}}>
             <ReactTooltip/>
+            {addNote &&
+            <Modal visible={true} width="500" height="auto" effect="fadeInUp">
+                <div className="form-material bg-dark" style={{borderRadius: "5px"}}>
+                    <button className="ModalClose float-left" onClick={() => setAddNote(false)}>
+                        <i className="icon-close s-24" style={{color: "orange"}}/>
+                    </button>
+                    <div className="col text-center">
+                        <div className="body">
+                            <h2 className="text-red pt-3">{your_reservation_demand ? "Donner une note a l'auditeur Pro": "Donner une note a la prestation de l'artiste"}</h2>
+                            <StarRatings rating={rating} starRatedColor="red" changeRating={newRating => setRating(newRating)}
+                                         starDimension="20px" starSpacing="10px" className="col-lg-12" name='rating'/>
+                            <button className="btn btn-outline-success btn-sm m-2 pl-5 pr-5 col-lg-12" onClick={sendNote}>Envoyer</button>
+                        </div>
+                    </div>
+                </div>
+            </Modal>}
             <Modal visible={visible} width="400" height="auto" animationType='slide'>
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
@@ -218,14 +283,12 @@ function PaymentsAndReservations(props) {
                                         <h3 className="text-red center-center ">Vous n'avez pas de demandes de reservation</h3>}
                                 </div>}
                                 <div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel" aria-labelledby="v-pills-payment-done-tab">
-                                    <h3 className="text-red center-center ">Vous n'avez pas de payment reussi</h3>
-                                    {/*{payment_accepted.length !== 0 ? tablePaymentGenerator(payment_accepted, true):*/}
-                                    {/*    <h3 className="text-red center-center ">Vous n'avez pas de payment reussi</h3>}*/}
+                                    {payment_accepted.length !== 0 ? tablePaymentGenerator(payment_accepted, false) :
+                                        <h3 className="text-red center-center ">Vous n'avez pas de payment reussi</h3>}
                                 </div>
                                 <div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel" aria-labelledby="v-pills-payment-repaid-tab">
-                                    <h3 className="text-red center-center ">Vous n'avez pas de rembourssement reussi</h3>
-                                    {/*{payment_refunded.length !== 0 ? tablePaymentGenerator(payment_refunded, true):*/}
-                                    {/*    <h3 className="text-red center-center ">Vous n'avez pas de rembourssement reussi</h3>}*/}
+                                    {payment_refunded.length !== 0 ? tablePaymentGenerator(payment_refunded, true) :
+                                        <h3 className="text-red center-center ">Vous n'avez pas de rembourssement reussi</h3>}
                                 </div>
                             </div>
                         </div>

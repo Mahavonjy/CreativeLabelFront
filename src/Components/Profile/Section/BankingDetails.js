@@ -250,7 +250,7 @@ function BankingDetails(props) {
                 <h4 className="mb-3 mt-3">Veuiller entrer votre mot de passe avant de voir</h4>
                 <div className="form-group form-float col-md-4 center">
                     <div className="form-line">
-                        <input type="password" id="password" className="form-control"
+                        <input type="password" id="lock_password" className="form-control"
                                placeholder="insérer votre mot de passe" name="password"
                                value={password || ''}
                                onChange={(e) => changeFields(setPassword, e)}/>
