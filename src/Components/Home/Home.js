@@ -180,7 +180,9 @@ function Home() {
                 history.push("/beats");
                 setLoading(false);
             } else setLoading(false);
-        } else history.goBack()
+        } else {
+            setLoading(false);
+        }
     };
 
     const NotOnline = () => {
