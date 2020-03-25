@@ -9,6 +9,7 @@ import {changeFields, changeFileFields} from "../../FunctionTools/Tools";
 import * as Tools from "../../FunctionTools/Tools";
 import { profileInitialisationInfo } from "../../FunctionTools/FunctionProps";
 import { smallSpinner, generateInput } from "../../FunctionTools/CreateFields";
+import {checkErrorMessage} from "../../Validators/Validatiors";
 
 function EditProfile (props) {
 
@@ -21,6 +22,7 @@ function EditProfile (props) {
     const [photo, setPhoto] = useState("");
     const [cover_photo, setCoverPhoto] = useState("");
     const [loading, setLoading] = useState(false);
+    const [disable, setDisable] = useState(false);
     const [name, setName] = useState(profile_info.name);
     const [email, setEmail] = useState(profile_info.email);
     const [gender, setGender] = useState(profile_info.gender);
@@ -43,10 +45,9 @@ function EditProfile (props) {
         })).then(() => setListOfCity(tmp));
     };
 
-    const handleSubmitUpdateProfile = (e) => {
-        let id = e.target.id;
-        document.getElementById(id).setAttribute("disabled", "disabled");
+    const handleSubmitUpdateProfile = () => {
         setLoading(true);
+        setDisable(true);
         const bodyFormData = new FormData();
         bodyFormData.append('name', name);
         bodyFormData.append('email', email);
@@ -73,14 +74,10 @@ function EditProfile (props) {
             props.updateProfile(data);
             setLoading(false);
             props.closePopup(1);
-        }).catch(err => {
+        }).catch(error => {
             setLoading(false);
-            try {
-                toast.error(err.response.data);
-            } catch (e) {
-                console.log(err)
-            }
-            document.getElementById(id).removeAttribute("disabled");
+            setDisable(false);
+            toast.error(checkErrorMessage(error).message);
         });
     };
 
@@ -150,7 +147,7 @@ function EditProfile (props) {
                                 <input onChange={(e) => changeFileFields(setCoverPhoto, e)} id="picture" accept="image/png, image/jpeg" name="picture" className="form-control" type="file" />
                             </div>
                         </div>
-                        <button id="update-profile" className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={(e) => handleSubmitUpdateProfile(e)}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>
+                        <button className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3" onClick={handleSubmitUpdateProfile} disabled={disable}>{loading ? "Veuiller attendre ...": "Mettre à Jour"}</button>
                     </div>
                 </div>
             </div>
