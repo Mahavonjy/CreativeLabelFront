@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from 'react-redux';
-import {toast, ToastContainer} from 'react-toastify';
+import {toast} from 'react-toastify';
 import PhotoTest from '../../images/Backgrounds/adult-banking-business-2254122.jpg';
 import PhotoD from '../../images/socials/profile.png';
 import {CreateBeatsPlaylist, smallSpinner} from "../FunctionTools/CreateFields";
@@ -168,16 +168,6 @@ function Profile(props) {
                                            onClick={() => setChoiceArtistTypeToChange(true)}><i
                                             className="icon-user-plus mr-3"/>Voulez vous devenir artiste sur ISL ?</p>
                                     </div>}
-                                    <li className="dropdown-item list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <i className="icon icon-cogs text-red mr-3"/>
-                                            <small className="mr-3">Envoyer une notification par mail</small>
-                                        </div>
-                                        <div className="material-switch">
-                                            <input id="sw2" name="someSwitchOption001" type="checkbox"/>
-                                            <label htmlFor="sw2" className="bg-secondary"/>
-                                        </div>
-                                    </li>
                                 </div>
                             </div>
 
@@ -243,7 +233,8 @@ function Profile(props) {
                 </div>
             </div>
             {/* if user choice become an artist*/}
-            <Modal visible={(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist)} width="80%" height="80%"
+            <Modal visible={(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist)} width="80%"
+                   height="80%"
                    effect="fadeInUp"
                    onClickAway={() => addNewPrestation ? setAddNewPrestation(false) : setAddNewPrestationForNewArtist(false)}>
                 <div className="bg-dark" style={{height: "100%"}}>
@@ -254,11 +245,11 @@ function Profile(props) {
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     {(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist) &&
-                        <Form artistType={user_role} headers={headers}
-                              close={() => toast.success("Ajouter avec succes")}
-                              setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
-                              allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation}
-                              setAddNewPrestationForNewArtist={setAddNewPrestationForNewArtist} new/>}
+                    <Form artistType={user_role} headers={headers}
+                          close={() => toast.success("Ajouter avec succes")}
+                          setActiveToast={setActiveToast} setAllPrestation={setAllPrestation}
+                          allPrestation={allPrestation} setAddNewPrestation={setAddNewPrestation}
+                          setAddNewPrestationForNewArtist={setAddNewPrestationForNewArtist} new/>}
                 </div>
             </Modal>
             {/* end form become an artist*/}

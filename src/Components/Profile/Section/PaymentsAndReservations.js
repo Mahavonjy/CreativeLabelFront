@@ -272,7 +272,7 @@ function PaymentsAndReservations(props) {
                         </div>
                         <div className="col-lg-10">
                             {load && smallSpinner("relative", "0")}
-                            <div className="tab-content" id="v-pills-tabContent">
+                            <div className="tab-content p-5" id="v-pills-tabContent">
                                 <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel" aria-labelledby="v-pills-reservation-tab">
                                     {reservations_booking_list.length !== 0 ? tableGenerator(reservations_booking_list):
                                         <h3 className="text-red center-center ">Vous n'avez pas de reservations</h3>}

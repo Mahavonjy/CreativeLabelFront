@@ -866,3 +866,12 @@ export function addPaymentRefunded(data) {
         });
     };
 }
+
+export function addFilterPricing(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_FILTER_PRICING",
+            data: data
+        });
+    };
+}

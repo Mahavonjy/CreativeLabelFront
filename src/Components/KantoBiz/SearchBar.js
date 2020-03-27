@@ -7,6 +7,7 @@ import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import axios from "axios";
 import {
+    addFilterPricing,
     addKantoBizSearchResults,
     addSearchLoading,
     changeCityToSearch,
@@ -15,8 +16,9 @@ import {
     changeInitialized,
     changeThematicsToSearch
 } from "../FunctionTools/FunctionProps";
-import {ChangeDate, generatePagination, onChangeListWithValueLabel,} from "../FunctionTools/Tools";
+import {ChangeDate, generatePagination, onChangeListWithValueLabel, shuffleArray,} from "../FunctionTools/Tools";
 import {validatorSearch} from "../Validators/Validatiors"
+import Results from "./Prestations/Results/Results";
 
 function SearchBar(props) {
 
@@ -57,9 +59,14 @@ function SearchBar(props) {
             }, {headers: props.headers}).then(async (resp) => {
                 let data = resp.data || [];
                 if (data.length === 0) toast.warn("Pas de presations");
+                else if (data.length >= 2) {
+                    await dispatch(addFilterPricing({"min": resp.data[0]["price"], "max": resp.data[resp.data.length - 1]["price"]}));
+                    data = shuffleArray(data);
+                }
                 await props.setStateResult(generatePagination(data, props.displayOne));
                 await dispatch(addKantoBizSearchResults(data));
                 await dispatch(addSearchLoading(false));
+                await Results.onScrollViewSearch();
             })
         }
     };

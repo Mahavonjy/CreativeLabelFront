@@ -19007,9 +19007,9 @@ a.btn-fab{
     height:4px;
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    background:#9ca8b0;
+    background:#ED1C24;
     position:absolute;
-    left:-5px;
+    left:0;
     transition:all .2s ease-out;
 }
 .paper-nav-toggle.paper-nav-white>i{

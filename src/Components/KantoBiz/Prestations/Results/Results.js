@@ -1,14 +1,17 @@
 import React, {useEffect, useRef, useState} from "react";
+import Modal from "react-awesome-modal";
 import InputRange from "react-input-range";
 import {useDispatch, useSelector} from "react-redux";
 import Select from "react-select";
+import StarRatings from "react-star-ratings";
 import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
 import {addFilterEventSelected, addSearchLoading, changeInitialized} from "../../../FunctionTools/FunctionProps";
 import {LoadingSearch} from "../../../FunctionTools/PopupFields";
-import {checkValueIfExistInArray, generatePagination} from "../../../FunctionTools/Tools";
+import {checkOnClickAwaySideBar, checkValueIfExistInArray, generatePagination} from "../../../FunctionTools/Tools";
+import Home from "../../../Home/Home";
 import Pagination from "../../../Pagination/Pagination";
 
 function Results(props) {
@@ -17,17 +20,24 @@ function Results(props) {
     const events_allowed = useSelector(state => state.Others.events_allowed);
     const loading = useSelector(state => state.KantobizSearch.loading);
     const results = useSelector(state => state.KantobizSearch.results);
+    const filter_price = useSelector(state => state.KantobizSearch.filter_price);
     const initialized = useSelector(state => state.KantobizSearchInfo.initialized);
     const filter_events_selected = useSelector(state => state.KantobizSearch.filter_events_selected);
 
     const isMounted = useRef(false);
+    const searchRef = useRef(null);
     const [events_type, setEventsType] = useState([]);
     const [price, setPrice] = useState({min: 0, max: 0});
     const [priceActive, setPriceActive] = useState(false);
     const [starts, setStarts] = useState({min: 0, max: 0});
     const [startsActive, setStartsActive] = useState(false);
     const [pageOfItems, setPageOfItems] = useState([]);
+    const [filterOpened, setFilterOpened] = useState(false);
     const [thisComponentResults, setThisComponentResults] = useState([]);
+
+    Results.onScrollViewSearch = () => {
+        searchRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
+    };
 
     const onChangePage = (pageOfItems) => {
         // update state with new page of items
@@ -88,50 +98,64 @@ function Results(props) {
         return () => {
             isMounted.current = true
         };
-    }, [loading, results, thisComponentResults]);
+    }, [loading, results, thisComponentResults, filter_price]);
 
     return (
         <div className="row row-eq-height p-b-100">
             <ReactTooltip/>
-            <div className="col-lg-3 pt-5">
-                <h4 className="text-red text-center">Filtrer le résultat</h4>
-                <div className="text-center ml-5 mr-5">
-                    <label className="pb-3 pt-4">Évènement</label>
-                    <Select isMulti options={events_type} placeholder="Choisir le/les thematics" onChange={obj => {
-                        let tmp = [];
-                        for (let row in obj) tmp.push(obj[row]["value"]);
-                        dispatch(addFilterEventSelected(tmp));
-                    }}/>
+            {filterOpened &&
+            <Modal visible={true} width="500" height="auto" effect="fadeInUp">
+                <div className="form-material bg-dark" style={{borderRadius: "5px"}}>
+                    <button className="ModalClose float-left" onClick={() => {setFilterOpened(false)}}>
+                        <i className="icon-close s-24" style={{color: "orange"}}/>
+                    </button>
+                    <div className="col text-center pb-5 pt-5">
+                        <div className="body">
+                            <h4 className="text-red text-center">Filtrer le résultat</h4>
+                            <div className="text-center ml-5 mr-5">
+                                <label className="pb-3 pt-4">Évènement</label>
+                                <Select isMulti options={events_type} placeholder="Choisir le/les thematics" onChange={obj => {
+                                    let tmp = [];
+                                    for (let row in obj) tmp.push(obj[row]["value"]);
+                                    dispatch(addFilterEventSelected(tmp));
+                                }}/>
+                            </div>
+                            <div className="text-center ml-5 mr-5">
+                                <label className="pb-3 pt-4">Prix de la prestation</label>
+                                {priceActive ?
+                                    <InputRange draggableTrack maxValue={filter_price["max"]} minValue={filter_price["min"]} formatLabel={value => `${value} $`}
+                                                onChange={value => setPrice(value)} step={10}
+                                                onChangeComplete={value => setPrice(value)}
+                                                value={price}/> : <i className="icon icon-plus ml-2 text-red s-18"
+                                                                     onClick={() => setPriceActive(true)}
+                                                                     data-tip="filtrer pas prix ?"/>}
+                            </div>
+                            <div className="text-center ml-5 mr-5">
+                                <label className={priceActive && "pb-3 pt-4"}>Notation (nombre d'étoile)</label>
+                                {startsActive ?
+                                    <InputRange draggableTrack maxValue={5} minValue={0} formatLabel={value => `${value}✰`}
+                                                onChange={value => setStarts(value)}
+                                                onChangeComplete={value => setStarts(value)}
+                                                value={starts}/> : <i className="icon icon-plus ml-2 text-red s-18"
+                                                                      data-tip="Ce filtrage va bientôt arriver"/>}
+                            </div>
+                            <div className="text-center ml-5 mr-5 mt-3">
+                                <button className="btn btn-outline-danger m-1" onClick={() => reset()}
+                                        data-tip="Remettre tout a zéro">Retablir tout&nbsp;
+                                    <i className="icon icon-remove"/></button>
+                                <button className="btn btn-outline-danger m-1" onClick={() => filter()}
+                                        data-tip="Appliquer les filtres">Appliquer&nbsp;<i
+                                    className="icon icon-search-1"/></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="text-center ml-5 mr-5">
-                    <label className="pb-3 pt-4">Prix de la prestation</label>
-                    {priceActive ?
-                        <InputRange draggableTrack maxValue={1000} minValue={0} formatLabel={value => `${value} $`}
-                                    onChange={value => setPrice(value)} step={10}
-                                    onChangeComplete={value => setPrice(value)}
-                                    value={price}/> : <i className="icon icon-plus ml-2 text-red s-18"
-                                                         onClick={() => setPriceActive(true)}
-                                                         data-tip="filtrer pas prix ?"/>}
-                </div>
-                <div className="text-center ml-5 mr-5">
-                    <label className={priceActive && "pb-3 pt-4"}>Notation (nombre d'étoile)</label>
-                    {startsActive ?
-                        <InputRange draggableTrack maxValue={5} minValue={0} formatLabel={value => `${value}✰`}
-                                    onChange={value => setStarts(value)}
-                                    onChangeComplete={value => setStarts(value)}
-                                    value={starts}/> : <i className="icon icon-plus ml-2 text-red s-18"
-                                                          data-tip="Nouvelle filtrage qui va arriver bientôt"/>}
-                </div>
-                <div className="text-center ml-5 mr-5 mt-3">
-                    <button className="btn btn-outline-danger m-1" onClick={() => reset()}
-                            data-tip="Remettre tout a zéro">Retablir tout&nbsp;
-                        <i className="icon icon-remove"/></button>
-                    <button className="btn btn-outline-danger m-1" onClick={() => filter()}
-                            data-tip="Appliquer les filtres">Appliquer&nbsp;<i
-                        className="icon icon-search-1"/></button>
-                </div>
-            </div>
-            <div className="col-lg-9 pt-2">
+            </Modal>}
+            <div className="col-lg-12 pt-2">
+                <button className="btn btn-outline-danger m-2 pl-5 pr-5" data-tip="Filtres"
+                        onClick={() => thisComponentResults.length > 1 ? setFilterOpened(true): toast.warn("Vous n'avez pas assez de resultat")}
+                ><i className="icon-th-list s-20"/>&nbsp;<i className="icon-filter s-20"/> Filtrer les résultats
+                </button>
                 <h4 className="text-red text-center">Résultat(s) de votre recherche</h4>
 
                 {!loading ?
@@ -140,7 +164,7 @@ function Results(props) {
                     </div> : <LoadingSearch/>}
 
                 {!loading &&
-                <div className="text-center">
+                <div className="text-center" ref={searchRef}>
                     {thisComponentResults.length !== 0 ?
                         <Pagination items={thisComponentResults} onChangePage={onChangePage} initialPage={1}/> :
                         <h3><p className="text-red center-center m-5">0 recherche</p></h3>}

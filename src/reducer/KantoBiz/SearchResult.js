@@ -3,6 +3,7 @@ const initState = {
     service_to_show: {},
     loading: false,
     ResultsPage: false,
+    filter_price: {"min": 0, "max": 0},
     filter_events_selected: [],
     EventAndThematics: true
 };
@@ -18,6 +19,11 @@ const KantoBizSearchResults = (state = initState, action) => {
             return {
                 ...state,
                 loading: action.data
+            };
+        case "ADD_FILTER_PRICING":
+            return {
+                ...state,
+                filter_price: action.data
             };
         case "ADD_SERVICE_TO_SHOW":
             return {

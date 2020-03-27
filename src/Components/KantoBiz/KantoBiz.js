@@ -114,7 +114,6 @@ function KantoBiz(props) {
                     </div>
                 </div>
             </div>
-            }
             {/* End */}
         </div>
     );

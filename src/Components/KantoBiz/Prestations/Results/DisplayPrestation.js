@@ -36,6 +36,7 @@ function DisplayPrestation(props) {
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
 
     const isMounted = useRef(false);
+    const paymentRef = useRef(null);
     const [event_date, setEventDate] = useState(null);
     const [reservation, setReservation] = useState(false);
     const [address, setAddress] = useState(reservation_address);
@@ -45,13 +46,20 @@ function DisplayPrestation(props) {
     const [total_amount, setTotalAmount] = useState(0);
     const [rating, setRating] = useState(1);
 
-    const validReservation = () => {
+    const onScrollViewSearch = () => {
+        paymentRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
+    };
+
+    const validReservation = async () => {
         if (!profile_info)
             document.getElementById("LoginRequire").click();
         else {
             if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
             else if (formatDate(date_to_search) === formatDate(new Date())) toast.error("Veuillez choisir une autre date");
-            else setReservation(true)
+            else {
+                await setReservation(true);
+                await onScrollViewSearch();
+            }
         }
     };
 
@@ -262,7 +270,7 @@ function DisplayPrestation(props) {
                                     </div>
                                 </div>
                                 {reservation ?
-                                    <div className="col-md-8">
+                                    <div className="col-md-8" ref={paymentRef}>
                                         <PurchaseInformation eventDate={event_date} address={address}
                                                              TotalPrice={service_to_show.price}
                                                              headers={props.headers} kantoBiz/>
