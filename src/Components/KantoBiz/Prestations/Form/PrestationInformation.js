@@ -65,35 +65,28 @@ function PrestationInformation(props) {
         })).then(() => setListOfCity(tmp));
     };
 
-    const onDrop = (e, file) => {
+    const onDrop = async (e) => {
         e.preventDefault();
 
         let files_;
         let tmp_file_state = [...files];
-
-        if (file) {
-            let file = e.target.files[0];
-            let {name, size, type} = file;
-            let url = URL.createObjectURL(file);
-            files_ = {name, size, type, url, file}
-        } else {
-            files_ = Array.prototype.map.call(e.dataTransfer.files, (file) => {
+        let uploadedFiles = e.target.files || e.dataTransfer.files;
+        if (uploadedFiles) {
+            await Array.prototype.map.call(uploadedFiles, async (file) => {
                 let {name, size, type} = file;
                 let url = URL.createObjectURL(file);
-                return {name, size, type, url, file};
-            }).filter(file => file.type)[0];
-        }
-
-        if (files_.type.split("/")[0] !== "image")
-            toast.error("veuillez mettre une image");
-        else {
-            tmp_file_state.push(files_);
+                files_ = {name, size, type, url, file};
+                if (files_.type.split("/")[0] === "image")
+                    tmp_file_state.push(files_);
+                else toast.warn("Fichier non supporté trouver")
+            });
             setFiles(tmp_file_state);
             dispatch(addPicturesOfService(tmp_file_state));
         }
     };
 
     const removeFile = (index) => {
+        console.log("here", index)
         let array = [...files];
         array.splice(index, 1);
         setFiles(array)
@@ -209,11 +202,11 @@ function PrestationInformation(props) {
                             <div className="row justify-content-center">
                                 <i className="icon-cloud-upload s-36 text-red"/>
                             </div>
-                            <input type="file" className="input-file" onChange={(e) => onDrop(e, true)}/>
+                            <input type="file" className="input-file" accept="image/png, image/jpeg" onChange={onDrop} multiple/>
                         </div>
                     </div>
                     {files.length > 0 ?
-                        <ul className="text-center">
+                        <ul className="text-center mt-5">
                             <div>
                                 <small>Voici la liste de vos images</small>
                             </div>
@@ -226,7 +219,7 @@ function PrestationInformation(props) {
                                         </span>
                                 </li>
                             )}
-                        </ul> : <small>Vous n'avez importé aucune image</small>}
+                        </ul> : <div className="mt-5"><small>Vous n'avez importé aucune image</small></div>}
                 </div>
             </div>
         </div>
