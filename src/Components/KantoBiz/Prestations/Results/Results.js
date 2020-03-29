@@ -69,6 +69,7 @@ function Results(props) {
                 dispatch(addSearchLoading(false));
                 toast.warn("Pas de resultat")
             }
+            setFilterOpened(false);
         });
     };
 

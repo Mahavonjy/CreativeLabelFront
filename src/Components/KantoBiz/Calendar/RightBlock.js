@@ -137,10 +137,10 @@ function RightBlock(props) {
             let bg_color = "";
             Promise.all(reservations_list.map(element => {
                 let date_ = element.event_date.split("T")[0];
-                let year = date_.split("-")[0];
-                let month = date_.split("-")[1] - 1;
-                let day = date_.split("-")[2];
-                if (selectedYear === parseInt(year) && selectedMonth === parseInt(month) && i === parseInt(day)) {
+                let year = parseInt(date_.split("-")[0]);
+                let month = parseInt(date_.split("-")[1]) - 1;
+                let day = parseInt(date_.split("-")[2]) + 1;
+                if (selectedYear === year && selectedMonth === month && i === day) {
                     if (element.status === "pending") bg_color = "bg-warning";
                     else if (element.status === "accepted") bg_color = "bg-info";
                 }

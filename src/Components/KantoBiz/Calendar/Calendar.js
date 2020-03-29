@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 import '../../../assets/css/style/Calendar.css'
 import ReactTooltip from "react-tooltip";
 import { useSelector } from "react-redux";
@@ -45,4 +45,4 @@ function Calendar (props) {
     );
 }
 
-export default Calendar;
+export default memo(Calendar);

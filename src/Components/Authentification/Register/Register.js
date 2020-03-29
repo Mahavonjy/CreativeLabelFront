@@ -199,7 +199,8 @@ function Register() {
                             <div className="mt-5">
                                 <div className="row justify-content-center">
                                     <div className="col-md-7 card p-5 text-center" tabIndex="0"
-                                         onKeyDown={(e) => {e.key === "Enter" && Register.sendUserInfoToSingUp(e)}}>
+                                         // onKeyDown={(e) => {e.key === "Enter" && Register.sendUserInfoToSingUp(e)}}
+                                    >
                                         <div className="form-material">
                                             {/* Input */}
                                             <div className="body">

@@ -46,7 +46,7 @@ import {
     profileInitialisationRole,
     topBeatMaker,
 } from "../FunctionTools/FunctionProps";
-import * as PopupFields from "../FunctionTools/PopupFields";
+import {LoadingHome, Login} from "../FunctionTools/PopupFields";
 import {checkOnClickAwaySideBar, dispatchPayment, FillInCartProps} from "../FunctionTools/Tools";
 import IslPlayer from "../Players/Players";
 
@@ -308,7 +308,7 @@ function Home() {
     };
 
     const logout = async () => {
-        setLoading(true);
+        // setLoading(true);
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
@@ -337,13 +337,13 @@ function Home() {
 
     if (loading) {
         // Here is Loading page
-        return (PopupFields.LoadingHome());
+        return (LoadingHome());
     } else {
         return (
             <div>
                 <ToastContainer style={{zIndex: 999}}/>
                 {/* Popup Login */}
-                {PopupFields.Login()}
+                {Login()}
                 {/* End of Popup */}
                 <Router>
                     <Route render={({location, history}) => (

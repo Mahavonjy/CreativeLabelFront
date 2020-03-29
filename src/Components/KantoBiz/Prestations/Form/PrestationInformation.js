@@ -34,9 +34,9 @@ function PrestationInformation(props) {
     const [description, setDescription] = useState(Description);
     const [files, setFiles] = useState(PropsFiles);
 
-    const onDragOver = (e) => {
-        e.preventDefault();
-    };
+    const onDragOver = (e) => e.preventDefault();
+
+    const clickAddPhoto = () => document.getElementsByClassName("input-file")[0].click();
 
     const changeCountry = async (e) => {
         let value = e.target.value;
@@ -201,19 +201,24 @@ function PrestationInformation(props) {
                 </div>
                 <div className="col-md-5 text-center">
                     <span className="font-weight-lighter pb-2">Faire un glisser/déposer des images</span>
-                    <div className="m-4 text-center">
-                        <label htmlFor="uploadFile" className="btn btn-outline-danger pl-5 pr-5">Telecharger Image</label>
-                        <div className="dragBox m-auto rounded d-none d-sm-block" style={{border: "dashed 1px white", width: "300px", height: "100px"}}>
+                    <div className="m-2 text-center">
+                        <button className="btn btn-outline-danger pl-5 pr-5 mb-2" onClick={() => clickAddPhoto()}>Telecharger Image</button>
+                        <div className="dragBox m-auto rounded d-none d-sm-block" onClick={() => clickAddPhoto()}
+                             style={{border: "dashed 1px white", width: "300px", height: "100px"}} onDragOver={onDragOver} onDrop={onDrop}>
                             Déposer l'image ici
-                            <i className="icon-cloud-upload s-36 text-red center-center"/>
-                            <input type="file" className="input-file" onChange={(e) => onDrop(e, true)} onDragOver={onDragOver} onDrop={onDrop} id="uploadFile"/>
+                            <div className="row justify-content-center">
+                                <i className="icon-cloud-upload s-36 text-red"/>
+                            </div>
+                            <input type="file" className="input-file" onChange={(e) => onDrop(e, true)}/>
                         </div>
                     </div>
                     {files.length > 0 ?
-                        <ul>
-                            <small>Voici la liste de vos images</small>
+                        <ul className="text-center">
+                            <div>
+                                <small>Voici la liste de vos images</small>
+                            </div>
                             {files.map((file, index) =>
-                                <li className="bg-light m-1 text-black float-left" key={index}
+                                <li className="bg-light m-1 text-black" key={index}
                                     style={{borderRadius: 5}}>
                                         <span className="ml-1 font-italic" key={index}>{file.name} &nbsp;
                                             <i className="text-red icon icon-window-close-o" key={index}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, memo} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
@@ -217,13 +217,14 @@ function Profile(props) {
                                 </div>
                                 <div className="row justify-content-center">
                                     {[
-                                        ['email', 'Email'], ['age', 'Age'], ['gender', 'Genre'], ['birth', 'Anniversaire'],
+                                        ['age', 'Age'], ['gender', 'Genre'], ['birth', 'Anniversaire'],
                                         ['address', 'Adresse'], ['phone', 'Téléphone'], ['country', 'Pays'],
-                                        ['region', 'Région'], ['city', 'Ville']].map((val, index) =>
+                                        ['city', 'Ville']].map((val, index) =>
                                         <div className="col-md-4" key={index}>
                                             <div className="p-4">
                                                 <h5 className="text-red">{val[1]}</h5>
-                                                <span>{profile_info[val[0]] ? profile_info[val[0]] : "Votre " + val[1]}</span>
+                                                {val[0] === "gender" ? <span>{profile_info[val[0]] ? (profile_info[val[0]] ? "Homme": "Femme") : "Votre " + val[1]}</span>:
+                                                <span>{profile_info[val[0]] ? profile_info[val[0]] : "Votre " + val[1]}</span>}
                                             </div>
                                         </div>)}
                                 </div>
@@ -372,4 +373,4 @@ function Profile(props) {
     )
 }
 
-export default Profile;
+export default memo(Profile);

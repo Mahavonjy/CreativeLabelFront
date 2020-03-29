@@ -101,7 +101,7 @@ function EditProfile (props) {
                     <div className="body">
                         <div className="custom-float">
                             {generateInput("nom", name, setName, "name", "text", "icon-user", null, false, true)}
-                            {generateInput("email", email, setEmail, "email", "text", "icon-envelope",null, false, true)}
+                            {generateInput("email", email, setEmail, "email", "text", "icon-envelope",null, true, true)}
                         </div>
                         <div className="custom-float">
                             {generateInput("région", region, setRegion, "region", "text", "icon-location-arrow")}
