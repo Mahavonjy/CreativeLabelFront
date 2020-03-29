@@ -137,7 +137,7 @@ function Form(props) {
             <button className="ModalClose absolute" data-tip="Annuler" onClick={() => props.close()}>
                 <i className="icon-close s-24" style={{color: "orange"}}/>
             </button>}
-            <div className="mdl-card mdl-shadow--2dp">
+            <div className="mdl-card mdl-shadow--2dp d-none d-sm-block">
                 <div className="mdl-card__supporting-text">
                     <div className="mdl-stepper-horizontal-alternative">
                         <div
@@ -178,23 +178,24 @@ function Form(props) {
             {(props.register || props.artistType === "professional_auditor") &&
             <h2 className="text-red text-center">Créer votre première prestaion pour devenir artiste sur ISL</h2>}
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
-            <div className="text-center pt-2">
+            {state_steps_index !== component_steps.length - 1 &&
+            <div className="text-center mt-2">
                 <small className="text-center">Cliquer sur suivant pour passer à l'étape suivante</small>
-            </div>
+            </div>}
             {checkProps() && !loading ?
-                <div className="text-center pt-2">
+                <div className="text-center">
                     {state_steps_index === component_steps.length - 1 && !props.register &&
                     <button className="btn btn-outline-success center pl-5 pr-5"
                             onClick={() => props.artistType === "professional_auditor" ? auditorToArtist() : addNewPrestation()}>
                         {props.artistType === "professional_auditor" ? "Devenir Artiste" : "Enregister"}</button>}
-                </div> : <div className="text-center pt-2">{smallSpinner("relative", "0")}</div>}
+                </div> : <div className="text-center">{smallSpinner("relative", "0")}</div>}
             <div className="NextOrPrevPageStepper mt-4 pb-5">
                 {state_steps_index !== 0 &&
-                <button className="btn btn-outline-light pr-5 mb-3 bolder float-left border-bottom-0 border-right-0"
+                <button className="btn-custom btn-outline-light pr-2 mb-3 bolder float-left border-bottom-0 border-right-0"
                         onClick={() => Prev()}><i
                     className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>Precedent</button>}
                 {state_steps_index !== component_steps.length - 1 &&
-                <button className="btn btn-outline-light pl-5 mb-3 bolder float-right border-bottom-0 border-left-0"
+                <button className="btn-custom btn-outline-light pl-2 mb-3 bolder float-right border-bottom-0 border-left-0"
                         onClick={() => Next()}>Suivant&nbsp;<i
                     className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></button>}
                 {state_steps_index === component_steps.length - 1 && props.register &&

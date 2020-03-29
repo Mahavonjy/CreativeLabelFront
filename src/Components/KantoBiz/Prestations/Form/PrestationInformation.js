@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
-import {CreateInput} from "../../../FunctionTools/CreateFields";
 import {
     addDescriptionOfService,
     addOthersCityOfService,
@@ -13,8 +12,6 @@ import {
 } from "../../../FunctionTools/FunctionProps";
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
 import {changeFields} from "../../../FunctionTools/Tools";
-// import CreatableSelect from 'react-select/creatable';
-
 
 function PrestationInformation(props) {
 
@@ -50,13 +47,11 @@ function PrestationInformation(props) {
             tmpList = country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"]
         } catch (e) { /**/ }
         new Promise(resolve => {
-            setTimeout(() => {
-                resolve(setListOfCity(tmpList));
-                resolve(setTmpListOfCity(tmpList));
-                resolve(dispatch(addReferenceOfCity("")));
-                resolve(dispatch(addServiceCountry(value)));
-                resolve(dispatch(addOthersCityOfService([])));
-            }, 1000)
+            resolve(setListOfCity(tmpList));
+            resolve(setTmpListOfCity(tmpList));
+            resolve(dispatch(addReferenceOfCity("")));
+            resolve(dispatch(addServiceCountry(value)));
+            resolve(dispatch(addOthersCityOfService([])));
         })
     };
 
@@ -67,9 +62,7 @@ function PrestationInformation(props) {
         let tmp = [];
         await Promise.all(tmpListOfCity.map(element => {
             if (element !== value) tmp.push(element)
-        })).then(() => {
-            setListOfCity(tmp)
-        });
+        })).then(() => setListOfCity(tmp));
     };
 
     const onDrop = (e, file) => {
@@ -137,93 +130,88 @@ function PrestationInformation(props) {
     return (
         <div className="Base">
             <ReactTooltip/>
-            <div className="card-header transparent b-b">
+            <div className="card-header text-center transparent b-b">
                 <strong className="text-red">Les informations générales sur votre prestation</strong>
             </div>
-            <div className="row" style={{height: 450}}>
-                <div className="col-md-7 card p-5">
-                    <div className="form-material">
-                        {/* Input */}
-                        <div className="body">
-                            <div className="form-group form-float">
-                                <div className="form-line"
-                                     data-tip={!title && "Veuillez donner un titre à votre prestation..."}>
-                                    {CreateInput('title', title, (e) => changeFields(setTitle, e, addTitleOfService, dispatch), "Titre de votre Prestation", "text", true)}
+            <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl" style={{height: 300}}>
+                <div className="col-md-7">
+                    <div className="row">
+                        <div className="col-md-6 form-material">
+                            {/* Input */}
+                            <div className="body">
+
+                                <div className="form-group d-flex flex-wrap required">
+                                    <label className="col-sm-4 control-label bolder">Titre</label>
+                                    <div className="col-sm-8 center">
+                                        <input type="text" id="title" className="form-control text-center" value={title || ''}
+                                               placeholder="Le titre de votre prestation"
+                                               onChange={(e) => changeFields(setTitle, e, addTitleOfService, dispatch)}/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="form-group form-float"
-                                 data-tip={!description ? "Décrire la prestation en quelques mots" : null}>
-                                <div className="form-line">
-                                        <textarea defaultValue={description} id="desc" name="desc"
-                                                  className="form-control" style={{height: 100}}
-                                                  placeholder="Description de la prestation"
+                                <div className="form-group d-flex flex-wrap">
+                                    <label className="col-sm-4 control-label bolder">Description</label>
+                                    <div className="col-sm-8 center">
+                                        <textarea defaultValue={description} id="desc" name="desc" style={{height: 152}}
+                                                  className="form-control" placeholder="Decrire votre prestation en quelque mots"
                                                   onChange={(e) => changeFields(setDescription, e, addDescriptionOfService, dispatch)}/>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="form-group form-float">
-                                <div className="form-line">
-                                    <input id="country" name="country" className="form-control" autoComplete="off"
-                                           placeholder="Veuillez choisir un pays de référence pour votre prestation"
-                                           value={country} onChange={(e) => changeCountry(e)} list="country-type"/>
-                                    <datalist id="country-type">
-                                        {country_allowed.map((val, index) => <option key={index}
-                                                                                     value={val.name}>{val.name}</option>)}
-                                    </datalist>
-                                </div>
-                            </div>
-                            <div className="form-group form-float">
-                                <div className="form-line">
-                                    <input id="city" name="city" className="form-control" autoComplete="off"
-                                           placeholder={city || "Veuillez choisir une ville de référence pour votre prestation"}
-                                           value={city} onChange={(e) => changeCity(e)} list="city-type"/>
-                                    <datalist id="city-type">
-                                        {listOfCity.length !== 0 ? listOfCity.map((val, index) => <option key={index}
-                                                                                                          value={val}>{val}</option>) :
-                                            <option value={null} selected>Veuillez choisir un pays</option>}
-                                    </datalist>
-                                </div>
-                            </div>
-                            {city &&
-                            <div className="form-group form-float"
-                                 data-tip={"Veuillez ajouter une ou plusieurs villes annexes dans lesquelles vous pouvez réaliser votre prestation "}>
-                                <div className="form-line">
-                                    <MultiSelectTools tags={PropsOthersCity} list={listOfCity}
-                                                      funcToFillInProps={addOthersCityOfService}
-                                                      placeholder="Ajouter d'autres villes" sort/>
-                                </div>
-                            </div>}
+                            {/* #END# Input */}
                         </div>
-                        {/* #END# Input */}
+                        <div className="col-md-6 form-material">
+                            <div className="body">
+                                <div className="form-group d-flex flex-wrap required">
+                                    <label className="col-sm-4 control-label bolder">Pays</label>
+                                    <div className="col-sm-8 center">
+                                        <input id="country" name="country" className="form-control" autoComplete="off"
+                                               placeholder="......"
+                                               value={country} onChange={(e) => changeCountry(e)} list="country-type"/>
+                                        <datalist id="country-type">
+                                            {country_allowed.map((val, index) =>
+                                                <option key={index} value={val.name}>{val.name}</option>)}
+                                        </datalist>
+                                    </div>
+                                </div>
+                                <div className="form-group d-flex flex-wrap required">
+                                    <label className="col-sm-4 control-label bolder">Ville</label>
+                                    <div className="col-sm-8 center">
+                                        <input id="city" name="city" className="form-control" autoComplete="off"
+                                               placeholder={city || "....."} value={city}
+                                               onChange={(e) => changeCity(e)} list="city-type"/>
+                                        <datalist id="city-type">
+                                            {listOfCity.length !== 0 ? listOfCity.map((val, index) =>
+                                                    <option key={index} value={val}>{val}</option>) :
+                                                <option value={null} selected>Veuillez choisir un pays</option>}
+                                        </datalist>
+                                    </div>
+                                </div>
+                                {city &&
+                                <div className="form-group d-flex flex-wrap">
+                                    <label className="col-sm-4 control-label bolder">Autres villes</label>
+                                    <div className="col-sm-8 center">
+                                        <MultiSelectTools tags={PropsOthersCity} list={listOfCity}
+                                                          funcToFillInProps={addOthersCityOfService} sort/>
+                                    </div>
+                                </div>}
+
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="col-md-5 text-center p-5">
-                    <span className="font-weight-lighter">Faire un glisser/déposer des images</span>
-                    <div className="form-group pt-5">
-                        <div className="custom-file"
-                             data-tip="C'est ici que vous cherchez vos images dans votre appareil">
-                            <input onChange={(e) => onDrop(e, true)} type="file" accept="image/*"
-                                   className="custom-file-input"/>
-                            <label className="custom-file-label" htmlFor="inputGroupFile01">Télécharger des
-                                fichiers</label>
+                <div className="col-md-5 text-center">
+                    <span className="font-weight-lighter pb-2">Faire un glisser/déposer des images</span>
+                    <div className="m-4 text-center">
+                        <label htmlFor="uploadFile" className="btn btn-outline-danger pl-5 pr-5">Telecharger Image</label>
+                        <div className="dragBox m-auto rounded d-none d-sm-block" style={{border: "dashed 1px white", width: "300px", height: "100px"}}>
+                            Déposer l'image ici
+                            <i className="icon-cloud-upload s-36 text-red center-center"/>
+                            <input type="file" className="input-file" onChange={(e) => onDrop(e, true)} onDragOver={onDragOver} onDrop={onDrop} id="uploadFile"/>
                         </div>
                     </div>
-                    <div className="file has-name is-boxed d-none d-sm-block"
-                         data-tip="C'est ici que vous déplacerai vos images">
-                            <span className="file-label" onDragOver={onDragOver} onDrop={onDrop}>
-                                <div className="buttonStyle">
-                                      <span className="line-1"/>
-                                      <span className="line-2"/>
-                                      <span className="line-3"/>
-                                      <span className="line-4"/>
-                                      <span className="line-5"/>
-                                      <span className="line-6"/><br/>
-                                      <i className="icon icon-plus align-middle text-light"/><br/>
-                                      <i className="icon icon-file-image-o align-middle s-64 text-light"/>
-                                </div>
-                            </span>
-                    </div>
                     {files.length > 0 ?
-                        <ul className="pt-5">
+                        <ul>
+                            <small>Voici la liste de vos images</small>
                             {files.map((file, index) =>
                                 <li className="bg-light m-1 text-black float-left" key={index}
                                     style={{borderRadius: 5}}>

@@ -112,7 +112,7 @@ function SearchBar(props) {
     return (
         <div className="Base search-bar relative p-b-40 mt-5">
             {/* Input Search */}
-            <h3 className="text-center text-red">Trouvez la meilleur prestation pour votre evenement</h3><br/>
+            <h3 className="text-center text-red pt-4">Trouvez la meilleur prestation pour votre evenement</h3><br/>
             <div className="search-row row justify-content-center ml-2 mr-2">
                 <div className="col-lg-2 d-inline-block text-center required">
                     <label className="control-label">Pays</label>
@@ -153,7 +153,7 @@ function SearchBar(props) {
                     <input type="date" className="special-date-picker text-center" onChange={(e) => ChangeDate(e, setStartDate, dispatch, changeDateToSearch)}/>
                     {/*<i className="icon-calendar text-center ml-2 s-20 text-red" data-tip="Ceci est votre date d'Evenement"/>*/}
                 </div>
-                <div className="col-lg-10">
+                <div className="col-lg-10 mt-4">
                     <button type="submit" onClick={Search}
                             className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
                         <i className="icon-search-1 text-white"/>

@@ -42,10 +42,9 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne,
                     <img alt={title} src={image}/>
                 </div>
                 <div className="card-text text-center">
-                    <h4 className="text-red pb-2">{title}</h4>
+                    <h4 className="text-red">{title}</h4>
                     <small className="bolder">{desc}</small>
-                    <button className="btn btn-outline-info"
-                            onClick={() => searchService("events", key)}
+                    <button className="btn btn-outline-info mt-1" onClick={() => searchService("events", key)}
                             data-tip="Cliquer moi pour voir les prestations de cette évenement">Les prestations
                     </button>
                 </div>
@@ -66,10 +65,7 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne,
                     <img alt={name} src={image} style={{width: "100%"}}/>
                 </div>
                 <button className="btn btn-outline-info relative align-middle"
-                        onClick={() => {
-                            setThematics(key);
-                            setShow(true);
-                        }}
+                        onClick={() => {setThematics(key);setShow(true);}}
                         data-tip="Cliquer moi pour voir les prestation de cette univer">Les prestations
                 </button>
             </div>

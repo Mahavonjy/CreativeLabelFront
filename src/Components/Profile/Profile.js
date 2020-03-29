@@ -234,15 +234,13 @@ function Profile(props) {
             </div>
             {/* if user choice become an artist*/}
             <Modal visible={(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist)} width="80%"
-                   height="80%"
-                   effect="fadeInUp"
+                   height="60%" effect="fadeInUp"
                    onClickAway={() => addNewPrestation ? setAddNewPrestation(false) : setAddNewPrestationForNewArtist(false)}>
-                <div className="bg-dark" style={{height: "100%"}}>
+                <div className="bg-dark scrollbar-isl overflow-auto">
                     <button className="ModalClose" onClick={() => {
                         resetPropsForm(dispatch);
                         addNewPrestation ? setAddNewPrestation(false) : setAddNewPrestationForNewArtist(false)
-                    }}>
-                        <i className="icon-close s-24" style={{color: "orange"}}/>
+                    }}><i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     {(addNewPrestation ? addNewPrestation : addNewPrestationForNewArtist) &&
                     <Form artistType={user_role} headers={headers}

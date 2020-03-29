@@ -26,20 +26,6 @@ function Recaputilatif(props) {
     const [unit_time_of_preparation, setUnitTimeOfPreparation] = useState('');
     const [unit_time_of_service, setUnitTimeOfService] = useState('');
 
-    const createSmallForm = (Title, values, width, icon) => {
-        return (
-            <div className="custom-float m-1">
-                <div className="input-group-prepend d-inline-block center" style={{width: width}}>
-                    <div className="input-group-text text-dark font-weight-bold">
-                        <i className={icon}/>&nbsp;{Title}</div>
-                    <div className="input-group-text text-light success-color" id={Title}>
-                        <p className="center" id={Title}>{values}</p>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     Recaputilatif.validation = () => {
         return {"error": false};
     };
@@ -49,7 +35,7 @@ function Recaputilatif(props) {
             <div className="custom-float">
                 <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                     <div className="input-group-text text-dark">
-                        <i className={icon}/>&nbsp;    {Title}</div>
+                        <i className={icon}/>&nbsp; {Title}</div>
                     <input value={values} id={Title} name={Title} className="form-control" type="text" disabled/>
                 </div>
             </div>
@@ -83,53 +69,75 @@ function Recaputilatif(props) {
                 <i className="icon icon-error s-36 absolute m-2 text-red" onClick={() => setOpenLightBox(false)}/>
                 <img alt="show" src={imageToDisplay} width="auto" height="auto" style={{borderRadius: 4}}/>
             </Modal>
-
-            <div className="relative mb-5">
+            <div className="relative">
                 <h3 className="mb-2 text-primary">Le récapitulatif de votre prestation</h3>
-
             </div>
-            <div className="row">
+            <div className="row rounded border bg-grey justify-content-center overflow-auto scrollbar-isl"
+                 style={{height: 300}}>
                 <div className="col-md-6">
-                    {createBigForm("Type d'artiste", props.var.artistType !== "professional_auditor" ? props.var.artistType : tmpArtistTypeSelected, "icon-user")}
-                    {createBigForm("Thématique", props_thematics_options_selected.join(', '), "icon-neuter")}
-                    {createBigForm("Titre de votre prestation", PropsTitle, "icon-text-width")}
-                    <div className="custom-float">
-                        <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
-                            <div className="input-group-text text-dark">
-                                <i className="icon-text-width"/>&nbsp; Description
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm("Type d'artiste", props.var.artistType !== "professional_auditor" ? props.var.artistType : tmpArtistTypeSelected, "icon-user")}
                             </div>
-                            <textarea value={PropsDescription} id="Description de votre prestation"
-                                      name="Description de votre prestation" className="form-control" disabled/>
+                            <div className="col-sm-6">
+                                {createBigForm("Thématique", props_thematics_options_selected.join(', '), "icon-neuter")}
+                            </div>
                         </div>
                     </div>
-                    {createBigForm("Les villes annexes pour votre prestation", allCity, "icon-map-marker\n")}
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm("Titre de votre prestation", PropsTitle, "icon-text-width")}
+                            </div>
+                            <div className="col-sm-6">
+                                {createBigForm("Prix", props_price_of_service + "euros", "icon-money")}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm("Nombre d'artiste", props_number_of_artist, "icon-view")}
+                            </div>
+                            <div className="col-sm-6">
+                                {createBigForm("Type(s) d'evenement(s) sélectionné(s)", props_events_selected.join(', '), "icon-bitbucket-square")}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm("Temps de préparation", props_preparation_time + ' ' + unit_time_of_preparation, "icon-alarm-clock-1")}
+                            </div>
+                            <div className="col-sm-6">
+                                {createBigForm("Durée de la prestation", props_service_time + ' ' + unit_time_of_service, "icon-clock")}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm("Les villes annexes pour votre prestation", allCity, "icon-map-marker")}
+                            </div>
+                            <div className="col-sm-6">
+                                <div className="custom-float">
+                                    <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
+                                        <div className="input-group-text text-dark">
+                                            <i className="icon-text-width"/>&nbsp; Description
+                                        </div>
+                                        <textarea value={PropsDescription} id="Description de votre prestation"
+                                                  name="Description de votre prestation" className="form-control" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="col-md-6">
-                    <div className="justify-content-center" style={{display: "flex"}}>
-                        {createSmallForm("Prix", props_price_of_service + "euros", "88px", "icon-money")}
-                        {createSmallForm("Nombre d'artiste", props_number_of_artist, "auto", "icon-view")}
-                    </div>
-                    <div className="justify-content-center" style={{display: "flex"}}>
-                        {createSmallForm("Temps de préparation", props_preparation_time + ' ' + unit_time_of_preparation, "auto", "icon-alarm-clock-1")}
-                        {createSmallForm("Durée de la prestation", props_service_time + ' ' + unit_time_of_service, "115px", "icon-clock")}
-                    </div>
-                    <div className="justify-content-center" style={{display: "flex"}}>
-                        <div className="custom-float m-1">
-                            <div className="input-group-prepend d-inline-block center" style={{width: "222px"}}>
-                                <div className="input-group-text text-dark font-weight-bold">
-                                    <i className="icon-bitbucket-square"/>&nbsp;Type(s) d'evenement(s) sélectionné(s)
-                                </div>
-                                <div className="input-group-text text-light success-color" id="events">
-                                    <input value={props_events_selected.join(', ')}
-                                           className="center text-center border-0 bg-transparent"
-                                           style={{width: "200px"}} id="events"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <p className="text-red text-center">Les images de votre prestation</p>
                     <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
-                        <div className="carousel-inner" style={{height: 110, width: "100%", borderRadius: 5}}>
+                        <div className="carousel-inner" style={{height: 250, width: "100%", borderRadius: 5}}>
                             {PropsFiles.map((photo, index) =>
                                 <div className={index === 0 ? "carousel-item active" : "carousel-item"} key={index}>
                                     <img className="d-block w-100" src={photo.url} onClick={async () => {

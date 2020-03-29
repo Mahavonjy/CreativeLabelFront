@@ -1,14 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import { changeFields } from "../../../FunctionTools/Tools";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import ReactTooltip from 'react-tooltip';
-import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
-import { useDispatch, useSelector } from "react-redux";
 import {
-    addEventSelected, addNumberOfArtist,
-    addPreparationTime, addPriceOfService,
-    addServiceTime, addUnitTimeOfPreparation,
-    addUnitTimeOfService, profileInitialisationBanking
+    addEventSelected,
+    addNumberOfArtist,
+    addPreparationTime,
+    addPriceOfService,
+    addServiceTime,
+    addUnitTimeOfPreparation,
+    addUnitTimeOfService
 } from "../../../FunctionTools/FunctionProps";
+import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
+import {changeFields} from "../../../FunctionTools/Tools";
 
 function PrestationDetails(props) {
 
@@ -48,7 +51,9 @@ function PrestationDetails(props) {
         if (state_name === "unit_time_of_service") props_function = addUnitTimeOfService;
         if (state_name === "unit_time_of_preparation") props_function = addUnitTimeOfPreparation;
         return (
-            <div className={"input-group-text " + bg + " text-dark"} onClick={() => onchangeUnitOfTime(key_name, state, setName, props_function)} style={{height: 28, width: 60}}>{title}&nbsp;
+            <div className={"input-group-text " + bg + " text-dark"}
+                 onClick={() => onchangeUnitOfTime(key_name, state, setName, props_function)}
+                 style={{height: 28, width: 60}}>{title}&nbsp;
                 <input className="custom-checkbox align-middle" type="checkbox" value={true} checked={state[key_name]}/>
             </div>
         );
@@ -93,85 +98,79 @@ function PrestationDetails(props) {
             <div className="card-header transparent b-b">
                 <strong className="text-red">Préciser les détails de votre prestation</strong>
             </div>
-            <div className="row justify-content-center">
-                <div className="form-group pt-5">
+            <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl"
+                 style={{height: 300}}>
+                <div className="col form-material">
 
-                    {/*<div className="form-group d-flex flex-wrap required">*/}
-                    {/*    <label className="col-sm-4 control-label">Prix de la prestation</label>*/}
-                    {/*    <div className="col-sm-8 center">*/}
-                    {/*        <span className="text-info pt-2" data-tip="Prix HT de la prestation ">?&nbsp;</span>*/}
-                    {/*        <input value={price_of_service} id="price_of_service" name="price_of_service"*/}
-                    {/*               onChange={(e) => changeFields(setPriceOfService, e, addPriceOfService, dispatch)}*/}
-                    {/*               className="form-control" placeholder="Prix " type="number" style={{width: "100%"}} required/>*/}
-                    {/*        <input className="custom-checkbox text-center text-black align-middle bg-light" placeholder="Euros" style={{width: 300}} disabled/>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
-                    <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Prix de la prestation</label>
-                        <div className="col-sm-12">
-                            <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Prix HT de la prestation ">?&nbsp;</span>
-                                <input value={price_of_service} id="price_of_service" name="price_of_service"
-                                       onChange={(e) => changeFields(setPriceOfService, e, addPriceOfService, dispatch)}
-                                       className="form-control" placeholder="Prix " type="number" style={{width: "100%"}} required/>
-                                <input className="custom-checkbox text-center text-black align-middle bg-light" placeholder="Euros" style={{width: 300}} disabled/>
-                            </div>
+                    <div className="form-group d-flex flex-wrap required">
+                        <label className="col-sm-4 control-label bolder">
+                            <i className="icon icon-warning text-red"
+                               data-tip="Définir les évènements pour lesquels vous souhaiter réaliser la prestation"/>&nbsp;Type(s)
+                            d'évènement(s)</label>
+                        <div className="input-group-prepend col-sm-8 center">
+                            <MultiSelectTools funcToFillInProps={addEventSelected} tags={props_events_selected}
+                                              list={events_type} placeholder="Ajouter un ou plusieurs évènements"/>
                         </div>
                     </div>
 
-                    <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">La durée de votre prestaion</label>
-                        <div className="col-sm-12">
-                            <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Définir la durée de la prestation">?&nbsp;</span>
-                                <input value={service_time} id="service_time" name="service_time"
-                                       onChange={(e) => changeFields(setServiceTime, e, addServiceTime, dispatch)}
-                                       className="form-control" type="number" placeholder="Durée d'execution" style={{width: "100%"}} required/>
-                                {createCheckBox("Jrs", "Votre preparation dure quelque jours ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "day", "bg-grey")}
-                                {createCheckBox("Hrs", "Votre preparation dure quelque Heures ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "hours", "bg-success")}
-                                {createCheckBox("Min", "Votre preparation dure quelque Minutes ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "min", "bg-info")}
-                                {createCheckBox("Sec", "Votre preparation dure quelque Secondes ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "sec", "bg-warning")}
-                            </div>
+                    <div className="form-group d-flex flex-wrap required">
+                        <label className="col-sm-4 control-label bolder">
+                            <i className="icon icon-warning text-red"
+                               data-tip="Prix HT de la prestation "/>&nbsp;Prix de la prestation</label>
+                        <div className="input-group-prepend col-sm-8 center">
+                            <input value={price_of_service} id="price_of_service" name="price_of_service"
+                                   onChange={(e) => changeFields(setPriceOfService, e, addPriceOfService, dispatch)}
+                                   className="form-control" placeholder="Prix " type="number" style={{width: "100%"}}/>
+                            <input className="custom-checkbox text-center text-black align-middle bg-light"
+                                   placeholder="Euros" style={{width: 300}} disabled/>
                         </div>
                     </div>
 
-                    <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Temps de préparation</label>
-                        <div className="col-sm-12">
-                            <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Définir le temps de préparation nécessaire à la préparation de votre prestation">?&nbsp;</span>
-                                <input value={preparation_time} id="preparation_time" name="preparation_time"
-                                       onChange={(e) => changeFields(setPreparationTime, e, addPreparationTime, dispatch)}
-                                       className="form-control" placeholder="Préparation" type="number" style={{width: "100%"}} required/>
-                                {createCheckBox("Jrs", "Votre temps de preparation dure quelque jours ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation,"day", "bg-grey")}
-                                {createCheckBox("Hrs", "Votre temps de preparation dure quelque Heures ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "hours", "bg-success")}
-                                {createCheckBox("Min", "Votre temps de preparation dure quelque Minutes ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "min", "bg-info")}
-                                {createCheckBox("Sec", "Votre temps de preparation dure quelque Secondes ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "sec", "bg-warning")}
-                            </div>
+                    <div className="form-group d-flex flex-wrap required">
+                        <label className="col-sm-4 control-label bolder">
+                            <i className="icon icon-warning text-red"
+                               data-tip="Le nombre de personnes impliquées dans la prestation"/>&nbsp;Nombre
+                            d'artiste</label>
+                        <div className="input-group-prepend col-sm-8 center">
+                            <input value={number_of_artist} id="number_of_artist" name="number_of_artist"
+                                   onChange={(e) => changeFields(setNumberOfArtist, e, addNumberOfArtist, dispatch)}
+                                   className="form-control" placeholder="Nombre d'artist" type="number"
+                                   style={{width: "100%"}}/>
+                            <input className="custom-checkbox text-center text-black align-middle bg-light"
+                                   placeholder="Dans l'equipe" style={{width: 300}} disabled/>
                         </div>
                     </div>
 
-                    <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Nombre d'artiste</label>
-                        <div className="col-sm-12">
-                            <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Le nombre de personnes impliquées dans la prestation  ">?&nbsp;</span>
-                                <input value={number_of_artist} id="number_of_artist" name="number_of_artist"
-                                       onChange={(e) => changeFields(setNumberOfArtist, e, addNumberOfArtist, dispatch)}
-                                       className="form-control" placeholder="Nombre d'artist" type="number" style={{width: "100%"}}/>
-                                <input className="custom-checkbox text-center text-black align-middle bg-light" placeholder="Dans l'equipe" style={{width: 300}} disabled/>
-                            </div>
+                    <div className="form-group d-flex flex-wrap required">
+                        <label className="col-sm-4 control-label bolder">
+                            <i className="icon icon-warning text-red"
+                               data-tip="Définir la durée de la prestation"/>&nbsp;Durée de prestation</label>
+                        <div className="input-group-prepend col-sm-8 center">
+                            <input value={service_time} id="service_time" name="service_time"
+                                   onChange={(e) => changeFields(setServiceTime, e, addServiceTime, dispatch)}
+                                   className="form-control" type="number" placeholder="Durée d'execution"
+                                   style={{width: "100%"}} required/>
+                            {createCheckBox("Jrs", "Votre preparation dure quelque jours ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "day", "bg-grey")}
+                            {createCheckBox("Hrs", "Votre preparation dure quelque Heures ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "hours", "bg-success")}
+                            {createCheckBox("Min", "Votre preparation dure quelque Minutes ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "min", "bg-info")}
+                            {createCheckBox("Sec", "Votre preparation dure quelque Secondes ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "sec", "bg-warning")}
                         </div>
                     </div>
 
-                    <div className="form-group row">
-                        <label className="col-sm-12 col-form-label text-center pb-3 text-light">Type(s) d'évènement(s)</label>
-                        <div className="col-sm-12">
-                            <div className="input-group-prepend center">
-                                <span className="text-info pt-2" data-tip="Définir les évènements pour lesquels vous souhaiter réaliser la prestation">?&nbsp;</span>
-                                <MultiSelectTools funcToFillInProps={addEventSelected} tags={props_events_selected} list={events_type} placeholder="Ajouter un ou plusieurs évènements"/>
-                            </div>
+                    <div className="form-group d-flex flex-wrap required">
+                        <label className="col-sm-4 control-label bolder">
+                            <i className="icon icon-warning text-red"
+                               data-tip="Définir le temps de préparation nécessaire à la préparation de votre prestation"/>&nbsp;Temps
+                            de préparation</label>
+                        <div className="input-group-prepend col-sm-8 center">
+                            <input value={preparation_time} id="preparation_time" name="preparation_time"
+                                   onChange={(e) => changeFields(setPreparationTime, e, addPreparationTime, dispatch)}
+                                   className="form-control" placeholder="Préparation" type="number"
+                                   style={{width: "100%"}} required/>
+                            {createCheckBox("Jrs", "Votre temps de preparation dure quelque jours ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "day", "bg-grey")}
+                            {createCheckBox("Hrs", "Votre temps de preparation dure quelque Heures ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "hours", "bg-success")}
+                            {createCheckBox("Min", "Votre temps de preparation dure quelque Minutes ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "min", "bg-info")}
+                            {createCheckBox("Sec", "Votre temps de preparation dure quelque Secondes ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "sec", "bg-warning")}
                         </div>
                     </div>
 
