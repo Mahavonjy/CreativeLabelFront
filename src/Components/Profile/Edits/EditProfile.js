@@ -41,6 +41,8 @@ function EditProfile(props) {
         bodyFormData.append('description', description);
         bodyFormData.append('phone', phone ? phone : 0);
         bodyFormData.append('birth', birth ? birth : "1998-03-12");
+        bodyFormData.append('cover_photo', profile_info.cover_photo);
+        bodyFormData.append('photo', profile_info.photo);
         axios.put("api/profiles/updateProfile", bodyFormData, {headers: props.headers}).then(resp => {
             let data = resp.data;
             dispatch(profileInitialisationInfo(data));
@@ -73,37 +75,78 @@ function EditProfile(props) {
                         <div className="form-material d-flex flex-wrap required">
                             <label className="col-sm-3 mt-2 control-label">Nom</label>
                             <div className="col-sm-9">
-                                {CreateInput('name', name !== "null" ? name : "" , (e) => changeFields(setName, e), "Votre nom", "text", true)}
+                                {CreateInput(
+                                    'name',
+                                    name !== "null" ? name : "",
+                                    (e) => changeFields(setName, e),
+                                    "Votre nom",
+                                    "text",
+                                    true
+                                )}
                             </div>
                         </div>
                         <div className="form-material d-flex flex-wrap">
                             <label className="col-sm-3 mt-2 control-label">Date de naissance</label>
                             <div className="col-sm-9">
-                                {CreateInput('birth', birth !== "null" ? birth : "", (e) => changeFields(setBirth, e), "Date de naissance", "date", false)}
+                                {CreateInput(
+                                    'birth',
+                                    birth !== "null" ? birth : "",
+                                    (e) => changeFields(setBirth, e),
+                                    "Date de naissance",
+                                    "date",
+                                    false
+                                )}
                             </div>
                         </div>
                         <div className="form-material d-flex flex-wrap">
                             <label className="col-sm-3 mt-2 control-label">Télephone</label>
                             <div className="col-sm-9">
-                                {CreateInput('phone', phone !== "null" ? phone : "", (e) => changeFields(setPhone, e), "votre telephone", "number", false)}
+                                {CreateInput(
+                                    'phone',
+                                    phone !== "null" ? phone : "",
+                                    (e) => changeFields(setPhone, e),
+                                    "votre telephone",
+                                    "number",
+                                    false
+                                )}
                             </div>
                         </div>
                         <div className="form-material d-flex flex-wrap">
                             <label className="col-sm-3 mt-2 control-label">Adresse</label>
                             <div className="col-sm-9">
-                                {CreateInput('address', address !== "null" ? address : "", (e) => changeFields(setAddress, e), "Votre adresse", "text", false)}
+                                {CreateInput(
+                                    'address',
+                                    address !== "null" ? address : "",
+                                    (e) => changeFields(setAddress, e),
+                                    "Votre adresse",
+                                    "text",
+                                    false
+                                )}
                             </div>
                         </div>
                         <div className="form-material d-flex flex-wrap">
                             <label className="col-sm-3 mt-2 control-label">Pays</label>
                             <div className="col-sm-9">
-                                {CreateInput('country', country !== "null" ? country : "", (e) => changeFields(setCountry, e), "Votre Pays", "text", false)}
+                                {CreateInput(
+                                    'country',
+                                    country !== "null" ? country : "",
+                                    (e) => changeFields(setCountry, e),
+                                    "Votre Pays",
+                                    "text",
+                                    false
+                                )}
                             </div>
                         </div>
                         <div className="form-material d-flex flex-wrap">
                             <label className="col-sm-3 mt-2 control-label">Ville</label>
                             <div className="col-sm-9">
-                                {CreateInput('city', city !== "null" ? city : "", (e) => changeFields(setCity, e), "Votre ville", "text", false)}
+                                {CreateInput(
+                                    'city',
+                                    city !== "null" ? city : "",
+                                    (e) => changeFields(setCity, e),
+                                    "Votre ville", "text",
+                                    false
+                                )}
                             </div>
                         </div>
                         <div className="form-material d-flex flex-wrap">
@@ -111,8 +154,13 @@ function EditProfile(props) {
                             <div className="col-sm-9">
                                 <MDBRow>
                                     <MDBCol className='mb-3'>
-                                        <select className="selectpicker form-control" id="gender" name="gender" value={gender}
-                                                onChange={(e) => changeFields(setGender, e)}>
+                                        <select className="selectpicker form-control"
+                                                id="gender"
+                                                name="gender"
+                                                value={gender}
+                                                onChange={
+                                                    (e) => changeFields(setGender, e)
+                                                }>
                                             <option value="0">Femelle</option>
                                             <option value="1">male</option>
                                         </select>
@@ -125,9 +173,14 @@ function EditProfile(props) {
                             <div className="col-sm-9">
                                 <MDBRow>
                                     <MDBCol className='mb-3'>
-                                 <textarea defaultValue={description !== "null" ? description : ""} id="desc" name="desc"
-                                           className="form-control" placeholder="Decrivez vous en quelque mots"
-                                           onChange={(e) => changeFields(setDescription, e)}/>
+                                 <textarea defaultValue={description !== "null" ? description : ""}
+                                           id="desc"
+                                           name="desc"
+                                           className="form-control"
+                                           placeholder="Decrivez vous en quelque mots"
+                                           onChange={
+                                               (e) => changeFields(setDescription, e)
+                                           }/>
                                     </MDBCol>
                                 </MDBRow>
                             </div>

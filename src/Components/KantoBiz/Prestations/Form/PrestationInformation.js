@@ -11,7 +11,7 @@ import {
     addTitleOfService,
 } from "../../../FunctionTools/FunctionProps";
 import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
-import {changeFields} from "../../../FunctionTools/Tools";
+import {changeFields, funcToSpecifyValueForSpecialInput} from "../../../FunctionTools/Tools";
 
 function PrestationInformation(props) {
 
@@ -40,29 +40,34 @@ function PrestationInformation(props) {
 
     const changeCountry = async (e) => {
         let value = e.target.value;
-        await setCountry(value);
-        await setCity("");
         let tmpList = [];
         try {
-            tmpList = country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"]
-        } catch (e) { /**/ }
-        new Promise(resolve => {
-            resolve(setListOfCity(tmpList));
-            resolve(setTmpListOfCity(tmpList));
-            resolve(dispatch(addReferenceOfCity("")));
-            resolve(dispatch(addServiceCountry(value)));
-            resolve(dispatch(addOthersCityOfService([])));
-        })
+            tmpList = country_allowed[country_allowed.findIndex(tmp => tmp.name === value)]["value"];
+            await setCity("");
+            await setCountry(value);
+            new Promise(resolve => {
+                resolve(setListOfCity(tmpList));
+                resolve(setTmpListOfCity(tmpList));
+                resolve(dispatch(addReferenceOfCity("")));
+                resolve(dispatch(addServiceCountry(value)));
+                resolve(dispatch(addOthersCityOfService([])));
+            })
+        } catch (e) {
+            setCountry("")
+        }
     };
 
     const changeCity = async (e) => {
         let value = e.target.value;
-        await setCity(value);
-        await dispatch(addReferenceOfCity(value));
         let tmp = [];
-        await Promise.all(tmpListOfCity.map(element => {
-            if (element !== value) tmp.push(element)
-        })).then(() => setListOfCity(tmp));
+        if (tmpListOfCity.length)
+            await Promise.all(tmpListOfCity.map(element => {
+                if (element !== value) tmp.push(element)
+            })).then(async () => {
+                await setListOfCity(tmp);
+                await setCity(value);
+                await dispatch(addReferenceOfCity(value));
+            });
     };
 
     const onDrop = async (e) => {
@@ -86,7 +91,6 @@ function PrestationInformation(props) {
     };
 
     const removeFile = (index) => {
-        console.log("here", index)
         let array = [...files];
         array.splice(index, 1);
         setFiles(array)
@@ -104,16 +108,7 @@ function PrestationInformation(props) {
 
     useEffect(() => {
 
-        let tmp = [];
-        for (let row in country_allowed) {
-            let cityTmp = [];
-            for (let index in country_allowed[row]["value"]) {
-                let tmpName = country_allowed[row]["value"][index];
-                cityTmp.push({value: tmpName, label: tmpName, index: index})
-            }
-            tmp.push({value: country_allowed[row]["name"], label: country_allowed[row]["name"], city: cityTmp});
-        }
-        setCountryOption(tmp);
+        funcToSpecifyValueForSpecialInput(country_allowed, setCountryOption);
 
         return () => {
             isMounted.current = true

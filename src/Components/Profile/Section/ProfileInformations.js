@@ -17,13 +17,20 @@ function ProfileInformation(props) {
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
     const [loadingPhoto, setLoadingPhoto] = useState(false);
+    const cover_style = {
+        background: "url(" + (profile_info["cover_photo"] ? profile_info["cover_photo"] : PhotoTest) + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "80%",
+        opacity: 0.7
+    };
 
     const togglePopupEditProfile = async (success) => {
         setEdit(false);
         if (success) toast.success("Profile mis a jour");
     };
 
-    const updateProfilePhoto = (photo, cover_area) => {
+    const updateProfilePhoto = (photo, cover_area, message) => {
         setLoadingPhoto(true);
         const bodyFormData = new FormData();
         bodyFormData.append('city', profile_info.city);
@@ -39,7 +46,7 @@ function ProfileInformation(props) {
         bodyFormData.append('photo', photo ? photo : profile_info.photo);
         axios.put("api/profiles/updateProfile", bodyFormData, {headers: props.headers}).then(resp => {
             dispatch(profileInitialisationInfo(resp.data));
-            toast.success("photo mis a jour");
+            toast.success("photo " + message + " mis a jour");
             setLoadingPhoto(false);
         }).catch(error => {
             toast.error(checkErrorMessage(error).message);
@@ -77,57 +84,67 @@ function ProfileInformation(props) {
                             </div>
                         </div>
                         {!loadingPhoto ?
-                        <div className="text-center rounded-top p-5 mt-5" style={{
-                            background: "url(" + (profile_info["cover_photo"] ? profile_info["cover_photo"] : PhotoTest) + ")",
-                            backgroundRepeat: "no-repeat",
-                            backgroundPosition: "center",
-                            backgroundSize: "80%",
-                            opacity: 0.5,
-                        }}>
-                            <i className="icon icon-edit1 s-36 absolute top-0 right-0 m-5 pr-5 text-red"
-                               onClick={() => document.getElementById("cover_area_file").click()}
-                               data-tip="modifier la photo de couverture"/>
-                            <input onChange={(e) => {
-                                updateProfilePhoto(null, e.target.files[0]);
-                            }} id="cover_area_file" type="file"
-                                   accept="image/png, image/jpeg" name="picture" className="input-file"/>
-                            <figure className="avatar avatar-xl">
-                                <div className="hovereffect">
-                                    <img src={profile_info.photo ? profile_info.photo : PhotoD} alt="profile"/>
-                                    <div className="overlay zIndex99">
-                                        <i className="icon icon-edit s-36 bolder text-red"
-                                           onClick={() => document.getElementById("picture").click()}
-                                           data-tip="modifier la photo de profile"/>
-                                        <input onChange={async (e) => {
-                                            updateProfilePhoto(e.target.files[0], null);
-                                        }} id="picture" accept="image/png, image/jpeg" name="picture"
-                                               className="input-file" type="file"/>
+                            <div className="text-center rounded-top p-5 mt-5" style={cover_style}>
+                                <i className="icon-edit1 cursor-pointer s-36 absolute top-20 m-5 text-red"
+                                   onClick={() => document.getElementById("cover_area_file").click()}
+                                   data-tip="modifier la photo de couverture"/>
+                                <input id="cover_area_file"
+                                       type="file"
+                                       accept="image/png, image/jpeg"
+                                       className="input-file"
+                                       onChange={(e) => {
+                                           updateProfilePhoto(
+                                               null,
+                                               e.target.files[0],
+                                               "de couverture"
+                                           )
+                                       }}
+                                />
+                                <figure className="avatar avatar-xl">
+                                    <div className="hovereffect">
+                                        <img src={profile_info.photo ? profile_info.photo : PhotoD} alt="profile"/>
+                                        <div className="overlay zIndex99">
+                                            <i className="icon icon-edit cursor-pointer s-36 bolder text-red"
+                                               onClick={() => document.getElementById("picture").click()}
+                                               data-tip="modifier la photo de profile"/>
+                                            <input id="picture"
+                                                   accept="image/png, image/jpeg"
+                                                   className="input-file"
+                                                   type="file"
+                                                   onChange={(e) => {
+                                                       updateProfilePhoto(
+                                                           e.target.files[0],
+                                                           null,
+                                                           "de profile"
+                                                       );
+                                                   }}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </figure>
-                            <div className="pt-2" style={{opacity: 0.8}}>
-                                <h4 className="text-light bg-dark center pt-2"
-                                    style={{
+                                </figure>
+                                <div className="pt-2" style={{opacity: 0.8}}>
+                                    <h4 className="text-light bg-dark center pt-2"
+                                        style={{
+                                            width: "80%",
+                                            borderTopLeftRadius: "10px",
+                                            borderTopRightRadius: "10px"
+                                        }}>
+                                        {profile_info.name ? profile_info.name : "Name"}
+                                    </h4>
+                                    <h4 className="text-light bg-dark center pt-2 pb-2" style={{
                                         width: "80%",
-                                        borderTopLeftRadius: "10px",
-                                        borderTopRightRadius: "10px"
+                                        borderBottomLeftRadius: "10px",
+                                        borderBottomRightRadius: "10px"
                                     }}>
-                                    {profile_info.name ? profile_info.name : "Name"}
-                                </h4>
-                                <h4 className="text-light bg-dark center pt-2 pb-2" style={{
-                                    width: "80%",
-                                    borderBottomLeftRadius: "10px",
-                                    borderBottomRightRadius: "10px"
-                                }}>
-                                    {profile_info.email ? profile_info.email : "Email"}
-                                </h4>
-                            </div>
-                        </div> :
-                        <div className='text-center rounded-top p-5 m-5 text-danger'>
-                            <div className='spinner-grow text-danger m-5 p-4' role='status'>
-                                <span className='sr-only'>Loading...</span>
-                            </div>
-                        </div>}
+                                        {profile_info.email ? profile_info.email : "Email"}
+                                    </h4>
+                                </div>
+                            </div> :
+                            <div className='text-center rounded-top p-5 m-5 text-danger'>
+                                <div className='spinner-grow text-danger m-5 p-4' role='status'>
+                                    <span className='sr-only'>Loading...</span>
+                                </div>
+                            </div>}
 
                         <div className="text-center">
                             <button className="btn btn-outline-primary btn-sm mt-3 pl-4 pr-4"
@@ -147,15 +164,26 @@ function ProfileInformation(props) {
                             </div>
                             <div className="row justify-content-center">
                                 {[
-                                    ['age', 'Age'], ['gender', 'Genre'], ['birth', 'Anniversaire'],
-                                    ['address', 'Adresse'], ['phone', 'Téléphone'], ['country', 'Pays'],
-                                    ['city', 'Ville']].map((val, index) =>
+                                    ['age', 'Age'], ['gender', 'Genre'], ['birth', 'Anniversaire'], ['country', 'Pays'],
+                                    ['address', 'Adresse'], ['phone', 'Téléphone'], ['city', 'Ville']
+                                ].map((val, index) =>
                                     <div className="col-md-4" key={index}>
                                         <div className="p-4">
                                             <h5 className="text-red">{val[1]}</h5>
-                                            {val[0] === "gender" ?
-                                                <span>{profile_info[val[0]] ? (parseInt(profile_info[val[0]]) ? "Homme" : "Femme") : "Votre " + val[1]}</span> :
-                                                <span>{profile_info[val[0]] ? profile_info[val[0]] : "Votre " + val[1]}</span>}
+                                            {
+                                                val[0] === "gender" ?
+                                                    <span>
+                                                        {profile_info[val[0]] ?
+                                                            (parseInt(profile_info[val[0]])
+                                                                ? "Homme" : "Femme")
+                                                            : "Votre " + val[1]}
+                                                    </span> :
+                                                    <span>
+                                                        {profile_info[val[0]] ?
+                                                            profile_info[val[0]]
+                                                            : "Votre " + val[1]}
+                                                    </span>
+                                            }
                                         </div>
                                     </div>)}
                             </div>

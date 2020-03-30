@@ -31,6 +31,18 @@ import {
     changeStatusOfService
 } from "./FunctionProps";
 
+export const funcToSpecifyValueForSpecialInput = (country_allowed, setTo) => {
+    let tmp = [];
+    Promise.all(country_allowed.map(element => {
+        let cityTmp = [];
+        for (let index in element["value"]) {
+            let tmpName = element["value"][index];
+            cityTmp.push({value: tmpName, label: tmpName, index: index})
+        }
+        tmp.push({value: element["name"], label: element["name"], city: cityTmp});
+    })).then(() => setTo(tmp));
+};
+
 export const changeFields = (setState, e, up_props, dispatch, key, props) => {
     let value = e.target.value;
     setState(value);
@@ -506,7 +518,6 @@ export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
     if (func && dispatch)
         dispatch(func(value))
 };
-
 
 export const shuffleArray = (array) => {
     let i = array.length - 1;

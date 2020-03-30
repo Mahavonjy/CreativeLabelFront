@@ -16,7 +16,13 @@ import {
     changeInitialized,
     changeThematicsToSearch
 } from "../FunctionTools/FunctionProps";
-import {ChangeDate, generatePagination, onChangeListWithValueLabel, shuffleArray,} from "../FunctionTools/Tools";
+import {
+    ChangeDate,
+    funcToSpecifyValueForSpecialInput,
+    generatePagination,
+    onChangeListWithValueLabel,
+    shuffleArray,
+} from "../FunctionTools/Tools";
 import {validatorSearch} from "../Validators/Validatiors"
 import Results from "./Prestations/Results/Results";
 
@@ -80,19 +86,6 @@ function SearchBar(props) {
 
     useEffect(() => {
 
-        function one() {
-            let tmp = [];
-            for (let row in country_allowed) {
-                let cityTmp = [];
-                for (let index in country_allowed[row]["value"]) {
-                    let tmpName = country_allowed[row]["value"][index];
-                    cityTmp.push({value: tmpName, label: tmpName, index: index})
-                }
-                tmp.push({value: country_allowed[row]["name"], label: country_allowed[row]["name"], city: cityTmp});
-            }
-            setCountryAllowed(tmp);
-        }
-
         function two() {
             let tmp = [];
             for (let row in events_allowed) {
@@ -102,7 +95,7 @@ function SearchBar(props) {
             setListOfEvents(tmp);
         }
 
-        Promise.all([one(), two()]).then(r => null);
+        Promise.all([funcToSpecifyValueForSpecialInput(country_allowed, setCountryAllowed), two()]).then();
 
         return () => {
             isMounted.current = true
