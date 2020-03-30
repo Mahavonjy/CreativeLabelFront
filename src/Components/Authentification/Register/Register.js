@@ -9,11 +9,10 @@ import {sessionService} from "redux-react-session";
 import {CreateInput} from "../../FunctionTools/CreateFields";
 import {addTmpArtistSelected, displayBecomeArtistForm} from "../../FunctionTools/FunctionProps";
 import {DifferentArtist} from "../../FunctionTools/PopupFields";
-import {changeFields, checkUnit, generateBodyFormOfGallery} from "../../FunctionTools/Tools";
+import {changeFields, checkUnit, generateBodyFormOfGallery, SectionContainer} from "../../FunctionTools/Tools";
 import Home from "../../Home/Home";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import {checkErrorMessage, RegisterValidation} from "../../Validators/Validatiors";
-import LoginFacebook from "../SocialCredentials/Facebook/Facebook";
 import LoginGoogle from "../SocialCredentials/Google/Google";
 
 const style_ = "radial-gradient(circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, #232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)";
@@ -199,33 +198,17 @@ function Register() {
                             <div className="mt-5">
                                 <div className="row justify-content-center">
                                     <div className="col-md-7 card p-5 text-center" tabIndex="0"
-                                         // onKeyDown={(e) => {e.key === "Enter" && Register.sendUserInfoToSingUp(e)}}
+                                        // onKeyDown={(e) => {e.key === "Enter" && Register.sendUserInfoToSingUp(e)}}
                                     >
                                         <div className="form-material">
                                             {/* Input */}
                                             <div className="body">
                                                 <h4 className="font-weight-lighter pb-4 text-center bolder">Formulaire
                                                     d'inscription</h4>
-                                                <div className="form-group form-float">
-                                                    <div className="form-line">
-                                                        {CreateInput('name', name, (e) => changeFields(setName, e), "Votre nom", "text", true)}
-                                                    </div>
-                                                </div>
-                                                <div className="form-group form-float">
-                                                    <div className="form-line">
-                                                        {CreateInput('email', email, (e) => changeFields(setEmail, e), "E-mail", "email", true)}
-                                                    </div>
-                                                </div>
-                                                <div className="form-group form-float">
-                                                    <div className="form-line">
-                                                        {CreateInput('password', password, (e) => changeFields(setPassword, e), "Mot de passe (au moins 8 caractères)", "password", true)}
-                                                    </div>
-                                                </div>
-                                                <div className="form-group form-float">
-                                                    <div className="form-line">
-                                                        {CreateInput('confirm_password', confirm_password, (e) => changeFields(setConfirmPassword, e), "Entrez le mot de passe à nouveau", "password", true)}
-                                                    </div>
-                                                </div>
+                                                {CreateInput('name', name, (e) => changeFields(setName, e), "Votre nom", "text", true)}
+                                                {CreateInput('email', email, (e) => changeFields(setEmail, e), "Email valide", "email", true)}
+                                                {CreateInput('password', password, (e) => changeFields(setPassword, e), "Mot de passe (au moins 8 caractères)", "password", true)}
+                                                {CreateInput('confirm_password', confirm_password, (e) => changeFields(setConfirmPassword, e), "Entrez le mot de passe à nouveau", "password", true)}
                                                 {Register.registerButton()}
                                             </div>
                                             {/* #END# Input */}
@@ -247,11 +230,11 @@ function Register() {
                                 </div>
                             </div>
                         </div>}
-                    </div>
-                </div>
-            </div>
-        </main>
-    );
-}
+                            </div>
+                            </div>
+                            </div>
+                            </main>
+                            );
+                            }
 
-export default Register;
+                            export default Register;

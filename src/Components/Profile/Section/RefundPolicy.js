@@ -69,7 +69,7 @@ function RefundPolicy (props) {
                     <div className="toggle-button__icon" />
                 </div>
             </section>
-            <div className="row justify-content-center">
+            <div className="d-flex flex-wrap justify-content-center">
                 <div className="col-lg-6">
                     <h3 className="text-red">Si Flexible</h3>
                     <ol className="list-group-item text-center flexible row justify-content-center">

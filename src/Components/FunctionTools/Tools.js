@@ -298,7 +298,6 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
     }
     if (secure)
         return {"error": true, message: null};
-    await _props.setActiveToast(true);
     let tmp_prestation = {};
 
     if (update) {
@@ -329,7 +328,6 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
             tmp.push(resp.data);
             _props.setAllPrestation(tmp);
             dispatch(addAllUserPrestation(tmp));
-            _props.setActiveToast(true);
             _props.setAddNewPrestation(false);
             _props.close();
             resetPropsForm(dispatch);

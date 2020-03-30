@@ -67,14 +67,12 @@ function MyPrestations(props) {
     };
 
     const updated = async (opt) => {
-        await props.setToast(true);
         await setEditPrestation(false);
         if (!opt)
             toast.success("success");
     };
 
     const addToPropsToEdit = async (index, copy_) => {
-        props.setToast(false);
         if (copy_)
             await setCopyEdit(true);
         setStateIndex(index);
@@ -171,7 +169,6 @@ function MyPrestations(props) {
                 <div className="bg-dark" style={{height: "100%"}}>
                     <button className="ModalClose float-left" onClick={() => {
                         setEditPrestation(false);
-                        props.setToast(true);
                         resetPropsForm(dispatch);
                         setCopyEdit(false)
                     }}>
@@ -179,14 +176,13 @@ function MyPrestations(props) {
                     </button>
                     {editPrestation &&
                     <EditPrestation updated={updated} copyEdit={copyEdit} setEditPrestation={setEditPrestation}
-                                    close={props.close} setActiveToast={props.setActiveToast} index={state_index}
-                                    allPrestation={allPrestation} setAllPrestation={setAllPrestation}
-                                    headers={props.headers} setAddNewPrestation={props.setAddNewPrestation}/>}
+                                    close={props.close} index={state_index} allPrestation={allPrestation}
+                                    setAllPrestation={setAllPrestation} headers={props.headers} setAddNewPrestation={props.setAddNewPrestation}/>}
                 </div>
             </Modal>
             <div className="row justify-content-center">
                 {!props.read &&
-                <div className="col-lg-2">
+                <div className="col-lg-3">
                     <h4 className="text-light text-center bolder pt-3 pb-2">Mon frais de transport est de:</h4>
                     <div className="col text-center pt-2 pb-3">
                         <h2 className="text-red">{global_price} $&nbsp;
@@ -203,8 +199,7 @@ function MyPrestations(props) {
                         </div>
                     </div>
                 </div>}
-
-                <div className={props.read ? "col-lg-12" : "col-lg-10"}>
+                <div className={props.read ? "col-lg-12" : "col-lg-9"}>
                     <div className="row justify-content-center scrollbar-isl">
                         {allPrestation.map((val, index) =>
                             <div className={!props.profile ? "card_kanto" : "card_kantoProfile"} key={index}>

@@ -229,7 +229,7 @@ function Login() {
                     <button className="l-go btn btn-outline-success"
                             onClick={(e) => sendLoginCredentials(e)}>Connexion
                     </button>
-                    <small className="f-p" onClick={() => setVisibility(true)}>Mot de passe oublié?</small>
+                    <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>Mot de passe oublié?</small>
                 </div>
                 {loading &&
                 <div className="absolute preloader-wrapper small active" style={{marginLeft: 400}}>

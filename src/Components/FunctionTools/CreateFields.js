@@ -1,3 +1,4 @@
+import {MDBCol, MDBInput, MDBRow} from "mdbreact";
 import React, {useEffect, useRef} from "react";
 import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
@@ -16,12 +17,12 @@ import Beats from "../BeatMaking/Beats/AllBeatsSuggestion/Beats";
 import OneBeat from "../BeatMaking/Beats/AllBeatsSuggestion/OneBeat";
 import Cart from "../Cart/Cart";
 import {addNewPlayerList} from "../FunctionTools/FunctionProps"
+import Home from "../Home/Home";
 import KantoBiz from "../KantoBiz/KantoBiz";
 import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation";
 import SearchBar from "../KantoBiz/SearchBar";
 import IslPlayer from "../Players/Players";
 import Preference from "../Preference/Preference";
-import Home from "../Home/Home";
 import Profile from "../Profile/Profile";
 import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
@@ -32,13 +33,16 @@ import {changeFields, LikeOrFollow} from "./Tools";
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
         return (
-            <input type={type}
-                   value={value}
-                   id={state_name}
-                   name={state_name}
-                   className="form-control"
-                   placeholder={placeholder}
-                   onChange={functionToOnchange} required={required}/>
+            <MDBRow>
+                <MDBCol className='mb-3'>
+                    <input type={type}
+                           value={value}
+                           id={state_name}
+                           className="form-control"
+                           placeholder={placeholder}
+                           onChange={functionToOnchange} required={required}/>
+                </MDBCol>
+            </MDBRow>
         )
     } else return true
 };
@@ -456,7 +460,8 @@ export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_
 export const generateInput = (label, value, setValue, field_, type_, icon, tip, disable, required) => {
     return (
         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-            <div className="input-group-text black-text bolder" data-tip={tip}><i className={icon}/>&nbsp;{label}{required && "*"}</div>
+            <div className="input-group-text black-text bolder" data-tip={tip}><i
+                className={icon}/>&nbsp;{label}{required && "*"}</div>
             <input value={value} onChange={(e) => changeFields(setValue, e)}
                    id={field_} name={field_} placeholder={field_} className="form-control" type={type_}
                    disabled={disable}/>

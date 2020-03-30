@@ -121,9 +121,6 @@ function Form(props) {
 
     useEffect(() => {
 
-        if (props.new)
-            props.setActiveToast(false);
-
         return () => {
             isMounted.current = true
         };
