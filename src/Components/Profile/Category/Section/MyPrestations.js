@@ -26,13 +26,13 @@ import {
     addTitleOfService,
     addTravelExpenses,
     addUnitTimeOfPreparation,
-    addUnitTimeOfService, addUserId,
+    addUnitTimeOfService,
+    addUserId,
     changeStatusOfService,
     profileInitialisationCondition
-} from "../../FunctionTools/FunctionProps";
-import {checkUnitKey, deleteInObject, objectToFormData, resetPropsForm} from "../../FunctionTools/Tools";
-import Home from "../../Home/Home";
-import EditPrestation from "../PrestationEdits/EditPrestation";
+} from "../../../FunctionTools/FunctionProps";
+import {checkUnitKey, deleteInObject, objectToFormData, resetPropsForm} from "../../../FunctionTools/Tools";
+import EditPrestation from "../../Edits/EditPrestation";
 
 function MyPrestations(props) {
 
@@ -56,10 +56,11 @@ function MyPrestations(props) {
         tmp['travel_expenses'] = value;
         dispatch(profileInitialisationCondition(tmp));
         tmp = deleteInObject(tmp);
-        axios.put('api/artist_conditions/update', tmp, {headers: props.headers}).then((err) => null)
+        axios.put('api/artist_conditions/update', tmp, {headers: props.headers}
+        ).then((err) => null)
     };
 
-    const displayService = async(index) => {
+    const displayService = async (index) => {
         let tmp = {...allPrestation[index]};
         tmp['options'] = props_options;
         await dispatch(addServiceToShow(tmp));
@@ -109,13 +110,14 @@ function MyPrestations(props) {
 
     const deletePrestations = (indexOfService) => {
         if (allPrestation.length > 1) {
-            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'], {headers: props.headers}).then(async () => {
-                toast.success("Supprimer avec succès");
-                let tmp = allPrestation.filter((service, index) => index !== indexOfService);
-                setAllPrestation(tmp);
-                props.setAllPrestation(tmp);
-                await dispatch(addAllUserPrestation(tmp));
-            });
+            axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'],
+                {headers: props.headers}).then(async () => {
+                    toast.success("Supprimer avec succès");
+                    let tmp = allPrestation.filter((service, index) => index !== indexOfService);
+                    setAllPrestation(tmp);
+                    props.setAllPrestation(tmp);
+                    await dispatch(addAllUserPrestation(tmp));
+                });
         } else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
 
@@ -126,7 +128,8 @@ function MyPrestations(props) {
         delete tmpData['modified_at'];
         let headers = props.headers;
         headers['Content-Type'] = 'multipart/form-data';
-        axios.put("api/artist_services/update/" + allServices[index]['id'], objectToFormData(tmpData), {headers: headers}).then((resp) => {
+        axios.put("api/artist_services/update/" + allServices[index]['id'], objectToFormData(tmpData),
+            {headers: headers}).then((resp) => {
             props.setAllPrestation(allServices);
         }).catch((error) => {
             console.log(error.response.data)
@@ -147,7 +150,6 @@ function MyPrestations(props) {
             <ReactTooltip/>
             <ReactTooltip place="right" className="special-color-dark" id='global_price' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Ce montant correspond aux frais de transport général</h5><br/>
-
                 <small>• Il s'agit de vos frais de transport par défaut applicable à toutes vos
                     prestations </small><br/>
                 <small>• Le frais de transport général par défaut est de 0 et est personnalisable en fonction de vos
@@ -158,14 +160,17 @@ function MyPrestations(props) {
             </ReactTooltip>
             <ReactTooltip place="left" className="special-color-dark" id='copy_edit' aria-haspopup='true'>
                 <h5 className="text-center text-green">Dupliquer et Modifier</h5><br/>
-
                 <small>• Une autre façon de le dire: cloner en vue d’une modification </small><br/>
                 <small>• L’artiste ne peut pas publier une prestation dupliqué qui a le même prix, le même type
                     d’évènement, même ville en même temps</small><br/>
                 <small>• Exemple: Soît c'est le même prix, pas le même type d’évènement, même ville</small><br/><br/>
             </ReactTooltip>
+
             {/* if user choice edit one prestation */}
-            <Modal visible={editPrestation} width="80%" height="80%" effect="fadeInUp">
+            <Modal visible={editPrestation}
+                   width="80%"
+                   height="60%"
+                   effect="fadeInUp">
                 <div className="bg-dark" style={{height: "100%"}}>
                     <button className="ModalClose float-left" onClick={() => {
                         setEditPrestation(false);
@@ -175,9 +180,17 @@ function MyPrestations(props) {
                         <i className="icon-close s-24 text-warning"/>
                     </button>
                     {editPrestation &&
-                    <EditPrestation updated={updated} copyEdit={copyEdit} setEditPrestation={setEditPrestation}
-                                    close={props.close} index={state_index} allPrestation={allPrestation}
-                                    setAllPrestation={setAllPrestation} headers={props.headers} setAddNewPrestation={props.setAddNewPrestation}/>}
+                    <EditPrestation
+                        updated={updated}
+                        copyEdit={copyEdit}
+                        close={props.close}
+                        index={state_index}
+                        headers={props.headers}
+                        allPrestation={allPrestation}
+                        setAllPrestation={setAllPrestation}
+                        setEditPrestation={setEditPrestation}
+                        setAddNewPrestation={props.setAddNewPrestation}
+                    />}
                 </div>
             </Modal>
             <div className="row justify-content-center">
@@ -204,9 +217,12 @@ function MyPrestations(props) {
                         {allPrestation.map((val, index) =>
                             <div className={!props.profile ? "card_kanto" : "card_kantoProfile"} key={index}>
                                 <div className={!props.profile ? "additional" : "additionalProfile"}>
-                                    <div
-                                        className={props.profile ? "user-card_kanto" : "user-card_kanto d-none d-sm-block"}
-                                        data-tip="Cliquer Moi">
+                                    <div className={
+                                        props.profile
+                                            ? "user-card_kanto"
+                                            : "user-card_kanto d-none d-sm-block"
+                                    }
+                                         data-tip="Cliquer Moi">
                                         <div className="level center-result">
                                             {val.title}
                                         </div>
@@ -251,14 +267,15 @@ function MyPrestations(props) {
                                                 <p className="events scrollbar-isl">
                                                     {val.events.map((v) => v + " ,")}
                                                 </p>
-
                                                 <div className="row ml-2 mr-3">
                                                     <div className="col">
                                                         <small className="text-red">Ville</small>
                                                         <ul className="small-kanto-list">
                                                             <ul className="bg-transparent scrollbar-isl kanto-list m-1">
                                                                 <li>{val.reference_city}</li>
-                                                                {val.others_city.map((v, i) => <li key={i}>{v}</li>)}
+                                                                {val.others_city.map(
+                                                                    (v, i) => <li key={i}>{v}</li>
+                                                                )}
                                                             </ul>
                                                         </ul>
                                                     </div>
@@ -275,29 +292,26 @@ function MyPrestations(props) {
                                                         </ul>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div className="stats">
                                             <div data-tip="Le nombre d'artiste dans le groupe">
-                                                {/*<small className="title">Artist</small>*/}
                                                 <i className="icon icon-adjust"/>
                                                 <div className="value">{val.number_of_artists}</div>
                                             </div>
                                             <div data-tip="La durée de la preparation">
-                                                {/*<small className="title">Preparation</small>*/}
                                                 <i className="icon icon-clock-1"/>
-                                                <div
-                                                    className="value">{val.duration_of_the_service}{val.unit_duration_of_the_service}</div>
+                                                <div className="value">
+                                                    {val.duration_of_the_service}{val.unit_duration_of_the_service}
+                                                </div>
                                             </div>
                                             <div data-tip="La durée de la preparation">
-                                                {/*<small className="title">Durée</small>*/}
                                                 <i className="icon icon-clock-o"/>
-                                                <div
-                                                    className="value">{val.preparation_time}{val.unit_of_the_preparation_time}</div>
+                                                <div className="value">
+                                                    {val.preparation_time}{val.unit_of_the_preparation_time}
+                                                </div>
                                             </div>
                                             <div data-tip="Le prix de la prestation">
-                                                {/*<small className="title">Prix</small>*/}
                                                 <i className="icon icon-money"/>
                                                 <div className="value">{val.price}$</div>
                                             </div>
@@ -310,19 +324,25 @@ function MyPrestations(props) {
                                         {val.hidden ?
                                             <i className="float-right text-red icon-hide s-36 mt-1"
                                                onClick={() => onChangeHidden(index)}
-                                               data-tip="Cette prestation est caché, c'est a dire n'est pas visible a la recherche des autieurs pro"/> :
+                                               data-tip="Cette prestation est caché,
+                                               c'est a dire n'est pas visible a la recherche des autieurs pro"/> :
                                             <i className="float-right text-red icon-eye s-36 mt-1"
                                                onClick={() => onChangeHidden(index)}
-                                               data-tip="Cette prestation est afficher, c'est a dire visible a la recherche des autieurs pro"/>}
+                                               data-tip="Cette prestation est afficher,
+                                               c'est a dire visible a la recherche des autieurs pro"/>}
                                     </div>}
                                     {!props.profile && <img alt="" src={val.galleries[0]} width="100%" height="100%"/>}
                                     {!props.profile && <h1 className="pt-2 ml-2 bolder text-red">Artist Name</h1>}
                                     {!props.profile &&
                                     <p className="text-dark ml-2 font-weight-bold">{val.description}</p>}
-                                    <h1 className={!props.profile ? "more text-black bolder" : "more text-black bolder pb-5"}>{val.price}$</h1>
+                                    <h1 className={!props.profile
+                                        ? "more text-black bolder"
+                                        : "more text-black bolder pb-5"}>
+                                        {val.price}$
+                                    </h1>
                                     {!props.profile ?
-                                        <small
-                                            className="more-genre scrollbar-isl pl-2 text-black">{val.thematics.map((v) => v)}</small> :
+                                        <small className="more-genre scrollbar-isl pl-2 text-black">
+                                            {val.thematics.map((v) => v)}</small> :
                                         <div className="more-icon text-red mt-4"
                                              onClick={() => addToPropsToEdit(index, true)} data-tip
                                              data-for="copy_edit">

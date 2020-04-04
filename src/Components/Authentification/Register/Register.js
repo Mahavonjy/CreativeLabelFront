@@ -9,13 +9,16 @@ import {sessionService} from "redux-react-session";
 import {CreateInput} from "../../FunctionTools/CreateFields";
 import {addTmpArtistSelected, displayBecomeArtistForm} from "../../FunctionTools/FunctionProps";
 import {DifferentArtist} from "../../FunctionTools/PopupFields";
-import {changeFields, checkUnit, generateBodyFormOfGallery, SectionContainer} from "../../FunctionTools/Tools";
+import {changeFields, checkUnit, generateBodyFormOfGallery} from "../../FunctionTools/Tools";
 import Home from "../../Home/Home";
 import Form from "../../KantoBiz/Prestations/Form/Form";
 import {checkErrorMessage, RegisterValidation} from "../../Validators/Validatiors";
 import LoginGoogle from "../SocialCredentials/Google/Google";
 
-const style_ = "radial-gradient(circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, #232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)";
+const style_ =
+    "radial-gradient" +
+    "circle, #58585a, #4b4b4e, #3f3e41, #333236, #28262a, " +
+    "#232125, #1f1c20, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b)";
 
 function Register() {
 
@@ -75,7 +78,11 @@ function Register() {
                 </button>
                 <button type="submit" id="register" disabled={disable}
                         className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
-                        onClick={(e) => toAuditor ? Home.beforeDataLoad().then(() => null) : Register.sendUserInfoToSingUp(e)}>
+                        onClick={(e) =>
+                            toAuditor
+                                ? Home.beforeDataLoad().then(() => null)
+                                : Register.sendUserInfoToSingUp(e)
+                        }>
                     Créer votre compte Auditor Pro
                 </button>
             </div>
@@ -168,7 +175,14 @@ function Register() {
 
                             <div className="center p-10">
                                 <div className="form-line">
-                                    {CreateInput('keys', keys, (e) => changeFields(setKeys, e), "Inserer votre clé ici", "number", true)}
+                                    {CreateInput(
+                                        'keys',
+                                        keys,
+                                        (e) => changeFields(setKeys, e),
+                                        "Inserer votre clé ici",
+                                        "number",
+                                        true
+                                    )}
                                 </div>
                             </div>
 
@@ -190,8 +204,14 @@ function Register() {
                         </a>
                     </div>
                     {/* if user choice become an artist*/}
-                    {becomeArtistForm && <Form setIsActive={setIsActive} tmpArtistTypeSelected={tmpArtistTypeSelected}
-                                               artistType={tmpArtistTypeSelected} close={() => close()} register/>}
+                    {becomeArtistForm &&
+                    <Form
+                        register
+                        setIsActive={setIsActive}
+                        tmpArtistTypeSelected={tmpArtistTypeSelected}
+                        artistType={tmpArtistTypeSelected}
+                        close={() => close()}
+                    />}
                     {/* end form become an artist*/}
                     <div className="row">
                         {!becomeArtistForm && <div className="col-md-10 mx-md-auto">
@@ -205,10 +225,35 @@ function Register() {
                                             <div className="body">
                                                 <h4 className="font-weight-lighter pb-4 text-center bolder">Formulaire
                                                     d'inscription</h4>
-                                                {CreateInput('name', name, (e) => changeFields(setName, e), "Votre nom", "text", true)}
-                                                {CreateInput('email', email, (e) => changeFields(setEmail, e), "Email valide", "email", true)}
-                                                {CreateInput('password', password, (e) => changeFields(setPassword, e), "Mot de passe (au moins 8 caractères)", "password", true)}
-                                                {CreateInput('confirm_password', confirm_password, (e) => changeFields(setConfirmPassword, e), "Entrez le mot de passe à nouveau", "password", true)}
+                                                {CreateInput(
+                                                    'name',
+                                                    name, (e) => changeFields(setName, e),
+                                                    "Votre nom",
+                                                    "text",
+                                                    true
+                                                )}
+                                                {CreateInput(
+                                                    'email',
+                                                    email,
+                                                    (e) => changeFields(setEmail, e),
+                                                    "Email valide",
+                                                    "email",
+                                                    true
+                                                )}
+                                                {CreateInput(
+                                                    'password',
+                                                    password, (e) => changeFields(setPassword, e),
+                                                    "Mot de passe (au moins 8 caractères)",
+                                                    "password",
+                                                    true
+                                                )}
+                                                {CreateInput(
+                                                    'confirm_password', confirm_password,
+                                                    (e) => changeFields(setConfirmPassword, e),
+                                                    "Entrez le mot de passe à nouveau",
+                                                    "password",
+                                                    true
+                                                )}
                                                 {Register.registerButton()}
                                             </div>
                                             {/* #END# Input */}
@@ -220,7 +265,9 @@ function Register() {
                                             <button className="btn btn-outline-primary m-3 pl-5 pr-5"
                                                     onClick={() => {
                                                         history.goBack();
-                                                        document.getElementsByClassName("LoginRequire")[0].click();
+                                                        document.getElementsByClassName(
+                                                            "LoginRequire"
+                                                        )[0].click();
                                                     }}> Identifiez-vous
                                             </button>
                                             <LoginGoogle register Label="S'inscrire avec Google"/>
@@ -230,11 +277,11 @@ function Register() {
                                 </div>
                             </div>
                         </div>}
-                            </div>
-                            </div>
-                            </div>
-                            </main>
-                            );
-                            }
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
+}
 
-                            export default Register;
+export default Register;

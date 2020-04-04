@@ -1258,10 +1258,10 @@ function PreviewScreen(props) {
                                                                 <div className="elementor-widget-container">
                                                                     <div className="elementor-image">
                                                                         <img width={300} height={133}
-                                                                             src="Content/uploads/2018/11/Fotolia_36450501_S-300x133.jpg"
+                                                                             src="ProfileContent/uploads/2018/11/Fotolia_36450501_S-300x133.jpg"
                                                                              className="attachment-medium size-medium"
                                                                              alt=""
-                                                                             srcSet="http://localhost/wordpress/Content/uploads/2018/11/Fotolia_36450501_S-300x133.jpg 300w, http://localhost/wordpress/Content/uploads/2018/11/Fotolia_36450501_S-1024x455.jpg 1024w, http://localhost/wordpress/Content/uploads/2018/11/Fotolia_36450501_S-768x341.jpg 768w, http://localhost/wordpress/Content/uploads/2018/11/Fotolia_36450501_S-600x267.jpg 600w, http://localhost/wordpress/Content/uploads/2018/11/Fotolia_36450501_S.jpg 1039w"
+                                                                             srcSet="http://localhost/wordpress/ProfileContent/uploads/2018/11/Fotolia_36450501_S-300x133.jpg 300w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Fotolia_36450501_S-1024x455.jpg 1024w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Fotolia_36450501_S-768x341.jpg 768w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Fotolia_36450501_S-600x267.jpg 600w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Fotolia_36450501_S.jpg 1039w"
                                                                              sizes="(max-width: 300px) 100vw, 300px"/>
                                                                     </div>
                                                                 </div>
@@ -1281,10 +1281,10 @@ function PreviewScreen(props) {
                                                                 <div className="elementor-widget-container">
                                                                     <div className="elementor-image">
                                                                         <img width={300} height={177}
-                                                                             src="Content/uploads/2018/11/Paiement-CB-300x177.jpg"
+                                                                             src="ProfileContent/uploads/2018/11/Paiement-CB-300x177.jpg"
                                                                              className="attachment-medium size-medium"
                                                                              alt=""
-                                                                             srcSet="http://localhost/wordpress/Content/uploads/2018/11/Paiement-CB-300x177.jpg 300w, http://localhost/wordpress/Content/uploads/2018/11/Paiement-CB-768x454.jpg 768w, http://localhost/wordpress/Content/uploads/2018/11/Paiement-CB-600x355.jpg 600w, http://localhost/wordpress/Content/uploads/2018/11/Paiement-CB.jpg 800w"
+                                                                             srcSet="http://localhost/wordpress/ProfileContent/uploads/2018/11/Paiement-CB-300x177.jpg 300w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Paiement-CB-768x454.jpg 768w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Paiement-CB-600x355.jpg 600w, http://localhost/wordpress/ProfileContent/uploads/2018/11/Paiement-CB.jpg 800w"
                                                                              sizes="(max-width: 300px) 100vw, 300px"/>
                                                                     </div>
                                                                 </div>

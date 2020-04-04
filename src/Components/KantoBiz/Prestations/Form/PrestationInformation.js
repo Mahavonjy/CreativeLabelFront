@@ -36,7 +36,7 @@ function PrestationInformation(props) {
 
     const onDragOver = (e) => e.preventDefault();
 
-    const clickAddPhoto = () => document.getElementsByClassName("input-file")[0].click();
+    const clickAddPhoto = () => document.getElementsByClassName("input-file service")[0].click();
 
     const changeCountry = async (e) => {
         let value = e.target.value;
@@ -121,7 +121,8 @@ function PrestationInformation(props) {
             <div className="card-header text-center transparent b-b">
                 <strong className="text-red">Les informations générales sur votre prestation</strong>
             </div>
-            <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl" style={{height: 300}}>
+            <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl"
+                 style={{height: 300}}>
                 <div className="col-md-7">
                     <div className="row">
                         <div className="col-md-6 form-material">
@@ -131,17 +132,39 @@ function PrestationInformation(props) {
                                 <div className="form-group d-flex flex-wrap required">
                                     <label className="col-sm-4 control-label bolder">Titre</label>
                                     <div className="col-sm-8 center">
-                                        <input type="text" id="title" className="form-control text-center" value={title || ''}
+                                        <input type="text"
+                                               id="title"
+                                               className="form-control text-center" value={title || ''}
                                                placeholder="Le titre de votre prestation"
-                                               onChange={(e) => changeFields(setTitle, e, addTitleOfService, dispatch)}/>
+                                               onChange={
+                                                   (e) =>
+                                                       changeFields(
+                                                           setTitle,
+                                                           e,
+                                                           addTitleOfService,
+                                                           dispatch
+                                                       )
+                                               }/>
                                     </div>
                                 </div>
                                 <div className="form-group d-flex flex-wrap">
                                     <label className="col-sm-4 control-label bolder">Description</label>
                                     <div className="col-sm-8 center">
-                                        <textarea defaultValue={description} id="desc" name="desc" style={{height: 152}}
-                                                  className="form-control" placeholder="Decrire votre prestation en quelque mots"
-                                                  onChange={(e) => changeFields(setDescription, e, addDescriptionOfService, dispatch)}/>
+                                        <textarea defaultValue={description}
+                                                  id="desc"
+                                                  name="desc"
+                                                  style={{height: 152}}
+                                                  className="form-control"
+                                                  placeholder="Decrire votre prestation en quelque mots"
+                                                  onChange={
+                                                      (e) =>
+                                                          changeFields(
+                                                              setDescription,
+                                                              e,
+                                                              addDescriptionOfService,
+                                                              dispatch
+                                                          )
+                                                  }/>
                                     </div>
                                 </div>
                             </div>
@@ -152,9 +175,17 @@ function PrestationInformation(props) {
                                 <div className="form-group d-flex flex-wrap required">
                                     <label className="col-sm-4 control-label bolder">Pays</label>
                                     <div className="col-sm-8 center">
-                                        <input id="country" name="country" className="form-control" autoComplete="off"
+                                        <input id="country"
+                                               name="country"
+                                               className="form-control"
+                                               autoComplete="off"
                                                placeholder="......"
-                                               value={country} onChange={(e) => changeCountry(e)} list="country-type"/>
+                                               value={country}
+                                               list="country-type"
+                                               onChange={
+                                                   (e) => changeCountry(e)
+                                               }
+                                        />
                                         <datalist id="country-type">
                                             {country_allowed.map((val, index) =>
                                                 <option key={index} value={val.name}>{val.name}</option>)}
@@ -164,9 +195,14 @@ function PrestationInformation(props) {
                                 <div className="form-group d-flex flex-wrap required">
                                     <label className="col-sm-4 control-label bolder">Ville</label>
                                     <div className="col-sm-8 center">
-                                        <input id="city" name="city" className="form-control" autoComplete="off"
+                                        <input id="city"
+                                               name="city"
+                                               className="form-control"
+                                               autoComplete="off"
+                                               list="city-type"
                                                placeholder={city || "....."} value={city}
-                                               onChange={(e) => changeCity(e)} list="city-type"/>
+                                               onChange={(e) => changeCity(e)}
+                                        />
                                         <datalist id="city-type">
                                             {listOfCity.length !== 0 ? listOfCity.map((val, index) =>
                                                     <option key={index} value={val}>{val}</option>) :
@@ -190,14 +226,25 @@ function PrestationInformation(props) {
                 <div className="col-md-5 text-center">
                     <span className="font-weight-lighter pb-2">Faire un glisser/déposer des images</span>
                     <div className="m-2 text-center">
-                        <button className="btn btn-outline-danger pl-5 pr-5 mb-2" onClick={() => clickAddPhoto()}>Telecharger Image</button>
-                        <div className="dragBox m-auto rounded d-none d-sm-block" onClick={() => clickAddPhoto()}
-                             style={{border: "dashed 1px white", width: "300px", height: "100px"}} onDragOver={onDragOver} onDrop={onDrop}>
+                        <button className="btn btn-outline-danger pl-5 pr-5 mb-2"
+                                onClick={() => clickAddPhoto()}>
+                            Telecharger Image
+                        </button>
+                        <div className="dragBox m-auto rounded d-none d-sm-block"
+                             onClick={() => clickAddPhoto()}
+                             style={{border: "dashed 1px white", width: "300px", height: "100px"}}
+                             onDragOver={onDragOver}
+                             onDrop={onDrop}>
                             Déposer l'image ici
                             <div className="row justify-content-center">
                                 <i className="icon-cloud-upload s-36 text-red"/>
                             </div>
-                            <input type="file" className="input-file" accept="image/png, image/jpeg" onChange={onDrop} multiple/>
+                            <input type="file"
+                                   className="input-file service"
+                                   accept="image/png, image/jpeg"
+                                   onChange={onDrop}
+                                   multiple
+                            />
                         </div>
                     </div>
                     {files.length > 0 ?
@@ -205,15 +252,21 @@ function PrestationInformation(props) {
                             <div>
                                 <small>Voici la liste de vos images</small>
                             </div>
-                            {files.map((file, index) =>
-                                <li className="bg-light m-1 text-black" key={index}
-                                    style={{borderRadius: 5}}>
-                                        <span className="ml-1 font-italic" key={index}>{file.name} &nbsp;
-                                            <i className="text-red icon icon-window-close-o" key={index}
-                                               onClick={() => removeFile(index)}/>
-                                        </span>
-                                </li>
-                            )}
+                            <div className="row justify-content-center">
+                                {files.map((file, index) =>
+                                    <div className="bg-dark rounded m-1" key={index}>
+                                        <img width={50}
+                                             height={50}
+                                             className="rounded m-1"
+                                             alt={"service_image" + index}
+                                             src={file.url ? file.url : file}
+                                        />
+                                        <i className="icon m-1 icon-trash-o text-red s-24"
+                                           key={index}
+                                           onClick={() => removeFile(index)}/>
+                                    </div>
+                                )}
+                            </div>
                         </ul> : <div className="mt-5"><small>Vous n'avez importé aucune image</small></div>}
                 </div>
             </div>

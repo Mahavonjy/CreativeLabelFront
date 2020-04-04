@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import PhotoD from '../../../images/socials/profile.png';
-import * as Tools from "../../FunctionTools/Tools";
+import PhotoD from '../../images/socials/profile.png';
+import * as Tools from "../FunctionTools/Tools";
 import {useDispatch, useSelector} from "react-redux";
-import * as CreateFields from "../../FunctionTools/CreateFields";
-import { getMediaLink } from "../../FunctionTools/Tools";
-import * as BeatsProps from "../../FunctionTools/FunctionProps";
+import * as CreateFields from "../FunctionTools/CreateFields";
+import { getMediaLink } from "../FunctionTools/Tools";
+import * as BeatsProps from "../FunctionTools/FunctionProps";
 import { ToastContainer } from "react-toastify";
-import MyPrestations from "../Section/MyPrestations";
+import MyPrestations from "./Category/Section/MyPrestations";
 
 function OtherProfile(props) {
 

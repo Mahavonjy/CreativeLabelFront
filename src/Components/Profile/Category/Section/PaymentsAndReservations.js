@@ -5,14 +5,14 @@ import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {smallSpinner} from "../../FunctionTools/CreateFields";
+import {smallSpinner} from "../../../FunctionTools/CreateFields";
 import {
     addAllUSerBookingReservation,
     addAllUSerReservation,
     addPaymentHistory
-} from "../../FunctionTools/FunctionProps";
-import {dispatchPayment} from "../../FunctionTools/Tools";
-import {checkErrorMessage} from "../../Validators/Validatiors";
+} from "../../../FunctionTools/FunctionProps";
+import {dispatchPayment} from "../../../FunctionTools/Tools";
+import {checkErrorMessage} from "../../../Validators/Validatiors";
 
 function PaymentsAndReservations(props) {
 

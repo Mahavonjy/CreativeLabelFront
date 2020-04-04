@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Conf from "../../Config/tsconfig";
 import Home from "../Home/Home";
-import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import OtherProfile from "../Profile/OtherProfile";
 import * as Validators from "../Validators/Validatiors";
 import {
     addAllUserOptions,

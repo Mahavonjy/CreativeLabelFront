@@ -215,7 +215,12 @@
 }
 
 .outer .flip-container-right .flipper .front .container-day .inactive {
-    border: 0.1vw solid #1a171b;
+    border: 0.1vw solid green;
+    border-radius: 50%;
+}
+
+.outer .flip-container-right .flipper .front .container-day .day-in {
+    border: 0.1vw solid #58585a;
     border-radius: 50%;
 }
 

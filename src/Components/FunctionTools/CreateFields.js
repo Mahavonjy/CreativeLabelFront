@@ -24,7 +24,7 @@ import SearchBar from "../KantoBiz/SearchBar";
 import IslPlayer from "../Players/Players";
 import Preference from "../Preference/Preference";
 import Profile from "../Profile/Profile";
-import OtherProfile from "../Profile/SeeOtherProfile/OtherProfile";
+import OtherProfile from "../Profile/OtherProfile";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import {ForAddToCard} from "./PopupFields"

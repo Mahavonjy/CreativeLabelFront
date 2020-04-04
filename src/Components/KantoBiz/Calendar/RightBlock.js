@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import ReactTooltip from "react-tooltip";
 import {addCurrentDateKey, addMaterialsCopy, addOptionCopy, addServicesCopy} from "../../FunctionTools/FunctionProps";
 import {addSpecialDateToData, checkIfHidden} from "../../FunctionTools/Tools";
-import Materials from "../../Profile/PrestationEdits/Materials";
+import Materials from "../../Profile/Edits/Materials";
 import LeftBlock from "./LeftBlock";
 
 function RightBlock(props) {
@@ -18,7 +18,6 @@ function RightBlock(props) {
 
     const isMounted = useRef(false);
     const [loadMaterials, setLoadMaterials] = useState(true);
-    const [firstDay, setFirstDay] = useState(new Date(props.date.getFullYear() + "-" + (props.date.getMonth() + 1) + "-01").getDay());
     const [selectedYear, setSelectedYear] = useState(props.date.getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(props.date.getMonth());
     const [selectedDay, setSelectedDay] = useState(props.date.getDate());
@@ -29,6 +28,9 @@ function RightBlock(props) {
     const [arrMonth, setArrMonth] = useState({});
     const [index_, setIndex_] = useState(null);
     const [key, setKey] = useState(dateKey);
+    const [firstDay, setFirstDay] = useState(
+        new Date(props.date.getFullYear() + "-" + (props.date.getMonth() + 1) + "-01").getDay()
+    );
     let handleToUpdateDate = props.handleToUpdateDate;
     let monthOptions = Object.keys(arrMonth).map(month => (
         <option className="option-month" selected={month === Object.keys(arrMonth)[selectedMonth] ? "selected" : ""}>
@@ -78,7 +80,9 @@ function RightBlock(props) {
         let tmp_editOptions = [...editOptions];
         let tmp_opt = tmp_editOptions[index]["special_dates"][key]['services_id_list'];
         if (opt) {
-            tmp_editOptions[index]["special_dates"][key]['services_id_list'] = tmp_opt.filter(id => !editPrestation["id"] === id);
+            tmp_editOptions[index]["special_dates"][key]['services_id_list'] = tmp_opt.filter(
+                id => !editPrestation["id"] === id
+            );
         } else {
             tmp_opt.push(editPrestation["id"]);
             tmp_editOptions[index]["special_dates"][key]['services_id_list'] = tmp_opt;
@@ -148,7 +152,12 @@ function RightBlock(props) {
             arrNo.push(
                 <div data-id={i} onClick={!props.noEdit ? () => fillProps(0, false, i) : null}
                      data-tip="Cliquer pour faire une modification"
-                     className={bg_color + " " + `day-block ${i === selectedDay && props.date.getMonth() + 1 === selectedMonth + 1 && props.date.getFullYear() === selectedYear ? "active" : "inactive"}`}>
+                     className={
+                         bg_color + " " + `day-block ${
+                         i === selectedDay 
+                         && props.date.getMonth() + 1 === selectedMonth + 1 
+                         && props.date.getFullYear() === selectedYear ? "active" : (bg_color ? "day-in" : "inactive")}`
+                     }>
                     <div className="inner">{i}</div>
                 </div>
             );
@@ -166,24 +175,41 @@ function RightBlock(props) {
                         <div className="text-center">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
-                                    <div className="input-group-text text-dark">Prix pour cette date&nbsp;<i
-                                        className="icon icon-info text-red"
-                                        data-tip="Ceci est le prix de la prestation pour ce jour"/></div>
+                                    <div className="input-group-text text-dark">Prix pour cette date&nbsp;
+                                        <i
+                                            className="icon icon-info text-red"
+                                            data-tip="Ceci est le prix de la prestation pour ce jour"/>
+                                    </div>
                                     <input className="form-control" type="number" id="global_price" name="global_price"
                                            value={price}
-                                           onChange={(e) => updateDiffenrentPrice(e, setPrice, "price")}/>
+                                           onChange={
+                                               (e) =>
+                                                   updateDiffenrentPrice(
+                                                       e,
+                                                       setPrice,
+                                                       "price"
+                                                   )
+                                           }/>
                                 </div>
                             </div>
                         </div>
                         <div className="text-center">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
-                                    <div className="input-group-text text-dark">Frais pour cette date&nbsp;<i
-                                        className="icon icon-info text-red"
-                                        data-tip="Ceci est le prix du frais de transport ce jour"/></div>
+                                    <div className="input-group-text text-dark">Frais pour cette date&nbsp;
+                                        <i
+                                            className="icon icon-info text-red"
+                                            data-tip="Ceci est le prix du frais de transport ce jour"/>
+                                    </div>
                                     <input className="form-control" type="number" id="global_price" name="global_price"
                                            value={travel_expenses}
-                                           onChange={(e) => updateDiffenrentPrice(e, setTravelExpenses, "travel_expenses")}/>
+                                           onChange={
+                                               (e) => updateDiffenrentPrice(
+                                                   e,
+                                                   setTravelExpenses,
+                                                   "travel_expenses"
+                                               )
+                                           }/>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +234,9 @@ function RightBlock(props) {
                         <tbody>
                         {editOptions.map((val, index) =>
                             <tr className="bg-secondary" key={index}>
-                                {checkIfHidden(optionsCopy[index]["special_dates"][key].services_id_list, editPrestation["id"]) ?
+                                {checkIfHidden(
+                                    optionsCopy[index]["special_dates"][key].services_id_list,
+                                    editPrestation["id"]) ?
                                     <i className="icon icon-eye s-24 text-red"
                                        data-tip="Cette Otpion est activer pour cette prestation sur cette journée"
                                        onClick={() => changeOptionHide(index, true)}/> :
@@ -238,7 +266,20 @@ function RightBlock(props) {
             return [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
         }
 
-        let months = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'];
+        let months = [
+            'Janvier',
+            'Fevrier',
+            'Mars',
+            'Avril',
+            'Mai',
+            'Juin',
+            'Juillet',
+            'Aout',
+            'Septembre',
+            'Octobre',
+            'Novembre',
+            'Decembre'
+        ];
         let tmp = {};
         for (let index in months) tmp[months[index]] = getDayInMonth(selectedYear, index);
         setArrMonth(tmp);
@@ -254,15 +295,17 @@ function RightBlock(props) {
             <div className={`flipper ${props.toggle ? "" : "toggle"}`}>
                 <div className="front front-right">
                     <div className="container-date-picker">
-                        <button className="btn btn-outline-danger" data-tip="le mois precedent" onClick={prevMonth}><i
-                            className="text-red icon-long-arrow-left"/></button>
+                        <button className="btn btn-outline-danger" data-tip="le mois precedent" onClick={prevMonth}>
+                            <i className="text-red icon-long-arrow-left"/>
+                        </button>
                         <select className="select-month" onChange={updateMonth}>
                             {props.toggle && monthOptions}
                         </select>
                         <input type="text" className="input-year" data-tip="changer manuelement l'année"
                                onChange={updateYear} value={selectedYear} maxlength="4"/>
-                        <button className="btn btn-outline-danger" data-tip="le mois suivant" onClick={nextMonth}><i
-                            className="text-red icon-long-arrow-right"/></button>
+                        <button className="btn btn-outline-danger" data-tip="le mois suivant" onClick={nextMonth}>
+                            <i className="text-red icon-long-arrow-right"/>
+                        </button>
                     </div>
                     <div className="container-day">
                         {props.toggle && props.arrDays.map(day => (
@@ -273,16 +316,29 @@ function RightBlock(props) {
                         <div className="legend-title text-black">Légende</div>
                         <div className="legend-scale text-black pt-3">
                             <ul className="row justify-content-center legend-labels border1">
-                                <li><span className="bolder"
-                                          style={{background: '#74A9CF'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Réservé&nbsp;<i
-                                    className="icon-info" data-tip="L'artiste a été réservé"/></span></li>
-                                <li><span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;<i
-                                    className="icon icon-info" data-tip="L'artiste est disponible"/></span></li>
-                                <li><span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;<i
-                                    className="icon icon-info"
-                                    data-tip="Réservation(s) en attente de validation par l'artiste"/></span></li>
-                                <li><span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;<i
-                                    className="icon icon-info" data-tip="l'artiste est indisponible"/></span></li>
+                                <li>
+                                    <span className="bolder" style={{background: '#74A9CF'}}>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Réservé&nbsp;
+                                    <i className="icon-info" data-tip="L'artiste a été réservé"/>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;
+                                    <i className="icon icon-info" data-tip="L'artiste est disponible"/>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;
+                                    <i
+                                        className="icon icon-info"
+                                        data-tip="Réservation(s) en attente de validation par l'artiste"/>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;
+                                        <i className="icon icon-info" data-tip="l'artiste est indisponible"/>
+                                    </span>
+                                </li>
                             </ul>
                         </div>
                     </div>

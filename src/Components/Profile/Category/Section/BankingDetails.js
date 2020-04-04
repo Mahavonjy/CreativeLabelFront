@@ -2,9 +2,9 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import {profileInitialisationBanking, profileShowBankingDetails} from "../../FunctionTools/FunctionProps";
-import {changeFields, deleteInObject} from "../../FunctionTools/Tools";
-import {checkErrorMessage, countryRegex, validatorBanking} from "../../Validators/Validatiors";
+import {profileInitialisationBanking, profileShowBankingDetails} from "../../../FunctionTools/FunctionProps";
+import {changeFields, deleteInObject} from "../../../FunctionTools/Tools";
+import {checkErrorMessage, countryRegex, validatorBanking} from "../../../Validators/Validatiors";
 
 function BankingDetails(props) {
 

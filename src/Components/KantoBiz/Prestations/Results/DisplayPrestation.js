@@ -1,17 +1,17 @@
 import axios from "axios";
 import dateFormat from 'dateformat';
 import React, {useEffect, useRef, useState} from "react";
-import DatePicker from "react-datepicker"
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import StarRatings from 'react-star-ratings';
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
 import PurchaseInformation from "../../../Cart/PurchaseInformation";
 import {
     addListOfOptionsAdded,
-    addReservationAddress, addServiceToShow,
+    addReservationAddress,
+    addServiceToShow,
     changeDateToSearch,
     changeInitialized
 } from "../../../FunctionTools/FunctionProps";
@@ -22,7 +22,6 @@ import {
     checkValueIfExistInArray,
     formatDate
 } from "../../../FunctionTools/Tools";
-import {checkErrorMessage} from "../../../Validators/Validatiors";
 import Calendar from "../../Calendar/Calendar";
 
 function DisplayPrestation(props) {
@@ -101,12 +100,14 @@ function DisplayPrestation(props) {
     useEffect(() => {
 
         setEventDate(dateFormat(date_to_search, "yyyy-mm-dd"));
-        axios.post( "api/reservation/check_total_price", {price: service_to_show.price}, {headers: props.headers}).then((resp) => {
-            setTva(resp.data["tva"]);
-            setHtPrice(resp.data["ht_price"]);
-            setIslAmount(resp.data["isl_amount"]);
-            setTotalAmount(resp.data["total_amount"]);
-        });
+        axios.post("api/reservation/check_total_price",
+            {price: service_to_show.price},
+            {headers: props.headers}).then((resp) => {
+                setTva(resp.data["tva"]);
+                setHtPrice(resp.data["ht_price"]);
+                setIslAmount(resp.data["isl_amount"]);
+                setTotalAmount(resp.data["total_amount"])
+            });
 
         return () => {
             isMounted.current = true
@@ -156,14 +157,18 @@ function DisplayPrestation(props) {
                                 <div className="profile">
                                     <div className="avatar-plain">
                                         <img
-                                            src={service_to_show.galleries.length > 1 ? service_to_show.galleries[1] : service_to_show.galleries[0]}
+                                            src={service_to_show.galleries.length > 1
+                                                ? service_to_show.galleries[1]
+                                                : service_to_show.galleries[0]}
                                             alt="Circle" className="img-raised rounded-circle img-fluid"/>
                                     </div>
                                     <div className="name pt-5">
                                         <h3 className="title text-red text-center"
                                             data-tip="Titre de la Prestation">{service_to_show.title}</h3>
                                         <h6 className="pb-2"
-                                            data-tip="Different genre produit par l'artiste">{service_to_show.thematics.join(", ")}</h6>
+                                            data-tip="Different genre produit par l'artiste">
+                                            {service_to_show.thematics.join(", ")}
+                                        </h6>
                                         <button className="btn btn-link btn-outline-info icon-instagram"
                                                 data-tip="Partager Cette Prestation sur Instagram"/>
                                         <button className="btn btn-link btn-outline-info icon-facebook"
@@ -185,19 +190,28 @@ function DisplayPrestation(props) {
                             <div className="row text-center pt-5">
                                 <div className="col-md-4">
                                     <div className="mb-4 p-1 rounded" style={{border: "dashed 1px white"}}>
-                                        <h2 className="text-red border-bottom" >Details de la reservations</h2>
-                                        <h3 className="col"><small className="text-light">Prix HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info" data-tip="Ceci est le prix HT"/></h3>
-                                        <h3 className="col"><small className="text-light">Tva (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info" data-tip="Ceci est le tva du prix HT"/></h3>
-                                        <h3 className="col"><small className="text-light">Prix TTC:</small>&nbsp;{total_amount}$&nbsp;<i className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/></h3>
+                                        <h2 className="text-red border-bottom">Details de la reservations</h2>
+                                        <h3 className="col"><small className="text-light">Prix
+                                            HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info"
+                                                                                 data-tip="Ceci est le prix HT"/></h3>
+                                        <h3 className="col"><small className="text-light">Tva
+                                            (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info"
+                                                                               data-tip="Ceci est le tva du prix HT"/>
+                                        </h3>
+                                        <h3 className="col"><small className="text-light">Prix
+                                            TTC:</small>&nbsp;{total_amount}$&nbsp;<i
+                                            className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/></h3>
                                     </div>
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h4 className="col text-primary">Temps de préparation
-                                                : {service_to_show.preparation_time}{checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;
+                                                : {service_to_show.preparation_time}
+                                                {checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;
                                                 <i className="icon icon-info"
                                                    data-tip="Ceci est le temps de preparation de l'artiste"/></h4>
                                             <h4 className="col text-primary">Durée de la prestation
-                                                : {service_to_show.duration_of_the_service}{checkUnitKey(service_to_show.unit_duration_of_the_service)}&nbsp;
+                                                : {service_to_show.duration_of_the_service}
+                                                {checkUnitKey(service_to_show.unit_duration_of_the_service)}&nbsp;
                                                 <i className="icon icon-info"
                                                    data-tip="Ceci est le durée de l'evenement"/></h4>
                                             <div className="col pt-2 pb-2">
@@ -208,7 +222,16 @@ function DisplayPrestation(props) {
                                                             *&nbsp;<i className="icon icon-info"
                                                                       data-tip="Indiquer la date et l'heure de l'évènement"/>
                                                         </div>
-                                                        <input type="date" value={event_date} className="form-control" onChange={(date) => ChangeDate(date, setEventDate, dispatch, changeDateToSearch)}/>
+                                                        <input type="date" value={event_date} className="form-control"
+                                                               onChange={
+                                                                   (date) =>
+                                                                       ChangeDate(
+                                                                           date,
+                                                                           setEventDate,
+                                                                           dispatch,
+                                                                           changeDateToSearch
+                                                                       )
+                                                               }/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -318,9 +341,9 @@ function DisplayPrestation(props) {
                                                                        onClick={() => removeOption(val)}
                                                                        data-tip="Deja ajouté"/>
                                                                     :
-                                                                <i className="icon icon-plus text-red s-24"
-                                                                                        onClick={() => addOption(val)}
-                                                                                        data-tip="Ajoute moi"/>}
+                                                                    <i className="icon icon-plus text-red s-24"
+                                                                       onClick={() => addOption(val)}
+                                                                       data-tip="Ajoute moi"/>}
                                                             </td>
                                                         </tr>)}
                                                     </tbody>
@@ -330,25 +353,24 @@ function DisplayPrestation(props) {
                                             }
                                         </div>
                                         <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Galerie d'images&nbsp;<i
-                                                className="icon icon-info"
-                                                data-tip="Quelques photo de l'artiste sur cette prestation"/></h2>
-                                            <div>
-                                                <div className="cube-container">
-                                                    <div className="cube initial-position">
-                                                        {service_to_show.galleries.map((val, index) =>
-                                                            <img key={index}
-                                                                 className={"cube-face-image image-" + index} src={val}
-                                                                 alt=""/>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="image-buttons">
+                                            <h2 className="col text-primary pb-3">
+                                                Galerie d'images&nbsp;
+                                                <i className="icon icon-info"
+                                                   data-tip="Quelques photo de l'artiste sur cette prestation"/>
+                                            </h2>
+                                            <div className="demo-gallery">
+                                                <ul id="lightgallery">
                                                     {service_to_show.galleries.map((val, index) =>
-                                                        <input onClick={ImageClick} width={100} type="image"
-                                                               className={"show-image-" + index} src={val} alt=""/>
+                                                        <li key={index} data-src={val}>
+                                                            <a href={val} target="_blank">
+                                                                <img alt="gallery" className="img-responsive" src={val}/>
+                                                                <div className="demo-gallery-poster">
+                                                                    <i className="icon icon-search-1 s-36 text-red"/>
+                                                                </div>
+                                                            </a>
+                                                        </li>
                                                     )}
-                                                </div>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div className="flex-grow-0 text-center pb-3">

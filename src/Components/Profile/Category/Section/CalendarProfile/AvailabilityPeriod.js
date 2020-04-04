@@ -7,7 +7,7 @@ import {
     addAllUserOptions,
     addAllUserPrestation,
     profileInitialisationCondition
-} from "../../../FunctionTools/FunctionProps";
+} from "../../../../FunctionTools/FunctionProps";
 import {
     addSpecialDateToData,
     calculateNumberDaysBetweenDates,
@@ -15,7 +15,7 @@ import {
     deleteInObject,
     formatDate,
     objectToFormData, updateAllOptions, updateAllServices
-} from "../../../FunctionTools/Tools";
+} from "../../../../FunctionTools/Tools";
 
 function AvailabilityPeriod(props) {
 

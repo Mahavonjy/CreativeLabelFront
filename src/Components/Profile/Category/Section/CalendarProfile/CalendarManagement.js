@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import ReactTooltip from "react-tooltip";
-import Calendar from "../../../KantoBiz/Calendar/Calendar";
+import Calendar from "../../../../KantoBiz/Calendar/Calendar";
 import AvailabilityPeriod from "./AvailabilityPeriod";
 
 function CalendarManagement(props) {
