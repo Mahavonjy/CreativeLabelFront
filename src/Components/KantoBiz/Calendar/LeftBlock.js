@@ -97,6 +97,9 @@ function LeftBlock(props) {
                         <i className="icon-long-arrow-left bg-transparent text-red s-24"
                            data-tip="revenir au calendrier" onClick={LeftBlock.handleClick}/>
                     </span>
+                    <button className="btn btn-outline-danger pl-5 pr-5"
+                            data-tip="Enregistrer tous vos changements" onClick={updateService}>Enregistrer
+                    </button>
                     <div className="text-center mt-4 mb-5" style={{width: "100%", height: "100px"}}>
                         <h4 className="text-red bolder mb-4">Mes prestation pour cette date</h4>
                         <table className="table">
@@ -111,9 +114,6 @@ function LeftBlock(props) {
                             </tbody>
                         </table>
                     </div>
-                    <button className="btn btn-outline-danger pl-5 pr-5 mt-5"
-                            data-tip="Enregistrer tous vos changements" onClick={updateService}>Enregistrer
-                    </button>
                 </div>
             </div>
         </div>

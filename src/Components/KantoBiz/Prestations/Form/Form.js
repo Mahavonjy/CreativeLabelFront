@@ -70,6 +70,7 @@ function Form(props) {
             }
         ).then(resp => {
             if (resp.error) {
+                setLoading(false);
                 if (!resp.message)
                     toast.error("Meme titre, type d'evenement dans la même ville ne peut pas etre dupliquer");
                 else toast.error(resp.message);

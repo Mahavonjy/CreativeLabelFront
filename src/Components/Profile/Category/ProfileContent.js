@@ -81,8 +81,7 @@ function ProfileContent(props) {
     };
 
     const tabList = (
-        <ul className="nav nav-tabs nav-material responsive-tab d-flex flex-wrap justify-content-center"
-            role="tablist">
+        <ul className="nav nav-tabs nav-material responsive-tab d-flex flex-wrap justify-content-center" role="tablist">
             {props.user_role !== "professional_auditor" &&
             <li className="nav-item">
                 <a className="nav-link active show"
@@ -177,25 +176,18 @@ function ProfileContent(props) {
 
             {popupAddSingle && <AddSingle Type={"beats"} closePopup={(e, data) => togglePopupAddSingle(e, data)}/>}
 
-            <Modal
-                width="80%"
-                height="60%"
-                effect="fadeInUp"
-                visible={(props.addNewPrestation ? props.addNewPrestation : props.addNewPrestationForNewArtist)}
-                onClickAway={
-                    () =>
-                        props.addNewPrestation
-                            ? props.setAddNewPrestation(false) :
-                            props.setAddNewPrestationForNewArtist(false)
-                }>
+            <Modal width="80%"
+                   height="60%"
+                   effect="fadeInUp"
+                   visible={(props.addNewPrestation ? props.addNewPrestation : props.addNewPrestationForNewArtist)}>
                 <div className="bg-dark scrollbar-isl overflow-auto">
-                    <button
-                        className="ModalClose" onClick={() => {
-                        resetPropsForm(dispatch);
-                        props.addNewPrestation
-                            ? props.setAddNewPrestation(false)
-                            : props.setAddNewPrestationForNewArtist(false)
-                    }}>
+                    <button className="ModalClose"
+                            onClick={() => {
+                                resetPropsForm(dispatch);
+                                props.addNewPrestation
+                                    ? props.setAddNewPrestation(false)
+                                    : props.setAddNewPrestationForNewArtist(false)
+                            }}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     {(props.addNewPrestation ? props.addNewPrestation : props.addNewPrestationForNewArtist) &&

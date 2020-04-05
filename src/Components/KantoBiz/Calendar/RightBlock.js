@@ -312,36 +312,6 @@ function RightBlock(props) {
                             <div className="weekday text-red">{day.substring(0, 3)}</div>))}
                         {props.toggle && getDayBlocks()}
                     </div>
-                    <div className='my-legend pt-1 text-center'>
-                        <div className="legend-title text-black">Légende</div>
-                        <div className="legend-scale text-black pt-3">
-                            <ul className="row justify-content-center legend-labels border1">
-                                <li>
-                                    <span className="bolder" style={{background: '#74A9CF'}}>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Réservé&nbsp;
-                                    <i className="icon-info" data-tip="L'artiste a été réservé"/>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span className="bolder" style={{background: '#00c853'}}>Disponible&nbsp;
-                                    <i className="icon icon-info" data-tip="L'artiste est disponible"/>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span className="bolder" style={{background: '#ef6c00'}}>Indifférent&nbsp;
-                                    <i
-                                        className="icon icon-info"
-                                        data-tip="Réservation(s) en attente de validation par l'artiste"/>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span className="bolder" style={{background: '#ED1C24'}}>Indisponible&nbsp;
-                                        <i className="icon icon-info" data-tip="l'artiste est indisponible"/>
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
                 <div className="back back-right overflow-auto scrollbar-isl">
                     {checkServiceOptionToEdit()}

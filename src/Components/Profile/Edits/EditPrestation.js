@@ -3,7 +3,7 @@ import React, {memo, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {addMaterialsOfService, addPicturesOfService, addTravelExpenses} from "../../FunctionTools/FunctionProps";
+import {addMaterialsOfService, addTravelExpenses} from "../../FunctionTools/FunctionProps";
 import {
     changeFields,
     createOrUpdatePrestation,
@@ -17,7 +17,6 @@ import PrestationDetails from "../../KantoBiz/Prestations/Form/PrestationDetails
 import PrestationInformation from "../../KantoBiz/Prestations/Form/PrestationInformation";
 import Thematics from "../../KantoBiz/Prestations/Form/Thematics";
 import {checkErrorMessage} from "../../Validators/Validatiors";
-import CalendarManagement from "../Category/Section/CalendarProfile/CalendarManagement";
 import RefundPolicy from "../Category/Section/RefundPolicy";
 import Materials from "./Materials";
 import Options from "./Options";
@@ -49,17 +48,7 @@ function EditPrestation(props) {
     const props_materials = useSelector(state => state.KantoBizForm.materials);
 
     const isMounted = useRef(false);
-    const [files, setFiles] = useState((PropsFiles));
     const [travel_expenses, setTravelExpense] = useState(props_travel_expenses);
-
-    const deleteImage = (indexImage) => {
-        if (files.length > 1) {
-            let tmp = files.filter((file, index) => index !== indexImage);
-            setFiles(tmp);
-            dispatch(addPicturesOfService(tmp));
-            toast.success("Supprimer avec succès")
-        } else toast.error("Vous ne pouvez pas supprimer toute les photos")
-    };
 
     const updateMaterials = () => {
         let tmp = {...props_materials};
@@ -173,6 +162,30 @@ function EditPrestation(props) {
         </div>
     );
 
+    const prestationNav = (
+        <ul className="nav nav-tabs nav-material responsive-tab d-flex flex-wrap justify-content-center"
+            role="tablist">
+            <li className="nav-item">
+                <a className="nav-link active show"
+                   data-toggle="tab"
+                   href="#edit-thematics"
+                   role="tab"
+                   aria-selected="false">
+                    Thematique
+                </a>
+            </li>
+            <li className="nav-item">
+                <a className="nav-link"
+                   data-toggle="tab"
+                   href="#edit-details"
+                   role="tab"
+                   aria-selected="false">
+                    Informations sur la prestation
+                </a>
+            </li>
+        </ul>
+    );
+
     useEffect(() => {
 
         return () => {
@@ -214,27 +227,7 @@ function EditPrestation(props) {
                                  id="v-pills-prestation"
                                  role="tabpanel"
                                  aria-labelledby="v-pills-prestation-tab">
-                                <ul className="nav nav-tabs nav-material responsive-tab"
-                                    role="tablist">
-                                    <li className="nav-item">
-                                        <a className="nav-link active show"
-                                           data-toggle="tab"
-                                           href="#edit-thematics"
-                                           role="tab"
-                                           aria-selected="false">
-                                            Thematique
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link"
-                                           data-toggle="tab"
-                                           href="#edit-details"
-                                           role="tab"
-                                           aria-selected="false">
-                                            Informations sur la prestation
-                                        </a>
-                                    </li>
-                                </ul>
+                                {prestationNav}
                                 <div className="tab-content mt-2">
                                     <div className="tab-pane fade show active" id="edit-thematics" role="tabpanel">
                                         <Thematics var={{artistType: role}} edit/>
@@ -333,10 +326,6 @@ function EditPrestation(props) {
                                         <PrestationDetails edit/>
                                     </div>
                                     <div className="tab-pane" id="show-calendar" role="tabpanel">
-                                        <h2 className="text-center text-primary pb-3">Calendrier&nbsp;
-                                            <i className="icon icon-info"
-                                               data-tip="Ceci est un aperçu de votre planing"/>
-                                        </h2>
                                         <Calendar noEdit/>
                                     </div>
                                 </div>

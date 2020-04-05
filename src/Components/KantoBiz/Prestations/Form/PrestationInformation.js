@@ -123,7 +123,7 @@ function PrestationInformation(props) {
             </div>
             <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl"
                  style={{height: 300}}>
-                <div className="col-md-7">
+                <div className="col-lg-8">
                     <div className="row">
                         <div className="col-md-6 form-material">
                             {/* Input */}
@@ -218,12 +218,11 @@ function PrestationInformation(props) {
                                                           funcToFillInProps={addOthersCityOfService} sort/>
                                     </div>
                                 </div>}
-
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="col-md-5 text-center">
+                <div className="col-lg-4 text-center">
                     <span className="font-weight-lighter pb-2">Faire un glisser/déposer des images</span>
                     <div className="m-2 text-center">
                         <button className="btn btn-outline-danger pl-5 pr-5 mb-2"

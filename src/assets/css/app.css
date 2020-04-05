@@ -22765,11 +22765,7 @@ select::-ms-expand {
 }
 
 .input-file {
-    height: auto;
-    width: 100%;
     opacity: 0;
-    top: 0;
-    left: 0;
 }
 
 .hovereffect {

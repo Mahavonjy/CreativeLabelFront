@@ -85,21 +85,23 @@ function ProfileInformation(props) {
                         </div>
                         {!loadingPhoto ?
                             <div className="text-center rounded-top p-5 mt-5" style={cover_style}>
-                                <i className="icon-edit1 cursor-pointer s-36 absolute top-20 m-5 text-red"
-                                   onClick={() => document.getElementById("cover_area_file").click()}
-                                   data-tip="modifier la photo de couverture"/>
-                                <input id="cover_area_file"
-                                       type="file"
-                                       accept="image/png, image/jpeg"
-                                       className="input-file"
-                                       onChange={(e) => {
-                                           updateProfilePhoto(
-                                               null,
-                                               e.target.files[0],
-                                               "de couverture"
-                                           )
-                                       }}
-                                />
+                                <div className="cursor-pointer absolute ml-5">
+                                    <i className="icon-edit1 text-center bg-grey rounded-lg s-36 bolder text-red"
+                                       onClick={() => document.getElementById("cover_area_file").click()}
+                                       data-tip="modifier la photo de couverture"/>
+                                    <input id="cover_area_file"
+                                           type="file"
+                                           accept="image/png, image/jpeg"
+                                           className="input-file"
+                                           onChange={(e) => {
+                                               updateProfilePhoto(
+                                                   null,
+                                                   e.target.files[0],
+                                                   "de couverture"
+                                               )
+                                           }}
+                                    />
+                                </div>
                                 <figure className="avatar avatar-xl">
                                     <div className="hovereffect">
                                         <img src={profile_info.photo ? profile_info.photo : PhotoD} alt="profile"/>
@@ -129,14 +131,14 @@ function ProfileInformation(props) {
                                             borderTopLeftRadius: "10px",
                                             borderTopRightRadius: "10px"
                                         }}>
-                                        {profile_info.name ? profile_info.name : "Name"}
+                                        {profile_info.name}
                                     </h4>
                                     <h4 className="text-light bg-dark center pt-2 pb-2" style={{
                                         width: "80%",
                                         borderBottomLeftRadius: "10px",
                                         borderBottomRightRadius: "10px"
                                     }}>
-                                        {profile_info.email ? profile_info.email : "Email"}
+                                        {profile_info.email}
                                     </h4>
                                 </div>
                             </div> :
@@ -164,8 +166,13 @@ function ProfileInformation(props) {
                             </div>
                             <div className="row justify-content-center">
                                 {[
-                                    ['age', 'Age'], ['gender', 'Genre'], ['birth', 'Anniversaire'], ['country', 'Pays'],
-                                    ['address', 'Adresse'], ['phone', 'Téléphone'], ['city', 'Ville']
+                                    ['age', 'Age'],
+                                    ['gender', 'Genre'],
+                                    ['birth', 'Anniversaire'],
+                                    ['country', 'Pays'],
+                                    ['address', 'Adresse'],
+                                    ['phone', 'Téléphone'],
+                                    ['city', 'Ville']
                                 ].map((val, index) =>
                                     <div className="col-md-4" key={index}>
                                         <div className="p-4">

@@ -1,4 +1,4 @@
-import {MDBCol, MDBInput, MDBRow} from "mdbreact";
+import {MDBCol, MDBRow} from "mdbreact";
 import React, {useEffect, useRef} from "react";
 import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
@@ -23,8 +23,8 @@ import DisplayPrestation from "../KantoBiz/Prestations/Results/DisplayPrestation
 import SearchBar from "../KantoBiz/SearchBar";
 import IslPlayer from "../Players/Players";
 import Preference from "../Preference/Preference";
-import Profile from "../Profile/Profile";
 import OtherProfile from "../Profile/OtherProfile";
+import Profile from "../Profile/Profile";
 import CommandError from "../StatusPage/CommandStatus/Error/CommandError";
 import CommandSuccess from "../StatusPage/CommandStatus/Success/CommandSuccess";
 import {ForAddToCard} from "./PopupFields"
@@ -108,7 +108,14 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                             <i className="icon-pause s-28 text-danger"
                                                onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
                                             <i className="icon-play s-28 text-danger"
-                                               onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
+                                               onClick={
+                                                   () => CreateBeatsPlaylist.Play(
+                                                       index,
+                                                       "beats",
+                                                       false
+                                                   ).then(() => null)
+                                               }
+                                            />}
                                     </div> : <div>
                                         {states.link[index] ?
                                             <div className="text-red">
@@ -116,7 +123,14 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                                     <i className="icon-pause s-28 text-danger"
                                                        onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
                                                     <i className="icon-play s-28 text-danger"
-                                                       onClick={() => CreateBeatsPlaylist.Play(index, "beats", false).then(() => null)}/>}
+                                                       onClick={
+                                                           () => CreateBeatsPlaylist.Play(
+                                                               index,
+                                                               "beats",
+                                                               false
+                                                           ).then(() => null)
+                                                       }/>
+                                                }
                                             </div> :
                                             <div className="spinner-grow text-primary" role="status">
                                                 <span className="sr-only"/>
@@ -155,7 +169,10 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                             <i className="icon-pause s-28 text-danger"
                                                onClick={() => CreateBeatsPlaylist.pausePlayer(true)}/> :
                                             <i className="icon-play s-28 text-danger"
-                                               onClick={() => CreateBeatsPlaylist.Play(index, "beats", false)}/>}
+                                               onClick={
+                                                   () => CreateBeatsPlaylist.Play(index, "beats", false)
+                                               }
+                                            />}
                                     </div>
                                     :
                                     <div className="spinner-grow text-primary" role="status">
@@ -178,16 +195,19 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     </div>
                                 }
                             </div>
-                            <div
-                                className={height_div !== "user_profile" ? "col-md-6 d-none d-sm-block" : "col-md-7 d-none d-sm-block"}>
+                            <div className={
+                                height_div !== "user_profile"
+                                    ? "col-md-6 d-none d-sm-block"
+                                    : "col-md-7 d-none d-sm-block"}>
                                 <div className="d-flex">
                                     {height_div !== "user_profile" ?
                                         <small className="ml-auto">{val.silver_price}$</small> : null}
                                     <small className="ml-auto">{val.bpm}/bpm</small>
                                     {height_div !== "user_profile" ?
-                                        <FacebookProvider appId={Conf.configs.FacebookId}>
-                                            <Feed
-                                                link={"http://" + window.location.host + '/beats/CheckThisBeat/' + val.id}>
+                                        <FacebookProvider appId={Conf.configs.FacebookId} debug>
+                                            <Feed link={
+                                                "http://" + window.location.host + '/beats/CheckThisBeat/' + val.id
+                                            }>
                                                 {({handleClick}) => (
                                                     <div className="ml-auto transparent border-0">
                                                         <i className="icon-share-1 text-red" onClick={handleClick}/>
@@ -252,13 +272,14 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                         <div>
                                             <button className="dropdown-item"
                                                     id={val.id} data-tip="Modifier"
-                                                    onClick={() => states.togglePopupEditSong(index, "beats")}><i
-                                                className="icon-edit mr-3"/>Edit
+                                                    onClick={() => states.togglePopupEditSong(index, "beats")}>
+                                                <i className="icon-edit mr-3"/> Edit
                                             </button>
                                             <button className="dropdown-item"
                                                     id={val.id} data-tip="supprimer"
-                                                    onClick={(e) => states.remove(e, "beats")}><i
-                                                className="icon-trash mr-3"/>Delete
+                                                    onClick={
+                                                        (e) => states.remove(e, "beats")}>
+                                                <i className="icon-trash mr-3"/> Delete
                                             </button>
                                         </div>}
                                 </div>
@@ -318,7 +339,8 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                     <div className="absolute zIndex99" style={{right: 10}}>
                         <div className="row justify-content-center">
                             <button className="btn btn-outline-danger m-2"
-                                    onClick={() => document.getElementById("LoginRequire").click()}>S'identifier
+                                    onClick={() => document.getElementById("LoginRequire").click()}>
+                                S'identifier
                             </button>
                             <button className="btn btn-outline-danger m-2" onClick={async () => {
                                 history.push("/register");
@@ -327,14 +349,16 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                             </button>
                         </div>
                     </div>}
-                    <div
-                        className={Title === "Creative KantoBiz" ? "has-bottom-gradient d-none d-sm-block" : "has-bottom-gradient"}>
+                    <div className={
+                        Title === "Creative KantoBiz"
+                            ? "has-bottom-gradient d-none d-sm-block"
+                            : "has-bottom-gradient"}>
                         <div className="home-menu pl-md-5">
                             <div className="row">
                                 <div className="col-12 col-lg-10 animated">
                                     <div className="xv-slider-content clearfix color-white">
-                                        <h1 className="s-36 mt-5 pt-5 font-weight-lighter"> {Title} </h1>
-                                        <p className="s-24 font-weight-lighter"
+                                        <h1 className="s-36 mt-5 pt-5 font-weight-lighter text-red"> {Title} </h1>
+                                        <p className="s-24 font-italic font-weight-lighter"
                                            dangerouslySetInnerHTML={{__html: Description}}/>
                                     </div>
                                 </div>
@@ -342,85 +366,117 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                         </div>
                     </div>
                     {Title === "Creative KantoBiz" ?
-                        <SearchBar headers={headers} displayOne={displayOne} setStateResult={setStateResult}
-                                   next={next}/> : null}
+                        <SearchBar
+                            next={next}
+                            headers={headers}
+                            displayOne={displayOne}
+                            setStateResult={setStateResult}
+                        /> : null}
                 </div>
             </div>
         </div>
     )
 };
 
-export const SideBars = (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected, openSideBar) => {
-    return (
-        <div className="sidebar">
-            <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
-            <ul className="sidebar-menu">
-                <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
-                {/* BEATS */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative BeatMaking" onClick={() => {
-                    (location.pathname !== "/beats") && history.push("/beats")
-                }}><i
-                    className={location.pathname === "/beats" ? "icon icon-heartbeat text-red s-24" : "icon icon-heartbeat s-24"}/>
-                    <span className="ml-5">BeatMaking</span>
-                </li>
+export const SideBars =
+    (state_cart, log_name, logout_class, location, history, headers, logout, isPlaying, ifUserGenreSelected) => {
+        return (
+            <div className="sidebar">
+                <a href="/beats"><img alt="Logo" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
+                <ul className="sidebar-menu">
+                    <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
+                    {/* BEATS */}
+                    <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative BeatMaking" onClick={() => {
+                        (location.pathname !== "/beats") && history.push("/beats")
+                    }}><i className={
+                        location.pathname === "/beats"
+                            ? "icon icon-heartbeat text-red s-24"
+                            : "icon icon-heartbeat s-24"}/>
+                        <span className="ml-5">BeatMaking</span>
+                    </li>
 
-                {/* KantoBiz */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative KantoBiz" onClick={() => {
-                    location.pathname !== "/kantobiz" && history.push("/kantobiz")
-                }}><i
-                    className={location.pathname === "/kantobiz" ? "icon icon-compact-disc-2 text-red s-24" : "icon icon-compact-disc-2 s-24"}/>
-                    <span className="ml-5">KantoBiz</span>
-                </li>
+                    {/* KantoBiz */}
+                    <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative KantoBiz" onClick={() => {
+                        location.pathname !== "/kantobiz" && history.push("/kantobiz")
+                    }}><i
+                        className={
+                            location.pathname === "/kantobiz"
+                                ? "icon icon-compact-disc-2 text-red s-24"
+                                : "icon icon-compact-disc-2 s-24"}/>
+                        <span className="ml-5">KantoBiz</span>
+                    </li>
 
-                {/* PROFILE */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profil" onClick={() => {
-                    if (headers['Isl-Token'] !== Conf.configs.TokenVisitor && !ifUserGenreSelected)
-                        toast.warn("Preference not defined");
-                    else headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile"
-                        ? document.getElementById("LoginRequire").click()
-                        : history.push("/Profile");
-                }}><i
-                    className={location.pathname === "/Profile" ? "icon icon-user text-red s-24" : "icon icon-user s-24"}/>
-                    <span className="ml-5">Profile</span>
-                </li>
+                    {/* PROFILE */}
+                    <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profil" onClick={() => {
+                        if (headers['Isl-Token'] !== Conf.configs.TokenVisitor && !ifUserGenreSelected)
+                            toast.warn("Preference not defined");
+                        else headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/Profile"
+                            ? document.getElementById("LoginRequire").click()
+                            : history.push("/Profile");
+                    }}><i className={
+                        location.pathname === "/Profile"
+                            ? "icon icon-user text-red s-24"
+                            : "icon icon-user s-24"}/>
+                        <span className="ml-5">Profile</span>
+                    </li>
 
-                {/* CART */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
-                    ((state_cart > 0) && (location.pathname !== "/Cart")) ? history.push("/Cart") : toast.warn("Veuillez remplir votre panier avant")
-                }}>
-                    <div id="CartBadge">
+                    {/* CART */}
+                    <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
+                        ((state_cart > 0)
+                            && (location.pathname !== "/Cart"))
+                            ? history.push("/Cart")
+                            : toast.warn("Veuillez remplir votre panier avant")
+                    }}>
+                        <div id="CartBadge">
                             <span className="p1 " data-count={state_cart}>
-                                <i className={location.pathname === "/Cart" ? "icon icon-cart-plus text-red s-24 mr-5" : "icon icon-cart-plus s-24 mr-5"}
-                                   data-count="4b"/> Cart
+                                <i data-count="4b"
+                                   className={
+                                       location.pathname === "/Cart"
+                                           ? "icon icon-cart-plus text-red s-24 mr-5"
+                                           : "icon icon-cart-plus s-24 mr-5"
+                                   }
+                                /> Cart
                             </span>
-                    </div>
-                </li>
+                        </div>
+                    </li>
 
-                {/* About */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="Onglet à propos" onClick={() => {
-                    (location.pathname !== "/about") && history.push("/about")
-                }}><i
-                    className={location.pathname === "/about" ? "icon text-red icon-info-circle s-24" : "icon icon-info-circle s-24"}/>
-                    <span className="ml-5">À propos</span>
-                </li>
+                    {/* About */}
+                    <li style={{margin: "0 0 20px 11px"}} data-tip="Onglet à propos" onClick={() => {
+                        (location.pathname !== "/about") && history.push("/about")
+                    }}><i className={
+                        location.pathname === "/about"
+                            ? "icon text-red icon-info-circle s-24"
+                            : "icon icon-info-circle s-24"}/>
+                        <span className="ml-5">À propos</span>
+                    </li>
 
-                {/* About */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="Politique"><i className="icon icon-flag s-24"/>
-                    <span className="ml-5">Le mentions légales</span>
-                </li>
+                    {/* About */}
+                    <li style={{margin: "0 0 20px 11px"}} data-tip="Politique"><i className="icon icon-flag s-24"/>
+                        <span className="ml-5">Le mentions légales</span>
+                    </li>
 
-                {/* LOGOUT OR LOGIN */}
-                <li style={logout_class === "icon icon-users-1 s-24 mr-5 text-red" ? {margin: "50px 0 20px 8px"} : {margin: "50px 0 20px 12px"}}
-                    data-tip={logout_class === "icon icon-users-1 s-24 mr-5 text-red" ? "Se Connecter" : " Se déconnecter"}
-                    onClick={() => logout()}>
-                    <i className={logout_class}/> <span>{log_name}</span>
-                </li>
-            </ul>
-        </div>
-    )
-};
+                    {/* LOGOUT OR LOGIN */}
+                    <li onClick={() => logout()}
+                        style={
+                            logout_class === "icon icon-users-1 s-24 mr-5 text-red"
+                                ? {margin: "50px 0 20px 8px"}
+                                : {margin: "50px 0 20px 12px"}
+                        }
+                        data-tip={
+                            logout_class === "icon icon-users-1 s-24 mr-5 text-red"
+                                ? "Se Connecter"
+                                : " Se déconnecter"
+                        }>
+                        <i className={logout_class}/> <span>{log_name}</span>
+                    </li>
+                </ul>
+            </div>
+        )
+    };
 
-export const SideBarsMain = (addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show) => {
+export const SideBarsMain = (
+    addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show
+) => {
     return (
         <div>
             <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>

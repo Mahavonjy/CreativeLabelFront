@@ -30,7 +30,7 @@ function PaymentsAndReservations(props) {
     const [addNote, setAddNote] = useState(false);
     const [visible, setVisible] = useState(false);
     const [reservationToNote, setReservationToNote] = useState({});
-    const [id_of_reservation, setIdOfReservation] = useState(false);
+    const [reservationId, setReservationId] = useState(false);
     const [func, setFunc] = useState(null);
     const [your_reservation_demand, setYourReservationDemand] = useState(false);
     const [headers, setHeaders] = useState({});
@@ -56,10 +56,17 @@ function PaymentsAndReservations(props) {
         })).then(r => setAddNote(true));
     };
 
-    const replace_array_value = async (id_of_reservation, value, array_, func_to_dispatch) => {
+    const update_payment_data = (data, res, func, reservationId) => {
+        let payment_history = data['payment_history'];
+        dispatchPayment(payment_history, dispatch);
+        dispatch(addPaymentHistory(payment_history));
+        replace_array_value(reservationId, data["reservations"], res, func).then(r => null)
+    };
+
+    const replace_array_value = async (reservationId, value, array_, func_to_dispatch) => {
         let tmp = [];
         await Promise.all(array_.map(element => {
-            if (element.id === id_of_reservation) tmp.push(value);
+            if (element.id === reservationId) tmp.push(value);
             else tmp.push(element);
         })).then(r => {
             setLoad(false);
@@ -68,38 +75,32 @@ function PaymentsAndReservations(props) {
         });
     };
 
-    const canceled_reservation_booked = (id_of_reservation) => {
-        if (id_of_reservation) {
+    const canceled_reservation_booked = (reservationId) => {
+        if (reservationId) {
             setLoad(true);
-            axios.put("api/reservation/auditor_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-                let payment_history = resp.data['payment_history'];
-                dispatchPayment(payment_history, dispatch);
-                dispatch(addPaymentHistory(payment_history));
-                replace_array_value(id_of_reservation, resp.data["reservations"], reservations_booking_list, addAllUSerBookingReservation).then(r => null)
+            axios.put("api/reservation/auditor_decline/" + reservationId, {}, {headers: headers}
+            ).then((resp) => {
+                update_payment_data(resp.data, reservations_booking_list, addAllUSerBookingReservation, reservationId)
             }).catch(error => toast.error(checkErrorMessage(error).message));
         }
     };
 
-    const accepted_reservation_demand = (id_of_reservation) => {
-        if (id_of_reservation) {
+    const accepted_reservation_demand = (reservationId) => {
+        if (reservationId) {
             setLoad(true);
-            axios.put("api/reservation/artist_accept/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-                let payment_history = resp.data['payment_history'];
-                dispatchPayment(payment_history, dispatch);
-                dispatch(addPaymentHistory(payment_history));
-                replace_array_value(id_of_reservation, resp.data["reservations"], reservations_list, addAllUSerReservation).then(r => null)
+            axios.put("api/reservation/artist_accept/" + reservationId, {}, {headers: headers}
+            ).then((resp) => {
+                update_payment_data(resp.data, reservations_list, addAllUSerReservation, reservationId)
             }).catch(error => toast.error(checkErrorMessage(error).message));
         }
     };
 
-    const canceled_reservation_demand = (id_of_reservation) => {
-        if (id_of_reservation) {
+    const canceled_reservation_demand = (reservationId) => {
+        if (reservationId) {
             setLoad(true);
-            axios.put("api/reservation/artist_decline/" + id_of_reservation, {}, {headers: headers}).then((resp) => {
-                let payment_history = resp.data['payment_history'];
-                dispatchPayment(payment_history, dispatch);
-                dispatch(addPaymentHistory(payment_history));
-                replace_array_value(id_of_reservation, resp.data["reservations"], reservations_list, addAllUSerReservation).then(r => null)
+            axios.put("api/reservation/artist_decline/" + reservationId, {}, {headers: headers}
+            ).then((resp) => {
+                update_payment_data(resp.data, reservations_list, addAllUSerReservation, reservationId)
             }).catch(error => toast.error(checkErrorMessage(error).message));
         }
     };
@@ -109,24 +110,42 @@ function PaymentsAndReservations(props) {
             <table className="responsive-table mt-4">
                 <thead>
                 <tr>
-                    <th scope="col-lg-4">Titre&nbsp;<i className="icon icon-info"
-                                                       data-tip="Le titre de la prestation que vous avez choisie"/></th>
-                    <th scope="col">Date&nbsp;<i className="icon icon-info" data-tip="Date de l'évènement"/></th>
-                    {demand ? <th scope="col">Auditeur&nbsp;<i className="icon icon-info"
-                                                               data-tip="Le nom de l'auditeur concerné"/></th>
-                        : <th scope="col">Artiste&nbsp;<i className="icon icon-info"
-                                                          data-tip="Le nom de l'artiste concerné par l'évènement"/>
+                    <th scope="col-lg-4">
+                        Titre&nbsp;
+                        <i className="icon icon-info" data-tip="Le titre de la prestation que vous avez choisie"/>
+                    </th>
+                    <th scope="col">
+                        Date&nbsp;
+                        <i className="icon icon-info" data-tip="Date de l'évènement"/>
+                    </th>
+                    {demand ?
+                        <th scope="col">
+                            Auditeur&nbsp;
+                            <i className="icon icon-info" data-tip="Le nom de l'auditeur concerné"/>
+                        </th>
+                        : <th scope="col">
+                            Artiste&nbsp;<i className="icon icon-info"
+                                            data-tip="Le nom de l'artiste concerné par l'évènement"/>
                         </th>}
-                    <th scope="col">Évènement&nbsp;<i className="icon icon-info"
-                                                      data-tip="Le type d'évènement de l'auditeur pro "/></th>
-                    <th scope="col">Adresse&nbsp;<i className="icon icon-info"
-                                                    data-tip="L'adresse où se déroulera l'évènement"/></th>
-                    <th scope="col">Montant&nbsp;<i className="icon icon-info"
-                                                    data-tip="Montant HT de la prestation (fixé par l'artiste)"/></th>
-                    <th scope="col">Status&nbsp;<i className="icon icon-info"
-                                                   data-tip="Le statut de la réservation de l'auditeur pro."/></th>
-                    <th scope="col">Action&nbsp;<i className="icon icon-info"
-                                                   data-tip={"Ce boutton sera est utile afin d'annuler la prestation sauf si le status est en échec"}/>
+                    <th scope="col">
+                        Évènement&nbsp;
+                        <i className="icon icon-info" data-tip="Le type d'évènement de l'auditeur pro "/>
+                    </th>
+                    <th scope="col">
+                        Adresse&nbsp;
+                        <i className="icon icon-info" data-tip="L'adresse où se déroulera l'évènement"/>
+                    </th>
+                    <th scope="col">
+                        Montant&nbsp;
+                        <i className="icon icon-info" data-tip="Montant HT de la prestation (fixé par l'artiste)"/>
+                    </th>
+                    <th scope="col">Status&nbsp;
+                        <i className="icon icon-info" data-tip="Le statut de la réservation de l'auditeur pro."/>
+                    </th>
+                    <th scope="col">Action&nbsp;
+                        <i className="icon icon-info"
+                           data-tip={"Ce boutton sera est utile afin d'annuler la " +
+                           "prestation sauf si le status est en échec"}/>
                     </th>
                 </tr>
                 </thead>
@@ -148,21 +167,24 @@ function PaymentsAndReservations(props) {
                                 <td className="small text-red" data-title="Status">Refuser</td>}
                         {value.status === "pending" ?
                             <td className="text-center border-bottom-0 border-right-0">
-
-                                {!demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
-                                    setVisible(true);
-                                    setFunc("canceled_reservation_booked");
-                                    setIdOfReservation(value.id);
-                                }}>Annuler</button>}
-
+                                {!demand &&
+                                <button className="btn btn-outline-danger text-center mt-2"
+                                        onClick={() => {
+                                            setVisible(true);
+                                            setFunc("canceled_reservation_booked");
+                                            setReservationId(value.id);
+                                        }}>Annuler
+                                </button>}
                                 {demand && <button className="btn btn-outline-danger text-center mt-2" onClick={() => {
                                     setVisible(true);
                                     setFunc("canceled_reservation_demand");
-                                    setIdOfReservation(value.id);
+                                    setReservationId(value.id);
                                 }}>Annuler</button>}
-
-                                {demand && <button className="btn btn-outline-success text-center mt-2"
-                                                   onClick={() => accepted_reservation_demand(value.id)}>Accepter</button>}
+                                {demand &&
+                                <button className="btn btn-outline-success text-center mt-2"
+                                        onClick={() => accepted_reservation_demand(value.id)}>
+                                    Accepter
+                                </button>}
                             </td> :
                             <td className="text-center border-bottom-0 border-right-0">
                                 {(value.status === "accepted") ?
@@ -170,7 +192,7 @@ function PaymentsAndReservations(props) {
                                         setVisible(true);
                                         if (role !== "professional_auditor") setFunc("canceled_reservation_demand");
                                         else setFunc("canceled_reservation_booked");
-                                        setIdOfReservation(value.id);
+                                        setReservationId(value.id);
                                     }}>Annuler</button>
                                     : <i className="icon icon-multiply text-red s-24 mt-2"/>}
                             </td>
@@ -203,7 +225,8 @@ function PaymentsAndReservations(props) {
                         <th scope="col">Montant&nbsp;<i className="icon icon-info"
                                                         data-tip="Montant TTC de la prestation"/></th>}
                     <th scope="col">Facture&nbsp;<i className="icon icon-info"
-                                                    data-tip="Vous pouvez telecharger votre facture ici en cliquant sur 'télécharger' ou via votre email"/>
+                                                    data-tip="Vous pouvez telecharger votre facture ici en
+                                                    cliquant sur 'télécharger' ou via votre email"/>
                     </th>
                     <th scope="col">Note&nbsp;<i className="icon icon-info"
                                                  data-tip={"Donner une note a la cette prestaion"}/></th>
@@ -220,13 +243,14 @@ function PaymentsAndReservations(props) {
                         <td className="small" data-title="Adresse">{value.address}</td>
                         {refund ? <td className="small" data-title="Montant Remboursée">{value.artist_amount}$</td> :
                             <td className="small" data-title="Montant">{value.total_amount}$</td>}
-                        {<td className="small text-red" data-title="Status"><a href={value.invoice} target="_blank"
-                                                                               download={!!value.invoice}>telecharger</a>
+                        {<td className="small text-red" data-title="Status">
+                            <a href={value.invoice} target="_blank" download={!!value.invoice}>telecharger</a>
                         </td>}
                         <td className="small text-red border-top" data-title="Status"
                             onClick={() => addNoteToAuditorOrPrestation(value)}
-                            data-tip="Donner une note à l'auditeur pro (sens de l'accueil, convivialité, sympathie, etc...)">Donner
-                            une note
+                            data-tip="Donner une note à l'auditeur pro
+                            (sens de l'accueil, convivialité, sympathie, etc...)">
+                            Donner une note
                         </td>
                     </tr>
                 )}
@@ -244,7 +268,14 @@ function PaymentsAndReservations(props) {
         return () => {
             isMounted.current = true
         };
-    }, [reservations_list, reservations_booking_list, payment_refunded, payment_accepted, payment_history, your_reservation_demand]);
+    }, [
+        reservations_list,
+        reservations_booking_list,
+        payment_refunded,
+        payment_accepted,
+        payment_history,
+        your_reservation_demand
+    ]);
 
     return (
         <div className="col" style={{minHeight: 320}}>
@@ -257,10 +288,16 @@ function PaymentsAndReservations(props) {
                     </button>
                     <div className="col text-center">
                         <div className="body">
-                            <h2 className="text-red pt-3">{your_reservation_demand ? "Donner une note a l'auditeur Pro" : "Donner une note a la prestation de l'artiste"}</h2>
+                            <h2 className="text-red pt-3">
+                                {your_reservation_demand
+                                    ? "Donner une note a l'auditeur Pro"
+                                    : "Donner une note a la prestation de l'artiste"}
+                            </h2>
                             <MDBRating iconFaces iconSize='2x' iconRegular containerClassName="justify-content-center"
                                        getValue={(resp) => setRating(resp.value)}
-                                       fillColors={['red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text']}
+                                       fillColors={[
+                                           'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
+                                       ]}
                             />
                             <button className="btn btn-outline-success btn-sm m-2 pl-5 pr-5 col-lg-12"
                                     onClick={sendNote}>Envoyer
@@ -277,8 +314,10 @@ function PaymentsAndReservations(props) {
                             <h3 className="text-light pt-5 mb-3">Etes vous sur de votre action ?</h3>
                             <div className="row justify-content-center">
                                 <button className="btn btn-outline-danger btn-sm m-2 pl-5 pr-5" onClick={() => {
-                                    if (func === "canceled_reservation_booked") canceled_reservation_booked(id_of_reservation);
-                                    else if (func === "canceled_reservation_demand") canceled_reservation_demand(id_of_reservation);
+                                    if (func === "canceled_reservation_booked")
+                                        canceled_reservation_booked(reservationId);
+                                    else if (func === "canceled_reservation_demand")
+                                        canceled_reservation_demand(reservationId);
                                     setVisible(false)
                                 }}>Oui
                                 </button>
@@ -322,8 +361,8 @@ function PaymentsAndReservations(props) {
                             <div className="tab-content p-5" id="v-pills-tabContent">
                                 <div className="tab-pane fade active show" id="v-pills-reservation" role="tabpanel"
                                      aria-labelledby="v-pills-reservation-tab">
-                                    {reservations_booking_list.length !== 0 ? tableGenerator(reservations_booking_list) :
-                                        <h3 className="text-red center-center ">Vous n'avez pas de reservations</h3>}
+                                    {reservations_booking_list.length !== 0 ? tableGenerator(reservations_booking_list)
+                                        : <h3 className="text-red center-center ">Vous n'avez pas de reservations</h3>}
                                 </div>
                                 {role !== "professional_auditor" &&
                                 <div className="tab-pane fade" id="v-pills-demandes" role="tabpanel"
@@ -334,14 +373,19 @@ function PaymentsAndReservations(props) {
                                 </div>}
                                 <div className="tab-pane fade" id="v-pills-payment-done" role="tabpanel"
                                      aria-labelledby="v-pills-payment-done-tab">
-                                    {payment_accepted.length !== 0 ? tablePaymentGenerator(payment_accepted, false) :
-                                        <h3 className="text-red center-center ">Vous n'avez pas de payment reussi</h3>}
+                                    {payment_accepted.length !== 0
+                                        ? tablePaymentGenerator(payment_accepted, false)
+                                        : <h3 className="text-red center-center ">
+                                            Vous n'avez pas de payment reussi
+                                        </h3>}
                                 </div>
                                 <div className="tab-pane fade" id="v-pills-payment-repaid" role="tabpanel"
                                      aria-labelledby="v-pills-payment-repaid-tab">
-                                    {payment_refunded.length !== 0 ? tablePaymentGenerator(payment_refunded, true) :
-                                        <h3 className="text-red center-center ">Vous n'avez pas de rembourssement
-                                            reussi</h3>}
+                                    {payment_refunded.length !== 0
+                                        ? tablePaymentGenerator(payment_refunded, true)
+                                        : <h3 className="text-red center-center ">
+                                            Vous n'avez pas de rembourssement reussi
+                                        </h3>}
                                 </div>
                             </div>
                         </div>

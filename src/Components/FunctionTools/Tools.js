@@ -301,9 +301,14 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
     let secure = false;
     for (let row in _props.allPrestation) {
         if (_props.allPrestation[row]["id"] !== props.service_id) {
-            if (_props.allPrestation[row]['title'] === props.PropsTitle && _props.allPrestation[row]['reference_city'] === props.PropsCityReference) {
+            if (_props.allPrestation[row]['title'] === props.PropsTitle
+                && _props.allPrestation[row]['reference_city'] === props.PropsCityReference
+            ) {
                 secure = true;
-            } else if (_props.allPrestation[row]['title'] === props.PropsTitle && compareArrays(_props.allPrestation[row]['events'], props.props_events_selected)) {
+            } else if (
+                _props.allPrestation[row]['title'] === props.PropsTitle
+                && compareArrays(_props.allPrestation[row]['events'], props.props_events_selected)
+            ) {
                 secure = true;
             }
         }
@@ -335,26 +340,30 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
 
     let response = {};
     if (!update) {
-        await axios.post("api/artist_services/newService", objectToFormData(tmp_prestation, props.PropsFiles), {headers: _props.headers}).then((resp) => {
-            let tmp = _props.allPrestation;
-            tmp.push(resp.data);
-            _props.setAllPrestation(tmp);
-            dispatch(addAllUserPrestation(tmp));
-            _props.setAddNewPrestation(false);
-            _props.close();
-            resetPropsForm(dispatch);
-            response = {"error": false, message: null}
+        await axios.post("api/artist_services/newService",
+            objectToFormData(tmp_prestation, props.PropsFiles),
+            {headers: _props.headers}).then((resp) => {
+                let tmp = _props.allPrestation;
+                tmp.push(resp.data);
+                _props.setAllPrestation(tmp);
+                dispatch(addAllUserPrestation(tmp));
+                _props.setAddNewPrestation(false);
+                _props.close();
+                resetPropsForm(dispatch);
+                response = {"error": false, message: null}
         }).catch((error) => {
             response = {"error": true, message: Validators.checkErrorMessage(error).message}
         });
     } else {
-        await axios.put("api/artist_services/update/" + props.service_id, objectToFormData(tmp_prestation, props.PropsFiles), {headers: _props.headers}).then((resp) => {
-            let tmp = [..._props.allPrestation];
-            tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
-            _props.setAllPrestation(tmp);
-            resetPropsForm(dispatch);
-            dispatch(addAllUserPrestation(tmp));
-            response = {"error": false, message: null}
+        await axios.put("api/artist_services/update/" + props.service_id,
+            objectToFormData(tmp_prestation, props.PropsFiles),
+            {headers: _props.headers}).then((resp) => {
+                let tmp = [..._props.allPrestation];
+                tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
+                _props.setAllPrestation(tmp);
+                resetPropsForm(dispatch);
+                dispatch(addAllUserPrestation(tmp));
+                response = {"error": false, message: null}
         }).catch((error) => {
             response = {"error": true, message: Validators.checkErrorMessage(error).message}
         });
@@ -487,9 +496,10 @@ export const updateAllOptions = (optionToUpdate, dispatch, headers) => {
         let option_id = tmpOption['id'];
         tmpOption = deleteInObject(tmpOption, ["materials"]);
         tmp_call.push(
-            axios.put('api/options/update/' + option_id, tmpOption, {headers: headers}).then((resp) => {
-                tmpAllOptions[row] = resp.data;
-                dispatch(addAllUserOptions(tmpAllOptions));
+            axios.put('api/options/update/' + option_id, tmpOption,
+                {headers: headers}).then((resp) => {
+                    tmpAllOptions[row] = resp.data;
+                    dispatch(addAllUserOptions(tmpAllOptions));
             })
         )
     }
@@ -503,9 +513,11 @@ export const updateAllServices = (prestations, dispatch, headers) => {
         let prestation_id = tmpPrestations[index]["id"];
         let prestation_selected = deleteInObject(tmpPrestations[index]);
         api_call_update.push(
-            axios.put('api/artist_services/update/' + prestation_id, objectToFormData(prestation_selected), {headers: headers}).then((resp) => {
-                tmpPrestations[index] = resp.data;
-                dispatch(addAllUserPrestation(tmpPrestations));
+            axios.put('api/artist_services/update/' + prestation_id,
+                objectToFormData(prestation_selected),
+                {headers: headers}).then((resp) => {
+                    tmpPrestations[index] = resp.data;
+                    dispatch(addAllUserPrestation(tmpPrestations));
             })
         )
     }
@@ -587,7 +599,9 @@ export const generatePagination = (_array, funcToDisplay) => {
                                             <small className="text-red">Ville</small>
                                             <ul className="small-kanto-list">
                                                 <li key={0}>{val.reference_city}</li>
-                                                {val.others_city.map((val, index) => <li key={index + 1}>{val}</li>)}
+                                                {val.others_city.map((val, index) =>
+                                                    <li key={index + 1}>{val}</li>
+                                                )}
                                             </ul>
                                         </div>
                                         <div className="col">
@@ -612,13 +626,17 @@ export const generatePagination = (_array, funcToDisplay) => {
                                 </div>
                                 <div data-tip="La durée de la preparation">
                                     <i className="icon icon-clock-1"/>
-                                    <div
-                                        className="value">{val.preparation_time}&nbsp;{checkUnitKey(val.unit_of_the_preparation_time)}</div>
+                                    <div className="value">
+                                        {val.preparation_time}&nbsp;
+                                        {checkUnitKey(val.unit_of_the_preparation_time)}
+                                    </div>
                                 </div>
                                 <div data-tip="La durée de la prestation">
                                     <i className="icon icon-clock-o"/>
-                                    <div
-                                        className="value">{val.duration_of_the_service}&nbsp;{checkUnitKey(val.unit_duration_of_the_service)}</div>
+                                    <div className="value">
+                                        {val.duration_of_the_service}&nbsp;
+                                        {checkUnitKey(val.unit_duration_of_the_service)}
+                                    </div>
                                 </div>
                                 <div data-tip="Le prix de la prestation">
                                     <i className="icon icon-money"/>
@@ -629,8 +647,13 @@ export const generatePagination = (_array, funcToDisplay) => {
                     </div>
                     <div className="general d-none d-sm-block">
                         <img alt=""
-                             src={val.galleries.length > 1 ? val.galleries[1] : "https://zupimages.net/up/19/42/zyu8.bmp"}
-                             width="100%" height="100%"/>
+                             width="100%"
+                             height="100%"
+                             src={val.galleries.length > 1
+                                 ? val.galleries[1]
+                                 : "https://zupimages.net/up/19/42/zyu8.bmp"
+                             }
+                        />
                         <h1 className="pt-2 ml-2 bolder text-red">{val.artist_name}</h1>
                         <p className="text-dark ml-2 font-weight-bold">{val.description}</p>
                         <h1 className="more text-black bolder">{val.price}$</h1>

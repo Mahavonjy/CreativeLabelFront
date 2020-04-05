@@ -9,6 +9,7 @@ import {
     addAllUserPrestation,
     addDescriptionOfService,
     addEventSelected,
+    addFileTechnicalSheet,
     addMaterialsOfService,
     addNumberOfArtist,
     addOptionSelected,
@@ -80,25 +81,27 @@ function MyPrestations(props) {
         let tmp_prestation = allPrestation[index];
         await dispatch(addServiceId(tmp_prestation.id));
         await dispatch(addUserId(tmp_prestation.user_id));
-        await dispatch(addServiceCountry(tmp_prestation.country));
-        await dispatch(addServiceSpecialDate(tmp_prestation.special_dates));
-        await dispatch(addUnitTimeOfService(checkUnitKey(tmp_prestation.unit_duration_of_the_service, true)));
-        await dispatch(addOptionSelected(tmp_prestation.thematics));
-        await dispatch(addPicturesOfService(tmp_prestation.galleries));
-        await dispatch(addTravelExpenses(tmp_prestation.travel_expenses));
+        await dispatch(addPriceOfService(tmp_prestation.price));
         await dispatch(addTitleOfService(tmp_prestation.title));
+        await dispatch(addTitleOfService(tmp_prestation.title));
+        await dispatch(addEventSelected(tmp_prestation.events));
+        await dispatch(addServiceCountry(tmp_prestation.country));
+        await dispatch(addOptionSelected(tmp_prestation.thematics));
+        await dispatch(changeStatusOfService(tmp_prestation.hidden));
+        await dispatch(addPicturesOfService(tmp_prestation.galleries));
+        await dispatch(addMaterialsOfService(tmp_prestation.materials));
+        await dispatch(addTravelExpenses(tmp_prestation.travel_expenses));
         await dispatch(addReferenceOfCity(tmp_prestation.reference_city));
         await dispatch(addOthersCityOfService(tmp_prestation.others_city));
         await dispatch(addDescriptionOfService(tmp_prestation.description));
-        await dispatch(addEventSelected(tmp_prestation.events));
-        await dispatch(addServiceTime(tmp_prestation.duration_of_the_service));
-        await dispatch(addPriceOfService(tmp_prestation.price));
+        await dispatch(addServiceSpecialDate(tmp_prestation.special_dates));
         await dispatch(addPreparationTime(tmp_prestation.preparation_time));
         await dispatch(addNumberOfArtist(tmp_prestation.number_of_artists));
-        await dispatch(addUnitTimeOfPreparation(checkUnitKey(tmp_prestation.unit_of_the_preparation_time, true)));
-        await dispatch(changeStatusOfService(tmp_prestation.hidden));
         await dispatch(addServiceRefundPolicy(tmp_prestation.refund_policy));
-        await dispatch(addMaterialsOfService(tmp_prestation.materials));
+        await dispatch(addServiceTime(tmp_prestation.duration_of_the_service));
+        await dispatch(addFileTechnicalSheet(tmp_prestation.materials.technical_sheet));
+        await dispatch(addUnitTimeOfService(checkUnitKey(tmp_prestation.unit_duration_of_the_service, true)));
+        await dispatch(addUnitTimeOfPreparation(checkUnitKey(tmp_prestation.unit_of_the_preparation_time, true)));
         await setEditPrestation(true)
     };
 

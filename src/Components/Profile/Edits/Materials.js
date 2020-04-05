@@ -1,11 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    addFileTechnicalSheet,
-    addMaterialsOfService,
-    addMaterialsCopy,
-    addServicesCopy
-} from "../../FunctionTools/FunctionProps";
+import {toast} from "react-toastify";
+import {addFileTechnicalSheet, addMaterialsOfService, addServicesCopy} from "../../FunctionTools/FunctionProps";
 
 function Materials(props) {
 
@@ -14,11 +10,18 @@ function Materials(props) {
     const prestationCopy = useSelector(state => state.Others.prestationCopy);
     const materialsCopy = useSelector(state => state.Others.materialsCopy);
     const materials = useSelector(state => state.KantoBizForm.materials);
+    const technical_sheet = useSelector(state => state.KantoBizForm.technical_sheet);
 
-    const isMounted = useRef(false);
-    const [tags, setTags] = useState(props.index || props.index === 0 && props.edit ? [...materialsCopy['list_of_materials']] : [...materials['list_of_materials']]);
-    const [technicalSheet, setTechnicalSheet] = useState();
+    const [technicalSheet, setTechnicalSheet] = useState(technical_sheet);
     const [tagsSuggestion, setTagSuggestion] = useState(["Micro", "Piano"]);
+    const isMounted = useRef(false);
+    const [tags, setTags] = useState(
+        props.index
+        || props.index === 0
+        && props.edit
+            ? [...materialsCopy['list_of_materials']]
+            : [...materials['list_of_materials']]
+    );
 
     const removeTag = (i) => {
         const newTags = [...tags];
@@ -39,13 +42,13 @@ function Materials(props) {
     };
 
     const updateServiceCopy = (origin_of_materials) => {
-        let prestationCopy_ = [...prestationCopy];
-        prestationCopy_[props.index]["special_dates"][dateKey]["materials"]["list_of_materials"] = origin_of_materials.list_of_materials;
-        dispatch(addServicesCopy(prestationCopy_));
-    }
-;
+            let pCopy_ = [...prestationCopy];
+            pCopy_[props.index]["special_dates"][dateKey]["materials"]["list_of_materials"]
+                = origin_of_materials.list_of_materials;
+            dispatch(addServicesCopy(pCopy_));
+        }
+    ;
     const inputKeyDown = (e, attr_val) => {
-
         let key, val;
         try {
             key = e.key;
@@ -83,10 +86,24 @@ function Materials(props) {
         <div className={!props.noExemple && "card no-b"}>
             {!props.noExemple &&
             <div className="custom-file mt-3 mb-3" data-tip="Fiche technique en pdf">
-                <input type="file" accept="application/pdf" className="custom-file-input"
-                       onChange={(e) => addTechnicalSheet(e)}/>
-                <label className="custom-file-label text-black" htmlFor="inputGroupFile01">Importer ici la fiche
-                    technique de cette prestation</label>
+                <button className="btn btn-outline-danger pl-5 pr-5 m-1"
+                        onClick={() => document.getElementsByClassName("input-file sheet")[0].click()}>
+                    {
+                        technical_sheet
+                            ? "Importer la fiche technique de cette prestation"
+                            : "Changer la fiche technique de cette prestation"
+                    }
+                </button>
+                <a target="_blank"
+                   className="btn btn-outline-danger pl-5 pr-5 m-1"
+                   onClick={() => !technical_sheet && toast.warn("Pas de fiche technique a afficher")}
+                   href={
+                       typeof technical_sheet === "string"
+                           ? technical_sheet
+                           : technical_sheet && URL.createObjectURL(technical_sheet)
+                   }>
+                    Afficher la fiche technique de cette prestation
+                </a>
             </div>}
             <div className="tag-editor">
                 <span className="tag-editor-inner">
@@ -132,6 +149,11 @@ function Materials(props) {
                     </div>
                 </span>
             </div>}
+            <input type="file"
+                   className="input-file sheet"
+                   accept="application/pdf"
+                   onChange={(e) => addTechnicalSheet(e)}
+            />
         </div>
     );
 }
