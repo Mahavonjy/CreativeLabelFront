@@ -186,6 +186,48 @@ function EditPrestation(props) {
         </ul>
     );
 
+    const prestationPCNav = (
+        <ul className="nav nav-tabs nav-material responsive-tab d-flex flex-wrap justify-content-center"
+            role="tablist">
+            <li className="nav-item">
+                <a className="nav-link active show"
+                   data-toggle="tab"
+                   href="#edit-travel-expenses"
+                   role="tab"
+                   aria-selected="false">
+                    Frais de deplacement
+                </a>
+            </li>
+            <li className="nav-item">
+                <a className="nav-link"
+                   data-toggle="tab"
+                   href="#edit-refund-policy"
+                   role="tab"
+                   aria-selected="false">
+                    Politique de remboursement
+                </a>
+            </li>
+            <li className="nav-item">
+                <a className="nav-link"
+                   data-toggle="tab"
+                   href="#edit-service-details"
+                   role="tab"
+                   aria-selected="false">
+                    Details de la prestation
+                </a>
+            </li>
+            <li className="nav-item">
+                <a className="nav-link"
+                   data-toggle="tab"
+                   href="#show-calendar"
+                   role="tab"
+                   aria-selected="false">
+                    Calendrier
+                </a>
+            </li>
+        </ul>
+    );
+
     useEffect(() => {
 
         return () => {
@@ -245,46 +287,7 @@ function EditPrestation(props) {
                                     cette balise sera enlever pour les beatmakers et les
                                     monteurs vidéoclips au vue du caractère spécifique de leurs prestations
                                 */}
-                                <ul className="nav nav-tabs nav-material responsive-tab"
-                                    role="tablist">
-                                    <li className="nav-item">
-                                        <a className="nav-link active show"
-                                           data-toggle="tab"
-                                           href="#edit-travel-expenses"
-                                           role="tab"
-                                           aria-selected="false">
-                                            Frais de deplacement
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link"
-                                           data-toggle="tab"
-                                           href="#edit-refund-policy"
-                                           role="tab"
-                                           aria-selected="false">
-                                            Politique de remboursement
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link"
-                                           data-toggle="tab"
-                                           href="#edit-service-details"
-                                           role="tab"
-                                           aria-selected="false">
-                                            Details de la prestation
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link"
-                                           data-toggle="tab"
-                                           href="#show-calendar"
-                                           role="tab"
-                                           aria-selected="false">
-                                            Calendrier
-                                        </a>
-                                    </li>
-                                </ul>
-
+                                {prestationPCNav}
                                 <div className="tab-content mt-2">
                                     <div className="tab-pane fade show active"
                                          id="edit-travel-expenses"

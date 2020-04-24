@@ -102,10 +102,12 @@ function Home() {
             });
             headers['Isl-Token'] = currentSession.token;
             if (beats.length === 0) Online();
+            else setLoading(false);
         }).catch(() => {
             dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
             if (beats.length === 0) NotOnline();
+            else setLoading(false);
         });
     };
 

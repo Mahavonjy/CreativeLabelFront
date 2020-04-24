@@ -8,6 +8,7 @@ import ReactTooltip from 'react-tooltip';
 import { useSelector } from "react-redux";
 import {generateInput, smallSpinner} from "../../FunctionTools/CreateFields";
 import * as Tools from "../../FunctionTools/Tools";
+import {checkErrorMessage} from "../../Validators/Validatiors";
 
 function AddSingle (props) {
 
@@ -110,14 +111,11 @@ function AddSingle (props) {
                 'Isl-Token': user_credentials.token
             };
             axios.post( link, bodyFormData, {headers: headers}).then(resp => {
-                setLoading(false);
                 props.closePopup(1, resp.data);
-            }).catch(err => {
-                try {
-                    toast.error(err.response.data);
-                } catch (e) {
-                    console.log(err)
-                }
+            }).catch(error => {
+                disabledBtn(id);
+                setLoading(false);
+                toast.error(checkErrorMessage(error).message);
             });
         }
     };

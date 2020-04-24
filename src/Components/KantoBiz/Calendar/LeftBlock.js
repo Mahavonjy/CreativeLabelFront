@@ -109,7 +109,7 @@ function LeftBlock(props) {
                                     <td>{!props.toggle && getHidePrestation(index)}</td>
                                     <td onClick={() => changeClicked(index)}><img src={val.galleries[0]} width="25" height="25" className="border1" alt="prestation-image"/></td>
                                     <td onClick={() => changeClicked(index)}><small className="bolder">{val.title}</small></td>
-                                    <td onClick={() => changeClicked(index)}><small className="bolder">{val.price}$</small></td>
+                                    {/*<td onClick={() => changeClicked(index)}><small className="bolder">{val.price}$</small></td>*/}
                                 </tr>)}
                             </tbody>
                         </table>

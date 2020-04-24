@@ -145,9 +145,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                             <button className="dropdown-item"
                                     type="button" data-toggle="modal"
                                     data-target={"#" + set_of_beats_name + val.id}>
-                                <small className="ml-auto"><i
-                                    className="icon-opencart text-red"/>
-                                </small>
+                                <small className="ml-auto"><i className="icon-opencart text-red"/></small>
                             </button>
                             {/* Here is Popup for add to cart */}
                             <div> {ForAddToCard(val, set_of_beats_name, states)} </div>
@@ -216,7 +214,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                             </Feed>
                                         </FacebookProvider> :
                                         <div className="ml-auto">
-                                            <small className="ml-auto">Ecouté {val.number_play} fois</small>
+                                            <small className="ml-auto">Ecouté(e) {val.number_play} fois</small>
                                         </div>}
                                     {height_div !== "user_profile" ?
                                         <i className="icon-heart-1 ml-auto text-red" data-tip="Like me"
@@ -234,10 +232,11 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                 <div className="col-sm-2 d-none d-sm-block">
                                     <div className="d-flex">
                                         <div className="ml-auto">
-                                            <button className="btn btn-outline-primary btn-sm" type="button"
+                                            <button className="btn btn-outline-primary btn-sm"
+                                                    type="button"
                                                     data-toggle="modal"
-                                                    data-target={"#" + set_of_beats_name + val.id}><i
-                                                className="icon-opencart"/>
+                                                    data-target={"#" + set_of_beats_name + val.id}>
+                                                <i className="icon-opencart"/>
                                             </button>
                                         </div>
                                     </div>
@@ -246,7 +245,8 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     <div className="d-flex">
                                         <div className="ml-auto">
                                             <i className="icon-trash s-24"
-                                               id={val.id} data-tip="supprimer"
+                                               id={val.id}
+                                               data-tip="supprimer"
                                                onClick={(e) => states.remove(e, "beats")}>
                                             </i>
                                         </div>
@@ -262,9 +262,10 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     {height_div !== "user_profile" ?
                                         <div>
                                             <button className="dropdown-item"
-                                                    type="button" data-toggle="modal"
-                                                    data-target={"#" + set_of_beats_name + val.id}><i
-                                                className="icon-shopping-bag mr-3"/>Add To Cart
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target={"#" + set_of_beats_name + val.id}>
+                                                <i className="icon-shopping-bag mr-3"/>Ajouter au panier
                                             </button>
                                             <small className="dropdown-item"><i
                                                 className="icon-money mr-3"/>{val.silver_price}$</small>
@@ -273,13 +274,13 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                             <button className="dropdown-item"
                                                     id={val.id} data-tip="Modifier"
                                                     onClick={() => states.togglePopupEditSong(index, "beats")}>
-                                                <i className="icon-edit mr-3"/> Edit
+                                                <i className="icon-edit mr-3"/> Modifier
                                             </button>
                                             <button className="dropdown-item"
                                                     id={val.id} data-tip="supprimer"
                                                     onClick={
                                                         (e) => states.remove(e, "beats")}>
-                                                <i className="icon-trash mr-3"/> Delete
+                                                <i className="icon-trash mr-3"/> Supprimer
                                             </button>
                                         </div>}
                                 </div>
@@ -358,7 +359,7 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                                 <div className="col-12 col-lg-10 animated">
                                     <div className="xv-slider-content clearfix color-white">
                                         <h1 className="s-36 mt-5 pt-5 font-weight-lighter text-red"> {Title} </h1>
-                                        <p className="s-24 font-italic font-weight-lighter"
+                                        <p className="s-24 font-weight-lighter"
                                            dangerouslySetInnerHTML={{__html: Description}}/>
                                     </div>
                                 </div>
@@ -479,36 +480,77 @@ export const SideBarsMain = (
 ) => {
     return (
         <div>
-            <Route path="/beats" exact component={() => <Beats ToPlay={addToPlaylist}/>}/>
-            <Route path="/CommandSuccess" exact component={() => <CommandSuccess/>}/>
-            <Route path="/CommandError" exact component={() => <CommandError/>}/>
-            <Route path="/kantobiz" exact component={() => <KantoBiz headers={headers}/>}/>
-            <Route path="/Cart" exact component={() => <Cart ToPlay={addToPlaylist}/>}/>
-            <Route path="/beats/CheckThisBeat/:id(\d+)" exact
-                   component={() => <OneBeat ToPlay={addToPlaylist} SingleBeat={single_beat}
-                                             SimilarBeats={beats_similar}/>}/>
-            <Route path="/Profile/isl_artist_profile/:id(\d+)" exact
-                   component={() => <OtherProfile ToPlay={addToPlaylist} ProfileChecked={profile_checked}
-                                                  UserData={user_data}/>}/>
-            <Route path="/Profile" exact component={() => {
-                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? history.goBack() : (
-                    <Profile ToPlay={addToPlaylist}/>)
+            <Route exact
+                   path="/about"
+                   component={() => <About/>}
+            />
+            <Route exact
+                   path="/CommandError"
+                   component={() => <CommandError/>}
+            />
+            <Route exact
+                   path="/CommandSuccess"
+                   component={() => <CommandSuccess/>}
+            />
+            <Route exact
+                   path="/Cart"
+                   component={() => <Cart ToPlay={addToPlaylist}/>}
+            />
+            <Route exact
+                   path="/beats"
+                   component={() => <Beats ToPlay={addToPlaylist}/>}
+            />
+            <Route exact
+                   path="/kantobiz"
+                   component={() => <KantoBiz headers={headers}/>}
+            />
+            <Route exact
+                   path="/beats/CheckThisBeat/:id(\d+)"
+                   component={() =>
+                       <OneBeat
+                           ToPlay={addToPlaylist}
+                           SingleBeat={single_beat}
+                           SimilarBeats={beats_similar}
+                       />
+                   }/>
+            <Route exact
+                   path="/Profile/isl_artist_profile/:id(\d+)"
+                   component={() =>
+                       <OtherProfile
+                           ToPlay={addToPlaylist}
+                           ProfileChecked={profile_checked}
+                           UserData={user_data}
+                       />
+                   }/>
+            <Route exact
+                   path="/Profile"
+                   component={() => {
+                       return headers['Isl-Token'] === Conf.configs.TokenVisitor
+                           ? history.goBack() : (<Profile ToPlay={addToPlaylist}/>)
+                   }}/>
+            <Route exact
+                   path="/preference"
+                   component={() => {
+                       return headers['Isl-Token'] === Conf.configs.TokenVisitor
+                           ? history.goBack() : (<Preference/>)
+                   }}/>
+            <Route exact
+                   path="/show-service"
+                   component={() => {
+                       if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
+                       else window.location.replace("/KantoBiz")
+                   }}/>
+            <Route exact
+                   path="/show-service-read"
+                   component={() => {
+                       if (service_to_show["id"]) return <DisplayPrestation headers={headers} read/>;
+                       else window.location.replace("/Profile")
             }}/>
-            <Route path="/preference" exact component={() => {
-                return headers['Isl-Token'] === Conf.configs.TokenVisitor ? history.goBack() : (<Preference/>)
-            }}/>
-            <Route path="/show-service" exact component={() => {
-                if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
-                else window.location.replace("/KantoBiz")
-            }}/>
-            <Route path="/show-service-read" exact component={() => {
-                if (service_to_show["id"]) return <DisplayPrestation headers={headers} read/>;
-                else window.location.replace("/Profile")
-            }}/>
-            <Route path="/register" exact component={() => {
-                return headers['Isl-Token'] !== Conf.configs.TokenVisitor ? history.goBack() : (<Register/>)
-            }}/>
-            <Route path="/about" exact component={() => <About/>}/>
+            <Route exact
+                   path="/register"
+                   component={() => {
+                       return headers['Isl-Token'] !== Conf.configs.TokenVisitor ? history.goBack() : (<Register/>)
+                   }}/>
         </div>
     )
 };
@@ -516,10 +558,15 @@ export const SideBarsMain = (
 export const generateInput = (label, value, setValue, field_, type_, icon, tip, disable, required) => {
     return (
         <div className="input-group-prepend d-inline-block center" style={{width: "40%"}}>
-            <div className="input-group-text black-text bolder" data-tip={tip}><i
-                className={icon}/>&nbsp;{label}{required && "*"}</div>
-            <input value={value} onChange={(e) => changeFields(setValue, e)}
-                   id={field_} name={field_} placeholder={field_} className="form-control" type={type_}
+            <div className="input-group-text black-text bolder" data-tip={tip}>
+                <i className={icon}/>&nbsp;{label}{required && "*"}</div>
+            <input value={value}
+                   onChange={(e) => changeFields(setValue, e)}
+                   id={field_}
+                   name={field_}
+                   placeholder={field_}
+                   className="form-control"
+                   type={type_}
                    disabled={disable}/>
         </div>
     );
