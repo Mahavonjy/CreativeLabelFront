@@ -18,7 +18,7 @@ import KantoBizSearch from "./reducer/Search/KantoSearch";
 import CommandSuccess from "./reducer/CommandSuccess/success";
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from "redux-thunk";
-import Conf from "./Config/tsconfig";
+import Conf from "./config/tsconfig";
 import axios from 'axios';
 
 axios.defaults.baseURL = Conf.configs.ServerApi;

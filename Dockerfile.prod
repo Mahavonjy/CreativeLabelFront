@@ -6,13 +6,12 @@ MAINTAINER Cynthion Mahavonjy <mahavonjy.cynthion@gmail.com>
 COPY . /usr/src/app/
 WORKDIR /usr/src/app/
 
-RUN npm install --silent && npm install -g serve
+RUN rm -rf node_modules && npm install --silent && npm install -g serve
 RUN npm run build
 
 # production environment
 FROM nginx:stable-alpine
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
-# new
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

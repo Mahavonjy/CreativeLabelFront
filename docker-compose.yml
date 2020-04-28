@@ -1,6 +1,6 @@
 version: '2'
 services:
-  front-prod:
+  prod:
     container_name: creative-front-prod
     build:
       context: .

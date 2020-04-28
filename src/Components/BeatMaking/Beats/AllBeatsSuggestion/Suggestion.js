@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as CreateFields from "../../../FunctionTools/CreateFields";
-import * as FunctionProps from "../../../FunctionTools/FunctionProps";
-import { getMediaLink } from "../../../FunctionTools/Tools";
+import * as CreateFields from "../../../functionTools/createFields";
+import * as FunctionProps from "../../../functionTools/functionProps";
+import { getMediaLink } from "../../../functionTools/tools";
 
 function Suggestion(props) {
 

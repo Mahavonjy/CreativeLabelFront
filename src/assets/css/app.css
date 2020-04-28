@@ -15439,6 +15439,12 @@ ul li:before{
 .m-t-50{
     margin-top:50px!important
 }
+.m-t-60{
+    margin-top:60px!important
+}
+.m-t-70{
+    margin-top:70px!important
+}
 .m-t-150{
     margin-top:150px
 }
@@ -15658,6 +15664,9 @@ ul li:before{
 }
 .width-250{
     width:250px!important
+}
+.width-80{
+    width:80px!important
 }
 .width-900{
     max-width:900px
@@ -22387,7 +22396,7 @@ nav.nav-flat .navbar-brand{
 }
 
 
-/* Facebook */
+/* facebook */
 .loginBtn--facebook {
     background-color: #4C69BA;
     background-image: linear-gradient(#4C69BA, #3B55A0);
@@ -22405,7 +22414,7 @@ nav.nav-flat .navbar-brand{
 }
 
 
-/* Google */
+/* google */
 .loginBtn--google {
     /*font-family: "Roboto", Roboto, arial, sans-serif;*/
     background: #DD4B39;

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Conf from "../../Config/tsconfig";
+import Conf from "../../config/tsconfig";
 import TestImg from "../../assets/img/demo/a2.jpg";
 import {toast, ToastContainer} from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import PurchaseInformation from "./PurchaseInformation";
-import Home from "../Home/Home";
-import { addCarts, addTotalPrice } from "../FunctionTools/FunctionProps";
+import PurchaseInformation from "./purchaseInformation";
+import HomeRoot from "../home/homeRoot";
+import { addCarts, addTotalPrice } from "../functionTools/functionProps";
 
 let headers = {
     "Content-Type":'application/json',
@@ -42,7 +42,7 @@ function Cart(props) {
             dispatch(addCarts(carts_tmp));
             await setCart(carts_tmp);
             await localStorage.setItem("MyCarts",  JSON.stringify(carts_tmp));
-            await Home.Decrement();
+            await HomeRoot.Decrement();
             toast.success("suprimé avec succes");
             if (carts_tmp.length === 0) window.location.replace('/beats');
         } else {
@@ -60,7 +60,7 @@ function Cart(props) {
                 else {
                     setCart(carts_tmp);
                     dispatch(addCarts(carts_tmp));
-                    Home.Decrement();
+                    HomeRoot.Decrement();
                     toast.success("suprimé avec succes");
                 }
             }).catch(err => {

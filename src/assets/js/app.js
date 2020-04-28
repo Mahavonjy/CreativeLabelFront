@@ -742,7 +742,7 @@ const $ = window.$;
             },
             guid: 1,
             support: St
-        }), "function" == typeof Symbol && (xt.fn[Symbol.iterator] = ut[Symbol.iterator]), xt.each("Boolean Number String Function Array Date RegExp Object Error Symbol".split(" "), function (t, e) {
+        }), "function" == typeof Symbol && (xt.fn[Symbol.iterator] = ut[Symbol.iterator]), xt.each("Boolean Number String Function Array Date RegExp Object error Symbol".split(" "), function (t, e) {
             mt["[object " + e + "]"] = e.toLowerCase();
         });
 
@@ -5539,8 +5539,8 @@ const $ = window.$;
                         }, n.backends = {
                             MediaElement: g["default"],
                             WebAudio: p["default"]
-                        }, n.util = f, n.params = f.extend({}, n.defaultParams, t), n.container = "string" == typeof t.container ? document.querySelector(n.params.container) : n.params.container, !n.container) throw new Error("Container element not found");
-                        if (null == n.params.mediaContainer ? n.mediaContainer = n.container : "string" == typeof n.params.mediaContainer ? n.mediaContainer = document.querySelector(n.params.mediaContainer) : n.mediaContainer = n.params.mediaContainer, !n.mediaContainer) throw new Error("Media Container element not found");
+                        }, n.util = f, n.params = f.extend({}, n.defaultParams, t), n.container = "string" == typeof t.container ? document.querySelector(n.params.container) : n.params.container, !n.container) throw new Error("container element not found");
+                        if (null == n.params.mediaContainer ? n.mediaContainer = n.container : "string" == typeof n.params.mediaContainer ? n.mediaContainer = document.querySelector(n.params.mediaContainer) : n.mediaContainer = n.params.mediaContainer, !n.mediaContainer) throw new Error("Media container element not found");
                         if (n.params.maxCanvasWidth <= 1) throw new Error("maxCanvasWidth must be greater than 1");
                         if (n.params.maxCanvasWidth % 2 == 1) throw new Error("maxCanvasWidth must be an even number");
                         if (n.savedVolume = 0, n.isMuted = !1, n.tmpEvents = [], n.currentAjax = null, n.arraybuffer = null, n.drawer = null, n.backend = null, n.peakCache = null, "function" != typeof n.params.renderer) throw new Error("Renderer parameter is invalid");
@@ -5713,7 +5713,7 @@ const $ = window.$;
                         key: "seekTo",
                         value: function (t) {
                             var e = this;
-                            if ("number" != typeof t || !isFinite(t) || t < 0 || 1 < t) return console.error("Error calling wavesurfer.seekTo, parameter must be a number between 0 and 1!");
+                            if ("number" != typeof t || !isFinite(t) || t < 0 || 1 < t) return console.error("error calling wavesurfer.seekTo, parameter must be a number between 0 and 1!");
                             this.fireEvent("interaction", function () {
                                 return e.seekTo(t);
                             });
@@ -5874,7 +5874,7 @@ const $ = window.$;
                             }), n.addEventListener("load", function (t) {
                                 return e.loadArrayBuffer(t.target.result);
                             }), n.addEventListener("error", function () {
-                                return e.fireEvent("error", "Error reading file");
+                                return e.fireEvent("error", "error reading file");
                             }), n.readAsArrayBuffer(t), this.empty();
                         }
                     }, {
@@ -5939,7 +5939,7 @@ const $ = window.$;
                             this.arraybuffer = t, this.backend.decodeArrayBuffer(t, function (i) {
                                 n.isDestroyed || n.arraybuffer != t || (e(i), n.arraybuffer = null);
                             }, function () {
-                                return n.fireEvent("error", "Error decoding audiobuffer");
+                                return n.fireEvent("error", "error decoding audiobuffer");
                             });
                         }
                     }, {
@@ -6830,7 +6830,7 @@ const $ = window.$;
                     value: function (t, e) {
                         var n = this;
                         "function" == typeof t.load && t.load(), t.addEventListener("error", function () {
-                            n.fireEvent("error", "Error loading media element");
+                            n.fireEvent("error", "error loading media element");
                         }), t.addEventListener("canplay", function () {
                             n.fireEvent("canplay");
                         }), t.addEventListener("ended", function () {
@@ -13697,7 +13697,7 @@ const $ = window.$;
                     try {
                         n = o && JSON.parse(o);
                     } catch (a) {
-                        return void (r && r.error("Error parsing " + s + " on " + t.className + ": " + a));
+                        return void (r && r.error("error parsing " + s + " on " + t.className + ": " + a));
                     }
 
                     var l = new e(t, n);
@@ -14263,7 +14263,7 @@ const $ = window.$;
                     try {
                         n = o && JSON.parse(o);
                     } catch (a) {
-                        return void (i && i.error("Error parsing " + s + " on " + t.className + ": " + a));
+                        return void (i && i.error("error parsing " + s + " on " + t.className + ": " + a));
                     }
 
                     var l = new e(t, n);
@@ -15330,7 +15330,7 @@ const $ = window.$;
                 }
             },
             fixSidebar: function () {
-                return $(".main-sidebar").hasClass("fixed") ? ("undefined" == typeof $.fn.slimScroll && window.console && window.console.error("Error: the fixed layout requires the slimscroll plugin!"), void ($.PaperPanel.options.sidebarSlimScroll && "undefined" != typeof $.fn.slimScroll && ($(".sidebar").slimScroll({
+                return $(".main-sidebar").hasClass("fixed") ? ("undefined" == typeof $.fn.slimScroll && window.console && window.console.error("error: the fixed layout requires the slimscroll plugin!"), void ($.PaperPanel.options.sidebarSlimScroll && "undefined" != typeof $.fn.slimScroll && ($(".sidebar").slimScroll({
                     destroy: !0
                 }).height("auto"), $(".sidebar").slimscroll({
                     height: $(window).height() + "px",
