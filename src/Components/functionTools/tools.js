@@ -626,56 +626,6 @@ export const generatePagination = (_array, funcToDisplay) => {
                         </div>
                     </div>
                 </div>
-
-                {/*<div className="card_kanto" onClick={() => funcToDisplay(val)}>*/}
-                {/*    <div className="additional">*/}
-                {/*        <div className="more-info">*/}
-                {/*            <h1 className="pt-2">{val.artist_name}</h1>*/}
-                {/*            <div className="row justify-content-center text-center" data-tip="Cliquer Moi">*/}
-                {/*                <div className="col text-light d-none d-sm-block">*/}
-                {/*                    <h4 className="text-light bolder">Genre</h4>*/}
-                {/*                    <ul className="bg-transparent kanto-list m-1">*/}
-                {/*                        {val.thematics.map((val, index) => <li key={index}>{val}</li>)}*/}
-                {/*                    </ul>*/}
-                {/*                </div>*/}
-                {/*                <div className="col text-light d-none d-sm-block">*/}
-                {/*                    <h4 className="text-light bolder">Ville</h4>*/}
-                {/*                    <ul className="bg-transparent kanto-list m-1">*/}
-                {/*                        <li key={0}>{val.reference_city}</li>*/}
-                {/*                        {val.others_city.map((val, index) => <li key={index + 1}>{val}</li>)}*/}
-                {/*                    </ul>*/}
-                {/*                </div>*/}
-                {/*                <div className="col ml-auto d-sm-none">*/}
-                {/*                    <h4 className="text-red">Evenements</h4>*/}
-                {/*                    <p className="events">{val.events.join(", ")}</p>*/}
-                {/*                    <div className="row ml-2 mr-3">*/}
-                {/*                        <div className="col">*/}
-                {/*                            <small className="text-red">Ville</small>*/}
-                {/*                            <ul className="small-kanto-list">*/}
-                {/*                                <li key={0}>{val.reference_city}</li>*/}
-                {/*                                {val.others_city.map((val, index) =>*/}
-                {/*                                    <li key={index + 1}>{val}</li>*/}
-                {/*                                )}*/}
-                {/*                            </ul>*/}
-                {/*                        </div>*/}
-                {/*                        <div className="col">*/}
-                {/*                            <div className="text-center" style={{marginTop: 10, marginLeft: 10}}>*/}
-                {/*                                <img className="border1" src={val.galleries[0]} alt=''/>*/}
-                {/*                            </div>*/}
-                {/*                        </div>*/}
-                {/*                        <div className="col">*/}
-                {/*                            <small className="text-red">Genre</small>*/}
-                {/*                            <ul className="small-kanto-list">*/}
-                {/*                                {val.thematics.map((val, index) => <li key={index}>{val}</li>)}*/}
-                {/*                            </ul>*/}
-                {/*                        </div>*/}
-                {/*                    </div>*/}
-
-                {/*                </div>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
             </div>
     }));
 };
