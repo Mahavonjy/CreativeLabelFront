@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import PhotoD from '../../images/socials/profile.png';
+import PhotoD from "../../assets/images/logo/ISL_logo.png";
 import * as Tools from "../functionTools/tools";
 import {useDispatch, useSelector} from "react-redux";
 import * as CreateFields from "../functionTools/createFields";

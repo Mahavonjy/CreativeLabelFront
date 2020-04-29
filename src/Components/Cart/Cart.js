@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Conf from "../../config/tsconfig";
-import TestImg from "../../assets/img/demo/a2.jpg";
+import TestImg from "../../assets/images/demo/a2.jpg";
 import {toast, ToastContainer} from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import PurchaseInformation from "./purchaseInformation";

@@ -4,16 +4,16 @@ import {useDispatch, useSelector} from "react-redux";
 import StepZilla from "react-stepzilla";
 import {toast, ToastContainer} from "react-toastify";
 import "../../../../assets/css/style/Form.css"
-import Register from "../../../Authentification/Register/Register";
-import {smallSpinner} from "../../../FunctionTools/CreateFields";
-import {addStepsIndex} from "../../../FunctionTools/FunctionProps"
-import {createOrUpdatePrestation} from "../../../FunctionTools/Tools";
-import Home from "../../../Home/Home";
-import {checkErrorMessage} from "../../../Validators/Validatiors";
-import PrestationDetails from "./PrestationDetails";
-import PrestationInformation from "./PrestationInformation";
-import Recaputilatif from "./Recaputilatif";
-import Thematics from "./Thematics";
+import Register from "../../../authentification/register/register";
+import {smallSpinner} from "../../../functionTools/createFields";
+import {addStepsIndex} from "../../../functionTools/functionProps"
+import {createOrUpdatePrestation} from "../../../functionTools/tools";
+import HomeRoot from "../../../home/homeRoot";
+import {checkErrorMessage} from "../../../validators/validatiors";
+import PrestationDetails from "./prestationDetails";
+import PrestationInformation from "./prestationInformation";
+import Recaputilatif from "./recaputilatif";
+import Thematics from "./thematics";
 
 function Form(props) {
 
@@ -85,12 +85,12 @@ function Form(props) {
     const auditorToArtist = () => {
         setLoading(true);
         axios.put("api/users/update_user_to/" + tmpArtistTypeSelected, {}, {headers: props.headers}).then(() => {
-            addNewPrestation().then(r => Home.beforeDataLoad().then(() => toast.success("Vous artiste maintenant")));
+            addNewPrestation().then(r => HomeRoot.beforeDataLoad().then(() => toast.success("Vous artiste maintenant")));
             setLoading(true);
         }).catch(error => {
             let message = checkErrorMessage(error).message;
             if (message === "You are already artist right now")
-                addNewPrestation().then(r => Home.beforeDataLoad().then(() => toast.success("Vous artiste maintenant")));
+                addNewPrestation().then(r => HomeRoot.beforeDataLoad().then(() => toast.success("Vous artiste maintenant")));
             else toast.error(message);
             setLoading(false);
         })

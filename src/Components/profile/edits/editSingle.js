@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Modal from 'react-awesome-modal';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import logo from "../../../images/Logo/ISL_logo.png";
+import logo from "../../../assets/images/logo/ISL_logo.png";
 import { useSelector } from "react-redux";
 import { smallSpinner } from "../../functionTools/createFields";
 import * as Tools from "../../functionTools/tools";

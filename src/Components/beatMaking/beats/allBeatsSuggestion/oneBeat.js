@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import TestImg from "../../../../assets/img/demo/a2.jpg";
+import TestImg from "../../../../assets/images/demo/a2.jpg";
 import IslPlayer from "../../../players/players";
 import { useDispatch, useSelector } from "react-redux";
 import { getMediaLink } from "../../../functionTools/tools";
 import * as FunctionProps from "../../../functionTools/functionProps";
 import * as CreateFields from "../../../functionTools/createFields";
-import BackGround from "../../../../assets/img/demo/a5.jpg"
+import BackGround from "../../../../assets/images/demo/a5.jpg"
 import { ForAddToCard } from "../../../functionTools/popupFields";
 
 function OneBeat(props) {

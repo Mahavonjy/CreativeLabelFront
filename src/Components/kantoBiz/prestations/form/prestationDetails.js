@@ -9,9 +9,9 @@ import {
     addServiceTime,
     addUnitTimeOfPreparation,
     addUnitTimeOfService
-} from "../../../FunctionTools/FunctionProps";
-import MultiSelectTools from "../../../FunctionTools/MultiSelectTools";
-import {changeFields} from "../../../FunctionTools/Tools";
+} from "../../../functionTools/functionProps";
+import MultiSelectTools from "../../../functionTools/multiSelectTools";
+import {changeFields} from "../../../functionTools/tools";
 
 function PrestationDetails(props) {
 

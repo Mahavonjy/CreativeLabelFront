@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import logo from "../../images/Logo/ISL_logo.png"
+import logo from "../../assets/images/logo/ISL_logo.png"
 import Conf from "../../config/tsconfig";
 import './styles/main.scss'
 import './styles/_global.scss'

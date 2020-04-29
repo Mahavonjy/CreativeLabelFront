@@ -18,8 +18,8 @@ spec:
         io.kompose.service: front-prod
     spec:
       containers:
-        - image: gcr.io/creativelabel/creativelabel-front`:latest`
-        name: creative-front-front-prod
+      - image: gcr.io/creativelabel/creativelabel-front:latest
+        name: creative-front-prod
         ports:
         - containerPort: 80
         resources: {}

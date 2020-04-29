@@ -6,10 +6,10 @@ import {useDispatch} from "react-redux";
 import {Link, Route} from "react-router-dom";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import TestImg from "../../assets/img/demo/a2.jpg";
-import TestImageTwo from "../../assets/img/demo/a3.jpg"
-import TestImageThree from "../../assets/img/demo/a5.jpg";
-import TestImageOne from "../../assets/img/demo/a7.jpg";
+import TestImg from "../../assets/images/demo/a2.jpg";
+import thirdBlockImg from "../../assets/images/backgrounds/instru.jpg"
+import firstBlockImg from "../../assets/images/backgrounds/dark.jpg";
+import secondBlockImg from "../../assets/images/backgrounds/moon.jpg";
 import Conf from "../../config/tsconfig";
 import About from "../about/about";
 import Register from "../authentification/register/register";
@@ -327,54 +327,46 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
         <div>
             <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
                 <div className="carousel-inner" style={{height: "auto"}}>
-                    <div className="carousel-item active">
-                        <img className="d-block w-100" height="470" src={TestImageThree} alt=""/>
+
+                    <div className="carousel-item d-none d-sm-block active" style={{height: 350}}>
+                        <img className="d-block w-100 zIndex-1" src={firstBlockImg} alt=""/>
                     </div>
-                    <div className="carousel-item">
-                        <img className="d-block w-100" height="470" src={TestImageOne} alt=""/>
+                    <div className="carousel-item d-none d-sm-block" style={{height: 350}}>
+                        <img className="d-block w-100 zIndex-1" src={secondBlockImg} alt=""/>
                     </div>
-                    <div className="carousel-item">
-                        <img className="d-block w-100" height="470" src={TestImageTwo} alt=""/>
+                    <div className="carousel-item d-none d-sm-block" style={{height: 350}}>
+                        <img className="d-block w-100 zIndex-1" src={thirdBlockImg} alt=""/>
                     </div>
+
+                    <div className="zIndex99 relative">
+                        <div className="mt-5 p-5 rounded" style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
+                            <h2 className="s-36 text-center font-weight-lighter text-red"> {Title} </h2>
+                            <p className="s-18 text-center font-weight-lighter"
+                               dangerouslySetInnerHTML={{__html: Description}}/>
+                        </div>
+                    </div>
+
                     {!auth &&
-                    <div className="absolute zIndex99" style={{right: 10}}>
-                        <div className="row justify-content-center">
-                            <button className="btn btn-outline-danger m-2"
-                                    onClick={() => document.getElementById("LoginRequire").click()}>
-                                S'identifier
-                            </button>
-                            <button className="btn btn-outline-danger m-2" onClick={async () => {
-                                history.push("/register");
-                                HomeRoot.beforeDataLoad().then(() => null);
-                            }}>Créer votre compte ISL Creative
-                            </button>
-                        </div>
+                    <div className="absolute p-2 zIndex99" style={{right: 0, bottom: 0}}>
+                        <button className="btn border-left-0 border-right-0 btn-outline-danger m-2"
+                                onClick={() => document.getElementById("LoginRequire").click()}>
+                            <i className="icon icon-user-secret"/>S'identifier
+                        </button>
+                        <button className="btn border-left-0 border-right-0 btn-outline-danger m-2"
+                                onClick={async () => {
+                                    history.push("/register");
+                                    HomeRoot.beforeDataLoad().then(() => null);
+                                }}><i className="icon icon-user-plus"/>Créer votre compte
+                        </button>
                     </div>}
-                    <div className={
-                        Title === "Creative kantoBiz"
-                            ? "has-bottom-gradient d-none d-sm-block"
-                            : "has-bottom-gradient"}>
-                        <div className="home-menu pl-md-5">
-                            <div className="row">
-                                <div className="col-12 col-lg-10 animated">
-                                    <div className="xv-slider-content clearfix color-white">
-                                        <h1 className="s-36 mt-5 pt-5 font-weight-lighter text-red"> {Title} </h1>
-                                        <p className="s-24 font-weight-lighter"
-                                           dangerouslySetInnerHTML={{__html: Description}}/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {Title === "Creative kantoBiz" ?
-                        <SearchBar
-                            next={next}
-                            headers={headers}
-                            displayOne={displayOne}
-                            setStateResult={setStateResult}
-                        /> : null}
                 </div>
             </div>
+            {Title === "Creative kantoBiz"
+            && <SearchBar next={next}
+                          headers={headers}
+                          displayOne={displayOne}
+                          setStateResult={setStateResult}
+            />}
         </div>
     )
 };

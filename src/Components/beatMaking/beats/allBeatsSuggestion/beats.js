@@ -96,7 +96,7 @@ function Beats(props) {
         <div>
             <ReactTooltip/>
             {/* Headers */}
-            {CreateFields.CreativeHeaders("Creative beatMaking", 'Des créations orginales qui font la différence <br/> ' + 'Pour les professionnels de la musique (artistes,producteurs, labels...)', null, null, null, null, auth, history)}
+            {CreateFields.CreativeHeaders("Creative beatMaking", 'Des créations orginales qui font la différence Pour les professionnels de la musique (artistes,producteurs, labels...)', null, null, null, null, auth, history)}
             {/* End Headers */}
             <div className="Base">
                 {/*PlayList & Events*/}

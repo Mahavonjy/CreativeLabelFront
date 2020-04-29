@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import Modal from 'react-awesome-modal';
 import Conf from "../../../config/tsconfig";
 import axios from 'axios';
-import logo from "../../../images/Logo/ISL_logo.png"
+import logo from "../../../assets/images/logo/ISL_logo.png"
 import { ToastContainer, toast } from 'react-toastify';
 import ReactTooltip from 'react-tooltip';
 import { useSelector } from "react-redux";
