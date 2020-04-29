@@ -14,14 +14,17 @@ import {
     addEventSelected,
     addNumberOfArtist,
     addOptionSelected,
-    addOthersCityOfService, addPaymentAccepted, addPaymentRefunded,
+    addOthersCityOfService,
+    addPaymentAccepted,
+    addPaymentRefunded,
     addPicturesOfService,
     addPreparationTime,
     addPriceOfService,
     addReferenceOfCity,
     addServiceCountry,
     addServiceRefundPolicy,
-    addServiceTime, addStepsIndex,
+    addServiceTime,
+    addStepsIndex,
     addTitleOfService,
     addTotalPrice,
     addTravelExpenses,
@@ -343,14 +346,14 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
         await axios.post("api/artist_services/newService",
             objectToFormData(tmp_prestation, props.PropsFiles),
             {headers: _props.headers}).then((resp) => {
-                let tmp = _props.allPrestation;
-                tmp.push(resp.data);
-                _props.setAllPrestation(tmp);
-                dispatch(addAllUserPrestation(tmp));
-                _props.setAddNewPrestation(false);
-                _props.close();
-                resetPropsForm(dispatch);
-                response = {"error": false, message: null}
+            let tmp = _props.allPrestation;
+            tmp.push(resp.data);
+            _props.setAllPrestation(tmp);
+            dispatch(addAllUserPrestation(tmp));
+            _props.setAddNewPrestation(false);
+            _props.close();
+            resetPropsForm(dispatch);
+            response = {"error": false, message: null}
         }).catch((error) => {
             response = {"error": true, message: Validators.checkErrorMessage(error).message}
         });
@@ -358,12 +361,12 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
         await axios.put("api/artist_services/update/" + props.service_id,
             objectToFormData(tmp_prestation, props.PropsFiles),
             {headers: _props.headers}).then((resp) => {
-                let tmp = [..._props.allPrestation];
-                tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
-                _props.setAllPrestation(tmp);
-                resetPropsForm(dispatch);
-                dispatch(addAllUserPrestation(tmp));
-                response = {"error": false, message: null}
+            let tmp = [..._props.allPrestation];
+            tmp[tmp.findIndex(tmp => tmp.id === props.service_id)] = resp.data;
+            _props.setAllPrestation(tmp);
+            resetPropsForm(dispatch);
+            dispatch(addAllUserPrestation(tmp));
+            response = {"error": false, message: null}
         }).catch((error) => {
             response = {"error": true, message: Validators.checkErrorMessage(error).message}
         });
@@ -498,8 +501,8 @@ export const updateAllOptions = (optionToUpdate, dispatch, headers) => {
         tmp_call.push(
             axios.put('api/options/update/' + option_id, tmpOption,
                 {headers: headers}).then((resp) => {
-                    tmpAllOptions[row] = resp.data;
-                    dispatch(addAllUserOptions(tmpAllOptions));
+                tmpAllOptions[row] = resp.data;
+                dispatch(addAllUserOptions(tmpAllOptions));
             })
         )
     }
@@ -516,8 +519,8 @@ export const updateAllServices = (prestations, dispatch, headers) => {
             axios.put('api/artist_services/update/' + prestation_id,
                 objectToFormData(prestation_selected),
                 {headers: headers}).then((resp) => {
-                    tmpPrestations[index] = resp.data;
-                    dispatch(addAllUserPrestation(tmpPrestations));
+                tmpPrestations[index] = resp.data;
+                dispatch(addAllUserPrestation(tmpPrestations));
             })
         )
     }
@@ -542,7 +545,7 @@ export const shuffleArray = (array) => {
     return array;
 };
 
-export const dispatchPayment= (payment_history, dispatch) => {
+export const dispatchPayment = (payment_history, dispatch) => {
     let tmpPaid = [];
     let tmpRefund = [];
     Promise.all(payment_history.map(element => {
@@ -555,8 +558,8 @@ export const dispatchPayment= (payment_history, dispatch) => {
 };
 
 export const checkOnClickAwaySideBar = (e) => {
-    if (e.target.className !== "paper-nav-toggle pp-nav-toggle pl-2 ml-4" && HomeRoot.checkOpenSideBar)
-        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()
+    if (e.target.className !== "paper-nav-toggle pp-nav-toggle pl-2 ml-3" && HomeRoot.checkOpenSideBar)
+        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-3")[0].click()
 };
 
 export const generatePagination = (_array, funcToDisplay) => {
@@ -564,102 +567,115 @@ export const generatePagination = (_array, funcToDisplay) => {
         id: (index + 1), name:
             <div key={index}>
                 <ReactTooltip/>
-                <div className="card_kanto" onClick={() => funcToDisplay(val)}>
-                    <div className="additional">
-                        <div className="user-card_kanto d-none d-sm-block" data-tip="Cliquer Moi">
-                            <div className="level center-result">{val.title}</div>
-                            <div className="points center-result">
-                                5&nbsp;<i className="icon icon-star"/>
-                            </div>
-                            <div className="text-center" style={{paddingTop: 70}}>
-                                <img className="border1" width={110} height={100} src={val.galleries[0]} alt=''/>
-                            </div>
+                <div className="o-card_container m-2">
+                    <div className="o-card bg-darks">
+                        <div className="o-card_header">
+                            <div className="o-card_headerHeroImg"
+                                 style={{
+                                     background:
+                                         'url(' + "https://zupimages.net/up/19/42/zyu8.bmp" + ') center no-repeat'
+                                 }}/>
+                            <ul className="o-card-headerList isOpen">
+                                <li className="o-card-headerList--item">
+                                    <a className="o-card-headerList--link" href="#">
+                                        <i className="icon-facebook"/>
+                                    </a>
+                                </li>
+                                <li className="o-card-headerList--item">
+                                    <a className="o-card-headerList--link" href="#">
+                                        <i className="icon-twitter"/>
+                                    </a>
+                                </li>
+                                <li className="o-card-headerList--item">
+                                    <a className="o-card-headerList--link" href="#">
+                                        <i className="icon-linkedin"/>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div className="o-card_logo" style={{
+                                background:
+                                    'url(' + val.galleries[0] + ') center no-repeat'
+                            }}/>
                         </div>
-                        <div className="more-info">
-                            <h1 className="pt-2">{val.artist_name}</h1>
-                            <div className="row justify-content-center text-center" data-tip="Cliquer Moi">
-                                <div className="col text-light d-none d-sm-block">
-                                    <h4 className="text-light bolder">Genre</h4>
-                                    <ul className="bg-transparent kanto-list m-1">
-                                        {val.thematics.map((val, index) => <li key={index}>{val}</li>)}
-                                    </ul>
-                                </div>
-                                <div className="col text-light d-none d-sm-block">
-                                    <h4 className="text-light bolder">Ville</h4>
-                                    <ul className="bg-transparent kanto-list m-1">
-                                        <li key={0}>{val.reference_city}</li>
-                                        {val.others_city.map((val, index) => <li key={index + 1}>{val}</li>)}
-                                    </ul>
-                                </div>
-                                <div className="col ml-auto d-sm-none">
-                                    <h4 className="text-red">Evenements</h4>
-                                    <p className="events">{val.events.join(", ")}</p>
-                                    <div className="row ml-2 mr-3">
-                                        <div className="col">
-                                            <small className="text-red">Ville</small>
-                                            <ul className="small-kanto-list">
-                                                <li key={0}>{val.reference_city}</li>
-                                                {val.others_city.map((val, index) =>
-                                                    <li key={index + 1}>{val}</li>
-                                                )}
-                                            </ul>
-                                        </div>
-                                        <div className="col">
-                                            <div className="text-center" style={{marginTop: 10, marginLeft: 10}}>
-                                                <img className="border1" src={val.galleries[0]} alt=''/>
-                                            </div>
-                                        </div>
-                                        <div className="col">
-                                            <small className="text-red">Genre</small>
-                                            <ul className="small-kanto-list">
-                                                {val.thematics.map((val, index) => <li key={index}>{val}</li>)}
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div className="stats">
-                                <div data-tip="Le nombre d'artiste dans le groupe">
-                                    <i className="icon icon-adjust"/>
-                                    <div className="value">{val.number_of_artists}</div>
-                                </div>
-                                <div data-tip="La durée de la preparation">
-                                    <i className="icon icon-clock-1"/>
-                                    <div className="value">
-                                        {val.preparation_time}&nbsp;
-                                        {checkUnitKey(val.unit_of_the_preparation_time)}
-                                    </div>
-                                </div>
-                                <div data-tip="La durée de la prestation">
-                                    <i className="icon icon-clock-o"/>
-                                    <div className="value">
-                                        {val.duration_of_the_service}&nbsp;
-                                        {checkUnitKey(val.unit_duration_of_the_service)}
-                                    </div>
-                                </div>
-                                <div data-tip="Le prix de la prestation">
-                                    <i className="icon icon-money"/>
-                                    <div className="value">{val.price}$</div>
-                                </div>
-                            </div>
+                        <div className="o-card_body">
+                            <h2 className="o-card_title text-black">{val.price}<i className="icon icon-euro text-red"/>
+                            </h2>
+                            <h3 className="o-card_subTitle text-black">
+                                {val.title}&nbsp;-&nbsp;5<i className="icon text-red icon-star"/>
+                            </h3>
+                            <h3 className="o-card_subTitle text-black">
+                                <small className="text-black bolder">
+                                    {val.reference_city},&nbsp;
+                                    {val.others_city.map((val, index) => <small key={index}>{val}, </small>)}
+                                </small>
+                            </h3>
+                            <h3 className="o-card_subTitle text-black">
+                                <small className="text-black bolder">
+                                    {val.thematics.map((val, index) => <small key={index}>{val}, </small>)}
+                                </small>
+                            </h3>
+                            <p className="o-card_paragraph text-black">{val.description}</p>
                         </div>
-                    </div>
-                    <div className="general d-none d-sm-block">
-                        <img alt=""
-                             width="100%"
-                             height="100%"
-                             src={val.galleries.length > 1
-                                 ? val.galleries[1]
-                                 : "https://zupimages.net/up/19/42/zyu8.bmp"
-                             }
-                        />
-                        <h1 className="pt-2 ml-2 bolder text-red">{val.artist_name}</h1>
-                        <p className="text-dark ml-2 font-weight-bold">{val.description}</p>
-                        <h1 className="more text-black bolder">{val.price}$</h1>
-                        <small className="more-genre pl-2 text-black">{val.thematics.join(", ")}</small>
+                        <div className="p-2">
+                            <button className="btn col btn-outline-dark pl-5 pr-5 pb-3"
+                                    onClick={() => funcToDisplay(val)}>
+                                <i className="icon-man-left mr-2 s-18"/>
+                                RESERVER
+                                <i className="icon-man-right ml-2 s-18"/>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                {/*<div className="card_kanto" onClick={() => funcToDisplay(val)}>*/}
+                {/*    <div className="additional">*/}
+                {/*        <div className="more-info">*/}
+                {/*            <h1 className="pt-2">{val.artist_name}</h1>*/}
+                {/*            <div className="row justify-content-center text-center" data-tip="Cliquer Moi">*/}
+                {/*                <div className="col text-light d-none d-sm-block">*/}
+                {/*                    <h4 className="text-light bolder">Genre</h4>*/}
+                {/*                    <ul className="bg-transparent kanto-list m-1">*/}
+                {/*                        {val.thematics.map((val, index) => <li key={index}>{val}</li>)}*/}
+                {/*                    </ul>*/}
+                {/*                </div>*/}
+                {/*                <div className="col text-light d-none d-sm-block">*/}
+                {/*                    <h4 className="text-light bolder">Ville</h4>*/}
+                {/*                    <ul className="bg-transparent kanto-list m-1">*/}
+                {/*                        <li key={0}>{val.reference_city}</li>*/}
+                {/*                        {val.others_city.map((val, index) => <li key={index + 1}>{val}</li>)}*/}
+                {/*                    </ul>*/}
+                {/*                </div>*/}
+                {/*                <div className="col ml-auto d-sm-none">*/}
+                {/*                    <h4 className="text-red">Evenements</h4>*/}
+                {/*                    <p className="events">{val.events.join(", ")}</p>*/}
+                {/*                    <div className="row ml-2 mr-3">*/}
+                {/*                        <div className="col">*/}
+                {/*                            <small className="text-red">Ville</small>*/}
+                {/*                            <ul className="small-kanto-list">*/}
+                {/*                                <li key={0}>{val.reference_city}</li>*/}
+                {/*                                {val.others_city.map((val, index) =>*/}
+                {/*                                    <li key={index + 1}>{val}</li>*/}
+                {/*                                )}*/}
+                {/*                            </ul>*/}
+                {/*                        </div>*/}
+                {/*                        <div className="col">*/}
+                {/*                            <div className="text-center" style={{marginTop: 10, marginLeft: 10}}>*/}
+                {/*                                <img className="border1" src={val.galleries[0]} alt=''/>*/}
+                {/*                            </div>*/}
+                {/*                        </div>*/}
+                {/*                        <div className="col">*/}
+                {/*                            <small className="text-red">Genre</small>*/}
+                {/*                            <ul className="small-kanto-list">*/}
+                {/*                                {val.thematics.map((val, index) => <li key={index}>{val}</li>)}*/}
+                {/*                            </ul>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
     }));
 };

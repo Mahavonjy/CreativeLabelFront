@@ -3,7 +3,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import PhotoTest from "../../../assets/images/backgrounds/adult-banking-business-2254122.jpg";
-import PhotoD from "../../../assets/images/logo/ISL_logo.png";
 import {profileInitialisationInfo} from "../../functionTools/functionProps";
 import {checkErrorMessage} from "../../validators/validatiors";
 import EditProfile from "../edits/editProfile";
@@ -104,7 +103,9 @@ function ProfileInformation(props) {
                                 </div>
                                 <figure className="avatar avatar-xl">
                                     <div className="hovereffect">
-                                        <img src={profile_info.photo ? profile_info.photo : PhotoD} alt="profile"/>
+                                        <img alt="profile"
+                                             src={profile_info.photo || "https://zupimages.net/up/19/18/3ltf.png"}
+                                        />
                                         <div className="overlay zIndex99">
                                             <i className="icon icon-edit cursor-pointer s-36 bolder text-red"
                                                onClick={() => document.getElementById("picture").click()}

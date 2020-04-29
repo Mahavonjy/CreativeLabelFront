@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import Modal from 'react-awesome-modal';
-import Conf from "../../../config/tsconfig";
 import axios from 'axios';
-import logo from "../../../assets/images/logo/ISL_logo.png"
 import { ToastContainer, toast } from 'react-toastify';
 import ReactTooltip from 'react-tooltip';
 import { useSelector } from "react-redux";
@@ -186,7 +184,7 @@ function AddSingle (props) {
 
             {loading && smallSpinner("absolute", "0")}
 
-            <img alt={"logo"} src={logo} style={{position: "absolute", marginTop: "5%", opacity:0.4}}/>
+            <img alt={"logo"} src="https://zupimages.net/up/19/18/3ltf.png" style={{position: "absolute", marginTop: "5%", opacity:0.4}}/>
             <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
                 <button className="ModalClose" onClick={() => props.closePopup(0)}>
                     <i className="icon-close s-24" style={{color:"orange"}} />

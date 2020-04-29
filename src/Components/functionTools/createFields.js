@@ -379,11 +379,11 @@ export const SideBars = (
     history,
     headers,
     logout,
+    isPlaying,
     ifUserGenreSelected
 ) => {
     return (
         <div className="sidebar">
-            <a href="/beats"><img alt="Logo" className="m-t-50" src="https://zupimages.net/up/19/18/3ltf.png"/></a>
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
@@ -471,6 +471,13 @@ export const SideBars = (
                     <i className={logout_class}/> <span>{log_name}</span>
                 </li>
             </ul>
+            {!isPlaying &&
+            <a href="/beats">
+                <img alt="Logo"
+                     className="absolute"
+                     style={{bottom: 0}}
+                     src="https://zupimages.net/up/19/18/3ltf.png"/>
+            </a>}
         </div>
     )
 };

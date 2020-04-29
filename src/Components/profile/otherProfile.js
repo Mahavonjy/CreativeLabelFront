@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import PhotoD from "../../assets/images/logo/ISL_logo.png";
 import * as Tools from "../functionTools/tools";
 import {useDispatch, useSelector} from "react-redux";
 import * as CreateFields from "../functionTools/createFields";
 import { getMediaLink } from "../functionTools/tools";
 import * as BeatsProps from "../functionTools/functionProps";
-import { ToastContainer } from "react-toastify";
 import MyPrestations from "./category/section/myPrestations";
 
 function OtherProfile(props) {
@@ -59,7 +57,7 @@ function OtherProfile(props) {
                             <div className="text-center p-5 mt-2">
                                 <figure className="avatar avatar-xl">
                                     <img
-                                        src={props.ProfileChecked.photo || PhotoD}
+                                        src={props.ProfileChecked.photo || "https://zupimages.net/up/19/18/3ltf.png"}
                                         alt="profile"/>
                                 </figure>
                                 <div>

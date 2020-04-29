@@ -14,7 +14,19 @@ import {
 import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../functionTools/tools";
 import Results from "./prestations/results/results";
 
-export const EventAndThematics = (headers, dispatch, setStateResult, displayOne, setShow, show, listOfEvents, setEvents, events, thematics, setThematics) => {
+export const EventAndThematics = (
+    headers,
+    dispatch,
+    setStateResult,
+    displayOne,
+    setShow,
+    show,
+    listOfEvents,
+    setEvents,
+    events,
+    thematics,
+    setThematics
+) => {
 
     const searchService = async (key, value) => {
         await dispatch(addSearchLoading(true));
@@ -23,7 +35,10 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne,
         axios.get("api/service_search/moment/" + key + "/" + value, {headers: headers}).then(async (resp) => {
             let data = resp.data;
             if (data.length >= 2) {
-                await dispatch(addFilterPricing({"min": resp.data[0]["price"], "max": resp.data[resp.data.length - 1]["price"]}));
+                await dispatch(addFilterPricing({
+                    "min": resp.data[0]["price"],
+                    "max": resp.data[resp.data.length - 1]["price"]
+                }));
                 data = shuffleArray(data);
             }
             await dispatch(changeInitialized(false));
@@ -65,7 +80,10 @@ export const EventAndThematics = (headers, dispatch, setStateResult, displayOne,
                     <img alt={name} src={image} style={{width: "100%"}}/>
                 </div>
                 <button className="btn btn-outline-info relative align-middle"
-                        onClick={() => {setThematics(key);setShow(true);}}
+                        onClick={() => {
+                            setThematics(key);
+                            setShow(true);
+                        }}
                         data-tip="Cliquer moi pour voir les prestation de cette univer">Les prestations
                 </button>
             </div>

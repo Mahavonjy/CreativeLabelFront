@@ -50,6 +50,13 @@ function SearchBar(props) {
     const [startDate, setStartDate] = useState(date_to_search);
 
     const Search = async () => {
+        console.log({
+            "country": country,
+            "city": city,
+            "event_date": startDate.toISOString(),
+            "event": state_events,
+            "thematics": state_thematics,
+        });
         let if_errors = validatorSearch(state_thematics, startDate, country);
         if (if_errors['error']) {
             toast.error(if_errors['message'])
@@ -80,19 +87,41 @@ function SearchBar(props) {
         }
     };
 
-    const changeCity = async (value) => {
+    const changelistOfCity = async (value) => {
         let tmp = [];
         await Promise.all(country_allowed[country_allowed.findIndex(
-            tmp => tmp.name === value)]["value"]
-            .map(element => {
+            tmp => tmp.name === value)]["value"].map(element => {
                 tmp.push({value: element, label: element})
             })
         ).then(() => setListOfCity(tmp));
     };
 
+    const resetDataOfCity = () => {
+        setCity("");
+        dispatch(changeCityToSearch(""))
+    };
+
+    const updateCountry = (obj) => {
+        if (obj)
+            new Promise(resolve => {
+                resolve(onChangeListWithValueLabel(setCountry, obj, dispatch, changeCountryToSearch));
+                resolve(changelistOfCity(obj.value).then(r => {
+                    setCity("");
+                    dispatch(changeCityToSearch(""))
+                }));
+            }).then(r => null);
+        else resetDataOfCity()
+    };
+
+    const updateCity = (obj) => {
+        if (obj)
+            onChangeListWithValueLabel(setCity, obj, dispatch, changeCityToSearch);
+        else resetDataOfCity()
+    };
+
     useEffect(() => {
 
-        function two() {
+        function _start() {
             let tmp = [];
             for (let row in events_allowed) {
                 let value = events_allowed[row];
@@ -101,7 +130,7 @@ function SearchBar(props) {
             setListOfEvents(tmp);
         }
 
-        Promise.all([funcToSpecifyValueForSpecialInput(country_allowed, setCountryAllowed), two()]).then();
+        Promise.all([funcToSpecifyValueForSpecialInput(country_allowed, setCountryAllowed), _start()]).then();
 
         return () => {
             isMounted.current = true
@@ -111,37 +140,24 @@ function SearchBar(props) {
     return (
         <div className="Base search-bar relative p-b-40 mt-5">
             {/* Input Search */}
-            <h3 className="text-center text-red pt-4">Trouvez la meilleur prestation pour votre evenement</h3><br/>
+            <ReactTooltip/>
+            <h3 className="text-center text-red mb-4 pt-4">
+                Trouvez la meilleur prestation pour votre evenement
+            </h3>
             <div className="search-row row justify-content-center ml-2 mr-2">
                 <div className="col-lg-2 d-inline-block text-center required">
                     <label className="control-label">Pays</label>
-                    <CreatableSelect placeholder="Choisir un pays"
-                                     onChange={obj => {
-                                         new Promise(resolve => {
-                                             resolve(setCity(""));
-                                             resolve(dispatch(changeCityToSearch("")));
-                                             resolve(changeCity(obj.value).then(r => null));
-                                             resolve(onChangeListWithValueLabel(
-                                                 setCountry,
-                                                 obj,
-                                                 dispatch,
-                                                 changeCountryToSearch));
-                                         }).then(r => null)
-                                     }}
+                    <CreatableSelect isClearable
+                                     placeholder="Choisir un pays"
+                                     onChange={obj => updateCountry(obj)}
                                      options={countryAllowed}/>
                 </div>
                 <div className=" col-lg-2 d-inline-block text-center">
                     <label className="control-label">Villes</label>
-                    <CreatableSelect placeholder="Choisir une ville"
+                    <CreatableSelect isClearable
+                                     placeholder="Choisir une ville"
                                      options={listOfCity}
-                                     onChange={
-                                         obj => onChangeListWithValueLabel(
-                                             setCity,
-                                             obj,
-                                             dispatch,
-                                             changeCityToSearch
-                                         )
-                                     }/>
+                                     onChange={obj => updateCity(obj)}/>
                 </div>
                 <div className=" col-lg-3 d-inline-block text-center required">
                     <label className="control-label">Thematics</label>
@@ -154,16 +170,16 @@ function SearchBar(props) {
                 </div>
                 <div className=" col-lg-2 d-inline-block text-center">
                     <label className="control-label">Evenements</label>
-                    <Select options={listOfEvents} placeholder="Choisir le/les evenements"
+                    <Select options={listOfEvents}
+                            placeholder="Choisir le/les evenements"
                             onChange={obj => {
                                 onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
                             }}/>
                 </div>
-                <div className="col-lg-2 d-inline-block text-center required">
-                    <ReactTooltip/>
-                    <label className="control-label">Date de votre evenement</label>
+                <div className="col-lg-2 d-inline-block  text-center required">
+                    <label className="control-label"><i className="icon icon-calendar text-red mr-2"/>Date</label>
                     <input type="date"
-                           className="special-date-picker text-center"
+                           className="special-date-picker col text-center"
                            onChange={
                                (e) => ChangeDate(
                                    e,
@@ -171,11 +187,10 @@ function SearchBar(props) {
                                    dispatch,
                                    changeDateToSearch)
                            }/>
-                    {/*<i className="icon-calendar text-center ml-2 s-20 text-red" */}
-                    {/*   data-tip="Ceci est votre date d'Evenement"/>*/}
                 </div>
                 <div className="col-lg-10 mt-4">
-                    <button type="submit" onClick={Search}
+                    <button type="submit"
+                            onClick={Search}
                             className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
                         <i className="icon-search-1 text-white"/>
                     </button>

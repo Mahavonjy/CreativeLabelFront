@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import logo from "../../assets/images/logo/ISL_logo.png"
 import Conf from "../../config/tsconfig";
 import './styles/main.scss'
 import './styles/_global.scss'
@@ -273,13 +272,10 @@ class Players extends Component {
                 <nav className="navbar-wrapper navbar-bottom-fixed shadow">
                     <div className="navbar navbar-expand player-header justify-content-between  bd-navbar">
                         <div className="d-flex align-items-center">
-                            <a href="/#" data-toggle="push-menu" className="paper-nav-toggle pp-nav-toggle ml-2 mr-2">
-                                <i />
-                            </a>
-                            <a className="navbar-brand d-none d-lg-block" href="/beats">
+                            <a className="navbar-brand d-none d-lg-block" href="/#">
                                 <div className="d-flex align-items-center s-14 l-s-2">
                                     <figure className="avatar-md float-left mr-3 mt-1">
-                                        <img className="r-5" src={logo} alt="" />
+                                        <img className="r-5" src="https://zupimages.net/up/19/18/3ltf.png" alt="" />
                                     </figure>
                                     <span>ISL CREATIVE</span>
                                 </div>

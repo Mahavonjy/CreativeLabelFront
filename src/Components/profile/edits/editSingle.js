@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Modal from 'react-awesome-modal';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import logo from "../../../assets/images/logo/ISL_logo.png";
 import { useSelector } from "react-redux";
 import { smallSpinner } from "../../functionTools/createFields";
 import * as Tools from "../../functionTools/tools";
@@ -89,7 +88,7 @@ function EditSingle(props) {
         <Modal visible={true} width="650" height="auto" effect="fadeInUp" onClickAway={() => props.CloseEdit}>
             <ToastContainer position="bottom-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
             {loading && smallSpinner("absolute", "0")}
-            <img alt={"logo"} src={logo} style={{position: "absolute", height: 550, width: 650, opacity:0.4}}/>
+            <img alt={"logo"} src="https://zupimages.net/up/19/18/3ltf.png" style={{position: "absolute", height: 550, width: 650, opacity:0.4}}/>
             <div className="form-material" style={{background:"black", height:"100%", borderRadius:"5px", opacity: 0.7}}>
                 <button className="ModalClose" onClick={props.CloseEdit}>
                     <i className="icon-close s-24" style={{color:"orange"}} />

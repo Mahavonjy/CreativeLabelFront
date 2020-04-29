@@ -49,6 +49,7 @@ import {
 import {LoadingHome, Login} from "../functionTools/popupFields";
 import {checkOnClickAwaySideBar, dispatchPayment, FillInCartProps} from "../functionTools/tools";
 import IslPlayer from "../players/players";
+import "../../assets/css/style/style.scss";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
@@ -350,10 +351,7 @@ function HomeRoot() {
                 <Router>
                     <Route render={({location, history}) => (
                         <React.Fragment>
-                            <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas"
-                                   // onMouseEnter={() => !openSideBar && document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
-                                   // onMouseLeave={() => document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()}
-                            >
+                            <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
                                 {/* SideBars with ICON */}
                                 {SideBars(
                                     state_cart_length,
@@ -363,6 +361,7 @@ function HomeRoot() {
                                     history,
                                     headers,
                                     logout,
+                                    isPlaying,
                                     ifUserGenreSelected,
                                     openSideBar)}
                                 {/* End SideBars */}
@@ -384,13 +383,13 @@ function HomeRoot() {
                         </React.Fragment>)}
                     />
                 </Router>
-                {isPlaying ? <IslPlayer key={key}/> :
-                    <nav className="relative width-80 fixed fixed-top">
-                        <a href="/#" data-toggle="push-menu" data-tip="Ouvrir le menu"
-                           onClick={() => openSideBar ? setOpenSideBar(false): setOpenSideBar(true)}
-                           className="paper-nav-toggle pp-nav-toggle pl-2 ml-4"><i/>
-                        </a>
-                    </nav>}
+                <nav className="relative width-80 fixed fixed-top">
+                    <a href="/#" data-toggle="push-menu" data-tip="Ouvrir le menu"
+                       onClick={() => openSideBar ? setOpenSideBar(false): setOpenSideBar(true)}
+                       className="paper-nav-toggle pp-nav-toggle pl-2 ml-3"><i/>
+                    </a>
+                </nav>
+                {isPlaying && <IslPlayer key={key}/>}
             </div>
         );
     }

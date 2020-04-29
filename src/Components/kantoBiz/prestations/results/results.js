@@ -3,15 +3,13 @@ import Modal from "react-awesome-modal";
 import InputRange from "react-input-range";
 import {useDispatch, useSelector} from "react-redux";
 import Select from "react-select";
-import StarRatings from "react-star-ratings";
 import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
 import {addFilterEventSelected, addSearchLoading, changeInitialized} from "../../../functionTools/functionProps";
 import {LoadingSearch} from "../../../functionTools/popupFields";
-import {checkOnClickAwaySideBar, checkValueIfExistInArray, generatePagination} from "../../../functionTools/tools";
-import HomeRoot from "../../../home/homeRoot";
+import {checkValueIfExistInArray, generatePagination} from "../../../functionTools/tools";
 import Pagination from "../../../pagination/pagination";
 
 function Results(props) {
@@ -115,16 +113,20 @@ function Results(props) {
                             <h4 className="text-red text-center">Filtrer le résultat</h4>
                             <div className="text-center ml-5 mr-5">
                                 <label className="pb-3 pt-4">Évènement</label>
-                                <Select isMulti options={events_type} placeholder="Choisir le/les thematics" onChange={obj => {
-                                    let tmp = [];
-                                    for (let row in obj) tmp.push(obj[row]["value"]);
-                                    dispatch(addFilterEventSelected(tmp));
-                                }}/>
+                                <Select isMulti
+                                        options={events_type}
+                                        placeholder="Choisir le/les thematics"
+                                        onChange={obj => {
+                                            let tmp = [];
+                                            for (let row in obj) tmp.push(obj[row]["value"]);
+                                            dispatch(addFilterEventSelected(tmp));
+                                        }}/>
                             </div>
                             <div className="text-center ml-5 mr-5">
                                 <label className="pb-3 pt-4">Prix de la prestation</label>
                                 {priceActive ?
-                                    <InputRange draggableTrack maxValue={filter_price["max"]} minValue={filter_price["min"]} formatLabel={value => `${value} $`}
+                                    <InputRange draggableTrack maxValue={filter_price["max"]}
+                                                minValue={filter_price["min"]} formatLabel={value => `${value} $`}
                                                 onChange={value => setPrice(value)} step={10}
                                                 onChangeComplete={value => setPrice(value)}
                                                 value={price}/> : <i className="icon icon-plus ml-2 text-red s-18"
@@ -134,7 +136,8 @@ function Results(props) {
                             <div className="text-center ml-5 mr-5">
                                 <label className={priceActive && "pb-3 pt-4"}>Notation (nombre d'étoile)</label>
                                 {startsActive ?
-                                    <InputRange draggableTrack maxValue={5} minValue={0} formatLabel={value => `${value}✰`}
+                                    <InputRange draggableTrack maxValue={5} minValue={0}
+                                                formatLabel={value => `${value}✰`}
                                                 onChange={value => setStarts(value)}
                                                 onChangeComplete={value => setStarts(value)}
                                                 value={starts}/> : <i className="icon icon-plus ml-2 text-red s-18"
@@ -153,15 +156,17 @@ function Results(props) {
                 </div>
             </Modal>}
             <div className="col-lg-12 pt-2">
-                <button className="btn btn-outline-danger m-2 pl-5 pr-5" data-tip="Filtres"
-                        onClick={() => thisComponentResults.length > 1 ? setFilterOpened(true): toast.warn("Vous n'avez pas assez de resultat")}
+                <button className="btn btn-outline-danger m-2 pl-5 pr-5"
+                        data-tip="Filtres"
+                        onClick={() => setFilterOpened(true)}
                 ><i className="icon-th-list s-20"/>&nbsp;<i className="icon-filter s-20"/> Filtrer les résultats
                 </button>
                 <h4 className="text-red text-center">Résultat(s) de votre recherche</h4>
 
                 {!loading ?
                     <div className="row justify-content-center">
-                        {thisComponentResults.length !== 0 && pageOfItems.map(item => <div key={item.id}>{item.name}</div>)}
+                        {thisComponentResults.length !== 0 && pageOfItems.map(item => <div
+                            key={item.id}>{item.name}</div>)}
                     </div> : <LoadingSearch/>}
 
                 {!loading &&
