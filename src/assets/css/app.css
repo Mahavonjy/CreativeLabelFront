@@ -4970,6 +4970,10 @@ a.bg-light:focus,a.bg-light:hover,button.bg-light:focus,button.bg-light:hover{
     background-color:#0c101b!important
 }
 
+.modal-dialog {
+    max-width: 1000px !important;
+}
+
 .bg-darks{
     background-image: linear-gradient(to bottom, #1a171b, #28262a, #373639, #474749, #58585a);
 }

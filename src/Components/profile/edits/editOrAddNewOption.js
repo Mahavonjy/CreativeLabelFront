@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import {addDescriptionOfService} from "../../functionTools/functionProps";
 import { changeFields } from "../../functionTools/tools";
 
 function EditOrAddNewOptions(props) {

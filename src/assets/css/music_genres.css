@@ -1,31 +1,14 @@
-.send-genre:hover {
-    background-color: #4CAF50; /* Green */
-    color: white;
-}
-
 .send-genre {
-    -webkit-transition-duration: 0.4s;
-    transition-duration: 0.4s;
     position: fixed;
-    background-color: #3bc8e7;
-    border-radius: 30px;
     z-index: 99;
-    width: 80px;
     height: 40px;
     right: 0;
     bottom: 20%;
 }
 
-.loader {
-    margin-left:auto;
-    margin-right:auto;
-}
-
-.row-genre {
-    width: 80%;
-    margin: 10px auto;
-    position: relative;
-    text-align:center;
+.lo {
+    height: 100%;
+    overflow: auto;
 }
 
 .ChoiceTitle h1 {
@@ -68,11 +51,15 @@
     z-index: 1;
 }
 
-.MusicChoiceTitle h1 {
+.MusicChoiceTitle {
+    height: 500px;
+}
+
+.MusicChoiceTitle h2 {
     text-align: center;
     color: floralwhite;
     display: block;
-    font-size: 35px;
+    font-size: 25px;
 }
 
 .music-genre .top:after {

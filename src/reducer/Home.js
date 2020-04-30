@@ -7,6 +7,7 @@ const initState = {
     playMusic: false,
     redirect: false,
     loading: false,
+    toastGlobal: true,
     auth: false
 };
 
@@ -51,6 +52,11 @@ const PlaylistHomeReducer = (state = initState, action) => {
             return {
                 ...state,
                 loading: !state.loading
+            };
+        case "SET_TOAST_GLOBAL":
+            return {
+                ...state,
+                toastGlobal: action.data
             };
         default:
             return state;

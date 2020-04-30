@@ -164,8 +164,15 @@ function Register() {
                                 })
                             }}/>
             <Modal visible={visible} className="zIndex99" width="400" height="150" animationType='slide'>
-                <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
-                                rtl={false} pauseOnVisibilityChange draggable pauseOnHover/>
+                <ToastContainer position="top-center"
+                                autoClose={5000}
+                                hideProgressBar={false}
+                                newestOnTop
+                                closeOnClick
+                                rtl={false}
+                                pauseOnVisibilityChange
+                                draggable
+                                pauseOnHover/>
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">

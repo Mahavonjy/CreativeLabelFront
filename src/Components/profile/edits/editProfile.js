@@ -5,7 +5,7 @@ import Modal from 'react-awesome-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast, ToastContainer} from 'react-toastify';
 import {CreateInput, smallSpinner} from "../../functionTools/createFields";
-import {profileInitialisationInfo} from "../../functionTools/functionProps";
+import {profileInitialisationInfo, setValueOfToastGlobal} from "../../functionTools/functionProps";
 import {changeFields} from "../../functionTools/tools";
 import {checkErrorMessage} from "../../validators/validatiors";
 
@@ -31,6 +31,7 @@ function EditProfile(props) {
 
         setLoading(true);
         setDisable(true);
+        dispatch(setValueOfToastGlobal(false));
         const bodyFormData = new FormData();
         bodyFormData.append('city', city);
         bodyFormData.append('name', name);
@@ -47,6 +48,7 @@ function EditProfile(props) {
             let data = resp.data;
             dispatch(profileInitialisationInfo(data));
             setLoading(false);
+            dispatch(setValueOfToastGlobal(true));
             props.closePopup(1);
         }).catch(error => {
             setLoading(false);
@@ -66,8 +68,10 @@ function EditProfile(props) {
             <ToastContainer/>
             {loading && smallSpinner("absolute", "0")}
             <div className="bg-dark" style={{height: "100%", borderRadius: "5px", opacity: 0.7}}>
-                <button className="ModalClose" onClick={(e) => props.closePopup(0)}>
-                    <i className="icon-close s-24" style={{color: "orange"}}/>
+                <button className="ModalClose" onClick={(e) => {
+                    dispatch(setValueOfToastGlobal(true));
+                    props.closePopup(0);
+                }}><i className="icon-close s-24" style={{color: "orange"}}/>
                 </button>
                 <div className="col text-center">
                     <h4 className="text-green text-monospace">Modifier mon profil</h4>

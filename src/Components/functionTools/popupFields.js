@@ -206,12 +206,10 @@ export const Login = () => {
             <div aria-disabled={"false"} className="modal fade p-t-b-50" id="exampleModal" tabIndex={-1} role="dialog"
                  aria-labelledby="exampleModalLabel">
                 <div className="modal-dialog p-t-100" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">x</span>
-                            </button>
-                        </div>
+                    <div className="modal-content border-0 bg-transparent">
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" hidden={true}>x</span>
+                        </button>
                         <div className="modal-body">
                             <SignInOrUp/>
                         </div>

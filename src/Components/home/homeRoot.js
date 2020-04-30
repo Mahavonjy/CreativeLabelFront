@@ -63,9 +63,7 @@ function HomeRoot() {
     let user_credentials;
     const history = useHistory();
     const dispatch = useDispatch();
-    const carts = useSelector(state => state.Carts.carts);
-    const totalPrice = useSelector(state => state.Carts.total_price);
-    const beats = useSelector(state => state.beats.beats);
+    const toastGlobal = useSelector(state => state.Home.toastGlobal);
     const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
     const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
 
@@ -232,23 +230,23 @@ function HomeRoot() {
                 history.goBack();
                 setLoading(false);
                 return true
-            } else if (routeParsed !== 'preference') {
-                axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
-                    fetchUserData()
-                }).catch(err => {
-                    try {
-                        if (err.response.data === "no choice music genre") {
-                            history.push("/preference");
-                            notOnline()
-                        } else if (err.response.data === "token invalid") {
-                            logout().then(() => null)
-                        } else notOnline()
-                    } catch (e) {
-                        history.push("/badConnexion");
-                    }
-                });
+            // } else if (routeParsed !== 'preference') {
+            //     axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
+            //         fetchUserData()
+            //     }).catch(err => {
+            //         try {
+            //             if (err.response.data === "no choice music genre") {
+            //                 history.push("/preference");
+            //                 notOnline()
+            //             } else if (err.response.data === "token invalid") {
+            //                 logout().then(() => null)
+            //             } else notOnline()
+            //         } catch (e) {
+            //             history.push("/badConnexion");
+            //         }
+            //     });
             } else {
-                axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
+                axios.get("api/users/if_token_valide", {headers: headers}).then(() => {
                     fetchUserData()
                 }).catch(() => {
                     notOnline()
@@ -342,7 +340,7 @@ function HomeRoot() {
     } else {
         return (
             <div>
-                <ToastContainer style={{zIndex: 999}}/>
+                {toastGlobal && <ToastContainer style={{zIndex: 999}}/>}
                 {/* Popup login */}
                 {Login()}
                 {/* End of Popup */}

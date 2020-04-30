@@ -34,7 +34,7 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
-                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Go back to store</button>
+                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Voir les Beats</button>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
-                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Go back to store</button>
+                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Voir les Beats</button>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
-                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Go back to store</button>
+                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Voir les Beats</button>
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@ class Offers extends Component {
                                 <li><span className="fa-li"><i className="fas fa-check" /></span>100% libre de droits</li>
                                 <li className="text-muted"><span className="fa-li"><i className="fas fa-times" /></span>Credits : Prod. par [Nom du producteur] / ISL Creative</li>
                             </ul>
-                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Go back to store</button>
+                            <button onClick={() => {document.getElementsByClassName("closeOffers")[0].click()}} className="btn btn-block btn-primary text-uppercase">Voir les Beats</button>
                         </div>
                     </div>
                 </div>

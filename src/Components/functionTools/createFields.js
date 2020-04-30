@@ -6,10 +6,10 @@ import {useDispatch} from "react-redux";
 import {Link, Route} from "react-router-dom";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import TestImg from "../../assets/images/demo/a2.jpg";
-import thirdBlockImg from "../../assets/images/backgrounds/instru.jpg"
 import firstBlockImg from "../../assets/images/backgrounds/dark.jpg";
+import thirdBlockImg from "../../assets/images/backgrounds/instru.jpg"
 import secondBlockImg from "../../assets/images/backgrounds/moon.jpg";
+import TestImg from "../../assets/images/demo/a2.jpg";
 import Conf from "../../config/tsconfig";
 import About from "../about/about";
 import Register from "../authentification/register/register";
@@ -17,6 +17,7 @@ import Beats from "../beatMaking/beats/allBeatsSuggestion/beats";
 import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
 import Cart from "../cart/cart";
 import HomeRoot from "../home/homeRoot";
+import LegalNotices from "../home/legalNotices";
 import KantoBiz from "../kantoBiz/kantoBiz";
 import DisplayPrestation from "../kantoBiz/prestations/results/displayPrestation";
 import SearchBar from "../kantoBiz/searchBar";
@@ -380,44 +381,42 @@ export const SideBars = (
     headers,
     logout,
     isPlaying,
-    ifUserGenreSelected
+    ifUserGenreSelected,
 ) => {
     return (
         <div className="sidebar">
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Creative BeatMaking" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}}
+                    data-tip="Creative BeatMaking" onClick={() => {
                     (location.pathname !== "/beats") && history.push("/beats")
                 }}><i className={
                     location.pathname === "/beats"
-                        ? "icon icon-heartbeat text-red s-24"
-                        : "icon icon-heartbeat s-24"}/>
+                        ? "icon icon-heartbeat cursor-pointer text-red s-24"
+                        : "icon icon-heartbeat cursor-pointer s-24"}/>
                     <span className="ml-5">BeatMaking</span>
                 </li>
 
                 {/* kantoBiz */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Creative KantoBiz" onClick={() => {
                     location.pathname !== "/kantobiz" && history.push("/kantobiz")
-                }}><i
-                    className={
-                        location.pathname === "/kantobiz"
-                            ? "icon icon-compact-disc-2 text-red s-24"
-                            : "icon icon-compact-disc-2 s-24"}/>
+                }}><i className={
+                    location.pathname === "/kantobiz"
+                        ? "icon icon-compact-disc-2 cursor-pointer text-red s-24"
+                        : "icon icon-compact-disc-2 cursor-pointer s-24"}/>
                     <span className="ml-5">KantoBiz</span>
                 </li>
 
                 {/* PROFILE */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Profil" onClick={() => {
-                    if (headers['Isl-Token'] !== Conf.configs.TokenVisitor && !ifUserGenreSelected)
-                        toast.warn("preference not defined");
-                    else headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/profile"
+                    headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/profile"
                         ? document.getElementById("LoginRequire").click()
                         : history.push("/profile");
                 }}><i className={
                     location.pathname === "/profile"
-                        ? "icon icon-user text-red s-24"
-                        : "icon icon-user s-24"}/>
+                        ? "icon icon-user cursor-pointer text-red s-24"
+                        : "icon icon-user cursor-pointer s-24"}/>
                     <span className="ml-5">Profil</span>
                 </li>
 
@@ -433,8 +432,8 @@ export const SideBars = (
                                 <i data-count="4b"
                                    className={
                                        location.pathname === "/cart"
-                                           ? "icon icon-cart-plus text-red s-24 mr-5"
-                                           : "icon icon-cart-plus s-24 mr-5"
+                                           ? "icon icon-cart-plus cursor-pointer text-red s-24 mr-5"
+                                           : "icon icon-cart-plus cursor-pointer s-24 mr-5"
                                    }
                                 /> Panier
                             </span>
@@ -446,19 +445,23 @@ export const SideBars = (
                     (location.pathname !== "/about") && history.push("/about")
                 }}><i className={
                     location.pathname === "/about"
-                        ? "icon text-red icon-info-circle s-24"
-                        : "icon icon-info-circle s-24"}/>
+                        ? "icon text-red cursor-pointer icon-info-circle s-24"
+                        : "icon icon-info-circle cursor-pointer s-24"}/>
                     <span className="ml-5">À propos de nous</span>
                 </li>
 
-                {/* about */}
+                {/* Mention */}
                 <li style={{margin: "0 0 20px 11px"}} data-tip="Les mentions légales">
-                    <i className="icon icon-flag s-24"/>
+                    <i className="icon icon-flag s-24 cursor-pointer"
+                       data-toggle="modal" data-target="#legaleNotices"/>
                     <span className="ml-5">Les mentions légales</span>
                 </li>
 
                 {/* LOGOUT OR LOGIN */}
-                <li onClick={() => logout()}
+                <li onClick={() =>
+                    headers['Isl-Token'] === Conf.configs.TokenVisitor
+                        ? document.getElementById("LoginRequire").click()
+                        : logout()}
                     style={
                         logout_class === "icon icon-users-1 s-24 mr-5 text-red"
                             ? {margin: "50px 0 20px 8px"}
@@ -469,7 +472,7 @@ export const SideBars = (
                             ? "Se Connecter"
                             : " Se déconnecter"
                     }>
-                    <i className={logout_class}/> <span>{log_name}</span>
+                    <i className={logout_class + " cursor-pointer"}/> <span>{log_name}</span>
                 </li>
             </ul>
             {!isPlaying &&
@@ -484,7 +487,15 @@ export const SideBars = (
 };
 
 export const SideBarsMain = (
-    addToPlaylist, single_beat, beats_similar, profile_checked, user_data, headers, location, history, service_to_show
+    addToPlaylist,
+    single_beat,
+    beats_similar,
+    profile_checked,
+    user_data,
+    headers,
+    location,
+    history,
+    service_to_show
 ) => {
     return (
         <div>
@@ -559,6 +570,7 @@ export const SideBarsMain = (
                    component={() => {
                        return headers['Isl-Token'] !== Conf.configs.TokenVisitor ? history.goBack() : (<Register/>)
                    }}/>
+            <LegalNotices headers={headers}/>
         </div>
     )
 };

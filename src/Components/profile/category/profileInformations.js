@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
+import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import PhotoTest from "../../../assets/images/backgrounds/adult-banking-business-2254122.jpg";
 import {profileInitialisationInfo} from "../../functionTools/functionProps";
+import Preference from "../../preference/preference";
 import {checkErrorMessage} from "../../validators/validatiors";
 import EditProfile from "../edits/editProfile";
 
@@ -16,8 +18,13 @@ function ProfileInformation(props) {
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
     const [loadingPhoto, setLoadingPhoto] = useState(false);
+    const [preference, setPreference] = useState(false);
     const cover_style = {
-        background: "url(" + (profile_info["cover_photo"] ? profile_info["cover_photo"] : PhotoTest) + ")",
+        background: "url(" + (
+            profile_info["cover_photo"] &&
+            profile_info["cover_photo"] !== "null"
+                ? profile_info["cover_photo"]
+                : PhotoTest) + ")",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         backgroundSize: "80%",
@@ -63,6 +70,21 @@ function ProfileInformation(props) {
     return (
         <div className="container-fluid relative animatedParent animateOnce p-lg-3">
             {edit && <EditProfile headers={props.headers} closePopup={(e) => togglePopupEditProfile(e)}/>}
+
+            {preference &&
+            <Modal visible={true} width="70%" animationType='slide'>
+                <div className="form-material bg-dark" style={{height: "100%", borderRadius: "5px"}}>
+                    <button className="ModalClose" onClick={() => setPreference(false)}>
+                        <i className="icon-close s-24" style={{color: "orange"}}/>
+                    </button>
+                    <div className="col text-center">
+                        <div className="body">
+                            <Preference headers={props.headers} setPreference={setPreference}/>
+                        </div>
+                    </div>
+                </div>
+            </Modal>}
+
             <div className="card no-b shadow no-r">
                 <div className="row no-gutters">
                     <div className="col-md-4 b-r">
@@ -77,9 +99,14 @@ function ProfileInformation(props) {
                                 {props.user_role === "professional_auditor" &&
                                 <div>
                                     <p className="dropdown-item text-red"
-                                       onClick={() => props.setChoiceArtistTypeToChange(true)}><i
-                                        className="icon-user-plus mr-3"/>Voulez vous devenir artiste sur ISL ?</p>
+                                       onClick={() => props.setChoiceArtistTypeToChange(true)}>
+                                        <i className="icon-user-plus mr-3"/>Voulez vous devenir artiste sur ISL ?</p>
                                 </div>}
+                                <div>
+                                    <p className="dropdown-item text-red"
+                                       onClick={() => setPreference(true)}>
+                                        <i className="icon-music-genre mr-3"/>Selectionner vos genres de musique</p>
+                                </div>
                             </div>
                         </div>
                         {!loadingPhoto ?

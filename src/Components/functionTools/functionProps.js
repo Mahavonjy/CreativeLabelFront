@@ -813,6 +813,15 @@ export function addListOfOptionsAdded(data) {
     };
 }
 
+export function setValueOfToastGlobal(data) {
+    return async dispatch => {
+        dispatch({
+            type: "SET_TOAST_GLOBAL",
+            data: data
+        });
+    };
+}
+
 export function addAllUSerReservation(data) {
     return async dispatch => {
         dispatch({

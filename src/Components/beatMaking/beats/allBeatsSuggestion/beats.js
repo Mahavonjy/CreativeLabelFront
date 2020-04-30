@@ -14,6 +14,7 @@ function Beats(props) {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const contract = useSelector(state => state.profile.contract);
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
     const auth = useSelector(state => state.session.authenticated);
@@ -117,8 +118,7 @@ function Beats(props) {
                                                                 className="btn btn-outline-info btn-fab-md pl-md-6 pr-md-6 Offers"
                                                                 data-toggle="modal" data-target="#exampleModalOffers">Offers
                                                         </button>
-                                                        <div aria-disabled={"false"}
-                                                             className="modal fade p-t-b-50 Offers"
+                                                        <div aria-disabled={"false"} className="modal fade p-t-b-50 Offers"
                                                              id="exampleModalOffers" role="dialog"
                                                              aria-labelledby="exampleModalLabelOffers">
                                                             <div className="modal-dialog" role="document" style={{width: "100%"}}>
@@ -129,7 +129,7 @@ function Beats(props) {
                                                                                 className="closeOffers transparent border-0"
                                                                                 data-dismiss="modal"
                                                                                 aria-label="Close">
-                                                                            <i className="icon-close s-36 text-red"/>
+                                                                            <i className="icon-close s-24 text-red"/>
                                                                         </button>
                                                                     </div>
                                                                     <div className="modal-body">

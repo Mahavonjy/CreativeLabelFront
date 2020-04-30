@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, {useState} from "react";
 import Modal from "react-awesome-modal";
+import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import {sessionService} from "redux-react-session";
+import {setValueOfToastGlobal} from "../../functionTools/functionProps";
 import HomeRoot from "../../home/homeRoot";
 import {CreateInput, smallSpinner} from "../../functionTools/createFields";
 import {changeFields} from "../../functionTools/tools";
@@ -19,6 +21,7 @@ let headers = {
 
 function Login() {
 
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const [loading, setLoading] = useState(false);
@@ -34,12 +37,14 @@ function Login() {
     const sendLoginCredentials = (e) => {
         e.preventDefault();
 
+        dispatch(setValueOfToastGlobal(false));
         if (!email || !password) {
             toast.warn("email et/ou mot de passe non remplis")
         } else {
             let data = {email, password};
             setLoading(true);
             axios.post("api/users/login", data, {headers: headers}).then(async response => {
+                dispatch(setValueOfToastGlobal(true));
                 const {token} = response.data;
                 setLoading(false);
                 document.getElementsByClassName("close")[0].click();
@@ -62,6 +67,7 @@ function Login() {
 
     const verifyKeysSubmit = () => {
         setLoading(true);
+        dispatch(setValueOfToastGlobal(false));
         let data = {email: email, keys: keys};
         axios.post("api/users/get_if_keys_validate", data, {headers: headers}).then(() => {
             setLoading(false);
@@ -75,10 +81,12 @@ function Login() {
 
     const verifyEmail = () => {
         setLoading(true);
+        dispatch(setValueOfToastGlobal(false));
         axios.post("api/users/get_mail", {email: email}).then(() => {
             setVisibility(false);
             setLoading(false);
             setResetPassword(true);
+            dispatch(setValueOfToastGlobal(true));
         }).catch(error => {
             setLoading(false);
             toast.error(checkErrorMessage(error).message)
@@ -87,11 +95,13 @@ function Login() {
 
     const verifyKeysResetPass = () => {
         setLoading(true);
+        dispatch(setValueOfToastGlobal(false));
         let data = {email: email, keys: keys};
         axios.post("api/users/get_if_keys_validate", data).then(() => {
             setLoading(false);
             setResetPassword(false);
             setChangePass(true);
+            dispatch(setValueOfToastGlobal(true));
         }).catch(error => {
             setLoading(false);
             toast.error(checkErrorMessage(error).message)
@@ -103,11 +113,13 @@ function Login() {
 
         if (password === confirm_password) {
             setLoading(true);
+            dispatch(setValueOfToastGlobal(false));
             let data = {email: email, password: password};
             axios.put("api/users/reset_password", data, {headers: headers}).then(() => {
                 setLoading(false);
                 toast.success("Password updated");
                 setChangePass(false);
+                dispatch(setValueOfToastGlobal(true));
             }).catch(error => {
                 setLoading(false);
                 if (data["password"].length < 8) {
@@ -126,6 +138,7 @@ function Login() {
 
     return (
         <div tabIndex="0" onKeyDown={(e) => {e.key === "Enter" && sendLoginCredentials(e)}}>
+            {!changePass && !resetPassword && !visibility && !visible && <ToastContainer/>}
             <Modal visible={changePass} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick
@@ -170,6 +183,7 @@ function Login() {
                 {loading && smallSpinner("absolute", "0")}
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
+                    <ToastContainer/>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
@@ -199,6 +213,7 @@ function Login() {
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     <div className="col text-center">
+                        <ToastContainer/>
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre adresse mail</h3>
                             <div className="custom-float center">
@@ -224,6 +239,7 @@ function Login() {
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
                     <div className="col text-center">
                         <div className="body">
+                            <ToastContainer/>
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
                                 {CreateInput(
@@ -244,8 +260,11 @@ function Login() {
 
             <div className="container-login">
                 <div className="absolute text-red ml-2" style={{zIndex: 99}}>
-                    <i className="icon-close s-24"
-                       onClick={() => document.getElementsByClassName("close")[0].click()}/>
+                    <i className="icon-close s-24 cursor-pointer"
+                       onClick={() => {
+                           dispatch(setValueOfToastGlobal(true));
+                           document.getElementsByClassName("close")[0].click()
+                       }}/>
                 </div>
                 <div className="row l-form">
 
