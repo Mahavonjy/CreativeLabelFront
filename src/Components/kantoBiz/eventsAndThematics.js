@@ -9,7 +9,7 @@ import {
     addKantoBizSearchResults,
     addSearchLoading,
     changeEventsToSearch,
-    changeInitialized
+    // changeInitialized
 } from "../functionTools/functionProps";
 import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../functionTools/tools";
 import Results from "./prestations/results/results";
@@ -32,22 +32,23 @@ export const EventAndThematics = (
         await dispatch(addSearchLoading(true));
         if (key === "events")
             dispatch(changeEventsToSearch(value));
-        axios.get("api/service_search/moment/" + key + "/" + value, {headers: headers}).then(async (resp) => {
-            let data = resp.data;
-            if (data.length >= 2) {
-                await dispatch(addFilterPricing({
-                    "min": resp.data[0]["price"],
-                    "max": resp.data[resp.data.length - 1]["price"]
-                }));
-                data = shuffleArray(data);
-            }
-            await dispatch(changeInitialized(false));
-            await setStateResult(generatePagination(data, displayOne));
-            await dispatch(addKantoBizSearchResults(data));
-            await dispatch(addSearchLoading(false));
-            if (data.length === 0) toast.warn("pas de prestations");
-            else await Results.onScrollViewSearch();
-        })
+        axios.get("api/service_search/moment/" + key + "/" + value, {headers: headers}).then(
+            async (resp) => {
+                let data = resp.data;
+                if (data.length >= 2) {
+                    await dispatch(addFilterPricing({
+                        "min": resp.data[0]["price"],
+                        "max": resp.data[resp.data.length - 1]["price"]
+                    }));
+                    data = shuffleArray(data);
+                }
+                // await dispatch(changeInitialized(false));
+                await setStateResult(generatePagination(data, displayOne));
+                await dispatch(addKantoBizSearchResults(data));
+                await dispatch(addSearchLoading(false));
+                if (data.length === 0) toast.warn("pas de prestations");
+                else await Results.onScrollViewSearch();
+            })
     };
 
     const generatorEventCard = (position_name, key, title, desc, image) => {
@@ -84,7 +85,8 @@ export const EventAndThematics = (
                             setThematics(key);
                             setShow(true);
                         }}
-                        data-tip="Cliquer moi pour voir les prestation de cette univer">Les prestations
+                        data-tip="Cliquer moi pour voir les prestation de cette univer">
+                    Les prestations
                 </button>
             </div>
         )
@@ -103,7 +105,9 @@ export const EventAndThematics = (
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Vous le voulez pour quelle genre d'evenements ?</h3>
                             <Select options={listOfEvents} placeholder="Choisir l'évenements"
-                                    onChange={obj => {onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)}}/>
+                                    onChange={obj => {
+                                        onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
+                                    }}/>
                             <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4"
                                     onClick={() => {
                                         if (events) {

@@ -387,7 +387,7 @@ export const SideBars = (
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative BeatMaking" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Creative BeatMaking" onClick={() => {
                     (location.pathname !== "/beats") && history.push("/beats")
                 }}><i className={
                     location.pathname === "/beats"
@@ -397,7 +397,7 @@ export const SideBars = (
                 </li>
 
                 {/* kantoBiz */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Creative KantoBiz" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Creative KantoBiz" onClick={() => {
                     location.pathname !== "/kantobiz" && history.push("/kantobiz")
                 }}><i
                     className={
@@ -408,7 +408,7 @@ export const SideBars = (
                 </li>
 
                 {/* PROFILE */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet profil" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Profil" onClick={() => {
                     if (headers['Isl-Token'] !== Conf.configs.TokenVisitor && !ifUserGenreSelected)
                         toast.warn("preference not defined");
                     else headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/profile"
@@ -418,11 +418,11 @@ export const SideBars = (
                     location.pathname === "/profile"
                         ? "icon icon-user text-red s-24"
                         : "icon icon-user s-24"}/>
-                    <span className="ml-5">Profile</span>
+                    <span className="ml-5">Profil</span>
                 </li>
 
                 {/* CART */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Onglet Panier" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip="Votre Panier" onClick={() => {
                     ((state_cart > 0)
                         && (location.pathname !== "/cart"))
                         ? history.push("/cart")
@@ -436,24 +436,25 @@ export const SideBars = (
                                            ? "icon icon-cart-plus text-red s-24 mr-5"
                                            : "icon icon-cart-plus s-24 mr-5"
                                    }
-                                /> Cart
+                                /> Panier
                             </span>
                     </div>
                 </li>
 
                 {/* about */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="Onglet à propos" onClick={() => {
+                <li style={{margin: "0 0 20px 11px"}} data-tip="A propos de nous" onClick={() => {
                     (location.pathname !== "/about") && history.push("/about")
                 }}><i className={
                     location.pathname === "/about"
                         ? "icon text-red icon-info-circle s-24"
                         : "icon icon-info-circle s-24"}/>
-                    <span className="ml-5">À propos</span>
+                    <span className="ml-5">À propos de nous</span>
                 </li>
 
                 {/* about */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="Politique"><i className="icon icon-flag s-24"/>
-                    <span className="ml-5">Le mentions légales</span>
+                <li style={{margin: "0 0 20px 11px"}} data-tip="Les mentions légales">
+                    <i className="icon icon-flag s-24"/>
+                    <span className="ml-5">Les mentions légales</span>
                 </li>
 
                 {/* LOGOUT OR LOGIN */}

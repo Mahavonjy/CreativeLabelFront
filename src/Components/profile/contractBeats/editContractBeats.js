@@ -152,6 +152,7 @@ function EditContractBeats(props) {
     };
 
     useEffect(() => {
+
         return () => {
             isMounted.current = true
         };

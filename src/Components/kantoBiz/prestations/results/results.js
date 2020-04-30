@@ -7,7 +7,8 @@ import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
-import {addFilterEventSelected, addSearchLoading, changeInitialized} from "../../../functionTools/functionProps";
+import {addFilterEventSelected, addSearchLoading, } from "../../../functionTools/functionProps";
+// import {changeInitialized} from "../../../functionTools/functionProps";
 import {LoadingSearch} from "../../../functionTools/popupFields";
 import {checkValueIfExistInArray, generatePagination} from "../../../functionTools/tools";
 import Pagination from "../../../pagination/pagination";
@@ -19,7 +20,7 @@ function Results(props) {
     const loading = useSelector(state => state.KantobizSearch.loading);
     const results = useSelector(state => state.KantobizSearch.results);
     const filter_price = useSelector(state => state.KantobizSearch.filter_price);
-    const initialized = useSelector(state => state.KantobizSearchInfo.initialized);
+    // const initialized = useSelector(state => state.KantobizSearchInfo.initialized);
     const filter_events_selected = useSelector(state => state.KantobizSearch.filter_events_selected);
 
     const isMounted = useRef(false);
@@ -82,12 +83,10 @@ function Results(props) {
 
     useEffect(() => {
 
-        if (!initialized) {
-            if (props.stateResults.length !== 0)
-                setThisComponentResults(props.stateResults);
-            else setThisComponentResults(generatePagination(results, props.displayOne));
-            dispatch(changeInitialized(true));
-        }
+        if (props.stateResults.length !== 0)
+            setThisComponentResults(props.stateResults);
+        else setThisComponentResults(generatePagination(results, props.displayOne));
+        // dispatch(changeInitialized(true));
 
         let tmp = [];
         Promise.all(events_allowed.map((value, row) => {
@@ -97,7 +96,7 @@ function Results(props) {
         return () => {
             isMounted.current = true
         };
-    }, [loading, results, thisComponentResults, filter_price]);
+    }, [loading, results, filter_price]);
 
     return (
         <div className="row row-eq-height p-b-100">
@@ -161,7 +160,7 @@ function Results(props) {
                         onClick={() => setFilterOpened(true)}
                 ><i className="icon-th-list s-20"/>&nbsp;<i className="icon-filter s-20"/> Filtrer les résultats
                 </button>
-                <h4 className="text-red text-center">Résultat(s) de votre recherche</h4>
+                <h4 className="text-red text-center m-5">Résultat(s) de votre recente recherche</h4>
 
                 {!loading ?
                     <div className="row justify-content-center">
@@ -170,7 +169,7 @@ function Results(props) {
                     </div> : <LoadingSearch/>}
 
                 {!loading &&
-                <div className="text-center" ref={searchRef}>
+                <div className="text-center pt-4" ref={searchRef}>
                     {thisComponentResults.length !== 0 ?
                         <Pagination items={thisComponentResults} onChangePage={onChangePage} initialPage={1}/> :
                         <h3><p className="text-red center-center m-5">0 recherche</p></h3>}

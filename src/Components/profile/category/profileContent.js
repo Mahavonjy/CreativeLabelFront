@@ -8,6 +8,7 @@ import {profileAddBeats} from "../../functionTools/functionProps";
 import {resetPropsForm} from "../../functionTools/tools";
 import Form from "../../kantoBiz/prestations/form/form";
 import AddSingle from "../addMedia/addSingle";
+import EditContractBeats from "../contractBeats/editContractBeats";
 import EditSingle from "../edits/editSingle";
 import BankingDetails from "./section/bankingDetails";
 import CalendarManagement from "./section/calendarProfile/calendarManagement";
@@ -258,25 +259,24 @@ function ProfileContent(props) {
                                         <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
                                             <p className="text-center pt-5 text-red">Pas de beat</p>
                                         </div>}
+                                        <EditContractBeats headers={props.headers}/>
                                 </div>}
                                 {props.user_role !== "professional_auditor" &&
                                 <div className="tab-pane fade" id="Prestations" role="tabpanel">
-                                    <MyPrestations
-                                        profile
-                                        role={props.user_role}
-                                        headers={props.headers}
-                                        setAllPrestation={setAllPrestation}
-                                        allPrestation={allPrestation}
-                                        setAddNewPrestation={props.setAddNewPrestation}
-                                        close={() => toast.success("Ajouter avec succes")}
+                                    <MyPrestations profile
+                                                   role={props.user_role}
+                                                   headers={props.headers}
+                                                   setAllPrestation={setAllPrestation}
+                                                   allPrestation={allPrestation}
+                                                   setAddNewPrestation={props.setAddNewPrestation}
+                                                   close={() => toast.success("Ajouter avec succes")}
                                     />
                                 </div>}
-                                <div
-                                    className={
-                                        props.user_role === "professional_auditor"
-                                            ? "tab-pane fade show active"
-                                            : "tab-pane fade"}
-                                    id="Paiements-Reservations" role="tabpanel">
+                                <div className={
+                                    props.user_role === "professional_auditor"
+                                        ? "tab-pane fade show active"
+                                        : "tab-pane fade"}
+                                     id="Paiements-Reservations" role="tabpanel">
                                     <PaymentsAndReservations headers={props.headers}/>
                                 </div>
                                 <div className="tab-pane fade" id="Coordonnees-bancaires" role="tabpanel">

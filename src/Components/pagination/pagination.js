@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import "../../assets/css/style/Results.css"
+import React, {useEffect, useRef, useState} from "react";
 import {useSelector} from "react-redux";
+import "../../assets/css/style/Results.css"
 
 /**
  * @return {null}
@@ -17,9 +17,8 @@ function Pagination(props) {
         let items = props.items;
         let tmp_pager = {...pager};
 
-        if (page < 1 || page > pager.totalPages) {
+        if (page < 1 || page > pager.totalPages)
             return;
-        }
 
         // get new pager object for specified page
         tmp_pager = getPager(items.length, page);
@@ -107,20 +106,29 @@ function Pagination(props) {
                     <button className="btn btn-outline-info" onClick={() => setPage(1)}>Première Page</button>
                 </li>
                 <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                    <button className="btn btn-outline-success" onClick={() => setPage(pager.currentPage - 1)}>Précédent</button>
+                    <button className="btn btn-outline-success" onClick={() => setPage(pager.currentPage - 1)}>
+                        Précédent
+                    </button>
                 </li>
                 {pager.pages.map((page, index) =>
                     <li key={index}>
-                        <button className={pager.currentPage === page ? 'btn text-red bg-info' : 'btn text-red btn-outline-light'}
+                        <button className={
+                            pager.currentPage === page
+                                ? 'btn text-red bg-info'
+                                : 'btn text-red btn-outline-light'}
                                 onClick={() => setPage(page)}>{page}
                         </button>
                     </li>
                 )}
                 <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                    <button className="btn btn-outline-success" onClick={() => setPage(pager.currentPage + 1)}>Suivant</button>
+                    <button className="btn btn-outline-success" onClick={() => setPage(pager.currentPage + 1)}>
+                        Suivant
+                    </button>
                 </li>
                 <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                    <button className="btn btn-outline-info" onClick={() => setPage(pager.totalPages)}>Dernière Page</button>
+                    <button className="btn btn-outline-info" onClick={() => setPage(pager.totalPages)}>
+                        Dernière Page
+                    </button>
                 </li>
             </ul>
         );

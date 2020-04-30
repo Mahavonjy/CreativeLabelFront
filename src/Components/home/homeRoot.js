@@ -23,8 +23,8 @@ import {
     addCarts,
     addOtherBeatMakerBeats,
     addOtherUserOptions,
-    addOtherUserService, addPaymentAccepted,
-    addPaymentHistory, addPaymentRefunded,
+    addOtherUserService,
+    addPaymentHistory,
     addPrefAllMediaGenre,
     addSimilarBeats,
     addTotalPrice,
@@ -102,13 +102,11 @@ function HomeRoot() {
                 user_credentials = user_data;
             });
             headers['Isl-Token'] = currentSession.token;
-            if (beats.length === 0) online();
-            else setLoading(false);
+            online();
         }).catch(() => {
             dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
-            if (beats.length === 0) notOnline();
-            else setLoading(false);
+            notOnline();
         });
     };
 
@@ -384,9 +382,9 @@ function HomeRoot() {
                     />
                 </Router>
                 <nav className="relative width-80 fixed fixed-top">
-                    <a href="/#" data-toggle="push-menu" data-tip="Ouvrir le menu"
+                    <a href="/#" data-toggle="push-menu"
                        onClick={() => openSideBar ? setOpenSideBar(false): setOpenSideBar(true)}
-                       className="paper-nav-toggle pp-nav-toggle pl-2 ml-3"><i/>
+                       className="paper-nav-toggle pp-nav-toggle pl-2 ml-4"><i/>
                     </a>
                 </nav>
                 {isPlaying && <IslPlayer key={key}/>}

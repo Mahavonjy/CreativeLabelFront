@@ -13,7 +13,7 @@ import {
     addReservationAddress,
     addServiceToShow,
     changeDateToSearch,
-    changeInitialized
+    // changeInitialized
 } from "../../../functionTools/functionProps";
 import {
     ChangeDate,
@@ -139,7 +139,7 @@ function DisplayPrestation(props) {
             <div className="profile-page">
                 <button
                     onClick={() => {
-                        dispatch(changeInitialized(false));
+                        // dispatch(changeInitialized(false));
                         if (props.read)
                             history.push("/profile");
                         else history.push("/kantoBiz");

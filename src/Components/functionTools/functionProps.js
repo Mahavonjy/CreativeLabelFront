@@ -795,14 +795,14 @@ export function addReservationAddress(data) {
     };
 }
 
-export function changeInitialized(data) {
-    return async dispatch => {
-        dispatch({
-            type: "CHANGE_INITIALIZED",
-            data: data
-        });
-    };
-}
+// export function changeInitialized(data) {
+//     return async dispatch => {
+//         dispatch({
+//             type: "CHANGE_INITIALIZED",
+//             data: data
+//         });
+//     };
+// }
 
 export function addListOfOptionsAdded(data) {
     return async dispatch => {

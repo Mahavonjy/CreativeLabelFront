@@ -239,16 +239,6 @@ export const changeFileFields = (setState, e) => {
     setState(e.target.files[0]);
 };
 
-export const ImageClick = (e) => {
-    const cube = document.querySelector(".cube");
-    let cubeImageClass = cube.classList[1];
-
-    const targetNode = e.target.nodeName;
-    const targetClass = e.target.className;
-
-    if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
-};
-
 export const checkValueOfUnit = (val) => {
     if (val["day"])
         return "j";
@@ -558,8 +548,8 @@ export const dispatchPayment = (payment_history, dispatch) => {
 };
 
 export const checkOnClickAwaySideBar = (e) => {
-    if (e.target.className !== "paper-nav-toggle pp-nav-toggle pl-2 ml-3" && HomeRoot.checkOpenSideBar)
-        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-3")[0].click()
+    if (e.target.className !== "paper-nav-toggle pp-nav-toggle pl-2 ml-4" && HomeRoot.checkOpenSideBar)
+        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()
 };
 
 export const generatePagination = (_array, funcToDisplay) => {

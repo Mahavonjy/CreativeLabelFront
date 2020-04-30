@@ -138,17 +138,28 @@ function Login() {
                             <div className="custom-float">
                                 <label className="ModalFormField__Label" style={{paddingTop: "10px", color: "black"}}>
                                     Nouveau mot de passe</label><br/>
-                                {CreateInput('password', password, (e) => {changeFields(setPassword, e)}, "Au moins 8 caractères", "password", true)}
+                                {CreateInput(
+                                    'password',
+                                    password,
+                                    (e) => {changeFields(setPassword, e)},
+                                    "Au moins 8 caractères", "password", true)}
                             </div>
 
                             <div className="custom-float">
                                 <label className="ModalFormField__Label"
                                        style={{paddingTop: "10px", color: "black"}}>confirmer</label> <br/>
-                                {CreateInput('confirm_password', confirm_password, (e) => {changeFields(setConfirmPassword, e)}, "Entrez le mot de passe à nouveau", "password", true)}
+                                {CreateInput(
+                                    'confirm_password',
+                                    confirm_password,
+                                    (e) => {changeFields(setConfirmPassword, e)},
+                                    "Entrez le mot de passe à nouveau",
+                                    "password",
+                                    true)}
                             </div>
 
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
-                                    onClick={(e) => changeMyPassword(e)}>Envoyer
+                                    onClick={(e) => changeMyPassword(e)}>
+                                Envoyer
                             </button>
                         </div>
                     </div>
@@ -163,7 +174,13 @@ function Login() {
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
-                                {CreateInput('keys', keys, (e) => {changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
+                                {CreateInput(
+                                    'keys',
+                                    keys,
+                                    (e) => {changeFields(setKeys, e)},
+                                    "Inserer votre clé ici",
+                                    "number",
+                                    true)}
                             </div>
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyKeysResetPass()}>Verifier
@@ -177,14 +194,21 @@ function Login() {
                 {loading && smallSpinner("absolute", "0")}
                 <div className="form-material"
                      style={{background: "lightslategray", height: "100%", borderRadius: "5px"}}>
-                    <button className="ModalClose" onClick={(e) => setVisibility(false)}>
+                    <button className="ModalClose"
+                            onClick={(e) => setVisibility(false)}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre adresse mail</h3>
                             <div className="custom-float center">
-                                {CreateInput('email', email, (e) => {changeFields(setEmail, e)}, "E-mail", "email", true)}
+                                {CreateInput(
+                                    'email',
+                                    email,
+                                    (e) => {changeFields(setEmail, e)},
+                                    "E-mail",
+                                    "email",
+                                    true)}
                             </div>
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyEmail()}>Envoyer
@@ -202,7 +226,13 @@ function Login() {
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
                             <div className="custom-float">
-                                {CreateInput('keys', keys, (e) => {changeFields(setKeys, e)}, "Inserer votre clé ici", "number", true)}
+                                {CreateInput(
+                                    'keys',
+                                    keys,
+                                    (e) => {changeFields(setKeys, e)},
+                                    "Inserer votre clé ici",
+                                    "number",
+                                    true)}
                             </div>
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyKeysSubmit()}>Envoyer
@@ -214,7 +244,8 @@ function Login() {
 
             <div className="container-login">
                 <div className="absolute text-red ml-2" style={{zIndex: 99}}>
-                    <i className="icon-close s-24" onClick={() => document.getElementsByClassName("close")[0].click()}/>
+                    <i className="icon-close s-24"
+                       onClick={() => document.getElementsByClassName("close")[0].click()}/>
                 </div>
                 <div className="row l-form">
 
@@ -222,14 +253,20 @@ function Login() {
                            value={email} onChange={(e) => {changeFields(setEmail, e)}}/>
 
                     <div className="pass-wrap l-pass">
-                        <input className="pass" placeholder="Mot de passe" type="password" id="login-password"
-                               name="password" value={password} onChange={(e) => {changeFields(setPassword, e)}}/>
+                        <input className="pass"
+                               placeholder="Mot de passe"
+                               type="password"
+                               id="login-password"
+                               name="password" value={password}
+                               onChange={(e) => {changeFields(setPassword, e)}}/>
                     </div>
 
                     <button className="l-go btn btn-outline-success"
                             onClick={(e) => sendLoginCredentials(e)}>Connexion
                     </button>
-                    <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>Mot de passe oublié?</small>
+                    <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
+                        Mot de passe oublié?
+                    </small>
                 </div>
                 {loading &&
                 <div className="absolute preloader-wrapper small active" style={{marginLeft: 400}}>

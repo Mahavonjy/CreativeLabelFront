@@ -13,7 +13,6 @@ import {
     changeCountryToSearch,
     changeDateToSearch,
     changeEventsToSearch,
-    changeInitialized,
     changeThematicsToSearch
 } from "../functionTools/functionProps";
 import {
@@ -50,19 +49,12 @@ function SearchBar(props) {
     const [startDate, setStartDate] = useState(date_to_search);
 
     const Search = async () => {
-        console.log({
-            "country": country,
-            "city": city,
-            "event_date": startDate.toISOString(),
-            "event": state_events,
-            "thematics": state_thematics,
-        });
         let if_errors = validatorSearch(state_thematics, startDate, country);
         if (if_errors['error']) {
             toast.error(if_errors['message'])
         } else {
             await dispatch(addSearchLoading(true));
-            await dispatch(changeInitialized(false));
+            // await dispatch(changeInitialized(false));
             await axios.post("api/service_search/moment", {
                 "country": country,
                 "city": city,
@@ -113,6 +105,15 @@ function SearchBar(props) {
         else resetDataOfCity()
     };
 
+    const updateEvents = (obj) => {
+        if (obj)
+            onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch);
+        else {
+            setEvents("");
+            dispatch(changeEventsToSearch(""))
+        }
+    };
+
     const updateCity = (obj) => {
         if (obj)
             onChangeListWithValueLabel(setCity, obj, dispatch, changeCityToSearch);
@@ -161,20 +162,22 @@ function SearchBar(props) {
                 </div>
                 <div className=" col-lg-3 d-inline-block text-center required">
                     <label className="control-label">Thematics</label>
-                    <Select isMulti options={artist_types} placeholder="Choisir le/les thematics" onChange={obj => {
-                        let tmp = [];
-                        for (let row in obj) tmp.push(obj[row]["value"]);
-                        setThematics(tmp);
-                        dispatch(changeThematicsToSearch(tmp));
-                    }}/>
+                    <Select isMulti
+                            options={artist_types}
+                            placeholder="Choisir le/les thematics"
+                            onChange={obj => {
+                                let tmp = [];
+                                for (let row in obj) tmp.push(obj[row]["value"]);
+                                setThematics(tmp);
+                                dispatch(changeThematicsToSearch(tmp));
+                            }}/>
                 </div>
                 <div className=" col-lg-2 d-inline-block text-center">
                     <label className="control-label">Evenements</label>
-                    <Select options={listOfEvents}
+                    <Select isClearable
+                            options={listOfEvents}
                             placeholder="Choisir le/les evenements"
-                            onChange={obj => {
-                                onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
-                            }}/>
+                            onChange={obj => updateEvents(obj)}/>
                 </div>
                 <div className="col-lg-2 d-inline-block  text-center required">
                     <label className="control-label"><i className="icon icon-calendar text-red mr-2"/>Date</label>
