@@ -115,12 +115,12 @@ function MyPrestations(props) {
         if (allPrestation.length > 1) {
             axios.delete('api/artist_services/delete/' + allPrestation[indexOfService]['id'],
                 {headers: props.headers}).then(async () => {
-                    toast.success("Supprimer avec succès");
-                    let tmp = allPrestation.filter((service, index) => index !== indexOfService);
-                    setAllPrestation(tmp);
-                    props.setAllPrestation(tmp);
-                    await dispatch(addAllUserPrestation(tmp));
-                });
+                toast.success("Supprimer avec succès");
+                let tmp = allPrestation.filter((service, index) => index !== indexOfService);
+                setAllPrestation(tmp);
+                props.setAllPrestation(tmp);
+                await dispatch(addAllUserPrestation(tmp));
+            });
         } else toast.error("Vous ne pouvez pas supprimer toute les prestations")
     };
 
@@ -140,12 +140,16 @@ function MyPrestations(props) {
     };
 
     useEffect(() => {
-        if (props.allPrestation)
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
+        let props_allPrestation = props.allPrestation;
+        if (props_allPrestation) {
             setAllPrestation(allPrestation);
+        }
 
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [allPrestation]);
 
     return (

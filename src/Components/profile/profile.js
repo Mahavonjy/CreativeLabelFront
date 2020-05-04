@@ -37,12 +37,14 @@ function Profile(props) {
             getMediaLink(setUserBeatsLink, user_beats_link, user_beats, profileUpdateBeats, dispatch).then(() => null);
             dispatch(profileReadyBeats())
         } else if (user_beats.length !== 0) {
-            for (let row_ in user_beats) setUserBeatsLink(user_beats_link => [...user_beats_link, {row: true}])
+            for (let row_ in user_beats)
+                setUserBeatsLink(user_beats_link => [...user_beats_link, {[row_]: true}])
         }
 
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, []);
 
     return (

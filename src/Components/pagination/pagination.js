@@ -84,7 +84,6 @@ function Pagination(props) {
     };
 
     useEffect(() => {
-
         if (props.items && props.items.length) {
             setPage(props.initialPage);
         }
@@ -92,6 +91,7 @@ function Pagination(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [loading, results]);
 
     if (!pager.pages || pager.pages.length <= 1) {

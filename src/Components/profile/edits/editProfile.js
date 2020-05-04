@@ -18,6 +18,7 @@ function EditProfile(props) {
     const [loading, setLoading] = useState(false);
     const [disable, setDisable] = useState(false);
     const [name, setName] = useState(profile_info.name);
+    /* eslint-disable-next-line no-unused-vars */
     const [email, setEmail] = useState(profile_info.email);
     const [gender, setGender] = useState(profile_info.gender);
     const [birth, setBirth] = useState(profile_info.birth);

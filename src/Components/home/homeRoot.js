@@ -73,6 +73,7 @@ function HomeRoot() {
     const [openSideBar, setOpenSideBar] = useState(false);
     const [href] = useState(window.location.href.split("/"));
     const [single_beat, setSingleBeat] = useState('');
+    /* eslint-disable-next-line no-unused-vars */
     const [beats_similar, setBeatsSimilar] = useState([]);
     const [profile_checked, setProfileChecked] = useState('');
     const [user_data, setUserData] = useState('');

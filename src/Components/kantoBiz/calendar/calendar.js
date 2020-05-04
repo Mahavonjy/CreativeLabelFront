@@ -13,18 +13,17 @@ function Calendar (props) {
 
     const now = new Date();
     const isMounted = useRef(false);
-    const [date, setDate] = useState(now);
+    const [date] = useState(now);
     const [toggle, setToggle] = useState(true);
-    const [eventList, setEventList] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(now.getDate() + "/" + now.getMonth() + 1 + "/" + now.getFullYear());
+    // const [selectedDate, setSelectedDate] = useState(now.getDate() + "/" + now.getMonth() + 1 + "/" + now.getFullYear());
 
     const handleToUpdate = (isToggle) => {
         setToggle(isToggle);
     };
 
-    const handleToUpdateDate = (date) => {
-        setSelectedDate(date);
-    };
+    // const handleToUpdateDate = (date) => {
+    //     setSelectedDate(date);
+    // };
 
 
     useEffect(() => {
@@ -38,8 +37,20 @@ function Calendar (props) {
         <div className="outer zIndex99">
             <ReactTooltip/>
             <div className="wrapper justify-content-center">
-                {!props.noEdit && <LeftBlock headers={props.headers} arrDays={arrDays} date={date} handleToUpdate={handleToUpdate} prestations={prestations}/>}
-                <RightBlock arrDays={arrDays} date={date} toggle={toggle} handleToUpdateDate={handleToUpdateDate} prestations={prestations} noEdit={props.noEdit}/>
+                {!props.noEdit &&
+
+                <LeftBlock headers={props.headers}
+                           arrDays={arrDays}
+                           date={date}
+                           handleToUpdate={handleToUpdate}
+                           prestations={prestations}/>}
+
+                <RightBlock arrDays={arrDays}
+                            date={date}
+                            toggle={toggle}
+                            // handleToUpdateDate={handleToUpdateDate}
+                            prestations={prestations}
+                            noEdit={props.noEdit}/>
             </div>
         </div>
     );

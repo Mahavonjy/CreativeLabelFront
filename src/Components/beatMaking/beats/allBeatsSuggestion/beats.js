@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import ReactTooltip from 'react-tooltip';
 import Suggestion from "./suggestion";
@@ -14,7 +13,7 @@ function Beats(props) {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const contract = useSelector(state => state.profile.contract);
+    // const contract = useSelector(state => state.profile.contract);
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
     const auth = useSelector(state => state.session.authenticated);
@@ -60,7 +59,7 @@ function Beats(props) {
             if (key === "random") {
                 for (let beats in data)
                     getMediaLink(setLinkBeats, link_beats, beats, BeatsProps.updateBeats).then(() => null)
-            } else for (let row_ in data) setLinkBeats(link_beats => [...link_beats, {row: true}]);
+            } else for (let row_ in data) setLinkBeats(link_beats => [...link_beats, {[row_]: true}]);
         }).catch(err => {
             console.log(err.response)
         })
@@ -86,11 +85,12 @@ function Beats(props) {
             getMediaLink(setLinkBeats, link_beats, state_beats, BeatsProps.updateBeats, dispatch).then(() => null);
             dispatch(BeatsProps.readyBeats());
         } else if (state_beats.length !== 0)
-            for (let row_ in beats) setLinkBeats(link_beats => [...link_beats, {row: true}]);
+            for (let row_ in beats) setLinkBeats(link_beats => [...link_beats, {[row_]: true}]);
 
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, []);
 
     return (

@@ -58,8 +58,10 @@ function Results(props) {
                         if (priceActive) filterPrice(value, tmp);
                         else tmp.push(value)
                     }
+                    return true
                 })
             } else if (priceActive) filterPrice(value, tmp);
+            return true
         })).then(r => {
             if (tmp.length !== 0) {
                 setThisComponentResults(generatePagination(tmp, props.displayOne));
@@ -91,11 +93,13 @@ function Results(props) {
         let tmp = [];
         Promise.all(events_allowed.map((value, row) => {
             tmp.push({value: value, label: value, index: row})
+            return true
         })).then(r => setEventsType(tmp));
 
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [loading, results, filter_price]);
 
     return (

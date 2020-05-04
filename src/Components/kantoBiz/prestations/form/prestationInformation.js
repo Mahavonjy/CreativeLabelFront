@@ -27,6 +27,7 @@ function PrestationInformation(props) {
     const isMounted = useRef(false);
     const [title, setTitle] = useState(PropsTitle);
     const [country, setCountry] = useState(PropsCountry);
+    /* eslint-disable-next-line no-unused-vars */
     const [countryOption, setCountryOption] = useState([]);
     const [city, setCity] = useState(PropsCityReference);
     const [listOfCity, setListOfCity] = useState([]);
@@ -62,7 +63,8 @@ function PrestationInformation(props) {
         let tmp = [];
         if (tmpListOfCity.length)
             await Promise.all(tmpListOfCity.map(element => {
-                if (element !== value) tmp.push(element)
+                if (element !== value) tmp.push(element);
+                return true
             })).then(async () => {
                 await setListOfCity(tmp);
                 await setCity(value);
@@ -113,6 +115,7 @@ function PrestationInformation(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [city, listOfCity]);
 
     return (

@@ -92,9 +92,12 @@ function AvailabilityPeriod(props) {
         let start = formatDate(startDate);
         let end = formatDate(endDate);
         if (oneDate && start === now) toast.error("Ne pas choisir la date d'aujourd'hui");
-        else if (periodDate && startDate === nowDate || periodDate && endDate === nowDate) toast.error("date de debut et/ou de fin pour aujourd'hui n'est pas valide");
-        else if (periodDate && startDate > endDate) toast.error("Date de Fin invalide");
-        else if (selectedOption === null && selectedPrestation === null) toast.error("Choisir une Prestation ou une option");
+        else if ((periodDate && startDate === nowDate) || (periodDate && endDate === nowDate))
+            toast.error("date de debut et/ou de fin pour aujourd'hui n'est pas valide");
+        else if (periodDate && startDate > endDate)
+            toast.error("Date de Fin invalide");
+        else if (selectedOption === null && selectedPrestation === null)
+            toast.error("Choisir une Prestation ou une option");
         else {
             let numberOfDaysDifference = calculateNumberDaysBetweenDates(new Date(end), new Date(start));
             if (numberOfDaysDifference === 0) addNewSpecialDateInPrestationOrOption(start);

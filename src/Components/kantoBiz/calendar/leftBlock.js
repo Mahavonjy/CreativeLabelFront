@@ -23,7 +23,7 @@ function LeftBlock(props) {
     LeftBlock.handleClick = async (prestations, key) => {
         props.handleToUpdate(!toggle);
         setToggle(!toggle);
-        if (prestations && key || key === 0) {
+        if (prestations && (key || key === 0)) {
             setKey(key);
             setAllPrestation(prestations);
         } else {
@@ -81,6 +81,7 @@ function LeftBlock(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [optionsCopy, prestationCopy, prestations, props_options, key]);
 
     return (
@@ -107,8 +108,16 @@ function LeftBlock(props) {
                             {allPrestation.map((val, index) =>
                                 <tr className={clicked[index] ? "bg-green" : "bg-secondary"} key={index}>
                                     <td>{!props.toggle && getHidePrestation(index)}</td>
-                                    <td onClick={() => changeClicked(index)}><img src={val.galleries[0]} width="25" height="25" className="border1" alt="prestation-image"/></td>
-                                    <td onClick={() => changeClicked(index)}><small className="bolder">{val.title}</small></td>
+                                    <td onClick={() => changeClicked(index)}>
+                                        <img src={val.galleries[0]}
+                                             width="25"
+                                             height="25"
+                                             className="border1"
+                                             alt={"prestation-image-" + index}/>
+                                    </td>
+                                    <td onClick={() => changeClicked(index)}>
+                                        <small className="bolder">{val.title}</small>
+                                    </td>
                                     {/*<td onClick={() => changeClicked(index)}><small className="bolder">{val.price}$</small></td>*/}
                                 </tr>)}
                             </tbody>

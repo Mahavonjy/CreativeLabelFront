@@ -72,6 +72,7 @@ export const countryRegex = {
     VG:"Virgin Islands, British"
 };
 
+/* eslint-disable no-useless-escape */
 export const allRegex = {
     'AL': '[a-zA-Z0-9]{2}\s?([0-9]{4}\s?){2}([a-zA-Z0-9]{4}\s?){4}\s?',
     'AD': '[a-zA-Z0-9]{2}\s?([0-9]{4}\s?){2}([a-zA-Z0-9]{4}\s?){3}\s?',

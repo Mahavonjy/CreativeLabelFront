@@ -12,13 +12,9 @@ function Materials(props) {
     const materials = useSelector(state => state.KantoBizForm.materials);
     const technical_sheet = useSelector(state => state.KantoBizForm.technical_sheet);
 
-    const [technicalSheet, setTechnicalSheet] = useState(technical_sheet);
-    const [tagsSuggestion, setTagSuggestion] = useState(["Micro", "Piano"]);
     const isMounted = useRef(false);
     const [tags, setTags] = useState(
-        props.index
-        || props.index === 0
-        && props.edit
+        (props.index || (props.index === 0 && props.edit))
             ? [...materialsCopy['list_of_materials']]
             : [...materials['list_of_materials']]
     );
@@ -28,16 +24,15 @@ function Materials(props) {
         newTags.splice(i, 1);
         setTags(newTags);
         let origin_of_materials;
-        if (props.index || props.index === 0 && props.edit) origin_of_materials = {...materialsCopy};
+        if (props.index || (props.index === 0 && props.edit)) origin_of_materials = {...materialsCopy};
         else origin_of_materials = {...materials};
         origin_of_materials['list_of_materials'] = newTags;
-        if (props.index || props.index === 0 && props.edit) updateServiceCopy(origin_of_materials);
+        if (props.index || (props.index === 0 && props.edit)) updateServiceCopy(origin_of_materials);
         else dispatch(addMaterialsOfService(origin_of_materials));
     };
 
     const addTechnicalSheet = (e) => {
         let file = e.target.files[0];
-        setTechnicalSheet(file);
         dispatch(addFileTechnicalSheet(file))
     };
 
@@ -57,16 +52,16 @@ function Materials(props) {
             key = '';
             val = attr_val;
         } finally {
-            if (key === 'Enter' && val || attr_val) {
+            if (key === 'Enter' && (val || attr_val)) {
                 if (tags.find(tag => tag.toLowerCase() === val.toLowerCase())) return;
                 let tmp_tags = [...tags];
                 let origin_of_materials;
-                if (props.index || props.index === 0 && props.edit) origin_of_materials = {...materialsCopy};
+                if (props.index || (props.index === 0 && props.edit)) origin_of_materials = {...materialsCopy};
                 else origin_of_materials = {...materials};
                 tmp_tags.push(val);
                 setTags(tmp_tags);
                 origin_of_materials['list_of_materials'] = tmp_tags;
-                if (props.index || props.index === 0 && props.edit) updateServiceCopy(origin_of_materials);
+                if (props.index || (props.index === 0 && props.edit)) updateServiceCopy(origin_of_materials);
                 else dispatch(addMaterialsOfService(origin_of_materials));
                 document.getElementsByClassName("input-add-tag")[0].value = null;
             } else if (key === 'Backspace' && !val) {
@@ -80,7 +75,7 @@ function Materials(props) {
         return () => {
             isMounted.current = true
         };
-    }, [tags, prestationCopy]);
+    }, [tags, prestationCopy, technical_sheet]);
 
     return (
         <div className={!props.noExemple && "card no-b"}>
@@ -95,6 +90,7 @@ function Materials(props) {
                     }
                 </button>
                 <a target="_blank"
+                   rel="noopener noreferrer"
                    className="btn btn-outline-danger pl-5 pr-5 m-1"
                    onClick={() => !technical_sheet && toast.warn("Pas de fiche technique a afficher")}
                    href={
@@ -113,14 +109,17 @@ function Materials(props) {
                     <div className="tag-editor-tags">
                         <div className="input-tag">
                             <div className="input-tag__tags__input pb-3">
-                                <input className="input-add-tag" placeholder="Ajouter un materiel" type="text"
+                                <input className="input-add-tag"
+                                       placeholder="Ajouter un materiel"
+                                       type="text"
                                        onKeyDown={inputKeyDown}/>
                             </div>
                             <ul className="input-tag__tags text-center">
                                 {tags.map((tag, i) => (
                                     <li key={tag}>{tag}
-                                        <button type="button" className="ml-2" onClick={() => removeTag(i)}><i
-                                            className="icon-close1 text-red ml-1 mr-1"/></button>
+                                        <button type="button" className="ml-2" onClick={() => removeTag(i)}>
+                                            <i className="icon-close1 text-red ml-1 mr-1"/>
+                                        </button>
                                     </li>
                                 ))}
                             </ul>
@@ -132,16 +131,19 @@ function Materials(props) {
             <div className="tag-editor">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">
-                        <h1 className="text-light">Quelques exemples de materiels&nbsp;<i
-                            className="icon icon-info s-18"/></h1>
+                        <h1 className="text-light">Quelques exemples de materiels&nbsp;
+                            <i className="icon icon-info s-18"/>
+                        </h1>
                     </div>
                     <div className="tag-editor-tags">
                         <div className="input-tag">
                             <ul className="input-tag__tags text-center">
-                                {tagsSuggestion.map((val, index) =>
+                                {["Micro", "Piano"].map((val, index) =>
                                     <li key={index}>
                                         <button type="button" className="pl-1 pr-1"
-                                                onClick={() => inputKeyDown(null, val)}>{val}</button>
+                                                onClick={() => inputKeyDown(null, val)}>
+                                            {val}
+                                        </button>
                                     </li>
                                 )}
                             </ul>

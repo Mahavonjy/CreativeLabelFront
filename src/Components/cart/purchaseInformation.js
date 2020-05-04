@@ -108,12 +108,12 @@ function PurchaseInformation(props) {
             "email": email,
             "city": city,
             "postal_code": postal_code,
-            "phone": phone && phone.toString() || "0",
             "event": events_to_search,
             "event_date": date_to_search,
             "address": reservation_address,
             "services_id": service_to_show.id,
             "total_amount": service_to_show.price,
+            "phone": phone ? phone.toString() : "0",
             "options_id_list": list_of_options_added,
             "artist_owner_id": service_to_show.user_id,
         };

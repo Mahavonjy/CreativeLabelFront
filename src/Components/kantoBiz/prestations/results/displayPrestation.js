@@ -41,9 +41,10 @@ function DisplayPrestation(props) {
     const [address, setAddress] = useState(reservation_address);
     const [tva, setTva] = useState(0);
     const [ht_price, setHtPrice] = useState(0);
+    /* eslint-disable-next-line no-unused-vars */
     const [isl_amount, setIslAmount] = useState(0);
     const [total_amount, setTotalAmount] = useState(0);
-    const [rating, setRating] = useState(1);
+    // const [rating, setRating] = useState(1);
 
     const onScrollViewSearch = () => {
         paymentRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -60,16 +61,6 @@ function DisplayPrestation(props) {
                 await onScrollViewSearch();
             }
         }
-    };
-
-    const ImageClick = (e) => {
-        const cube = document.querySelector(".cube");
-        let cubeImageClass = cube.classList[1];
-
-        const targetNode = e.target.nodeName;
-        const targetClass = e.target.className;
-
-        if (targetNode === "INPUT" && targetClass !== cubeImageClass) cube.classList.replace(cubeImageClass, targetClass);
     };
 
     const addOption = async (value) => {
@@ -90,6 +81,7 @@ function DisplayPrestation(props) {
         Promise.all(list_of_options_added.map(elem => {
             if (elem !== value.id) tmp.push(value.id);
             else tmpService.price -= value.price;
+            return true
         })).then(r => {
             dispatch(addListOfOptionsAdded(tmp));
             dispatch(addServiceToShow(tmpService));
@@ -112,6 +104,7 @@ function DisplayPrestation(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [service_to_show, profile_info, date_to_search]);
 
     return (
@@ -362,7 +355,7 @@ function DisplayPrestation(props) {
                                                 <ul id="lightgallery">
                                                     {service_to_show.galleries.map((val, index) =>
                                                         <li key={index} data-src={val}>
-                                                            <a href={val} target="_blank">
+                                                            <a href={val} target="_blank" rel="noopener noreferrer">
                                                                 <img alt="gallery" className="img-responsive" src={val}/>
                                                                 <div className="demo-gallery-poster">
                                                                     <i className="icon icon-search-1 s-36 text-red"/>

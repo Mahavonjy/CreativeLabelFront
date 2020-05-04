@@ -91,7 +91,6 @@ function Options(props) {
     };
 
     useEffect(() => {
-
         let _headers = props.headers;
         _headers['Content-Type'] = 'application/json';
         setHeaders(_headers);
@@ -99,6 +98,7 @@ function Options(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, []);
 
     return (

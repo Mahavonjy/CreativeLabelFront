@@ -16,12 +16,13 @@ function EditSingle(props) {
     const [stems, setStems] = useState("");
     const [bpm, setBpm] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [beats] = useState(true);
+    // const [beats] = useState(true);
     const [file, setFile] = useState(null);
     const [photo, setPhoto] = useState(null);
     const [title, setTitle] = useState(props.Song.title);
     const [artist, setArtist] = useState(props.Song.artist);
     const [genre, setGenre] = useState(props.Song.genre);
+    /* eslint-disable-next-line no-unused-vars */
     const [genre_musical, setGenreMusical] = useState(props.Song.genre_musical);
     const [description, setDescription] = useState(props.Song.description);
     const [artist_tag, setArtistTag] = useState(props.Song.artist_tag);

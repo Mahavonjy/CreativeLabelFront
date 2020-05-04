@@ -43,6 +43,7 @@ export const funcToSpecifyValueForSpecialInput = (country_allowed, setTo) => {
             cityTmp.push({value: tmpName, label: tmpName, index: index})
         }
         tmp.push({value: element["name"], label: element["name"], city: cityTmp});
+        return true
     })).then(() => setTo(tmp));
 };
 
@@ -257,6 +258,7 @@ export const checkValueIfExistInArray = (val, array_) => {
     let response = false;
     Promise.all(array_.map(val_of_arr => {
         if (val_of_arr === val) response = true;
+        return true
     })).then(r => null);
     return response
 };
@@ -391,9 +393,10 @@ export const checkUnit = (object) => {
 
 export const checkKeyOfValue = (object, value) => {
 
+    /* eslint-disable-next-line array-callback-return */
     return Object.keys(object).filter(function (key) {
         if (object[key] === value)
-            return key
+            return key;
     })[0]
 };
 
@@ -541,6 +544,7 @@ export const dispatchPayment = (payment_history, dispatch) => {
     Promise.all(payment_history.map(element => {
         if (element["paid"]) tmpPaid.push(element);
         if (element["refund"]) tmpRefund.push(element);
+        return true
     })).then(() => {
         dispatch(addPaymentRefunded(tmpRefund));
         dispatch(addPaymentAccepted(tmpPaid));
@@ -563,21 +567,21 @@ export const generatePagination = (_array, funcToDisplay) => {
                             <div className="o-card_headerHeroImg"
                                  style={{
                                      background:
-                                         'url(' + "https://zupimages.net/up/19/42/zyu8.bmp" + ') center no-repeat'
+                                         'url(https://zupimages.net/up/19/42/zyu8.bmp) center no-repeat'
                                  }}/>
                             <ul className="o-card-headerList isOpen">
                                 <li className="o-card-headerList--item">
-                                    <a className="o-card-headerList--link" href="#">
+                                    <a className="o-card-headerList--link" href="/#">
                                         <i className="icon-facebook"/>
                                     </a>
                                 </li>
                                 <li className="o-card-headerList--item">
-                                    <a className="o-card-headerList--link" href="#">
+                                    <a className="o-card-headerList--link" href="/#">
                                         <i className="icon-twitter"/>
                                     </a>
                                 </li>
                                 <li className="o-card-headerList--item">
-                                    <a className="o-card-headerList--link" href="#">
+                                    <a className="o-card-headerList--link" href="/#">
                                         <i className="icon-linkedin"/>
                                     </a>
                                 </li>

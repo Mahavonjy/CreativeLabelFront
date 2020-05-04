@@ -78,6 +78,7 @@ function BankingDetails(props) {
     useEffect(() => {
 
         let tmp = [];
+        /* eslint-disable-next-line no-unused-vars */
         for (const [key, value] of Object.entries(countryRegex)) tmp.push(value);
         setCountryReg(tmp);
         let _headers = props.headers;
@@ -87,6 +88,7 @@ function BankingDetails(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [headersCustomed]);
 
     return (

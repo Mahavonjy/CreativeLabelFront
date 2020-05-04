@@ -34,6 +34,7 @@ function KantoBiz(props) {
         let tmp = false;
         await Promise.all(user_connected_prestations.map(element => {
             if (element["id"] === val["id"]) tmp = true
+            return true
         })).then(async () => {
             if (tmp) {
                 toast.warn("Vous ne pouvez pas acheter votre propre prestaion")
@@ -69,18 +70,28 @@ function KantoBiz(props) {
         let tmp = [];
         Promise.all(events_allowed.map((value, row) => {
             tmp.push({value: value, label: value, index: row})
+            return true
         })).then(r => setEventTypes(tmp));
 
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [loading, results]);
 
     return (
         <div>
             <ReactTooltip/>
             {/* Headers */}
-            {CreativeHeaders("Creative kantoBiz", "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)", props.headers, setStateResult, next, displayOne, auth, history)}
+            {CreativeHeaders(
+                "Creative kantoBiz",
+                "Creation de prestation pour les professionnels de la musique (artistes,producteurs, labels...)",
+                props.headers,
+                setStateResult,
+                next,
+                displayOne,
+                auth,
+                history)}
             {/* End Headers */}
 
             {/* This is a main of for show different component */}
@@ -108,8 +119,25 @@ function KantoBiz(props) {
                 <div className="main-page">
                     <div>
                         {/* Show Different events/thematics or all Prestation result of search or Prestation selected*/}
-                        {eventAndThematics && EventAndThematics_(props.headers, dispatch, setStateResult, displayOne, setShow, show, eventType, setEvent, event, thematics, setThematics) ||
-                        resultsPage && <Results next={next} displayOne={displayOne} setStateResult={setStateResult} stateResults={stateResults}/>}
+                        {(eventAndThematics
+                        && EventAndThematics_(
+                            props.headers,
+                            dispatch,
+                            setStateResult,
+                            displayOne,
+                            setShow,
+                            show,
+                            eventType,
+                            setEvent,
+                            event,
+                            thematics,
+                            setThematics) )
+                        ||
+                        (resultsPage
+                        && <Results next={next}
+                                    displayOne={displayOne}
+                                    setStateResult={setStateResult}
+                                    stateResults={stateResults}/>)}
                         {/* End */}
                     </div>
                 </div>

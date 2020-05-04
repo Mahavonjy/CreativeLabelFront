@@ -83,7 +83,8 @@ function SearchBar(props) {
         let tmp = [];
         await Promise.all(country_allowed[country_allowed.findIndex(
             tmp => tmp.name === value)]["value"].map(element => {
-                tmp.push({value: element, label: element})
+                tmp.push({value: element, label: element});
+                return true
             })
         ).then(() => setListOfCity(tmp));
     };
@@ -136,6 +137,7 @@ function SearchBar(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [city, country, listOfCity, service_to_show]);
 
     return (

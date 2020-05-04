@@ -1197,6 +1197,7 @@ function PreviewScreen(props) {
                                                                     <div className="elementor-social-icons-wrapper">
                                                                         <a href="https://www.facebook.com/IndependanceSoundLabel/"
                                                                            style={{borderRadius: "10px"}}
+                                                                           rel="noopener noreferrer"
                                                                            className="elementor-icon elementor-social-icon elementor-social-icon-facebook elementor-repeater-item-2d15071"
                                                                            target="_blank">
                                                                             <span
@@ -1204,6 +1205,7 @@ function PreviewScreen(props) {
                                                                             <i className="fab fa-facebook"/> </a>
                                                                         <a href="https://www.instagram.com/isl_creative/"
                                                                            style={{borderRadius: "10px"}}
+                                                                           rel="noopener noreferrer"
                                                                            className="elementor-icon elementor-social-icon elementor-social-icon-instagram elementor-repeater-item-f2664d3"
                                                                            target="_blank">
                                                                             <span

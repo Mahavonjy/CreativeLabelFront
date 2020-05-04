@@ -53,6 +53,7 @@ function PaymentsAndReservations(props) {
         setReservationToNote(value);
         await Promise.all(reservations_list.map(element => {
             if (element.id === value.id) setYourReservationDemand(true)
+            return true
         })).then(r => setAddNote(true));
     };
 
@@ -68,6 +69,7 @@ function PaymentsAndReservations(props) {
         await Promise.all(array_.map(element => {
             if (element.id === reservationId) tmp.push(value);
             else tmp.push(element);
+            return true
         })).then(r => {
             setLoad(false);
             toast.success("Changement prise en compte");
@@ -244,7 +246,9 @@ function PaymentsAndReservations(props) {
                         {refund ? <td className="small" data-title="Montant Remboursée">{value.artist_amount}$</td> :
                             <td className="small" data-title="Montant">{value.total_amount}$</td>}
                         {<td className="small text-red" data-title="Status">
-                            <a href={value.invoice} target="_blank" download={!!value.invoice}>telecharger</a>
+                            <a href={value.invoice} rel="noopener noreferrer" target="_blank" download={!!value.invoice}>
+                                telecharger
+                            </a>
                         </td>}
                         <td className="small text-red border-top" data-title="Status"
                             onClick={() => addNoteToAuditorOrPrestation(value)}
@@ -260,7 +264,6 @@ function PaymentsAndReservations(props) {
     };
 
     useEffect(() => {
-
         let headers = props.headers;
         headers['Content-Type'] = 'application/json';
         setHeaders(headers);
@@ -268,6 +271,7 @@ function PaymentsAndReservations(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [
         reservations_list,
         reservations_booking_list,

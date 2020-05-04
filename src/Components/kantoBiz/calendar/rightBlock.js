@@ -31,7 +31,7 @@ function RightBlock(props) {
     const [firstDay, setFirstDay] = useState(
         new Date(props.date.getFullYear() + "-" + (props.date.getMonth() + 1) + "-01").getDay()
     );
-    let handleToUpdateDate = props.handleToUpdateDate;
+    // let handleToUpdateDate = props.handleToUpdateDate;
     let monthOptions = Object.keys(arrMonth).map(month => (
         <option className="option-month" selected={month === Object.keys(arrMonth)[selectedMonth] ? "selected" : ""}>
             {month}
@@ -93,19 +93,19 @@ function RightBlock(props) {
 
     const updateMonth = (event) => {
         let newMonth = Object.keys(arrMonth).indexOf(event.target.value);
-        handleToUpdateDate(selectedDay + "/" + newMonth + "/" + selectedYear);
+        // handleToUpdateDate(selectedDay + "/" + newMonth + "/" + selectedYear);
         setSelectedMonth(newMonth + 1);
         setFirstDay(new Date(selectedYear + "-" + (newMonth + 1) + "-01").getDay());
     };
 
     const prevMonth = () => {
         if (selectedMonth - 1 < 0) {
-            handleToUpdateDate(selectedDay + "/" + 11 + "/" + selectedYear - 1);
+            // handleToUpdateDate(selectedDay + "/" + 11 + "/" + selectedYear - 1);
             setSelectedMonth(11);
             setSelectedYear(selectedYear - 1);
-            setFirstDay(new Date(selectedYear - 1 + "-" + "12-01").getDay())
+            setFirstDay(new Date(selectedYear - 1 + "-12-01").getDay())
         } else {
-            handleToUpdateDate(selectedDay + "/" + selectedMonth - 1 + "/" + selectedYear);
+            // handleToUpdateDate(selectedDay + "/" + selectedMonth - 1 + "/" + selectedYear);
             setSelectedMonth(selectedMonth - 1);
             setFirstDay(new Date(selectedYear + "-" + selectedMonth).getDay());
         }
@@ -113,12 +113,12 @@ function RightBlock(props) {
 
     const nextMonth = () => {
         if (selectedMonth + 1 > 11) {
-            handleToUpdateDate(selectedDay + "/" + 0 + "/" + selectedYear + 1);
+            // handleToUpdateDate(selectedDay + "/" + 0 + "/" + selectedYear + 1);
             setSelectedMonth(0);
             setSelectedYear(selectedYear + 1);
-            setFirstDay(new Date(selectedYear + 1 + "-" + "01-01").getDay());
+            setFirstDay(new Date(selectedYear + 1 + "-01-01").getDay());
         } else {
-            handleToUpdateDate(selectedDay + "/" + selectedMonth + 1 + "/" + selectedYear);
+            // handleToUpdateDate(selectedDay + "/" + selectedMonth + 1 + "/" + selectedYear);
             setSelectedMonth(selectedMonth + 1);
             setFirstDay(new Date(selectedYear + "-" + (selectedMonth + 2) + "-01").getDay());
         }
@@ -126,7 +126,7 @@ function RightBlock(props) {
 
     const updateYear = (event) => {
         if (event.target.value.length === 4) {
-            handleToUpdateDate(selectedDay + "/" + selectedMonth + "/" + event.target.value);
+            // handleToUpdateDate(selectedDay + "/" + selectedMonth + "/" + event.target.value);
             setSelectedYear(parseInt(event.target.value));
             setFirstDay(new Date(parseInt(event.target.value) + "-" + (selectedMonth + 1) + "-01").getDay());
         } else if (event.target.value.length > 0) {
@@ -140,20 +140,21 @@ function RightBlock(props) {
         for (let i = 1; i < Object.values(arrMonth)[selectedMonth] + 1; i++) {
             let bg_color = "";
             Promise.all(reservations_list.map(element => {
-                let date_ = element.event_date.split("T")[0];
-                let year = parseInt(date_.split("-")[0]);
-                let month = parseInt(date_.split("-")[1]) - 1;
-                let day = parseInt(date_.split("-")[2]) + 1;
+                let date_   = element.event_date.split("T")[0];
+                let year    = parseInt(date_.split("-")[0]);
+                let month   = parseInt(date_.split("-")[1]) - 1;
+                let day     = parseInt(date_.split("-")[2]) + 1;
                 if (selectedYear === year && selectedMonth === month && i === day) {
                     if (element.status === "pending") bg_color = "bg-warning";
                     else if (element.status === "accepted") bg_color = "bg-info";
                 }
+                return true;
             })).then(r => null);
             arrNo.push(
                 <div data-id={i} onClick={!props.noEdit ? () => fillProps(0, false, i) : null}
                      data-tip="Cliquer pour faire une modification"
                      className={
-                         bg_color + " " + `day-block ${
+                         bg_color + ` day-block ${
                          i === selectedDay 
                          && props.date.getMonth() + 1 === selectedMonth + 1 
                          && props.date.getFullYear() === selectedYear ? "active" : (bg_color ? "day-in" : "inactive")}`
@@ -287,6 +288,7 @@ function RightBlock(props) {
         return () => {
             isMounted.current = true
         };
+        /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [props_options, prestations, prestationCopy, optionsCopy]);
 
     return (

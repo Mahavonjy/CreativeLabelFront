@@ -10,8 +10,8 @@ import HomeRoot from "../../home/homeRoot";
 import {CreateInput, smallSpinner} from "../../functionTools/createFields";
 import {changeFields} from "../../functionTools/tools";
 import {checkErrorMessage} from "../../validators/validatiors";
-import LoginFacebook from "../socialCredentials/facebook/facebook";
-import LoginGoogle from "../socialCredentials/google/google";
+// import LoginFacebook from "../socialCredentials/facebook/facebook";
+// import LoginGoogle from "../socialCredentials/google/google";
 import "../../../assets/css/style/Sign.css"
 
 let headers = {

@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useRef, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch} from "react-redux";
 
 function MultiSelectList(props) {
     const {handleListItemClick, list} = props;
