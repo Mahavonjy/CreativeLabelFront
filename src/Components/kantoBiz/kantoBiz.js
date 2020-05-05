@@ -101,15 +101,13 @@ function KantoBiz(props) {
                 <div className="NextOrPrevPage">
                     <div>
                         {resultsPage &&
-                            <button
-                                className="float-left btn-custom btn-outline-light border-bottom-0 border-right-0"
-                                onClick={prev}>
+                            <button className="float-left btn-custom btn-outline-light border-bottom-0 border-right-0"
+                                    onClick={prev}>
                                 <i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent
                             </button>}
                         {eventAndThematics &&
-                        <button
-                            className="float-right btn-custom btn-outline-light border-bottom-0 border-left-0"
-                            onClick={next}>Suivant&nbsp;
+                        <button className="float-right btn-custom btn-outline-light border-bottom-0 border-left-0"
+                                onClick={next}>Suivant&nbsp;
                             <i className="icon icon-long-arrow-right mr-5 s-24 align-middle"/>
                         </button>}
 

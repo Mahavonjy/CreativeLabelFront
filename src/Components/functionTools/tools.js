@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import {FacebookProvider, Feed} from "react-facebook";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Conf from "../../config/tsconfig";
@@ -265,7 +266,7 @@ export const checkValueIfExistInArray = (val, array_) => {
 
 export const ChangeDate = (date, setStartDate, dispatch, func) => {
     let new_date = new Date(date.target.value);
-    if (formatDate(new Date()) < formatDate(new_date)) {
+    if (new Date() < new_date) {
         setStartDate(new_date);
         if (dispatch && func)
             dispatch(func(new_date))
@@ -572,19 +573,27 @@ export const generatePagination = (_array, funcToDisplay) => {
                             <ul className="o-card-headerList isOpen">
                                 <li className="o-card-headerList--item">
                                     <a className="o-card-headerList--link" href="/#">
-                                        <i className="icon-facebook"/>
+                                        <FacebookProvider appId={Conf.configs.FacebookId} debug>
+                                            <Feed link={"http://" + window.location.host + "/kantoBiz"}>
+                                                {({handleClick}) => (
+                                                    <i className="icon-facebook"
+                                                       onClick={handleClick}
+                                                       data-tip="Partager Cette Prestation sur facebook"/>
+                                                )}
+                                            </Feed>
+                                        </FacebookProvider>
                                     </a>
                                 </li>
-                                <li className="o-card-headerList--item">
-                                    <a className="o-card-headerList--link" href="/#">
-                                        <i className="icon-twitter"/>
-                                    </a>
-                                </li>
-                                <li className="o-card-headerList--item">
-                                    <a className="o-card-headerList--link" href="/#">
-                                        <i className="icon-linkedin"/>
-                                    </a>
-                                </li>
+                                {/*<li className="o-card-headerList--item">*/}
+                                {/*    <a className="o-card-headerList--link" href="/#">*/}
+                                {/*        <i className="icon-twitter"/>*/}
+                                {/*    </a>*/}
+                                {/*</li>*/}
+                                {/*<li className="o-card-headerList--item">*/}
+                                {/*    <a className="o-card-headerList--link" href="/#">*/}
+                                {/*        <i className="icon-linkedin"/>*/}
+                                {/*    </a>*/}
+                                {/*</li>*/}
                             </ul>
                             <div className="o-card_logo" style={{
                                 background:

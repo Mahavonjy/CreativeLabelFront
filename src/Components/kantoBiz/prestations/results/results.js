@@ -92,7 +92,7 @@ function Results(props) {
 
         let tmp = [];
         Promise.all(events_allowed.map((value, row) => {
-            tmp.push({value: value, label: value, index: row})
+            tmp.push({value: value, label: value, index: row});
             return true
         })).then(r => setEventsType(tmp));
 

@@ -1,12 +1,15 @@
 import axios from "axios";
 import dateFormat from 'dateformat';
+import {MDBRating} from "mdbreact";
 import React, {useEffect, useRef, useState} from "react";
+import {FacebookProvider, Feed} from "react-facebook";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
-import StarRatings from 'react-star-ratings';
+// import StarRatings from 'react-star-ratings';
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
+import Conf from "../../../../config/tsconfig";
 import PurchaseInformation from "../../../cart/purchaseInformation";
 import {
     addListOfOptionsAdded,
@@ -162,22 +165,37 @@ function DisplayPrestation(props) {
                                             data-tip="Different genre produit par l'artiste">
                                             {service_to_show.thematics.join(", ")}
                                         </h6>
-                                        <button className="btn btn-link btn-outline-info icon-instagram"
-                                                data-tip="Partager Cette Prestation sur Instagram"/>
-                                        <button className="btn btn-link btn-outline-info icon-facebook"
-                                                data-tip="Partager Cette Prestation sur Facebook"/>
-                                        <button className="btn btn-link btn-outline-info icon-twitter"
-                                                data-tip="Partager Cette Prestation sur Twitter"/>
+
+                                        <div className="m-2">
+                                            <i className="icon icon-instagram text-red"
+                                               data-tip="Partager Cette Prestation sur Instagram"/>
+                                            <FacebookProvider appId={Conf.configs.FacebookId} debug>
+                                                <Feed link={"http://" + window.location.host + "/kantoBiz"}>
+                                                    {({handleClick}) => (
+                                                        <i className="icon icon-facebook text-red"
+                                                           onClick={handleClick}
+                                                           data-tip="Partager Cette Prestation sur facebook"/>
+                                                    )}
+                                                </Feed>
+                                            </FacebookProvider>
+                                            <i className="icon icon-twitter text-red"
+                                               data-tip="Partager Cette Prestation sur Twitter"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="description text-center">
                                 <p data-tip="Description">{service_to_show.description}</p>
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
-                                    <StarRatings rating={service_to_show.notes} starRatedColor="red"
-                                                 numberOfStars={5} starDimension="20px"
-                                                 starSpacing="10px" className="col" name='rating'/>
-                                    <span className="col pt-2">5&nbsp;✰</span>
+                                    <MDBRating iconFaces iconSize='2x' iconRegular containerClassName="justify-content-center"
+                                               fillColors={[
+                                                   'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
+                                               ]}
+                                    />
+                                    {/*<StarRatings rating={service_to_show.notes} starRatedColor="red"*/}
+                                    {/*             numberOfStars={5} starDimension="20px"*/}
+                                    {/*             starSpacing="10px" className="col" name='rating'/>*/}
+                                    {/*<span className="col pt-2">5&nbsp;✰</span>*/}
                                 </div>
                             </div>
                             <div className="row text-center pt-5">

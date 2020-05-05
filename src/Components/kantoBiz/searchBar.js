@@ -138,7 +138,7 @@ function SearchBar(props) {
             isMounted.current = true
         };
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
-    }, [city, country, listOfCity, service_to_show]);
+    }, [city, country, listOfCity, service_to_show, startDate]);
 
     return (
         <div className="Base search-bar relative p-b-40 mt-5">
