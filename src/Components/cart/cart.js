@@ -1,17 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Conf from "../../config/tsconfig";
 import TestImg from "../../assets/images/demo/a2.jpg";
 import {toast} from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PurchaseInformation from "./purchaseInformation";
 import HomeRoot from "../home/homeRoot";
-import { addCarts, addTotalPrice } from "../functionTools/functionProps";
+import {addCarts, addTotalPrice} from "../functionTools/functionProps";
+import {DarkModeToggle} from "../functionTools/createFields";
 
 let headers = {
-    "Content-Type":'application/json',
-    "Access-Control-Allow-Origin":'*',
-    'Isl-Token':  ''
+    "Content-Type": 'application/json',
+    "Access-Control-Allow-Origin": '*',
+    'Isl-Token': ''
 };
 
 function Cart(props) {
@@ -41,13 +42,13 @@ function Cart(props) {
             await localStorage.removeItem("MyCarts");
             dispatch(addCarts(carts_tmp));
             await setCart(carts_tmp);
-            await localStorage.setItem("MyCarts",  JSON.stringify(carts_tmp));
+            await localStorage.setItem("MyCarts", JSON.stringify(carts_tmp));
             await HomeRoot.Decrement();
             toast.success("suprimé avec succes");
             if (carts_tmp.length === 0) window.location.replace('/beats');
         } else {
             headers['Isl-Token'] = user_credentials.token;
-            axios.delete( "api/carts/delete/" + song_id , {headers: headers}).then(() => {
+            axios.delete("api/carts/delete/" + song_id, {headers: headers}).then(() => {
                 let carts_tmp = [];
                 for (let cart in carts) {
                     if (carts[cart].song_id === song_id) {
@@ -88,13 +89,15 @@ function Cart(props) {
                         <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                             Total: {total_price}$
                         </h3>
-                        <h4><i className="icon-cart-arrow-down mr-2 mb-5" />Votre panier</h4>
+                        <h4><i className="icon-cart-arrow-down mr-2 mb-5"/>Votre panier</h4>
 
                         <div className="d-flex justify-content-between">
                             <div className="align-self-end">
                                 <ul className="nav nav-material nav-material-white card-header-tabs" role="tablist">
                                     <li className="nav-item">
-                                        <a className="nav-link active show" id="w6--tab1" data-toggle="tab" href="#w6-tab1" role="tab" aria-controls="tab1" aria-expanded="true" aria-selected="true">
+                                        <a className="nav-link active show" id="w6--tab1" data-toggle="tab"
+                                           href="#w6-tab1" role="tab" aria-controls="tab1" aria-expanded="true"
+                                           aria-selected="true">
                                             Liste
                                         </a>
                                     </li>
@@ -105,7 +108,8 @@ function Cart(props) {
                     </div>
                     <div className="card-body no-p">
                         <div className="tab-content" id="v-pills-tabContent2">
-                            <div className="tab-pane fade active show" id="w6-tab1" role="tabpanel" aria-labelledby="w6-tab1">
+                            <div className="tab-pane fade active show" id="w6-tab1" role="tabpanel"
+                                 aria-labelledby="w6-tab1">
                                 <div className="table-responsive border black scrollbar-isl" style={{height: 400}}>
                                     <table className="table table-hover earning-box ">
                                         {cart ?
@@ -114,7 +118,8 @@ function Cart(props) {
                                                 <tr className="no-b " key={index}>
                                                     <td className="w-10">
                                                         <figure className="avatar-md float-left  mr-3 mt-1">
-                                                            <img className="r-3" src={val.media.photo || val.photo} alt="" />
+                                                            <img className="r-3" src={val.media.photo || val.photo}
+                                                                 alt=""/>
                                                         </figure>
                                                     </td>
                                                     <td>
@@ -137,12 +142,14 @@ function Cart(props) {
                                                                     </div>
                                                                 </div>
                                                             </div> :
-                                                            <i className="icon-trash text-red s-24" onClick={() => deleteCart(val.song_id)}/>}
+                                                            <i className="icon-trash text-red s-24"
+                                                               onClick={() => deleteCart(val.song_id)}/>}
                                                     </td>
                                                 </tr>
                                             )}
                                             </tbody>
-                                            : <p className="p-t-100 text-center text-light align-content-center"> Votre panier est vide </p>}
+                                            : <p className="p-t-100 text-center text-light align-content-center"> Votre
+                                                panier est vide </p>}
                                     </table>
                                 </div>
                             </div>
@@ -168,13 +175,13 @@ function Cart(props) {
                                 <div className="d-flex align-items-center">
                                     <div className="col-10">
                                         <figure className="avatar avatar-md float-left  mr-3 mt-1">
-                                            <img src={TestImg} alt="" />
+                                            <img src={TestImg} alt=""/>
                                         </figure>
                                         <h6>Zoe Foe</h6>
                                         <small>5 Albums - 50 Songs</small>
                                     </div>
-                                    <a href="/#" className="ml-auto"><i className="icon-user-plus" /></a>
-                                    <a href="/#" className="ml-auto"><i className="icon-user-circle" /></a>
+                                    <a href="/#" className="ml-auto"><i className="icon-user-plus"/></a>
+                                    <a href="/#" className="ml-auto"><i className="icon-user-circle"/></a>
                                 </div>
                             </li>
                         </ul>
@@ -182,6 +189,7 @@ function Cart(props) {
                 </div>
             </div>
             <PurchaseInformation Cart={cart} TotalPrice={total_price} beats_cart/>
+            {DarkModeToggle()}
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import {MDBCol, MDBRow} from "mdbreact";
-import React, {useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
 import {useDispatch} from "react-redux";
@@ -30,6 +30,7 @@ import CommandSuccess from "../statusPage/commandStatus/success/commandSuccess";
 import {addNewPlayerList} from "./functionProps"
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
+import "../../assets/css/style/style.scss";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -606,3 +607,41 @@ export const smallSpinner = (position, right) => {
         </div>
     )
 };
+
+export const DarkModeToggle = () => {
+    const [darkModeOn, setDarkMode] = useState(false);
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-dark-mode", darkModeOn);
+        let elementsHeader = document.getElementsByClassName('card-header');
+        let elementsBody = document.getElementsByClassName('card-body');
+
+
+        if(darkModeOn) {
+            document.body.style.backgroundColor = "#f4f6f9";
+            for(let i = 0; i < elementsHeader.length; i++){
+                elementsHeader[i].style.backgroundColor = "#ffffff";
+            }
+            for(let i = 0; i < elementsBody.length; i++){
+                elementsBody[i].style.backgroundColor = "#ffffff";
+            }
+
+        }else {
+            document.body.style.backgroundColor = "#131722"
+            for(let i = 0; i < elementsHeader.length; i++){
+                elementsHeader[i].style.backgroundColor = "#0c101b";
+            }
+            for(let i = 0; i < elementsBody.length; i++){
+                elementsBody[i].style.backgroundColor = "#0c101b";
+            }
+        }
+
+    });
+
+    return (
+        <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={darkModeOn}
+              onClick={() => setDarkMode(!darkModeOn)} aria-hidden="true"/>
+
+    );
+};
+

@@ -361,6 +361,79 @@ $grey_5:#555;
   height: 24px;
 }
 
+//Dark mode and light mode
+
+:root {
+  --primary: #f4f6f9;
+  --secondary: #131722;
+  --accent: #009688;
+}
+
+:root[data-dark-mode="true"] {
+  --primary: #131722;
+  --secondary: #f4f6f9;
+  --accent: #89e2cb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #1c182f;
+    --secondary: #f4f6f9;
+    --accent: #89e2cb;
+  }
+}
+
+.dark-mode__btn {
+  border: none;
+  background-color: var(--secondary);
+  color: var(--primary);
+  font-size: 3vmin;
+  font-family: "Inconsolata", monospace;
+  cursor: pointer;
+}
+
+/* needed to easily vertically align button content since some browsers won't let a button be a flex container */
+.dark-mode__content-wrap {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  padding: 0.5em 0.75em;
+}
+
+.dark-mode__icon {
+  --sz: 4em;
+  display: inline-block;
+  width: var(--sz);
+  height: var(--sz);
+  margin-right: 1em;
+  background-image: -webkit-gradient(
+                  linear,
+                  left top, right top,
+                  color-stop(50%, var(--primary)),
+                  color-stop(50%, var(--secondary))
+  );
+  background-image: linear-gradient(
+                  to right,
+                  var(--primary) 50%,
+                  var(--secondary) 50%
+  );
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.1em var(--secondary), 0 0 0 0.2em var(--primary);
+}
+
+.dark-mode__status {
+  display: inline-block;
+  margin-left: 1ch;
+  /*  prevents reflow when switching between on and off */
+  min-width: 3ch;
+  text-align: left;
+}
+
+.dark-mode__btn:focus {
+  outline-color: var(--accent);
+}
+
 //.icon-note:before { content: "\266a"; } /* '\266a' */
 //.icon-note-beamed:before { content: "\266b"; } /* '\266b' */
 //.icon-music:before { content: "🎵"; } /* '\1f3b5' */
