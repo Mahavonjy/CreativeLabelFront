@@ -113,31 +113,44 @@ function Options(props) {
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
                     <EditOrAddNewOptions edit={addNewOption ? false : edit}
-                                         func={addNewOption ? createOption : editOption} data={data}/>
+                                         func={addNewOption ? createOption : editOption}
+                                         data={data}/>
                 </div>
             </Modal>}
             {/* END */}
             <table className="responsive-table border-0">
                 <thead>
                 <tr>
-                    <th scope="col">Cacher/Afficher&nbsp;<i className="icon icon-info"
-                                                            data-tip="Choisir, soit de cahcer ou afficher cette opion pour cette prestation"/>
+                    <th scope="col">Cacher/Afficher&nbsp;
+                        <i className="icon icon-info"
+                           data-tip="Choisir, soit de cahcer ou afficher cette opion pour cette prestation"/>
                     </th>
-                    <th scope="col">Nom&nbsp;<i className="icon icon-info"
-                                                data-tip="Nom donner par l'artiste cette option"/></th>
-                    <th scope="col">Tag&nbsp;<i className="icon icon-info"
-                                                data-tip="Le nom des autres artiste proposé avec"/></th>
-                    <th scope="col">Prix&nbsp;<i className="icon icon-info"
-                                                 data-tip="Le prix de cette option en plus de la prestation"/></th>
-                    <th scope="col">Description&nbsp;<i className="icon icon-info"
-                                                        data-tip="quelque description qui explique l'option"/></th>
-                    <th scope="col-lg-4">Ajouter&nbsp;<i className="icon icon-plus text-red ml-1 mr-1 bolder"
-                                                         data-tip="Crée un nouvelle option" onClick={async () => {
-                        await setData(null);
-                        await setEdit(true);
-                        await setAddNewOption(true);
-                    }}/>&nbsp;
-                        <i className="icon icon-info" data-tip="Ajouter cette l'option en plus de la prestation"/></th>
+                    <th scope="col">Nom&nbsp;
+                        <i className="icon icon-info"
+                           data-tip="Nom donner par l'artiste cette option"/>
+                    </th>
+                    <th scope="col">Tag&nbsp;
+                        <i className="icon icon-info"
+                           data-tip="Le nom des autres artiste proposé avec"/>
+                    </th>
+                    <th scope="col">Prix&nbsp;
+                        <i className="icon icon-info"
+                           data-tip="Le prix de cette option en plus de la prestation"/>
+                    </th>
+                    <th scope="col">Description&nbsp;
+                        <i className="icon icon-info"
+                           data-tip="quelque description qui explique l'option"/>
+                    </th>
+                    <th scope="col-lg-4">Ajouter&nbsp;
+                        <i className="icon icon-plus text-red ml-1 mr-1 bolder"
+                           data-tip="Crée un nouvelle option"
+                           onClick={async () => {
+                               await setData(null);
+                               await setEdit(true);
+                               await setAddNewOption(true);
+                           }}/>&nbsp;
+                        <i className="icon icon-info" data-tip="Ajouter cette l'option en plus de la prestation"/>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -153,7 +166,8 @@ function Options(props) {
                                    onClick={() => changeOptionsStatus(index, false)}/>}
                         </th>
                         <th className="text-center small bolder border-left-0 border-bottom-0"
-                            scope="row">{val.name}</th>
+                            scope="row">{val.name}
+                        </th>
                         <td className="small" data-title="Tag">{val.artist_tagged}</td>
                         <td className="small" data-title="Prix">{val.price}$</td>
                         <td className="small" data-title="Description">{val.description || "Pas de description"}</td>
@@ -163,7 +177,8 @@ function Options(props) {
                                 await setIndex(index);
                                 await setEdit(true);
                             }} data-tip={"Modifier la prestation " + val.name}/>
-                            <i className="icon icon-trash text-red s-24 ml-1 mr-1" onClick={() => deleteOptions(index)}
+                            <i className="icon icon-trash text-red s-24 ml-1 mr-1"
+                               onClick={() => deleteOptions(index)}
                                data-tip="Supprimer pour tout"/>
                         </td>
                     </tr>)}
