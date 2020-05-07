@@ -608,45 +608,45 @@ export const smallSpinner = (position, right) => {
     )
 };
 
-export const DarkModeToggle = () => {
-    const [darkModeOn, setDarkMode] = useState(false);
+export const LightModeToggle = () => {
+    const [lightModeOn, setlightMode] = useState(false);
 
     useEffect(() => {
+
+
         // try {
         //     document.getElementsByClassName("sidebar-mini sidebar-collapse theme-dark sidebar-expanded-on-hover")[0].classList.replace("theme-dark", "theme-light")
         // } catch (e) {
         //     //
         // }
 
-        document.documentElement.setAttribute("data-dark-mode", darkModeOn);
-        let elementsHeader = document.getElementsByClassName('card-header');
-        let elementsBody = document.getElementsByClassName('card-body');
+        document.documentElement.setAttribute("data-dark-mode", lightModeOn);
 
+        try {
+            if (lightModeOn) {
+                document.getElementsByClassName("sidebar-mini sidebar-collapse theme-dark sidebar-expanded-on-hover")[0].classList.replace("theme-dark", "theme-light")
+                document.getElementsByClassName("playlist list-group bg-dark list-group-flush")[0].classList.replace("bg-dark", "bg-white")
+                document.getElementsByClassName("card-header bg-dark darken-1 text-white")[0].classList.replace("bg-dark", "bg-white")
+                document.getElementsByClassName("card-header bg-white darken-1 text-white")[0].classList.replace("text-white", "text-black")
+                document.getElementsByClassName("table-responsive border bg-dark scrollbar-isl")[0].classList.replace("bg-dark", "bg-white")
 
-        if(darkModeOn) {
-            document.body.style.backgroundColor = "#f4f6f9";
-            for(let i = 0; i < elementsHeader.length; i++){
-                elementsHeader[i].style.backgroundColor = "#ffffff";
-            }
-            for(let i = 0; i < elementsBody.length; i++){
-                elementsBody[i].style.backgroundColor = "#ffffff";
+            } else {
+                document.getElementsByClassName("sidebar-mini sidebar-collapse theme-light sidebar-expanded-on-hover")[0].classList.replace("theme-light", "theme-dark")
+                document.getElementsByClassName("playlist list-group bg-white list-group-flush")[0].classList.replace("bg-white", "bg-dark")
+                document.getElementsByClassName("card-header bg-white darken-1 text-black")[0].classList.replace("bg-white", "bg-dark")
+                document.getElementsByClassName("card-header bg-dark darken-1 text-black")[0].classList.replace("text-black", "text-white")
+                document.getElementsByClassName("table-responsive border bg-white scrollbar-isl")[0].classList.replace("bg-white", "bg-dark")
             }
 
-        }else {
-            document.body.style.backgroundColor = "#131722"
-            for(let i = 0; i < elementsHeader.length; i++){
-                elementsHeader[i].style.backgroundColor = "#0c101b";
-            }
-            for(let i = 0; i < elementsBody.length; i++){
-                elementsBody[i].style.backgroundColor = "#0c101b";
-            }
+        } catch (e) {
+
         }
 
-    });
+    }, [lightModeOn]);
 
     return (
-        <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={darkModeOn}
-              onClick={() => setDarkMode(!darkModeOn)} aria-hidden="true"/>
+        <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={lightModeOn}
+              onClick={() => setlightMode(!lightModeOn)} aria-hidden="true"/>
 
     );
 };

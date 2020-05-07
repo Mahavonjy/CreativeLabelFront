@@ -146,7 +146,9 @@ function PurchaseInformation(props) {
             s.id = "stripe-script";
             s.type = "text/javascript";
             s.src = "https://js.stripe.com/v2/";
-            s.onload = () => {window['Stripe'].setPublishableKey('pk_test_Wg94pwR4mTzxLSdh5CL8JMRb')};
+            s.onload = () => {
+                window['Stripe'].setPublishableKey('pk_test_Wg94pwR4mTzxLSdh5CL8JMRb')
+            };
             window.document.body.appendChild(s);
         }
     };
@@ -391,7 +393,9 @@ function PurchaseInformation(props) {
                                             </div>
                                         </div>
                                         <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => {inputValidators()}}>{props.kantoBiz ? "Confirmer la reservation" : "Commander"}</button>
+                                                onClick={() => {
+                                                    inputValidators()
+                                                }}>{props.kantoBiz ? "Confirmer la reservation" : "Commander"}</button>
                                     </div>
                                     {/* #END# Input */}
                                 </div>

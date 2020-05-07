@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import PurchaseInformation from "./purchaseInformation";
 import HomeRoot from "../home/homeRoot";
 import {addCarts, addTotalPrice} from "../functionTools/functionProps";
-import {DarkModeToggle} from "../functionTools/createFields";
+import {LightModeToggle} from "../functionTools/createFields";
 
 let headers = {
     "Content-Type": 'application/json',
@@ -85,7 +85,7 @@ function Cart(props) {
         <div className="Base">
             <div className="row no-gutters">
                 <div className="col-lg-6 no-b p-lg-3 m-t-10 ">
-                    <div className="card-header dark-grey darken-1 text-white">
+                    <div className="card-header bg-dark darken-1 text-white">
                         <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                             Total: {total_price}$
                         </h3>
@@ -110,7 +110,7 @@ function Cart(props) {
                         <div className="tab-content" id="v-pills-tabContent2">
                             <div className="tab-pane fade active show" id="w6-tab1" role="tabpanel"
                                  aria-labelledby="w6-tab1">
-                                <div className="table-responsive border black scrollbar-isl" style={{height: 400}}>
+                                <div className="table-responsive border bg-dark scrollbar-isl" style={{height: 400}}>
                                     <table className="table table-hover earning-box ">
                                         {cart ?
                                             <tbody>
@@ -189,7 +189,7 @@ function Cart(props) {
                 </div>
             </div>
             <PurchaseInformation Cart={cart} TotalPrice={total_price} beats_cart/>
-            {DarkModeToggle()}
+            {LightModeToggle()}
         </div>
     );
 }
