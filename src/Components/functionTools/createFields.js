@@ -612,6 +612,12 @@ export const DarkModeToggle = () => {
     const [darkModeOn, setDarkMode] = useState(false);
 
     useEffect(() => {
+        // try {
+        //     document.getElementsByClassName("sidebar-mini sidebar-collapse theme-dark sidebar-expanded-on-hover")[0].classList.replace("theme-dark", "theme-light")
+        // } catch (e) {
+        //     //
+        // }
+
         document.documentElement.setAttribute("data-dark-mode", darkModeOn);
         let elementsHeader = document.getElementsByClassName('card-header');
         let elementsBody = document.getElementsByClassName('card-body');
