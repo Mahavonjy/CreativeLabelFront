@@ -139,7 +139,6 @@ function KantoBiz(props) {
                                     stateResults={stateResults}/>)}
                         {/* End */}
                     </div>
-                    {LightModeToggle()}
                 </div>
             </div>
             {/* End */}

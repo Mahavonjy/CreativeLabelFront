@@ -215,7 +215,6 @@ function Beats(props) {
                         </div>
                     </div>
                     <Suggestion ToPlay={props.ToPlay} user_credentials={user_credentials}/>
-                    {LightModeToggle()}
                 </section>
             </div>
         </div>

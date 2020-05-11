@@ -189,7 +189,7 @@ function Cart(props) {
                 </div>
             </div>
             <PurchaseInformation Cart={cart} TotalPrice={total_price} beats_cart/>
-            {LightModeToggle()}
+
         </div>
     );
 }

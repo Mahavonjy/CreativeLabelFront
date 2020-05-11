@@ -359,7 +359,6 @@ function About() {
                                 </div>
                             </article>
                             {/* #post-## */}
-                            {LightModeToggle()}
                         </main>
                         {/* #main */}
                     </div>

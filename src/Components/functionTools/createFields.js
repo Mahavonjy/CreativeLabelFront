@@ -572,6 +572,7 @@ export const SideBarsMain = (
                        return headers['Isl-Token'] !== Conf.configs.TokenVisitor ? history.goBack() : (<Register/>)
                    }}/>
             <LegalNotices headers={headers}/>
+            <LightModeToggle/>
         </div>
     )
 };
@@ -646,7 +647,7 @@ export const LightModeToggle = () => {
 
         }
 
-    }, [isLightOn]);
+    });
 
     return (
         <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={isLightOn}
