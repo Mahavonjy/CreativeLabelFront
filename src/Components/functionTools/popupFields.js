@@ -25,7 +25,7 @@ export const DifferentArtist = (dispatch, setChoiceArtistType, listOfArtistTypes
                 <i className="icon-close s-24" style={{color: "orange"}}/>
             </button>
             <div className="col text-center pt-5 pb-5" style={{height: "100%", borderRadius: 5, background: "#58585a"}}>
-                <h4 className="text-light text-monospace">Quelle genre d'artiste êtes vous ?</h4>
+                <h4 className="text-light text-monospace">Quel genre d'artiste êtes vous ?</h4>
                 <div className="body row justify-content-center  pt-2">
                     {listOfArtistTypes.map((val, index) =>
                         <button className="btn btn-outline-danger pt-2 pl-5 pr-5 ml-3 mr-3 mt-1 mb-1 col-lg-10"

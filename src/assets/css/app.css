@@ -3390,6 +3390,17 @@ input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-
     border:0 solid #e1e8ee;
     border-radius:.25rem
 }
+
+.card-border-top{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.card-border-bottom{
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
 .card>hr{
     margin-right:0;
     margin-left:0

@@ -97,7 +97,7 @@ function Pagination(props) {
     if (!pager.pages || pager.pages.length <= 1) {
         // don't display pager if there is only 1 page
         if (props.items.length === 0)
-            return <p className="text-red center-center m-5">0 préstations trouvé</p>;
+            return <p className="text-red center-center m-5">0 prestations trouvé</p>;
         return null;
     } else {
         return (

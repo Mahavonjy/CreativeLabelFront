@@ -8,6 +8,7 @@ import {CreativeHeaders} from "../functionTools/createFields";
 import {activeEventAndThematicsPage, activeResultPage, addServiceToShow} from "../functionTools/functionProps";
 import {EventAndThematics as EventAndThematics_} from "./eventsAndThematics";
 import Results from "./prestations/results/results";
+import {LightModeToggle} from "../functionTools/createFields";
 
 function KantoBiz(props) {
 
@@ -138,6 +139,7 @@ function KantoBiz(props) {
                                     stateResults={stateResults}/>)}
                         {/* End */}
                     </div>
+                    {LightModeToggle()}
                 </div>
             </div>
             {/* End */}

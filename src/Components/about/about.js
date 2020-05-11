@@ -1,4 +1,6 @@
 import React, {useEffect, useRef} from "react";
+import {LightModeToggle} from "../functionTools/createFields";
+
 
 function About() {
 
@@ -162,7 +164,8 @@ function About() {
                                                                                         style={{
                                                                                             fontSize: '12.0pt',
                                                                                             lineHeight: '115%'
-                                                                                        }} className="text-red">Respect&nbsp;:</span></u></i></b>
+                                                                                        }}
+                                                                                        className="text-red">Respect&nbsp;:</span></u></i></b>
                                                                                     </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
@@ -189,7 +192,8 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }} className="text-red">Intégrité&nbsp;:</span></u></i></b>
+                                                                                    }}
+                                                                                    className="text-red">Intégrité&nbsp;:</span></u></i></b>
                                                                                 </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
@@ -206,7 +210,8 @@ function About() {
                                                                                     }}>o</span><b><i><u><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
-                                                                                }}className="text-red">Indépendance&nbsp;: </span></u></i></b>
+                                                                                }}
+                                                                                                              className="text-red">Indépendance&nbsp;: </span></u></i></b>
                                                                                 </p><p><span style={{
                                                                                     fontSize: '12.0pt',
                                                                                     lineHeight: '115%'
@@ -260,7 +265,9 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }}className="text-red">L’Equité :</span></u></i></b></p><p
+                                                                                    }}
+                                                                                    className="text-red">L’Equité :</span></u></i></b>
+                                                                                </p><p
                                                                                     style={{
                                                                                         textIndent: '-18.0pt',
                                                                                         msoList: 'l0 level1 lfo1'
@@ -314,7 +321,9 @@ function About() {
                                                                                     style={{
                                                                                         fontSize: '12.0pt',
                                                                                         lineHeight: '115%'
-                                                                                    }} className="text-red">Excellence :</span></u></i></b></p>
+                                                                                    }}
+                                                                                    className="text-red">Excellence :</span></u></i></b>
+                                                                                </p>
                                                                                     <p style={{
                                                                                         textIndent: '-18.0pt',
                                                                                         msoList: 'l0 level1 lfo1'
@@ -350,6 +359,7 @@ function About() {
                                 </div>
                             </article>
                             {/* #post-## */}
+                            {LightModeToggle()}
                         </main>
                         {/* #main */}
                     </div>

@@ -500,6 +500,7 @@ export function addServiceId(data) {
     };
 }
 
+
 export function addAllUserOptions(data) {
     return async dispatch => {
         dispatch({
@@ -883,4 +884,13 @@ export function addFilterPricing(data) {
             data: data
         });
     };
+}
+
+export function activeThemeLight(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ACTIVE_THEME_LIGHT",
+            data: data
+        })
+    }
 }

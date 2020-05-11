@@ -236,7 +236,7 @@ function PurchaseInformation(props) {
                 </div>
             </Modal>
             <div className="col-12 pl-lg-3">
-                <div className="row justify-content-center my-3">
+                <div className="row justify-content-center">
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-header transparent">

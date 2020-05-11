@@ -8,7 +8,8 @@ const initState = {
     redirect: false,
     loading: false,
     toastGlobal: true,
-    auth: false
+    auth: false,
+    lightModeOn : false
 };
 
 const PlaylistHomeReducer = (state = initState, action) => {
@@ -17,16 +18,6 @@ const PlaylistHomeReducer = (state = initState, action) => {
             return {
                 ...state,
                 user_credentials: action.data
-            };
-        case "ADD_PLAYLIST_INFO":
-            return {
-                ...state,
-                PlaListInfo: action.data
-            };
-        case "ADD_PLAYLIST":
-            return {
-                ...state,
-                PlayList: action.data
             };
         case "ADD_ALL_MEDIA_GENRE":
             return {
@@ -58,6 +49,11 @@ const PlaylistHomeReducer = (state = initState, action) => {
                 ...state,
                 toastGlobal: action.data
             };
+        case "ACTIVE_THEME_LIGHT":
+            return {
+                ...state,
+                lightModeOn: !state.lightModeOn
+            }
         default:
             return state;
     }

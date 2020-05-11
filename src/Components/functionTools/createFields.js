@@ -2,7 +2,7 @@ import {MDBCol, MDBRow} from "mdbreact";
 import React, {useState, useEffect, useRef} from "react";
 import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Link, Route} from "react-router-dom";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
@@ -27,7 +27,7 @@ import OtherProfile from "../profile/otherProfile";
 import Profile from "../profile/profile";
 import CommandError from "../statusPage/commandStatus/error/commandError";
 import CommandSuccess from "../statusPage/commandStatus/success/commandSuccess";
-import {addNewPlayerList} from "./functionProps"
+import {addAllUserOptions, activeThemeLight, addNewPlayerList} from "./functionProps"
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
 import "../../assets/css/style/style.scss";
@@ -609,7 +609,11 @@ export const smallSpinner = (position, right) => {
 };
 
 export const LightModeToggle = () => {
-    const [lightModeOn, setlightMode] = useState(false);
+    //const [lightModeOn, setlightMode] = useState(false);
+    const dispatch = useDispatch();
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
+    const [isLightOn, setIsLightOn] = useState(lightModeOn);
+
 
     useEffect(() => {
 
@@ -623,7 +627,7 @@ export const LightModeToggle = () => {
         document.documentElement.setAttribute("data-dark-mode", lightModeOn);
 
         try {
-            if (lightModeOn) {
+            if (isLightOn) {
                 document.getElementsByClassName("sidebar-mini sidebar-collapse theme-dark sidebar-expanded-on-hover")[0].classList.replace("theme-dark", "theme-light")
                 document.getElementsByClassName("playlist list-group bg-dark list-group-flush")[0].classList.replace("bg-dark", "bg-white")
                 document.getElementsByClassName("card-header bg-dark darken-1 text-white")[0].classList.replace("bg-dark", "bg-white")
@@ -642,11 +646,15 @@ export const LightModeToggle = () => {
 
         }
 
-    }, [lightModeOn]);
+    }, [isLightOn]);
 
     return (
-        <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={lightModeOn}
-              onClick={() => setlightMode(!lightModeOn)} aria-hidden="true"/>
+        <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={isLightOn}
+              onClick={() => {
+                setIsLightOn(!isLightOn)
+                dispatch(activeThemeLight(!isLightOn))
+              }}
+              aria-hidden="true"/>
 
     );
 };

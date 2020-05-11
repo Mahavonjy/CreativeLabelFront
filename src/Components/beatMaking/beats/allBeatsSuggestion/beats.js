@@ -8,6 +8,7 @@ import { getMediaLink } from "../../../functionTools/tools";
 import Offers from "../offers/offers";
 import * as CreateFields from "../../../functionTools/createFields";
 import * as BeatsProps from "../../../functionTools/functionProps";
+import {LightModeToggle} from "../../../functionTools/createFields";
 
 function Beats(props) {
 
@@ -214,6 +215,7 @@ function Beats(props) {
                         </div>
                     </div>
                     <Suggestion ToPlay={props.ToPlay} user_credentials={user_credentials}/>
+                    {LightModeToggle()}
                 </section>
             </div>
         </div>
