@@ -21747,7 +21747,7 @@ nav.nav-flat .navbar-brand{
     top:auto
 }
 .card-header{
-    position:relative
+    position:relative;
 }
 .card-header .card-handle{
     position:absolute;
@@ -21756,7 +21756,7 @@ nav.nav-flat .navbar-brand{
 .control-sidebar,.theme-dark{
     background:#131722
 }
-.control-sidebar .card,.control-sidebar .dropdown-menu,.control-sidebar .list-group-item,.control-sidebar .loader,.control-sidebar .main-sidebar,.control-sidebar .navbar,.control-sidebar .searchOverlay::before,.control-sidebar pre,.control-sidebar.body,.control-sidebar.card,.control-sidebar.main-sidebar,.control-sidebar.navbar,.theme-dark .card,.theme-dark .dropdown-menu,.theme-dark .list-group-item,.theme-dark .loader,.theme-dark .main-sidebar,.theme-dark .navbar,.theme-dark .searchOverlay::before,.theme-dark pre,.theme-dark.body,.theme-dark.card,.theme-dark.main-sidebar,.theme-dark.navbar{
+.control-sidebar .card, .theme-dark .card-header, .theme-dark .list-group-item, .theme-dark .table-responsive, .theme-dark .playlist, .control-sidebar .dropdown-menu,.control-sidebar .list-group-item,.control-sidebar .loader,.control-sidebar .main-sidebar,.control-sidebar .navbar,.control-sidebar .searchOverlay::before,.control-sidebar pre,.control-sidebar.body,.control-sidebar.card,.control-sidebar.main-sidebar,.control-sidebar.navbar,.theme-dark .card,.theme-dark .dropdown-menu,.theme-dark .list-group-item,.theme-dark .loader,.theme-dark .main-sidebar,.theme-dark .navbar,.theme-dark .searchOverlay::before,.theme-dark pre,.theme-dark.body,.theme-dark.card,.theme-dark.main-sidebar,.theme-dark.navbar{
     background:#0c101b!important
 }
 .control-sidebar .b-l,.control-sidebar .b-r,.control-sidebar .b-t,.control-sidebar .card,.control-sidebar .card-footer,.control-sidebar .card-header,.control-sidebar .form-material .form-group .form-line,.control-sidebar .list-group-item,.control-sidebar .sidebar-header,.control-sidebar .table td,.control-sidebar .table th,.control-sidebar .table tr,.control-sidebar .table-striped tbody tr:nth-of-type(2n+1),.control-sidebar.b-b,.control-sidebar.b-l,.control-sidebar.b-r,.control-sidebar.b-t,.theme-dark .b-b,.theme-dark .b-l,.theme-dark .b-r,.theme-dark .b-t,.theme-dark .card,.theme-dark .card-footer,.theme-dark .card-header,.theme-dark .form-material .form-group .form-line,.theme-dark .list-group-item,.theme-dark .sidebar-header,.theme-dark .table td,.theme-dark .table th,.theme-dark .table tr,.theme-dark .table-striped tbody tr:nth-of-type(2n+1),.theme-dark.b-b,.theme-dark.b-l,.theme-dark.b-r,.theme-dark.b-t{
@@ -23007,4 +23007,13 @@ select::-ms-expand {
 
 .demo-gallery.dark > ul > li a {
     border: 3px solid #04070a;
+}
+
+.theme-light .card-header, .theme-light .table-responsive, .theme-light .playlist, .theme-light .list-group-item {
+    background-color: #ffffff;
+    color: rgba(0,0,0,.92);
+}
+
+.theme-light {
+    color: rgba(0,0,0,.92);
 }

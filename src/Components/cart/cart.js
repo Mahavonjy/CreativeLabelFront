@@ -22,6 +22,8 @@ function Cart(props) {
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
 
+    const lightModeOn = LightModeToggle.lightModeOn;
+
     const isMounted = useRef(false);
     const [total_price, setTotalPrice] = useState(totalPrice);
     const [cart, setCart] = useState(carts);
@@ -85,7 +87,7 @@ function Cart(props) {
         <div className="Base">
             <div className="row no-gutters" >
                 <div className="col-lg-6 no-b p-lg-3 m-t-10 ">
-                    <div className="card-header bg-dark darken-1 text-white card-border-top" >
+                    <div className="card-header theme-dark darken-1 card-border-top" >
                         <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                             Total: {total_price}$
                         </h3>
@@ -110,7 +112,7 @@ function Cart(props) {
                         <div className="tab-content" id="v-pills-tabContent2">
                             <div className="tab-pane fade active show" id="w6-tab1" role="tabpanel"
                                  aria-labelledby="w6-tab1">
-                                <div className="table-responsive border bg-dark scrollbar-isl card-border-bottom" style={{height: 400}}>
+                                <div className="table-responsive theme-dark border scrollbar-isl card-border-bottom" style={{height: 400}}>
                                     <table className="table table-hover earning-box ">
                                         {cart ?
                                             <tbody>
@@ -158,7 +160,7 @@ function Cart(props) {
                     </div>
                 </div>
                 <div className="col-lg-6 p-lg-3">
-                    <div className="mb-3 card p-3">
+                    <div className={lightModeOn ? "mb-3 card p-3 bg-dark" : "mb-3 card p-3 bg-white"}>
                         <div>
                             <div className="mr-3 float-left text-center">
                                 <div className="s-36"><i className="icon-music-player-3"/></div>
@@ -170,7 +172,7 @@ function Cart(props) {
                                 <small>D'autres créations similaires</small>
                             </div>
                         </div>
-                        <ul className="playlist list-group bg-dark list-group-flush" style={{height: 388}}>
+                        <ul className="playlist list-group list-group-flush" style={{height: 388}}>
                             <li className="list-group-item">
                                 <div className="d-flex align-items-center">
                                     <div className="col-10">

@@ -630,17 +630,13 @@ export const LightModeToggle = () => {
         try {
             if (isLightOn) {
                 document.getElementsByClassName("sidebar-mini sidebar-collapse theme-dark sidebar-expanded-on-hover")[0].classList.replace("theme-dark", "theme-light")
-                document.getElementsByClassName("playlist list-group bg-dark list-group-flush")[0].classList.replace("bg-dark", "bg-white")
-                document.getElementsByClassName("card-header bg-dark darken-1 text-white")[0].classList.replace("bg-dark", "bg-white")
-                document.getElementsByClassName("card-header bg-white darken-1 text-white")[0].classList.replace("text-white", "text-black")
-                document.getElementsByClassName("table-responsive border bg-dark scrollbar-isl")[0].classList.replace("bg-dark", "bg-white")
+                document.getElementsByClassName("card-header theme-dark darken-1 card-border-top")[0].classList.replace("theme-dark", "theme-light")
+                document.getElementsByClassName("table-responsive theme-dark border scrollbar-isl card-border-bottom")[0].classList.replace("theme-dark", "theme-light")
 
             } else {
                 document.getElementsByClassName("sidebar-mini sidebar-collapse theme-light sidebar-expanded-on-hover")[0].classList.replace("theme-light", "theme-dark")
-                document.getElementsByClassName("playlist list-group bg-white list-group-flush")[0].classList.replace("bg-white", "bg-dark")
-                document.getElementsByClassName("card-header bg-white darken-1 text-black")[0].classList.replace("bg-white", "bg-dark")
-                document.getElementsByClassName("card-header bg-dark darken-1 text-black")[0].classList.replace("text-black", "text-white")
-                document.getElementsByClassName("table-responsive border bg-white scrollbar-isl")[0].classList.replace("bg-white", "bg-dark")
+                document.getElementsByClassName("card-header theme-light darken-1 card-border-top")[0].classList.replace("theme-light", "theme-dark")
+                document.getElementsByClassName("table-responsive theme-light border scrollbar-isl card-border-bottom")[0].classList.replace("theme-light", "theme-dark")
             }
 
         } catch (e) {
