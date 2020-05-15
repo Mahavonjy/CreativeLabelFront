@@ -28,6 +28,7 @@ function PurchaseInformation(props) {
     const events_to_search = useSelector(state => state.KantobizSearchInfo.events_to_search);
     const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [cvc, setCvc] = useState("");
@@ -258,7 +259,7 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="name" className="form-control"
                                                        placeholder="Votre nom" name="name"
                                                        value={name || ''}
-                                                       onChange={(e) => changeFields(setName, e)} required/>
+                                                       onChange={(e) => changeFields(setName, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
@@ -266,7 +267,7 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="lastname" className="form-control"
                                                        placeholder="Votre prénom" name="lastname"
                                                        value={lastname}
-                                                       onChange={(e) => changeFields(setLastname, e)} required/>
+                                                       onChange={(e) => changeFields(setLastname, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
@@ -274,7 +275,7 @@ function PurchaseInformation(props) {
                                                 <input type="email" id="email" className="form-control"
                                                        placeholder="E-mail"
                                                        name="email" value={email || ''}
-                                                       onChange={(e) => changeFields(setEmail, e)} required/>
+                                                       onChange={(e) => changeFields(setEmail, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                     </div>
@@ -294,6 +295,7 @@ function PurchaseInformation(props) {
                                                        placeholder="Votre addresse" name="address"
                                                        value={address || ''}
                                                        onChange={(e) => changeFields(setAddress, e)}
+                                                       autocomplete="off"
                                                        required/>
                                             </div>
                                         </div>
@@ -303,6 +305,7 @@ function PurchaseInformation(props) {
                                                        placeholder="Votre code postal" name="postal_code"
                                                        value={postal_code || ''}
                                                        onChange={(e) => changeFields(setPostalCode, e)}
+                                                       autocomplete="off"
                                                        required/>
                                             </div>
                                         </div>
@@ -311,7 +314,7 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="city" className="form-control"
                                                        placeholder="Votre ville" name="city"
                                                        value={city || ''}
-                                                       onChange={(e) => changeFields(setCity, e)} required/>
+                                                       onChange={(e) => changeFields(setCity, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
@@ -319,7 +322,7 @@ function PurchaseInformation(props) {
                                                 <input type="number" id="phone" className="form-control"
                                                        placeholder="Votre téléphone" name="phone"
                                                        value={phone || ''}
-                                                       onChange={(e) => changeFields(setPhone, e)}/>
+                                                       onChange={(e) => changeFields(setPhone, e)} autocomplete="off"/>
                                             </div>
                                         </div>
                                     </div>
@@ -352,7 +355,7 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="card_number" className="form-control"
                                                        placeholder="0000 0000 0000 0000" name="card_number"
                                                        value={card_number}
-                                                       onChange={changeCardNumber} required/>
+                                                       onChange={changeCardNumber} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -360,7 +363,7 @@ function PurchaseInformation(props) {
                                             <div className="col-sm-8">
                                                 <input type="month" id="expiration" className="form-control"
                                                        name="expiration" value={expiration}
-                                                       onChange={(e) => changeFields(setExpiration, e)} required/>
+                                                       onChange={(e) => changeFields(setExpiration, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -369,7 +372,7 @@ function PurchaseInformation(props) {
                                                 <input type="number" id="cvc" className="form-control"
                                                        placeholder="CVC"
                                                        name="cvc" value={cvc}
-                                                       onChange={changeCVC} required/>
+                                                       onChange={changeCVC} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -378,14 +381,14 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="card_name" className="form-control"
                                                        placeholder="Nom du proprietaire de la carte"
                                                        name="card_name" value={card_name}
-                                                       onChange={(e) => changeFields(setCardName, e)} required/>
+                                                       onChange={(e) => changeFields(setCardName, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
                                             <div className="form-line">
                                                 <div className="material-switch">
                                                     <input id="unlimited" name="unlimited" type="checkbox"
-                                                           onChange={() => setRules(!rules)}/>
+                                                           onChange={() => setRules(!rules)} autocomplete="off"/>
                                                     <label htmlFor="sw2"
                                                            className="text-red text-monospace text-muted"> J'accepte les
                                                         Conditions Générales d'Utilisation</label>

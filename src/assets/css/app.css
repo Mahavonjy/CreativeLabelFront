@@ -1836,7 +1836,6 @@ textarea.form-control{
     padding:.375rem .75rem;
     font-size:1rem;
     line-height:1.5;
-    border-radius:1px;
     transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
 }
 
@@ -21600,7 +21599,7 @@ nav.nav-flat .navbar-brand{
     opacity:.1;
     color:#ff1744
 }
-.searchOverlay__input::-webkit-searchOverlay-cancel-button,.searchOverlay__input::-webkit-searchOverlay-decoration{
+.searchOverlay__input::val-webkit-searchOverlay-cancel-button,.searchOverlay__input::-webkit-searchOverlay-decoration{
     -webkit-appearance:none
 }
 .searchOverlay__input::-ms-clear{
@@ -23011,9 +23010,9 @@ select::-ms-expand {
 
 .theme-light .card-header, .theme-light .table-responsive, .theme-light .playlist, .theme-light .list-group-item {
     background-color: #ffffff;
-    color: rgba(0,0,0,.92);
+    color: #202124;
 }
 
 .theme-light {
-    color: rgba(0,0,0,.92);
+    color: #202124;
 }

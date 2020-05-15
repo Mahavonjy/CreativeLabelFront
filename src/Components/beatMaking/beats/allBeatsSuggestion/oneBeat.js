@@ -15,6 +15,7 @@ function OneBeat(props) {
     const totalPrice = useSelector(state => state.Carts.total_price);
     const beat_maker_beats = useSelector(state => state.beats.beat_maker_beats);
     const beats_similar = useSelector(state => state.beats.beats_similar);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const dispatch = useDispatch();
     const isMounted = useRef(false);
@@ -74,7 +75,7 @@ function OneBeat(props) {
 
     return (
         <div className="Base">
-            <section className="pl-lg-3 bg-dark" style={{backgroundImage: 'url(' + BackGround + ')', backgroundSize: "cover"}}>
+            <section className={"pl-lg-3 " + (lightModeOn ? "bg-white" : "bg-dark")} style={{backgroundImage: 'url(' + BackGround + ')', backgroundSize: "cover"}}>
                 <div className="row pt-5 ml-lg-5 mr-lg-5">
                     <div className="col-md-10 mr-4 ml-4">
                         <div className="row my-5 pt-5">

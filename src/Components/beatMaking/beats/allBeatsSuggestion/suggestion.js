@@ -16,6 +16,7 @@ function Suggestion(props) {
     const ready_latest_beats = useSelector(state => state.beats.ready_latest_beats);
     const ready_discovery_beats = useSelector(state => state.beats.ready_discovery_beats);
     const ready_isl_playlist = useSelector(state => state.beats.ready_isl_playlist);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [index, setIndex] = useState(null);
@@ -95,10 +96,10 @@ function Suggestion(props) {
                             </div>
                         </div>
                         {isl_playlist.length !== 0 ?
-                            <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
+                            <div className={"playlist  pl-lg-3 pr-lg-3 scrollbar-isl " + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 350}}>
                                 {CreateFields.CreateBeatsPlaylist("long_beats", "link_isl_playlist", props, generate_states(link_isl_playlist, state_isl_playlist), "long_beats")}
                             </div>
-                            : <div className="playlist bg-dark pl-lg-3 pr-lg-3" style={{height: 350}}>
+                            : <div className={"playlist pl-lg-3 pr-lg-3 " + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 350}}>
                                 <p className="text-center text-red pt-5"> Pas de playlist pour le moment </p>
                             </div>}
                     </div>
@@ -118,10 +119,10 @@ function Suggestion(props) {
                             </div>
                         </div>
                         {discovery_beats.length !== 0 ?
-                            <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 328}}>
+                            <div className={"playlist pl-lg-3 pr-lg-3 scrollbar-isl " + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 328}}>
                                 {CreateFields.CreateBeatsPlaylist("short_beats", "link_discovery_beats", props, generate_states(link_discovery_beats, state_discovery_beats), "short_beats")}
                             </div>
-                            : <div className="playlist bg-dark pl-lg-3 pr-lg-3" style={{height: 328}}>
+                            : <div className={"playlist pl-lg-3 pr-lg-3 " + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 328}}>
                                 <p className="text-center text-red pt-5"> Pas de découverte</p>
                             </div>}
                     </div>
@@ -147,10 +148,10 @@ function Suggestion(props) {
                             </div>
                         </div>
                         {latest_beats.length !== 0 ?
-                            <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 434}}>
+                            <div className={"playlist pl-lg-3 pr-lg-3 scrollbar-isl" + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 434}}>
                                 {CreateFields.CreateBeatsPlaylist("long_beats", "latest_beats", props, generate_states(link_latest_beats, state_latest_beats), "long_beats")}
                             </div>
-                            : <div className="playlist bg-dark pl-lg-3 pr-lg-3" style={{height: 434}}>
+                            : <div className={"playlist pl-lg-3 pr-lg-3 " + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 434}}>
                                 <p className="text-center text-red pt-5"> Pas de nouveau Instru</p>
                             </div>}
                     </div>

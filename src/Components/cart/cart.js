@@ -7,7 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import PurchaseInformation from "./purchaseInformation";
 import HomeRoot from "../home/homeRoot";
 import {addCarts, addTotalPrice} from "../functionTools/functionProps";
-import {LightModeToggle} from "../functionTools/createFields";
 
 let headers = {
     "Content-Type": 'application/json',
@@ -22,7 +21,7 @@ function Cart(props) {
     const carts = useSelector(state => state.Carts.carts);
     const totalPrice = useSelector(state => state.Carts.total_price);
 
-    const lightModeOn = LightModeToggle.lightModeOn;
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [total_price, setTotalPrice] = useState(totalPrice);
@@ -91,7 +90,7 @@ function Cart(props) {
                         <h3 className="border float-right fab-right-top relative shadow btn-outline-info btn-lg mt-3 pl-4 pr-4">
                             Total: {total_price}$
                         </h3>
-                        <h4><i className="icon-cart-arrow-down mr-2 mb-5"/>Votre panier</h4>
+                        <h4 className={(lightModeOn ? "text-black" : "text-white")}><i className="icon-cart-arrow-down mr-2 mb-5"/>Votre panier</h4>
 
                         <div className="d-flex justify-content-between">
                             <div className="align-self-end">
@@ -125,10 +124,10 @@ function Cart(props) {
                                                         </figure>
                                                     </td>
                                                     <td>
-                                                        <h6 className="text-center">{val.media.artist || val.artist}</h6>
-                                                        <p className="text-muted text-center">{val.media.title || val.title}</p>
+                                                        <h6 className={"text-center " + (lightModeOn ? "text-dark" : "")}>{val.media.artist || val.artist}</h6>
+                                                        <p className={"text-muted text-center " + (lightModeOn ? "text-black" : "")}>{val.media.title || val.title}</p>
                                                     </td>
-                                                    <td className="text-muted text-center">{val.price} $</td>
+                                                    <td className={"text-muted text-center " + (lightModeOn ? "text-black" : "")}>{val.price} $</td>
                                                     <td className="text-muted text-center">
                                                         {remove === val.song_id ?
                                                             <div className="preloader-wrapper small active">
@@ -144,8 +143,8 @@ function Cart(props) {
                                                                     </div>
                                                                 </div>
                                                             </div> :
-                                                            <i className="icon-trash text-red s-24"
-                                                               onClick={() => deleteCart(val.song_id)}/>}
+                                                            <button className="icon-trash text-red s-24"
+                                                               onClick={() => deleteCart(val.song_id)} style={{backgroundColor: (lightModeOn ? '#0c101b' : '#fff')}}/>}
                                                     </td>
                                                 </tr>
                                             )}
@@ -160,7 +159,7 @@ function Cart(props) {
                     </div>
                 </div>
                 <div className="col-lg-6 p-lg-3">
-                    <div className={lightModeOn ? "mb-3 card p-3 bg-dark" : "mb-3 card p-3 bg-white"}>
+                    <div className="mb-3 card p-3 ">
                         <div>
                             <div className="mr-3 float-left text-center">
                                 <div className="s-36"><i className="icon-music-player-3"/></div>
@@ -172,7 +171,7 @@ function Cart(props) {
                                 <small>D'autres créations similaires</small>
                             </div>
                         </div>
-                        <ul className="playlist list-group list-group-flush" style={{height: 388}}>
+                        <ul className="playlist list-group list-group-flush "  style={{height: 388}}>
                             <li className="list-group-item">
                                 <div className="d-flex align-items-center">
                                     <div className="col-10">

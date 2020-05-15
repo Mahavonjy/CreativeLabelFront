@@ -8,7 +8,6 @@ import { getMediaLink } from "../../../functionTools/tools";
 import Offers from "../offers/offers";
 import * as CreateFields from "../../../functionTools/createFields";
 import * as BeatsProps from "../../../functionTools/functionProps";
-import {LightModeToggle} from "../../../functionTools/createFields";
 
 function Beats(props) {
 
@@ -23,6 +22,7 @@ function Beats(props) {
     const top_beatBaker = useSelector(state => state.beats.top_beatmaker);
     const ready = useSelector(state => state.beats.ready);
     const AllMediaGenre = useSelector(state => state.Home.AllMediaGenre);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [placeHolder, setPlaceHolder] = useState("Rechercher");
@@ -157,7 +157,7 @@ function Beats(props) {
                                                                 <div className="md-form my-0">
                                                                     <div
                                                                         className="input-group-text bg-mdb-color">Genre&nbsp;
-                                                                        <input className="form-control" type="text"
+                                                                        <input className="form-control " type="text"
                                                                                placeholder={placeHolder} value={genre}
                                                                                onChange={(e) => getBeats(e, "genre")}
                                                                                list="music-genre"/>
@@ -181,10 +181,10 @@ function Beats(props) {
                                         <div className="tab-pane fade show active" id="w2-tab1" role="tabpanel" aria-labelledby="w2-tab1">
 
                                             {beats.length !== 0 ?
-                                                <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl" style={{height: 350}}>
+                                                <div className={"playlist pl-lg-3 pr-lg-3 scrollbar-isl" + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 350}}>
                                                     {CreateFields.CreateBeatsPlaylist("oneBeats", "AllBeat", props, states, "oneBeats")}
                                                 </div>
-                                                : <div className="playlist bg-dark pl-lg-3 pr-lg-3" style={{height: 350}}>
+                                                : <div className={"playlist pl-lg-3 pr-lg-3 " + (lightModeOn ? "bg-white" : "bg-dark")} style={{height: 350}}>
                                                     <p className="text-center">Vide</p>
                                                 </div>}
 

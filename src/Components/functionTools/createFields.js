@@ -299,8 +299,9 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
 };
 
 export const DisplayArtist = (artist_info, user_credentials) => {
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
     return (
-        <ul className="playlist scrollbar-isl list-group bg-dark list-group-flush scrollbar-isl" style={{height: 428}}>
+        <ul className={"playlist scrollbar-isl list-group " + (lightModeOn ? "bg-white" : "bg-dark") + " list-group-flush scrollbar-isl"} style={{height: 428}}>
             {artist_info.length !== 0 ? artist_info.map((val, index) =>
                 <li className="list-group-item" key={index}>
                     <div className="d-flex align-items-center">
@@ -325,6 +326,7 @@ export const DisplayArtist = (artist_info, user_credentials) => {
 };
 
 export const CreativeHeaders = (Title, Description, headers, setStateResult, next, displayOne, auth, history) => {
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
     return (
         <div>
             <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
@@ -341,20 +343,20 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                     </div>
 
                     <div className="zIndex99 relative">
-                        <div className="mt-5 p-5 rounded" style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
-                            <h2 className="s-36 text-center font-weight-lighter text-red"> {Title} </h2>
-                            <p className="s-18 text-center font-weight-lighter"
+                        <div className="mt-5 p-5 rounded" style={lightModeOn ? {backgroundColor: "rgba(255, 255, 255, 0.5)"} : {backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
+                            <h2 className="s-60 text-center text-red"> {Title} </h2>
+                            <p className={lightModeOn ? "s-18 text-center text-dark" : "s-18 text-center  text-white"}
                                dangerouslySetInnerHTML={{__html: Description}}/>
                         </div>
                     </div>
 
                     {!auth &&
                     <div className="absolute p-2 zIndex99" style={{right: 0, bottom: 0}}>
-                        <button className="btn border-left-0 border-right-0 btn-outline-danger m-2"
+                        <button className="btn btn-outline-primary m-2 r-5"
                                 onClick={() => document.getElementById("LoginRequire").click()}>
                             <i className="icon icon-user-secret"/>S'identifier
                         </button>
-                        <button className="btn border-left-0 border-right-0 btn-outline-danger m-2"
+                        <button className="btn btn-outline-primary m-2 r-5"
                                 onClick={async () => {
                                     history.push("/register");
                                     HomeRoot.beforeDataLoad().then(() => null);
