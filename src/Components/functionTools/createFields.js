@@ -42,7 +42,7 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
                            id={state_name}
                            className="form-control"
                            placeholder={placeholder}
-                           onChange={functionToOnchange} required={required}/>
+                           onChange={functionToOnchange} required={required} autoComplete="off"/>
                 </MDBCol>
             </MDBRow>
         )

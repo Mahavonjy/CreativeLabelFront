@@ -37,6 +37,7 @@ function SearchBar(props) {
     const country_to_search = useSelector(state => state.KantobizSearchInfo.country_to_search);
     const thematics_to_search = useSelector(state => state.KantobizSearchInfo.thematics_to_search);
     const events_to_search = useSelector(state => state.KantobizSearchInfo.events_to_search);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [city, setCity] = useState(city_to_search);
@@ -141,7 +142,7 @@ function SearchBar(props) {
     }, [city, country, listOfCity, service_to_show, startDate]);
 
     return (
-        <div className="Base search-bar relative p-b-40 mt-5">
+        <div className={lightModeOn ? "Base shadow-lg search-bar theme-light relative p-b-40 mt-5 " : "Base search-bar theme-dark relative p-b-40 mt-5"}>
             {/* Input Search */}
             <ReactTooltip/>
             <h3 className="text-center text-red mb-4 pt-4">

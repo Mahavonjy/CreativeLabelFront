@@ -14,8 +14,12 @@
 }
 
 .search-bar {
-    border-radius: 5px;
-    background-image: linear-gradient(to right bottom, #000000, #1b1a1a, #2e2d2e, #434243, #58585a);
+    border-radius: 15px;
+    background-color: #0c101b!important;
+}
+
+.theme-light .search-bar {
+    background-color: #ffffff!important;
 }
 
 .main-page {
