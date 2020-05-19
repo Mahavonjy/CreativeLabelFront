@@ -116,7 +116,7 @@ function Beats(props) {
                                                     <p>Toutes les créactions</p>
                                                     <div className="mt-8 d-flex">
                                                         <button type="button" id="Offers"
-                                                                className="btn btn-outline-info btn-fab-md pl-md-6 pr-md-6 Offers"
+                                                                className="btn btn-outline-info btn-fab-md pl-md-6 pr-md-6 Offers m-1 r-5"
                                                                 data-toggle="modal" data-target="#exampleModalOffers">Offers
                                                         </button>
                                                         <div aria-disabled={"false"} className="modal fade p-t-b-50 Offers"
@@ -141,7 +141,7 @@ function Beats(props) {
                                                         </div>
                                                         <div className="dropdown">
                                                             <button
-                                                                className="btn btn-outline-secondary btn-fab-md pl-md-4 pr-md-4"
+                                                                className="btn btn-outline-secondary btn-fab-md pl-md-4 pr-md-4 m-1 r-5"
                                                                 type="button"
                                                                 id="dropdownMenuButton" data-toggle="dropdown"
                                                                 aria-haspopup="true"

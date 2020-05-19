@@ -365,7 +365,7 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                     </div>}
                 </div>
             </div>
-            {Title === "Creative kantoBiz"
+            {Title === "Creative KantoBiz"
             && <SearchBar next={next}
                           headers={headers}
                           displayOne={displayOne}
