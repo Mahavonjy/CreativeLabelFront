@@ -13,6 +13,7 @@ import {
 } from "../functionTools/functionProps";
 import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../functionTools/tools";
 import Results from "./prestations/results/results";
+import {useSelector} from "react-redux";
 
 export const EventAndThematics = (
     headers,
@@ -59,7 +60,7 @@ export const EventAndThematics = (
                 </div>
                 <div className="card-text text-center">
                     <h4 className="text-red">{title}</h4>
-                    <small className="bolder">{desc}</small>
+                    <small>{desc}</small>
                     <button className="btn btn-outline-info mt-1" onClick={() => searchService("events", key)}
                             data-tip="Cliquer moi pour voir les prestations de cette évenement">Les prestations
                     </button>

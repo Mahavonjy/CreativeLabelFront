@@ -8,7 +8,6 @@ import {CreativeHeaders} from "../functionTools/createFields";
 import {activeEventAndThematicsPage, activeResultPage, addServiceToShow} from "../functionTools/functionProps";
 import {EventAndThematics as EventAndThematics_} from "./eventsAndThematics";
 import Results from "./prestations/results/results";
-import {LightModeToggle} from "../functionTools/createFields";
 
 function KantoBiz(props) {
 
@@ -21,6 +20,7 @@ function KantoBiz(props) {
     const events_allowed = useSelector(state => state.Others.events_allowed);
     const user_connected_prestations = useSelector(state => state.profilePrestations.prestations);
     const EventAndThematics = useSelector(state => state.KantobizSearch.EventAndThematics);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [eventAndThematics, setEventAndThematics] = useState(EventAndThematics);
@@ -99,15 +99,15 @@ function KantoBiz(props) {
             <div className="Base mt-5">
                 {/* Navigation Page*/}
 
-                <div className="NextOrPrevPage">
+                <div className={lightModeOn ? "NextOrPrevPage shadow-lg" : "NextOrPrevPage theme-light shadow-lg"}>
                     <div>
                         {resultsPage &&
-                            <button className="float-left btn-custom btn-outline-light border-bottom-0 border-right-0"
+                            <button className={lightModeOn ? "float-left btn-custom btn-outline-dark border-bottom-0 border-right-0" : "float-left btn-custom btn-outline-light border-bottom-0 border-right-0"}
                                     onClick={prev}>
                                 <i className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>&nbsp;Precedent
                             </button>}
                         {eventAndThematics &&
-                        <button className="float-right btn-custom btn-outline-light border-bottom-0 border-left-0"
+                        <button className={lightModeOn ? "float-right btn-custom btn-outline-dark border-bottom-0 border-left-0" : "float-right btn-custom btn-outline-light border-bottom-0 border-left-0"}
                                 onClick={next}>Suivant&nbsp;
                             <i className="icon icon-long-arrow-right mr-5 s-24 align-middle"/>
                         </button>}
@@ -115,7 +115,7 @@ function KantoBiz(props) {
                     </div>
                 </div>
                 {/* End Navigation Page*/}
-                <div className="main-page">
+                <div className={lightModeOn ? "main-page shadow-lg" : "main-page theme-light shadow-lg"}>
                     <div>
                         {/* Show Different events/thematics or all Prestation result of search or Prestation selected*/}
                         {(eventAndThematics

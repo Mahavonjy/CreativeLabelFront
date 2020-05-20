@@ -148,7 +148,7 @@ function SearchBar(props) {
             <h3 className="text-center text-red mb-4 pt-4">
                 Trouvez la meilleur prestation pour votre evenement
             </h3>
-            <div className="search-row row justify-content-center ml-2 mr-2">
+            <div className={lightModeOn ? "search-row row text-black justify-content-center ml-2 mr-2" : "search-row row text-white justify-content-center ml-2 mr-2"}>
                 <div className="col-lg-2 d-inline-block text-center required">
                     <label className="control-label">Pays</label>
                     <CreatableSelect isClearable
