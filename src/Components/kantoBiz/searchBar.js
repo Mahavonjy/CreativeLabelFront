@@ -1,9 +1,8 @@
+import frLocale from "date-fns/locale/fr";
 import axios from "axios";
-import React, {useEffect, useRef, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
-import {toast} from "react-toastify";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import {
     addFilterPricing,
@@ -22,11 +21,41 @@ import {
     onChangeListWithValueLabel,
     shuffleArray,
 } from "../functionTools/tools";
-import {validatorSearch} from "../validators/validatiors"
+import { validatorSearch } from "../validators/validatiors"
 import Results from "./prestations/results/results";
+import FormControl from '@material-ui/core/FormControl';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from '@material-ui/core/InputLabel';
+import { makeStyles } from '@material-ui/core/styles';
+import DateFnsUtils from "@date-io/date-fns";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+
+const localeMap = {
+    fr: frLocale
+};
+
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        margin: theme.spacing(3)
+
+    },
+    formControl: {
+        margin: theme.spacing(2),
+        minWidth: 160,
+        
+    },
+    select:{
+        color: 'white'
+    }
+}));
 
 function SearchBar(props) {
 
+    const locale= "fr";
+    const classes = useStyles();
     const dispatch = useDispatch();
     const country_allowed = useSelector(state => state.Others.country_allowed);
     const events_allowed = useSelector(state => state.Others.events_allowed);
@@ -45,9 +74,16 @@ function SearchBar(props) {
     const [state_events, setEvents] = useState(events_to_search);
     const [listOfEvents, setListOfEvents] = useState([]);
     const [country, setCountry] = useState("");
-    const [countryAllowed, setCountryAllowed] = useState(country_to_search);
+    const [countryAllowed, setCountryAllowed] = useState([]);
     const [state_thematics, setThematics] = useState(thematics_to_search);
     const [startDate, setStartDate] = useState(date_to_search);
+
+    
+    const valueAll = ()=>{
+        setCountry(country_to_search);
+    }
+
+    
 
     const Search = async () => {
         let if_errors = validatorSearch(state_thematics, startDate, country);
@@ -62,7 +98,7 @@ function SearchBar(props) {
                 "event_date": startDate.toISOString(),
                 "event": state_events,
                 "thematics": state_thematics,
-            }, {headers: props.headers}).then(async (resp) => {
+            }, { headers: props.headers }).then(async (resp) => {
                 let data = resp.data || [];
                 if (data.length === 0) toast.warn("Pas de presations");
                 else if (data.length >= 2) {
@@ -84,7 +120,7 @@ function SearchBar(props) {
         let tmp = [];
         await Promise.all(country_allowed[country_allowed.findIndex(
             tmp => tmp.name === value)]["value"].map(element => {
-                tmp.push({value: element, label: element});
+                tmp.push({ value: element, label: element });
                 return true
             })
         ).then(() => setListOfCity(tmp));
@@ -99,7 +135,7 @@ function SearchBar(props) {
         if (obj)
             new Promise(resolve => {
                 resolve(onChangeListWithValueLabel(setCountry, obj, dispatch, changeCountryToSearch));
-                resolve(changelistOfCity(obj.value).then(r => {
+                resolve(changelistOfCity(obj.target.value).then(r => {
                     setCity("");
                     dispatch(changeCityToSearch(""))
                 }));
@@ -122,13 +158,25 @@ function SearchBar(props) {
         else resetDataOfCity()
     };
 
+    const updateDate = (daty) => {
+        if (daty) {
+            ChangeDate(setStartDate, daty, dispatch, changeDateToSearch)    
+        }else{
+            setStartDate("");
+            dispatch(changeDateToSearch(""));
+        }
+        
+    }
+
     useEffect(() => {
+
+        valueAll()
 
         function _start() {
             let tmp = [];
             for (let row in events_allowed) {
                 let value = events_allowed[row];
-                tmp.push({value: value, label: value, index: row})
+                tmp.push({ value: value, label: value, index: row })
             }
             setListOfEvents(tmp);
         }
@@ -141,64 +189,134 @@ function SearchBar(props) {
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [city, country, listOfCity, service_to_show, startDate]);
 
+
     return (
         <div className={lightModeOn ? "Base shadow-lg search-bar theme-light relative p-b-40 mt-5 " : "Base search-bar theme-dark relative p-b-40 mt-5"}>
             {/* Input Search */}
-            <ReactTooltip/>
+            <ReactTooltip />
             <h3 className="text-center text-red mb-4 pt-4">
                 Trouvez la meilleur prestation pour votre evenement
             </h3>
             <div className={lightModeOn ? "search-row row text-black justify-content-center ml-2 mr-2" : "search-row row text-white justify-content-center ml-2 mr-2"}>
-                <div className="col-lg-2 d-inline-block text-center required">
-                    <label className="control-label">Pays</label>
-                    <CreatableSelect isClearable
-                                     placeholder="Choisir un pays"
-                                     onChange={obj => updateCountry(obj)}
-                                     options={countryAllowed}/>
-                </div>
-                <div className=" col-lg-2 d-inline-block text-center">
-                    <label className="control-label">Villes</label>
-                    <CreatableSelect isClearable
-                                     placeholder="Choisir une ville"
-                                     options={listOfCity}
-                                     onChange={obj => updateCity(obj)}/>
-                </div>
-                <div className=" col-lg-3 d-inline-block text-center required">
-                    <label className="control-label">Thematics</label>
-                    <Select isMulti
-                            options={artist_types}
-                            placeholder="Choisir le/les thematics"
-                            onChange={obj => {
-                                let tmp = [];
-                                for (let row in obj) tmp.push(obj[row]["value"]);
-                                setThematics(tmp);
-                                dispatch(changeThematicsToSearch(tmp));
-                            }}/>
-                </div>
-                <div className=" col-lg-2 d-inline-block text-center">
-                    <label className="control-label">Evenements</label>
-                    <Select isClearable
-                            options={listOfEvents}
-                            placeholder="Choisir le/les evenements"
-                            onChange={obj => updateEvents(obj)}/>
-                </div>
-                <div className="col-lg-2 d-inline-block  text-center required">
-                    <label className="control-label"><i className="icon icon-calendar text-red mr-2"/>Date</label>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-dialog-select-label">Pays</InputLabel>
+                    <NativeSelect
+                        value={countryAllowed.value}
+                        placeholder="Choisir un pays"
+                        onChange={obj => updateCountry(obj)}
+
+                        inputProps={{
+                            name: 'pays',
+                            id: 'age-native-helper',
+                        }}
+                    >
+                        <option value=""></option>
+                        {
+                            countryAllowed.map((data) => ([
+                                <option value={data.value}>{data.label}</option>
+                            ]))
+                        }
+
+                    </NativeSelect>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-dialog-select-label">Villes</InputLabel>
+                    <NativeSelect
+                        value={listOfCity.value}
+                        onChange={obj => updateCity(obj)}
+
+                        inputProps={{
+                            name: 'city',
+                            id: 'age-native-helper',
+                        }}
+                        className={classes.select}
+                    >
+                        <option value=""></option>
+                        {
+                        listOfCity.map((data) => ([
+                            <option value={data.value}>{data.label}</option>
+                        ]))
+                        }
+
+                    </NativeSelect>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-dialog-select-label">Thematics</InputLabel>
+                    <NativeSelect
+                        value={artist_types.value}
+                        placeholder="Choisir un pays"
+                        onChange={obj => {
+                            let tmp = [];
+                            for (let row in obj) tmp.push(obj[row]["value"]);
+                            setThematics(tmp);
+                            dispatch(changeThematicsToSearch(tmp));
+                        }}
+
+                        inputProps={{
+                            name: 'thematics',
+                            id: 'age-native-helper',
+                        }}
+                    >
+                        <option value=""></option>
+                        {
+                        artist_types.map((data) => ([
+                            <option value={data.value}>{data.label}</option>
+                        ]))
+                        }
+
+                    </NativeSelect>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-dialog-select-label">Evenements</InputLabel>
+                    {/* <Select isClearable
+                        options={listOfEvents}
+                        placeholder="Choisir le/les evenements"
+                        onChange={obj => updateEvents(obj)} /> */}
+                    <NativeSelect
+                        value={listOfEvents.value}
+                        placeholder="Choisir un pays"
+                        onChange={obj => updateEvents(obj)}
+
+                        inputProps={{
+                            name: 'events',
+                            id: 'age-native-helper',
+                        }}
+                    >
+                        <option value=""></option>
+                        {
+                        listOfEvents.map((data) => ([
+                            <option value={data.value}>{data.label}</option>
+                        ]))
+                        }
+
+                    </NativeSelect>
+                </FormControl>
+                <FormControl className={classes.formControl} style={{ marginTop: '32px' }} >
+                    <MuiPickersUtilsProvider utils={DateFnsUtils} local={localeMap[locale]} >
+                        {/* <label className="control-label"><i className="icon icon-calendar text-red mr-2" />Date</label>
                     <input type="date"
-                           className="special-date-picker col text-center"
-                           onChange={
-                               (e) => ChangeDate(
-                                   e,
-                                   setStartDate,
-                                   dispatch,
-                                   changeDateToSearch)
-                           }/>
-                </div>
+                        className="special-date-picker col text-center"
+                        onChange={
+                            (e) => ChangeDate(
+                                e,
+                                setStartDate,
+                                dispatch,
+                                changeDateToSearch)
+                        } /> */}
+                        <KeyboardDatePicker
+                            clearable
+                            value={startDate}
+                            placeholder="10/10/2018"
+                            onChange={daty => updateDate(daty) }
+                            format="dd/MM/yyyy"
+                        />
+                    </MuiPickersUtilsProvider>
+                </FormControl>
                 <div className="col-lg-10 mt-4">
                     <button type="submit"
-                            onClick={Search}
-                            className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
-                        <i className="icon-search-1 text-white"/>
+                        onClick={Search}
+                        className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
+                        <i className="icon-search-1 text-white" />
                     </button>
                 </div>
             </div>

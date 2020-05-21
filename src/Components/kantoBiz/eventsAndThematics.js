@@ -54,7 +54,7 @@ export const EventAndThematics = (
 
     const generatorEventCard = (position_name, key, title, desc, image) => {
         return (
-            <div className={position_name}>
+            <div className={position_name} style={{margin:"20px"}} >
                 <div className="card-image">
                     <img alt={title} src={image}/>
                 </div>
@@ -71,7 +71,7 @@ export const EventAndThematics = (
 
     const generatorThematicCard = (name, key, image, desc) => {
         return (
-            <div className="thematics-card col-md-4">
+            <div className="thematics-card col-md-5" style={{margin:"20px"}} >
                 <h3 className="pt-3 text-white">{name}</h3>
                 <small>{desc}</small>
                 <div className="bar">
@@ -149,7 +149,7 @@ export const EventAndThematics = (
                     <h1 className="mb-2 text-primary">Nos Thematiques/Univers</h1>
                     <p>Voici tout les differentes univers dans KantoBiz</p>
                 </div>
-                <div className="row ml-5 mr-5 justify-content-center">
+                <div className="row ml-5 mr-15 justify-content-center"  >
                     {generatorThematicCard("Cirque/Arts de la rue", "street_artists", "https://zupimages.net/up/19/18/3ltf.png", "acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur ...")}
                     {generatorThematicCard("Comédiens", "comedian", "https://zupimages.net/up/19/18/3ltf.png", "Burlesque, Comédie, Conteur, Humoriste, expérimental ...")}
                     {generatorThematicCard("DJ", "dj", "https://zupimages.net/up/19/18/3ltf.png", "Animateur, Mix, Live set, DJ Set")}
