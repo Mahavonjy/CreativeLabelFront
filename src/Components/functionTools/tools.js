@@ -266,6 +266,8 @@ export const checkValueIfExistInArray = (val, array_) => {
 
 export const ChangeDate = (setStartDate, date, dispatch, func) => {
     let new_date = new Date(date);
+    new_date = formatDate(new_date)
+    console.log(new_date)
     if (new Date() < new_date) {
         setStartDate(new_date);
         if (dispatch && func)
@@ -522,7 +524,7 @@ export const updateAllServices = (prestations, dispatch, headers) => {
 };
 
 export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
-    let value = obj.value;
+    let value = obj.target.value;
     setState(value);
     if (func && dispatch)
         dispatch(func(value))
