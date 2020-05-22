@@ -130,7 +130,7 @@ function Beats(props) {
                                                                                 className="closeOffers transparent border-0"
                                                                                 data-dismiss="modal"
                                                                                 aria-label="Close">
-                                                                            <i className="icon-close s-24 text-red"/>
+                                                                            <i className="icon-times-rectangle s-24 text-primary"/>
                                                                         </button>
                                                                     </div>
                                                                     <div className="modal-body">
