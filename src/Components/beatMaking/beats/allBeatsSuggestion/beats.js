@@ -150,9 +150,9 @@ function Beats(props) {
                                                             <div className="dropdown-menu text-center"
                                                                  aria-labelledby="dropdownMenuButton">
                                                                 <button
-                                                                    className="btn btn-outline-warning btn-fab-md"
+                                                                    className="btn btn-outline-warning btn-fab-md m-2 r-5"
                                                                     onClick={(e) => getBeats(e, "random")}>
-                                                                    <i className="icon-warning mr-2"/>réinitialiser
+                                                                    <i className="icon-warning mr-2"/>Réinitialiser
                                                                 </button>
                                                                 <div className="md-form my-0">
                                                                     <div
