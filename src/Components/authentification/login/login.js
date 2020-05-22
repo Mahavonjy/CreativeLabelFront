@@ -260,7 +260,7 @@ function Login() {
 
             <div className="container-login">
                 <div className="absolute text-red ml-2" style={{zIndex: 99}}>
-                    <i className="icon-close s-24 cursor-pointer"
+                    <button className="icon-times-rectangle s-24 cursor-pointer text-primary border-0 transparent"
                        onClick={() => {
                            dispatch(setValueOfToastGlobal(true));
                            document.getElementsByClassName("close")[0].click()
@@ -280,7 +280,7 @@ function Login() {
                                onChange={(e) => {changeFields(setPassword, e)}}/>
                     </div>
 
-                    <button className="l-go btn btn-outline-success"
+                    <button className="l-go btn btn-outline-success m-1 r-5"
                             onClick={(e) => sendLoginCredentials(e)}>Connexion
                     </button>
                     <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
@@ -325,7 +325,7 @@ function Login() {
                 {/*    <LoginFacebook Label="Connecter avec facebook"/>*/}
                 {/*</div>*/}
                 <small className="r-disc">Vous n'avez pas de compte ISL Creative ?</small>
-                <button className="r-btn btn btn-outline-danger"
+                <button className="r-btn btn btn-outline-danger m-1 r-5"
                         onClick={() => {
                             document.getElementsByClassName("close")[0].click();
                             history.push('/register');

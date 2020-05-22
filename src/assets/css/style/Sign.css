@@ -11,7 +11,7 @@
 .container-login {
     height: 300px;
     width: 500px;
-    background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #721e49, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
+    background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #790d45, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
     position: absolute;
     top:50%;
     left:50%;
