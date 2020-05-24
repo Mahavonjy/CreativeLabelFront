@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(2),
         minWidth: 160,
-        
+
     },
     select:{
         color: 'white',
@@ -80,12 +80,12 @@ function SearchBar(props) {
     const [state_thematics, setThematics] = useState(thematics_to_search);
     const [startDate, setStartDate] = useState(date_to_search);
 
-    
+
     const valueAll = ()=>{
         setCountry(country_to_search);
     }
 
-    
+
 
     const Search = async () => {
         let if_errors = validatorSearch(state_thematics, startDate, country);
@@ -168,7 +168,7 @@ function SearchBar(props) {
             setStartDate("");
             dispatch(changeDateToSearch(""));
         }
-        
+
     }
 
     console.log(startDate)
