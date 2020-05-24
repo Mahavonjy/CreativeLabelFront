@@ -19,8 +19,6 @@
     cursor: pointer;
     font-size: 1vw;
     border: none;
-    border-left: 0.1vw solid #58585a;
-    border-right: 0.1vw solid #58585a;
 }
 
 .outer .wrapper .flip-container-left .flipper .input-year,
@@ -30,7 +28,7 @@
     font-size: 1vw;
     text-align: center;
     border: none;
-    border-bottom: 0.1vw solid #58585a;
+    border-bottom: 0.1vw solid #202124;
 }
 
 .outer .wrapper .flip-container-left .flipper .container-event,
@@ -65,8 +63,8 @@
 
 .outer .wrapper .flip-container-left .flipper .option-month,
 .outer .wrapper .flip-container-right .flipper .option-month {
-    color: #ED1C24;
-    background-color: #58585a;
+    color: #ffffff;
+    background-color: #202124;
 }
 
 .outer .wrapper .flip-container-left .flipper .front-left,

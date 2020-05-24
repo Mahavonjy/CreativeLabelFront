@@ -157,7 +157,7 @@ function RightBlock(props) {
                          bg_color + ` day-block ${
                          i === selectedDay 
                          && props.date.getMonth() + 1 === selectedMonth + 1 
-                         && props.date.getFullYear() === selectedYear ? "active" : (bg_color ? "day-in" : "inactive")}`
+                         && props.date.getFullYear() === selectedYear ? "m-1 active" : (bg_color ? "m-1 day-in" : "m-1 inactive")}`
                      }>
                     <div className="inner">{i}</div>
                 </div>
@@ -297,7 +297,7 @@ function RightBlock(props) {
             <div className={`flipper ${props.toggle ? "" : "toggle"}`}>
                 <div className="front front-right">
                     <div className="container-date-picker">
-                        <button className="btn btn-outline-danger" data-tip="le mois precedent" onClick={prevMonth}>
+                        <button className="btn btn-outline-danger r-5" data-tip="le mois precedent" onClick={prevMonth}>
                             <i className="text-red icon-long-arrow-left"/>
                         </button>
                         <select className="select-month" onChange={updateMonth}>
@@ -305,7 +305,7 @@ function RightBlock(props) {
                         </select>
                         <input type="text" className="input-year" data-tip="changer manuelement l'année"
                                onChange={updateYear} value={selectedYear} maxlength="4"/>
-                        <button className="btn btn-outline-danger" data-tip="le mois suivant" onClick={nextMonth}>
+                        <button className="btn btn-outline-danger r-5" data-tip="le mois suivant" onClick={nextMonth}>
                             <i className="text-red icon-long-arrow-right"/>
                         </button>
                     </div>
