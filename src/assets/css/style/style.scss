@@ -402,6 +402,7 @@ $grey_5:#555;
 }
 
 .dark-mode__icon {
+  z-index: 1000;
   --sz: 4em;
   display: inline-block;
   width: var(--sz);

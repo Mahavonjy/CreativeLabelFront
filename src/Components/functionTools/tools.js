@@ -565,7 +565,7 @@ export const generatePagination = (_array, funcToDisplay) => {
             <div key={index}>
                 <ReactTooltip/>
                 <div className="o-card_container m-2">
-                    <div className="o-card bg-darks">
+                    <div className="o-card bg-white">
                         <div className="o-card_header">
                             <div className="o-card_headerHeroImg"
                                  style={{

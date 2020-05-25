@@ -13,7 +13,6 @@ import {
 } from "../functionTools/functionProps";
 import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../functionTools/tools";
 import Results from "./prestations/results/results";
-import {useSelector} from "react-redux";
 
 export const EventAndThematics = (
     headers,
@@ -26,7 +25,8 @@ export const EventAndThematics = (
     setEvents,
     events,
     thematics,
-    setThematics
+    setThematics,
+    lightModeOn
 ) => {
 
     const searchService = async (key, value) => {
@@ -54,13 +54,13 @@ export const EventAndThematics = (
 
     const generatorEventCard = (position_name, key, title, desc, image) => {
         return (
-            <div className={position_name} style={{margin:"20px"}} >
+            <div className={position_name} style={{margin: "20px"}}>
                 <div className="card-image">
                     <img alt={title} src={image}/>
                 </div>
                 <div className="card-text text-center">
                     <h4 className="text-red">{title}</h4>
-                    <small>{desc}</small>
+                    <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
                     <button className="btn btn-outline-info mt-1" onClick={() => searchService("events", key)}
                             data-tip="Cliquer moi pour voir les prestations de cette évenement">Les prestations
                     </button>
@@ -71,9 +71,10 @@ export const EventAndThematics = (
 
     const generatorThematicCard = (name, key, image, desc) => {
         return (
-            <div className="thematics-card col-md-5" style={{margin:"20px"}} >
-                <h3 className="pt-3 text-white">{name}</h3>
-                <small>{desc}</small>
+            <div className={lightModeOn ? "thematics-card col-md-5 bg-white": "thematics-card col-md-5"}
+                 style={{margin: "20px"}}>
+                <h3 className={lightModeOn ? "pt-3 text-black" : "pt-3 text-white"}>{name}</h3>
+                <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
                 <div className="bar">
                     <div className="emptybar"/>
                     <div className="filledbar"/>
@@ -125,7 +126,7 @@ export const EventAndThematics = (
             <div className="pt-5">
                 <div className="relative mb-5 p-t-10 p-b-10 ml-5 ">
                     <h1 className="mb-2 text-primary">Nos Evenements</h1>
-                    <p>Voici tout les differentes enevements dans KantoBiz</p>
+                    <p className={lightModeOn ? "text-black" : "text-white"}>Voici tout les differentes enevements dans KantoBiz</p>
                 </div>
                 <div className="card-container">
                     {generatorEventCard("card-left", "Mariage", "Mariage", "Un show pour vous rien que pour vous", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
@@ -149,7 +150,7 @@ export const EventAndThematics = (
                     <h1 className="mb-2 text-primary">Nos Thematiques/Univers</h1>
                     <p>Voici tout les differentes univers dans KantoBiz</p>
                 </div>
-                <div className="row ml-5 mr-15 justify-content-center"  >
+                <div className="row ml-5 mr-15 justify-content-center">
                     {generatorThematicCard("Cirque/Arts de la rue", "street_artists", "https://zupimages.net/up/19/18/3ltf.png", "acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur ...")}
                     {generatorThematicCard("Comédiens", "comedian", "https://zupimages.net/up/19/18/3ltf.png", "Burlesque, Comédie, Conteur, Humoriste, expérimental ...")}
                     {generatorThematicCard("DJ", "dj", "https://zupimages.net/up/19/18/3ltf.png", "Animateur, Mix, Live set, DJ Set")}

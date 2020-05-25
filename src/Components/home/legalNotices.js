@@ -1,8 +1,10 @@
 import React, {useEffect, useRef} from "react";
+import {useSelector} from "react-redux";
 
 function LegalNotices(props) {
 
     const isMounted = useRef(false);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     useEffect(() => {
 
@@ -14,7 +16,7 @@ function LegalNotices(props) {
     return (
         <div aria-disabled={"false"} className="modal fade p-t-b-50 Offers" id="legaleNotices" role="dialog">
             <div className="modal-dialog" role="document" style={{width: "100%"}}>
-                <div className="modal-content bg-dark border-0">
+                <div className={lightModeOn ? "modal-content bg-white border-0" : "modal-content bg-dark border-0"}>
                     <div className="modal-header justify-content-center">
                         <h1 className="pt-2 bolder">CONDITIONS GÉNÉRALES D'UTILISATION ET DE VENTE</h1>
                         <button type="button"

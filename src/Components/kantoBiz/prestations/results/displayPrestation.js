@@ -36,6 +36,7 @@ function DisplayPrestation(props) {
     const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
     const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const paymentRef = useRef(null);
@@ -98,11 +99,11 @@ function DisplayPrestation(props) {
         axios.post("api/reservation/check_total_price",
             {price: service_to_show.price},
             {headers: props.headers}).then((resp) => {
-                setTva(resp.data["tva"]);
-                setHtPrice(resp.data["ht_price"]);
-                setIslAmount(resp.data["isl_amount"]);
-                setTotalAmount(resp.data["total_amount"])
-            });
+            setTva(resp.data["tva"]);
+            setHtPrice(resp.data["ht_price"]);
+            setIslAmount(resp.data["isl_amount"]);
+            setTotalAmount(resp.data["total_amount"])
+        });
 
         return () => {
             isMounted.current = true
@@ -146,7 +147,8 @@ function DisplayPrestation(props) {
                 </button>
                 <div className="page-header header-filter border1" data-parallax="true"
                      style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}}/>
-                <div className="main bg-dark main-raised ml-3 mr-3">
+                <div
+                    className={lightModeOn ? "main bg-white main-raised ml-3 mr-3" : "main bg-dark main-raised ml-3 mr-3"}>
                     <div className="profile-content">
                         <div className="container">
                             <div className="col-md-6 ml-auto mr-auto">
@@ -161,7 +163,7 @@ function DisplayPrestation(props) {
                                     <div className="name pt-5">
                                         <h3 className="title text-red text-center"
                                             data-tip="Titre de la Prestation">{service_to_show.title}</h3>
-                                        <h6 className="pb-2"
+                                        <h6 className={lightModeOn ? "pb-2 text-black" : "pb-2"}
                                             data-tip="Different genre produit par l'artiste">
                                             {service_to_show.thematics.join(", ")}
                                         </h6>
@@ -187,7 +189,8 @@ function DisplayPrestation(props) {
                             <div className="description text-center">
                                 <p data-tip="Description">{service_to_show.description}</p>
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
-                                    <MDBRating iconFaces iconSize='2x' iconRegular containerClassName="justify-content-center"
+                                    <MDBRating iconFaces iconSize='2x' iconRegular
+                                               containerClassName="justify-content-center"
                                                fillColors={[
                                                    'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
                                                ]}
@@ -202,14 +205,14 @@ function DisplayPrestation(props) {
                                 <div className="col-md-4">
                                     <div className="mb-4 p-1 rounded" style={{border: "dashed 1px white"}}>
                                         <h2 className="text-red border-bottom">Details de la reservations</h2>
-                                        <h3 className="col"><small className="text-light">Prix
+                                        <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Prix
                                             HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info"
                                                                                  data-tip="Ceci est le prix HT"/></h3>
-                                        <h3 className="col"><small className="text-light">Tva
+                                        <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Tva
                                             (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info"
                                                                                data-tip="Ceci est le tva du prix HT"/>
                                         </h3>
-                                        <h3 className="col"><small className="text-light">Prix
+                                        <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Prix
                                             TTC:</small>&nbsp;{total_amount}$&nbsp;<i
                                             className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/></h3>
                                     </div>
@@ -258,7 +261,9 @@ function DisplayPrestation(props) {
                                                         <input type="text" value={address} id="address"
                                                                placeholder="Indiquer l'adresse de l'évènement"
                                                                name="address" className="form-control"
-                                                               onChange={(e) => {if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)}}/>
+                                                               onChange={(e) => {
+                                                                   if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
+                                                               }}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -270,18 +275,18 @@ function DisplayPrestation(props) {
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Plus de détails</h2>
-                                            <h4 className="col"><strong>Politique d’annulation
+                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique d’annulation
                                                 :</strong> {service_to_show.refund_policy}&nbsp;<i
                                                 className="icon icon-info" data-tip data-for='refund'/></h4>
-                                            <h4 className="col"><strong>Catégorie
+                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Catégorie
                                                 :</strong> {service_to_show.thematics.join(", ")}</h4>
-                                            <h4 className="col"><strong>Type(s) d’évènement(s)
+                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Type(s) d’évènement(s)
                                                 :</strong> {service_to_show.events.join(", ")}</h4>
-                                            <h4 className="col"><strong>Nombre d'artistes
+                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Nombre d'artistes
                                                 :</strong> {service_to_show.number_of_artists}</h4>
-                                            <h4 className="col"><strong>Ville de référence
+                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Ville de référence
                                                 :</strong> {service_to_show.reference_city}</h4>
-                                            <h4 className="col"><strong>Ville(s) annexe(s)
+                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Ville(s) annexe(s)
                                                 :</strong> {service_to_show.others_city.join(", ")}</h4>
                                         </div>
                                     </div>
@@ -359,7 +364,7 @@ function DisplayPrestation(props) {
                                                         </tr>)}
                                                     </tbody>
                                                 </table> :
-                                                <h3 className="text-light text-center">Pas d'options pour cette
+                                                <h3 className={lightModeOn ? "text-black text-center" : "text-light text-center"}>Pas d'options pour cette
                                                     prestations</h3>
                                             }
                                         </div>
@@ -374,7 +379,8 @@ function DisplayPrestation(props) {
                                                     {service_to_show.galleries.map((val, index) =>
                                                         <li key={index} data-src={val}>
                                                             <a href={val} target="_blank" rel="noopener noreferrer">
-                                                                <img alt="gallery" className="img-responsive" src={val}/>
+                                                                <img alt="gallery" className="img-responsive"
+                                                                     src={val}/>
                                                                 <div className="demo-gallery-poster">
                                                                     <i className="icon icon-search-1 s-36 text-red"/>
                                                                 </div>
