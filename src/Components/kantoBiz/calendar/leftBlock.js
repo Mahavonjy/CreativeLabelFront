@@ -88,10 +88,10 @@ function LeftBlock(props) {
         <div className="flip-container-left">
             <ReactTooltip/>
             <div className={`flipper ${toggle ? "" : "toggle"}`}>
-                <div className="front front-left">
-                    <h2 className="text-red">{props.arrDays[props.date.getDay()]}</h2>
-                    <h1 className="text-red">{props.date.getDate()}</h1>
-                    <h2 className="text-red">Aujourd'hui</h2>
+                <div className="front front-left bg-primary">
+                    <h2 className="text-white">{props.arrDays[props.date.getDay()]}</h2>
+                    <h1 className="text-white">{props.date.getDate()}</h1>
+                    <h2 className="text-white">Aujourd'hui</h2>
                 </div>
                 <div className="back back-left">
                     <span className="mb-1">

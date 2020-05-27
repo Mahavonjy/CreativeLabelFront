@@ -130,7 +130,8 @@ function KantoBiz(props) {
                             setEvent,
                             event,
                             thematics,
-                            setThematics) )
+                            setThematics,
+                            lightModeOn) )
                         ||
                         (resultsPage
                         && <Results next={next}

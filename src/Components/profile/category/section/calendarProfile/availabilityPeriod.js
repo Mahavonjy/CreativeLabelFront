@@ -23,6 +23,7 @@ function AvailabilityPeriod(props) {
     const conditions = useSelector(state => state.profile.conditions);
     const prestations = useSelector(state => state.profilePrestations.prestations);
     const props_options = useSelector(state => state.profilePrestations.options);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [startDate, setStartDate] = useState(new Date());
@@ -204,54 +205,54 @@ function AvailabilityPeriod(props) {
                 <div className="text-center mb-3">
                     <h4 className="text-red bolder pb-4">Je suis disponible chaque </h4>
                     <div className="countDown">
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("monday")}>
                                     {condition["monday"] ? <i className="icon-success text-green"/> :
                                         <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Lundi</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Lundi</small>
                         </div>
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("tuesday")}>
                                     {condition["tuesday"] ? <i className="icon-success text-green"/> :
                                         <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Mardi</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Mardi</small>
                         </div>
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("wednesday")}>
                                    {condition["wednesday"] ? <i className="icon-success text-green"/> :
                                        <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Mercredi</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Mercredi</small>
                         </div>
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("thursday")}>
                                     {condition["thursday"] ? <i className="icon-success text-green"/> :
                                         <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Jeudi</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Jeudi</small>
                         </div>
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("friday")}>
                                     {condition["friday"] ? <i className="icon-success text-green"/> :
                                         <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Vendredi</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Vendredi</small>
                         </div>
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("saturday")}>
                                     {condition["saturday"] ? <i className="icon-success text-green"/> :
                                         <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Samedi</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Samedi</small>
                         </div>
-                        <div className="bg-secondary">
+                        <div className="btn btn-outline-primary bg-transparent">
                                 <span onClick={() => changeDayOfAvailability("sunday")}>
                                     {condition["sunday"] ? <i className="icon-success text-green"/> :
                                         <i className="icon-error text-red"/>}
                                 </span>
-                            <small className="count-type text-white">Dimanche</small>
+                            <small className={lightModeOn ? "count-type text-black" : "count-type text-white"}>Dimanche</small>
                         </div>
                     </div>
                 </div>
@@ -264,7 +265,7 @@ function AvailabilityPeriod(props) {
                             <h4 className="text-red">{oneDate ? "Le statut sera appliquer le" : "Début"}<i
                                 className="icon ml-2 icon-info"
                                 data-tip="La date de début"/></h4>
-                            <DatePicker className="form-control text-white pl-5 pr-5" selected={startDate}
+                            <DatePicker className={lightModeOn ? "form-control text-black pl-5 pr-5" : "form-control text-white pl-5 pr-5"} selected={startDate}
                                         onChange={(date) => changeStartDateFields(date)}/>
                         </div> : <div className="row justify-content-center">
                             <button className="btn btn-outline-danger ml-2 mr-2" onClick={() => setOneDate(true)}>
@@ -279,7 +280,7 @@ function AvailabilityPeriod(props) {
                         <div className="ml-2 mr-2">
                             <h4 className="text-red">Jusqu'au<i className="icon ml-2 icon-info"
                                                                 data-tip="La date de fin"/></h4>
-                            <DatePicker className="form-control text-white pl-5 pr-5" selected={endDate}
+                            <DatePicker className={lightModeOn ? "form-control text-black pl-5 pr-5" : "form-control text-white pl-5 pr-5"} selected={endDate}
                                         onChange={(e) => changeEndDateFields(e)}/>
                         </div>}
                     </div>

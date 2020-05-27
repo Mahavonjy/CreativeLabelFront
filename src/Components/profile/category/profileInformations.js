@@ -89,7 +89,7 @@ function ProfileInformation(props) {
                 <div className="row no-gutters">
                     <div className="col-md-4 b-r">
                         <div className="dropdown" style={{position: "absolute", paddingTop: "10px"}}>
-                            <button className="btn btn-outline-danger btn-sm pt-3 pb-3 zIndex99" type="button"
+                            <button className="btn btn-outline-danger btn-sm pt-3 pb-3 r-5 zIndex99" type="button"
                                     data-tip="Plus d'options"
                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -112,7 +112,7 @@ function ProfileInformation(props) {
                         {!loadingPhoto ?
                             <div className="text-center rounded-top p-5 mt-5" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
-                                    <i className="icon-edit1 text-center bg-grey rounded-lg s-36 bolder text-red"
+                                    <i className="icon-edit1 text-center bg-transparent rounded-lg s-36 text-red"
                                        onClick={() => document.getElementById("cover_area_file").click()}
                                        data-tip="modifier la photo de couverture"/>
                                     <input id="cover_area_file"
