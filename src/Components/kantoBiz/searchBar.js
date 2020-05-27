@@ -27,7 +27,11 @@ import Results from "./prestations/results/results";
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputLabel from '@material-ui/core/InputLabel';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
@@ -45,18 +49,65 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(2),
-        minWidth: 160,
-        
+        minWidth: 140,
     },
-    select:{
+    select: {
         color: 'white',
-        textDecoration :'black'
+        textDecoration: 'black',
+    },
+
+    select2: {
+        color: 'black',
+        textDecoration: 'white',
+    },
+    root: {
+        borderBottom: '2px solid white'
+    },
+    root2: {
+        borderBottom: '2px solid black'
+    },
+    input: {
+        color: 'white',
+
+    },
+    input2: {
+        color: 'black',
+
+    },
+    icon: {
+        color: 'white',
+    },
+    icon2: {
+        color: 'black',
     }
+
 }));
+
+const ITEM_HEIGHT = 38;
+const ITEM_PADDING_TOP = 4;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+function getStyles(name, personName, theme) {
+    return {
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
+
 
 function SearchBar(props) {
 
-    const locale= "fr";
+    const theme = useTheme();
+    const locale = "fr";
     const classes = useStyles();
     const dispatch = useDispatch();
     const country_allowed = useSelector(state => state.Others.country_allowed);
@@ -77,15 +128,15 @@ function SearchBar(props) {
     const [listOfEvents, setListOfEvents] = useState([]);
     const [country, setCountry] = useState("");
     const [countryAllowed, setCountryAllowed] = useState([]);
-    const [state_thematics, setThematics] = useState(thematics_to_search);
+    const [state_thematics, setThematics] = useState([]);
     const [startDate, setStartDate] = useState(date_to_search);
 
-    
-    const valueAll = ()=>{
+    const valueAll = () => {
         setCountry(country_to_search);
+        setThematics(thematics_to_search)
     }
 
-    
+
 
     const Search = async () => {
         let if_errors = validatorSearch(state_thematics, startDate, country);
@@ -97,7 +148,7 @@ function SearchBar(props) {
             await axios.post("api/service_search/moment", {
                 "country": country,
                 "city": city,
-                "event_date": formatDate(startDate),
+                "event_date": startDate.toISOString(),
                 "event": state_events,
                 "thematics": state_thematics,
             }, { headers: props.headers }).then(async (resp) => {
@@ -162,16 +213,21 @@ function SearchBar(props) {
 
     const updateDate = (daty) => {
         if (daty) {
-            ChangeDate(setStartDate, daty, dispatch, changeDateToSearch)
-            setStartDate(daty)    
-        }else{
+            ChangeDate(daty, setStartDate, dispatch, changeDateToSearch)
+            setStartDate(daty)
+        } else {
             setStartDate("");
             dispatch(changeDateToSearch(""));
         }
-        
+
     }
 
-    console.log(startDate)
+    const updateThematics = (obj) => {
+        let tmp = obj.target.value
+        setThematics(tmp)
+        dispatch(changeThematicsToSearch(tmp));
+    }
+
 
     useEffect(() => {
 
@@ -194,7 +250,6 @@ function SearchBar(props) {
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [city, country, listOfCity, service_to_show, startDate]);
 
-
     return (
         <div className={lightModeOn ? "Base shadow-lg search-bar theme-light relative p-b-40 mt-5 " : "Base search-bar theme-dark relative p-b-40 mt-5"}>
             {/* Input Search */}
@@ -203,81 +258,80 @@ function SearchBar(props) {
                 Trouvez la meilleur prestation pour votre evenement
             </h3>
             <div className={lightModeOn ? "search-row row text-black justify-content-center ml-2 mr-2" : "search-row row text-white justify-content-center ml-2 mr-2"}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? "" : classes.select} >Pays</InputLabel>
+                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
+                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select} >Pays</InputLabel>
                     <NativeSelect
+                        style={{ borderButtomColor: 'red' }}
                         value={countryAllowed.value}
                         placeholder="Choisir un pays"
                         onChange={obj => updateCountry(obj)}
-                        className={lightModeOn ? "" : classes.select}
+                        className={lightModeOn ? classes.select2 : classes.select}
+                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
                         inputProps={{
                             name: 'pays',
                             id: 'age-native-helper',
+                            borderColor: 'rbg(0,0,255)'
                         }}
                     >
                         <option value=""></option>
                         {
                             countryAllowed.map((data) => ([
-                                <option value={data.value} style={{color:'black'}}>{data.label}</option>
+                                <option key={data.value} value={data.value} style={{ color: 'black' }}>{data.label}</option>
                             ]))
                         }
 
                     </NativeSelect>
                 </FormControl>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? "" : classes.select}>Villes</InputLabel>
+                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
+                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Villes</InputLabel>
                     <NativeSelect
+                        IconComponent='white'
                         value={listOfCity.value}
                         onChange={obj => updateCity(obj)}
                         inputProps={{
                             name: 'city',
-                            id: 'age-native-helper',
+                            id: 'age-native-helper'
                         }}
-                        className={lightModeOn ? "" : classes.select}
+                        className={lightModeOn ? classes.select2 : classes.select}
+                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
                     >
                         <option value=""></option>
                         {
-                        listOfCity.map((data) => ([
-                            <option value={data.value} style={{color:'black'}}>{data.label}</option>
-                        ]))
+                            listOfCity.map((data) => ([
+                                <option key={data.value} value={data.value} style={{ color: 'black' }}>{data.label}</option>
+                            ]))
                         }
 
                     </NativeSelect>
                 </FormControl>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? "" : classes.select}>Thematics</InputLabel>
-                    <NativeSelect
-                        value={artist_types.value}
-                        placeholder="Choisir un pays"
-                        className={lightModeOn ? "" : classes.select}
-                        onChange={obj => {
-                            let tmp = [];
-                            for (let row in obj) tmp.push(obj[row]["value"]);
-                            setThematics(tmp);
-                            dispatch(changeThematicsToSearch(tmp));
-                        }}
-
-                        inputProps={{
-                            name: 'thematics',
-                            id: 'age-native-helper',
-                        }}
+                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
+                    <InputLabel id="demo-multiple-chip-label" className={lightModeOn ? classes.select2 : classes.select}>Thematics</InputLabel>
+                    <Select
+                        labelId="demo-mutiple-name-label"
+                        id="demo-mutiple-name"
+                        multiple
+                        value={state_thematics}
+                        onChange={obj => updateThematics(obj)}
+                        input={<Input />}
+                        MenuProps={MenuProps}
+                        className={lightModeOn ? classes.select2 : classes.select}
+                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
                     >
-                        <option value=""></option>
-                        {
-                        artist_types.map((data) => ([
-                            <option value={data.value} style={{color:'black'}}>{data.label}</option>
-                        ]))
-                        }
-
-                    </NativeSelect>
+                        {artist_types.map((data) => (
+                            <MenuItem key={data.value} value={data.value} style={getStyles(data, artist_types, theme)}>
+                                {data.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </FormControl>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? "" : classes.select}>Evenements</InputLabel>
+                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
+                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Evenements</InputLabel>
                     <NativeSelect
                         value={listOfEvents.value}
                         placeholder="Choisir un pays"
                         onChange={obj => updateEvents(obj)}
-                        className={lightModeOn ? "" : classes.select}
+                        className={lightModeOn ? classes.select2 : classes.select}
+                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
                         inputProps={{
                             name: 'events',
                             id: 'age-native-helper',
@@ -285,33 +339,31 @@ function SearchBar(props) {
                     >
                         <option value=""></option>
                         {
-                        listOfEvents.map((data) => ([
-                            <option value={data.value} style={{color:'black'}}>{data.label}</option>
-                        ]))
+                            listOfEvents.map((data) => ([
+                                <option key={data.value} value={data.value} style={{ color: 'black' }}>{data.label}</option>
+                            ]))
                         }
 
                     </NativeSelect>
                 </FormControl>
-                <FormControl className={classes.formControl}  >
+                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
                     <MuiPickersUtilsProvider utils={DateFnsUtils} local={localeMap[locale]} >
-                        {/* <label className="control-label"><i className="icon icon-calendar text-red mr-2" />Date</label>
-                    <input type="date"
-                        className="special-date-picker col text-center"
-                        onChange={
-                            (e) => ChangeDate(
-                                e,
-                                setStartDate,
-                                dispatch,
-                                changeDateToSearch)
-                        } /> */}
-                        <KeyboardDatePicker
-                            className={lightModeOn ? "" : classes.select}
-                            clearable
-                            label="Date"
-                            value={startDate}
-                            onChange={daty => updateDate(daty) }
-                            format="MM/dd/yyyy"
-                        />
+                        <Grid container justify="space-around">
+                            <KeyboardDatePicker
+                                id="date-picker-dialog"
+                                label="Date"
+                                style={{ textDecorationColor: 'white' }}
+                                format="dd/MM/yyyy"
+                                value={startDate}
+                                onChange={daty => updateDate(daty)}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                    'color': 'white'
+                                }}
+                                inputProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
+                                InputLabelProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
+                            />
+                        </Grid>
                     </MuiPickersUtilsProvider>
                 </FormControl>
                 <div className="col-lg-10 mt-4">
