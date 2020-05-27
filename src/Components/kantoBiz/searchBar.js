@@ -285,7 +285,6 @@ function SearchBar(props) {
                 <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
                     <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Villes</InputLabel>
                     <NativeSelect
-                        IconComponent='white'
                         value={listOfCity.value}
                         onChange={obj => updateCity(obj)}
                         inputProps={{

@@ -171,7 +171,7 @@ KantoTabs.propTypes = {
     title: PropTypes.string,
     tabs: PropTypes.arrayOf(
         PropTypes.shape({
-            tabName: PropTypes.string.isRequired,
+            tabName: PropTypes.node.isRequired,
             tabIcon: PropTypes.object,
             tabContent: PropTypes.node.isRequired
         })
