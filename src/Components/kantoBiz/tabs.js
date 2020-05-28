@@ -70,9 +70,9 @@ const TabsStyle = {
         lineHeight: "24px",
         border: "0 !important",
         color: whiteColor + " !important",
-        marginLeft: "110px",
+        marginLeft: "140px",
         "&:last-child": {
-            marginLeft: "50px"
+            marginLeft: "0px"
         }
     },
     tabSelected: {
