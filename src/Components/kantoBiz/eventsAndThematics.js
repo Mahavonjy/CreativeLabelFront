@@ -130,7 +130,7 @@ export const EventAndThematics = (
                     tabs={[
                         {
                             tabName:(
-                                < div className="relative mb-5 p-t-10 p-b-10 ml-5 " >
+                                < div >
                                     <h1 className="mb-2 text-primary">Nos Evenements</h1>
                                     <p className={lightModeOn ? "text-black" : "text-white"}>Voici tout les differentes enevements dans KantoBiz</p>
                                 </div>
@@ -155,7 +155,7 @@ export const EventAndThematics = (
                             )
                         },{
                             tabName:(
-                                <div className="relative mb-5 p-t-10 p-b-10 ml-5 ">
+                                <div>
                                     <h1 className="mb-2 text-primary">Nos Thematiques/Univers</h1>
                                     <p className={lightModeOn ? "text-black" : "text-white"} >Voici tout les differentes univers dans KantoBiz</p>
                                 </div>

@@ -32,13 +32,24 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
+import format from "date-fns/format";
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import red from '@material-ui/core/colors/red'
 
-const localeMap = {
-    fr: frLocale
-};
 
+class LocalizedUtils extends DateFnsUtils {
+    getDatePickerHeaderText(date) {
+        return format(date, "d MMM yyyy", { locale: this.locale });
+    }
+}
+
+const defaultMaterialTheme = createMuiTheme({
+    palette: {
+        primary: red,
+    },
+});
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -57,14 +68,17 @@ const useStyles = makeStyles((theme) => ({
     },
 
     select2: {
-        color: 'black',
+        color: 'white',
         textDecoration: 'white',
     },
     root: {
-        borderBottom: '2px solid white'
+        borderBottom: '2px solid red',
+        '&.focus':{
+            borderButtomColor: red
+          },
     },
     root2: {
-        borderBottom: '2px solid black'
+        borderBottom: '2px solid red'
     },
     input: {
         color: 'white',
@@ -82,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
+
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 4;
@@ -261,6 +276,7 @@ function SearchBar(props) {
                 <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
                     <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select} >Pays</InputLabel>
                     <NativeSelect
+                        theme={defaultMaterialTheme}
                         style={{ borderButtomColor: 'red' }}
                         value={countryAllowed.value}
                         placeholder="Choisir un pays"
@@ -285,6 +301,7 @@ function SearchBar(props) {
                 <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
                     <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Villes</InputLabel>
                     <NativeSelect
+                        theme={defaultMaterialTheme}
                         value={listOfCity.value}
                         onChange={obj => updateCity(obj)}
                         inputProps={{
@@ -306,6 +323,7 @@ function SearchBar(props) {
                 <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
                     <InputLabel id="demo-multiple-chip-label" className={lightModeOn ? classes.select2 : classes.select}>Thematics</InputLabel>
                     <Select
+                        theme={defaultMaterialTheme}
                         labelId="demo-mutiple-name-label"
                         id="demo-mutiple-name"
                         multiple
@@ -326,6 +344,7 @@ function SearchBar(props) {
                 <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
                     <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Evenements</InputLabel>
                     <NativeSelect
+                        theme={defaultMaterialTheme}
                         value={listOfEvents.value}
                         placeholder="Choisir un pays"
                         onChange={obj => updateEvents(obj)}
@@ -346,23 +365,30 @@ function SearchBar(props) {
                     </NativeSelect>
                 </FormControl>
                 <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} local={localeMap[locale]} >
-                        <Grid container justify="space-around">
-                            <KeyboardDatePicker
-                                id="date-picker-dialog"
-                                label="Date"
-                                style={{ textDecorationColor: 'white' }}
-                                format="dd/MM/yyyy"
-                                value={startDate}
-                                onChange={daty => updateDate(daty)}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                    'color': 'white'
-                                }}
-                                inputProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
-                                InputLabelProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
-                            />
-                        </Grid>
+                    <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale} theme={defaultMaterialTheme} >
+                        <ThemeProvider theme={defaultMaterialTheme} >
+                            <Grid container justify="space-around" >
+                                <KeyboardDatePicker
+                                    style={{ headerColor: 'red' }}
+                                    id="date-picker-dialog"
+                                    label="Date"
+                                    style={{ textDecorationColor: 'white' }}
+                                    format="dd/MM/yyyy"
+                                    cancelLabel='annuler'
+                                    autoOk='true'
+                                    value={startDate}
+                                    onChange={daty => updateDate(daty)}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                        'headerColor': 'red'
+                                    }}
+                                    inputProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
+                                    InputLabelProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
+
+
+                                />
+                            </Grid>
+                        </ThemeProvider>
                     </MuiPickersUtilsProvider>
                 </FormControl>
                 <div className="col-lg-10 mt-4">
