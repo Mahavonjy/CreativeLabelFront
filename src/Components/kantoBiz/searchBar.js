@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     select2: {
-        color: 'white',
+        color: 'black',
         textDecoration: 'white',
     },
     root: {
