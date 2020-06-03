@@ -20,9 +20,10 @@ function Container() {
         <BrowserRouter>
             <Switch>
                 {/* HOME ROUTING */}
-                <Route exact path="/">
-                    <PreviewScreen/>
-                </Route>
+                {/*<Route exact path="/">*/}
+                {/*    <PreviewScreen/>*/}
+                {/*</Route>*/}
+
                 {/* PROFILE ROUTING */}
                 <Route path="/Profile">
                     <HomeRoot/>
@@ -30,41 +31,17 @@ function Container() {
                 <Route path="/Profile/isl_artist_profile/:id(\d+)">
                     <HomeRoot/>
                 </Route>
+
                 {/* BEATS ROUTING */}
-                <Route path="/beats">
-                    <HomeRoot/>
-                </Route>
-                <Route path="/beats/CheckThisBeat/:id(\d+)">
-                    <HomeRoot/>
-                </Route>
+                {/*<Route path="/beats">*/}
+                {/*    <HomeRoot/>*/}
+                {/*</Route>*/}
+                {/*<Route path="/beats/CheckThisBeat/:id(\d+)">*/}
+                {/*    <HomeRoot/>*/}
+                {/*</Route>*/}
+
                 {/* KANTOBIZ ROUTING */}
-                <Route path="/kantobiz">
-                    <HomeRoot/>
-                </Route>
-                {/* CART ROUTING */}
-                <Route path="/Cart">
-                    <HomeRoot/>
-                </Route>
-                {/* REGISTER ROUTING */}
-                <Route path="/register">
-                    <HomeRoot/>
-                </Route>
-                {/* PREFERENCE ROUTING */}
-                <Route path="/preference">
-                    <HomeRoot/>
-                </Route>
-                {/* BAD CONNEXION */}
-                <Route path="/badConnexion">
-                    <ConnexionError/>
-                </Route>
-                {/* COMMAND RESPONSE ROUTING */}
-                <Route path="/CommandSuccess">
-                    <HomeRoot/>
-                </Route>
-                <Route path="/CommandError">
-                    <HomeRoot/>
-                </Route>
-                <Route path="/about">
+                <Route path="/(|kantobiz)">
                     <HomeRoot/>
                 </Route>
                 <Route path="/show-service">
@@ -73,6 +50,39 @@ function Container() {
                 <Route path="/show-service-read">
                     <HomeRoot/>
                 </Route>
+
+                {/* CART ROUTING */}
+                {/*<Route path="/Cart">*/}
+                {/*    <HomeRoot/>*/}
+                {/*</Route>*/}
+
+                {/* REGISTER ROUTING */}
+                <Route path="/register">
+                    <HomeRoot/>
+                </Route>
+
+                {/* PREFERENCE ROUTING */}
+                {/*<Route path="/preference">*/}
+                {/*    <HomeRoot/>*/}
+                {/*</Route>*/}
+
+                {/* BAD CONNEXION */}
+                <Route path="/badConnexion">
+                    <ConnexionError/>
+                </Route>
+
+                {/* COMMAND RESPONSE ROUTING */}
+                <Route path="/CommandSuccess">
+                    <HomeRoot/>
+                </Route>
+                <Route path="/CommandError">
+                    <HomeRoot/>
+                </Route>
+
+                <Route path="/about">
+                    <HomeRoot/>
+                </Route>
+
                 {/* NOT FOUND */}
                 <Route component={NotFound}/>
             </Switch>

@@ -88,6 +88,7 @@ function ProfileInformation(props) {
             <div className="card no-b shadow no-r">
                 <div className="row no-gutters">
                     <div className="col-md-4 b-r">
+                        {props.user_role === "professional_auditor" &&
                         <div className="dropdown" style={{position: "absolute", paddingTop: "10px"}}>
                             <button className="btn btn-outline-danger btn-sm pt-3 pb-3 r-5 zIndex99" type="button"
                                     data-tip="Plus d'options"
@@ -96,19 +97,20 @@ function ProfileInformation(props) {
                                 <i className="icon-more-1 s-12"/>
                             </button>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                {props.user_role === "professional_auditor" &&
+                                {/*{props.user_role === "professional_auditor" &&*/}
                                 <div>
                                     <p className="dropdown-item text-red"
                                        onClick={() => props.setChoiceArtistTypeToChange(true)}>
                                         <i className="icon-user-plus mr-3"/>Voulez vous devenir artiste sur ISL ?</p>
-                                </div>}
-                                <div>
-                                    <p className="dropdown-item text-red"
-                                       onClick={() => setPreference(true)}>
-                                        <i className="icon-music-genre mr-3"/>Selectionner vos genres de musique</p>
                                 </div>
+                                {/*}*/}
+                                {/*<div>*/}
+                                {/*    <p className="dropdown-item text-red"*/}
+                                {/*       onClick={() => setPreference(true)}>*/}
+                                {/*        <i className="icon-music-genre mr-3"/>Selectionner vos genres de musique</p>*/}
+                                {/*</div>*/}
                             </div>
-                        </div>
+                        </div>}
                         {!loadingPhoto ?
                             <div className="text-center rounded-top p-5 mt-5" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">

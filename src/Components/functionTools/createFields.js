@@ -391,15 +391,15 @@ export const SideBars = (
             <ul className="sidebar-menu">
                 <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
                 {/* BEATS */}
-                <li style={{margin: "0 0 20px 10px"}}
-                    data-tip="Creative BeatMaking" onClick={() => {
-                    (location.pathname !== "/beats") && history.push("/beats")
-                }}><i className={
-                    location.pathname === "/beats"
-                        ? "icon icon-heartbeat cursor-pointer text-red s-24"
-                        : "icon icon-heartbeat cursor-pointer s-24"}/>
-                    <span className="ml-5">BeatMaking</span>
-                </li>
+                {/*<li style={{margin: "0 0 20px 10px"}}*/}
+                {/*    data-tip="Creative BeatMaking" onClick={() => {*/}
+                {/*    (location.pathname !== "/beats") && history.push("/beats")*/}
+                {/*}}><i className={*/}
+                {/*    location.pathname === "/beats"*/}
+                {/*        ? "icon icon-heartbeat cursor-pointer text-red s-24"*/}
+                {/*        : "icon icon-heartbeat cursor-pointer s-24"}/>*/}
+                {/*    <span className="ml-5">BeatMaking</span>*/}
+                {/*</li>*/}
 
                 {/* kantoBiz */}
                 <li style={{margin: "0 0 20px 10px"}} data-tip="Creative KantoBiz" onClick={() => {
@@ -424,24 +424,24 @@ export const SideBars = (
                 </li>
 
                 {/* CART */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Votre Panier" onClick={() => {
-                    ((state_cart > 0)
-                        && (location.pathname !== "/cart"))
-                        ? history.push("/cart")
-                        : toast.warn("Veuillez remplir votre panier avant")
-                }}>
-                    <div id="CartBadge">
-                            <span className="p1 " data-count={state_cart}>
-                                <i data-count="4b"
-                                   className={
-                                       location.pathname === "/cart"
-                                           ? "icon icon-cart-plus cursor-pointer text-red s-24 mr-5"
-                                           : "icon icon-cart-plus cursor-pointer s-24 mr-5"
-                                   }
-                                /> Panier
-                            </span>
-                    </div>
-                </li>
+                {/*<li style={{margin: "0 0 20px 10px"}} data-tip="Votre Panier" onClick={() => {*/}
+                {/*    ((state_cart > 0)*/}
+                {/*        && (location.pathname !== "/cart"))*/}
+                {/*        ? history.push("/cart")*/}
+                {/*        : toast.warn("Veuillez remplir votre panier avant")*/}
+                {/*}}>*/}
+                {/*    <div id="CartBadge">*/}
+                {/*            <span className="p1 " data-count={state_cart}>*/}
+                {/*                <i data-count="4b"*/}
+                {/*                   className={*/}
+                {/*                       location.pathname === "/cart"*/}
+                {/*                           ? "icon icon-cart-plus cursor-pointer text-red s-24 mr-5"*/}
+                {/*                           : "icon icon-cart-plus cursor-pointer s-24 mr-5"*/}
+                {/*                   }*/}
+                {/*                /> Panier*/}
+                {/*            </span>*/}
+                {/*    </div>*/}
+                {/*</li>*/}
 
                 {/* about */}
                 <li style={{margin: "0 0 20px 11px"}} data-tip="A propos de nous" onClick={() => {
@@ -479,7 +479,7 @@ export const SideBars = (
                 </li>
             </ul>
             {!isPlaying &&
-            <a href="/beats">
+            <a href="/">
                 <img alt="Logo"
                      className="absolute"
                      style={{bottom: 0}}
@@ -514,27 +514,27 @@ export const SideBarsMain = (
                    path="/CommandSuccess"
                    component={() => <CommandSuccess/>}
             />
+            {/*<Route exact*/}
+            {/*       path="/Cart"*/}
+            {/*       component={() => <Cart ToPlay={addToPlaylist}/>}*/}
+            {/*/>*/}
+            {/*<Route exact*/}
+            {/*       path="/beats"*/}
+            {/*       component={() => <Beats ToPlay={addToPlaylist}/>}*/}
+            {/*/>*/}
             <Route exact
-                   path="/Cart"
-                   component={() => <Cart ToPlay={addToPlaylist}/>}
-            />
-            <Route exact
-                   path="/beats"
-                   component={() => <Beats ToPlay={addToPlaylist}/>}
-            />
-            <Route exact
-                   path="/kantobiz"
+                   path="/(|kantobiz)"
                    component={() => <KantoBiz headers={headers}/>}
             />
-            <Route exact
-                   path="/beats/CheckThisBeat/:id(\d+)"
-                   component={() =>
-                       <OneBeat
-                           ToPlay={addToPlaylist}
-                           SingleBeat={single_beat}
-                           SimilarBeats={beats_similar}
-                       />
-                   }/>
+            {/*<Route exact*/}
+            {/*       path="/beats/CheckThisBeat/:id(\d+)"*/}
+            {/*       component={() =>*/}
+            {/*           <OneBeat*/}
+            {/*               ToPlay={addToPlaylist}*/}
+            {/*               SingleBeat={single_beat}*/}
+            {/*               SimilarBeats={beats_similar}*/}
+            {/*           />*/}
+            {/*       }/>*/}
             <Route exact
                    path="/Profile/isl_artist_profile/:id(\d+)"
                    component={() =>
@@ -550,12 +550,12 @@ export const SideBarsMain = (
                        return headers['Isl-Token'] === Conf.configs.TokenVisitor
                            ? history.goBack() : (<Profile ToPlay={addToPlaylist}/>)
                    }}/>
-            <Route exact
-                   path="/preference"
-                   component={() => {
-                       return headers['Isl-Token'] === Conf.configs.TokenVisitor
-                           ? history.goBack() : (<Preference/>)
-                   }}/>
+            {/*<Route exact*/}
+            {/*       path="/preference"*/}
+            {/*       component={() => {*/}
+            {/*           return headers['Isl-Token'] === Conf.configs.TokenVisitor*/}
+            {/*               ? history.goBack() : (<Preference/>)*/}
+            {/*       }}/>*/}
             <Route exact
                    path="/show-service"
                    component={() => {
@@ -619,13 +619,6 @@ export const LightModeToggle = () => {
 
 
     useEffect(() => {
-
-
-        // try {
-        //     document.getElementsByClassName("sidebar-mini sidebar-collapse theme-dark sidebar-expanded-on-hover")[0].classList.replace("theme-dark", "theme-light")
-        // } catch (e) {
-        //     //
-        // }
 
         document.documentElement.setAttribute("data-dark-mode", lightModeOn);
 

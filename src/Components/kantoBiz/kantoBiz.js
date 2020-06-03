@@ -34,7 +34,7 @@ function KantoBiz(props) {
     const displayOne = async (val) => {
         let tmp = false;
         await Promise.all(user_connected_prestations.map(element => {
-            if (element["id"] === val["id"]) tmp = true
+            if (element["id"] === val["id"]) tmp = true;
             return true
         })).then(async () => {
             if (tmp) {
@@ -44,7 +44,6 @@ function KantoBiz(props) {
                 history.push("/show-service")
             }
         });
-
     };
 
     const next = () => {
