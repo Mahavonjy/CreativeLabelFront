@@ -1,8 +1,20 @@
-import frLocale from "date-fns/locale/fr";
+import DateFnsUtils from "@date-io/date-fns";
+import red from '@material-ui/core/colors/red'
+import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import Select from '@material-ui/core/Select';
+import {ThemeProvider, useTheme} from '@material-ui/core/styles';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import axios from "axios";
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import format from "date-fns/format";
+import frLocale from "date-fns/locale/fr";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import {
     addFilterPricing,
@@ -16,98 +28,21 @@ import {
 } from "../functionTools/functionProps";
 import {
     ChangeDate,
-    formatDate,
     funcToSpecifyValueForSpecialInput,
     generatePagination,
     onChangeListWithValueLabel,
     shuffleArray,
 } from "../functionTools/tools";
-import { validatorSearch } from "../validators/validatiors"
+import {defaultMaterialTheme, MenuProps, useStyles} from "../functionTools/utilStyles";
+import {validatorSearch} from "../validators/validatiors"
 import Results from "./prestations/results/results";
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import InputLabel from '@material-ui/core/InputLabel';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Grid from '@material-ui/core/Grid';
-import format from "date-fns/format";
-import DateFnsUtils from "@date-io/date-fns";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import red from '@material-ui/core/colors/red'
 
 
 class LocalizedUtils extends DateFnsUtils {
     getDatePickerHeaderText(date) {
-        return format(date, "d MMM yyyy", { locale: this.locale });
+        return format(date, "d MMM yyyy", {locale: this.locale});
     }
 }
-
-const defaultMaterialTheme = createMuiTheme({
-    palette: {
-        primary: red,
-    },
-});
-
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        margin: theme.spacing(3)
-
-    },
-    formControl: {
-        margin: theme.spacing(2),
-        minWidth: 140,
-    },
-    select: {
-        color: 'white',
-        textDecoration: 'black',
-    },
-
-    select2: {
-        color: 'black',
-        textDecoration: 'white',
-    },
-    root: {
-        borderBottom: '2px solid red',
-        '&.focus':{
-            borderButtomColor: red
-          },
-    },
-    root2: {
-        borderBottom: '2px solid red'
-    },
-    input: {
-        color: 'white',
-
-    },
-    input2: {
-        color: 'black',
-
-    },
-    icon: {
-        color: 'white',
-    },
-    icon2: {
-        color: 'black',
-    }
-
-}));
-
-
-const ITEM_HEIGHT = 38;
-const ITEM_PADDING_TOP = 4;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 function getStyles(name, personName, theme) {
     return {
@@ -118,11 +53,9 @@ function getStyles(name, personName, theme) {
     };
 }
 
-
 function SearchBar(props) {
 
     const theme = useTheme();
-    const locale = "fr";
     const classes = useStyles();
     const dispatch = useDispatch();
     const country_allowed = useSelector(state => state.Others.country_allowed);
@@ -149,9 +82,7 @@ function SearchBar(props) {
     const valueAll = () => {
         setCountry(country_to_search);
         setThematics(thematics_to_search)
-    }
-
-
+    };
 
     const Search = async () => {
         let if_errors = validatorSearch(state_thematics, startDate, country);
@@ -166,10 +97,9 @@ function SearchBar(props) {
                 "event_date": startDate.toISOString(),
                 "event": state_events,
                 "thematics": state_thematics,
-            }, { headers: props.headers }).then(async (resp) => {
+            }, {headers: props.headers}).then(async (resp) => {
                 let data = resp.data || [];
-                if (data.length === 0) toast.warn("Pas de presations");
-                else if (data.length >= 2) {
+                if (data.length >= 2) {
                     await dispatch(addFilterPricing({
                         "min": resp.data[0]["price"],
                         "max": resp.data[resp.data.length - 1]["price"]
@@ -179,7 +109,9 @@ function SearchBar(props) {
                 await props.setStateResult(generatePagination(data, props.displayOne));
                 await dispatch(addKantoBizSearchResults(data));
                 await dispatch(addSearchLoading(false));
-                await Results.onScrollViewSearch();
+                if (data.length === 0) {
+                    toast.warn("Pas de prestations trouvées");
+                } else await Results.onScrollViewSearch();
             })
         }
     };
@@ -188,7 +120,7 @@ function SearchBar(props) {
         let tmp = [];
         await Promise.all(country_allowed[country_allowed.findIndex(
             tmp => tmp.name === value)]["value"].map(element => {
-                tmp.push({ value: element, label: element });
+                tmp.push({value: element, label: element});
                 return true
             })
         ).then(() => setListOfCity(tmp));
@@ -234,25 +166,23 @@ function SearchBar(props) {
             setStartDate("");
             dispatch(changeDateToSearch(""));
         }
-
-    }
+    };
 
     const updateThematics = (obj) => {
-        let tmp = obj.target.value
-        setThematics(tmp)
+        let tmp = obj.target.value;
+        setThematics(tmp);
         dispatch(changeThematicsToSearch(tmp));
-    }
-
+    };
 
     useEffect(() => {
 
-        valueAll()
+        valueAll();
 
         function _start() {
             let tmp = [];
             for (let row in events_allowed) {
                 let value = events_allowed[row];
-                tmp.push({ value: value, label: value, index: row })
+                tmp.push({value: value, label: value, index: row})
             }
             setListOfEvents(tmp);
         }
@@ -266,23 +196,31 @@ function SearchBar(props) {
     }, [city, country, listOfCity, service_to_show, startDate]);
 
     return (
-        <div className={lightModeOn ? "Base shadow-lg search-bar theme-light relative p-b-40 mt-5 " : "Base search-bar theme-dark relative p-b-40 mt-5"}>
+        <div
+            className={lightModeOn
+                ? "Base shadow-lg search-bar theme-light relative p-b-40 mt-5 "
+                : "Base search-bar theme-dark relative p-b-40 mt-5"}>
             {/* Input Search */}
-            <ReactTooltip />
+            <ReactTooltip/>
             <h3 className="text-center text-red mb-4 pt-4">
                 Trouvez la meilleur prestation pour votre evenement
             </h3>
-            <div className={lightModeOn ? "search-row row text-black justify-content-center ml-2 mr-2" : "search-row row text-white justify-content-center ml-2 mr-2"}>
-                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select} >Pays</InputLabel>
+            <div
+                className={lightModeOn
+                    ? "search-row row text-black justify-content-center ml-2 mr-2"
+                    : "search-row row text-white justify-content-center ml-2 mr-2"}>
+                <FormControl className={classes.formControl}
+                             classes={lightModeOn ? {root: classes.root2} : {root: classes.root}}>
+                    <InputLabel id="demo-dialog-select-label"
+                                className={lightModeOn ? classes.select2 : classes.select}>Pays</InputLabel>
                     <NativeSelect
                         theme={defaultMaterialTheme}
-                        style={{ borderButtomColor: 'red' }}
+                        style={{borderButtomColor: 'red'}}
                         value={countryAllowed.value}
                         placeholder="Choisir un pays"
                         onChange={obj => updateCountry(obj)}
                         className={lightModeOn ? classes.select2 : classes.select}
-                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
+                        classes={lightModeOn ? {icon: classes.icon2} : {icon: classes.icon}}
                         inputProps={{
                             name: 'pays',
                             id: 'age-native-helper',
@@ -292,14 +230,17 @@ function SearchBar(props) {
                         <option value=""></option>
                         {
                             countryAllowed.map((data) => ([
-                                <option key={data.value} value={data.value} style={{ color: 'black' }}>{data.label}</option>
+                                <option key={data.value} value={data.value}
+                                        style={{color: 'black'}}>{data.label}</option>
                             ]))
                         }
 
                     </NativeSelect>
                 </FormControl>
-                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Villes</InputLabel>
+                <FormControl className={classes.formControl}
+                             classes={lightModeOn ? {root: classes.root2} : {root: classes.root}}>
+                    <InputLabel id="demo-dialog-select-label"
+                                className={lightModeOn ? classes.select2 : classes.select}>Villes</InputLabel>
                     <NativeSelect
                         theme={defaultMaterialTheme}
                         value={listOfCity.value}
@@ -309,19 +250,22 @@ function SearchBar(props) {
                             id: 'age-native-helper'
                         }}
                         className={lightModeOn ? classes.select2 : classes.select}
-                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
+                        classes={lightModeOn ? {icon: classes.icon2} : {icon: classes.icon}}
                     >
                         <option value=""></option>
                         {
                             listOfCity.map((data) => ([
-                                <option key={data.value} value={data.value} style={{ color: 'black' }}>{data.label}</option>
+                                <option key={data.value} value={data.value}
+                                        style={{color: 'black'}}>{data.label}</option>
                             ]))
                         }
 
                     </NativeSelect>
                 </FormControl>
-                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
-                    <InputLabel id="demo-multiple-chip-label" className={lightModeOn ? classes.select2 : classes.select}>Thematics</InputLabel>
+                <FormControl className={classes.formControl}
+                             classes={lightModeOn ? {root: classes.root2} : {root: classes.root}}>
+                    <InputLabel id="demo-multiple-chip-label"
+                                className={lightModeOn ? classes.select2 : classes.select}>Thematics</InputLabel>
                     <Select
                         theme={defaultMaterialTheme}
                         labelId="demo-mutiple-name-label"
@@ -329,10 +273,10 @@ function SearchBar(props) {
                         multiple
                         value={state_thematics}
                         onChange={obj => updateThematics(obj)}
-                        input={<Input />}
+                        input={<Input/>}
                         MenuProps={MenuProps}
                         className={lightModeOn ? classes.select2 : classes.select}
-                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
+                        classes={lightModeOn ? {icon: classes.icon2} : {icon: classes.icon}}
                     >
                         {artist_types.map((data) => (
                             <MenuItem key={data.value} value={data.value} style={getStyles(data, artist_types, theme)}>
@@ -341,38 +285,42 @@ function SearchBar(props) {
                         ))}
                     </Select>
                 </FormControl>
-                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
-                    <InputLabel id="demo-dialog-select-label" className={lightModeOn ? classes.select2 : classes.select}>Evenements</InputLabel>
+                <FormControl className={classes.formControl}
+                             classes={lightModeOn ? {root: classes.root2} : {root: classes.root}}>
+                    <InputLabel id="demo-dialog-select-label"
+                                className={lightModeOn ? classes.select2 : classes.select}>Evenements</InputLabel>
                     <NativeSelect
                         theme={defaultMaterialTheme}
                         value={listOfEvents.value}
                         placeholder="Choisir un pays"
                         onChange={obj => updateEvents(obj)}
                         className={lightModeOn ? classes.select2 : classes.select}
-                        classes={lightModeOn ? { icon: classes.icon2 } : { icon: classes.icon }}
+                        classes={lightModeOn ? {icon: classes.icon2} : {icon: classes.icon}}
                         inputProps={{
                             name: 'events',
                             id: 'age-native-helper',
                         }}
                     >
-                        <option value=""></option>
+                        <option value=""/>
                         {
                             listOfEvents.map((data) => ([
-                                <option key={data.value} value={data.value} style={{ color: 'black' }}>{data.label}</option>
+                                <option key={data.value} value={data.value}
+                                        style={{color: 'black'}}>{data.label}</option>
                             ]))
                         }
 
                     </NativeSelect>
                 </FormControl>
-                <FormControl className={classes.formControl} classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }} >
-                    <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale} theme={defaultMaterialTheme} >
-                        <ThemeProvider theme={defaultMaterialTheme} >
-                            <Grid container justify="space-around" >
+                <FormControl className={classes.formControl}
+                             classes={lightModeOn ? {root: classes.root2} : {root: classes.root}}>
+                    <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale} theme={defaultMaterialTheme}>
+                        <ThemeProvider theme={defaultMaterialTheme}>
+                            <Grid container justify="space-around">
                                 <KeyboardDatePicker
-                                    style={{ headerColor: 'red' }}
+                                    style={{headerColor: 'red'}}
                                     id="date-picker-dialog"
                                     label="Date"
-                                    style={{ textDecorationColor: 'white' }}
+                                    style={{textDecorationColor: 'white'}}
                                     format="dd/MM/yyyy"
                                     cancelLabel='annuler'
                                     autoOk='true'
@@ -382,10 +330,12 @@ function SearchBar(props) {
                                         'aria-label': 'change date',
                                         'headerColor': 'red'
                                     }}
-                                    inputProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
-                                    InputLabelProps={lightModeOn ? { className: classes.input2 } : { className: classes.input }}
-
-
+                                    inputProps={lightModeOn
+                                        ? {className: classes.input2}
+                                        : {className: classes.input}}
+                                    InputLabelProps={lightModeOn
+                                        ? {className: classes.input2}
+                                        : {className: classes.input}}
                                 />
                             </Grid>
                         </ThemeProvider>
@@ -393,9 +343,9 @@ function SearchBar(props) {
                 </FormControl>
                 <div className="col-lg-10 mt-4">
                     <button type="submit"
-                        onClick={Search}
-                        className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
-                        <i className="icon-search-1 text-white" />
+                            onClick={Search}
+                            className="btn btn-outline-primary btn-lg p-3 m-2 col">Recherche&nbsp;
+                        <i className="icon-search-1 text-white"/>
                     </button>
                 </div>
             </div>
