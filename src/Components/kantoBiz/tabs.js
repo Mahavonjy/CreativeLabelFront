@@ -95,7 +95,7 @@ const TabsStyle = {
             margin: "-1px 5px 0 0 !important"
         }
     }
-}
+};
 
 const useStyles = makeStyles(TabsStyle);
 
