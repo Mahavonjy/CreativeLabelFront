@@ -4,6 +4,7 @@ import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../assets/css/style/KantoBiz.css";
+import "../../assets/css/app.css";
 import {CreativeHeaders} from "../functionTools/createFields";
 import {activeEventAndThematicsPage, activeResultPage, addServiceToShow} from "../functionTools/functionProps";
 import {EventAndThematics as EventAndThematics_} from "./eventsAndThematics";
