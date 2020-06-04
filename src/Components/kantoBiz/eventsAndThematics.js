@@ -108,7 +108,7 @@ export const EventAndThematics = (
                                     if (events) {
                                         setShow(false);
                                         searchService("thematics", thematics).then(r => null);
-                                    } else toast.error("bitee")
+                                    } else toast.error("Veuillez selectionner l'evenement")
                                 }}>Envoyer
                             </button>
                         </div>

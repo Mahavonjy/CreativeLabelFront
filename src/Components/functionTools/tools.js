@@ -522,10 +522,15 @@ export const updateAllServices = (prestations, dispatch, headers) => {
 };
 
 export const onChangeListWithValueLabel = (setState, obj, dispatch, func) => {
-    let value = obj.target.value;
-    setState(value);
-    if (func && dispatch)
-        dispatch(func(value))
+    let value;
+    try {
+        value = obj.target.value;
+    } catch (e) {
+        value = obj.value;
+    } finally {
+        setState(value);
+        (func && dispatch) && dispatch(func(value))
+    }
 };
 
 export const shuffleArray = (array) => {
