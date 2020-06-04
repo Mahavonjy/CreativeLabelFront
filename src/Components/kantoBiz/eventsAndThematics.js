@@ -92,8 +92,8 @@ export const EventAndThematics = (
             <ReactTooltip />
             <Modal visible={show} width="400" height="auto" animationType='slide'>
                 <div className="form-material"
-                    style={{ background: "lightslategray", height: "100%", borderRadius: "5px" }}>
-                    <button className="ModalClose" onClick={(e) => setShow(false)}>
+                    style={{ border: "2px solid red", borderRadius: "5px",marginTop:"-130px" }}>
+                    <button className="ModalClose" onClick={(e) => setShow(false)} style={{margin:"2px"}}>
                         <i className="icon-close s-24" style={{ color: "orange" }} />
                     </button>
                     <div className="col text-center">
@@ -103,7 +103,7 @@ export const EventAndThematics = (
                                 onChange={obj => {
                                     onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
                                 }} />
-                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4"
+                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4" style={{marginBottom:'5px'}}
                                 onClick={() => {
                                     if (events) {
                                         setShow(false);
