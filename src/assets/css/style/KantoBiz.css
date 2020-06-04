@@ -36,10 +36,10 @@
 .card-container {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(205px, 205px));
-    grid-auto-rows: 215px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
+    grid-auto-rows: 220px;
     grid-auto-flow: row dense;
-    grid-gap: 15px;
+    grid-gap: 17px;
     justify-content: center;
 }
 

@@ -70,27 +70,19 @@ export const EventAndThematics = (
         );
     };
 
-    const generatorThematicCard = (name, key, image, desc) => {
+    const generatorThematicCard = (title, key, image, desc, position_name) => {
         return (
-            <div className={lightModeOn ? "thematics-card col-md-5 bg-white" : "thematics-card col-md-5"}
-                style={{ margin: "20px" }}>
-                <h3 className={lightModeOn ? "pt-3 text-black" : "pt-3 text-white"}>{name}</h3>
-                <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
-                <div className="bar">
-                    <div className="emptybar" />
-                    <div className="filledbar" />
+            <div className={lightModeOn ? (position_name + " theme-light") : (position_name + " theme-dark")} style={{ margin: "20px" }}>
+                <div className="card-image">
+                    <img alt={title} src={image} />
                 </div>
-                <div className="circle center p-t-40 pb-2">
-                    <img alt={name} src={image} style={{ width: "100%" }} />
+                <div className="card-text text-center">
+                    <h4 className="text-red">{title}</h4>
+                    <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
+                    <button className="btn btn-outline-info mt-1" onClick={() => searchService("events", key)}
+                            data-tip="Cliquer moi pour voir les prestations de cette évenement">Les prestations
+                    </button>
                 </div>
-                <button className="btn btn-outline-info relative align-middle"
-                    onClick={() => {
-                        setThematics(key);
-                        setShow(true);
-                    }}
-                    data-tip="Cliquer moi pour voir les prestation de cette univer">
-                    Les prestations
-                </button>
             </div>
         )
     };
@@ -161,15 +153,15 @@ export const EventAndThematics = (
                                 </div>
                             ),
                             tabContent:(
-                                <div className="row ml-5 mr-15 justify-content-center">
-                                    {generatorThematicCard("Cirque/Arts de la rue", "street_artists", "https://zupimages.net/up/19/18/3ltf.png", "acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur ...")}
-                                    {generatorThematicCard("Comédiens", "comedian", "https://zupimages.net/up/19/18/3ltf.png", "Burlesque, Comédie, Conteur, Humoriste, expérimental ...")}
-                                    {generatorThematicCard("DJ", "dj", "https://zupimages.net/up/19/18/3ltf.png", "Animateur, Mix, Live set, DJ Set")}
-                                    {generatorThematicCard("Danseurs", "dancers", "https://zupimages.net/up/19/18/3ltf.png", "Tango, kilalaky, batrelaky, Ndombolo, Kizomba ...")}
-                                    {generatorThematicCard("Magiciens", "magician", "https://zupimages.net/up/19/18/3ltf.png", "Close-ups, Mentalistes, Prestidigitateurs ...")}
-                                    {generatorThematicCard("Chanteur/Musicien", "artist_musician", "https://zupimages.net/up/19/18/3ltf.png", "Acapella, Afrobeat, Batrelaky, Reggae-muffin, Reggaeton ...")}
-                                    {generatorThematicCard("Beatmaking", "beatmaker", "https://zupimages.net/up/19/18/3ltf.png", "Jazz, Pop, Rnb, Rap, Coupé-Décalé ...")}
-                                    {generatorThematicCard("Spécialiste de l’audiovisuel", "audiovisual_specialist", "https://zupimages.net/up/19/18/3ltf.png", "Monteur vidéoclip, Cameraman, Photographes, Réalisateur clip vidéo ...")}
+                                <div className="card-container">
+                                    {generatorThematicCard("Cirque/Arts de la rue", "street_artists", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur ...", "card-left")}
+                                    {generatorThematicCard("Comédiens", "comedian", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Burlesque, Comédie, Conteur, Humoriste, expérimental ...", "card-left")}
+                                    {generatorThematicCard("DJ", "dj", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Animateur, Mix, Live set, DJ Set", "card-bottom")}
+                                    {generatorThematicCard("Danseurs", "dancers", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Tango, kilalaky, batrelaky, Ndombolo, Kizomba ...","card-right")}
+                                    {generatorThematicCard("Magiciens", "magician", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Close-ups, Mentalistes, Prestidigitateurs ...", "card-right")}
+                                    {generatorThematicCard("Chanteur/Musicien", "artist_musician", "https://images.pexels.com/photos/668295/pexels-photo-668295.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Acapella, Afrobeat, Batrelaky, Reggae-muffin, Reggaeton ...", "card-right")}
+                                    {generatorThematicCard("Beatmaking", "beatmaker", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Jazz, Pop, Rnb, Rap, Coupé-Décalé ...", "card-right")}
+                                    {generatorThematicCard("Spécialiste de l’audiovisuel", "audiovisual_specialist", "https://images.pexels.com/photos/532561/pexels-photo-532561.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Monteur vidéoclip, Cameraman, Photographes, Réalisateur clip vidéo ...", "card-right")}
                                     {/*{generatorThematicCard("Spectacles enfants", "https://zupimages.net/up/19/18/3ltf.png", "Clown")}*/}
                                 </div>
                             )
