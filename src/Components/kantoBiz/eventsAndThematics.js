@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
-import Modal from "react-awesome-modal";
+// import Modal from "react-awesome-modal";
+import Modal from '@material-ui/core/Modal'
 import Select from "react-select";
 import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
@@ -14,6 +15,46 @@ import {
 import { generatePagination, onChangeListWithValueLabel, shuffleArray } from "../functionTools/tools";
 import Results from "./prestations/results/results";
 import KantoTabs from './tabs';
+import { InputLabel, FormControl, NativeSelect } from '@material-ui/core'
+import red from "@material-ui/core/colors/red";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+
+const defaultMaterialTheme = createMuiTheme({
+    overrides: {
+        MuiNativeSelect: {
+            select: {
+                color: 'white',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom: '2px solid red',
+                '&.focus': {
+                    borderButtom: '2px solid white'
+                },
+                textDecoration:'white'
+            },
+            input: {
+                color: 'white',
+                
+
+            },
+            icon: {
+                color: 'white',
+            }
+        },
+        MuiInputLabel:{
+            root:{
+                color:"white"
+            }
+        }
+    },
+    palette:{
+        primary:red
+    }
+
+});
+
+
 
 export const EventAndThematics = (
     headers,
@@ -79,8 +120,8 @@ export const EventAndThematics = (
                 <div className="card-text text-center m-2">
                     <h4 className="text-red">{title}</h4>
                     <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
-                    <button className="btn btn-outline-info mt-1" onClick={() => {setThematics(key); setShow(true);}}
-                            data-tip="Cliquer moi pour voir les prestations de cette univer">Les prestations
+                    <button className="btn btn-outline-info mt-1" onClick={() => { setThematics(key); setShow(true); }}
+                        data-tip="Cliquer moi pour voir les prestations de cette univer">Les prestations
                     </button>
                 </div>
             </div>
@@ -90,20 +131,49 @@ export const EventAndThematics = (
     return (
         <div className="p-b-100">
             <ReactTooltip />
-            <Modal visible={show} width="400" height="auto" animationType='slide'>
+            <Modal open={show} disableScrollLock={true}>
                 <div className="form-material"
-                    style={{ border: "2px solid red", borderRadius: "5px",marginTop:"-130px" }}>
-                    <button className="ModalClose" onClick={(e) => setShow(false)} style={{margin:"2px"}}>
+                    style={{ border: "2px solid red", borderRadius: "5px", marginTop: "150px", marginLeft: '450px', width: '400px' }}>
+                    <button className="ModalClose" onClick={(e) => setShow(false)} style={{ margin: "2px" }}>
                         <i className="icon-close s-24" style={{ color: "orange" }} />
                     </button>
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Vous le voulez pour quelle genre d'evenements ?</h3>
-                            <Select options={listOfEvents} placeholder="Choisir l'évenements"
+                            {/* <Select options={listOfEvents} placeholder="Choisir l'évenements"
                                 onChange={obj => {
                                     onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
-                                }} />
-                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4" style={{marginBottom:'5px'}}
+                                }} /> */}
+
+                            <ThemeProvider theme={defaultMaterialTheme}  >
+                                <FormControl style={{margin:'10px'}}>
+                                    <InputLabel id="demo-dialog-select-label" >Choisir l'évenements</InputLabel>
+                                    <NativeSelect
+                                        value={listOfEvents.value}
+                                        placeholder="Choisir un pays"
+                                        onChange={obj => {
+                                            onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
+                                        }}
+                                        // className={classes.select}
+                                        // classes={{ icon: classes.icon }}
+                                        inputProps={{
+                                            name: 'events',
+                                            id: 'age-native-helper',
+                                        }}
+
+                                    >
+                                        <option value="" />
+                                        {
+                                            listOfEvents.map((data) => ([
+                                                <option key={data.value} value={data.value}
+                                                    style={{ color: 'black' }}>{data.label}</option>
+                                            ]))
+                                        }
+
+                                    </NativeSelect>
+                                </FormControl>
+                            </ThemeProvider>
+                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4" style={{ marginBottom: '5px' }}
                                 onClick={() => {
                                     if (events) {
                                         setShow(false);
@@ -121,7 +191,7 @@ export const EventAndThematics = (
                     headerColor={lightModeOn ? 'white' : 'black'}
                     tabs={[
                         {
-                            tabName:(
+                            tabName: (
                                 < div >
                                     <h1 className="mb-2 text-primary">Nos Evenements</h1>
                                     <p className={lightModeOn ? "text-black" : "text-white"}>Voici tout les differentes enevements dans KantoBiz</p>
@@ -129,7 +199,7 @@ export const EventAndThematics = (
                             ),
 
 
-                            tabContent:(
+                            tabContent: (
                                 <div className="card-container">
                                     {generatorEventCard("card-left", "Mariage", "Mariage", "Un show pour vous rien que pour vous", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
                                     {generatorEventCard("card-top", "Fête traditionnelle", "Fête traditionnelle", "Un évènement particulier, des artistes particuliers", "https://images.pexels.com/photos/1011334/pexels-photo-1011334.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
@@ -145,19 +215,19 @@ export const EventAndThematics = (
 
                                 </div>
                             )
-                        },{
-                            tabName:(
+                        }, {
+                            tabName: (
                                 <div>
                                     <h1 className="mb-2 text-primary">Nos Thematiques/Univers</h1>
                                     <p className={lightModeOn ? "text-black" : "text-white"} >Voici tout les differentes univers dans KantoBiz</p>
                                 </div>
                             ),
-                            tabContent:(
+                            tabContent: (
                                 <div className="card-container">
                                     {generatorThematicCard("Cirque/Arts de la rue", "street_artists", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "acrobate, clown, cracheur de feu, dompteur Equilibriste, jongleur ...", "card-left")}
                                     {generatorThematicCard("Comédiens", "comedian", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Burlesque, Comédie, Conteur, Humoriste, expérimental ...", "card-left")}
                                     {generatorThematicCard("DJ", "dj", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Animateur, Mix, Live set, DJ Set", "card-bottom")}
-                                    {generatorThematicCard("Danseurs", "dancers", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Tango, kilalaky, batrelaky, Ndombolo, Kizomba ...","card-right")}
+                                    {generatorThematicCard("Danseurs", "dancers", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Tango, kilalaky, batrelaky, Ndombolo, Kizomba ...", "card-right")}
                                     {generatorThematicCard("Magiciens", "magician", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Close-ups, Mentalistes, Prestidigitateurs ...", "card-right")}
                                     {generatorThematicCard("Chanteur/Musicien", "artist_musician", "https://images.pexels.com/photos/668295/pexels-photo-668295.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Acapella, Afrobeat, Batrelaky, Reggae-muffin, Reggaeton ...", "card-right")}
                                     {generatorThematicCard("Beatmaking", "beatmaker", "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260", "Jazz, Pop, Rnb, Rap, Coupé-Décalé ...", "card-right")}
@@ -167,7 +237,7 @@ export const EventAndThematics = (
                             )
                         }
                     ]
-                }
+                    }
 
                 />
 

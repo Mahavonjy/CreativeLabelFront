@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import Modal from "react-awesome-modal";
 import InputRange from "react-input-range";
 import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
+// import Select from "react-select";
 import { toast } from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../../../assets/css/style/KantoBiz.css"
@@ -12,9 +11,67 @@ import { addFilterEventSelected, addSearchLoading, } from "../../../functionTool
 import { LoadingSearch } from "../../../functionTools/popupFields";
 import { checkValueIfExistInArray, generatePagination } from "../../../functionTools/tools";
 import Pagination from "../../../pagination/pagination";
+import { InputLabel, FormControl, MenuItem, Input, Modal, Select } from '@material-ui/core'
+import red from "@material-ui/core/colors/red";
+import { createMuiTheme, useTheme, ThemeProvider } from "@material-ui/core/styles";
+
+const defaultMaterialTheme = createMuiTheme({
+    overrides: {
+        MuiSelect:{
+            select: {
+                color: 'white',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom:'2px solid red',
+                '&.focus': {
+                    borderBottom:'2px solid red'
+                },
+            },
+            input: {
+                color: 'white',
+            },
+            icon: {
+                color: 'white',
+            }
+        },
+        MuiInputLabel: {
+            root: {
+                color: "white"
+            }
+        }
+    },
+    palette: {
+        primary: red
+    }
+
+});
+
+export const ITEM_HEIGHT = 38;
+
+export const ITEM_PADDING_TOP = 4;
+
+export const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+function getStyles(name, personName, theme) {
+    return {
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
 
 function Results(props) {
 
+    const theme = useTheme();
     const dispatch = useDispatch();
     const events_allowed = useSelector(state => state.Others.events_allowed);
     const loading = useSelector(state => state.KantobizSearch.loading);
@@ -33,6 +90,14 @@ function Results(props) {
     const [pageOfItems, setPageOfItems] = useState([]);
     const [filterOpened, setFilterOpened] = useState(false);
     const [thisComponentResults, setThisComponentResults] = useState([]);
+    const [state_events, setEvents] = useState([])
+
+    const updateEvents = obj => {
+        let tmp = obj.target.value
+        setEvents(tmp);
+        dispatch(addFilterEventSelected(tmp));
+
+    }
 
     Results.onScrollViewSearch = () => {
         searchRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -107,8 +172,8 @@ function Results(props) {
         <div className="row row-eq-height p-b-100">
             <ReactTooltip />
             {filterOpened &&
-                <Modal visible={true} width="500" height="auto" effect="fadeInUp">
-                    <div className="form-material bg-dark" style={{ border: "2px solid red", borderRadius: "5px" }}>
+                <Modal open={true} style={{ width: "400", height: "auto" }} disableScrollLock={true}>
+                    <div className="form-material bg-dark" style={{ border: "2px solid red", borderRadius: "5px", marginTop: "150px", marginLeft: '150px', width: '500px' }}>
                         <button className="ModalClose float-left" onClick={() => { setFilterOpened(false) }}>
                             <i className="icon-close s-24" style={{ color: "orange", margin: "2px" }} />
                         </button>
@@ -116,21 +181,41 @@ function Results(props) {
                             <div className="body">
                                 <h4 className="text-red text-center">Filtrer le résultat</h4>
                                 <div className="text-center ml-5 mr-5">
-                                    <label className="pb-3 pt-4">Évènement</label>
-                                    <Select isMulti
+                                    {/* <label className="pb-3 pt-4">Évènement</label> */}
+                                    {/* <Select isMulti
                                         options={events_type}
                                         placeholder="Choisir le/les thematics"
                                         onChange={obj => {
                                             let tmp = [];
                                             for (let row in obj) tmp.push(obj[row]["value"]);
                                             dispatch(addFilterEventSelected(tmp));
-                                        }}/>
+                                        }}/> */}
+                                    <ThemeProvider theme={defaultMaterialTheme}>
+                                        <FormControl style={{margin:'10px',width:'240px'}}>
+                                            <InputLabel id="demo-multiple-chip-label">Évènement</InputLabel>
+                                            <Select
+                                                labelId="demo-mutiple-name-label"
+                                                id="demo-mutiple-name"
+                                                multiple
+                                                value={state_events}
+                                                onChange={obj => updateEvents(obj)}
+                                                input={<Input />}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {events_type.map((data) => (
+                                                    <MenuItem key={data.index} value={data.value} style={getStyles(data, events_type, theme)}>
+                                                        {data.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </ThemeProvider>
                                 </div>
                                 <div className="text-center ml-5 mr-5">
                                     <label className="pb-3 pt-4">Prix de la prestation</label>
                                     {priceActive ?
-                                        <InputRange draggableTrack maxValue={filter_price["max"]}
-                                            minValue={filter_price["min"]} formatLabel={value => `${value} $`}
+                                        <InputRange draggableTrack maxValue={filter_price["min"]}
+                                            minValue={filter_price["max"]} formatLabel={value => `${value} $`}
                                             onChange={value => setPrice(value)} step={10}
                                             onChangeComplete={value => setPrice(value)}
                                             value={price} /> : <i className="icon icon-plus ml-2 text-red s-18"
