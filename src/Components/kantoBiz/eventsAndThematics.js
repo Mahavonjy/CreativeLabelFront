@@ -76,11 +76,11 @@ export const EventAndThematics = (
                 <div className="card-image">
                     <img alt={title} src={image} />
                 </div>
-                <div className="card-text text-center">
+                <div className="card-text text-center m-2">
                     <h4 className="text-red">{title}</h4>
                     <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
-                    <button className="btn btn-outline-info mt-1" onClick={() => searchService("events", key)}
-                            data-tip="Cliquer moi pour voir les prestations de cette évenement">Les prestations
+                    <button className="btn btn-outline-info mt-1" onClick={() => {setThematics(key); setShow(true);}}
+                            data-tip="Cliquer moi pour voir les prestations de cette univer">Les prestations
                     </button>
                 </div>
             </div>
