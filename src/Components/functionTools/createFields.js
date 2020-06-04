@@ -344,7 +344,7 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
 
                     <div className="zIndex99 relative">
                         <div className="mt-5 p-5 rounded" style={lightModeOn ? {backgroundColor: "rgba(255, 255, 255, 0.5)"} : {backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
-                            <h2 className="s-60 text-center text-primary font-weight-bold"> {Title} </h2>
+                            <h2 className="s-60 text-center text-primary"> {Title} </h2>
                             <p className={lightModeOn ? "s-18 text-center text-dark" : "s-18 text-center  text-white"}
                                dangerouslySetInnerHTML={{__html: Description}}/>
                         </div>

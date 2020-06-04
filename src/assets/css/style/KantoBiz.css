@@ -36,20 +36,29 @@
 .card-container {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
-    grid-auto-rows: 200px;
+    grid-template-columns: repeat(auto-fit, minmax(205px, 205px));
+    grid-auto-rows: 215px;
     grid-auto-flow: row dense;
-    grid-gap: 23px;
+    grid-gap: 15px;
     justify-content: center;
 }
 
-.card-top, .card-right, .card-bottom, .card-left {
+.theme-light .card-top, .theme-light .card-right, .theme-light .card-bottom, .theme-light .card-left {
     display: flex;
     flex-wrap: nowrap;
     height: 100%;
     width: 100%;
     border-radius: 95.2380952381px;
     box-shadow: 0px 3px 9px 1px rgba(0, 10, 20, 0.2);
+}
+
+.theme-dark .card-top, .theme-dark .card-right, .theme-dark .card-bottom, .theme-dark .card-left {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100%;
+    width: 100%;
+    border-radius: 95.2380952381px;
+    box-shadow: 0px 3px 9px 1px rgba(255, 255, 255, 0.2);
 }
 
 .card-top {

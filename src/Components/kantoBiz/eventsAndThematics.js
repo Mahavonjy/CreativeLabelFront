@@ -55,7 +55,7 @@ export const EventAndThematics = (
 
     const generatorEventCard = (position_name, key, title, desc, image) => {
         return (
-            <div className={position_name} style={{ margin: "20px" }}>
+            <div className={lightModeOn ? (position_name + " theme-light") : (position_name + " theme-dark")} style={{ margin: "20px" }}>
                 <div className="card-image">
                     <img alt={title} src={image} />
                 </div>
