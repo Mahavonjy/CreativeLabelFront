@@ -6,6 +6,7 @@ import {ToastContainer} from "react-toastify";
 import {sessionService} from 'redux-react-session';
 import "../../assets/css/app.css";
 import '../../assets/css/style/Home.css';
+import "../../assets/css/style/style.scss";
 import Conf from "../../config/tsconfig";
 import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
 import {CreateBeatsPlaylist, SideBars, SideBarsMain} from "../functionTools/createFields";
@@ -30,16 +31,16 @@ import {
     addTotalPrice,
     addUserCredentials,
     addUserNote,
-    beatsInitialisationPricing,
+    // beatsInitialisationPricing, // add if beatMaking is active
     changeUserGenreSelected,
     discoveryBeats,
     islBeats,
     latestBeats,
     newBeatMaker,
-    profileAddBeats,
+    // profileAddBeats, // add if beatMaking is active
     profileInitialisationBanking,
     profileInitialisationCondition,
-    profileInitialisationContract,
+    // profileInitialisationContract, // add if beatMaking is active
     profileInitialisationFollower,
     profileInitialisationFollowing,
     profileInitialisationInfo,
@@ -164,7 +165,8 @@ function HomeRoot() {
                 setLoading(false);
             })
         } else if (secondRouteParsing === "isl_artist_profile") {
-            axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}).then(resp => {
+            axios.get("api/profiles/check_other_profile/" + firstRouteParsing,
+                {headers: headers}).then(resp => {
                 dispatch(addOtherBeatMakerBeats(resp.data['user_beats']));
                 dispatch(addOtherUserOptions(resp.data['user_options']));
                 dispatch(addOtherUserService(resp.data['user_services']));
@@ -231,21 +233,6 @@ function HomeRoot() {
                 history.goBack();
                 setLoading(false);
                 return true
-            // } else if (routeParsed !== 'preference') {
-            //     axios.get("api/users/if_choice_user_status", {headers: headers}).then(() => {
-            //         fetchUserData()
-            //     }).catch(err => {
-            //         try {
-            //             if (err.response.data === "no choice music genre") {
-            //                 history.push("/preference");
-            //                 notOnline()
-            //             } else if (err.response.data === "token invalid") {
-            //                 logout().then(() => null)
-            //             } else notOnline()
-            //         } catch (e) {
-            //             history.push("/badConnexion");
-            //         }
-            //     });
             } else {
                 axios.get("api/users/if_token_valide", {headers: headers}).then(() => {
                     fetchUserData()
@@ -259,34 +246,43 @@ function HomeRoot() {
         }
     };
 
+    const insertUserData = (data) => {
+        new Promise(resolve => {
+            resolve(dispatch(addUserNote(data ? data['notes'] : '')));
+            resolve(dispatch(addPaymentHistory(data ? data['payment_history'] : [])));
+            resolve(dispatch(profileInitialisationInfo(data ? data['my_profile'] : '')));
+            resolve(dispatch(profileInitialisationRole(data ? data['role'] : '')));
+            resolve(dispatch(addAllUSerReservation(data ? data['reservations_list'] : [])));
+            resolve(dispatch(addAllUSerBookingReservation(data ? data['reservations_booking_list'] : [])));
+            resolve(dispatch(addAllUSerBookingReservation(data ? data['reservations_booking_list'] : [])));
+            resolve(dispatch(profileInitialisationFollower(data ? data['my_followers'] : '')));
+            resolve(dispatch(profileInitialisationFollowing(data ? data['my_followings'] : '')));
+            resolve(dispatch(profileInitialisationCondition(data ? data['conditions'] : {})));
+            resolve(dispatch(profileInitialisationBanking(data ? data['banking'] : {})));
+        }).then(r => {
+            if (!data) {
+                dispatch(addAllUserOptions([]));
+                dispatch(addAllUserPrestation([]));
+            }
+        });
+    };
+
     const fetchUserData = () => {
         Promise.all([
             axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
                 let payment_history = resp.data['payment_history'];
                 dispatchPayment(payment_history, dispatch);
-                new Promise(resolve => {
-                    resolve(dispatch(addUserNote(resp.data['notes'])));
-                    resolve(dispatch(addPaymentHistory(payment_history)));
-                    resolve(dispatch(profileInitialisationInfo(resp.data['my_profile'])));
-                    resolve(dispatch(profileInitialisationRole(resp.data['role'])));
-                    resolve(dispatch(addAllUSerReservation(resp.data['reservations_list'])));
-                    resolve(dispatch(addAllUSerBookingReservation(resp.data['reservations_booking_list'])));
-                    resolve(dispatch(addAllUSerBookingReservation(resp.data['reservations_booking_list'])));
-                    resolve(dispatch(profileInitialisationFollower(resp.data['my_followers'])));
-                    resolve(dispatch(profileInitialisationFollowing(resp.data['my_followings'])));
-                    resolve(dispatch(profileInitialisationCondition(resp.data['conditions'])));
-                    resolve(dispatch(profileInitialisationBanking(resp.data['banking'])));
-                }).then(r => null);
-                if (resp.data['role'] === "beatmaker") {
-                    Promise.all([
-                        axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-                            dispatch(profileAddBeats(resp.data['beats']));
-                        }).catch(err => ifConnectionError(err, fetchUserData)),
-                        axios.get("api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
-                            dispatch(profileInitialisationContract(resp.data));
-                        }).catch(err => ifConnectionError(err, fetchUserData))
-                    ]).then();
-                }
+                insertUserData(resp.data);
+                // if (resp.data['role'] === "beatmaker") {
+                //     Promise.all([
+                //         axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
+                //             dispatch(profileAddBeats(resp.data['beats']));
+                //         }).catch(err => ifConnectionError(err, fetchUserData)),
+                //         axios.get("api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
+                //             dispatch(profileInitialisationContract(resp.data));
+                //         }).catch(err => ifConnectionError(err, fetchUserData))
+                //     ]).then();
+                // }
                 FillInCartProps(headers, {
                     addTotalPrice: addTotalPrice,
                     addCarts: addCarts,
@@ -294,9 +290,9 @@ function HomeRoot() {
                     user_credentials: user_credentials
                 }).then(() => null);
             }).catch(err => ifConnectionError(err, fetchUserData)),
-            axios.get("api/beats/pricing", {headers: headers}).then(resp => {
-                dispatch(beatsInitialisationPricing(resp.data));
-            }).catch(err => ifConnectionError(err)),
+            // axios.get("api/beats/pricing", {headers: headers}).then(resp => {
+            //     dispatch(beatsInitialisationPricing(resp.data));
+            // }).catch(err => ifConnectionError(err)),
             axios.get("api/artist_services/my_services", {headers: headers}).then(resp => {
                 dispatch(addAllUserOptions(resp.data['user_options']));
                 dispatch(addAllUserPrestation(resp.data['user_services']));
@@ -316,11 +312,13 @@ function HomeRoot() {
         } catch (e) {
             //
         } finally {
+            setLogName("Se Connecter");
             await sessionService.deleteSession().then(async () => {
                 await sessionService.deleteUser().then(async () => {
-                    HomeRoot.beforeDataLoad().then(() => null);
-                }).catch(() => HomeRoot.beforeDataLoad().then(() => null))
-            }).catch(() => HomeRoot.beforeDataLoad().then(() => null))
+                    HomeRoot.beforeDataLoad().then(() => insertUserData());
+                }).catch(() => HomeRoot.beforeDataLoad().then(() => insertUserData()))
+            }).catch(() => HomeRoot.beforeDataLoad().then(() => insertUserData()));
+            setLogoutClass("icon icon-users-1 s-24 mr-5 text-red");
         }
     };
 
@@ -382,7 +380,7 @@ function HomeRoot() {
                 </Router>
                 <nav className="relative width-80 fixed fixed-top">
                     <a href="/#" data-toggle="push-menu"
-                       onClick={() => openSideBar ? setOpenSideBar(false): setOpenSideBar(true)}
+                       onClick={() => openSideBar ? setOpenSideBar(false) : setOpenSideBar(true)}
                        className="paper-nav-toggle pp-nav-toggle pl-2 ml-4"><i/>
                     </a>
                 </nav>

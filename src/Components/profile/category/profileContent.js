@@ -93,16 +93,16 @@ function ProfileContent(props) {
                     Gestion de Calendrier
                 </a>
             </li>}
-            {props.user_role === "beatmaker" &&
-            <li className="nav-item">
-                <a className="nav-link"
-                   data-toggle="tab"
-                   href="#beats-tab"
-                   role="tab"
-                   aria-selected="true">
-                    Beats & contrats
-                </a>
-            </li>}
+            {/*{props.user_role === "beatmaker" &&*/}
+            {/*<li className="nav-item">*/}
+            {/*    <a className="nav-link"*/}
+            {/*       data-toggle="tab"*/}
+            {/*       href="#beats-tab"*/}
+            {/*       role="tab"*/}
+            {/*       aria-selected="true">*/}
+            {/*        Beats & contrats*/}
+            {/*    </a>*/}
+            {/*</li>}*/}
             {props.user_role !== "professional_auditor" &&
             <li className="nav-item">
                 <a className="nav-link"
@@ -243,24 +243,24 @@ function ProfileContent(props) {
                                 <div className="tab-pane fade show active" id="Calendar-Management" role="tabpanel">
                                     <CalendarManagement headers={props.headers}/>
                                 </div>}
-                                {props.user_role === "beatmaker" &&
-                                <div className="tab-pane fade" id="beats-tab" role="tabpanel">
-                                    {props.state_user_beats.length !== 0 ?
-                                        <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl"
-                                             style={{height: 320}}>
-                                            {CreateBeatsPlaylist(
-                                                "user_profile",
-                                                "user_profile",
-                                                props,
-                                                states,
-                                                "user_profile"
-                                            )}
-                                        </div> :
-                                        <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
-                                            <p className="text-center pt-5 text-red">Pas de beat</p>
-                                        </div>}
-                                        <EditContractBeats headers={props.headers}/>
-                                </div>}
+                                {/*{props.user_role === "beatmaker" &&*/}
+                                {/*<div className="tab-pane fade" id="beats-tab" role="tabpanel">*/}
+                                {/*    {props.state_user_beats.length !== 0 ?*/}
+                                {/*        <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl"*/}
+                                {/*             style={{height: 320}}>*/}
+                                {/*            {CreateBeatsPlaylist(*/}
+                                {/*                "user_profile",*/}
+                                {/*                "user_profile",*/}
+                                {/*                props,*/}
+                                {/*                states,*/}
+                                {/*                "user_profile"*/}
+                                {/*            )}*/}
+                                {/*        </div> :*/}
+                                {/*        <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>*/}
+                                {/*            <p className="text-center pt-5 text-red">Pas de beat</p>*/}
+                                {/*        </div>}*/}
+                                {/*        <EditContractBeats headers={props.headers}/>*/}
+                                {/*</div>}*/}
                                 {props.user_role !== "professional_auditor" &&
                                 <div className="tab-pane fade" id="Prestations" role="tabpanel">
                                     <MyPrestations profile
@@ -290,13 +290,13 @@ function ProfileContent(props) {
                         {props.user_role !== "professional_auditor" &&
                         <div className="card-footer pb-2">
                             <div className="d-flex justify-content-between">
-                                {props.user_role === "beatmaker" &&
-                                <div className="align-self-center">
-                                    <button className="btn btn-outline-danger"
-                                            onClick={() => togglePopupAddSingle(0)}>
-                                        Ajouter un beat&nbsp;
-                                        <i className="icon-plus-circle"/></button>
-                                </div>}
+                                {/*{props.user_role === "beatmaker" &&*/}
+                                {/*<div className="align-self-center">*/}
+                                {/*    <button className="btn btn-outline-danger"*/}
+                                {/*            onClick={() => togglePopupAddSingle(0)}>*/}
+                                {/*        Ajouter un beat&nbsp;*/}
+                                {/*        <i className="icon-plus-circle"/></button>*/}
+                                {/*</div>}*/}
                                 <div className="align-self-center">
                                     <button className="btn btn-outline-danger"
                                             onClick={() => {props.setAddNewPrestation(true)}}>

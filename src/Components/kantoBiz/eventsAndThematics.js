@@ -48,7 +48,7 @@ export const EventAndThematics = (
                 await setStateResult(generatePagination(data, displayOne));
                 await dispatch(addKantoBizSearchResults(data));
                 await dispatch(addSearchLoading(false));
-                if (data.length === 0) toast.warn("pas de prestations");
+                if (data.length === 0) toast.warn("Pas de prestations trouvées");
                 else await Results.onScrollViewSearch();
             })
     };
@@ -135,7 +135,7 @@ export const EventAndThematics = (
                                     <p className={lightModeOn ? "text-black" : "text-white"}>Voici tout les differentes enevements dans KantoBiz</p>
                                 </div>
                             ),
-                            
+
 
                             tabContent:(
                                 <div className="card-container">
@@ -186,7 +186,7 @@ export const EventAndThematics = (
             {/* <div className="thematics pt-5">
                 <Tabs
 
-                    
+
                 />
 
             </div> */}
