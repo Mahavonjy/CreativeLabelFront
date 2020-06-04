@@ -4,11 +4,11 @@ import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import "../../assets/css/style/KantoBiz.css";
-import "../../assets/css/app.css";
 import {CreativeHeaders} from "../functionTools/createFields";
 import {activeEventAndThematicsPage, activeResultPage, addServiceToShow} from "../functionTools/functionProps";
 import {EventAndThematics as EventAndThematics_} from "./eventsAndThematics";
 import Results from "./prestations/results/results";
+
 
 function KantoBiz(props) {
 
@@ -64,7 +64,6 @@ function KantoBiz(props) {
     };
 
     useEffect(() => {
-
         if (results.length > 0)
             if (!resultsPage) next();
 
