@@ -381,7 +381,7 @@ function HomeRoot() {
                 <nav className="relative width-80 fixed fixed-top">
                     <a href="/#" data-toggle="push-menu"
                        onClick={() => openSideBar ? setOpenSideBar(false) : setOpenSideBar(true)}
-                       className="paper-nav-toggle pp-nav-toggle pl-2 ml-4"><i/>
+                       className="paper-nav-toggle pp-nav-toggle pl-0 ml-4"><i/>
                     </a>
                 </nav>
                 {isPlaying && <IslPlayer key={key}/>}

@@ -272,8 +272,8 @@ function DisplayPrestation(props) {
                                                 onClick={!props.read && validReservation}>Réserver
                                         </button>
                                     </div>
-                                    <div className="mb-4 card">
-                                        <div className="flex-grow-0 text-center pb-3">
+                                    <div className="mb-4 card" style={{boxShadow:"rbga(255,0,0,0.2)"}} >
+                                        <div className="flex-grow-0 text-center pb-3" >
                                             <h2 className="col text-primary pb-3">Plus de détails</h2>
                                             <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique d’annulation
                                                 :</strong> {service_to_show.refund_policy}&nbsp;<i
