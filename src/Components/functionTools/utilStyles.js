@@ -1,10 +1,110 @@
 import red from "@material-ui/core/colors/red";
-import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
+import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
 
 export const defaultMaterialTheme = createMuiTheme({
+    overrides: {
+        MuiNativeSelect: {
+            select: {
+                color: 'white',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom:'2px solid red',
+                '&.focus': {
+                    borderBottom:'2px solid red'
+                },
+            },
+            input: {
+                color: 'white',
+
+
+            },
+            icon: {
+                color: 'white',
+            }
+        },
+        MuiInputLabel: {
+            root: {
+                color: "white"
+            }
+        },
+        MuiSelect:{
+            select: {
+                color: 'white',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom:'2px solid red',
+                '&.focus': {
+                    borderBottom:'2px solid red'
+                },
+            },
+            input: {
+                color: 'white',
+
+
+            },
+            icon: {
+                color: 'white',
+            }
+        }
+    },
     palette: {
         primary: red,
+    }
+});
+
+export const defaultMaterialTheme1 = createMuiTheme({
+    overrides: {
+        MuiNativeSelect: {
+            select: {
+                color: 'black',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom:'2px solid black',
+                '&.focus': {
+                    borderBottom:'2px solid black'
+                },
+            },
+            input: {
+                color: 'white',
+
+
+            },
+            icon: {
+                color: 'black',
+            }
+        },
+        MuiInputLabel: {
+            root: {
+                color: "black"
+            }
+        },
+        MuiSelect:{
+            select: {
+                color: 'black',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom:'2px solid black',
+                '&.focus': {
+                    borderBottom:'2px solid black'
+                },
+            },
+            input: {
+                color: 'white',
+
+
+            },
+            icon: {
+                color: 'black',
+            }
+        }
     },
+    palette: {
+        primary: red,
+    }
 });
 
 export const useStyles = makeStyles((theme) => ({
@@ -34,7 +134,7 @@ export const useStyles = makeStyles((theme) => ({
         },
     },
     root2: {
-        borderBottom: '2px solid red'
+        borderBottom: '2px solid black'
     },
     input: {
         color: 'white',
