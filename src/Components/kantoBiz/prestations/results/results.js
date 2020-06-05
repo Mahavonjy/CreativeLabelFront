@@ -126,7 +126,7 @@ function Results(props) {
                                             dispatch(addFilterEventSelected(tmp));
                                         }}/>
                                 </div>
-                                <div className="text-center ml-5 mr-5">
+                                <div className="text-center text-red ml-5 mr-5">
                                     <label className="pb-3 pt-4">Prix de la prestation</label>
                                     {priceActive ?
                                         <InputRange draggableTrack maxValue={filter_price["max"]}
@@ -137,7 +137,7 @@ function Results(props) {
                                                 onClick={() => setPriceActive(true)}
                                                 data-tip="filtrer pas prix ?" />}
                                 </div>
-                                <div className="text-center ml-5 mr-5">
+                                <div className="text-center text-red ml-5 mr-5">
                                     <label className={priceActive ? "pb-3 pt-4" : ''}>Notation (nombre d'étoile)</label>
                                     {startsActive ?
                                         <InputRange draggableTrack maxValue={5} minValue={0}
