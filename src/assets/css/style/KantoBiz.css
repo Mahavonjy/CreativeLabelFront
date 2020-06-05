@@ -13,6 +13,11 @@
     background-image: linear-gradient(to top, #ed1c24, #b2102d, #77132a, #3d121d, #000000);
 }
 
+.carousel-inner img {
+
+    max-height: 350px;
+}
+
 .search-bar {
     border-radius: 15px;
     background-color: #0c101b !important;
@@ -39,7 +44,7 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 250px));
     grid-auto-rows: 217px;
     grid-auto-flow: row dense;
-    grid-gap: 25px;
+    grid-gap: 17px;
     justify-content: center;
 }
 

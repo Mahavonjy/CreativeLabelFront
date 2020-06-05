@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
-import Modal from "react-awesome-modal";
+// import Modal from "react-awesome-modal";
+import Modal from '@material-ui/core/Modal'
 import Select from "react-select";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
@@ -13,6 +14,46 @@ import {
 import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../functionTools/tools";
 import Results from "./prestations/results/results";
 import KantoTabs from './tabs';
+import { InputLabel, FormControl, NativeSelect } from '@material-ui/core'
+import red from "@material-ui/core/colors/red";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+
+const defaultMaterialTheme = createMuiTheme({
+    overrides: {
+        MuiNativeSelect: {
+            select: {
+                color: 'white',
+                textDecoration: 'black',
+            },
+            root: {
+                borderBottom: '2px solid red',
+                '&.focus': {
+                    borderButtom: '2px solid white'
+                },
+                textDecoration:'white'
+            },
+            input: {
+                color: 'white',
+
+
+            },
+            icon: {
+                color: 'white',
+            }
+        },
+        MuiInputLabel:{
+            root:{
+                color:"white"
+            }
+        }
+    },
+    palette:{
+        primary:red
+    }
+
+});
+
+
 
 export const EventAndThematics = (
     headers,
@@ -93,18 +134,45 @@ export const EventAndThematics = (
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Vous le voulez pour quelle genre d'evenements ?</h3>
-                            <Select options={listOfEvents} placeholder="Choisir l'évenements"
-                                    onChange={obj => {
-                                        onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
-                                    }}/>
-                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4"
-                                    style={{marginBottom: '5px'}}
-                                    onClick={() => {
-                                        if (events) {
-                                            setShow(false);
-                                            searchService("thematics", thematics).then(r => null);
-                                        } else toast.error("Veuillez selectionner l'evenement")
-                                    }}>Envoyer
+                            {/* <Select options={listOfEvents} placeholder="Choisir l'évenements"
+                                onChange={obj => {
+                                    onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
+                                }} /> */}
+                            <ThemeProvider theme={defaultMaterialTheme}  >
+                                <FormControl style={{margin:'10px'}}>
+                                    <InputLabel id="demo-dialog-select-label" >Choisir l'évenements</InputLabel>
+                                    <NativeSelect
+                                        value={listOfEvents.value}
+                                        placeholder="Choisir un pays"
+                                        onChange={obj => {
+                                            onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
+                                        }}
+                                        // className={classes.select}
+                                        // classes={{ icon: classes.icon }}
+                                        inputProps={{
+                                            name: 'events',
+                                            id: 'age-native-helper',
+                                        }}
+
+                                    >
+                                        <option value="" />
+                                        {
+                                            listOfEvents.map((data) => ([
+                                                <option key={data.value} value={data.value}
+                                                    style={{ color: 'black' }}>{data.label}</option>
+                                            ]))
+                                        }
+
+                                    </NativeSelect>
+                                </FormControl>
+                            </ThemeProvider>
+                            <button className="btn btn-outline-success btn-sm pl-5 pr-5 mt-4" style={{ marginBottom: '5px' }}
+                                onClick={() => {
+                                    if (events) {
+                                        setShow(false);
+                                        searchService("thematics", thematics).then(r => null);
+                                    } else toast.error("Veuillez selectionner l'evenement")
+                                }}>Envoyer
                             </button>
                         </div>
                     </div>
@@ -124,7 +192,6 @@ export const EventAndThematics = (
                                     </p>
                                 </div>
                             ),
-
                             tabContent: (
                                 <div className="card-container">
                                     {generatorCard(
@@ -152,7 +219,6 @@ export const EventAndThematics = (
                                         "Pour une animation réussie",
                                         "https://images.pexels.com/photos/220072/pexels-photo-220072.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")}
                                     {generatorCard(
-
                                         "card-right",
                                         "Festival et défilé",
                                         "Festival & défilé",

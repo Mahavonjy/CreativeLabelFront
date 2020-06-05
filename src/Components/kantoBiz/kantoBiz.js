@@ -9,6 +9,7 @@ import {activeEventAndThematicsPage, activeResultPage, addServiceToShow} from ".
 import {EventAndThematics as EventAndThematics_} from "./eventsAndThematics";
 import Results from "./prestations/results/results";
 
+
 function KantoBiz(props) {
 
     const history = useHistory();
@@ -63,7 +64,6 @@ function KantoBiz(props) {
     };
 
     useEffect(() => {
-
         if (results.length > 0)
             if (!resultsPage) next();
 

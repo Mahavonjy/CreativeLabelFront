@@ -31,6 +31,8 @@ import {addAllUserOptions, activeThemeLight, addNewPlayerList} from "./functionP
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
 import "../../assets/css/style/style.scss";
+import Carousel from "react-bootstrap/Carousel";
+import { MDBCarousel, MDBCarouselInner, MDBCarouselItem, MDBView, MDBContainer } from "mdbreact";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -301,7 +303,8 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
 export const DisplayArtist = (artist_info, user_credentials) => {
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
     return (
-        <ul className={"playlist scrollbar-isl list-group " + (lightModeOn ? "bg-white" : "bg-dark") + " list-group-flush scrollbar-isl"} style={{height: 428}}>
+        <ul className={"playlist scrollbar-isl list-group " + (lightModeOn ? "bg-white" : "bg-dark") + " list-group-flush scrollbar-isl"}
+            style={{height: 428}}>
             {artist_info.length !== 0 ? artist_info.map((val, index) =>
                 <li className="list-group-item" key={index}>
                     <div className="d-flex align-items-center">
@@ -329,42 +332,67 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
     return (
         <div>
-            <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
-                <div className="carousel-inner" style={{height: "auto"}}>
-
-                    <div className="carousel-item d-none d-sm-block active" style={{height: 350}}>
-                        <img className="d-block w-100 zIndex-1" src={firstBlockImg} alt=""/>
-                    </div>
-                    <div className="carousel-item d-none d-sm-block" style={{height: 350}}>
-                        <img className="d-block w-100 zIndex-1" src={secondBlockImg} alt=""/>
-                    </div>
-                    <div className="carousel-item d-none d-sm-block" style={{height: 350}}>
-                        <img className="d-block w-100 zIndex-1" src={thirdBlockImg} alt=""/>
-                    </div>
-
-                    <div className="zIndex99 relative">
-                        <div className="mt-5 p-5 rounded" style={lightModeOn ? {backgroundColor: "rgba(255, 255, 255, 0.5)"} : {backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
-                            <h2 className="s-60 text-center text-primary"> {Title} </h2>
-                            <p className={lightModeOn ? "s-18 text-center text-dark" : "s-18 text-center  text-white"}
-                               dangerouslySetInnerHTML={{__html: Description}}/>
+                <MDBCarousel
+                    activeItem={1}
+                    length={3}
+                    showControls={false}
+                    showIndicators={false}
+                    className="z-depth-1"
+                    slide
+                >
+                    <MDBCarouselInner>
+                        <MDBCarouselItem itemId="1" className="d-none d-sm-block active">
+                            <MDBView>
+                                <img
+                                    className="d-block w-100 zIndex-1"
+                                    src={firstBlockImg}
+                                    alt=""
+                                />
+                            </MDBView>
+                        </MDBCarouselItem>
+                        <MDBCarouselItem itemId="2" className="d-none d-sm-block active">
+                            <MDBView>
+                                <img
+                                    className="d-block w-100 zIndex-1"
+                                    src={secondBlockImg}
+                                    alt=""
+                                />
+                            </MDBView>
+                        </MDBCarouselItem>
+                        <MDBCarouselItem itemId="3" className="d-none d-sm-block active">
+                            <MDBView>
+                                <img
+                                    className="d-block w-100 zIndex-1"
+                                    src={thirdBlockImg}
+                                    alt=""
+                                />
+                            </MDBView>
+                        </MDBCarouselItem>
+                        <div className="zIndex99 relative">
+                            <div className="mt-5 p-5 rounded"
+                                 style={lightModeOn ? {backgroundColor: "rgba(255, 255, 255, 0.5)"} : {backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
+                                <h2 className="s-60 text-center text-primary"> {Title} </h2>
+                                <p className={lightModeOn ? "s-18 text-center text-dark" : "s-18 text-center  text-white"}
+                                   dangerouslySetInnerHTML={{__html: Description}}/>
+                            </div>
                         </div>
-                    </div>
 
-                    {!auth &&
-                    <div className="absolute p-2 zIndex99" style={{right: 0, bottom: 0}}>
-                        <button className="btn btn-outline-primary m-2 r-5"
-                                onClick={() => document.getElementById("LoginRequire").click()}>
-                            <i className="icon icon-user-secret"/>S'identifier
-                        </button>
-                        <button className="btn btn-outline-primary m-2 r-5"
-                                onClick={async () => {
-                                    history.push("/register");
-                                    HomeRoot.beforeDataLoad().then(() => null);
-                                }}><i className="icon icon-user-plus"/>Créer votre compte
-                        </button>
-                    </div>}
-                </div>
-            </div>
+                        {!auth &&
+                        <div className="absolute p-2 zIndex99" style={{right: 0, bottom: 0}}>
+                            <button className="btn btn-outline-primary m-2 r-5"
+                                    onClick={() => document.getElementById("LoginRequire").click()}>
+                                <i className="icon icon-user-secret"/>S'identifier
+                            </button>
+                            <button className="btn btn-outline-primary m-2 r-5"
+                                    onClick={async () => {
+                                        history.push("/register");
+                                        HomeRoot.beforeDataLoad().then(() => null);
+                                    }}><i className="icon icon-user-plus"/>Créer votre compte
+                            </button>
+                        </div>}
+                    </MDBCarouselInner>
+                </MDBCarousel>
+
             {Title === "Creative kantoBiz"
             && <SearchBar next={next}
                           headers={headers}
@@ -643,8 +671,8 @@ export const LightModeToggle = () => {
     return (
         <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={isLightOn}
               onClick={() => {
-                setIsLightOn(!isLightOn)
-                dispatch(activeThemeLight(!isLightOn))
+                  setIsLightOn(!isLightOn)
+                  dispatch(activeThemeLight(!isLightOn))
               }}
               aria-hidden="true"/>
 
