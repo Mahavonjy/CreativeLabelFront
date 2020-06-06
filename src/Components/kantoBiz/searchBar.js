@@ -295,7 +295,7 @@ function SearchBar(props) {
                 </ThemeProvider>
                 <FormControl className={classes.formControl}
                     classes={lightModeOn ? { root: classes.root2 } : { root: classes.root }}>
-                    <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale} theme={defaultMaterialTheme}>
+                    <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale} >
                         <ThemeProvider theme={defaultMaterialTheme}>
                             <Grid container justify="space-around">
                                 <KeyboardDatePicker

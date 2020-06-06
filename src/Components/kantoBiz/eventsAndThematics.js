@@ -15,44 +15,8 @@ import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../f
 import Results from "./prestations/results/results";
 import KantoTabs from './tabs';
 import { InputLabel, FormControl, NativeSelect } from '@material-ui/core'
-import red from "@material-ui/core/colors/red";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-
-const defaultMaterialTheme = createMuiTheme({
-    overrides: {
-        MuiNativeSelect: {
-            select: {
-                color: 'white',
-                textDecoration: 'black',
-            },
-            root: {
-                borderBottom: '2px solid red',
-                '&.focus': {
-                    borderButtom: '2px solid white'
-                },
-                textDecoration:'white'
-            },
-            input: {
-                color: 'white',
-
-
-            },
-            icon: {
-                color: 'white',
-            }
-        },
-        MuiInputLabel:{
-            root:{
-                color:"white"
-            }
-        }
-    },
-    palette:{
-        primary:red
-    }
-
-});
-
+import { ThemeProvider } from "@material-ui/core/styles";
+import {defaultEventTheme} from '../functionTools/utilStyles'
 
 
 export const EventAndThematics = (
@@ -125,9 +89,9 @@ export const EventAndThematics = (
     return (
         <div className="p-b-100">
             <ReactTooltip/>
-            <Modal visible={show} width="400" height="auto" animationType='slide'>
+            <Modal open={show} width="400" height="auto" animationType='slide'>
                 <div className="form-material"
-                     style={{border: "2px solid red", borderRadius: "5px", marginTop: "-130px"}}>
+                     style={{border: "2px solid red", borderRadius: "5px",marginLeft:'470px' , marginTop: "170px",width:'400px'}}>
                     <button className="ModalClose" onClick={(e) => setShow(false)} style={{margin: "2px"}}>
                         <i className="icon-close s-24" style={{color: "orange"}}/>
                     </button>
@@ -138,7 +102,7 @@ export const EventAndThematics = (
                                 onChange={obj => {
                                     onChangeListWithValueLabel(setEvents, obj, dispatch, changeEventsToSearch)
                                 }} /> */}
-                            <ThemeProvider theme={defaultMaterialTheme}  >
+                            <ThemeProvider theme={defaultEventTheme}  >
                                 <FormControl style={{margin:'10px'}}>
                                     <InputLabel id="demo-dialog-select-label" >Choisir l'évenements</InputLabel>
                                     <NativeSelect

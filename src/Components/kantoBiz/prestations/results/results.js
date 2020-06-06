@@ -7,45 +7,13 @@ import ReactTooltip from 'react-tooltip';
 import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
 import { addFilterEventSelected, addSearchLoading, } from "../../../functionTools/functionProps";
-// import {changeInitialized} from "../../../functionTools/functionProps";
 import { LoadingSearch } from "../../../functionTools/popupFields";
 import { checkValueIfExistInArray, generatePagination } from "../../../functionTools/tools";
 import Pagination from "../../../pagination/pagination";
-import { InputLabel, FormControl, MenuItem, Input, Modal, Select } from '@material-ui/core'
-import red from "@material-ui/core/colors/red";
-import { createMuiTheme, useTheme, ThemeProvider } from "@material-ui/core/styles";
+import { InputLabel, FormControl, MenuItem, Input, Modal, Select } from '@material-ui/core';
+import { useTheme, ThemeProvider } from "@material-ui/core/styles";
+import {defaultResultTheme} from "../../../functionTools/utilStyles";
 
-const defaultMaterialTheme = createMuiTheme({
-    overrides: {
-        MuiSelect:{
-            select: {
-                color: 'white',
-                textDecoration: 'black',
-            },
-            root: {
-                borderBottom:'2px solid red',
-                '&.focus': {
-                    borderBottom:'2px solid red'
-                },
-            },
-            input: {
-                color: 'white',
-            },
-            icon: {
-                color: 'white',
-            }
-        },
-        MuiInputLabel: {
-            root: {
-                color: "white"
-            }
-        }
-    },
-    palette: {
-        primary: red
-    }
-
-});
 
 export const ITEM_HEIGHT = 38;
 
@@ -190,7 +158,7 @@ function Results(props) {
                                             for (let row in obj) tmp.push(obj[row]["value"]);
                                             dispatch(addFilterEventSelected(tmp));
                                         }}/> */}
-                                    <ThemeProvider theme={defaultMaterialTheme}>
+                                    <ThemeProvider theme={defaultResultTheme}>
                                         <FormControl style={{margin:'10px',width:'240px'}}>
                                             <InputLabel id="demo-multiple-chip-label">Évènement</InputLabel>
                                             <Select
@@ -214,8 +182,8 @@ function Results(props) {
                                 <div className="text-center text-red ml-5 mr-5">
                                     <label className="pb-3 pt-4">Prix de la prestation</label>
                                     {priceActive ?
-                                        <InputRange draggableTrack maxValue={filter_price["min"]}
-                                            minValue={filter_price["max"]} formatLabel={value => `${value} $`}
+                                        <InputRange draggableTrack maxValue={filter_price["max"]}
+                                            minValue={filter_price["min"]} formatLabel={value => `${value} $`}
                                             onChange={value => setPrice(value)} step={10}
                                             onChangeComplete={value => setPrice(value)}
                                             value={price} /> : <i className="icon icon-plus ml-2 text-red s-18"

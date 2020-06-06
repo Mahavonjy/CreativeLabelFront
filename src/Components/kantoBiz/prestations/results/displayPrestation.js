@@ -1,12 +1,13 @@
 import axios from "axios";
+import DateFnsUtils from "@date-io/date-fns";
 import dateFormat from 'dateformat';
-import {MDBRating} from "mdbreact";
-import React, {useEffect, useRef, useState} from "react";
-import {FacebookProvider, Feed} from "react-facebook";
-import {useDispatch, useSelector} from "react-redux";
-import {useHistory} from "react-router-dom";
+import { MDBRating } from "mdbreact";
+import React, { useEffect, useRef, useState } from "react";
+import { FacebookProvider, Feed } from "react-facebook";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 // import StarRatings from 'react-star-ratings';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
 import Conf from "../../../../config/tsconfig";
@@ -25,7 +26,22 @@ import {
     checkValueIfExistInArray,
     formatDate
 } from "../../../functionTools/tools";
-import Calendar from "../../calendar/calendar";
+// import Calendar from "../../calendar/calendar";
+import {TextField} from '@material-ui/core';
+import format from "date-fns/format";
+import frLocale from "date-fns/locale/fr";
+import { ThemeProvider} from '@material-ui/core/styles';
+import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker} from "@material-ui/pickers";
+import AddLocation from '@material-ui/icons/AddLocation';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
+import { defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight } from "../../../functionTools/utilStyles";
+
+class LocalizedUtils extends DateFnsUtils {
+    getDatePickerHeaderText(date) {
+        return format(date, "d MMM yyyy", { locale: this.locale });
+    }
+}
 
 function DisplayPrestation(props) {
 
@@ -49,9 +65,11 @@ function DisplayPrestation(props) {
     const [isl_amount, setIslAmount] = useState(0);
     const [total_amount, setTotalAmount] = useState(0);
     // const [rating, setRating] = useState(1);
+    const [startDate,setDate] = useState();
+
 
     const onScrollViewSearch = () => {
-        paymentRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
+        paymentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     const validReservation = async () => {
@@ -69,7 +87,7 @@ function DisplayPrestation(props) {
 
     const addOption = async (value) => {
         let tmp = [...list_of_options_added];
-        let tmpService = {...service_to_show};
+        let tmpService = { ...service_to_show };
         tmpService.price += value.price;
         if (!checkValueIfExistInArray(value.id, tmp)) {
             tmp.push(value.id);
@@ -81,7 +99,7 @@ function DisplayPrestation(props) {
 
     const removeOption = async (value) => {
         let tmp = [];
-        let tmpService = {...service_to_show};
+        let tmpService = { ...service_to_show };
         Promise.all(list_of_options_added.map(elem => {
             if (elem !== value.id) tmp.push(value.id);
             else tmpService.price -= value.price;
@@ -97,13 +115,13 @@ function DisplayPrestation(props) {
 
         setEventDate(dateFormat(date_to_search, "yyyy-mm-dd"));
         axios.post("api/reservation/check_total_price",
-            {price: service_to_show.price},
-            {headers: props.headers}).then((resp) => {
-            setTva(resp.data["tva"]);
-            setHtPrice(resp.data["ht_price"]);
-            setIslAmount(resp.data["isl_amount"]);
-            setTotalAmount(resp.data["total_amount"])
-        });
+            { price: service_to_show.price },
+            { headers: props.headers }).then((resp) => {
+                setTva(resp.data["tva"]);
+                setHtPrice(resp.data["ht_price"]);
+                setIslAmount(resp.data["isl_amount"]);
+                setTotalAmount(resp.data["total_amount"])
+            });
 
         return () => {
             isMounted.current = true
@@ -111,27 +129,29 @@ function DisplayPrestation(props) {
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [service_to_show, profile_info, date_to_search]);
 
+    const [date, changeDate] = useState(new Date());
+
     return (
         <div className="Base pt-5 p-b-100 zIndex-1">
-            <ReactTooltip/>
+            <ReactTooltip />
             <ReactTooltip className="special-color-dark" id='refund' aria-haspopup='true'>
-                <h5 className="text-center text-green"> Details des rembouresement </h5><br/>
+                <h5 className="text-center text-green"> Details des rembouresement </h5><br />
                 <h6 className="text-center text-info"> Rembouresement flexible</h6>
                 <small>• Si l’utilisateur annule jusqu à 7 jours avant le début de la représentation il est remboursé à
-                    100%. </small><br/>
+                    100%. </small><br />
                 <small>• Si l’utilisateur annule moins de 7 jours avant la représentation il est remboursé à
-                    50% </small><br/><br/>
+                    50% </small><br /><br />
                 <h6 className="text-center text-info"> Rembouresement stricte</h6>
                 <small>• Si l’utilisateur annule jusqu’à 7 jours avant le début de la représentation, il est remboursé à
-                    50%</small><br/>
+                    50%</small><br />
                 <small>• Si l’utilisateur annule moins de 7 jours avant la représentation, il n’y a pas de
-                    remboursement.</small><br/><br/>
+                    remboursement.</small><br /><br />
             </ReactTooltip>
             <ReactTooltip className="special-color-dark" id='option' aria-haspopup='true'>
-                <h5 className="text-center text-green"> Explication des options </h5><br/>
+                <h5 className="text-center text-green"> Explication des options </h5><br />
                 <small>• Quelque option en plus de la prestation d'origine que l'artist propose pour amelioré le
-                    show </small><br/>
-                <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br/><br/>
+                    show </small><br />
+                <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br /><br />
             </ReactTooltip>
             <div className="profile-page">
                 <button
@@ -141,12 +161,12 @@ function DisplayPrestation(props) {
                             history.push("/profile");
                         else history.push("/kantoBiz");
                     }}
-                    style={{position: "fixed", bottom: "5%", zIndex: 99}}
+                    style={{ position: "fixed", bottom: "5%", zIndex: 99 }}
                     className="btn-custom btn-outline-light border-bottom-0 border-right-0">
-                    <i className="icon icon-long-arrow-left s-24 align-middle"/>&nbsp;Precedent
+                    <i className="icon icon-long-arrow-left s-24 align-middle" />&nbsp;Precedent
                 </button>
                 <div className="page-header header-filter border1" data-parallax="true"
-                     style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}}/>
+                    style={{ backgroundImage: 'url(' + service_to_show.galleries[0] + ')' }} />
                 <div
                     className={lightModeOn ? "main bg-white main-raised ml-3 mr-3" : "main bg-dark main-raised ml-3 mr-3"}>
                     <div className="profile-content">
@@ -158,7 +178,7 @@ function DisplayPrestation(props) {
                                             src={service_to_show.galleries.length > 1
                                                 ? service_to_show.galleries[1]
                                                 : service_to_show.galleries[0]}
-                                            alt="Circle" className="img-raised rounded-circle img-fluid"/>
+                                            alt="Circle" className="img-raised rounded-circle img-fluid" />
                                     </div>
                                     <div className="name pt-5">
                                         <h3 className="title text-red text-center"
@@ -170,18 +190,18 @@ function DisplayPrestation(props) {
 
                                         <div className="m-2">
                                             <i className="icon icon-instagram text-red"
-                                               data-tip="Partager Cette Prestation sur Instagram"/>
+                                                data-tip="Partager Cette Prestation sur Instagram" />
                                             <FacebookProvider appId={Conf.configs.FacebookId} debug>
                                                 <Feed link={"http://" + window.location.host + "/kantoBiz"}>
-                                                    {({handleClick}) => (
+                                                    {({ handleClick }) => (
                                                         <i className="icon icon-facebook text-red"
-                                                           onClick={handleClick}
-                                                           data-tip="Partager Cette Prestation sur facebook"/>
+                                                            onClick={handleClick}
+                                                            data-tip="Partager Cette Prestation sur facebook" />
                                                     )}
                                                 </Feed>
                                             </FacebookProvider>
                                             <i className="icon icon-twitter text-red"
-                                               data-tip="Partager Cette Prestation sur Twitter"/>
+                                                data-tip="Partager Cette Prestation sur Twitter" />
                                         </div>
                                     </div>
                                 </div>
@@ -190,10 +210,10 @@ function DisplayPrestation(props) {
                                 <p data-tip="Description">{service_to_show.description}</p>
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
                                     <MDBRating iconFaces iconSize='2x' iconRegular
-                                               containerClassName="justify-content-center"
-                                               fillColors={[
-                                                   'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
-                                               ]}
+                                        containerClassName="justify-content-center"
+                                        fillColors={[
+                                            'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
+                                        ]}
                                     />
                                     {/*<StarRatings rating={service_to_show.notes} starRatedColor="red"*/}
                                     {/*             numberOfStars={5} starDimension="20px"*/}
@@ -203,18 +223,18 @@ function DisplayPrestation(props) {
                             </div>
                             <div className="row text-center pt-5">
                                 <div className="col-md-4">
-                                    <div className="mb-4 p-1 rounded" style={{border: "dashed 1px white"}}>
+                                    <div className="mb-4 p-1 rounded" style={{ border: "dashed 1px white" }}>
                                         <h2 className="text-red border-bottom">Details de la reservations</h2>
                                         <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Prix
                                             HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info"
-                                                                                 data-tip="Ceci est le prix HT"/></h3>
+                                                data-tip="Ceci est le prix HT" /></h3>
                                         <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Tva
                                             (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info"
-                                                                               data-tip="Ceci est le tva du prix HT"/>
+                                                data-tip="Ceci est le tva du prix HT" />
                                         </h3>
                                         <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Prix
                                             TTC:</small>&nbsp;{total_amount}$&nbsp;<i
-                                            className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/></h3>
+                                                className="icon text-red icon-info" data-tip="Ceci est le prix TTC" /></h3>
                                     </div>
                                     <div className="mb-4 card">
                                         <div className="flex-grow-0 text-center pb-3">
@@ -222,30 +242,56 @@ function DisplayPrestation(props) {
                                                 : {service_to_show.preparation_time}
                                                 {checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;
                                                 <i className="icon icon-info"
-                                                   data-tip="Ceci est le temps de preparation de l'artiste"/></h4>
+                                                    data-tip="Ceci est le temps de preparation de l'artiste" /></h4>
                                             <h4 className="col text-primary">Durée de la prestation
                                                 : {service_to_show.duration_of_the_service}
                                                 {checkUnitKey(service_to_show.unit_duration_of_the_service)}&nbsp;
                                                 <i className="icon icon-info"
-                                                   data-tip="Ceci est le durée de l'evenement"/></h4>
+                                                    data-tip="Ceci est le durée de l'evenement" /></h4>
                                             <div className="col pt-2 pb-2">
                                                 <div className="custom-float">
                                                     <div className="input-group-prepend d-inline-block center">
                                                         <div className="input-group-text text-dark">
-                                                            <i className="icon-clock-1"/>&nbsp;Date de l'évènement
+                                                            <i className="icon-clock-1" />&nbsp;Date de l'évènement
                                                             *&nbsp;<i className="icon icon-info"
-                                                                      data-tip="Indiquer la date et l'heure de l'évènement"/>
+                                                                data-tip="Indiquer la date et l'heure de l'évènement" />
                                                         </div>
-                                                        <input type="date" value={event_date} className="form-control"
-                                                               onChange={
-                                                                   (date) =>
-                                                                       ChangeDate(
-                                                                           date,
-                                                                           setEventDate,
-                                                                           dispatch,
-                                                                           changeDateToSearch
-                                                                       )
-                                                               }/>
+                                                        {/* <input type="date" value={event_date} className="form-control"
+                                                            onChange={
+                                                                (date) =>
+                                                                    ChangeDate(
+                                                                        date,
+                                                                        setEventDate,
+                                                                        dispatch,
+                                                                        changeDateToSearch
+                                                                    )
+                                                            } /> */}
+                                                        <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale}>
+                                                            <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
+                                                                <KeyboardDatePicker
+                                                                    id="date-picker-dialog"
+
+                                                                    format="dd/MM/yyyy"
+                                                                    cancelLabel='annuler'
+                                                                    autoOk='true'
+                                                                    value={startDate}
+                                                                    onChange={
+                                                                        (date) =>{
+                                                                            setDate(date)
+                                                                            ChangeDate(
+                                                                                date,
+                                                                                setEventDate,
+                                                                                dispatch,
+                                                                                changeDateToSearch
+                                                                            )
+                                                                    }}
+                                                                    KeyboardButtonProps={{
+                                                                        'aria-label': 'change date',
+                                                                        'headerColor': 'red'
+                                                                    }}
+                                                                />
+                                                            </ThemeProvider>
+                                                        </MuiPickersUtilsProvider>
                                                     </div>
                                                 </div>
                                             </div>
@@ -253,31 +299,45 @@ function DisplayPrestation(props) {
                                             <div className="col pt-2 pb-2">
                                                 <div className="custom-float">
                                                     <div className="input-group-prepend d-inline-block center"
-                                                         style={{width: "100%"}}>
+                                                        style={{ width: "100%" }}>
                                                         <div className="input-group-text text-dark">
-                                                            <i className="icon-map-marker"/>&nbsp;Adresse de l'évènement
+                                                            <i className="icon-map-marker" />&nbsp;Adresse de l'évènement
                                                             *
                                                         </div>
-                                                        <input type="text" value={address} id="address"
-                                                               placeholder="Indiquer l'adresse de l'évènement"
-                                                               name="address" className="form-control"
-                                                               onChange={(e) => {
-                                                                   if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
-                                                               }}/>
+                                                        {/* <input type="text" value={address} id="address"
+                                                            placeholder="Indiquer l'adresse de l'évènement"
+                                                            name="address" className="form-control"
+                                                            onChange={(e) => {
+                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
+                                                            }} /> */}
+                                                        <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
+                                                            <TextField id="standard-basic" label="" style={{width:'300px'}}
+                                                                onChange={(e) => {
+                                                                    if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
+                                                                }}
+                                                                InputProps={{
+                                                                    endAdornment: (
+                                                                      <InputAdornment position="end">
+                                                                        <AddLocation />
+                                                                      </InputAdornment>
+                                                                    ),
+                                                                  }}
+                                                            />
+                                                        </ThemeProvider>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <button className="btn btn-outline-success"
-                                                onClick={!props.read && validReservation}>Réserver
+                                            onClick={!props.read && validReservation}>Réserver
                                         </button>
                                     </div>
-                                    <div className="mb-4 card" style={{boxShadow:"rbga(255,0,0,0.2)"}} >
+                                    <div className="mb-4 card" style={{ boxShadow: "rbga(255,0,0,0.2)" }} >
                                         <div className="flex-grow-0 text-center pb-3" >
                                             <h2 className="col text-primary pb-3">Plus de détails</h2>
                                             <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique d’annulation
                                                 :</strong> {service_to_show.refund_policy}&nbsp;<i
-                                                className="icon icon-info" data-tip data-for='refund'/></h4>
+                                                    className="icon icon-info" data-tip data-for='refund' /></h4>
                                             <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Catégorie
                                                 :</strong> {service_to_show.thematics.join(", ")}</h4>
                                             <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Type(s) d’évènement(s)
@@ -294,14 +354,14 @@ function DisplayPrestation(props) {
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i
                                                 className="icon icon-info"
-                                                data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique. La liste complète des matériels nécessaires se trouve dans la fiche technique"/>
+                                                data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique. La liste complète des matériels nécessaires se trouve dans la fiche technique" />
                                             </h2>
                                             <div className="col">
                                                 {service_to_show.materials.list_of_materials.length !== 0 ?
                                                     <ul>
                                                         {service_to_show.materials.list_of_materials.map((val, index) =>
                                                             <li key={index}><i
-                                                                className="icon icon-success text-green"/>{val}</li>
+                                                                className="icon icon-success text-green" />{val}</li>
                                                         )}
                                                     </ul> : <p className="text-red">Pas de material necessaire</p>}
                                             </div>
@@ -311,57 +371,57 @@ function DisplayPrestation(props) {
                                 {reservation ?
                                     <div className="col-md-8" ref={paymentRef}>
                                         <PurchaseInformation eventDate={event_date} address={address}
-                                                             TotalPrice={service_to_show.price}
-                                                             headers={props.headers} kantoBiz/>
+                                            TotalPrice={service_to_show.price}
+                                            headers={props.headers} kantoBiz />
                                     </div> :
                                     <div className="col-md-8">
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Option(s) pour la prestation&nbsp;<i
-                                                className="icon icon-info" data-tip data-for="option"/></h2>
+                                                className="icon icon-info" data-tip data-for="option" /></h2>
                                             {service_to_show.options.length !== 0 ?
                                                 <table className="responsive-table border-0">
                                                     <thead>
-                                                    <tr>
-                                                        <th scope="col">Nom&nbsp;<i className="icon icon-info"
-                                                                                    data-tip="Nom donner par l'artiste cette option"/>
-                                                        </th>
-                                                        <th scope="col">Tag&nbsp;<i className="icon icon-info"
-                                                                                    data-tip="Le nom des autres artiste proposé avec"/>
-                                                        </th>
-                                                        <th scope="col">Prix&nbsp;<i className="icon icon-info"
-                                                                                     data-tip="Le prix de cette option en plus de la prestation"/>
-                                                        </th>
-                                                        <th scope="col">Description&nbsp;<i className="icon icon-info"
-                                                                                            data-tip="quelque description qui explique l'option"/>
-                                                        </th>
-                                                        <th scope="col-lg-4">Ajouter&nbsp;<i className="icon icon-info"
-                                                                                             data-tip="Ajouter cette l'option en plus de la prestation"/>
-                                                        </th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th scope="col">Nom&nbsp;<i className="icon icon-info"
+                                                                data-tip="Nom donner par l'artiste cette option" />
+                                                            </th>
+                                                            <th scope="col">Tag&nbsp;<i className="icon icon-info"
+                                                                data-tip="Le nom des autres artiste proposé avec" />
+                                                            </th>
+                                                            <th scope="col">Prix&nbsp;<i className="icon icon-info"
+                                                                data-tip="Le prix de cette option en plus de la prestation" />
+                                                            </th>
+                                                            <th scope="col">Description&nbsp;<i className="icon icon-info"
+                                                                data-tip="quelque description qui explique l'option" />
+                                                            </th>
+                                                            <th scope="col-lg-4">Ajouter&nbsp;<i className="icon icon-info"
+                                                                data-tip="Ajouter cette l'option en plus de la prestation" />
+                                                            </th>
+                                                        </tr>
                                                     </thead>
 
                                                     <tbody>
-                                                    {service_to_show.options.map((val, index) =>
-                                                        <tr key={index}>
-                                                            <th className="text-center small bolder border-left-0 border-bottom-0"
-                                                                scope="row">{val.name}</th>
-                                                            <td className="small"
-                                                                data-title="Tag">{val.artist_tagged}</td>
-                                                            <td className="small" data-title="Prix">{val.price}$</td>
-                                                            <td className="small"
-                                                                data-title="Description">{val.description || "Pas de description"}</td>
-                                                            <td className="small border-bottom-0 border-right-0"
-                                                                data-title="Ajouter">
-                                                                {checkValueIfExistInArray(val.id, list_of_options_added) ?
-                                                                    <i className="icon icon-success text-green s-24"
-                                                                       onClick={() => removeOption(val)}
-                                                                       data-tip="Deja ajouté"/>
-                                                                    :
-                                                                    <i className="icon icon-plus text-red s-24"
-                                                                       onClick={() => addOption(val)}
-                                                                       data-tip="Ajoute moi"/>}
-                                                            </td>
-                                                        </tr>)}
+                                                        {service_to_show.options.map((val, index) =>
+                                                            <tr key={index}>
+                                                                <th className="text-center small bolder border-left-0 border-bottom-0"
+                                                                    scope="row">{val.name}</th>
+                                                                <td className="small"
+                                                                    data-title="Tag">{val.artist_tagged}</td>
+                                                                <td className="small" data-title="Prix">{val.price}$</td>
+                                                                <td className="small"
+                                                                    data-title="Description">{val.description || "Pas de description"}</td>
+                                                                <td className="small border-bottom-0 border-right-0"
+                                                                    data-title="Ajouter">
+                                                                    {checkValueIfExistInArray(val.id, list_of_options_added) ?
+                                                                        <i className="icon icon-success text-green s-24"
+                                                                            onClick={() => removeOption(val)}
+                                                                            data-tip="Deja ajouté" />
+                                                                        :
+                                                                        <i className="icon icon-plus text-red s-24"
+                                                                            onClick={() => addOption(val)}
+                                                                            data-tip="Ajoute moi" />}
+                                                                </td>
+                                                            </tr>)}
                                                     </tbody>
                                                 </table> :
                                                 <h3 className={lightModeOn ? "text-black text-center" : "text-light text-center"}>Pas d'options pour cette
@@ -372,7 +432,7 @@ function DisplayPrestation(props) {
                                             <h2 className="col text-primary pb-3">
                                                 Galerie d'images&nbsp;
                                                 <i className="icon icon-info"
-                                                   data-tip="Quelques photo de l'artiste sur cette prestation"/>
+                                                    data-tip="Quelques photo de l'artiste sur cette prestation" />
                                             </h2>
                                             <div className="demo-gallery">
                                                 <ul id="lightgallery">
@@ -380,9 +440,9 @@ function DisplayPrestation(props) {
                                                         <li key={index} data-src={val}>
                                                             <a href={val} target="_blank" rel="noopener noreferrer">
                                                                 <img alt="gallery" className="img-responsive"
-                                                                     src={val}/>
+                                                                    src={val} />
                                                                 <div className="demo-gallery-poster">
-                                                                    <i className="icon icon-search-1 s-36 text-red"/>
+                                                                    <i className="icon icon-search-1 s-36 text-red" />
                                                                 </div>
                                                             </a>
                                                         </li>
@@ -393,8 +453,23 @@ function DisplayPrestation(props) {
                                         <div className="flex-grow-0 text-center pb-3">
                                             <h2 className="col text-primary pb-3">Calendrier de la prestation&nbsp;<i
                                                 className="icon icon-info"
-                                                data-tip="Le planing de d'artiste sur cette prestation"/></h2>
-                                            <Calendar noEdit/>
+                                                data-tip="Le planing de d'artiste sur cette prestation" /></h2>
+                                            <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale}>
+                                                {/* <Calendar noEdit
+                                                    value={date}
+                                                    onChange={changeDate}
+                                                /> */}
+                                                <ThemeProvider theme={defaultMaterialThemePrestation}>
+                                                    <DatePicker
+                                                        autoOk
+                                                        // orientation="landscape"
+                                                        variant="static"
+                                                        openTo="date"
+                                                        value={date}
+                                                        onChange={changeDate}
+                                                    />
+                                                </ThemeProvider>
+                                            </MuiPickersUtilsProvider>
                                         </div>
                                     </div>}
                             </div>
