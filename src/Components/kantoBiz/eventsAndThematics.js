@@ -69,15 +69,15 @@ export const EventAndThematics = (
                 </div>
                 <div className="card-text text-center">
                     <h4 className="text-red">{title}</h4>
-                    <small className={lightModeOn ? "text-black m-2" : "text-white m-2"}>{desc}</small>
+                    <small className={lightModeOn ? "text-black" : "text-white"}>{desc}</small>
                     {params ?
-                        <button className="btn btn-outline-info m-2" onClick={() => {
+                        <button className="btn btn-outline-info m-t-50" onClick={() => {
                             setThematics(key);
                             setShow(true)
                         }} data-tip="Cliquer moi pour voir les prestations de cette univer">
                             Les prestations
                         </button> :
-                        <button className="btn btn-outline-info m-2" onClick={() => searchService("events", key)}
+                        <button className="btn btn-outline-info align-bottom" onClick={() => searchService("events", key)}
                                 data-tip="Cliquer moi pour voir les prestations de cette évenement">
                             Les prestations
                         </button>}
