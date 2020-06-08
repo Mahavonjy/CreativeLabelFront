@@ -269,7 +269,7 @@ function DisplayPrestation(props) {
                                                             <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
                                                                 <KeyboardDatePicker
                                                                     id="date-picker-dialog"
-
+                                                                    disablePast="false"
                                                                     format="dd/MM/yyyy"
                                                                     cancelLabel='annuler'
                                                                     autoOk='true'

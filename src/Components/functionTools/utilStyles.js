@@ -184,6 +184,11 @@ export const defaultMaterialThemePrestation = createMuiTheme({
                 minHeight: '400px'
             }
         },
+        MuiPickerYearsSelection:{
+            container:{
+                minHeight: '400px'
+            }
+        },
         MuiPickersCalendarHeader: {
             dayLabel: {
                 width: '90px',
