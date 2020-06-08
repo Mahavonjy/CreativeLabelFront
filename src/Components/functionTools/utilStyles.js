@@ -173,7 +173,15 @@ export const defaultMaterialThemePrestation = createMuiTheme({
         },
         MuiPickersDay: {
             day: {
-                width: '90px'
+                width: '38px',
+                height: '38px',
+                margin: '15px 28px'
+            }
+        },
+        MuiPickersCalendar:{
+            transitionContainer: {
+                marginTop: '12px',
+                minHeight: '400px'
             }
         },
         MuiPickersCalendarHeader: {

@@ -65,7 +65,6 @@ function DisplayPrestation(props) {
     const [isl_amount, setIslAmount] = useState(0);
     const [total_amount, setTotalAmount] = useState(0);
     // const [rating, setRating] = useState(1);
-    const [startDate,setDate] = useState();
 
 
     const onScrollViewSearch = () => {
@@ -274,10 +273,9 @@ function DisplayPrestation(props) {
                                                                     format="dd/MM/yyyy"
                                                                     cancelLabel='annuler'
                                                                     autoOk='true'
-                                                                    value={startDate}
+                                                                    value={event_date}
                                                                     onChange={
                                                                         (date) =>{
-                                                                            setDate(date)
                                                                             ChangeDate(
                                                                                 date,
                                                                                 setEventDate,
@@ -311,7 +309,7 @@ function DisplayPrestation(props) {
                                                                 if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
                                                             }} /> */}
                                                         <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
-                                                            <TextField id="standard-basic" label="" style={{width:'300px'}}
+                                                            <TextField id="standard-basic" value={address} label="" style={{width:'300px'}}
                                                                 onChange={(e) => {
                                                                     if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
                                                                 }}
@@ -465,7 +463,7 @@ function DisplayPrestation(props) {
                                                         // orientation="landscape"
                                                         variant="static"
                                                         openTo="date"
-                                                        value={date}
+                                                        value={event_date}
                                                         onChange={changeDate}
                                                     />
                                                 </ThemeProvider>
