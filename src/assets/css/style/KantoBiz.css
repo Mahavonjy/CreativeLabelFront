@@ -13,7 +13,7 @@
     background-image: linear-gradient(to top, #ed1c24, #b2102d, #77132a, #3d121d, #000000);
 }
 
-.carousel-inner img {
+.carousel-inner {
 
     max-height: 350px;
 }
