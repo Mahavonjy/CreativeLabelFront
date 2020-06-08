@@ -387,7 +387,7 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                                 onClick={async () => {
                                     history.push("/register");
                                     HomeRoot.beforeDataLoad().then(() => null);
-                                }}><i className="icon icon-user-plus"/>Créer votre compte
+                                }}><i className="icon icon-user-plus"/>&nbsp;Créer votre compte
                         </button>
                     </div>}
                 </MDBCarouselInner>
