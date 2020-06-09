@@ -23028,9 +23028,12 @@ select::-ms-expand {
     font-weight:600;
 }
 
-ul, ol {
+ul {
     margin: 0px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
+
 
 ul.follow-list {
     margin: 0px;
