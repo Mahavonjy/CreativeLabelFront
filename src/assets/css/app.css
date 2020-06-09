@@ -23001,3 +23001,66 @@ select::-ms-expand {
 .theme-light {
     color: #202124;
 }
+
+.profile-card-5{
+    margin-top:20px;
+}
+.profile-card-5 .card-img-block {
+    width: 91%;
+    margin: 0 auto;
+    position: relative;
+    top: -20px;
+
+}
+.profile-card-5 .card-img-block img{
+    border-radius:5px;
+    height: 200px;
+    box-shadow:0 0 10px rgba(255,255,255,0.63);
+}
+
+.profile-card-5 h5{
+    color:#4E5E30;
+    font-size:30px;
+    font-weight:600;
+}
+.profile-card-5 p{
+    font-size:30px;
+    font-weight:600;
+}
+
+ul, ol {
+    margin: 0px;
+}
+
+ul.follow-list {
+    margin: 0px;
+    padding: 0px;
+    background: #3f4c6b;
+    width: 100%;
+}
+
+ul.follow-list li {
+    width: 20%;
+    float: left;
+    list-style: none;
+    padding: 8px 0px;
+    background: #111F28;
+}
+
+ul.follow-list li a {
+    padding: 4px 20px;
+    display: inline-block;
+    color: #fff;
+    font-size: 13px;
+    border-right: 1px solid #1C3544;
+
+}
+
+ul.follow-list li:last-child a {
+    border-right: none;
+}
+
+.fa {
+    color: #ffffff;
+}
+

@@ -42,6 +42,7 @@ function MyPrestations(props) {
     const conditions = useSelector(state => state.profile.conditions);
     const prestations = useSelector(state => state.profilePrestations.prestations);
     const props_options = useSelector(state => state.profilePrestations.options);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [global_price, setGlobalPrice] = useState(conditions['travel_expenses']);
@@ -222,36 +223,8 @@ function MyPrestations(props) {
                 <div className={props.read ? "col-lg-12" : "col-lg-9"}>
                     <div className="row justify-content-center scrollbar-isl">
                         {allPrestation.map((val, index) =>
-                            <div className={!props.profile ? "card_kanto" : "card_kantoProfile"} key={index}>
-                                <div className={!props.profile ? "additional" : "additionalProfile"}>
-                                    <div className={
-                                        props.profile
-                                            ? "user-card_kanto"
-                                            : "user-card_kanto d-none d-sm-block"
-                                    }
-                                         data-tip="Cliquer Moi">
-                                        <div className="level center-result">
-                                            {val.title}
-                                        </div>
-                                        {props.read ?
-                                            <div className="points center-result">
-                                                5&nbsp;<i className="icon icon-star"/>
-                                            </div> :
-                                            <div className="points center-result">
-                                                <i className="icon-edit text-red s-24 ml-1 mr-1"
-                                                   data-tip="Modifier cette prestation"
-                                                   onClick={() => addToPropsToEdit(index)}/>
-                                                <i className="icon-trash text-red s-24 ml-1 mr-1"
-                                                   onClick={() => deletePrestations(index)}
-                                                   data-tip="supprimer cette prestation"/>
-                                            </div>
-                                        }
-                                        <div className="text-center" style={{paddingTop: 70}}>
-                                            <img width={110} height={100} src={val.galleries[0]} alt=''
-                                                 className="border1"/>
-                                        </div>
-                                    </div>
-
+                            <div className={!props.profile && "card_kanto"} key={index}>
+                                <div className={!props.profile && "additional"}>
                                     {!props.profile &&
                                     <div className="more-info">
                                         <h1 className="pt-2">Artist Name</h1>
@@ -325,42 +298,70 @@ function MyPrestations(props) {
                                         </div>
                                     </div>}
                                 </div>
-                                <div className={!props.profile ? "general d-none d-sm-block" : "generalProfile"}>
-                                    {props.profile &&
-                                    <div>
-                                        {val.hidden ?
-                                            <i className="float-right text-red icon-hide s-36 mt-1"
-                                               onClick={() => onChangeHidden(index)}
-                                               data-tip="Cette prestation est caché,
-                                               c'est a dire n'est pas visible a la recherche des autieurs pro"/> :
-                                            <i className="float-right text-red icon-eye s-36 mt-1"
-                                               onClick={() => onChangeHidden(index)}
-                                               data-tip="Cette prestation est afficher,
-                                               c'est a dire visible a la recherche des autieurs pro"/>}
-                                    </div>}
+                                <div className={!props.profile && "general d-none d-sm-block"}>
                                     {!props.profile && <img alt="" src={val.galleries[0]} width="100%" height="100%"/>}
                                     {!props.profile && <h1 className="pt-2 ml-2 bolder text-red">Artist Name</h1>}
                                     {!props.profile &&
                                     <p className="text-dark ml-2 font-weight-bold">{val.description}</p>}
-                                    <h1 className={!props.profile
-                                        ? "more text-black bolder"
-                                        : "more text-black bolder pb-5"}>
-                                        {val.price}$
-                                    </h1>
-                                    {!props.profile ?
+                                    {!props.profile &&
                                         <small className="more-genre scrollbar-isl pl-2 text-black">
-                                            {val.thematics.map((v) => v)}</small> :
-                                        <div className="more-icon text-red mt-4"
-                                             onClick={() => addToPropsToEdit(index, true)} data-tip
-                                             data-for="copy_edit">
-                                            <i className="icon-copy s-24"/>&nbsp;&&nbsp;<i className="icon-edit s-24"/>
-                                        </div>}
-                                    {props.profile && <i className="icon-smartphone-11 text-red more-icon-phone s-36"
-                                                         onClick={() => displayService(index)}/>}
+                                            {val.thematics.map((v) => v)}</small>}
                                 </div>
                             </div>
                         )}
+                        {allPrestation.map((val, index) =>
+                        <div className="col-md-4 mt-4">
+                            {props.profile && <div className="card profile-card-5">
+                                    <div
+                                        className={lightModeOn ? "card-img-block theme-light" : "card-img-block theme-dark"}>
+                                        <img className="card-img-top"
+                                             src={val.galleries[0]}
+                                             alt="Card image cap"/>
+                                    </div>
+                                    <div className="card-body pt-0">
+                                        <h5>{val.title}</h5>
+                                        <p>{val.price}$</p>
+                                    </div>
+                                    <ul className="follow-list">
+
+                                        <li><a><i className="fa fa-edit"
+                                                  data-tip="Modifier cette prestation"
+                                                  onClick={() => addToPropsToEdit(index)}></i></a></li>
+
+                                        <li><a><i className="fa fa-trash-o"
+                                                  onClick={() => deletePrestations(index)}
+                                                  data-tip="supprimer cette prestation"></i></a>
+                                        </li>
+                                        <li><a><i className="fa fa-clone"
+                                                  onClick={() => addToPropsToEdit(index, true)}
+                                                  data-tip data-for="copy_edit"></i></a></li>
+                                        <li><a><i
+                                            className="fa fa-info-circle" onClick={() => displayService(index)}></i></a></li>
+                                        {val.hidden ?
+                                            <li>
+                                                <a>
+                                                    <i className="fa fa-eye-slash"
+                                                       onClick={() => onChangeHidden(index)}
+                                                      data-tip="Cette prestation est caché,
+                                               c'est a dire n'est pas visible a la recherche des autieurs pro">
+                                                    </i>
+                                                </a>
+                                            </li> :
+                                            <li>
+                                                <a>
+                                                    <i className="fa fa-eye"
+                                                       onClick={() => onChangeHidden(index)}
+                                                       data-tip="Cette prestation est afficher,
+                                               c'est a dire visible a la recherche des autieurs pro">
+                                                    </i>
+                                                </a>
+                                            </li>}
+                                    </ul>
+                                </div>}
+                            </div>
+                        )}
                     </div>
+
                 </div>
             </div>
         </div>
