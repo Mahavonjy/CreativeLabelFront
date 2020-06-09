@@ -175,7 +175,8 @@ export const defaultMaterialThemePrestation = createMuiTheme({
             day: {
                 width: '38px',
                 height: '38px',
-                margin: '15px 28px'
+                margin: '15px 28px',
+                backgroundColor: 'greenyellow'
             }
         },
         MuiPickersCalendar:{
