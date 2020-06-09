@@ -220,7 +220,7 @@ function MyPrestations(props) {
                         </div>
                     </div>
                 </div>}
-                
+
                 <div className={props.read ? "col-lg-12" : "col-lg-9"}>
                     <div className="row justify-content-center scrollbar-isl">
                         {allPrestation.map((val, index) =>
@@ -326,18 +326,19 @@ function MyPrestations(props) {
                                     <ul className="follow-list">
 
                                         <li className="first-list"><a><i className="fa fa-edit"
-                                                  data-tip="Modifier cette prestation"
-                                                  onClick={() => addToPropsToEdit(index)}></i></a></li>
+                                            data-tip="Modifier cette prestation"
+                                            onClick={() => addToPropsToEdit(index)}/></a></li>
 
-                                        <li><a><i className="fa fa-trash-o"
-                                                  onClick={() => deletePrestations(index)}
-                                                  data-tip="supprimer cette prestation"></i></a>
-                                        </li>
-                                        <li><a><i className="fa fa-clone"
-                                                  onClick={() => addToPropsToEdit(index, true)}
-                                                  data-tip data-for="copy_edit"></i></a></li>
-                                        <li><a><i
-                                            className="fa fa-info-circle" onClick={() => displayService(index)}></i></a></li>
+                                                                                <li><a><i className="fa fa-trash-o"
+                                            onClick={() => deletePrestations(index)}
+                                            data-tip="supprimer cette prestation"/></a>
+                                                                                </li>
+                                                                                <li><a><i className="fa fa-clone"
+                                            onClick={() => addToPropsToEdit(index, true)}
+                                            data-tip data-for="copy_edit"/></a></li>
+                                                                                <li><a><i
+                                            className="fa fa-info-circle" onClick={() => displayService(index)}/></a>
+                                                                                </li>
                                         {val.hidden ?
                                             <li className="last-list">
                                                 <a>
