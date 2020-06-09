@@ -312,7 +312,7 @@ function MyPrestations(props) {
                         )}
                         {allPrestation.map((val, index) =>
                         <div className="col-md-4 mt-4">
-                            {props.profile && <div className="card profile-card-5">
+                            {props.profile && <div className={lightModeOn ? "card shadow1 profile-card-5" : "card shadow2 profile-card-5"}>
                                     <div
                                         className={lightModeOn ? "card-img-block theme-light" : "card-img-block theme-dark"}>
                                         <img className="card-img-top"
@@ -325,7 +325,7 @@ function MyPrestations(props) {
                                     </div>
                                     <ul className="follow-list">
 
-                                        <li><a><i className="fa fa-edit"
+                                        <li className="first-list"><a><i className="fa fa-edit"
                                                   data-tip="Modifier cette prestation"
                                                   onClick={() => addToPropsToEdit(index)}></i></a></li>
 
@@ -339,7 +339,7 @@ function MyPrestations(props) {
                                         <li><a><i
                                             className="fa fa-info-circle" onClick={() => displayService(index)}></i></a></li>
                                         {val.hidden ?
-                                            <li>
+                                            <li className="last-list">
                                                 <a>
                                                     <i className="fa fa-eye-slash"
                                                        onClick={() => onChangeHidden(index)}
@@ -348,7 +348,7 @@ function MyPrestations(props) {
                                                     </i>
                                                 </a>
                                             </li> :
-                                            <li>
+                                            <li className="last-list">
                                                 <a>
                                                     <i className="fa fa-eye"
                                                        onClick={() => onChangeHidden(index)}
