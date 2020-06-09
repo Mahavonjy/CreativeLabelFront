@@ -320,7 +320,7 @@ function MyPrestations(props) {
                                              alt="Card image cap"/>
                                     </div>
                                     <div className="card-body pt-0">
-                                        <h5>{val.title}</h5>
+                                        <h5 className="card-title">{val.title}</h5>
                                         <p>{val.price}$</p>
                                     </div>
                                     <ul className="follow-list">
