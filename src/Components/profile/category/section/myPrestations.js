@@ -324,21 +324,18 @@ function MyPrestations(props) {
                                         <p>{val.price}$</p>
                                     </div>
                                     <ul className="follow-list">
-
                                         <li className="first-list"><a><i className="fa fa-edit"
                                             data-tip="Modifier cette prestation"
                                             onClick={() => addToPropsToEdit(index)}/></a></li>
-
-                                                                                <li><a><i className="fa fa-trash-o"
+                                        <li><a><i className="fa fa-trash-o"
                                             onClick={() => deletePrestations(index)}
                                             data-tip="supprimer cette prestation"/></a>
-                                                                                </li>
-                                                                                <li><a><i className="fa fa-clone"
+                                        </li>
+                                        <li><a><i className="fa fa-clone"
                                             onClick={() => addToPropsToEdit(index, true)}
                                             data-tip data-for="copy_edit"/></a></li>
-                                                                                <li><a><i
-                                            className="fa fa-info-circle" onClick={() => displayService(index)}/></a>
-                                                                                </li>
+                                        <li><a><i className="fa fa-info-circle" onClick={() => displayService(index)}/>
+                                        </a></li>
                                         {val.hidden ?
                                             <li className="last-list">
                                                 <a>
