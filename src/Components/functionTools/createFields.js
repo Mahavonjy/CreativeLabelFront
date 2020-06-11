@@ -376,7 +376,6 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                                dangerouslySetInnerHTML={{__html: Description}}/>
                         </div>
                     </div>
-
                     {!auth &&
                     <div className="absolute p-2 zIndex99" style={{right: 0, bottom: 0}}>
                         <button className="btn btn-outline-primary m-2 r-5"
@@ -392,7 +391,6 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                     </div>}
                 </MDBCarouselInner>
             </MDBCarousel>
-
             {Title === "Creative kantoBiz"
             && <SearchBar next={next}
                           headers={headers}

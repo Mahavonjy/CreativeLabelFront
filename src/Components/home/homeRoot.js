@@ -304,7 +304,6 @@ function HomeRoot() {
     };
 
     const logout = async () => {
-        // setLoading(true);
         try {
             if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
                 document.getElementById("LoginRequire").click();
