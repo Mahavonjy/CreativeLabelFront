@@ -27,11 +27,11 @@ import {
     formatDate
 } from "../../../functionTools/tools";
 // import Calendar from "../../calendar/calendar";
-import {TextField} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import format from "date-fns/format";
 import frLocale from "date-fns/locale/fr";
-import { ThemeProvider} from '@material-ui/core/styles';
-import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker} from "@material-ui/pickers";
+import { ThemeProvider } from '@material-ui/core/styles';
+import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import AddLocation from '@material-ui/icons/AddLocation';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
@@ -45,7 +45,7 @@ class LocalizedUtils extends DateFnsUtils {
 
 function DisplayPrestation(props) {
 
-    let {id} = useParams()
+    let { id } = useParams()
     const history = useHistory();
     const dispatch = useDispatch();
     const profile_info = useSelector(state => state.profile.profile_info);
@@ -66,7 +66,7 @@ function DisplayPrestation(props) {
     const [isl_amount, setIslAmount] = useState(0);
     const [total_amount, setTotalAmount] = useState(0);
     // const [rating, setRating] = useState(1);
-    const [val,setVal] = useState(0);
+    const [val, setVal] = useState(0);
 
 
     const onScrollViewSearch = () => {
@@ -113,7 +113,7 @@ function DisplayPrestation(props) {
     };
 
     const serviceValue = async () => {
-        axios.get("/api/artist_services/"+id,{headers:props.headers}).then((resp)=>{
+        axios.get("/api/artist_services/" + id, { headers: props.headers }).then((resp) => {
             setVal(resp.status)
         }
         )
@@ -143,7 +143,7 @@ function DisplayPrestation(props) {
 
     return (
 
-        val === 200 ?  <div className="Base pt-5 p-b-100 zIndex-1">
+        val === 200 ? <div className="Base pt-5 p-b-100 zIndex-1">
             <ReactTooltip />
             <ReactTooltip className="special-color-dark" id='refund' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Details des rembouresement </h5><br />
@@ -287,14 +287,14 @@ function DisplayPrestation(props) {
                                                                     autoOk='true'
                                                                     value={event_date}
                                                                     onChange={
-                                                                        (date) =>{
+                                                                        (date) => {
                                                                             ChangeDate(
                                                                                 date,
                                                                                 setEventDate,
                                                                                 dispatch,
                                                                                 changeDateToSearch
                                                                             )
-                                                                    }}
+                                                                        }}
                                                                     KeyboardButtonProps={{
                                                                         'aria-label': 'change date',
                                                                         'headerColor': 'red'
@@ -321,17 +321,17 @@ function DisplayPrestation(props) {
                                                                 if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
                                                             }} /> */}
                                                         <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
-                                                            <TextField id="standard-basic" value={address} label="" style={{width:'300px'}}
+                                                            <TextField id="standard-basic" value={address} label="" style={{ width: '300px' }}
                                                                 onChange={(e) => {
                                                                     if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
                                                                 }}
                                                                 InputProps={{
                                                                     endAdornment: (
-                                                                      <InputAdornment position="end">
-                                                                        <AddLocation />
-                                                                      </InputAdornment>
+                                                                        <InputAdornment position="end">
+                                                                            <AddLocation />
+                                                                        </InputAdornment>
                                                                     ),
-                                                                  }}
+                                                                }}
                                                             />
                                                         </ThemeProvider>
                                                     </div>
@@ -488,8 +488,19 @@ function DisplayPrestation(props) {
                 </div>
             </div>
         </div> : <div className="Base pt-5 p-b-100 zIndex-1" >
-            <h1 className="text-red center-center m-5" >Cette Service n'exit pas encore</h1>
-        </div>
+                <button
+                    onClick={() => {
+                        // dispatch(changeInitialized(false));
+                        if (props.read)
+                            history.push("/profile");
+                        else history.push("/kantoBiz");
+                    }}
+                    style={{ position: "fixed", bottom: "5%", zIndex: 99 }}
+                    className="btn-custom btn-outline-light border-bottom-0 border-right-0">
+                    <i className="icon icon-long-arrow-left s-24 align-middle" />&nbsp;Precedent
+                </button>
+                <h1 className="text-red center-center m-5" >Cette Service n'est pas encore disponible pour le moment</h1>
+            </div>
     );
 
 }
