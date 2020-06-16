@@ -42,7 +42,7 @@ function KantoBiz(props) {
                 toast.warn("Vous ne pouvez pas acheter votre propre prestaion")
             } else {
                 await dispatch(addServiceToShow(val));
-                history.push("/show-service")
+                history.push("/show-service/"+val['id'])
             }
         });
     };

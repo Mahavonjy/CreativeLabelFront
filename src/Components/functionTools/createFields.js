@@ -583,7 +583,7 @@ export const SideBarsMain = (
             {/*               ? history.goBack() : (<Preference/>)*/}
             {/*       }}/>*/}
             <Route exact
-                   path="/show-service"
+                   path="/show-service/:id"
                    component={() => {
                        if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
                        else window.location.replace("/kantoBiz")

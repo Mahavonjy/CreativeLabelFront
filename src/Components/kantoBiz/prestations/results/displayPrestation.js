@@ -5,7 +5,7 @@ import { MDBRating } from "mdbreact";
 import React, { useEffect, useRef, useState } from "react";
 import { FacebookProvider, Feed } from "react-facebook";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 // import StarRatings from 'react-star-ratings';
 import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
@@ -45,6 +45,7 @@ class LocalizedUtils extends DateFnsUtils {
 
 function DisplayPrestation(props) {
 
+    let {id} = useParams()
     const history = useHistory();
     const dispatch = useDispatch();
     const profile_info = useSelector(state => state.profile.profile_info);
@@ -65,6 +66,7 @@ function DisplayPrestation(props) {
     const [isl_amount, setIslAmount] = useState(0);
     const [total_amount, setTotalAmount] = useState(0);
     // const [rating, setRating] = useState(1);
+    const [val,setVal] = useState(0);
 
 
     const onScrollViewSearch = () => {
@@ -110,8 +112,16 @@ function DisplayPrestation(props) {
         });
     };
 
-    useEffect(() => {
+    const serviceValue = async () => {
+        axios.get("/api/artist_services/"+id,{headers:props.headers}).then((resp)=>{
+            setVal(resp.status)
+        }
+        )
 
+    }
+
+    useEffect(() => {
+        serviceValue();
         setEventDate(dateFormat(date_to_search, "yyyy-mm-dd"));
         axios.post("api/reservation/check_total_price",
             { price: service_to_show.price },
@@ -129,9 +139,11 @@ function DisplayPrestation(props) {
     }, [service_to_show, profile_info, date_to_search]);
 
     const [date, changeDate] = useState(new Date());
+    console.log(val);
 
     return (
-        <div className="Base pt-5 p-b-100 zIndex-1">
+
+        val === 200 ?  <div className="Base pt-5 p-b-100 zIndex-1">
             <ReactTooltip />
             <ReactTooltip className="special-color-dark" id='refund' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Details des rembouresement </h5><br />
@@ -475,6 +487,8 @@ function DisplayPrestation(props) {
                     </div>
                 </div>
             </div>
+        </div> : <div className="Base pt-5 p-b-100 zIndex-1" >
+            <h1 className="text-red center-center m-5" >Cette Service n'exit pas encore</h1>
         </div>
     );
 

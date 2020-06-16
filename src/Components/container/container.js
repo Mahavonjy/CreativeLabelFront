@@ -44,7 +44,7 @@ function Container() {
                 <Route path="/(|kantobiz)">
                     <HomeRoot/>
                 </Route>
-                <Route path="/show-service">
+                <Route path="/show-service/:id">
                     <HomeRoot/>
                 </Route>
                 <Route path="/show-service-read">
