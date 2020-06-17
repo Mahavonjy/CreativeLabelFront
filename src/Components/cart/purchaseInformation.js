@@ -9,6 +9,12 @@ import {addAllUSerBookingReservation, addSuccessMessage} from "../functionTools/
 import {changeFields, isNumber} from "../functionTools/tools";
 import HomeRoot from "../home/homeRoot";
 import {checkErrorMessage} from "../validators/validatiors";
+import $ from "jquery";
+import 'jquery-mask-plugin';
+import DatePicker from 'react-datepicker';
+
+
+
 
 let headers = {
     "Content-Type": 'application/json',
@@ -37,7 +43,7 @@ function PurchaseInformation(props) {
     const [lastname, setLastname] = useState("");
     const [postal_code, setPostalCode] = useState("");
     const [card_number, setCardNumber] = useState("");
-    const [expiration, setExpiration] = useState("");
+    const [expiration, setExpiration] = useState(new Date());
     const [payment_loading, setPaymentLoading] = useState(false);
     const [name, setName] = useState(profile_info.name);
     const [email, setEmail] = useState(profile_info.email);
@@ -197,9 +203,69 @@ function PurchaseInformation(props) {
         });
     };
 
+    const inputControl = () => {
+        $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {
+
+            $(".cardCredit").removeClass("flip");
+
+            $(this).mask('0000 0000 0000 0000');
+
+            if ($(this).hasClass("1")) {
+                let inputVal = $(this).val();
+                if (!inputVal.length == 0) {
+                    $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text(inputVal);
+                } else {
+                    $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
+                }
+            }
+
+        });
+        $(".form").find(".cd-holder").find("input").on('keyup change', function (e) {
+            let inputValCdHolder = $(this).val();
+
+            $(".cardCredit").removeClass("flip");
+
+            if (!inputValCdHolder.length == 0 && inputValCdHolder.length < 19) {
+                $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text(inputValCdHolder);
+            }
+
+            switch(inputValCdHolder.length) {
+                case 0:
+                    $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text("Nom et prénom");
+                    break;
+                case 18:
+                    $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").append("...");
+            }
+        });
+        $(".form").find(".cd-validate").find(".cvc").find('input').on('keyup change', function (e) {
+            let inputCvcVal = $(this).val();
+            if (!inputCvcVal.length == 0) {
+                $(".cardCredit").addClass("flip").find(".cvc").find("p").text(inputCvcVal);
+            } else if (inputCvcVal.length == 0) {
+                $(".cardCredit").removeClass("flip");
+            }
+        });
+        $(".form").find(".cd-validate").find(".expiration").find('select#month').on('keyup change', function () {
+
+            $(".cardCredit").removeClass("flip");
+            if (!$(this).val().length == 0) {
+                $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.month").text($(this).val())
+            }
+
+        });
+        $(".form").find(".cd-validate").find(".expiration").find('select#year').on('keyup change', function () {
+
+            $(".cardCredit").removeClass("flip");
+            if (!$(this).val().length == 0) {
+                $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.year").text($(this).val())
+            }
+
+        });
+    }
+
     useEffect(() => {
         loadStripe();
-
+        inputControl();
         return () => {
             isMounted.current = true
         };
@@ -259,7 +325,8 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="name" className="form-control"
                                                        placeholder="Votre nom" name="name"
                                                        value={name || ''}
-                                                       onChange={(e) => changeFields(setName, e)} autocomplete="off" required/>
+                                                       onChange={(e) => changeFields(setName, e)} autocomplete="off"
+                                                       required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
@@ -267,7 +334,8 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="lastname" className="form-control"
                                                        placeholder="Votre prénom" name="lastname"
                                                        value={lastname}
-                                                       onChange={(e) => changeFields(setLastname, e)} autocomplete="off" required/>
+                                                       onChange={(e) => changeFields(setLastname, e)} autocomplete="off"
+                                                       required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
@@ -275,7 +343,8 @@ function PurchaseInformation(props) {
                                                 <input type="email" id="email" className="form-control"
                                                        placeholder="E-mail"
                                                        name="email" value={email || ''}
-                                                       onChange={(e) => changeFields(setEmail, e)} autocomplete="off" required/>
+                                                       onChange={(e) => changeFields(setEmail, e)} autocomplete="off"
+                                                       required/>
                                             </div>
                                         </div>
                                     </div>
@@ -314,7 +383,8 @@ function PurchaseInformation(props) {
                                                 <input type="text" id="city" className="form-control"
                                                        placeholder="Votre ville" name="city"
                                                        value={city || ''}
-                                                       onChange={(e) => changeFields(setCity, e)} autocomplete="off" required/>
+                                                       onChange={(e) => changeFields(setCity, e)} autocomplete="off"
+                                                       required/>
                                             </div>
                                         </div>
                                         <div className="form-group form-float">
@@ -332,78 +402,112 @@ function PurchaseInformation(props) {
                         </div>
                     </div>
                     <div className="col-lg-6">
-                        <div className="card">
-                            <div className="card-header transparent">
-                                <h4 className="text-red"><strong>Informations carte bancaire</strong></h4>
-                            </div>
-                            <div className="flex-row ml-3">
-                                <img alt="Stripe" src="https://img.icons8.com/nolan/64/000000/stripe.png"/>
-                                <img alt="VISA Card" src="https://img.icons8.com/cute-clipart/64/000000/visa.png"/>
-                                <img alt="MasterCard" src="https://img.icons8.com/color/64/000000/mastercard.png"/>
-                            </div>
-                            <div className="card-body text-center">
-                                <div className="card-header transparent">
-                                    <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>C’est un
-                                        paiement sécurisé crypté en SSL.</strong></h4>
-                                </div>
-                                <div className="form-material pb-md-5">
-                                    {/* Input */}
-                                    <div className="body">
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">Numero de la carte</label>
-                                            <div className="col-sm-8">
-                                                <input type="text" id="card_number" className="form-control"
-                                                       placeholder="0000 0000 0000 0000" name="card_number"
-                                                       value={card_number}
-                                                       onChange={changeCardNumber} autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">Expiration (MM/AA)</label>
-                                            <div className="col-sm-8">
-                                                <input type="month" id="expiration" className="form-control"
-                                                       name="expiration" value={expiration}
-                                                       onChange={(e) => changeFields(setExpiration, e)} autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">CVC</label>
-                                            <div className="col-sm-8">
-                                                <input type="number" id="cvc" className="form-control"
-                                                       placeholder="CVC"
-                                                       name="cvc" value={cvc}
-                                                       onChange={changeCVC} autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">Nom sur la carte</label>
-                                            <div className="col-sm-8">
-                                                <input type="text" id="card_name" className="form-control"
-                                                       placeholder="Nom du proprietaire de la carte"
-                                                       name="card_name" value={card_name}
-                                                       onChange={(e) => changeFields(setCardName, e)} autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <div className="material-switch">
-                                                    <input id="unlimited" name="unlimited" type="checkbox"
-                                                           onChange={() => setRules(!rules)} autocomplete="off"/>
-                                                    <label htmlFor="sw2"
-                                                           className="text-red text-monospace text-muted"> J'accepte les
-                                                        Conditions Générales d'Utilisation</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => {
-                                                    inputValidators()
-                                                }}>{props.kantoBiz ? "Confirmer la reservation" : "Commander"}</button>
+                        <div className="center">
+                            <div className="cardCredit">
+                                <div className="front">
+                                    <div className="top">
+                                        <div className="chip"/>
                                     </div>
-                                    {/* #END# Input */}
+                                    <div className="middle">
+                                        <div className="cd-number">
+                                            <p><span className="num-1">#### #### #### ####</span></p>
+                                        </div>
+                                    </div>
+                                    <div className="bottom">
+                                        <div className="cardholder col-7">
+                                            <span className="label row">Nom du porteur</span>
+                                            <span className="holder row">Nom et prénom</span>
+                                        </div>
+                                        <div className="expires col-4">
+                                            <span className="label row">Date d'expiration
+                                            </span>
+                                            <span className="row"><span className="month">09</span>/<span
+                                                className="year">19</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="back">
+                                    <div className="top">
+                                        <div className="magstripe"/>
+                                    </div>
+                                    <div className="middle">
+                                        <p className="label">CCV</p>
+                                        <div className="cvc">
+                                            <p>****</p>
+                                        </div>
+                                    </div>
+                                    <div className="bottom">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        {/* credit card form */}
+                        <div className={lightModeOn ? "form shadow1" : "form shadow2"}>
+                            <form>
+                                <div className="cd-numbers">
+                                    <label>Numéro</label>
+                                    <div className="fields">
+                                        <input type="text"
+                                               id="card_number"
+                                               name="card_number"
+                                               value={card_number}
+                                               onChange={changeCardNumber}
+                                               autocomplete="off"
+                                               className={1}
+                                               maxLength={19} required/>
+                                    </div>
+                                </div>
+
+                                <div className="cd-holder">
+                                    <label htmlFor="cd-holder-input">Nom du porteur</label>
+                                    <input type="text"
+                                           id="card_name"
+                                           name="card_name"
+                                           value={card_name}
+                                           onChange={(e) => changeFields(setCardName, e)}
+                                           autocomplete="off" required/>
+                                </div>
+                                <div className="cd-validate">
+                                    <div className="expiration">
+                                        <div className="field">
+                                            <label htmlFor="month">Month</label>
+                                            <DatePicker
+                                                dateFormat="MM/yy"
+                                                showPopperArrow={false}
+                                                selected={expiration}
+                                                id="expiration"
+                                                name="expiration"
+                                                onChange={date => setExpiration(date)}
+                                                showMonthYearPicker
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="cvc">
+                                        <label htmlFor="cvc">CCV</label>
+                                        <input type="text"
+                                               id="cvc"
+                                               maxLength={4}
+                                               name="cvc"
+                                               value={cvc}
+                                               onChange={changeCVC}
+                                               autocomplete="off" required/>
+                                    </div>
+                                </div>
+                                <div className="material-switch m-t-50">
+                                    <input id="unlimited" name="unlimited" type="checkbox"
+                                           onChange={() => setRules(!rules)} autoComplete="off"/>
+                                    <label htmlFor="sw2"
+                                           className="text-red text-monospace text-muted"> J'accepte les
+                                        Conditions Générales d'Utilisation</label>
+                                </div>
+                                <button onClick={() => {
+                                    inputValidators()
+                                }}>
+                                    {props.kantoBiz ? "Confirmer la reservation" : "Commander"}
+                                </button>
+                            </form>
+                        </div>
+                        {/* end of credit card form */}
                     </div>
                 </div>
             </div>
