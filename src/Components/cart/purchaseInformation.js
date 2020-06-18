@@ -13,9 +13,6 @@ import $ from "jquery";
 import 'jquery-mask-plugin';
 import DatePicker from 'react-datepicker';
 
-
-
-
 let headers = {
     "Content-Type": 'application/json',
     "Access-Control-Allow-Origin": '*',
