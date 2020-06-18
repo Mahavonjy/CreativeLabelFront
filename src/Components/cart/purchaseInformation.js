@@ -182,8 +182,8 @@ function PurchaseInformation(props) {
     };
 
     const command = () => {
-        let expiration_years = expiration.split('-')[0];
-        let expiration_month = expiration.split('-')[1];
+        let expiration_years = expiration.getFullYear();
+        let expiration_month = expiration.getMonth();
         let new_card_number = card_number.split(' ');
         window.Stripe.card.createToken({
             number: new_card_number.join(''),
@@ -205,11 +205,8 @@ function PurchaseInformation(props) {
 
     const inputControl = () => {
         $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {
-
             $(".cardCredit").removeClass("flip");
-
             $(this).mask('0000 0000 0000 0000');
-
             if ($(this).hasClass("1")) {
                 let inputVal = $(this).val();
                 if (!inputVal.length === 0) {
@@ -218,17 +215,13 @@ function PurchaseInformation(props) {
                     $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
                 }
             }
-
         });
         $(".form").find(".cd-holder").find("input").on('keyup change', function (e) {
             let inputValCdHolder = $(this).val();
-
             $(".cardCredit").removeClass("flip");
-
             if (!inputValCdHolder.length === 0 && inputValCdHolder.length < 19) {
                 $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text(inputValCdHolder);
             }
-
             switch(inputValCdHolder.length) {
                 case 0:
                     $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text("Nom et prénom");
@@ -246,20 +239,16 @@ function PurchaseInformation(props) {
             }
         });
         $(".form").find(".cd-validate").find(".expiration").find('select#month').on('keyup change', function () {
-
             $(".cardCredit").removeClass("flip");
             if (!$(this).val().length === 0) {
                 $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.month").text($(this).val())
             }
-
         });
         $(".form").find(".cd-validate").find(".expiration").find('select#year').on('keyup change', function () {
-
             $(".cardCredit").removeClass("flip");
             if (!$(this).val().length === 0) {
                 $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.year").text($(this).val())
             }
-
         });
     }
 
@@ -355,7 +344,7 @@ function PurchaseInformation(props) {
                                 <h4 className="text-red"><strong> Adresse de facturation </strong></h4>
                             </div>
                             <div className="card-body text-center">
-                                <form className="form-material">
+                                <div className="form-material">
                                     {/* Input */}
                                     <div className="body">
                                         <div className="form-group form-float">
@@ -397,7 +386,7 @@ function PurchaseInformation(props) {
                                         </div>
                                     </div>
                                     {/* #END# Input */}
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -443,7 +432,7 @@ function PurchaseInformation(props) {
                         </div>
                         {/* credit card form */}
                         <div className={lightModeOn ? "form shadow1" : "form shadow2"}>
-                            <form>
+                            <div>
                                 <div className="cd-numbers">
                                     <label>Numéro</label>
                                     <div className="fields">
@@ -477,7 +466,7 @@ function PurchaseInformation(props) {
                                                 selected={expiration}
                                                 id="expiration"
                                                 name="expiration"
-                                                onChange={date => setExpiration(date)}
+                                                onChange={date => {setExpiration(date)}}
                                                 showMonthYearPicker
                                             />
                                         </div>
@@ -506,7 +495,7 @@ function PurchaseInformation(props) {
                                 }}>
                                     {props.kantoBiz ? "Confirmer la reservation" : "Commander"}
                                 </button>
-                            </form>
+                            </div>
                         </div>
                         {/* end of credit card form */}
                     </div>
