@@ -392,7 +392,7 @@ function PurchaseInformation(props) {
                                                 <input type="number" id="phone" className="form-control"
                                                        placeholder="Votre téléphone" name="phone"
                                                        value={phone || ''}
-                                                       onChange={(e) => changeFields(setPhone, e)} autocomplete="off"/>
+                                                       onChange={(e) => changeFields(setPhone, e)} autocomplete="off" required/>
                                             </div>
                                         </div>
                                     </div>
@@ -495,12 +495,12 @@ function PurchaseInformation(props) {
                                 </div>
                                 <div className="material-switch m-t-50">
                                     <input id="unlimited" name="unlimited" type="checkbox"
-                                           onChange={() => setRules(!rules)} autoComplete="off"/>
+                                           onChange={() => setRules(!rules)} autoComplete="off" required/>
                                     <label htmlFor="sw2"
                                            className="text-red text-monospace text-muted"> J'accepte les
                                         Conditions Générales d'Utilisation</label>
                                 </div>
-                                <button onClick={() => {
+                                <button className="submit" onClick={() => {
                                     inputValidators()
                                 }}>
                                     {props.kantoBiz ? "Confirmer la reservation" : "Commander"}
