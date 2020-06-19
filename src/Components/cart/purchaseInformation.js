@@ -179,8 +179,8 @@ function PurchaseInformation(props) {
     };
 
     const command = () => {
-        let expiration_years = expiration.getFullYear();
-        let expiration_month = expiration.getMonth();
+        let expiration_years = expiration.split('-')[0];
+        let expiration_month = expiration.split('-')[1];
         let new_card_number = card_number.split(' ');
         window.Stripe.card.createToken({
             number: new_card_number.join(''),
@@ -202,8 +202,11 @@ function PurchaseInformation(props) {
 
     const inputControl = () => {
         $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {
+
             $(".cardCredit").removeClass("flip");
+
             $(this).mask('0000 0000 0000 0000');
+
             if ($(this).hasClass("1")) {
                 let inputVal = $(this).val();
                 if (!inputVal.length === 0) {
@@ -212,13 +215,16 @@ function PurchaseInformation(props) {
                     $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
                 }
             }
+
         });
         $(".form").find(".cd-holder").find("input").on('keyup change', function (e) {
             let inputValCdHolder = $(this).val();
+
             $(".cardCredit").removeClass("flip");
             if (!inputValCdHolder.length === 0 && inputValCdHolder.length < 19) {
                 $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text(inputValCdHolder);
             }
+
             switch(inputValCdHolder.length) {
                 case 0:
                     $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text("Nom et prénom");
@@ -236,16 +242,20 @@ function PurchaseInformation(props) {
             }
         });
         $(".form").find(".cd-validate").find(".expiration").find('select#month').on('keyup change', function () {
+
             $(".cardCredit").removeClass("flip");
             if (!$(this).val().length === 0) {
                 $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.month").text($(this).val())
             }
+
         });
         $(".form").find(".cd-validate").find(".expiration").find('select#year').on('keyup change', function () {
+
             $(".cardCredit").removeClass("flip");
             if (!$(this).val().length === 0) {
                 $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.year").text($(this).val())
             }
+
         });
     }
 
@@ -341,7 +351,7 @@ function PurchaseInformation(props) {
                                 <h4 className="text-red"><strong> Adresse de facturation </strong></h4>
                             </div>
                             <div className="card-body text-center">
-                                <div className="form-material">
+                                <form className="form-material">
                                     {/* Input */}
                                     <div className="body">
                                         <div className="form-group form-float">
@@ -378,16 +388,90 @@ function PurchaseInformation(props) {
                                                 <input type="number" id="phone" className="form-control"
                                                        placeholder="Votre téléphone" name="phone"
                                                        value={phone || ''}
-                                                       onChange={(e) => changeFields(setPhone, e)} autocomplete="off" required/>
+                                                       onChange={(e) => changeFields(setPhone, e)} autocomplete="off"/>
                                             </div>
                                         </div>
+                                    </div>
+                                    {/* #END# Input */}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6">
+                        <div className="card">
+                            <div className="card-header transparent">
+                                <h4 className="text-red"><strong>Informations carte bancaire</strong></h4>
+                            </div>
+                            <div className="flex-row ml-3">
+                                <img alt="Stripe" src="https://img.icons8.com/nolan/64/000000/stripe.png"/>
+                                <img alt="VISA Card" src="https://img.icons8.com/cute-clipart/64/000000/visa.png"/>
+                                <img alt="MasterCard" src="https://img.icons8.com/color/64/000000/mastercard.png"/>
+                            </div>
+                            <div className="card-body text-center">
+                                <div className="card-header transparent">
+                                    <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>C’est un
+                                        paiement sécurisé crypté en SSL.</strong></h4>
+                                </div>
+                                <div className="form-material pb-md-5">
+                                    {/* Input */}
+                                    <div className="body">
+                                        <div className="form-group row">
+                                            <label className="col-sm-4 col-form-label">Numero de la carte</label>
+                                            <div className="col-sm-8">
+                                                <input type="text" id="card_number" className="form-control"
+                                                       placeholder="0000 0000 0000 0000" name="card_number"
+                                                       value={card_number}
+                                                       onChange={changeCardNumber} autocomplete="off" required/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-4 col-form-label">Expiration (MM/AA)</label>
+                                            <div className="col-sm-8">
+                                                <input type="month" id="expiration" className="form-control"
+                                                       name="expiration" value={expiration}
+                                                       onChange={(e) => changeFields(setExpiration, e)}
+                                                       autocomplete="off" required/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-4 col-form-label">CVC</label>
+                                            <div className="col-sm-8">
+                                                <input type="number" id="cvc" className="form-control"
+                                                       placeholder="CVC"
+                                                       name="cvc" value={cvc}
+                                                       onChange={changeCVC} autocomplete="off" required/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <label className="col-sm-4 col-form-label">Nom sur la carte</label>
+                                            <div className="col-sm-8">
+                                                <input type="text" id="card_name" className="form-control"
+                                                       placeholder="Nom du proprietaire de la carte"
+                                                       name="card_name" value={card_name}
+                                                       onChange={(e) => changeFields(setCardName, e)} autocomplete="off"
+                                                       required/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group form-float">
+                                            <div className="form-line">
+                                                <div className="material-switch">
+                                                    <input id="unlimited" name="unlimited" type="checkbox"
+                                                           onChange={() => setRules(!rules)} autocomplete="off"/>
+                                                    <label htmlFor="sw2"
+                                                           className="text-red text-monospace text-muted"> J'accepte les
+                                                        Conditions Générales d'Utilisation</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
+                                                onClick={() => {
+                                                    inputValidators()
+                                                }}>{props.kantoBiz ? "Confirmer la reservation" : "Commander"}</button>
                                     </div>
                                     {/* #END# Input */}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-lg-6">
                         <div className="center">
                             <div className="cardCredit">
                                 <div className="front">
@@ -429,7 +513,7 @@ function PurchaseInformation(props) {
                         </div>
                         {/* credit card form */}
                         <div className={lightModeOn ? "form shadow1" : "form shadow2"}>
-                            <div>
+                            <form>
                                 <div className="cd-numbers">
                                     <label>Numéro</label>
                                     <div className="fields">
@@ -463,7 +547,7 @@ function PurchaseInformation(props) {
                                                 selected={expiration}
                                                 id="expiration"
                                                 name="expiration"
-                                                onChange={date => {setExpiration(date)}}
+                                                onChange={(e) => changeFields(setExpiration, e)}
                                                 showMonthYearPicker
                                             />
                                         </div>
@@ -482,7 +566,7 @@ function PurchaseInformation(props) {
                                 </div>
                                 <div className="material-switch m-t-50">
                                     <input id="unlimited" name="unlimited" type="checkbox"
-                                           onChange={() => setRules(!rules)} autoComplete="off" required/>
+                                           onChange={() => setRules(!rules)} autoComplete="off"/>
                                     <label htmlFor="sw2"
                                            className="text-red text-monospace text-muted"> J'accepte les
                                         Conditions Générales d'Utilisation</label>
@@ -492,7 +576,7 @@ function PurchaseInformation(props) {
                                 }}>
                                     {props.kantoBiz ? "Confirmer la reservation" : "Commander"}
                                 </button>
-                            </div>
+                            </form>
                         </div>
                         {/* end of credit card form */}
                     </div>
