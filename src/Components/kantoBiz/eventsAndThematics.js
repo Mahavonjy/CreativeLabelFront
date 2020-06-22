@@ -71,7 +71,6 @@ export const EventAndThematics = (
                         ? "text-black row justify-content-center m-2"
                         : "text-white row justify-content-center m-2"}>{desc}
                     </small>
-                    <small className={lightModeOn ? "text-black row justify-content-center m-2" : "text-white row justify-content-center m-2"}>{desc}</small>
                     {params ?
                         <button className="btn btn-outline-info row justify-content-center m-2" onClick={() => {
                             setThematics(key);

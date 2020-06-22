@@ -139,6 +139,7 @@ function DisplayPrestation(props) {
     }, [service_to_show, profile_info, date_to_search]);
 
     const [date, changeDate] = useState(new Date());
+    console.log(val);
 
     return (
 
