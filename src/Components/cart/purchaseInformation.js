@@ -202,7 +202,6 @@ function PurchaseInformation(props) {
             }
         });
     };
-
     const inputControl = () => {
         $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {
             $(".cardCredit").removeClass("flip");
