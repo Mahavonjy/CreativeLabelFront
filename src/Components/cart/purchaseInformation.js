@@ -400,6 +400,7 @@ function PurchaseInformation(props) {
                             </div>
                         </div>
                     </div>
+                    {/*Carte de crédit*/}
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-header transparent">
