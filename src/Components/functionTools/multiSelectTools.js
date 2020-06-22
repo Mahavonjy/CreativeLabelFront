@@ -7,8 +7,13 @@ function MultiSelectList(props) {
     return (
         <ul className="multiselect__list">
             {list.map((val, index) =>
-                <li className="multiselect__list-item" key={index} id={index} value={val}
-                    onClick={() => handleListItemClick(val)}>{val}</li>
+                <li className="multiselect__list-item"
+                    key={index}
+                    id={index}
+                    value={val}
+                    onClick={() => handleListItemClick(val)}>
+                    {val}
+                </li>
             )}
         </ul>
     )
@@ -43,15 +48,40 @@ function MultiSelectSearch(props) {
 }
 
 function MultiSelect(props) {
-    const {onListItemClick, onTagClick, placeholder, inputRef, onChange, onMouseDown, onBlur, isOpen, value, list, tags} = props;
+    const {
+        onListItemClick,
+        onTagClick,
+        placeholder,
+        inputRef,
+        onChange,
+        onMouseDown,
+        onBlur,
+        isOpen,
+        value,
+        list,
+        tags
+    } = props;
 
     return (
         <div className="multiselect" onMouseDown={onMouseDown} onBlur={onBlur}>
             <div className="multiselect__tags">
-                {tags.map((val, index) => <MultiSelectTag key={index} id={index} handleTagClick={onTagClick}>{val}</MultiSelectTag>)}
+                {tags.map((val, index) =>
+                    <MultiSelectTag key={index} id={index} handleTagClick={onTagClick}>
+                        {val}
+                    </MultiSelectTag>)}
             </div>
-            <MultiSelectSearch inputRef={inputRef} handleChange={onChange} handleMouseDown={onMouseDown} value={value} placeholder={placeholder} isOpen={isOpen}/>
-            {isOpen ? <MultiSelectList handleListItemClick={onListItemClick} list={list} tags={tags}/> : null}
+            <MultiSelectSearch
+                inputRef={inputRef}
+                handleChange={onChange}
+                handleMouseDown={onMouseDown}
+                value={value}
+                placeholder={placeholder}
+                isOpen={isOpen}/>
+            {isOpen ?
+                <MultiSelectList
+                    handleListItemClick={onListItemClick}
+                    list={list}
+                    tags={tags}/> : null}
         </div>
     )
 }
