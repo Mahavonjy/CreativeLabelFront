@@ -182,8 +182,8 @@ function PurchaseInformation(props) {
     };
 
     const command = () => {
-        let expiration_years = expiration.split('-')[0];
-        let expiration_month = expiration.split('-')[1];
+        let expiration_years = expiration.getFullYear();
+        let expiration_month = expiration.getMonth();
         let new_card_number = card_number.split(' ');
         window.Stripe.card.createToken({
             number: new_card_number.join(''),
@@ -402,80 +402,6 @@ function PurchaseInformation(props) {
                     </div>
                     {/*Carte de crédit*/}
                     <div className="col-lg-6">
-                        <div className="card">
-                            <div className="card-header transparent">
-                                <h4 className="text-red"><strong>Informations carte bancaire</strong></h4>
-                            </div>
-                            <div className="flex-row ml-3">
-                                <img alt="Stripe" src="https://img.icons8.com/nolan/64/000000/stripe.png"/>
-                                <img alt="VISA Card" src="https://img.icons8.com/cute-clipart/64/000000/visa.png"/>
-                                <img alt="MasterCard" src="https://img.icons8.com/color/64/000000/mastercard.png"/>
-                            </div>
-                            <div className="card-body text-center">
-                                <div className="card-header transparent">
-                                    <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>C’est un
-                                        paiement sécurisé crypté en SSL.</strong></h4>
-                                </div>
-                                <div className="form-material pb-md-5">
-                                    {/* Input */}
-                                    <div className="body">
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">Numero de la carte</label>
-                                            <div className="col-sm-8">
-                                                <input type="text" id="card_number" className="form-control"
-                                                       placeholder="0000 0000 0000 0000" name="card_number"
-                                                       value={card_number}
-                                                       onChange={changeCardNumber} autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">Expiration (MM/AA)</label>
-                                            <div className="col-sm-8">
-                                                <input type="month" id="expiration" className="form-control"
-                                                       name="expiration" value={expiration}
-                                                       onChange={(e) => changeFields(setExpiration, e)}
-                                                       autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">CVC</label>
-                                            <div className="col-sm-8">
-                                                <input type="number" id="cvc" className="form-control"
-                                                       placeholder="CVC"
-                                                       name="cvc" value={cvc}
-                                                       onChange={changeCVC} autocomplete="off" required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-4 col-form-label">Nom sur la carte</label>
-                                            <div className="col-sm-8">
-                                                <input type="text" id="card_name" className="form-control"
-                                                       placeholder="Nom du proprietaire de la carte"
-                                                       name="card_name" value={card_name}
-                                                       onChange={(e) => changeFields(setCardName, e)} autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <div className="material-switch">
-                                                    <input id="unlimited" name="unlimited" type="checkbox"
-                                                           onChange={() => setRules(!rules)} autocomplete="off"/>
-                                                    <label htmlFor="sw2"
-                                                           className="text-red text-monospace text-muted"> J'accepte les
-                                                        Conditions Générales d'Utilisation</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => {
-                                                    inputValidators()
-                                                }}>{props.kantoBiz ? "Confirmer la reservation" : "Commander"}</button>
-                                    </div>
-                                    {/* #END# Input */}
-                                </div>
-                            </div>
-                        </div>
                         <div className="center">
                             <div className="cardCredit">
                                 <div className="front">
@@ -517,7 +443,7 @@ function PurchaseInformation(props) {
                         </div>
                         {/* credit card form */}
                         <div className={lightModeOn ? "form shadow1" : "form shadow2"}>
-                            <form>
+                            <div>
                                 <div className="cd-numbers">
                                     <label>Numéro</label>
                                     <div className="fields">
@@ -551,7 +477,7 @@ function PurchaseInformation(props) {
                                                 selected={expiration}
                                                 id="expiration"
                                                 name="expiration"
-                                                onChange={(e) => changeFields(setExpiration, e)}
+                                                onChange={date => {setExpiration(date)}}
                                                 showMonthYearPicker
                                             />
                                         </div>
@@ -570,7 +496,7 @@ function PurchaseInformation(props) {
                                 </div>
                                 <div className="material-switch m-t-50">
                                     <input id="unlimited" name="unlimited" type="checkbox"
-                                           onChange={() => setRules(!rules)} autoComplete="off"/>
+                                           onChange={() => setRules(!rules)} autoComplete="off" required/>
                                     <label htmlFor="sw2"
                                            className="text-red text-monospace text-muted"> J'accepte les
                                         Conditions Générales d'Utilisation</label>
@@ -580,7 +506,7 @@ function PurchaseInformation(props) {
                                 }}>
                                     {props.kantoBiz ? "Confirmer la reservation" : "Commander"}
                                 </button>
-                            </form>
+                            </div>
                         </div>
                         {/* end of credit card form */}
                     </div>
