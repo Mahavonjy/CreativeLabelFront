@@ -390,6 +390,7 @@ function PurchaseInformation(props) {
                             </div>
                         </div>
                     </div>
+                    {/*Carte de crédit*/}
                     <div className="col-lg-6">
                         <div className="center">
                             <div className="cardCredit">
