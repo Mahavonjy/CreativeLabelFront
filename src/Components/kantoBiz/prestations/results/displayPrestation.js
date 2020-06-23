@@ -36,6 +36,8 @@ import AddLocation from '@material-ui/icons/AddLocation';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight } from "../../../functionTools/utilStyles";
+//import stepper from MDB react
+import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBCard, MDBCardBody, MDBInput } from "mdbreact";
 
 class LocalizedUtils extends DateFnsUtils {
     getDatePickerHeaderText(date) {
@@ -67,6 +69,31 @@ function DisplayPrestation(props) {
     const [total_amount, setTotalAmount] = useState(0);
     // const [rating, setRating] = useState(1);
     const [val, setVal] = useState(0);
+
+    const state = {
+        formActivePanel1: 1,
+        formActivePanel1Changed: false,
+    }
+
+    const swapFormActive = (a) => (param) => (e) => {
+        this.setState({
+            ['formActivePanel' + a]: param,
+            ['formActivePanel' + a + 'Changed']: true
+        });
+    }
+
+    const handleNextPrevClick = (a) => (param) => (e) => {
+        this.setState({
+            ['formActivePanel' + a]: param,
+            ['formActivePanel' + a + 'Changed']: true
+        });
+    }
+
+    const calculateAutofocus = (a) => {
+        if (this.state['formActivePanel' + a + 'Changed']) {
+            return true
+        }
+    }
 
 
     const onScrollViewSearch = () => {
@@ -343,7 +370,7 @@ function DisplayPrestation(props) {
                                         </button>
                                     </div>
                                     <div className="mb-4 card" style={{ boxShadow: "rbga(255,0,0,0.2)" }} >
-                                        <div className="flex-grow-0 text-center pb-3" >
+                                        <div className="flex-grow-0 pb-3" >
                                             <h2 className="col text-primary pb-3">Plus de détails</h2>
                                             <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique d’annulation
                                                 :</strong> {service_to_show.refund_policy}&nbsp;<i
