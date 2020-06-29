@@ -27,8 +27,25 @@ const initState = {
     preparation_time: null,
     number_of_artist: 1,
     unit_time_of_preparation: {"day": false, "hours": false, "min": false, "sec": false},
-    unit_time_of_service: {"day": false, "hours": false, "min": false, "sec": false}
+    unit_time_of_service: {"day": false, "hours": false, "min": false, "sec": false},
     // End Service Details
+    //Personal information
+    postal_code: '',
+    name: '',
+    last_name: '',
+    email: '',
+    address: '',
+    city: '',
+    phone: '',
+    // page Reservation
+    val: 0,
+    activeStep: 0,
+    completed: new Set(),
+    reservation: false,
+    tva: 0,
+    ht_price: 0,
+    total_amount: 0,
+    isl_amount: 0
 };
 
 const kantoBizForm = (state = initState, action) => {
@@ -147,6 +164,81 @@ const kantoBizForm = (state = initState, action) => {
             return {
                 ...state,
                 unit_time_of_service: action.data
+            };
+        case "ADD_POSTAL_CODE" :
+            return {
+                ...state,
+                postal_code: action.data
+            };
+        case "ADD_NAME" :
+            return {
+                ...state,
+                name: action.data
+            };
+        case "ADD_LAST_NAME" :
+            return {
+                ...state,
+                last_name: action.data
+            };
+        case "ADD_EMAIL" :
+            return {
+                ...state,
+                email: action.data
+            };
+        case "ADD_ADDRESS" :
+            return {
+                ...state,
+                address: action.data
+            };
+        case "ADD_CITY" :
+            return {
+                ...state,
+                city: action.data
+            };
+        case "ADD_PHONE" :
+            return {
+                ...state,
+                phone: action.data
+            };
+        case "ACTIVE_STEP":
+            return {
+                ...state,
+                activeStep: action.data
+            };
+        case "COMPLETED_STEP":
+            return {
+                ...state,
+                completed: action.data
+            };
+        case "CHANGE_VALUE":
+            return {
+                ...state,
+                val: action.data
+            };
+        case "ADD_TOTAL_AMOUNT":
+            return {
+                ...state,
+                total_amount: action.data
+            };
+        case "ADD_ISL_AMOUNT":
+            return {
+                ...state,
+                isl_amount: action.data
+            };
+        case "ADD_HT_PRICE":
+            return {
+                ...state,
+                ht_price: action.data
+            };
+        case "ADD_TVA":
+            return {
+                ...state,
+                tva: action.data
+            };
+        case "ADD_RESERVATION":
+            return {
+                ...state,
+                reservation: action.data
             };
         default:
             return state;

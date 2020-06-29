@@ -5,12 +5,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {toast} from "react-toastify";
 import Conf from "../../config/tsconfig";
-import {addAllUSerBookingReservation, addSuccessMessage} from "../functionTools/functionProps";
-import {changeFields, isNumber} from "../functionTools/tools";
+import {
+    addAllUSerBookingReservation,
+    addSuccessMessage
+} from "../functionTools/functionProps";
+import {changeFields, isNumber, inputControl} from "../functionTools/tools";
 import HomeRoot from "../home/homeRoot";
 import {checkErrorMessage} from "../validators/validatiors";
-import $ from "jquery";
-import 'jquery-mask-plugin';
 import DatePicker from 'react-datepicker';
 
 
@@ -34,22 +35,24 @@ function PurchaseInformation(props) {
     const events_to_search = useSelector(state => state.KantobizSearchInfo.events_to_search);
     const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
+    const name     = useSelector(state => state.KantoBizForm.name);
+    const lastname = useSelector(state => state.KantoBizForm.last_name);
+    const email    = useSelector(state => state.KantoBizForm.email)
+    const address  = useSelector(state => state.KantoBizForm.address);
+    const city     = useSelector(state => state.KantoBizForm.city);
+    const phone    = useSelector(state => state.KantoBizForm.phone);
+    const postal_code    = useSelector(state => state.KantoBizForm.postal_code);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [cvc, setCvc] = useState("");
     const [rules, setRules] = useState(false);
     const [card_name, setCardName] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [postal_code, setPostalCode] = useState("");
     const [card_number, setCardNumber] = useState("");
     const [expiration, setExpiration] = useState(new Date());
     const [payment_loading, setPaymentLoading] = useState(false);
-    const [name, setName] = useState(profile_info.name);
-    const [email, setEmail] = useState(profile_info.email);
-    const [address, setAddress] = useState(profile_info.address);
-    const [city, setCity] = useState(profile_info.city);
-    const [phone, setPhone] = useState(profile_info.phone);
+
+    const handleNext = () => {};
 
     const changeCardNumber = (e) => {
         let cardNumber = e.target.value;
@@ -162,9 +165,7 @@ function PurchaseInformation(props) {
 
     const inputValidators = () => {
         if (
-            stateInvalid(name, "name") && stateInvalid(email, "email") &&
-            stateInvalid(address, "address") && stateInvalid(postal_code, "code postal") &&
-            stateInvalid(city, "ville") && stateInvalid(card_number, "numero de la carte") &&
+            stateInvalid(card_number, "numero de la carte") &&
             stateInvalid(expiration, "date d'expiration") && stateInvalid(cvc, "cvc") &&
             stateInvalid(card_name, "nom sur la carte")
         ) {
@@ -202,65 +203,6 @@ function PurchaseInformation(props) {
             }
         });
     };
-    const inputControl = () => {
-        $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {
-
-            $(".cardCredit").removeClass("flip");
-
-            $(this).mask('0000 0000 0000 0000');
-
-            if ($(this).hasClass("1")) {
-                let inputVal = $(this).val();
-                if (!inputVal.length == 0) {
-                    $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text(inputVal);
-                } else {
-                    $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
-                }
-            }
-
-        });
-        $(".form").find(".cd-holder").find("input").on('keyup change', function (e) {
-            let inputValCdHolder = $(this).val();
-
-            $(".cardCredit").removeClass("flip");
-            if (!inputValCdHolder.length == 0 && inputValCdHolder.length < 19) {
-                $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text(inputValCdHolder);
-            }
-
-            switch(inputValCdHolder.length) {
-                case 0:
-                    $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text("Nom et prénom");
-                    break;
-                case 18:
-                    $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").append("...");
-            }
-        });
-        $(".form").find(".cd-validate").find(".cvc").find('input').on('keyup change', function (e) {
-            let inputCvcVal = $(this).val();
-            if (!inputCvcVal.length == 0) {
-                $(".cardCredit").addClass("flip").find(".cvc").find("p").text(inputCvcVal);
-            } else if (inputCvcVal.length === 0) {
-                $(".cardCredit").removeClass("flip");
-            }
-        });
-        $(".form").find(".cd-validate").find(".expiration").find('select#month').on('keyup change', function () {
-
-            $(".cardCredit").removeClass("flip");
-            if (!$(this).val().length == 0) {
-                $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.month").text($(this).val())
-            }
-
-        });
-        $(".form").find(".cd-validate").find(".expiration").find('select#year').on('keyup change', function () {
-
-            $(".cardCredit").removeClass("flip");
-            if (!$(this).val().length == 0) {
-                $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.year").text($(this).val())
-            }
-
-        });
-    }
-
     
     useEffect(() => {
         loadStripe();
@@ -303,103 +245,6 @@ function PurchaseInformation(props) {
             </Modal>
             <div className="col-12 pl-lg-3">
                 <div className="row justify-content-center">
-                    <div className="col-lg-6">
-                        <div className="card">
-                            <div className="card-header transparent">
-                                {profile_info.name ?
-                                    <h4 className="text-red"><strong>Informations personnelles</strong></h4>
-                                    : <h4 className="text-red"><strong>Vous avez déjà un compte ?
-                                        <button
-                                            className="border-top-0 border-left-0 border-right-0 text-red transparent"
-                                            onClick={() => document.getElementById("LoginRequire").click()}>&nbsp;Se
-                                            connecter</button></strong></h4>}
-
-                            </div>
-                            <div className="card-body text-center">
-                                <form className="form-material">
-                                    {/* Input */}
-                                    <div className="body">
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="text" id="name" className="form-control"
-                                                       placeholder="Votre nom" name="name"
-                                                       value={name || ''}
-                                                       onChange={(e) => changeFields(setName, e)} autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="text" id="lastname" className="form-control"
-                                                       placeholder="Votre prénom" name="lastname"
-                                                       value={lastname}
-                                                       onChange={(e) => changeFields(setLastname, e)} autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="email" id="email" className="form-control"
-                                                       placeholder="E-mail"
-                                                       name="email" value={email || ''}
-                                                       onChange={(e) => changeFields(setEmail, e)} autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* #END# Input */}
-                                </form>
-                            </div>
-                            <div className="card-header  transparent">
-                                <h4 className="text-red"><strong> Adresse de facturation </strong></h4>
-                            </div>
-                            <div className="card-body text-center">
-                                <form className="form-material">
-                                    {/* Input */}
-                                    <div className="body">
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="text" id="address" className="form-control"
-                                                       placeholder="Votre addresse" name="address"
-                                                       value={address || ''}
-                                                       onChange={(e) => changeFields(setAddress, e)}
-                                                       autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="number" id="postal_code" className="form-control"
-                                                       placeholder="Votre code postal" name="postal_code"
-                                                       value={postal_code || ''}
-                                                       onChange={(e) => changeFields(setPostalCode, e)}
-                                                       autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="text" id="city" className="form-control"
-                                                       placeholder="Votre ville" name="city"
-                                                       value={city || ''}
-                                                       onChange={(e) => changeFields(setCity, e)} autocomplete="off"
-                                                       required/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group form-float">
-                                            <div className="form-line">
-                                                <input type="number" id="phone" className="form-control"
-                                                       placeholder="Votre téléphone" name="phone"
-                                                       value={phone || ''}
-                                                       onChange={(e) => changeFields(setPhone, e)} autocomplete="off"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* #END# Input */}
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                     {/*Carte de crédit*/}
                     <div className="col-lg-6">
                         <div className="center">

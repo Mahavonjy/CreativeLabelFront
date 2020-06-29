@@ -894,3 +894,137 @@ export function activeThemeLight(data) {
         })
     }
 }
+
+export function addName(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_NAME",
+            data: data
+        })
+    }
+}
+
+export function addLastName(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_LAST_NAME",
+            data: data
+        })
+    }
+}
+
+export function addEmail(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_EMAIL",
+            data: data
+        })
+    }
+}
+
+export function addAddress(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ADDRESS",
+            data: data
+        })
+    }
+}
+
+export function addCity(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_CITY",
+            data: data
+        })
+    }
+}
+
+export function addPhone(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_PHONE",
+            data: data
+        })
+    }
+}
+
+export function addPostalCode(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_POSTAL_CODE",
+            data: data
+        })
+    }
+}
+
+export function activeSteps(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ACTIVE_STEP",
+            data: data
+        })
+    }
+}
+
+export function completed(data) {
+    return async dispatch => {
+        dispatch({
+            type: "COMPLETED_STEP",
+            data: data
+        })
+    }
+}
+
+export function changeValue(data) {
+    return async dispatch => {
+        dispatch({
+            type: "CHANGE_VALUE",
+            data: data
+        })
+    }
+}
+
+export function addTotalAmount(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_TOTAL_AMOUNT",
+            data: data
+        })
+    }
+}
+
+export function addIslAmount(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_ISL_AMOUNT",
+            data: data
+        })
+    }
+}
+
+export function addThPrice(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_HT_PRICE",
+            data: data
+        })
+    }
+}
+export function addTva(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_TVA",
+            data: data
+        })
+    }
+}
+export function addReservation(data) {
+    return async dispatch => {
+        dispatch({
+            type: "ADD_RESERVATION",
+            data: data
+        })
+    }
+}
+

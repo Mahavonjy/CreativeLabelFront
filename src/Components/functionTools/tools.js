@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import {FacebookProvider, Feed} from "react-facebook";
+import {useDispatch} from "react-redux";
 import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Conf from "../../config/tsconfig";
@@ -8,6 +9,8 @@ import HomeRoot from "../home/homeRoot";
 import OtherProfile from "../profile/otherProfile";
 import * as Validators from "../validators/validatiors";
 import {
+    activeSteps,
+    completed,
     addAllUserOptions,
     addAllUserPrestation,
     addCarts,
@@ -34,6 +37,10 @@ import {
     addUserId,
     changeStatusOfService
 } from "./functionProps";
+import $ from "jquery";
+import 'jquery-mask-plugin';
+import {makeStyles} from "@material-ui/core/styles";
+
 
 export const funcToSpecifyValueForSpecialInput = (country_allowed, setTo) => {
     let tmp = [];
@@ -57,6 +64,65 @@ export const changeFields = (setState, e, up_props, dispatch, key, props) => {
             dispatch(up_props(props))
         } else dispatch(up_props(value))
     }
+};
+
+export const inputControl = () => {
+    $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {
+
+        $(".cardCredit").removeClass("flip");
+
+        $(this).mask('0000 0000 0000 0000');
+
+        if ($(this).hasClass("1")) {
+            let inputVal = $(this).val();
+            if (!inputVal.length == 0) {
+                $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text(inputVal);
+            } else {
+                $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
+            }
+        }
+
+    });
+    $(".form").find(".cd-holder").find("input").on('keyup change', function (e) {
+        let inputValCdHolder = $(this).val();
+
+        $(".cardCredit").removeClass("flip");
+        if (!inputValCdHolder.length == 0 && inputValCdHolder.length < 19) {
+            $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text(inputValCdHolder);
+        }
+
+        switch(inputValCdHolder.length) {
+            case 0:
+                $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text("Nom et prénom");
+                break;
+            case 18:
+                $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").append("...");
+        }
+    });
+    $(".form").find(".cd-validate").find(".cvc").find('input').on('keyup change', function (e) {
+        let inputCvcVal = $(this).val();
+        if (!inputCvcVal.length == 0) {
+            $(".cardCredit").addClass("flip").find(".cvc").find("p").text(inputCvcVal);
+        } else if (inputCvcVal.length === 0) {
+            $(".cardCredit").removeClass("flip");
+        }
+    });
+    $(".form").find(".cd-validate").find(".expiration").find('select#month').on('keyup change', function () {
+
+        $(".cardCredit").removeClass("flip");
+        if (!$(this).val().length == 0) {
+            $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.month").text($(this).val())
+        }
+
+    });
+    $(".form").find(".cd-validate").find(".expiration").find('select#year').on('keyup change', function () {
+
+        $(".cardCredit").removeClass("flip");
+        if (!$(this).val().length == 0) {
+            $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.year").text($(this).val())
+        }
+
+    });
 };
 
 export const FillInCartProps = (headers, props) => {
@@ -180,6 +246,65 @@ export const LikeOrFollow = (LikeOrFollow, id, user_credentials) => {
         }
         ;
     }
+};
+
+//stepper function
+export const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    button: {
+        marginRight: theme.spacing(1),
+    },
+    backButton: {
+        marginRight: theme.spacing(1),
+    },
+    completed: {
+        display: 'inline-block',
+    },
+    instructions: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+}));
+
+export const getSteps = () => {
+    return ['Réservez le prestataire', 'Information personnelle', 'Carte de crédit'];
+}
+
+export const totalSteps = () => {
+    return getSteps().length;
+};
+
+export const completedSteps = (completed) => {
+    return completed.size;
+};
+
+export const allStepsCompleted = () => {
+    return completedSteps() === totalSteps();
+};
+
+export const isLastStep = (activeStep) => {
+    return activeStep === totalSteps() - 1;
+};
+
+export const handleNext = (steps, activeStep, completed, dispatch) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+
+    const newActiveStep =
+        isLastStep() && !allStepsCompleted()
+            ? // It's the last step, but not all steps have been completed
+              // find the first step that has been completed
+            steps.findIndex((step, i) => !completed.has(i))
+            : activeStep + 1;
+    console.log(newActiveStep)
+    dispatch(activeSteps(newActiveStep))
+};
+
+export const handleStep = (step, dispatch) => () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+
+    dispatch(activeSteps(step))
 };
 
 export const isNumber = (number_) => {

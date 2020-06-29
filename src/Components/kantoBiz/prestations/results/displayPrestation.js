@@ -1,150 +1,92 @@
 import axios from "axios";
 import DateFnsUtils from "@date-io/date-fns";
 import dateFormat from 'dateformat';
-import { MDBRating } from "mdbreact";
-import React, { useEffect, useRef, useState } from "react";
-import { FacebookProvider, Feed } from "react-facebook";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import {MDBRating} from "mdbreact";
+import React, {useEffect, useRef, useState} from "react";
+import {FacebookProvider, Feed} from "react-facebook";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory, useParams} from "react-router-dom";
 // import StarRatings from 'react-star-ratings';
-import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
 import Conf from "../../../../config/tsconfig";
 import PurchaseInformation from "../../../cart/purchaseInformation";
-import {
-    addListOfOptionsAdded,
-    addReservationAddress,
-    addServiceToShow,
-    changeDateToSearch,
-    // changeInitialized
-} from "../../../functionTools/functionProps";
-import {
-    ChangeDate,
-    changeFields,
-    checkUnitKey,
-    checkValueIfExistInArray,
-    formatDate
+import {getSteps, handleStep
 } from "../../../functionTools/tools";
+
 // import Calendar from "../../calendar/calendar";
-import { TextField } from '@material-ui/core';
-import format from "date-fns/format";
-import frLocale from "date-fns/locale/fr";
-import { ThemeProvider } from '@material-ui/core/styles';
-import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import AddLocation from '@material-ui/icons/AddLocation';
-import InputAdornment from '@material-ui/core/InputAdornment';
-
-import { defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight } from "../../../functionTools/utilStyles";
-//import stepper from MDB react
-import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBCard, MDBCardBody, MDBInput } from "mdbreact";
-
-class LocalizedUtils extends DateFnsUtils {
-    getDatePickerHeaderText(date) {
-        return format(date, "d MMM yyyy", { locale: this.locale });
-    }
-}
+//import stepper from Material react
+import {makeStyles} from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepButton from '@material-ui/core/StepButton';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import PersonalInformation from "../../../cart/personalInformation";
+import Reservation from "../../../cart/Reservation";
+import {
+    addTva, addThPrice, addTotalAmount,
+    changeValue, addIslAmount
+} from "../../../functionTools/functionProps";
 
 function DisplayPrestation(props) {
 
-    let { id } = useParams()
+    let {id} = useParams()
     const history = useHistory();
     const dispatch = useDispatch();
-    const profile_info = useSelector(state => state.profile.profile_info);
     const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
-    const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
+    const profile_info = useSelector(state => state.profile.profile_info);
     const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
-    const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
+    const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
+    const reservation = useSelector(state => state.KantoBizForm.reservation);
+    const tvas = useSelector(state => state.KantoBizForm.tva);
+    const ht_prices = useSelector(state => state.KantoBizForm.ht_price);
+    const isl_amounts = useSelector(state => state.KantoBizForm.isl_amount);
+    const total_amounts = useSelector(state => state.KantoBizForm.total_amount);
+    const activeStep = useSelector(state => state.KantoBizForm.activeStep);
+    const valeur = useSelector(state => state.KantoBizForm.val);
+    const steps = getSteps();
+
+    const paymentRef = useRef(null);
 
     const isMounted = useRef(false);
-    const paymentRef = useRef(null);
     const [event_date, setEventDate] = useState(null);
-    const [reservation, setReservation] = useState(false);
     const [address, setAddress] = useState(reservation_address);
-    const [tva, setTva] = useState(0);
-    const [ht_price, setHtPrice] = useState(0);
+    const [tva, setTva] = useState(tvas);
+    const [ht_price, setHtPrice] = useState(ht_prices);
     /* eslint-disable-next-line no-unused-vars */
-    const [isl_amount, setIslAmount] = useState(0);
-    const [total_amount, setTotalAmount] = useState(0);
+    const [isl_amount, setIslAmount] = useState(isl_amounts);
+    const [total_amount, setTotalAmount] = useState(total_amounts);
     // const [rating, setRating] = useState(1);
-    const [val, setVal] = useState(0);
+    const [val, setVal] = useState(valeur);
 
-    const state = {
-        formActivePanel1: 1,
-        formActivePanel1Changed: false,
-    }
-
-    const swapFormActive = (a) => (param) => (e) => {
-        this.setState({
-            ['formActivePanel' + a]: param,
-            ['formActivePanel' + a + 'Changed']: true
-        });
-    }
-
-    const handleNextPrevClick = (a) => (param) => (e) => {
-        this.setState({
-            ['formActivePanel' + a]: param,
-            ['formActivePanel' + a + 'Changed']: true
-        });
-    }
-
-    const calculateAutofocus = (a) => {
-        if (this.state['formActivePanel' + a + 'Changed']) {
-            return true
-        }
-    }
-
-
-    const onScrollViewSearch = () => {
-        paymentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    const validReservation = async () => {
-        if (!profile_info)
-            document.getElementById("LoginRequire").click();
-        else {
-            if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
-            else if (formatDate(date_to_search) === formatDate(new Date())) toast.error("Veuillez choisir une autre date");
-            else {
-                await setReservation(true);
-                await onScrollViewSearch();
-            }
-        }
-    };
-
-    const addOption = async (value) => {
-        let tmp = [...list_of_options_added];
-        let tmpService = { ...service_to_show };
-        tmpService.price += value.price;
-        if (!checkValueIfExistInArray(value.id, tmp)) {
-            tmp.push(value.id);
-            await dispatch(addListOfOptionsAdded(tmp));
-            await dispatch(addServiceToShow(tmpService));
-            await toast.success("Option Ajouter avec succès");
-        }
-    };
-
-    const removeOption = async (value) => {
-        let tmp = [];
-        let tmpService = { ...service_to_show };
-        Promise.all(list_of_options_added.map(elem => {
-            if (elem !== value.id) tmp.push(value.id);
-            else tmpService.price -= value.price;
-            return true
-        })).then(r => {
-            dispatch(addListOfOptionsAdded(tmp));
-            dispatch(addServiceToShow(tmpService));
-            toast.warn("Option supprimer avec succès");
-        });
-    };
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            width: '100%'
+        },
+        button: {
+            marginRight: theme.spacing(1),
+        },
+        backButton: {
+            marginRight: theme.spacing(1),
+        },
+        completed: {
+            display: 'inline-block',
+        },
+        instructions: {
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+        },
+    }));
+    const classes = useStyles();
 
     const serviceValue = async () => {
         axios.get("/api/artist_services/" + id, { headers: props.headers }).then((resp) => {
-            setVal(resp.status)
-        }
+            setVal(resp.status);
+            dispatch(changeValue(val))
+            }
         )
-
     }
 
     useEffect(() => {
@@ -153,11 +95,15 @@ function DisplayPrestation(props) {
         axios.post("api/reservation/check_total_price",
             { price: service_to_show.price },
             { headers: props.headers }).then((resp) => {
-                setTva(resp.data["tva"]);
-                setHtPrice(resp.data["ht_price"]);
-                setIslAmount(resp.data["isl_amount"]);
-                setTotalAmount(resp.data["total_amount"])
-            });
+            setTva(resp.data["tva"]);
+            setHtPrice(resp.data["ht_price"]);
+            setIslAmount(resp.data["isl_amount"]);
+            setTotalAmount(resp.data["total_amount"])
+            dispatch(addTva(tva));
+            dispatch(addTotalAmount(total_amount));
+            dispatch(addIslAmount(isl_amount));
+            dispatch(addThPrice(ht_price));
+        });
 
         return () => {
             isMounted.current = true
@@ -165,31 +111,30 @@ function DisplayPrestation(props) {
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [service_to_show, profile_info, date_to_search]);
 
-    const [date, changeDate] = useState(new Date());
     console.log(val);
 
     return (
 
         val === 200 ? <div className="Base pt-5 p-b-100 zIndex-1">
-            <ReactTooltip />
+            <ReactTooltip/>
             <ReactTooltip className="special-color-dark" id='refund' aria-haspopup='true'>
-                <h5 className="text-center text-green"> Details des rembouresement </h5><br />
+                <h5 className="text-center text-green"> Details des rembouresement </h5><br/>
                 <h6 className="text-center text-info"> Rembouresement flexible</h6>
                 <small>• Si l’utilisateur annule jusqu à 7 jours avant le début de la représentation il est remboursé à
-                    100%. </small><br />
+                    100%. </small><br/>
                 <small>• Si l’utilisateur annule moins de 7 jours avant la représentation il est remboursé à
-                    50% </small><br /><br />
+                    50% </small><br/><br/>
                 <h6 className="text-center text-info"> Rembouresement stricte</h6>
                 <small>• Si l’utilisateur annule jusqu’à 7 jours avant le début de la représentation, il est remboursé à
-                    50%</small><br />
+                    50%</small><br/>
                 <small>• Si l’utilisateur annule moins de 7 jours avant la représentation, il n’y a pas de
-                    remboursement.</small><br /><br />
+                    remboursement.</small><br/><br/>
             </ReactTooltip>
             <ReactTooltip className="special-color-dark" id='option' aria-haspopup='true'>
-                <h5 className="text-center text-green"> Explication des options </h5><br />
+                <h5 className="text-center text-green"> Explication des options </h5><br/>
                 <small>• Quelque option en plus de la prestation d'origine que l'artist propose pour amelioré le
-                    show </small><br />
-                <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br /><br />
+                    show </small><br/>
+                <small>• Voici quelques exemple d'option : Featuring avec un artiste, shooting ... </small><br/><br/>
             </ReactTooltip>
             <div className="profile-page">
                 <button
@@ -199,12 +144,12 @@ function DisplayPrestation(props) {
                             history.push("/profile");
                         else history.push("/kantoBiz");
                     }}
-                    style={{ position: "fixed", bottom: "5%", zIndex: 99 }}
+                    style={{position: "fixed", bottom: "5%", zIndex: 99}}
                     className="btn-custom btn-outline-light border-bottom-0 border-right-0">
-                    <i className="icon icon-long-arrow-left s-24 align-middle" />&nbsp;Precedent
+                    <i className="icon icon-long-arrow-left s-24 align-middle"/>&nbsp;Precedent
                 </button>
                 <div className="page-header header-filter border1" data-parallax="true"
-                    style={{ backgroundImage: 'url(' + service_to_show.galleries[0] + ')' }} />
+                     style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}}/>
                 <div
                     className={lightModeOn ? "main bg-white main-raised ml-3 mr-3" : "main bg-dark main-raised ml-3 mr-3"}>
                     <div className="profile-content">
@@ -216,7 +161,7 @@ function DisplayPrestation(props) {
                                             src={service_to_show.galleries.length > 1
                                                 ? service_to_show.galleries[1]
                                                 : service_to_show.galleries[0]}
-                                            alt="Circle" className="img-raised rounded-circle img-fluid" />
+                                            alt="Circle" className="img-raised rounded-circle img-fluid"/>
                                     </div>
                                     <div className="name pt-5">
                                         <h3 className="title text-red text-center"
@@ -228,18 +173,18 @@ function DisplayPrestation(props) {
 
                                         <div className="m-2">
                                             <i className="icon icon-instagram text-red"
-                                                data-tip="Partager Cette Prestation sur Instagram" />
+                                               data-tip="Partager Cette Prestation sur Instagram"/>
                                             <FacebookProvider appId={Conf.configs.FacebookId} debug>
                                                 <Feed link={"http://" + window.location.host + "/kantoBiz"}>
-                                                    {({ handleClick }) => (
+                                                    {({handleClick}) => (
                                                         <i className="icon icon-facebook text-red"
-                                                            onClick={handleClick}
-                                                            data-tip="Partager Cette Prestation sur facebook" />
+                                                           onClick={handleClick}
+                                                           data-tip="Partager Cette Prestation sur facebook"/>
                                                     )}
                                                 </Feed>
                                             </FacebookProvider>
                                             <i className="icon icon-twitter text-red"
-                                                data-tip="Partager Cette Prestation sur Twitter" />
+                                               data-tip="Partager Cette Prestation sur Twitter"/>
                                         </div>
                                     </div>
                                 </div>
@@ -248,286 +193,71 @@ function DisplayPrestation(props) {
                                 <p data-tip="Description">{service_to_show.description}</p>
                                 <div className="flex-column justify-content-center" data-tip="Noter Moi">
                                     <MDBRating iconFaces iconSize='2x' iconRegular
-                                        containerClassName="justify-content-center"
-                                        fillColors={[
-                                            'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
-                                        ]}
+                                               containerClassName="justify-content-center"
+                                               fillColors={[
+                                                   'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
+                                               ]}
                                     />
                                     {/*<StarRatings rating={service_to_show.notes} starRatedColor="red"*/}
                                     {/*             numberOfStars={5} starDimension="20px"*/}
                                     {/*             starSpacing="10px" className="col" name='rating'/>*/}
                                     {/*<span className="col pt-2">5&nbsp;✰</span>*/}
                                 </div>
+                                <Stepper alternativeLabel nonLinear activeStep={activeStep}>
+                                    {steps.map((label, index) => {
+                                        const stepProps = {};
+                                        const buttonProps = {};
+                                        return (
+                                            <Step key={label} {...stepProps}>
+                                                <StepButton
+                                                    onClick={handleStep(index, dispatch)}
+                                                    {...buttonProps}
+                                                >
+                                                    {label}
+                                                </StepButton>
+                                            </Step>
+                                        );
+                                    })}
+                                </Stepper>
                             </div>
-                            <div className="row text-center pt-5">
-                                <div className="col-md-4">
-                                    <div className="mb-4 p-1 rounded" style={{ border: "dashed 1px white" }}>
-                                        <h2 className="text-red border-bottom">Details de la reservations</h2>
-                                        <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Prix
-                                            HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info"
-                                                data-tip="Ceci est le prix HT" /></h3>
-                                        <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Tva
-                                            (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info"
-                                                data-tip="Ceci est le tva du prix HT" />
-                                        </h3>
-                                        <h3 className="col"><small className={lightModeOn ? "text-dark" : "text-light"}>Prix
-                                            TTC:</small>&nbsp;{total_amount}$&nbsp;<i
-                                                className="icon text-red icon-info" data-tip="Ceci est le prix TTC" /></h3>
-                                    </div>
-                                    <div className="mb-4 card">
-                                        <div className="flex-grow-0 text-center pb-3">
-                                            <h4 className="col text-primary">Temps de préparation
-                                                : {service_to_show.preparation_time}
-                                                {checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;
-                                                <i className="icon icon-info"
-                                                    data-tip="Ceci est le temps de preparation de l'artiste" /></h4>
-                                            <h4 className="col text-primary">Durée de la prestation
-                                                : {service_to_show.duration_of_the_service}
-                                                {checkUnitKey(service_to_show.unit_duration_of_the_service)}&nbsp;
-                                                <i className="icon icon-info"
-                                                    data-tip="Ceci est le durée de l'evenement" /></h4>
-                                            <div className="col pt-2 pb-2">
-                                                <div className="custom-float">
-                                                    <div className="input-group-prepend d-inline-block center">
-                                                        <div className="input-group-text text-dark">
-                                                            <i className="icon-clock-1" />&nbsp;Date de l'évènement
-                                                            *&nbsp;<i className="icon icon-info"
-                                                                data-tip="Indiquer la date et l'heure de l'évènement" />
-                                                        </div>
-                                                        {/* <input type="date" value={event_date} className="form-control"
-                                                            onChange={
-                                                                (date) =>
-                                                                    ChangeDate(
-                                                                        date,
-                                                                        setEventDate,
-                                                                        dispatch,
-                                                                        changeDateToSearch
-                                                                    )
-                                                            } /> */}
-                                                        <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale}>
-                                                            <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
-                                                                <KeyboardDatePicker
-                                                                    id="date-picker-dialog"
-                                                                    disablePast="false"
-                                                                    format="dd/MM/yyyy"
-                                                                    cancelLabel='annuler'
-                                                                    autoOk='true'
-                                                                    value={event_date}
-                                                                    onChange={
-                                                                        (date) => {
-                                                                            ChangeDate(
-                                                                                date,
-                                                                                setEventDate,
-                                                                                dispatch,
-                                                                                changeDateToSearch
-                                                                            )
-                                                                        }}
-                                                                    KeyboardButtonProps={{
-                                                                        'aria-label': 'change date',
-                                                                        'headerColor': 'red'
-                                                                    }}
-                                                                />
-                                                            </ThemeProvider>
-                                                        </MuiPickersUtilsProvider>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            {(activeStep === 0) && <Typography className={classes.instructions}>
+                                <Reservation/>
+                            </Typography>}
+                            {reservation &&
+                                <div className="row text-center pt-5">
+                                    <div className="col" ref={paymentRef}>
+                                        {(activeStep === 1) && <Typography className={classes.instructions}>
 
-                                            <div className="col pt-2 pb-2">
-                                                <div className="custom-float">
-                                                    <div className="input-group-prepend d-inline-block center"
-                                                        style={{ width: "100%" }}>
-                                                        <div className="input-group-text text-dark">
-                                                            <i className="icon-map-marker" />&nbsp;Adresse de l'évènement
-                                                            *
-                                                        </div>
-                                                        {/* <input type="text" value={address} id="address"
-                                                            placeholder="Indiquer l'adresse de l'évènement"
-                                                            name="address" className="form-control"
-                                                            onChange={(e) => {
-                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
-                                                            }} /> */}
-                                                        <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
-                                                            <TextField id="standard-basic" value={address} label="" style={{ width: '300px' }}
-                                                                onChange={(e) => {
-                                                                    if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
-                                                                }}
-                                                                InputProps={{
-                                                                    endAdornment: (
-                                                                        <InputAdornment position="end">
-                                                                            <AddLocation />
-                                                                        </InputAdornment>
-                                                                    ),
-                                                                }}
-                                                            />
-                                                        </ThemeProvider>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button className="btn btn-outline-success"
-                                            onClick={!props.read && validReservation}>Réserver
-                                        </button>
-                                    </div>
-                                    <div className="mb-4 card" style={{ boxShadow: "rbga(255,0,0,0.2)" }} >
-                                        <div className="flex-grow-0 pb-3" >
-                                            <h2 className="col text-primary pb-3">Plus de détails</h2>
-                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique d’annulation
-                                                :</strong> {service_to_show.refund_policy}&nbsp;<i
-                                                    className="icon icon-info" data-tip data-for='refund' /></h4>
-                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Catégorie
-                                                :</strong> {service_to_show.thematics.join(", ")}</h4>
-                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Type(s) d’évènement(s)
-                                                :</strong> {service_to_show.events.join(", ")}</h4>
-                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Nombre d'artistes
-                                                :</strong> {service_to_show.number_of_artists}</h4>
-                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Ville de référence
-                                                :</strong> {service_to_show.reference_city}</h4>
-                                            <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Ville(s) annexe(s)
-                                                :</strong> {service_to_show.others_city.join(", ")}</h4>
-                                        </div>
-                                    </div>
-                                    <div className="mb-4 card">
-                                        <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i
-                                                className="icon icon-info"
-                                                data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique. La liste complète des matériels nécessaires se trouve dans la fiche technique" />
-                                            </h2>
-                                            <div className="col">
-                                                {service_to_show.materials.list_of_materials.length !== 0 ?
-                                                    <ul>
-                                                        {service_to_show.materials.list_of_materials.map((val, index) =>
-                                                            <li key={index}><i
-                                                                className="icon icon-success text-green" />{val}</li>
-                                                        )}
-                                                    </ul> : <p className="text-red">Pas de material necessaire</p>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {reservation ?
-                                    <div className="col-md-8" ref={paymentRef}>
-                                        <PurchaseInformation eventDate={event_date} address={address}
-                                            TotalPrice={service_to_show.price}
-                                            headers={props.headers} kantoBiz />
-                                    </div> :
-                                    <div className="col-md-8">
-                                        <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Option(s) pour la prestation&nbsp;<i
-                                                className="icon icon-info" data-tip data-for="option" /></h2>
-                                            {service_to_show.options.length !== 0 ?
-                                                <table className="responsive-table border-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Nom&nbsp;<i className="icon icon-info"
-                                                                data-tip="Nom donner par l'artiste cette option" />
-                                                            </th>
-                                                            <th scope="col">Tag&nbsp;<i className="icon icon-info"
-                                                                data-tip="Le nom des autres artiste proposé avec" />
-                                                            </th>
-                                                            <th scope="col">Prix&nbsp;<i className="icon icon-info"
-                                                                data-tip="Le prix de cette option en plus de la prestation" />
-                                                            </th>
-                                                            <th scope="col">Description&nbsp;<i className="icon icon-info"
-                                                                data-tip="quelque description qui explique l'option" />
-                                                            </th>
-                                                            <th scope="col-lg-4">Ajouter&nbsp;<i className="icon icon-info"
-                                                                data-tip="Ajouter cette l'option en plus de la prestation" />
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
+                                            <PersonalInformation/>
 
-                                                    <tbody>
-                                                        {service_to_show.options.map((val, index) =>
-                                                            <tr key={index}>
-                                                                <th className="text-center small bolder border-left-0 border-bottom-0"
-                                                                    scope="row">{val.name}</th>
-                                                                <td className="small"
-                                                                    data-title="Tag">{val.artist_tagged}</td>
-                                                                <td className="small" data-title="Prix">{val.price}$</td>
-                                                                <td className="small"
-                                                                    data-title="Description">{val.description || "Pas de description"}</td>
-                                                                <td className="small border-bottom-0 border-right-0"
-                                                                    data-title="Ajouter">
-                                                                    {checkValueIfExistInArray(val.id, list_of_options_added) ?
-                                                                        <i className="icon icon-success text-green s-24"
-                                                                            onClick={() => removeOption(val)}
-                                                                            data-tip="Deja ajouté" />
-                                                                        :
-                                                                        <i className="icon icon-plus text-red s-24"
-                                                                            onClick={() => addOption(val)}
-                                                                            data-tip="Ajoute moi" />}
-                                                                </td>
-                                                            </tr>)}
-                                                    </tbody>
-                                                </table> :
-                                                <h3 className={lightModeOn ? "text-black text-center" : "text-light text-center"}>Pas d'options pour cette
-                                                    prestations</h3>
-                                            }
-                                        </div>
-                                        <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">
-                                                Galerie d'images&nbsp;
-                                                <i className="icon icon-info"
-                                                    data-tip="Quelques photo de l'artiste sur cette prestation" />
-                                            </h2>
-                                            <div className="demo-gallery">
-                                                <ul id="lightgallery">
-                                                    {service_to_show.galleries.map((val, index) =>
-                                                        <li key={index} data-src={val}>
-                                                            <a href={val} target="_blank" rel="noopener noreferrer">
-                                                                <img alt="gallery" className="img-responsive"
-                                                                    src={val} />
-                                                                <div className="demo-gallery-poster">
-                                                                    <i className="icon icon-search-1 s-36 text-red" />
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                    )}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="flex-grow-0 text-center pb-3">
-                                            <h2 className="col text-primary pb-3">Calendrier de la prestation&nbsp;<i
-                                                className="icon icon-info"
-                                                data-tip="Le planing de d'artiste sur cette prestation" /></h2>
-                                            <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale}>
-                                                {/* <Calendar noEdit
-                                                    value={date}
-                                                    onChange={changeDate}
-                                                /> */}
-                                                <ThemeProvider theme={defaultMaterialThemePrestation}>
-                                                    <DatePicker
-                                                        autoOk
-                                                        // orientation="landscape"
-                                                        variant="static"
-                                                        openTo="date"
-                                                        value={event_date}
-                                                        onChange={changeDate}
-                                                    />
-                                                </ThemeProvider>
-                                            </MuiPickersUtilsProvider>
-                                        </div>
-                                    </div>}
-                            </div>
+                                        </Typography>}
+                                        {(activeStep === 2) && <Typography className={classes.instructions}>
+
+                                            <PurchaseInformation eventDate={event_date} address={address}
+                                                                 TotalPrice={service_to_show.price}
+                                                                 headers={props.headers} kantoBiz/>
+
+                                        </Typography>}
+                                    </div>
+                                </div>}
                         </div>
                     </div>
                 </div>
             </div>
-        </div> : <div className="Base pt-5 p-b-100 zIndex-1" >
-                <button
-                    onClick={() => {
-                        // dispatch(changeInitialized(false));
-                        if (props.read)
-                            history.push("/profile");
-                        else history.push("/kantoBiz");
-                    }}
-                    style={{ position: "fixed", bottom: "5%", zIndex: 99 }}
-                    className="btn-custom btn-outline-light border-bottom-0 border-right-0">
-                    <i className="icon icon-long-arrow-left s-24 align-middle" />&nbsp;Precedent
-                </button>
-                <h1 className="text-red center-center m-5" >Cette Service n'est pas encore disponible pour le moment</h1>
-            </div>
+        </div> : <div className="Base pt-5 p-b-100 zIndex-1">
+            <button
+                onClick={() => {
+                    // dispatch(changeInitialized(false));
+                    if (props.read)
+                        history.push("/profile");
+                    else history.push("/kantoBiz");
+                }}
+                style={{position: "fixed", bottom: "5%", zIndex: 99}}
+                className="btn-custom btn-outline-light border-bottom-0 border-right-0">
+                <i className="icon icon-long-arrow-left s-24 align-middle"/>&nbsp;Precedent
+            </button>
+            <h1 className="text-red center-center m-5">Cet Service n'est pas encore disponible pour le moment</h1>
+        </div>
     );
 
 }
