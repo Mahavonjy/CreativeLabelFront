@@ -9,6 +9,7 @@ function PersonalInformation(props) {
 
     const dispatch = useDispatch();
     const profile_info = useSelector(state => state.profile.profile_info);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
     const userName     = useSelector(state => state.KantoBizForm.name);
     const userLastName = useSelector(state => state.KantoBizForm.last_name);
     const userEmail    = useSelector(state => state.KantoBizForm.email)
@@ -49,7 +50,7 @@ function PersonalInformation(props) {
 
     return (
         <div className="col-lg-5 center">
-            <div className="card">
+            <div className={lightModeOn ? "card shadow" : "card shadow2"}>
                 <div className="card-header transparent">
                     {profile_info.name ?
                         <h4 className="text-red"><strong>Informations personnelles</strong></h4>
@@ -161,7 +162,7 @@ function PersonalInformation(props) {
                                 </div>
                             </div>
 
-                            <button className="btn btn-primary m-2 mr-5"  onClick={() => {
+                            <button className="btn btn-outline-primary m-2 r-5"  onClick={() => {
                                 inputValidators()
                             }}>Suivant
                             </button>
