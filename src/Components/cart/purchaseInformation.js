@@ -15,8 +15,6 @@ import {checkErrorMessage} from "../validators/validatiors";
 import DatePicker from 'react-datepicker';
 
 
-
-
 let headers = {
     "Content-Type": 'application/json',
     "Access-Control-Allow-Origin": '*',
@@ -252,6 +250,9 @@ function PurchaseInformation(props) {
                                 <div className="front">
                                     <div className="top">
                                         <div className="chip"/>
+                                        <div className="cardType">
+                                            <img src="https://www.iconsdb.com/icons/preview/white/visa-xxl.png"/>
+                                        </div>
                                     </div>
                                     <div className="middle">
                                         <div className="cd-number">

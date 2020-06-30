@@ -452,8 +452,8 @@ $grey_5:#555;
   font-family: "Source Sans Pro", sans-serif;
   transform-style: preserve-3d;
   transition: 0.5s ease-in-out;
-  widtH: 300px;
-  height: 200px;
+  widtH: 400px;
+  height: 250px;
   margin: auto;
   z-index: 2;
   @media(max-widtH: 500px) {
@@ -467,8 +467,8 @@ $grey_5:#555;
     transform: rotateY(0deg)
   }
   .front, .back {
-    widtH: 310px;
-    height: 210px;
+    widtH: 400px;
+    height: 250px;
     background: #ddeefc;
     background-image: url("https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/10.jpeg");
     padding: 20px;
@@ -488,8 +488,8 @@ $grey_5:#555;
       position: absolute;
       top: 0;
       left: 0;
-      widtH: 300px;
-      height: 200px;
+      widtH: 400px;
+      height: 250px;
       transition: 0.5s ease-in-out;
       @media(max-widtH: 500px) {
         widtH: 300px;
@@ -555,8 +555,8 @@ $grey_5:#555;
         p {
           margin-bottom: 0;
           span {
-            margin-right: 10px;
-            font-size: 20px;
+            margin-right: 20px;
+            font-size: 25px;
             @media(max-widtH: 500px) {
               font-size: 20px
             }
@@ -580,8 +580,8 @@ $grey_5:#555;
       justify-content: space-between;
       .cardType {
         svg, img {
-          width: 60px;
-          height: 40px;
+          width: 70px;
+          height: 50px;
           transition: 0.5s ease-in-out;
           @media(max-widtH: 500px) {
             width: 50px;
@@ -625,7 +625,7 @@ $grey_5:#555;
 }
 
 .form {
-  width: 350px;
+  width: 450px;
   margin: auto;
   padding: 20px;
   box-shadow: 0px 1px 10px rgba(black, 0.35);

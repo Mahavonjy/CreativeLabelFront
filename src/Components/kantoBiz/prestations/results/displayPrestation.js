@@ -11,7 +11,8 @@ import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
 import Conf from "../../../../config/tsconfig";
 import PurchaseInformation from "../../../cart/purchaseInformation";
-import {getSteps, handleStep
+import {
+    getSteps, handleStep
 } from "../../../functionTools/tools";
 
 // import Calendar from "../../calendar/calendar";
@@ -65,6 +66,17 @@ function DisplayPrestation(props) {
         root: {
             width: '100%'
         },
+        step: {
+            "& $completed": {
+                color: "lightgreen"
+            },
+            "& $active": {
+                color: "pink"
+            },
+            "& $disabled": {
+                color: "red"
+            }
+        },
         button: {
             marginRight: theme.spacing(1),
         },
@@ -82,9 +94,9 @@ function DisplayPrestation(props) {
     const classes = useStyles();
 
     const serviceValue = async () => {
-        axios.get("/api/artist_services/" + id, { headers: props.headers }).then((resp) => {
-            setVal(resp.status);
-            dispatch(changeValue(val))
+        axios.get("/api/artist_services/" + id, {headers: props.headers}).then((resp) => {
+                setVal(resp.status);
+                dispatch(changeValue(val))
             }
         )
     }
@@ -93,8 +105,8 @@ function DisplayPrestation(props) {
         serviceValue();
         setEventDate(dateFormat(date_to_search, "yyyy-mm-dd"));
         axios.post("api/reservation/check_total_price",
-            { price: service_to_show.price },
-            { headers: props.headers }).then((resp) => {
+            {price: service_to_show.price},
+            {headers: props.headers}).then((resp) => {
             setTva(resp.data["tva"]);
             setHtPrice(resp.data["ht_price"]);
             setIslAmount(resp.data["isl_amount"]);
@@ -203,7 +215,9 @@ function DisplayPrestation(props) {
                                     {/*             starSpacing="10px" className="col" name='rating'/>*/}
                                     {/*<span className="col pt-2">5&nbsp;✰</span>*/}
                                 </div>
-                                <Stepper alternativeLabel nonLinear activeStep={activeStep}>
+                                <Stepper alternativeLabel nonLinear activeStep={activeStep}
+                                         style={lightModeOn ? {backgroundColor: "#f4f6f9", borderRadius: "10px", boxShadow: "0 0 6px rgba(0,0,0,.1)"}
+                                         : {backgroundColor: "#f4f6f9", borderRadius: "10px", boxShadow: "0 0 6px rgba(255,255,255,.5)"}}>
                                     {steps.map((label, index) => {
                                         const stepProps = {};
                                         const buttonProps = {};
@@ -224,22 +238,22 @@ function DisplayPrestation(props) {
                                 <Reservation/>
                             </Typography>}
                             {reservation &&
-                                <div className="row text-center pt-5">
-                                    <div className="col" ref={paymentRef}>
-                                        {(activeStep === 1) && <Typography className={classes.instructions}>
+                            <div className="row text-center pt-5">
+                                <div className="col" ref={paymentRef}>
+                                    {(activeStep === 1) && <Typography className={classes.instructions}>
 
-                                            <PersonalInformation/>
+                                        <PersonalInformation/>
 
-                                        </Typography>}
-                                        {(activeStep === 2) && <Typography className={classes.instructions}>
+                                    </Typography>}
+                                    {(activeStep === 2) && <Typography className={classes.instructions}>
 
-                                            <PurchaseInformation eventDate={event_date} address={address}
-                                                                 TotalPrice={service_to_show.price}
-                                                                 headers={props.headers} kantoBiz/>
+                                        <PurchaseInformation eventDate={event_date} address={address}
+                                                             TotalPrice={service_to_show.price}
+                                                             headers={props.headers} kantoBiz/>
 
-                                        </Typography>}
-                                    </div>
-                                </div>}
+                                    </Typography>}
+                                </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
