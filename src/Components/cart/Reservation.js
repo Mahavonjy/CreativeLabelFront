@@ -30,6 +30,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import AddLocation from '@material-ui/icons/AddLocation';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 import { defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight } from "../functionTools/utilStyles";
 
@@ -61,6 +63,7 @@ function Reservation(props) {
     const [event_date, setEventDate] = useState(null);
     const [reservation, setReservation] = useState(reservations);
     const [address, setAddress] = useState(reservation_address);
+    const [isOpen, setIsOpen] = useState(false);
     /* eslint-disable-next-line no-unused-vars */
     // const [rating, setRating] = useState(1);
     //const [val, setVal] = useState(0);
@@ -364,10 +367,22 @@ function Reservation(props) {
                         <ul id="lightgallery">
                             {service_to_show.galleries.map((val, index) =>
                                 <li key={index} data-src={val}>
-                                    <a href={val} target="_blank" rel="noopener noreferrer">
+                                    <a>
                                         <img alt="gallery" className="img-responsive"
                                              src={val}/>
-                                        <div className="demo-gallery-poster">
+                                        {isOpen && (
+                                            <Lightbox
+                                                mainSrc={val}
+                                                onCloseRequest={() => setIsOpen(!isOpen)}
+                                                nextSrc={val[(index + 1) % val.length]}
+                                                prevSrc={val[(index + val.length - 1) % val.length]}
+                                            />
+                                        )}
+                                        <div className="demo-gallery-poster" onClick={() => {
+                                            setIsOpen(!isOpen)
+                                            console.log(val)
+                                            console.log(index)
+                                        }}>
                                             <i className="icon icon-search-1 s-36 text-red"/>
                                         </div>
                                     </a>
