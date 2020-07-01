@@ -66,7 +66,6 @@ function HomeRoot() {
     const dispatch = useDispatch();
     const toastGlobal = useSelector(state => state.Home.toastGlobal);
     const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
-    const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -370,8 +369,7 @@ function HomeRoot() {
                                     user_data,
                                     headers,
                                     location,
-                                    history,
-                                    service_to_show)}
+                                    history)}
                                 {/* End main of SideBars */}
                             </main>
                         </React.Fragment>)}

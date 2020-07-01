@@ -1,5 +1,11 @@
+import Step from '@material-ui/core/Step';
+import StepButton from '@material-ui/core/StepButton';
+import Stepper from '@material-ui/core/Stepper';
+// import Calendar from "../../calendar/calendar";
+//import stepper from Material react
+import {makeStyles} from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import axios from "axios";
-import DateFnsUtils from "@date-io/date-fns";
 import dateFormat from 'dateformat';
 import {MDBRating} from "mdbreact";
 import React, {useEffect, useRef, useState} from "react";
@@ -10,25 +16,11 @@ import {useHistory, useParams} from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import "../../../../assets/css/style/Results.css"
 import Conf from "../../../../config/tsconfig";
-import PurchaseInformation from "../../../cart/purchaseInformation";
-import {
-    getSteps, handleStep
-} from "../../../functionTools/tools";
-
-// import Calendar from "../../calendar/calendar";
-//import stepper from Material react
-import {makeStyles} from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import PersonalInformation from "../../../cart/personalInformation";
+import PurchaseInformation from "../../../cart/purchaseInformation";
 import Reservation from "../../../cart/Reservation";
-import {
-    addTva, addThPrice, addTotalAmount,
-    changeValue, addIslAmount
-} from "../../../functionTools/functionProps";
+import {addIslAmount, addServiceToShow, addThPrice, addTotalAmount, addTva} from "../../../functionTools/functionProps";
+import {getSteps, handleStep} from "../../../functionTools/tools";
 
 function DisplayPrestation(props) {
 
@@ -93,16 +85,14 @@ function DisplayPrestation(props) {
     }));
     const classes = useStyles();
 
-    const serviceValue = async () => {
-        axios.get("/api/artist_services/" + id, {headers: props.headers}).then((resp) => {
-                setVal(resp.status);
-                dispatch(changeValue(val))
-            }
-        )
+    const checkServiceValue = () => {
+        axios.get("/api/artist_services/" + id, {headers: props.headers}
+        ).then((resp) => dispatch(addServiceToShow(resp.data["service"])))
     }
 
     useEffect(() => {
-        serviceValue();
+        if (!(Object.getOwnPropertyNames(service_to_show).length > 0))
+            checkServiceValue();
         setEventDate(dateFormat(date_to_search, "yyyy-mm-dd"));
         axios.post("api/reservation/check_total_price",
             {price: service_to_show.price},
@@ -123,11 +113,8 @@ function DisplayPrestation(props) {
         /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [service_to_show, profile_info, date_to_search]);
 
-    console.log(val);
-
     return (
-
-        val === 200 ? <div className="Base pt-5 p-b-100 zIndex-1">
+        (Object.getOwnPropertyNames(service_to_show).length > 0) ? <div className="Base pt-5 p-b-100 zIndex-1">
             <ReactTooltip/>
             <ReactTooltip className="special-color-dark" id='refund' aria-haspopup='true'>
                 <h5 className="text-center text-green"> Details des rembouresement </h5><br/>
@@ -163,7 +150,10 @@ function DisplayPrestation(props) {
                 <div className="page-header header-filter border1" data-parallax="true"
                      style={{backgroundImage: 'url(' + service_to_show.galleries[0] + ')'}}/>
                 <div
-                    className={lightModeOn ? "main bg-white main-raised ml-3 mr-3" : "main bg-dark main-raised ml-3 mr-3"}>
+                    className={
+                        lightModeOn
+                            ? "main bg-white main-raised ml-3 mr-3"
+                            : "main bg-dark main-raised ml-3 mr-3"}>
                     <div className="profile-content">
                         <div className="container">
                             <div className="col-md-6 ml-auto mr-auto">
@@ -207,7 +197,11 @@ function DisplayPrestation(props) {
                                     <MDBRating iconFaces iconSize='2x' iconRegular
                                                containerClassName="justify-content-center"
                                                fillColors={[
-                                                   'red-text', 'orange-text', 'yellow-text', 'lime-text', 'light-green-text'
+                                                   'red-text',
+                                                   'orange-text',
+                                                   'yellow-text',
+                                                   'lime-text',
+                                                   'light-green-text'
                                                ]}
                                     />
                                     {/*<StarRatings rating={service_to_show.notes} starRatedColor="red"*/}
@@ -216,8 +210,16 @@ function DisplayPrestation(props) {
                                     {/*<span className="col pt-2">5&nbsp;✰</span>*/}
                                 </div>
                                 <Stepper alternativeLabel nonLinear activeStep={activeStep}
-                                         style={lightModeOn ? {backgroundColor: "#f4f6f9", borderRadius: "10px", boxShadow: "0 0 6px rgba(0,0,0,.1)"}
-                                         : {backgroundColor: "#f4f6f9", borderRadius: "10px", boxShadow: "0 0 6px rgba(255,255,255,.5)"}}>
+                                         style={lightModeOn ? {
+                                                 backgroundColor: "#f4f6f9",
+                                                 borderRadius: "10px",
+                                                 boxShadow: "0 0 6px rgba(0,0,0,.1)"
+                                             }
+                                             : {
+                                                 backgroundColor: "#f4f6f9",
+                                                 borderRadius: "10px",
+                                                 boxShadow: "0 0 6px rgba(255,255,255,.5)"
+                                             }}>
                                     {steps.map((label, index) => {
                                         const stepProps = {};
                                         const buttonProps = {};

@@ -523,8 +523,7 @@ export const SideBarsMain = (
     user_data,
     headers,
     location,
-    history,
-    service_to_show
+    history
 ) => {
     return (
         <div>
@@ -584,16 +583,12 @@ export const SideBarsMain = (
             {/*       }}/>*/}
             <Route exact
                    path="/show-service/:id"
-                   component={() => {
-                       if (service_to_show["id"]) return <DisplayPrestation headers={headers}/>;
-                       else window.location.replace("/kantoBiz")
-                   }}/>
+                   component={() => <DisplayPrestation headers={headers}/>
+                   }/>
             <Route exact
                    path="/show-service-read"
-                   component={() => {
-                       if (service_to_show["id"]) return <DisplayPrestation headers={headers} read/>;
-                       else window.location.replace("/profile")
-                   }}/>
+                   component={() => <DisplayPrestation headers={headers} read/>
+                   }/>
             <Route exact
                    path="/register"
                    component={() => {

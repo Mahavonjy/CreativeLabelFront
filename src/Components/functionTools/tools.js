@@ -714,21 +714,10 @@ export const generatePagination = (_array, funcToDisplay) => {
                                         </FacebookProvider>
                                     </a>
                                 </li>
-                                {/*<li className="o-card-headerList--item">*/}
-                                {/*    <a className="o-card-headerList--link" href="/#">*/}
-                                {/*        <i className="icon-twitter"/>*/}
-                                {/*    </a>*/}
-                                {/*</li>*/}
-                                {/*<li className="o-card-headerList--item">*/}
-                                {/*    <a className="o-card-headerList--link" href="/#">*/}
-                                {/*        <i className="icon-linkedin"/>*/}
-                                {/*    </a>*/}
-                                {/*</li>*/}
                             </ul>
-                            <div className="o-card_logo" style={{
-                                background:
-                                    'url(' + val.galleries[0] + ') center no-repeat'
-                            }}/>
+                            <div className="o-card_logo"
+                                 style={{background: 'url(' + val.galleries[0] + ') center no-repeat'}}
+                            />
                         </div>
                         <div className="o-card_body">
                             <h2 className="o-card_title text-black">{val.price}<i className="icon icon-euro text-red"/>

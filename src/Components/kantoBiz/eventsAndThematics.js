@@ -53,7 +53,6 @@ export const EventAndThematics = (
                 else await Results.onScrollViewSearch();
             })
     };
-    console.log(displayOne)
 
     const generatorCard = (position_name, key, title, desc, image, params) => {
         return (
