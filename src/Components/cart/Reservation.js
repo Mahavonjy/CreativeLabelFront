@@ -64,6 +64,8 @@ function Reservation(props) {
     const [reservation, setReservation] = useState(reservations);
     const [address, setAddress] = useState(reservation_address);
     const [isOpen, setIsOpen] = useState(false);
+    const [photoIndex, setPhotoIndex] = useState(0);
+
     /* eslint-disable-next-line no-unused-vars */
     // const [rating, setRating] = useState(1);
     //const [val, setVal] = useState(0);
@@ -143,17 +145,17 @@ function Reservation(props) {
                     <h2 className="text-red border-bottom">Details de la reservations</h2>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Prix
-                        HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info"
+                        HT:</small>&nbsp;{ht_price}€&nbsp;<i className="icon text-red icon-info"
                                                              data-tip="Ceci est le prix HT"/>
                     </h3>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Tva
-                        (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info"
+                        (20%):</small>&nbsp;{tva}€&nbsp;<i className="icon text-red icon-info"
                                                            data-tip="Ceci est le tva du prix HT"/>
                     </h3>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Prix
-                        TTC:</small>&nbsp;{total_amount}$&nbsp;<i
+                        TTC:</small>&nbsp;{total_amount}€&nbsp;<i
                         className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/>
                     </h3>
                 </div>
@@ -370,21 +372,19 @@ function Reservation(props) {
                                     <a>
                                         <img alt="gallery" className="img-responsive"
                                              src={val}/>
-                                        {isOpen && (
-                                            <Lightbox
-                                                mainSrc={val}
-                                                onCloseRequest={() => setIsOpen(!isOpen)}
-                                                nextSrc={val[(index + 1) % val.length]}
-                                                prevSrc={val[(index + val.length - 1) % val.length]}
-                                            />
-                                        )}
+
                                         <div className="demo-gallery-poster" onClick={() => {
-                                            setIsOpen(!isOpen)
-                                            console.log(val)
-                                            console.log(index)
+                                            setPhotoIndex(index)
+                                            setIsOpen(true)
                                         }}>
                                             <i className="icon icon-search-1 s-36 text-red"/>
                                         </div>
+                                        {photoIndex === index && isOpen && (
+                                            <Lightbox
+                                                mainSrc={val}
+                                                onCloseRequest={() => setIsOpen(false)}
+                                            />
+                                        )}
                                     </a>
                                 </li>
                             )}
