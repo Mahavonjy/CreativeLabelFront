@@ -62,10 +62,9 @@ function Reservation(props) {
     const paymentRef = useRef(null);
     const [event_date, setEventDate] = useState(null);
     const [reservation, setReservation] = useState(reservations);
-    const [address, setAddress] = useState(reservation_address);
+    const [address, setAddress] = useState(reservation_address)
     const [isOpen, setIsOpen] = useState(false);
     const [photoIndex, setPhotoIndex] = useState(0);
-
     /* eslint-disable-next-line no-unused-vars */
     // const [rating, setRating] = useState(1);
     //const [val, setVal] = useState(0);
@@ -372,10 +371,31 @@ function Reservation(props) {
                                     <a>
                                         <img alt="gallery" className="img-responsive"
                                              src={val}/>
-
+                                        {isOpen && (
+                                            <Lightbox
+                                                mainSrc={val}
+                                                onCloseRequest={() => setIsOpen(!isOpen)}
+                                                nextSrc={val[(index + 1) % val.length]}
+                                                prevSrc={val[(index + val.length - 1) % val.length]}
+                                            />
+                                        )}
+                                        {photoIndex === index && isOpen && (
+                                            <Lightbox
+                                                mainSrc={val}
+                                                nextSrc={(index + 1) % service_to_show.galleries.length}
+                                                prevSrc={(index + service_to_show.galleries.length - 1) % service_to_show.galleries.length}
+                                                onCloseRequest={() => setIsOpen(!isOpen)}
+                                                onMovePrevRequest={() =>
+                                                    setPhotoIndex((photoIndex + service_to_show.galleries.length - 1) % service_to_show.galleries.length)
+                                                }
+                                                onMoveNextRequest={() =>
+                                                    setPhotoIndex((photoIndex + service_to_show.galleries.length + 1) % service_to_show.galleries.length)
+                                                }
+                                            />
+                                        )}
                                         <div className="demo-gallery-poster" onClick={() => {
-                                            setPhotoIndex(index)
                                             setIsOpen(true)
+                                            setPhotoIndex(index)
                                         }}>
                                             <i className="icon icon-search-1 s-36 text-red"/>
                                         </div>
