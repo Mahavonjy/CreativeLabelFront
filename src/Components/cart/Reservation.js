@@ -371,14 +371,6 @@ function Reservation(props) {
                                     <a>
                                         <img alt="gallery" className="img-responsive"
                                              src={val}/>
-                                        {isOpen && (
-                                            <Lightbox
-                                                mainSrc={val}
-                                                onCloseRequest={() => setIsOpen(!isOpen)}
-                                                nextSrc={val[(index + 1) % val.length]}
-                                                prevSrc={val[(index + val.length - 1) % val.length]}
-                                            />
-                                        )}
                                         {photoIndex === index && isOpen && (
                                             <Lightbox
                                                 mainSrc={val}
@@ -399,12 +391,6 @@ function Reservation(props) {
                                         }}>
                                             <i className="icon icon-search-1 s-36 text-red"/>
                                         </div>
-                                        {photoIndex === index && isOpen && (
-                                            <Lightbox
-                                                mainSrc={val}
-                                                onCloseRequest={() => setIsOpen(false)}
-                                            />
-                                        )}
                                     </a>
                                 </li>
                             )}
