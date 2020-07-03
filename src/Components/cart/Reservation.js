@@ -58,7 +58,7 @@ function Reservation(props) {
     const reservation_rue = useSelector(state => state.KantobizSearchInfo.reservation_rue);
     const reservation_ville = useSelector(state => state.KantobizSearchInfo.reservation_ville);
 
-
+    
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
