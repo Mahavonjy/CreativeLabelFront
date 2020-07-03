@@ -1,7 +1,9 @@
 const initState = {
     date_to_search: new Date(),
     city_to_search: "",
-    reservation_address: "",
+    reservation_code_postal: "",
+    reservation_rue: "",
+    reservation_ville: "",
     country_to_search: "",
     thematics_to_search: [],
     events_to_search: "",
@@ -26,10 +28,20 @@ const KantoBizSearch = (state = initState, action) => {
         //         ...state,
         //         initialized: action.data
         //     };
-        case "RESERVATION_ADDRESS":
+        case "RESERVATION_CODE_POSTAL":
             return {
                 ...state,
-                reservation_address: action.data
+                reservation_code_postal: action.data
+            };
+        case "RESERVATION_RUE":
+            return {
+                ...state,
+                reservation_rue: action.data
+            };
+        case "RESERVATION_VILLE":
+            return {
+                ...state,
+                reservation_ville: action.data
             };
         case "ADD_CITY_TO_SEARCH":
             return {

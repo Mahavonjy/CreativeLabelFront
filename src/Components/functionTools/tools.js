@@ -683,8 +683,8 @@ export const dispatchPayment = (payment_history, dispatch) => {
 };
 
 export const checkOnClickAwaySideBar = (e) => {
-    if (e.target.className !== "paper-nav-toggle pp-nav-toggle pl-2 ml-4" && HomeRoot.checkOpenSideBar)
-        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle pl-2 ml-4")[0].click()
+    if (e.target.className !== "paper-nav-toggle pp-nav-toggle ml-4" && HomeRoot.checkOpenSideBar)
+        document.getElementsByClassName("paper-nav-toggle pp-nav-toggle ml-4")[0].click()
 };
 
 export const generatePagination = (_array, funcToDisplay) => {

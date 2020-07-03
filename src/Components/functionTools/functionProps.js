@@ -787,14 +787,33 @@ export function addSearchLoading(data) {
     };
 }
 
-export function addReservationAddress(data) {
+export function addReservationCodePostal(data) {
     return async dispatch => {
         dispatch({
-            type: "RESERVATION_ADDRESS",
+            type: "RESERVATION_CODE_POSTAL",
             data: data
         });
     };
 }
+
+export function addReservationRue(data) {
+    return async dispatch => {
+        dispatch({
+            type: "RESERVATION_RUE",
+            data: data
+        });
+    };
+}
+
+export function addReservationVille(data) {
+    return async dispatch => {
+        dispatch({
+            type: "RESERVATION_VILLE",
+            data: data
+        });
+    };
+}
+
 
 // export function changeInitialized(data) {
 //     return async dispatch => {
