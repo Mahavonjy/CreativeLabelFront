@@ -693,10 +693,13 @@ export const generatePagination = (_array, funcToDisplay) => {
             <div key={index}>
                 <ReactTooltip/>
                 <div className="o-card_container m-2">
-                    <div className="o-card bg-white">
+                    <div className="o-card bg-white shadow1">
                         <div className="o-card_header">
-                            <div className="o-card_headerHeroImg"
-                                 style={{
+                            <div className="o-card_headerHeroImg shadow2"
+                                 style={(val.galleries.length >= 1) ?
+                                     {
+                                         background: 'url(' + val.galleries[1] + ') center no-repeat'
+                                     } : {
                                      background:
                                          'url(https://zupimages.net/up/19/42/zyu8.bmp) center no-repeat'
                                  }}/>
@@ -736,7 +739,8 @@ export const generatePagination = (_array, funcToDisplay) => {
                                     {val.thematics.map((val, index) => <small key={index}>{val}, </small>)}
                                 </small>
                             </h3>
-                            <p className="o-card_paragraph text-black">{val.description}</p>
+                            <p className="o-card_paragraph text-black">{val.description.length <= 35
+                                ? val.description : val.description.substring(0, 35) + '...' }</p>
                         </div>
                         <div className="p-2">
                             <button className="btn col btn-outline-dark pl-5 pr-5 pb-3"
