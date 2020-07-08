@@ -223,10 +223,12 @@ export const Login = () => {
 export const LoadingHome = () => {
     return (
         <div className="center-center">
-            <Loader type="Bars" height={150} width={150} color="#ED1C24"/>
+            <div className="m-3">
+                <Loader type="Puff" height={150} width={150}color="#ED1C24"/>
+            </div>
             <Fade bottom>
-                <h2 className="text-red">Independance Sound Label</h2>
-                <h3 className="text-red">Creative</h3>
+                <h4 className="text-red">Independance Sound Label</h4>
+                <h4 className="text-red">Creative</h4>
             </Fade>
         </div>
     )
