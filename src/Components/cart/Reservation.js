@@ -9,7 +9,7 @@ import {
     addReservationAddress,
     addServiceToShow,
     changeDateToSearch,
-    addReservation
+    addReservation, addReservationCodePostal, addReservationRue, addReservationVille
     // changeInitialized
 } from "../functionTools/functionProps";
 import {
@@ -30,6 +30,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import AddLocation from '@material-ui/icons/AddLocation';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 import { defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight } from "../functionTools/utilStyles";
 
@@ -52,15 +54,22 @@ function Reservation(props) {
     const completed = useSelector(state => state.KantoBizForm.completed);
     const activeStep = useSelector(state => state.KantoBizForm.activeStep);
     const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
-    const reservation_address = useSelector(state => state.KantobizSearchInfo.reservation_address);
+    const reservation_code_postal = useSelector(state => state.KantobizSearchInfo.reservation_code_postal);
+    const reservation_rue = useSelector(state => state.KantobizSearchInfo.reservation_rue);
+    const reservation_ville = useSelector(state => state.KantobizSearchInfo.reservation_ville);
 
+    
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const paymentRef = useRef(null);
     const [event_date, setEventDate] = useState(null);
     const [reservation, setReservation] = useState(reservations);
-    const [address, setAddress] = useState(reservation_address);
+    const [code_postal, setCodePostal] = useState(reservation_code_postal);
+    const [rue, setRue] = useState(reservation_rue);
+    const [ville, setVille] = useState(reservation_ville);
+    const [isOpen, setIsOpen] = useState(false);
+    const [photoIndex, setPhotoIndex] = useState(0);
     /* eslint-disable-next-line no-unused-vars */
     // const [rating, setRating] = useState(1);
     //const [val, setVal] = useState(0);
@@ -95,7 +104,8 @@ function Reservation(props) {
         if (!profile_info)
             document.getElementById("LoginRequire").click();
         else {
-            if (!address) toast.error("Veuiller nous renseigner l'adresse de votre evenenment");
+            if (!code_postal) toast.error("Veuiller nous renseigner le code postal de l'adresse");
+            else if (!ville) toast.error("Veuiller nous renseigner la ville où aura lieu l'événement");
             else if (formatDate(date_to_search) === formatDate(new Date())) toast.error("Veuillez choisir une autre date");
             else {
                 await setReservation(true);
@@ -136,25 +146,25 @@ function Reservation(props) {
     return (
         <div className="row text-center pt-5">
             <div className="col-md-4" ref={paymentRef}>
-                <div className="mb-4 p-1 rounded" style={{border: "dashed 1px white"}}>
+                <div className="mb-4 p-1 rounded" style={lightModeOn ? {border: "dashed 1px black"} : {border: "dashed 1px white"}}>
                     <h2 className="text-red border-bottom">Details de la reservations</h2>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Prix
-                        HT:</small>&nbsp;{ht_price}$&nbsp;<i className="icon text-red icon-info"
+                        HT:</small>&nbsp;{ht_price}€&nbsp;<i className="icon text-red icon-info"
                                                              data-tip="Ceci est le prix HT"/>
                     </h3>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Tva
-                        (20%):</small>&nbsp;{tva}$&nbsp;<i className="icon text-red icon-info"
+                        (20%):</small>&nbsp;{tva}€&nbsp;<i className="icon text-red icon-info"
                                                            data-tip="Ceci est le tva du prix HT"/>
                     </h3>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Prix
-                        TTC:</small>&nbsp;{total_amount}$&nbsp;<i
+                        TTC:</small>&nbsp;{total_amount}€&nbsp;<i
                         className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/>
                     </h3>
                 </div>
-                <div className="mb-4 card">
+                <div className={lightModeOn ? "mb-4 card shadow1": "mb-4 card shadow2"}>
                     <div className="flex-grow-0 text-center pb-3">
                         <h4 className="col text-primary">Temps de préparation
                             : {service_to_show.preparation_time}
@@ -171,7 +181,8 @@ function Reservation(props) {
                                 <div className="input-group-prepend d-inline-block center">
                                     <div className="input-group-text text-dark">
                                         <i className="icon-clock-1"/>&nbsp;Date de l'évènement
-                                        *&nbsp;<i className="icon icon-info"
+                                        <span className="text-red">&nbsp; *&nbsp;</span>
+                                        <i className="icon icon-info"
                                                   data-tip="Indiquer la date et l'heure de l'évènement"/>
                                     </div>
                                     {/* <input type="date" value={event_date} className="form-control"
@@ -220,9 +231,7 @@ function Reservation(props) {
                                 <div className="input-group-prepend d-inline-block center"
                                      style={{width: "100%"}}>
                                     <div className="input-group-text text-dark">
-                                        <i className="icon-map-marker"/>&nbsp;Adresse de
-                                        l'évènement
-                                        *
+                                        <i className="icon-map-marker"/>&nbsp; Code postal<span className="text-red">&nbsp; *</span>
                                     </div>
                                     {/* <input type="text" value={address} id="address"
                                                             placeholder="Indiquer l'adresse de l'évènement"
@@ -232,10 +241,75 @@ function Reservation(props) {
                                                             }} /> */}
                                     <ThemeProvider
                                         theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
-                                        <TextField id="standard-basic" value={address} label=""
+                                        <TextField id="standard-basic" value={code_postal} label=""
                                                    style={{width: '300px'}}
                                                    onChange={(e) => {
-                                                       if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
+                                                       if (!props.read) changeFields(setCodePostal, e, addReservationCodePostal, dispatch)
+                                                   }}
+                                                   InputProps={{
+                                                       endAdornment: (
+                                                           <InputAdornment position="end">
+                                                               <AddLocation/>
+                                                           </InputAdornment>
+                                                       ),
+                                                   }}
+                                        />
+                                    </ThemeProvider>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col pt-2 pb-2">
+                            <div className="custom-float">
+                                <div className="input-group-prepend d-inline-block center"
+                                     style={{width: "100%"}}>
+                                    <div className="input-group-text text-dark">
+                                        <i className="icon-map-marker"/>&nbsp; Rue (optionnel)
+                                    </div>
+                                    {/* <input type="text" value={address} id="address"
+                                                            placeholder="Indiquer l'adresse de l'évènement"
+                                                            name="address" className="form-control"
+                                                            onChange={(e) => {
+                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
+                                                            }} /> */}
+                                    <ThemeProvider
+                                        theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
+                                        <TextField id="standard-basic" value={rue} label=""
+                                                   style={{width: '300px'}}
+                                                   onChange={(e) => {
+                                                       if (!props.read) changeFields(setRue, e, addReservationRue, dispatch)
+                                                   }}
+                                                   InputProps={{
+                                                       endAdornment: (
+                                                           <InputAdornment position="end">
+                                                               <AddLocation/>
+                                                           </InputAdornment>
+                                                       ),
+                                                   }}
+                                        />
+                                    </ThemeProvider>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col pt-2 pb-2">
+                            <div className="custom-float">
+                                <div className="input-group-prepend d-inline-block center"
+                                     style={{width: "100%"}}>
+                                    <div className="input-group-text text-dark">
+                                        <i className="icon-map-marker"/>&nbsp; Ville
+                                        <span className="text-red">&nbsp; *</span>
+                                    </div>
+                                    {/* <input type="text" value={address} id="address"
+                                                            placeholder="Indiquer l'adresse de l'évènement"
+                                                            name="address" className="form-control"
+                                                            onChange={(e) => {
+                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
+                                                            }} /> */}
+                                    <ThemeProvider
+                                        theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
+                                        <TextField id="standard-basic" value={ville} label=""
+                                                   style={{width: '300px'}}
+                                                   onChange={(e) => {
+                                                       if (!props.read) changeFields(setVille, e, addReservationVille, dispatch)
                                                    }}
                                                    InputProps={{
                                                        endAdornment: (
@@ -254,7 +328,7 @@ function Reservation(props) {
                             onClick={!props.read && validReservation}>Réserver
                     </button>
                 </div>
-                <div className="mb-4 card" style={{boxShadow: "rbga(255,0,0,0.2)"}}>
+                <div className={lightModeOn ? "mb-4 card shadow1" : "mb-4 card shadow2"}>
                     <div className="flex-grow-0 pb-3">
                         <h2 className="col text-primary pb-3">Plus de détails</h2>
                         <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique
@@ -277,7 +351,7 @@ function Reservation(props) {
                             :</strong> {service_to_show.others_city.join(", ")}</h4>
                     </div>
                 </div>
-                <div className="mb-4 card">
+                <div className={lightModeOn ? "mb-4 card shadow1" : "mb-4 card shadow2"}>
                     <div className="flex-grow-0 text-center pb-3">
                         <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i
                             className="icon icon-info"
@@ -364,10 +438,27 @@ function Reservation(props) {
                         <ul id="lightgallery">
                             {service_to_show.galleries.map((val, index) =>
                                 <li key={index} data-src={val}>
-                                    <a href={val} target="_blank" rel="noopener noreferrer">
+                                    <a>
                                         <img alt="gallery" className="img-responsive"
                                              src={val}/>
-                                        <div className="demo-gallery-poster">
+                                        {(photoIndex === index) && (isOpen) && (
+                                            <Lightbox
+                                                mainSrc={val}
+                                                nextSrc={(photoIndex + 1) % service_to_show.galleries.length}
+                                                prevSrc={(photoIndex + service_to_show.galleries.length - 1) % service_to_show.galleries.length}
+                                                onCloseRequest={() => setIsOpen(false)}
+                                                onMovePrevRequest={() =>
+                                                    setPhotoIndex((photoIndex + service_to_show.galleries.length - 1) % service_to_show.galleries.length)
+                                                }
+                                                onMoveNextRequest={() =>
+                                                    setPhotoIndex((photoIndex + service_to_show.galleries.length + 1) % service_to_show.galleries.length)
+                                                }
+                                            />
+                                        )}
+                                        <div className="demo-gallery-poster" onClick={() => {
+                                            setIsOpen(true)
+                                            setPhotoIndex(index)
+                                        }}>
                                             <i className="icon icon-search-1 s-36 text-red"/>
                                         </div>
                                     </a>
