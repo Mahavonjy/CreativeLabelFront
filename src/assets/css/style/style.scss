@@ -624,6 +624,16 @@ $grey_5:#555;
   }
 }
 
+h3{
+  font-size:1.4rem;
+  @media(max-widtH: 750px) {
+    font-size: 1rem;
+  }
+  @media(max-widtH: 560px) {
+    font-size: .8rem;
+  }
+}
+
 .form {
   width: 450px;
   margin: auto;

@@ -15,6 +15,7 @@ import {generatePagination, onChangeListWithValueLabel, shuffleArray} from "../f
 import {defaultEventTheme} from '../functionTools/utilStyles'
 import Results from "./prestations/results/results";
 import KantoTabs from './tabs';
+import "../../assets/css/style/style.scss";
 
 export const EventAndThematics = (
     headers,

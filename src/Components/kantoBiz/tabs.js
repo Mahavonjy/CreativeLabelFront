@@ -71,7 +71,7 @@ const TabsStyle = {
         border: "0 !important",
         color: whiteColor + " !important",
         marginRight: 'auto',
-        marginLeft: 'auto'
+        marginLeft: 'auto',
     },
     tabSelected: {
         backgroundColor: "rgba(" + hexToRgb(whiteColor) + ", 0.2)",
@@ -88,6 +88,12 @@ const TabsStyle = {
         fontWeight: "500",
         fontSize: "12px",
         marginTop: "1px",
+        "@media (max-width: 750px)" : {
+            fontSize: "9px",
+        },
+        "@media (max-width: 560px)" : {
+            fontSize: "7px",
+        },
         "& > svg,& > .material-icons": {
             verticalAlign: "middle",
             margin: "-1px 5px 0 0 !important"
@@ -120,8 +126,8 @@ export default function KantoTabs(props) {
                         indicator: classes.displayNone,
                         scrollButtons: classes.displayNone
                     }}
-                    variant="scrollable"
-                    scrollButtons="auto"
+                    variant="fullWidth"
+                    centered
                 >
                     {tabs.map((prop, key) => {
                         var icon = {};
