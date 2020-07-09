@@ -94,7 +94,6 @@ function Reservation(props) {
             marginBottom: theme.spacing(1),
         },
     }));
-    const classes = useStyles();
 
     const onScrollViewSearch = () => {
         paymentRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -407,9 +406,9 @@ function Reservation(props) {
                                 </tr>)}
                             </tbody>
                         </table> :
-                        <h3 className={lightModeOn ? "text-black text-center" : "text-light text-center"}>Pas
-                            d'options pour cette
-                            prestations</h3>
+                        <h3 className={lightModeOn ? "text-black text-center" : "text-light text-center"}>
+                            Pas d'options pour cette prestations
+                        </h3>
                     }
                 </div>
                 <div className="flex-grow-0 text-center pb-3">
