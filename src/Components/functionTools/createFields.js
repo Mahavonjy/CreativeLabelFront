@@ -385,7 +385,7 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                         <button className="btn btn-outline-primary m-2 r-5"
                                 onClick={async () => {
                                     history.push("/register");
-                                    HomeRoot.beforeDataLoad().then(() => null);
+                                    // HomeRoot.beforeDataLoad().then(() => null);
                                 }}><i className="icon icon-user-plus"/>&nbsp;Créer votre compte
                         </button>
                     </div>}
