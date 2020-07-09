@@ -37,6 +37,7 @@ const hexToRgb = input => {
   };
 
   const whiteColor = "#FFF";
+  const pinkColor = "#F44";
 
 const TabsStyle = {
     cardTitle: {
@@ -74,7 +75,7 @@ const TabsStyle = {
         marginLeft: 'auto',
     },
     tabSelected: {
-        backgroundColor: "rgba(" + hexToRgb(whiteColor) + ", 0.2)",
+        backgroundColor: "rgba(" + hexToRgb(pinkColor) + ", 0.4)",
         transition: "0.2s background-color 0.1s"
     },
     tabWrapper: {
