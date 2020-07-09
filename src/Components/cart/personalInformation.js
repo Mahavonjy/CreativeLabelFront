@@ -1,8 +1,16 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addName, addLastName, addAddress, addCity, addPhone, addPostalCode, addEmail} from "../functionTools/functionProps";
-import {changeFields, getSteps, handleNext} from "../functionTools/tools";
 import {toast} from "react-toastify";
+import {
+    addAddress,
+    addCity,
+    addEmail,
+    addLastName,
+    addName,
+    addPhone,
+    addPostalCode
+} from "../functionTools/functionProps";
+import {changeFields, getSteps, handleNext} from "../functionTools/tools";
 
 
 function PersonalInformation(props) {
@@ -10,13 +18,13 @@ function PersonalInformation(props) {
     const dispatch = useDispatch();
     const profile_info = useSelector(state => state.profile.profile_info);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
-    const userName     = useSelector(state => state.KantoBizForm.name);
+    const userName = useSelector(state => state.KantoBizForm.name);
     const userLastName = useSelector(state => state.KantoBizForm.last_name);
-    const userEmail    = useSelector(state => state.KantoBizForm.email)
-    const userAddress  = useSelector(state => state.KantoBizForm.address);
-    const userCity     = useSelector(state => state.KantoBizForm.city);
-    const userPhone    = useSelector(state => state.KantoBizForm.phone);
-    const userPostalCode    = useSelector(state => state.KantoBizForm.postal_code);
+    const userEmail = useSelector(state => state.KantoBizForm.email)
+    const userAddress = useSelector(state => state.KantoBizForm.address);
+    const userCity = useSelector(state => state.KantoBizForm.city);
+    const userPhone = useSelector(state => state.KantoBizForm.phone);
+    const userPostalCode = useSelector(state => state.KantoBizForm.postal_code);
     const completed = useSelector(state => state.KantoBizForm.completed);
     const activeStep = useSelector(state => state.KantoBizForm.activeStep);
     const steps = getSteps();
@@ -43,9 +51,7 @@ function PersonalInformation(props) {
             stateInvalid(name, "name") && stateInvalid(email, "email") &&
             stateInvalid(address, "address") && stateInvalid(postal_code, "code postal") &&
             stateInvalid(city, "ville")
-        ) {
-            handleNext(steps, activeStep, completed, dispatch)
-        }
+        ) handleNext(steps, activeStep, completed, dispatch)
     };
 
     return (
@@ -162,7 +168,7 @@ function PersonalInformation(props) {
                                 </div>
                             </div>
 
-                            <button className="btn btn-outline-primary m-2 r-5"  onClick={() => {
+                            <button className="btn btn-outline-primary m-2 r-5" onClick={() => {
                                 inputValidators()
                             }}>Suivant
                             </button>

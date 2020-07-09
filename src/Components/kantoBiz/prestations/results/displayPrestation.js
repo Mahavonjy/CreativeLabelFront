@@ -193,7 +193,7 @@ function DisplayPrestation(props) {
                             </div>
                             <div className="description text-center">
                                 <p data-tip="Description">{service_to_show.description}</p>
-                                <div className="flex-column justify-content-center" data-tip="Noter Moi">
+                                <div className="flex-column justify-content-center m-4" data-tip="Noter Moi">
                                     <MDBRating iconFaces iconSize='2x' iconRegular
                                                containerClassName="justify-content-center"
                                                fillColors={[
@@ -210,12 +210,12 @@ function DisplayPrestation(props) {
                                     {/*<span className="col pt-2">5&nbsp;✰</span>*/}
                                 </div>
                                 <Stepper alternativeLabel nonLinear activeStep={activeStep}
-                                         style={lightModeOn ? {
+                                         style={lightModeOn ?
+                                             {
                                                  backgroundColor: "#f4f6f9",
                                                  borderRadius: "10px",
                                                  boxShadow: "0 0 6px rgba(0,0,0,.1)"
-                                             }
-                                             : {
+                                             } : {
                                                  backgroundColor: "#f4f6f9",
                                                  borderRadius: "10px",
                                                  boxShadow: "0 0 6px rgba(255,255,255,.5)"
@@ -225,10 +225,7 @@ function DisplayPrestation(props) {
                                         const buttonProps = {};
                                         return (
                                             <Step key={label} {...stepProps}>
-                                                <StepButton
-                                                    onClick={handleStep(index, dispatch)}
-                                                    {...buttonProps}
-                                                >
+                                                <StepButton onClick={handleStep(index, dispatch)}{...buttonProps}>
                                                     {label}
                                                 </StepButton>
                                             </Step>
@@ -261,15 +258,15 @@ function DisplayPrestation(props) {
                 </div>
             </div>
         </div> : <div className="Base pt-5 p-b-100 zIndex-1">
-            <button
-                onClick={() => {
-                    // dispatch(changeInitialized(false));
-                    if (props.read)
-                        history.push("/profile");
-                    else history.push("/kantoBiz");
-                }}
-                style={{position: "fixed", bottom: "5%", zIndex: 99}}
-                className="btn-custom btn-outline-light border-bottom-0 border-right-0">
+            <button style={{position: "fixed", bottom: "5%", zIndex: 99}}
+                    className="btn-custom btn-outline-light border-bottom-0 border-right-0"
+                    onClick={() => {
+                        // dispatch(changeInitialized(false));
+                        if (props.read)
+                            history.push("/profile");
+                        else history.push("/kantoBiz");
+                    }}
+            >
                 <i className="icon icon-long-arrow-left s-24 align-middle"/>&nbsp;Precedent
             </button>
             <h1 className="text-red center-center m-5">Cet Service n'est pas encore disponible pour le moment</h1>

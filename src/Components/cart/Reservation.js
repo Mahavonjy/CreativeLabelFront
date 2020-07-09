@@ -1,16 +1,27 @@
 import DateFnsUtils from "@date-io/date-fns";
-import React, { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {TextField} from '@material-ui/core';
+import InputAdornment from '@material-ui/core/InputAdornment';
+// import Calendar from "../../calendar/calendar";
+import {makeStyles, ThemeProvider} from '@material-ui/core/styles';
+import AddLocation from '@material-ui/icons/AddLocation';
+import {DatePicker, KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import format from "date-fns/format";
+import frLocale from "date-fns/locale/fr";
+import React, {useRef, useState} from "react";
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
+import {useDispatch, useSelector} from "react-redux";
 // import StarRatings from 'react-star-ratings';
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import "../../assets/css/style/Results.css"
 import {
     addListOfOptionsAdded,
-    addReservationAddress,
+    addReservation,
+    addReservationCodePostal,
+    addReservationRue,
+    addReservationVille,
     addServiceToShow,
-    changeDateToSearch,
-    addReservation, addReservationCodePostal, addReservationRue, addReservationVille
-    // changeInitialized
+    changeDateToSearch
 } from "../functionTools/functionProps";
 import {
     ChangeDate,
@@ -18,22 +29,11 @@ import {
     checkUnitKey,
     checkValueIfExistInArray,
     formatDate,
-    handleNext,
-    getSteps
+    getSteps,
+    handleNext
 } from "../functionTools/tools";
-// import Calendar from "../../calendar/calendar";
-import {makeStyles} from '@material-ui/core/styles';
-import { TextField } from '@material-ui/core';
-import format from "date-fns/format";
-import frLocale from "date-fns/locale/fr";
-import { ThemeProvider } from '@material-ui/core/styles';
-import { KeyboardDatePicker, MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import AddLocation from '@material-ui/icons/AddLocation';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
 
-import { defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight } from "../functionTools/utilStyles";
+import {defaultMaterialThemePrestation, defaultThemeDark, defaultThemeLight} from "../functionTools/utilStyles";
 
 
 class LocalizedUtils extends DateFnsUtils {
@@ -58,7 +58,7 @@ function Reservation(props) {
     const reservation_rue = useSelector(state => state.KantobizSearchInfo.reservation_rue);
     const reservation_ville = useSelector(state => state.KantobizSearchInfo.reservation_ville);
 
-    
+
     const list_of_options_added = useSelector(state => state.KantobizSearchInfo.list_of_options_added);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
@@ -146,7 +146,8 @@ function Reservation(props) {
     return (
         <div className="row text-center pt-5">
             <div className="col-md-4" ref={paymentRef}>
-                <div className="mb-4 p-1 rounded" style={lightModeOn ? {border: "dashed 1px black"} : {border: "dashed 1px white"}}>
+                <div className="mb-4 p-1 rounded"
+                     style={lightModeOn ? {border: "dashed 1px black"} : {border: "dashed 1px white"}}>
                     <h2 className="text-red border-bottom">Details de la reservations</h2>
                     <h3 className="col"><small
                         className={lightModeOn ? "text-dark" : "text-light"}>Prix
@@ -164,8 +165,8 @@ function Reservation(props) {
                         className="icon text-red icon-info" data-tip="Ceci est le prix TTC"/>
                     </h3>
                 </div>
-                <div className={lightModeOn ? "mb-4 card shadow1": "mb-4 card shadow2"}>
-                    <div className="flex-grow-0 text-center pb-3">
+                <div className={lightModeOn ? "mb-4 card shadow1" : "mb-4 card shadow2"}>
+                    <div className="flex-grow-0 text-center pt-3 mb-3">
                         <h4 className="col text-primary">Temps de préparation
                             : {service_to_show.preparation_time}
                             {checkUnitKey(service_to_show.unit_of_the_preparation_time)}&nbsp;
@@ -176,6 +177,7 @@ function Reservation(props) {
                             {checkUnitKey(service_to_show.unit_duration_of_the_service)}&nbsp;
                             <i className="icon icon-info"
                                data-tip="Ceci est le durée de l'evenement"/></h4>
+
                         <div className="col pt-2 pb-2">
                             <div className="custom-float">
                                 <div className="input-group-prepend d-inline-block center">
@@ -183,22 +185,10 @@ function Reservation(props) {
                                         <i className="icon-clock-1"/>&nbsp;Date de l'évènement
                                         <span className="text-red">&nbsp; *&nbsp;</span>
                                         <i className="icon icon-info"
-                                                  data-tip="Indiquer la date et l'heure de l'évènement"/>
+                                           data-tip="Indiquer la date et l'heure de l'évènement"/>
                                     </div>
-                                    {/* <input type="date" value={event_date} className="form-control"
-                                                            onChange={
-                                                                (date) =>
-                                                                    ChangeDate(
-                                                                        date,
-                                                                        setEventDate,
-                                                                        dispatch,
-                                                                        changeDateToSearch
-                                                                    )
-                                                            } /> */}
-                                    <MuiPickersUtilsProvider utils={LocalizedUtils}
-                                                             locale={frLocale}>
-                                        <ThemeProvider
-                                            theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
+                                    <MuiPickersUtilsProvider utils={LocalizedUtils} locale={frLocale}>
+                                        <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
                                             <KeyboardDatePicker
                                                 id="date-picker-dialog"
                                                 disablePast="false"
@@ -225,26 +215,19 @@ function Reservation(props) {
                                 </div>
                             </div>
                         </div>
-
                         <div className="col pt-2 pb-2">
                             <div className="custom-float">
-                                <div className="input-group-prepend d-inline-block center"
-                                     style={{width: "100%"}}>
+                                <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                                     <div className="input-group-text text-dark">
-                                        <i className="icon-map-marker"/>&nbsp; Code postal<span className="text-red">&nbsp; *</span>
+                                        <i className="icon-map-marker"/>&nbsp; Code postal
+                                        <span className="text-red">&nbsp; *</span>
                                     </div>
-                                    {/* <input type="text" value={address} id="address"
-                                                            placeholder="Indiquer l'adresse de l'évènement"
-                                                            name="address" className="form-control"
-                                                            onChange={(e) => {
-                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
-                                                            }} /> */}
-                                    <ThemeProvider
-                                        theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
+                                    <ThemeProvider theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
                                         <TextField id="standard-basic" value={code_postal} label=""
-                                                   style={{width: '300px'}}
+                                                   style={{width: '100%'}}
                                                    onChange={(e) => {
-                                                       if (!props.read) changeFields(setCodePostal, e, addReservationCodePostal, dispatch)
+                                                       if (!props.read)
+                                                           changeFields(setCodePostal, e, addReservationCodePostal, dispatch)
                                                    }}
                                                    InputProps={{
                                                        endAdornment: (
@@ -265,18 +248,13 @@ function Reservation(props) {
                                     <div className="input-group-text text-dark">
                                         <i className="icon-map-marker"/>&nbsp; Rue (optionnel)
                                     </div>
-                                    {/* <input type="text" value={address} id="address"
-                                                            placeholder="Indiquer l'adresse de l'évènement"
-                                                            name="address" className="form-control"
-                                                            onChange={(e) => {
-                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
-                                                            }} /> */}
                                     <ThemeProvider
                                         theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
                                         <TextField id="standard-basic" value={rue} label=""
-                                                   style={{width: '300px'}}
+                                                   style={{width: '100%'}}
                                                    onChange={(e) => {
-                                                       if (!props.read) changeFields(setRue, e, addReservationRue, dispatch)
+                                                       if (!props.read)
+                                                           changeFields(setRue, e, addReservationRue, dispatch)
                                                    }}
                                                    InputProps={{
                                                        endAdornment: (
@@ -298,18 +276,13 @@ function Reservation(props) {
                                         <i className="icon-map-marker"/>&nbsp; Ville
                                         <span className="text-red">&nbsp; *</span>
                                     </div>
-                                    {/* <input type="text" value={address} id="address"
-                                                            placeholder="Indiquer l'adresse de l'évènement"
-                                                            name="address" className="form-control"
-                                                            onChange={(e) => {
-                                                                if (!props.read) changeFields(setAddress, e, addReservationAddress, dispatch)
-                                                            }} /> */}
                                     <ThemeProvider
                                         theme={lightModeOn ? defaultThemeLight : defaultThemeDark}>
                                         <TextField id="standard-basic" value={ville} label=""
-                                                   style={{width: '300px'}}
+                                                   style={{width: '100%'}}
                                                    onChange={(e) => {
-                                                       if (!props.read) changeFields(setVille, e, addReservationVille, dispatch)
+                                                       if (!props.read)
+                                                           changeFields(setVille, e, addReservationVille, dispatch)
                                                    }}
                                                    InputProps={{
                                                        endAdornment: (
@@ -329,40 +302,49 @@ function Reservation(props) {
                     </button>
                 </div>
                 <div className={lightModeOn ? "mb-4 card shadow1" : "mb-4 card shadow2"}>
-                    <div className="flex-grow-0 pb-3">
+                    <div className="flex-grow-0 pt-3 pb-3">
                         <h2 className="col text-primary pb-3">Plus de détails</h2>
-                        <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Politique
-                            d’annulation
-                            :</strong> {service_to_show.refund_policy}&nbsp;<i
-                            className="icon icon-info" data-tip data-for='refund'/></h4>
-                        <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Catégorie
-                            :</strong> {service_to_show.thematics.join(", ")}</h4>
-                        <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Type(s)
-                            d’évènement(s)
-                            :</strong> {service_to_show.events.join(", ")}</h4>
-                        <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Nombre
-                            d'artistes
-                            :</strong> {service_to_show.number_of_artists}</h4>
-                        <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Ville de
-                            référence
-                            :</strong> {service_to_show.reference_city}</h4>
-                        <h4 className={lightModeOn ? "col text-black" : "col"}><strong>Ville(s)
-                            annexe(s)
-                            :</strong> {service_to_show.others_city.join(", ")}</h4>
+                        <h4 className={lightModeOn ? "col text-black mb-3" : "col mb-3"}>
+                            <strong className="bolder">Politique d’annulation :</strong> <br/>
+                            {service_to_show.refund_policy}&nbsp;
+                            <i className="icon icon-info" data-tip data-for='refund'/>
+                        </h4>
+                        <h4 className={lightModeOn ? "col text-black mb-3" : "col mb-3"}>
+                            <strong className="bolder">Catégorie :</strong> <br/>
+                            {service_to_show.thematics.join(", ")}
+                        </h4>
+                        <h4 className={lightModeOn ? "col text-black mb-3" : "col mb-3"}>
+                            <strong className="bolder">Type(s) d’évènement(s) :</strong> <br/>
+                            {service_to_show.events.join(", ")}
+                        </h4>
+                        <h4 className={lightModeOn ? "col text-black mb-3" : "col mb-3"}>
+                            <strong className="bolder">Nombre d'artistes :</strong> <br/>
+                            {service_to_show.number_of_artists}
+                        </h4>
+                        <h4 className={lightModeOn ? "col text-black mb-3" : "col mb-3"}>
+                            <strong className="bolder">Ville de référence :</strong> <br/>
+                            {service_to_show.reference_city}
+                        </h4>
+                        <h4 className={lightModeOn ? "col text-black mb-3" : "col mb-3"}>
+                            <strong className="bolder">Ville(s) annexe(s) :</strong> <br/>
+                            {service_to_show.others_city.join(", ")}
+                        </h4>
                     </div>
                 </div>
-                <div className={lightModeOn ? "mb-4 card shadow1" : "mb-4 card shadow2"}>
+                <div className={lightModeOn ? "mb-3 mt-3 card shadow1" : "mb-3 mt-3 card shadow2"}>
                     <div className="flex-grow-0 text-center pb-3">
                         <h2 className="col text-primary pb-3">Matériels nécessaires&nbsp;<i
                             className="icon icon-info"
-                            data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique. La liste complète des matériels nécessaires se trouve dans la fiche technique"/>
+                            data-tip="Une liste non exhaustive des matériels nécessaires à la prestation artistique.
+                             La liste complète des matériels nécessaires se trouve dans la fiche technique"/>
                         </h2>
                         <div className="col">
                             {service_to_show.materials.list_of_materials.length !== 0 ?
                                 <ul>
                                     {service_to_show.materials.list_of_materials.map((val, index) =>
-                                        <li key={index}><i
-                                            className="icon icon-success text-green"/>{val}</li>
+                                        <li key={index}>
+                                            <i className="icon icon-success text-green"/>{val}
+                                        </li>
                                     )}
                                 </ul> : <p className="text-red">Pas de material necessaire</p>}
                         </div>
@@ -372,20 +354,22 @@ function Reservation(props) {
             <div className="col-md-8">
                 <div className="flex-grow-0 text-center pb-3">
                     <h2 className="col text-primary pb-3">Option(s) pour la prestation&nbsp;
-                        <i
-                            className="icon icon-info" data-tip data-for="option"/></h2>
+                        <i className="icon icon-info" data-tip data-for="option"/></h2>
                     {service_to_show.options.length !== 0 ?
                         <table className="responsive-table border-0">
                             <thead>
                             <tr>
-                                <th scope="col">Nom&nbsp;<i className="icon icon-info"
-                                                            data-tip="Nom donner par l'artiste cette option"/>
+                                <th scope="col">Nom&nbsp;
+                                    <i className="icon icon-info"
+                                       data-tip="Nom donner par l'artiste cette option"/>
                                 </th>
-                                <th scope="col">Tag&nbsp;<i className="icon icon-info"
-                                                            data-tip="Le nom des autres artiste proposé avec"/>
+                                <th scope="col">Tag&nbsp;
+                                    <i className="icon icon-info"
+                                       data-tip="Le nom des autres artiste proposé avec"/>
                                 </th>
-                                <th scope="col">Prix&nbsp;<i className="icon icon-info"
-                                                             data-tip="Le prix de cette option en plus de la prestation"/>
+                                <th scope="col">Prix&nbsp;
+                                    <i className="icon icon-info"
+                                       data-tip="Le prix de cette option en plus de la prestation"/>
                                 </th>
                                 <th scope="col">Description&nbsp;<i
                                     className="icon icon-info"
@@ -431,8 +415,7 @@ function Reservation(props) {
                 <div className="flex-grow-0 text-center pb-3">
                     <h2 className="col text-primary pb-3">
                         Galerie d'images&nbsp;
-                        <i className="icon icon-info"
-                           data-tip="Quelques photo de l'artiste sur cette prestation"/>
+                        <i className="icon icon-info" data-tip="Quelques photo de l'artiste sur cette prestation"/>
                     </h2>
                     <div className="demo-gallery">
                         <ul id="lightgallery">
@@ -445,13 +428,18 @@ function Reservation(props) {
                                             <Lightbox
                                                 mainSrc={val}
                                                 nextSrc={(photoIndex + 1) % service_to_show.galleries.length}
-                                                prevSrc={(photoIndex + service_to_show.galleries.length - 1) % service_to_show.galleries.length}
+                                                prevSrc={(photoIndex + service_to_show.galleries.length - 1)
+                                                % service_to_show.galleries.length}
                                                 onCloseRequest={() => setIsOpen(false)}
                                                 onMovePrevRequest={() =>
-                                                    setPhotoIndex((photoIndex + service_to_show.galleries.length - 1) % service_to_show.galleries.length)
+                                                    setPhotoIndex(
+                                                        (photoIndex + service_to_show.galleries.length - 1)
+                                                        % service_to_show.galleries.length)
                                                 }
                                                 onMoveNextRequest={() =>
-                                                    setPhotoIndex((photoIndex + service_to_show.galleries.length + 1) % service_to_show.galleries.length)
+                                                    setPhotoIndex(
+                                                        (photoIndex + service_to_show.galleries.length + 1)
+                                                        % service_to_show.galleries.length)
                                                 }
                                             />
                                         )}
