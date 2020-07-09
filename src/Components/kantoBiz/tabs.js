@@ -70,10 +70,8 @@ const TabsStyle = {
         lineHeight: "24px",
         border: "0 !important",
         color: whiteColor + " !important",
-        marginLeft: "280px",
-        "&:last-child": {
-            marginLeft: "40px"
-        }
+        marginRight: 'auto',
+        marginLeft: 'auto'
     },
     tabSelected: {
         backgroundColor: "rgba(" + hexToRgb(whiteColor) + ", 0.2)",
@@ -124,7 +122,6 @@ export default function KantoTabs(props) {
                     }}
                     variant="scrollable"
                     scrollButtons="auto"
-                    centered
                 >
                     {tabs.map((prop, key) => {
                         var icon = {};
