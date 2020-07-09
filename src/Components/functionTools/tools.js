@@ -726,21 +726,22 @@ export const generatePagination = (_array, funcToDisplay) => {
                             <h2 className="o-card_title text-black">{val.price}<i className="icon icon-euro text-red"/>
                             </h2>
                             <h3 className="o-card_subTitle text-black">
-                                {val.title}&nbsp;-&nbsp;5<i className="icon text-red icon-star"/>
+                                {val.title.length <= 15
+                                    ? val.title : val.title.substring(0, 15) + ' ...'}&nbsp;-&nbsp;5<i className="icon text-red icon-star"/>
                             </h3>
                             <h3 className="o-card_subTitle text-black">
                                 <small className="text-black bolder">
                                     {val.reference_city},&nbsp;
-                                    {val.others_city.map((val, index) => <small key={index}>{val}, </small>)}
+                                    {val.others_city.map((val, index) => (index <= 1) && <small key={index}>{val}, </small>)}
                                 </small>
                             </h3>
                             <h3 className="o-card_subTitle text-black">
                                 <small className="text-black bolder">
-                                    {val.thematics.map((val, index) => <small key={index}>{val}, </small>)}
+                                    {val.thematics.map((val, index) => (index <= 2) && <small key={index}>{val}, </small>)}
                                 </small>
                             </h3>
                             <p className="o-card_paragraph text-black">{val.description.length <= 35
-                                ? val.description : val.description.substring(0, 35) + '...' }</p>
+                                ? val.description : val.description.substring(0, 35) + ' ...' }</p>
                         </div>
                         <div className="p-2">
                             <button className="btn col btn-outline-dark pl-5 pr-5 pb-3"

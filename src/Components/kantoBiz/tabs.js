@@ -124,6 +124,7 @@ export default function KantoTabs(props) {
                     }}
                     variant="scrollable"
                     scrollButtons="auto"
+                    centered
                 >
                     {tabs.map((prop, key) => {
                         var icon = {};
