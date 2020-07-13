@@ -223,11 +223,64 @@ function Results(props) {
                 </div>
             </Modal>}
             <div className="col-lg-12 pt-2">
-                <button className="btn btn-outline-danger m-2 pl-5 pr-5"
-                        data-tip="Filtres"
-                        onClick={() => setFilterOpened(true)}
-                ><i className="icon-th-list s-20"/>&nbsp;<i className="icon-filter s-20"/> Filtrer les résultats
-                </button>
+                <fieldset className="border border-danger  p-2 m-5 r-5">
+                    <legend className="text-red text-center">Filtrer les resultats</legend>
+                    <div className="form-inline row justify-content-center">
+                        <ThemeProvider theme={defaultResultTheme}>
+                            <FormControl style={{margin: '10px', width: '240px'}}>
+                                <InputLabel id="demo-multiple-chip-label">Évènement</InputLabel>
+                                <Select
+                                    labelId="demo-mutiple-name-label"
+                                    id="demo-mutiple-name"
+                                    multiple
+                                    value={state_events}
+                                    onChange={obj => updateEvents(obj)}
+                                    input={<Input/>}
+                                    MenuProps={MenuProps}
+                                >
+                                    {events_type.map((data) => (
+                                        <MenuItem
+                                            key={data.index}
+                                            value={data.value}
+                                            style={getStyles(data, events_type, theme)}>
+                                            {data.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </ThemeProvider>
+                        <div className="text-center text-red ml-5 mr-5">
+                            <label className="pb-3 pt-4">Prix de la prestation</label>
+                            {priceActive ?
+                                <InputRange draggableTrack maxValue={filter_price["max"]}
+                                            minValue={filter_price["min"]} formatLabel={value => `${value} $`}
+                                            onChange={value => setPrice(value)} step={10}
+                                            onChangeComplete={value => setPrice(value)}
+                                            value={price}/> : <i className="icon icon-plus ml-2 text-red s-18"
+                                                                 onClick={() => setPriceActive(true)}
+                                                                 data-tip="filtrer pas prix ?"/>}
+                        </div>
+                        <div className="text-center text-red ml-5 mr-5">
+                            <label className={priceActive ? "pb-3 pt-4" : ''}>Notation (nombre d'étoile)</label>
+                            {startsActive ?
+                                <InputRange draggableTrack maxValue={5} minValue={0}
+                                            formatLabel={value => `${value}✰`}
+                                            onChange={value => setStarts(value)}
+                                            onChangeComplete={value => setStarts(value)}
+                                            value={starts}/> : <i className="icon icon-plus ml-2 text-red s-18"
+                                                                  data-tip="Ce filtrage va bientôt arriver"/>}
+                        </div>
+                        <div className="text-center ml-5 mr-5 mt-3">
+                            <button className="btn btn-outline-danger m-1" onClick={() => reset()}
+                                    data-tip="Remettre tout a zéro">Retablir tout&nbsp;
+                                <i className="icon icon-remove"/></button>
+                            <button className="btn btn-outline-danger m-1" onClick={() => filter()}
+                                    data-tip="Appliquer les filtres">Appliquer&nbsp;<i
+                                className="icon icon-search-1"/></button>
+                        </div>
+                    </div>
+                </fieldset>
+
                 <h4 className="text-red text-center m-5">Résultat(s) de votre recente recherche</h4>
 
                 {!loading ?
