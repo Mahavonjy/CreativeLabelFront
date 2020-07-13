@@ -260,16 +260,18 @@ function Results(props) {
                                                                  onClick={() => setPriceActive(true)}
                                                                  data-tip="filtrer pas prix ?"/>}
                         </div>
+
                         <div className="text-center text-red ml-5 mr-5">
-                            <label className={priceActive ? "pb-3 pt-4" : ''}>Notation (nombre d'étoile)</label>
+                            <label className="pb-3 pt-4">Notation (nombre d'étoile)</label>
                             {startsActive ?
-                                <InputRange draggableTrack maxValue={5} minValue={0}
-                                            formatLabel={value => `${value}✰`}
-                                            onChange={value => setStarts(value)}
+                                <InputRange draggableTrack maxValue={5}
+                                            minValue={0} formatLabel={value => `${value}✰`}
+                                            onChange={value => setStarts(value)} step={10}
                                             onChangeComplete={value => setStarts(value)}
                                             value={starts}/> : <i className="icon icon-plus ml-2 text-red s-18"
                                                                   data-tip="Ce filtrage va bientôt arriver"/>}
                         </div>
+
                         <div className="text-center ml-5 mr-5 mt-3">
                             <button className="btn btn-outline-danger m-1" onClick={() => reset()}
                                     data-tip="Remettre tout a zéro">Retablir tout&nbsp;
