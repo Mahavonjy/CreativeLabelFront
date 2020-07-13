@@ -153,7 +153,7 @@ export const EventAndThematics = (
                                {
                                    tabName: (
                                        <div>
-                                           <h3 className="text-primary">Nos Evenements</h3>
+                                           <h3 className="text-primary font-weight-bolder">Nos Evenements</h3>
                                            <span className={lightModeOn ? "text-black" : "text-white"}>
                                         Voici nos differents types d'evenements
                                     </span>
@@ -224,7 +224,7 @@ export const EventAndThematics = (
                                }, {
                                    tabName: (
                                        <div>
-                                           <h3 className="text-primary">Nos Thematiques/Univers</h3>
+                                           <h3 className="text-primary font-weight-bolder">Nos Thematiques/Univers</h3>
                                            <span className={lightModeOn ? "text-black" : "text-white"}>
                                         Voici nos differents types d'univers
                                     </span>

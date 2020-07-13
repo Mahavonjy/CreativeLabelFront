@@ -223,7 +223,7 @@ function Results(props) {
                 </div>
             </Modal>}
             <div className="col-lg-12 pt-2">
-                <fieldset className="border border-danger  p-2 m-5 r-5">
+                <fieldset className="border border-danger  p-5 m-5 r-5">
                     <legend className="text-red text-center">Filtrer les resultats</legend>
                     <div className="form-inline row justify-content-center">
                         <ThemeProvider theme={defaultResultTheme}>
