@@ -116,9 +116,6 @@ function ProfileInformation(props) {
                         {!loadingPhoto ?
                             <div className="text-center border border-light border-5" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
-                                    <i className="icon-edit1 text-center bg-transparent rounded-lg s-36 text-red"
-                                       onClick={() => document.getElementById("cover_area_file").click()}
-                                       data-tip="modifier la photo de couverture"/>
                                     <input id="cover_area_file"
                                            type="file"
                                            accept="image/png, image/jpeg"
@@ -131,6 +128,9 @@ function ProfileInformation(props) {
                                                )
                                            }}
                                     />
+                                    <i className="fa fa-camera-retro s-36 mt-3 ml-5"
+                                       onClick={() => document.getElementById("cover_area_file").click()}
+                                       data-tip="modifier la photo de couverture"/>
                                 </div>
                                 <figure className="avatar avatar-xxl border border-light border-5 mt-5" >
                                     <div className="hovereffect" style={{borderRadius: "100%"}}>
@@ -138,7 +138,7 @@ function ProfileInformation(props) {
                                              src={profile_info.photo || "https://zupimages.net/up/19/18/3ltf.png"}
                                         />
                                         <div className="overlay zIndex99">
-                                            <i className="icon icon-edit cursor-pointer s-36 bolder text-red"
+                                            <i className="icon icon-camera cursor-pointer s-36 text-light m-auto"
                                                onClick={() => document.getElementById("picture").click()}
                                                data-tip="modifier la photo de profile"/>
                                             <input id="picture"
@@ -167,20 +167,19 @@ function ProfileInformation(props) {
                             <div className="pt-2">
                                 <h4 className={lightModeOn ? "text-dark bg-transparent font-weight-bolder center pt-2 pb-2" : "text-light bg-transparent font-weight-bolder center pt-2 pb-2"}
                                     style={{
-                                        width: "80%",
-                                        borderTopLeftRadius: "10px",
-                                        borderTopRightRadius: "10px"
+                                        width: "100%",
+                                        fontFamily: "Arial"
                                     }}>
                                     {profile_info.name}
                                 </h4>
-                                <h4 className={lightModeOn ? "text-dark bg-transparent center pt-2 pb-2" : "text-light bg-transparent center pt-2 pb-2"}
+                                <p className={lightModeOn ? "text-dark text-justify bg-transparent center pt-2 pb-2" : "text-light text-justify bg-transparent center  pt-2 pb-2"}
                                     style={{
-                                        width: "80%",
-                                        borderTopLeftRadius: "10px",
-                                        borderTopRightRadius: "10px"
+                                        width: "85%",
+                                        fontFamily: "Arial",
+                                        fontSize: "16px"
                                     }}>
                                     {profile_info.description === null ? "" : profile_info.description}
-                                </h4>
+                                </p>
                             </div>
                             <button className="btn btn-outline-primary btn-sm mt-3 mt-3 pl-4 pr-4"
                                     onClick={() => setEdit(true)}>Modifier mon profile
@@ -195,7 +194,7 @@ function ProfileInformation(props) {
                             </div> : null}
                     </div>
                     <div className="col-md-8">
-                        <div className="p5 b-b text-center">
+                        <div className="p5 text-center">
                             <div className="pl-8 mt-4">
                                 <h3 className="text-red">Informations personnelles </h3>
                             </div>
