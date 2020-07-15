@@ -116,6 +116,7 @@ function ProfileInformation(props) {
                         {!loadingPhoto ?
                             <div className="text-center border border-light border-5" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
+
                                     <input id="cover_area_file"
                                            type="file"
                                            accept="image/png, image/jpeg"
@@ -128,6 +129,7 @@ function ProfileInformation(props) {
                                                )
                                            }}
                                     />
+
                                     <i className="fa fa-camera-retro s-36 mt-3 ml-5"
                                        onClick={() => document.getElementById("cover_area_file").click()}
                                        data-tip="modifier la photo de couverture"/>
