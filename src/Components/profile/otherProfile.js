@@ -54,7 +54,7 @@ function OtherProfile(props) {
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="card no-b shadow no-r">
                     <div className="row no-gutters">
-                        <div className="col-md-4 b-r">
+                        <div className="col-md-4">
                             <div className="text-center p-5 mt-2">
                                 <figure className="avatar avatar-xl">
                                     <img

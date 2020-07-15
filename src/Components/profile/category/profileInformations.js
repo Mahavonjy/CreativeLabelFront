@@ -14,6 +14,7 @@ function ProfileInformation(props) {
     const dispatch = useDispatch();
     const notes = useSelector(state => state.profile.notes);
     const profile_info = useSelector(state => state.profile.profile_info);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
@@ -27,7 +28,8 @@ function ProfileInformation(props) {
                 : PhotoTest) + ")",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        backgroundSize: "80%",
+        backgroundSize: "100%",
+        height: "150px",
         opacity: 0.7
     };
 
@@ -87,7 +89,7 @@ function ProfileInformation(props) {
 
             <div className="card no-b shadow no-r">
                 <div className="row no-gutters">
-                    <div className="col-md-4 b-r">
+                    <div className={lightModeOn ? "col-md-4" : "col-md-4"}>
                         {props.user_role === "professional_auditor" &&
                         <div className="dropdown" style={{position: "absolute", paddingTop: "10px"}}>
                             <button className="btn btn-outline-danger btn-sm pt-3 pb-3 r-5 zIndex99" type="button"
@@ -112,7 +114,7 @@ function ProfileInformation(props) {
                             </div>
                         </div>}
                         {!loadingPhoto ?
-                            <div className="text-center rounded-top p-5 mt-5" style={cover_style}>
+                            <div className="text-center border border-light border-5" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
                                     <i className="icon-edit1 text-center bg-transparent rounded-lg s-36 text-red"
                                        onClick={() => document.getElementById("cover_area_file").click()}
@@ -130,8 +132,8 @@ function ProfileInformation(props) {
                                            }}
                                     />
                                 </div>
-                                <figure className="avatar avatar-xl">
-                                    <div className="hovereffect">
+                                <figure className="avatar avatar-xxl border border-light border-5 mt-5" >
+                                    <div className="hovereffect" style={{borderRadius: "100%"}}>
                                         <img alt="profile"
                                              src={profile_info.photo || "https://zupimages.net/up/19/18/3ltf.png"}
                                         />
@@ -154,23 +156,6 @@ function ProfileInformation(props) {
                                         </div>
                                     </div>
                                 </figure>
-                                <div className="pt-2" style={{opacity: 0.8}}>
-                                    <h4 className="text-light bg-dark center pt-2"
-                                        style={{
-                                            width: "80%",
-                                            borderTopLeftRadius: "10px",
-                                            borderTopRightRadius: "10px"
-                                        }}>
-                                        {profile_info.name}
-                                    </h4>
-                                    <h4 className="text-light bg-dark center pt-2 pb-2" style={{
-                                        width: "80%",
-                                        borderBottomLeftRadius: "10px",
-                                        borderBottomRightRadius: "10px"
-                                    }}>
-                                        {profile_info.email}
-                                    </h4>
-                                </div>
                             </div> :
                             <div className='text-center rounded-top p-5 m-5 text-danger'>
                                 <div className='spinner-grow text-danger m-5 p-4' role='status'>
@@ -178,13 +163,33 @@ function ProfileInformation(props) {
                                 </div>
                             </div>}
 
-                        <div className="text-center">
-                            <button className="btn btn-outline-primary btn-sm mt-3 pl-4 pr-4"
+                        <div className="text-center mt-4">
+                            <div className="pt-2">
+                                <h4 className={lightModeOn ? "text-dark bg-transparent font-weight-bolder center pt-2 pb-2" : "text-light bg-transparent font-weight-bolder center pt-2 pb-2"}
+                                    style={{
+                                        width: "80%",
+                                        borderTopLeftRadius: "10px",
+                                        borderTopRightRadius: "10px"
+                                    }}>
+                                    {profile_info.name}
+                                </h4>
+                                <h4 className={lightModeOn ? "text-dark bg-transparent center pt-2 pb-2" : "text-light bg-transparent center pt-2 pb-2"}
+                                    style={{
+                                        width: "80%",
+                                        borderTopLeftRadius: "10px",
+                                        borderTopRightRadius: "10px"
+                                    }}>
+                                    {profile_info.description === null ? "" : profile_info.description}
+                                </h4>
+                            </div>
+                            <button className="btn btn-outline-primary btn-sm mt-3 mt-3 pl-4 pr-4"
                                     onClick={() => setEdit(true)}>Modifier mon profile
                             </button>
+
+
                         </div>
                         {props.user_role !== "professional_auditor" ?
-                            <div className="text-center mt-2 mb-2">
+                            <div className="text-center mt-3 mb-3">
                                     <span className="text-red">Note:&nbsp;{notes}&nbsp;<i
                                         className="icon-star-1"/></span>
                             </div> : null}
@@ -201,8 +206,9 @@ function ProfileInformation(props) {
                                     ['birth', 'Anniversaire'],
                                     ['country', 'Pays'],
                                     ['address', 'Adresse'],
+                                    ['city', 'Ville'],
                                     ['phone', 'Téléphone'],
-                                    ['city', 'Ville']
+                                    ['email', 'Email']
                                 ].map((val, index) =>
                                     <div className="col-md-4" key={index}>
                                         <div className="p-4">
