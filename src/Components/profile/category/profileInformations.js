@@ -29,8 +29,7 @@ function ProfileInformation(props) {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         backgroundSize: "100%",
-        height: "150px",
-        opacity: 0.7
+        height: "150px"
     };
 
     const togglePopupEditProfile = async (success) => {
@@ -130,7 +129,7 @@ function ProfileInformation(props) {
                                            }}
                                     />
 
-                                    <i className="fa fa-camera-retro s-36 mt-3 ml-5"
+                                    <i className="fa fa-camera s-36 mt-3 ml-5"
                                        onClick={() => document.getElementById("cover_area_file").click()}
                                        data-tip="modifier la photo de couverture"/>
                                 </div>
