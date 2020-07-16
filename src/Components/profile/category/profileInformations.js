@@ -8,6 +8,8 @@ import {profileInitialisationInfo} from "../../functionTools/functionProps";
 import Preference from "../../preference/preference";
 import {checkErrorMessage} from "../../validators/validatiors";
 import EditProfile from "../edits/editProfile";
+import { Fragment } from "react";
+import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
 
 function ProfileInformation(props) {
 
@@ -133,7 +135,7 @@ function ProfileInformation(props) {
                                        onClick={() => document.getElementById("cover_area_file").click()}
                                        data-tip="modifier la photo de couverture"/>
                                 </div>
-                                <figure className="avatar avatar-xxl border border-light border-5 mt-5" >
+                                <figure className="avatar avatar-xxl border border-light border-5 mt-5">
                                     <div className="hovereffect" style={{borderRadius: "100%"}}>
                                         <img alt="profile"
                                              src={profile_info.photo || "https://zupimages.net/up/19/18/3ltf.png"}
@@ -174,17 +176,18 @@ function ProfileInformation(props) {
                                     {profile_info.name}
                                 </h4>
                                 <p className={lightModeOn ? "text-dark text-justify bg-transparent center pt-2 pb-2" : "text-light text-justify bg-transparent center  pt-2 pb-2"}
-                                    style={{
-                                        width: "85%",
-                                        fontFamily: "Arial",
-                                        fontSize: "16px"
-                                    }}>
+                                   style={{
+                                       width: "85%",
+                                       fontFamily: "Arial",
+                                       fontSize: "16px"
+                                   }}>
                                     {profile_info.description === null ? "" : profile_info.description}
                                 </p>
                             </div>
-                            <button className="btn btn-outline-primary btn-sm mt-3 mt-3 pl-4 pr-4"
+                            {/*<button className="btn btn-outline-primary btn-sm mt-3 mt-3 pl-4 pr-4"
                                     onClick={() => setEdit(true)}>Modifier mon profile
-                            </button>
+                            </button>*/}
+
 
 
                         </div>
@@ -195,6 +198,28 @@ function ProfileInformation(props) {
                             </div> : null}
                     </div>
                     <div className="col-md-8">
+                        <div className="btn-group float-right mt-3 mr-4">
+                            <button type="button" className="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Plus
+                            </button>
+                            <div className="dropdown-menu">
+                                <ul>
+                                    <li className="dropdown-item" onClick={() => setEdit(true)}>
+                                        <span className={lightModeOn ? "text-black" : "text-white"}>
+                                            Modifier le profile
+                                        </span>
+                                    </li>
+                                    <li className="dropdown-item" >
+                                        <span className={lightModeOn ? "text-black" : "text-light"}>
+                                            Changer de mot de passe
+                                        </span>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div className="p5 text-center">
                             <div className="pl-8 mt-4">
                                 <h3 className="text-red">Informations personnelles </h3>
@@ -231,6 +256,7 @@ function ProfileInformation(props) {
                                     </div>)}
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
