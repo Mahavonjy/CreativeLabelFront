@@ -35,7 +35,7 @@ import {
     addUnitTimeOfPreparation,
     addUnitTimeOfService,
     addUserId,
-    changeStatusOfService
+    changeStatusOfService, addFilterPricing
 } from "./functionProps";
 import $ from "jquery";
 import 'jquery-mask-plugin';
@@ -667,6 +667,14 @@ export const shuffleArray = (array) => {
         array[j] = temp;
     }
     return array;
+};
+
+export const checkMinMax = (dispatch, resp, data) => {
+   dispatch(addFilterPricing({
+        "min": resp.data[0]["price"],
+        "max": resp.data[resp.data.length - 1]["price"]
+    }));
+    return shuffleArray(data);
 };
 
 export const dispatchPayment = (payment_history, dispatch) => {

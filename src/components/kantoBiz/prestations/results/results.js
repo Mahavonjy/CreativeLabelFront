@@ -58,6 +58,7 @@ function Results(props) {
     const [pageOfItems, setPageOfItems] = useState([]);
     const [filterOpened, setFilterOpened] = useState(false);
     const [thisComponentResults, setThisComponentResults] = useState([]);
+    const [thisComponentFilter, setThisComponentFilter] = useState([]);
     const [state_events, setEvents] = useState([])
 
     const updateEvents = obj => {
@@ -95,15 +96,15 @@ function Results(props) {
                 })
             } else if (priceActive) filterPrice(value, tmp);
             return true
-        })).then(r => {
+        })).then(async r => {
             if (tmp.length !== 0) {
-                setThisComponentResults(generatePagination(tmp, props.displayOne));
-                dispatch(addSearchLoading(false));
+                await setThisComponentFilter(generatePagination(tmp, props.displayOne));
+                await dispatch(addSearchLoading(false));
             } else {
                 dispatch(addSearchLoading(false));
                 toast.warn("Pas de resultat")
             }
-            setFilterOpened(false);
+            await setFilterOpened(false);
         });
     };
 
@@ -294,7 +295,10 @@ function Results(props) {
                 {!loading &&
                 <div className="text-center pt-4" ref={searchRef}>
                     {thisComponentResults.length !== 0 ?
-                        <Pagination items={thisComponentResults} onChangePage={onChangePage} initialPage={1}/> :
+
+                        (thisComponentFilter.length !== 0 ?
+                            <Pagination items={thisComponentFilter} onChangePage={onChangePage} initialPage={1}/> :
+                            <Pagination items={thisComponentResults} onChangePage={onChangePage} initialPage={1}/>) :
                         <h3><p className="text-red center-center m-5">0 recherche</p></h3>}
                 </div>}
             </div>

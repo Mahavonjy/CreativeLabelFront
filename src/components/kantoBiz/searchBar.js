@@ -27,7 +27,7 @@ import {
     changeThematicsToSearch
 } from "../functionTools/functionProps";
 import {
-    ChangeDate,
+    ChangeDate, checkMinMax,
     funcToSpecifyValueForSpecialInput,
     generatePagination,
     onChangeListWithValueLabel,
@@ -100,13 +100,10 @@ function SearchBar(props) {
             }, {headers: props.headers}).then(async (resp) => {
                 let data = resp.data || [];
                 if (data.length >= 2) {
-                    await dispatch(addFilterPricing({
-                        "min": resp.data[0]["price"],
-                        "max": resp.data[resp.data.length - 1]["price"]
-                    }));
-                    data = shuffleArray(data);
+                    await checkMinMax(dispatch, resp, data);
                 }
                 await props.setStateResult(generatePagination(data, props.displayOne));
+                await console.log(generatePagination(data, props.displayOne));
                 await dispatch(addKantoBizSearchResults(data));
                 await dispatch(addSearchLoading(false));
                 if (data.length === 0) {
