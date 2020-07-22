@@ -99,9 +99,8 @@ function SearchBar(props) {
                 "thematics": state_thematics,
             }, {headers: props.headers}).then(async (resp) => {
                 let data = resp.data || [];
-                if (data.length >= 2) {
-                    data = checkMinMax(dispatch, resp, data);
-                }
+                if (data.length >= 2) data = await checkMinMax(dispatch, resp, data);
+
                 await props.setStateResult(generatePagination(data, props.displayOne));
                 await dispatch(addKantoBizSearchResults(data));
                 await dispatch(addSearchLoading(false));
