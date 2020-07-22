@@ -100,7 +100,7 @@ function SearchBar(props) {
             }, {headers: props.headers}).then(async (resp) => {
                 let data = resp.data || [];
                 if (data.length >= 2) {
-                    await checkMinMax(dispatch, resp, data);
+                    data = checkMinMax(dispatch, resp, data);
                 }
                 await props.setStateResult(generatePagination(data, props.displayOne));
                 await dispatch(addKantoBizSearchResults(data));

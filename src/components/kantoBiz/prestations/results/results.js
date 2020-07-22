@@ -109,6 +109,8 @@ function Results(props) {
 
     const reset = async () => {
         await dispatch(addSearchLoading(true));
+        setPrice({min: 0, max: 0});
+        setEvents([]);
         setPriceActive(false);
         setStartsActive(false);
         setThisComponentFilter([]);
