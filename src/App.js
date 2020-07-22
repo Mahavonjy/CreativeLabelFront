@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from "react";
-import Container from "./Components/container/container";
+import Container from "./components/container/container";
 import 'react-toastify/dist/ReactToastify.css';
 
 function App () {
