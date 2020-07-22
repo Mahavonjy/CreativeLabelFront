@@ -10,6 +10,7 @@ import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
 import {addFilterEventSelected, addSearchLoading,} from "../../../functionTools/functionProps";
 import {LoadingSearch} from "../../../functionTools/popupFields";
+import {generatePagination} from "../../../functionTools/tools";
 import {defaultResultTheme} from "../../../functionTools/utilStyles";
 import Pagination from "../../../pagination/pagination";
 
