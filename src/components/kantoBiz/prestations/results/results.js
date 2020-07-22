@@ -112,6 +112,7 @@ function Results(props) {
         await dispatch(addSearchLoading(true));
         setPriceActive(false);
         setStartsActive(false);
+        setThisComponentFilter([]);
         dispatch(addFilterEventSelected([]));
         await setThisComponentResults(props.stateResults);
         await dispatch(addSearchLoading(false));
