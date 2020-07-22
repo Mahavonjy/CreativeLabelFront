@@ -27,7 +27,6 @@ import {
     ChangeDate,
     changeFields,
     checkUnitKey,
-    checkValueIfExistInArray,
     formatDate,
     getSteps,
     handleNext
@@ -119,7 +118,7 @@ function Reservation(props) {
         let tmp = [...list_of_options_added];
         let tmpService = {...service_to_show};
         tmpService.price += value.price;
-        if (!checkValueIfExistInArray(value.id, tmp)) {
+        if (!tmp.includes(value.id)) {
             tmp.push(value.id);
             await dispatch(addListOfOptionsAdded(tmp));
             await dispatch(addServiceToShow(tmpService));
@@ -394,7 +393,7 @@ function Reservation(props) {
                                         data-title="Description">{val.description || "Pas de description"}</td>
                                     <td className="small border-bottom-0 border-right-0"
                                         data-title="Ajouter">
-                                        {checkValueIfExistInArray(val.id, list_of_options_added) ?
+                                        {list_of_options_added.includes(val.id) ?
                                             <i className="icon icon-success text-green s-24"
                                                onClick={() => removeOption(val)}
                                                data-tip="Deja ajouté"/>

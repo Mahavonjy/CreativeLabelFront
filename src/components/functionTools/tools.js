@@ -380,15 +380,6 @@ export const calculateNumberDaysBetweenDates = (date1, date2) => {
     return (date1 - date2) / (1000 * 3600 * 24)
 };
 
-export const checkValueIfExistInArray = (val, array_) => {
-    let response = false;
-    Promise.all(array_.map(val_of_arr => {
-        if (val_of_arr === val) response = true;
-        return true
-    })).then(r => null);
-    return response
-};
-
 export const ChangeDate = (date, setStartDate, dispatch, func) => {
     let new_date = new Date(date);
     if (new Date() < new_date) {

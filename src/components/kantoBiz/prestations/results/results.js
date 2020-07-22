@@ -10,7 +10,6 @@ import "../../../../assets/css/style/KantoBiz.css"
 import "../../../../assets/css/style/Results.css"
 import {addFilterEventSelected, addSearchLoading,} from "../../../functionTools/functionProps";
 import {LoadingSearch} from "../../../functionTools/popupFields";
-import {checkValueIfExistInArray, generatePagination} from "../../../functionTools/tools";
 import {defaultResultTheme} from "../../../functionTools/utilStyles";
 import Pagination from "../../../pagination/pagination";
 
@@ -87,7 +86,7 @@ function Results(props) {
         await Promise.all(results.map(value => {
             if (filter_events_selected.length !== 0) {
                 filter_events_selected.map(val => {
-                    if (checkValueIfExistInArray(val, value.events)) {
+                    if (value.events.includes(val)) {
                         if (priceActive) filterPrice(value, tmp);
                         else tmp.push(value)
                     }
