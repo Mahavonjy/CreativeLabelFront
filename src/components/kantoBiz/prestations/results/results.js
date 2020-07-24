@@ -82,6 +82,15 @@ function Results(props) {
             arr.push(value)
     };
 
+    const groupBy = (array, key) => {
+        return array.reduce((result, currentValue) => {
+            (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                currentValue
+            );
+            return result;
+        }, {});
+    };
+
     const filter = async () => {
         await dispatch(addSearchLoading(true));
         let tmp = [];
@@ -98,8 +107,24 @@ function Results(props) {
             return true
         })).then(async r => {
             if (tmp.length !== 0) {
-                await setThisComponentFilter(generatePagination(tmp, props.displayOne));
-                await dispatch(addSearchLoading(false));
+                let groupId = groupBy(tmp, 'id');
+                let _ = require("underscore");
+
+                if (_.size(groupId) === 1) {
+                    await setThisComponentFilter(generatePagination(tmp, props.displayOne));
+                    await dispatch(addSearchLoading(false));
+                }else {
+                    let tmp2 = [];
+                    for(let i = 1; i <= _.size(groupId); i++) {
+                        for(let j = 0; j < 1; j++) {
+                            if(j === 0 ) tmp2.push(groupId[i][j]);
+                        }
+                    }
+                    await setThisComponentFilter(generatePagination(tmp2, props.displayOne));
+                    await dispatch(addSearchLoading(false));
+                }
+
+
             } else {
                 dispatch(addSearchLoading(false));
                 toast.warn("Pas de resultat")
@@ -153,7 +178,9 @@ function Results(props) {
                          marginLeft: '150px',
                          width: '500px'
                      }}>
-                    <button className="ModalClose float-left" onClick={() => { setFilterOpened(false) }}>
+                    <button className="ModalClose float-left" onClick={() => {
+                        setFilterOpened(false)
+                    }}>
                         <i className="icon-close s-24" style={{color: "orange", margin: "2px"}}/>
                     </button>
                     <div className="col text-center pb-5 pt-5">
