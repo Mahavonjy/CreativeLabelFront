@@ -113,11 +113,11 @@ function Results(props) {
                 if (_.size(groupId) === 1) {
                     await setThisComponentFilter(generatePagination(tmp, props.displayOne));
                     await dispatch(addSearchLoading(false));
-                }else {
+                } else {
                     let tmp2 = [];
-                    for(let i = 1; i <= _.size(groupId); i++) {
-                        for(let j = 0; j < 1; j++) {
-                            if(j === 0 ) tmp2.push(groupId[i][j]);
+                    for (let i = 1; i <= _.size(groupId); i++) {
+                        for (let j = 0; j < 1; j++) {
+                            if (j === 0) tmp2.push(groupId[i][j]);
                         }
                     }
                     await setThisComponentFilter(generatePagination(tmp2, props.displayOne));
