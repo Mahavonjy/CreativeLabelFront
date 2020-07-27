@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import ReactTooltip from "react-tooltip";
-import Calendar from "../../../../kantoBiz/calendar/calendar";
+import Calendar from "../../../../modules/kantoBiz/calendar/calendar";
 import AvailabilityPeriod from "./availabilityPeriod";
 
 function CalendarManagement(props) {
@@ -28,11 +28,13 @@ function CalendarManagement(props) {
                 <div className="ml-5 pl-5">
                     <h2 className="font-weight-lighter h3 my-3 text-primary">Gérer mes disponibilités</h2>
                     <ul className="align-baseline list-inline">
-                        <li className="list-inline-item"><i className="icon-folder text-primary mr-2"/>Pour mes
-                            prestations
+                        <li className="list-inline-item">
+                            <i className="icon-folder text-primary mr-2"/>
+                            Pour mes prestations
                         </li>
-                        <li className="list-inline-item"><i className="icon-list-1 text-primary mr-2"/>Pour mes options
-                        </li>
+                        {/*<li className="list-inline-item"><i className="icon-list-1 text-primary mr-2"/>*/}
+                        {/*Pour mes options*/}
+                        {/*</li>*/}
                     </ul>
                 </div>
             </div>

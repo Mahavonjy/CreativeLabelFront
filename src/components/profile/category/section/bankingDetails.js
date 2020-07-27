@@ -21,7 +21,6 @@ function BankingDetails(props) {
     const [phone, setPhone] = useState(banking['phone']);
     const [iban, setIban] = useState(banking['iban']);
     const [swift_bic, setSwiftBic] = useState(banking['swift']);
-    const [rules, setRules] = useState(banking["rules"]);
     const [password, setPassword] = useState("");
     const [headersCustomed, setCustomHeaders] = useState({});
 
@@ -34,15 +33,9 @@ function BankingDetails(props) {
         }
     };
 
-    const _setRules = () => {
-        setRules(!rules);
-        let tmp = {...banking};
-        tmp["rules"] = !rules;
-        dispatch(profileInitialisationBanking(tmp))
-    };
-
     const checkPassword = () => {
-        axios.post('api/users/check_password', {password}, {headers: headersCustomed}).then((resp) => {
+        axios.post('api/users/check_password', {password},
+            {headers: headersCustomed}).then((resp) => {
             dispatch(profileShowBankingDetails(true));
         }).catch((error) => {
             let errorMessage = checkErrorMessage(error);
@@ -52,7 +45,8 @@ function BankingDetails(props) {
 
     const createBanking = () => {
         let tmp = {...banking};
-        axios.post('api/banking/create', deleteInObject(tmp), {headers: headersCustomed}).then((resp) => {
+        axios.post('api/banking/create', deleteInObject(tmp),
+            {headers: headersCustomed}).then((resp) => {
             dispatch(profileShowBankingDetails(true));
             dispatch(profileInitialisationBanking(resp.data));
             toast.success("créer avec success")
@@ -94,7 +88,9 @@ function BankingDetails(props) {
     return (
         <div className="col">
             <div
-                className={!show_banking_details && banking['id'] ? "row justify-content-center my-3 blur" : "row justify-content-center my-3"}>
+                className={!show_banking_details && banking['id']
+                    ? "row justify-content-center my-3 blur"
+                    : "row justify-content-center my-3"}>
                 <div className="col-lg-6">
                     <div className="card">
                         <div className="card-header transparent">
@@ -111,7 +107,15 @@ function BankingDetails(props) {
                                             <input type="text" id="name" className="form-control text-center"
                                                    placeholder="le nom du propriétaire du compte en banque" name="name"
                                                    value={name || ''}
-                                                   onChange={(e) => changeFields(setName, e, profileInitialisationBanking, dispatch, "name", banking)}/>
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setName,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "name",
+                                                           banking)}
+                                            />
                                         </div>
                                     </div>
 
@@ -119,9 +123,17 @@ function BankingDetails(props) {
                                         <label className="col-sm-4 control-label">Prénom</label>
                                         <div className="col-sm-8 center">
                                             <input type="text" id="lastname" className="form-control text-center"
-                                                   placeholder="le prénom du propriétaire du compte en banque" name="lastname"
+                                                   placeholder="le prénom du propriétaire du compte en banque"
+                                                   name="lastname"
                                                    value={lastname}
-                                                   onChange={(e) => changeFields(setLastname, e, profileInitialisationBanking, dispatch, "lastname", banking)}
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setLastname,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "lastname",
+                                                           banking)}
                                                    required/>
                                         </div>
                                     </div>
@@ -132,7 +144,14 @@ function BankingDetails(props) {
                                             <input type="email" id="p-email" className="form-control text-center"
                                                    placeholder="l'email du proprietaire du compte en banque"
                                                    name="email" value={email || ''}
-                                                   onChange={(e) => changeFields(setEmail, e, profileInitialisationBanking, dispatch, "email", banking)}
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setEmail,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "email",
+                                                           banking)}
                                                    required/>
                                         </div>
                                     </div>
@@ -152,9 +171,18 @@ function BankingDetails(props) {
                                         <label className="col-sm-4 control-label">Pays</label>
                                         <div className="col-sm-8 center">
                                             <input id="country" className="form-control text-center"
-                                                   placeholder="Veuillez choisir ici le pays ou reside le compte en banque" list="country-regex"
+                                                   placeholder="Veuillez choisir le pays ou reside le compte en banque"
+                                                   list="country-regex"
                                                    name="country" value={country || ''}
-                                                   onChange={(e) => changeFields(setCountry, e, profileInitialisationBanking, dispatch, "country", banking)}/>
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setCountry,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "country",
+                                                           banking)}
+                                            />
                                             <datalist id="country-regex">
                                                 {countryReg.map((val, index) => <option key={index}
                                                                                         value={val}>{val}</option>)}
@@ -166,9 +194,18 @@ function BankingDetails(props) {
                                         <label className="col-sm-4 control-label">Téléphone</label>
                                         <div className="col-sm-8 center">
                                             <input type="number" id="phone" className="form-control text-center"
-                                                   placeholder="le téléphone du proprietaire du compte en banque" name="phone"
+                                                   placeholder="le téléphone du proprietaire du compte en banque"
+                                                   name="phone"
                                                    value={phone || ''}
-                                                   onChange={(e) => changeFields(setPhone, e, profileInitialisationBanking, dispatch, "phone", banking)}/>
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setPhone,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "phone",
+                                                           banking)}
+                                            />
                                         </div>
                                     </div>
 
@@ -183,15 +220,16 @@ function BankingDetails(props) {
                         <div className="card-header transparent">
                             <h4 className="text-red"><strong>Informations carte bancaire</strong></h4>
                         </div>
-                        <div className="flex-row ml-3">
+                        <div className="flex-row m-3">
                             <img alt="Stripe" src="https://img.icons8.com/nolan/64/000000/stripe.png"/>
                             <img alt="VISA Card" src="https://img.icons8.com/cute-clipart/64/000000/visa.png"/>
                             <img alt="MasterCard" src="https://img.icons8.com/color/64/000000/mastercard.png"/>
                         </div>
                         <div className="card-body text-center">
                             <div className="card-header transparent">
-                                <h4 className="text-red"><i className="icon-locked-2 s-14"/>&nbsp;<strong>Vos données
-                                    sont sécurisé & crypté en SSL.</strong></h4>
+                                <h4 className="text-red"><i className="icon-locked-2 s-14"/>
+                                &nbsp;<strong>Vos données sont sécurisé & crypté en SSL.</strong>
+                                </h4>
                             </div>
                             <div className="form-material pb-md-5">
                                 {/* Input */}
@@ -204,40 +242,47 @@ function BankingDetails(props) {
                                             <input type="text" id="iban" className="form-control"
                                                    placeholder="..........................................." name="iban"
                                                    value={iban || ''}
-                                                   onChange={(e) => changeFields(setIban, e, profileInitialisationBanking, dispatch, "iban", banking)}
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setIban,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "iban",
+                                                           banking)}
                                                    required/>
                                         </div>
                                     </div>
                                     <div className="form-group d-flex flex-wrap required">
                                         <label className="col-sm-4 control-label"><i
-                                            className="icon icon-info text-red" data-tip="A remplir"/>&nbsp;SWIFT / BIC</label>
+                                            className="icon icon-info text-red" data-tip="A remplir"/>
+                                            &nbsp;SWIFT / BIC
+                                        </label>
                                         <div className="col-sm-8">
                                             <input type="text" id="swift_bic" className="form-control"
-                                                   placeholder="..........................................." name="swift_bic"
+                                                   placeholder="..........................................."
+                                                   name="swift_bic"
                                                    value={swift_bic || ''}
-                                                   onChange={(e) => changeFields(setSwiftBic, e, profileInitialisationBanking, dispatch, "swift", banking)}
+                                                   onChange={(e) =>
+                                                       changeFields(
+                                                           setSwiftBic,
+                                                           e,
+                                                           profileInitialisationBanking,
+                                                           dispatch,
+                                                           "swift",
+                                                           banking)}
                                                    required/>
                                         </div>
                                     </div>
-
-                                    <div className="form-group form-float">
-                                        <div className="form-line">
-                                            <div className="material-switch">
-                                                <input id="unlimited" name="unlimited" type="checkbox"
-                                                       onChange={() => _setRules()} checked={rules}/>
-                                                <label htmlFor="sw2"
-                                                       className="text-red text-monospace text-muted"> J'accepte les
-                                                    Conditions Générales d'Utilisation</label>
-                                            </div>
-                                        </div>
-                                    </div>
                                     {banking['id'] ?
-                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => dispatchFunc("update")}>Changer les
-                                            informations</button> :
-                                        <button className="btn btn-outline-success btn-fab-md pl-4 pr-4"
-                                                onClick={() => dispatchFunc("create")}>Ajouter les
-                                            informations</button>}
+                                        <button className="btn btn-outline-success btn-fab-md pl-4 mt-4 pr-4"
+                                                onClick={() => dispatchFunc("update")}>
+                                            Changer les informations</button>
+                                        :
+                                        <button className="btn btn-outline-success btn-fab-md pl-4 mt-4 pr-4"
+                                                onClick={() => dispatchFunc("create")}>
+                                            Ajouter les informations
+                                        </button>}
                                 </div>
                                 {/* #END# Input */}
                             </div>

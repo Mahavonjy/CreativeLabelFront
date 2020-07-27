@@ -113,7 +113,7 @@ function ProfileInformation(props) {
                             </div>
                         </div>}
                         {!loadingPhoto ?
-                            <div className="text-center border border-light border-5" style={cover_style}>
+                            <div className="text-center border border-light border-1" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
 
                                     <input id="cover_area_file"
@@ -129,17 +129,17 @@ function ProfileInformation(props) {
                                            }}
                                     />
 
-                                    <i className="fa fa-camera s-36 mt-3 ml-5"
+                                    <i className="icon icon-camera-retro text-red s-36 mt-3 ml-5"
                                        onClick={() => document.getElementById("cover_area_file").click()}
                                        data-tip="modifier la photo de couverture"/>
                                 </div>
-                                <figure className="avatar avatar-xxl border border-light border-5 mt-5">
+                                <figure className="avatar avatar-xxl border border-light border-1 mt-5">
                                     <div className="hovereffect" style={{borderRadius: "100%"}}>
                                         <img alt="profile"
                                              src={profile_info.photo || "https://zupimages.net/up/19/18/3ltf.png"}
                                         />
                                         <div className="overlay zIndex99">
-                                            <i className="icon icon-camera cursor-pointer s-36 text-light m-auto"
+                                            <i className="icon icon-camera cursor-pointer s-36 text-red m-auto"
                                                onClick={() => document.getElementById("picture").click()}
                                                data-tip="modifier la photo de profile"/>
                                             <input id="picture"
@@ -158,7 +158,7 @@ function ProfileInformation(props) {
                                     </div>
                                 </figure>
                             </div> :
-                            <div className='text-center rounded-top p-5 m-5 text-danger'>
+                            <div className='text-center rounded-top text-danger'>
                                 <div className='spinner-grow text-danger m-5 p-4' role='status'>
                                     <span className='sr-only'>Loading...</span>
                                 </div>
@@ -166,40 +166,43 @@ function ProfileInformation(props) {
 
                         <div className="text-center mt-4">
                             <div className="pt-2">
-                                <h4 className={lightModeOn ? "text-dark bg-transparent font-weight-bolder center pt-2 pb-2" : "text-light bg-transparent font-weight-bolder center pt-2 pb-2"}
+                                <h4 className={lightModeOn
+                                    ? "text-dark bg-transparent font-weight-bolder center pt-1"
+                                    : "text-light bg-transparent font-weight-bolder center pt-1"}
                                     style={{
                                         width: "100%",
                                         fontFamily: "Arial"
                                     }}>
                                     {profile_info.name}
                                 </h4>
-                                <p className={lightModeOn ? "text-dark text-justify bg-transparent center pt-2 pb-2" : "text-light text-justify bg-transparent center  pt-2 pb-2"}
-                                   style={{
-                                       width: "85%",
-                                       fontFamily: "Arial",
-                                       fontSize: "16px"
-                                   }}>
-                                    {profile_info.description === null ? "" : profile_info.description}
+                                <p className={lightModeOn
+                                    ? "text-dark text-justify bg-transparent text-center pt-1"
+                                    : "text-light text-justify bg-transparent text-center pt-1"}
+                                   >
+                                    {profile_info.description === null
+                                        ? "Vous n'avez pas de description ou de Biographie"
+                                        : profile_info.description}
                                 </p>
                             </div>
-                            {/*<button className="btn btn-outline-primary btn-sm mt-3 mt-3 pl-4 pr-4"
-                                    onClick={() => setEdit(true)}>Modifier mon profile
-                            </button>*/}
-
-
-
                         </div>
+
                         {props.user_role !== "professional_auditor" ?
-                            <div className="text-center mt-3 mb-3">
-                                    <span className="text-red">Note:&nbsp;{notes}&nbsp;<i
-                                        className="icon-star-1"/></span>
+                            <div className="text-center mb-3">
+                                    <span className="text-red">
+                                        Note:&nbsp;{notes}&nbsp;
+                                        <i className="icon-star-1"/>
+                                    </span>
                             </div> : null}
                     </div>
                     <div className="col-md-8">
-                        <div className="btn-group float-right mt-3 mr-4">
-                            <button type="button" className="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                Plus
+
+                        <div className="text-center">
+                            <button type="button"
+                                    className="btn btn-outline-danger dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                Plus d'outils
                             </button>
                             <div className="dropdown-menu">
                                 <ul>
@@ -218,8 +221,8 @@ function ProfileInformation(props) {
                             </div>
                         </div>
 
-                        <div className="p5 text-center">
-                            <div className="pl-8 mt-4">
+                        <div className="text-center">
+                            <div className="mt-3">
                                 <h3 className="text-red">Informations personnelles </h3>
                             </div>
                             <div className="row justify-content-center">
@@ -231,7 +234,8 @@ function ProfileInformation(props) {
                                     ['address', 'Adresse'],
                                     ['city', 'Ville'],
                                     ['phone', 'Téléphone'],
-                                    ['email', 'Email']
+                                    ['email', 'Email'],
+                                    ['created_at', 'Compte crée le']
                                 ].map((val, index) =>
                                     <div className="col-md-4" key={index}>
                                         <div className="p-4">
@@ -254,7 +258,6 @@ function ProfileInformation(props) {
                                     </div>)}
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

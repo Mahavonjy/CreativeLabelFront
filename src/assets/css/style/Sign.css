@@ -112,18 +112,17 @@
 }
 
 .r-btn , .l-btn {
-    width: 230px;
+    width: auto;
     height: 30px;
     border-radius: 50px;
     border: 2px solid white;
     color: white;
-    padding-bottom: 10px;
     position: absolute;
     box-shadow: 2px 3px rgba(0, 0, 0, 0.1);
     text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
 }
 .r-btn {
-    bottom: 128px;
+    bottom: 120px;
     right: 10px;
     display: block;
 }
@@ -164,7 +163,7 @@ button:hover {
 }
 .l-pass .pass {
     height: 30px;
-    width: 190px !important;
+    width: 250px !important;
 }
 .l-pass {
     position: absolute;
@@ -174,7 +173,7 @@ button:hover {
     background-color: #58585a;
     border: none;
     border-radius: 50px;
-    width: 100px;
+    width: auto;
     height: 30px;
     position: absolute;
     top: 105px;
@@ -257,8 +256,8 @@ button:hover {
 .f-p {
     color: #fff;
     position: absolute;
-    top: 155px;
-    left: 5px;
+    top: 150px;
+    left: 15px;
     width: 100px;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
 }
@@ -266,8 +265,8 @@ button:hover {
 .r-disc {
     color: #fff;
     position: absolute;
-    bottom: 163px;
-    right: 10px;
+    bottom: 160px;
+    right: 15px;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
 }
 

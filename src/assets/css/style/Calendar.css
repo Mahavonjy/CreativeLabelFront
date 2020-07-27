@@ -210,11 +210,13 @@
 .outer .flip-container-right .flipper .front .container-day .active {
     border: 0.1vw solid #ED1C24;
     border-radius: 50%;
+    color: black;
 }
 
 .outer .flip-container-right .flipper .front .container-day .inactive {
     border: 0.1vw solid green;
     border-radius: 50%;
+    color: black;
 }
 
 .outer .flip-container-right .flipper .front .container-day .day-in {

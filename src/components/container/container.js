@@ -24,10 +24,10 @@ function Container() {
                 {/*</Route>*/}
 
                 {/* PROFILE ROUTING */}
-                <Route path="/Profile">
+                <Route path="/profile">
                     <HomeRoot/>
                 </Route>
-                <Route path="/Profile/isl_artist_profile/:id(\d+)">
+                <Route path="/profile/isl_artist_profile/:id(\d+)">
                     <HomeRoot/>
                 </Route>
 

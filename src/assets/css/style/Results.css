@@ -705,7 +705,7 @@ button { cursor: pointer; }
     content: attr(data-title);
     float: left;
     font-size: 0.8em;
-    color: rgba(94, 93, 82, 0.75);
+    color: #ED1C24!important;
 }
 @media (min-width: 30em) {
     .responsive-table tbody td[data-title]:before {

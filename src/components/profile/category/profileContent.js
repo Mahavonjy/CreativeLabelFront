@@ -5,13 +5,13 @@ import {toast} from "react-toastify";
 // import {CreateBeatsPlaylist, smallSpinner} from "../../functionTools/createFields";
 import {profileAddBeats} from "../../functionTools/functionProps";
 import {resetPropsForm} from "../../functionTools/tools";
-import Form from "../../kantoBiz/prestations/form/form";
+import Form from "../../modules/kantoBiz/prestations/form/form";
 import AddSingle from "../addMedia/addSingle";
 // import EditContractBeats from "../contractBeats/editContractBeats";
 import EditSingle from "../edits/editSingle";
 import BankingDetails from "./section/bankingDetails";
 import CalendarManagement from "./section/calendarProfile/calendarManagement";
-import MyPrestations from "./section/myPrestations";
+import MyPrestations from "./section/myPrestations/myPrestations";
 import PaymentsAndReservations from "./section/paymentsAndReservations";
 import RefundPolicy from "./section/refundPolicy";
 import {smallSpinner} from "../../functionTools/createFields";
@@ -209,7 +209,7 @@ function ProfileContent(props) {
 
             <div className="row row-eq-height">
                 <div className="col-lg-12">
-                    <div className="card no-b mb-md-3 p-2">
+                    <div className="card mb-md-3 p-2">
                         <div className="card-header no-bg transparent">
                             <div className="d-flex justify-content-between">
                                 <div className="align-self-center">
@@ -219,11 +219,12 @@ function ProfileContent(props) {
                                             <h4>Gerer votre planning</h4>
                                             <p>Verifier, Ajouter les information</p>
                                             {loading && smallSpinner("absolute", "50px")}
-                                            <div className="mt-3 d-none d-sm-block">
+                                            <div className="mt-3 d-none d-lg-block">
                                                 {tabList}
                                             </div>
-                                            <div className="ml-auto d-sm-none">
+                                            <div className="ml-auto d-lg-none">
                                                 <a href="/#"
+                                                   className="text-red"
                                                    data-toggle="dropdown"
                                                    aria-haspopup="true"
                                                    aria-expanded="false">

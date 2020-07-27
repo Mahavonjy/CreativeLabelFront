@@ -37,7 +37,7 @@ const initState = {
     address: '',
     city: '',
     phone: '',
-    // page Reservation
+    // page reservation
     val: 0,
     activeStep: 0,
     completed: new Set(),

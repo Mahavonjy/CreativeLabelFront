@@ -1,26 +1,10 @@
 /*--------------------------------------------------------------
 	Common
 --------------------------------------------------------------*/
-html {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  -ms-overflow-style: scrollbar;
-}
-
-body {
-  background: #fff;
-  font: 400 12px/1.8 "Open Sans", sans-serif;
-  color: #666;
-  -webkit-font-smoothing: antialiased;
-}
 
 img {
   max-width: 100%;
   height: auto;
-}
-
-iframe {
-  border: 0;
 }
 
 .align-center {
@@ -41,10 +25,6 @@ iframe {
 }
 
 /* Transition elsements */
-a,
-.btn {
-  transition: all 0.125s ease-in-out 0s;
-}
 
 .client-logo,
 .gallery-caption,
@@ -63,7 +43,7 @@ a,
 }
 
 /* Reset box-shadow */
-.btn,
+
 .well,
 .panel,
 .progress,
@@ -162,7 +142,7 @@ a,
 .module,
 .module-small {
   position: relative;
-  padding: 140px 0;
+  padding: 50px 0;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
@@ -214,9 +194,9 @@ a,
 .side-image {
   position: absolute;
   height: 100%;
-  background-image: url("../../images/screenshots/section-14.jpg");
+  background-image: url("../../images/logo/ISL_logo.png");
   background-repeat: no-repeat;
-  background-position: 50% 50%;
+  background-position: 5% 50%;
   background-size: cover;
 }
 
@@ -645,23 +625,6 @@ a,
 /*--------------------------------------------------------------
 	Buttons
 --------------------------------------------------------------*/
-.btn {
-  border-radius: 0;
-  font-family: "Roboto Condensed", sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 11px;
-  padding: 8px 37px;
-}
-
-.btn.active.focus,
-.btn.active:focus,
-.btn.focus,
-.btn:active.focus,
-.btn:active:focus,
-.btn:focus {
-  outline: 0;
-}
 
 .btn.btn-round {
   border-radius: 2px;
@@ -820,30 +783,6 @@ a,
   border-color: #CACACA;
 }
 
-/* Forms size */
-.input-lg,
-.form-horizontal .form-group-lg .form-control {
-  height: 43px;
-  font-size: 13px;
-}
-
-.input-sm, .form-horizontal .form-group-sm .form-control {
-  height: 29px;
-  font-size: 10px;
-}
-
-.rqst-form {
-  margin-top: 27px;
-}
-
-.rqst-form .btn {
-  margin-top: 5px;
-}
-
-.input-group-addon {
-  border: 1px solid #e4e4e4 !important;
-}
-
 /*--------------------------------------------------------------
 	Typography
 --------------------------------------------------------------*/
@@ -913,7 +852,7 @@ blockquote {
 .module-subtitle {
   text-align: center;
   font-size: 16px;
-  margin-bottom: 70px;
+  margin-bottom: 40px;
 }
 
 .module-icon {
@@ -1417,16 +1356,6 @@ General Styles - Owlcarousel
   background: rgba(2, 2, 2, 0.2);
 }
 
-/* Contact Page Header */
-.contact-page-header {
-  background-position: 13% 45%;
-  background-repeat: no-repeat;
-}
-
-.contact-page-header:before {
-  background: rgba(2, 2, 2, 0.5);
-}
-
 /* FAQ Page Header */
 .faq-page-header:before {
   background: rgba(2, 2, 2, 0.15);
@@ -1596,6 +1525,7 @@ Google map
 
 .team-image img {
   width: 100%;
+  height: 350px;
 }
 
 .team-image:after {
@@ -1603,7 +1533,7 @@ Google map
   background: transparent;
   content: " ";
   display: block;
-  height: 100%;
+  height: 350px;
   width: 100%;
   top: 0;
   left: 0;
@@ -2028,7 +1958,7 @@ Google map
 }
 
 .testimonial {
-  background-image: url("../../images/screenshots/testimonial_bg.jpg");
+  background-image: url("../../images/logo/koko.jpg");
 }
 
 .testimonials-slider {
@@ -2279,11 +2209,12 @@ Google map
 }
 
 .theme-dark .panel{
-  background-color: #bbdefb;
+  background-color: whitesmoke;
   margin: 5px
 }
 
 .panel-title {
+  padding-top: 6px;
   font-size: 14px;
 }
 

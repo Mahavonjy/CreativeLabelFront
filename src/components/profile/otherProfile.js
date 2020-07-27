@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import * as CreateFields from "../functionTools/createFields";
 import { getMediaLink } from "../functionTools/tools";
 import * as BeatsProps from "../functionTools/functionProps";
-import MyPrestations from "./category/section/myPrestations";
+import MyPrestations from "./category/section/myPrestations/myPrestations";
 
 function OtherProfile(props) {
 

@@ -11,7 +11,7 @@ import {addTmpArtistSelected, displayBecomeArtistForm} from "../../functionTools
 import {DifferentArtist} from "../../functionTools/popupFields";
 import {changeFields, checkUnit, generateBodyFormOfGallery} from "../../functionTools/tools";
 import HomeRoot from "../../home/homeRoot";
-import Form from "../../kantoBiz/prestations/form/form";
+import Form from "../../modules/kantoBiz/prestations/form/form";
 import {checkErrorMessage, RegisterValidation} from "../../validators/validatiors";
 import LoginGoogle from "../socialCredentials/google/google";
 
@@ -49,6 +49,7 @@ function Register() {
     const [disable, setDisable] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [rules, setRules] = useState(false);
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
     const [user_credentials, setUserCredentials] = useState({});
@@ -72,10 +73,17 @@ function Register() {
     Register.registerButton = (toAuditor) => {
         return (
             <div className="text-center">
-                <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
-                        onClick={(e) => Register.sendUserInfoToSingUp(e, true)}>
-                    Créer votre compte Artiste
-                </button>
+                <div className="material-switch m-2">
+                    <input id="unlimited"
+                           name="unlimited"
+                           type="checkbox"
+                           onChange={() => setRules(!rules)}
+                           checked={rules}/>
+                    <label htmlFor="sw2"
+                           className="text-monospace border-bottom text-muted">
+                        J'accepte les Conditions Générales d'Utilisation
+                    </label>
+                </div>
                 <button type="submit" id="register" disabled={disable}
                         className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
                         onClick={(e) =>
@@ -83,7 +91,11 @@ function Register() {
                                 ? HomeRoot.beforeDataLoad().then(() => null)
                                 : Register.sendUserInfoToSingUp(e)
                         }>
-                    Créer votre compte Auditor Pro
+                    Créer votre compte Auditeur Pro
+                </button>
+                <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
+                        onClick={(e) => Register.sendUserInfoToSingUp(e, true)}>
+                    Créer votre compte Artiste
                 </button>
             </div>
         );
@@ -93,7 +105,7 @@ function Register() {
         e.preventDefault();
 
         setDisable(true);
-        const validator = RegisterValidation(password, confirm_password);
+        const validator = RegisterValidation(password, confirm_password, rules);
 
         if (validator.error) {
             setDisable(false);
@@ -122,7 +134,7 @@ function Register() {
                         "thematics": props_thematics_options_selected,
                         "description": PropsDescription,
                         "reference_city": PropsCityReference,
-                        "travel_expenses": 0,
+                        "travel_expenses": {'from': 0, 'to': 0},
                         "number_of_artists": props_number_of_artist,
                         "preparation_time": props_preparation_time,
                         "events": props_events_selected,

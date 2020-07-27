@@ -39,7 +39,6 @@ import $ from "jquery";
 import 'jquery-mask-plugin';
 import {makeStyles} from "@material-ui/core/styles";
 
-
 export const funcToSpecifyValueForSpecialInput = (country_allowed, setTo) => {
     let tmp = [];
     Promise.all(country_allowed.map(element => {
@@ -295,9 +294,7 @@ export const handleNext = (steps, activeStep, completed, dispatch) => {
         isLastStep() && !allStepsCompleted()
             ? // It's the last step, but not all steps have been completed
               // find the first step that has been completed
-            steps.findIndex((step, i) => !completed.has(i))
-            : activeStep + 1;
-    console.log(newActiveStep)
+            steps.findIndex((step, i) => !completed.has(i)) : activeStep + 1;
     dispatch(activeSteps(newActiveStep))
 };
 
@@ -442,11 +439,11 @@ export const createOrUpdatePrestation = async (_props, dispatch, props, update) 
     tmp_prestation['refund_policy'] = props.refund_policy;
     tmp_prestation['events'] = props.props_events_selected;
     tmp_prestation['price'] = props.props_price_of_service;
-    tmp_prestation['travel_expenses'] = props.travel_expenses || 0.0;
     tmp_prestation['preparation_time'] = props.props_preparation_time;
     tmp_prestation['number_of_artists'] = props.props_number_of_artist;
     tmp_prestation['duration_of_the_service'] = props.props_service_time;
     tmp_prestation['thematics'] = props.props_thematics_options_selected;
+    tmp_prestation['travel_expenses'] = props.props_travel_expenses || {"from": 0.0, "to": 0.0};
     tmp_prestation['unit_of_the_preparation_time'] = checkUnit(props.props_unit_time_of_preparation);
     tmp_prestation['unit_duration_of_the_service'] = checkUnit(props.props_unit_time_of_service);
 
@@ -686,7 +683,12 @@ export const checkOnClickAwaySideBar = (e) => {
         document.getElementsByClassName("paper-nav-toggle pp-nav-toggle ml-4")[0].click()
 };
 
+export const formatCreatedAt = (date) => {
+    return date.split(".")[0].replace("T", " à ")
+};
+
 export const generatePagination = (_array, funcToDisplay) => {
+    console.log(_array)
     return _array.map((val, index) => ({
         id: (index + 1), name:
             <div key={index}>
@@ -695,13 +697,9 @@ export const generatePagination = (_array, funcToDisplay) => {
                     <div className="o-card bg-white shadow1">
                         <div className="o-card_header">
                             <div className="o-card_headerHeroImg shadow2"
-                                 style={(val.galleries.length >= 1) ?
-                                     {
-                                         background: 'url(' + val.galleries[1] + ') center no-repeat'
-                                     } : {
-                                     background:
-                                         'url(https://zupimages.net/up/19/42/zyu8.bmp) center no-repeat'
-                                 }}/>
+                                 style={(val.galleries.length > 1)
+                                     ? {background: 'url(' + val.galleries[1] + ') center no-repeat'}
+                                     : {background: 'url(https://zupimages.net/up/19/42/zyu8.bmp) center no-repeat'}}/>
                             <ul className="o-card-headerList isOpen">
                                 <li className="o-card-headerList--item">
                                     <a className="o-card-headerList--link" href="/#">
@@ -743,7 +741,7 @@ export const generatePagination = (_array, funcToDisplay) => {
                                 ? val.description : val.description.substring(0, 35) + ' ...' }</p>
                         </div>
                         <div className="p-2">
-                            <button className="btn col btn-outline-dark pl-5 pr-5 pb-3"
+                            <button className="btn col btn-outline-dark pl-5 pr-5 pb-1"
                                     onClick={() => funcToDisplay(val)}>
                                 <i className="icon-man-left mr-2 s-18"/>
                                 RESERVER

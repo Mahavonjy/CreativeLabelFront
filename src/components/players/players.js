@@ -8,7 +8,7 @@ import './styles/_variables.scss'
 import './styles/style.css'
 import axios from 'axios';
 import { CreateBeatsPlaylist } from "../functionTools/createFields";
-import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
+import OneBeat from "../modules/beatMaking/beats/allBeatsSuggestion/oneBeat";
 
 let _this;
 

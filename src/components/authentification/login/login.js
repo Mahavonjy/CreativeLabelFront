@@ -148,27 +148,19 @@ function Login() {
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Crée votre nouveau mot de passe</h3>
-                            <div className="custom-float">
-                                <label className="ModalFormField__Label" style={{paddingTop: "10px", color: "black"}}>
-                                    Nouveau mot de passe</label><br/>
-                                {CreateInput(
-                                    'password',
-                                    password,
-                                    (e) => {changeFields(setPassword, e)},
-                                    "Au moins 8 caractères", "password", true)}
-                            </div>
+                            {CreateInput(
+                                'password',
+                                password,
+                                (e) => {changeFields(setPassword, e)},
+                                "Au moins 8 caractères", "password", true)}
 
-                            <div className="custom-float">
-                                <label className="ModalFormField__Label"
-                                       style={{paddingTop: "10px", color: "black"}}>confirmer</label> <br/>
-                                {CreateInput(
-                                    'confirm_password',
-                                    confirm_password,
-                                    (e) => {changeFields(setConfirmPassword, e)},
-                                    "Entrez le mot de passe à nouveau",
-                                    "password",
-                                    true)}
-                            </div>
+                            {CreateInput(
+                                'confirm_password',
+                                confirm_password,
+                                (e) => {changeFields(setConfirmPassword, e)},
+                                "Entrez le mot de passe à nouveau",
+                                "password",
+                                true)}
 
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={(e) => changeMyPassword(e)}>
@@ -187,15 +179,13 @@ function Login() {
                     <div className="col text-center">
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
-                            <div className="custom-float">
-                                {CreateInput(
-                                    'keys',
-                                    keys,
-                                    (e) => {changeFields(setKeys, e)},
-                                    "Inserer votre clé ici",
-                                    "number",
-                                    true)}
-                            </div>
+                            {CreateInput(
+                                'keys',
+                                keys,
+                                (e) => {changeFields(setKeys, e)},
+                                "Inserer votre clé ici",
+                                "number",
+                                true)}
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyKeysResetPass()}>Verifier
                             </button>
@@ -216,15 +206,13 @@ function Login() {
                         <ToastContainer/>
                         <div className="body">
                             <h3 className="text-light pt-5 mb-3">Verifier votre adresse mail</h3>
-                            <div className="custom-float center">
-                                {CreateInput(
-                                    'email',
-                                    email,
-                                    (e) => {changeFields(setEmail, e)},
-                                    "E-mail",
-                                    "email",
-                                    true)}
-                            </div>
+                            {CreateInput(
+                                'email',
+                                email,
+                                (e) => {changeFields(setEmail, e)},
+                                "E-mail",
+                                "email",
+                                true)}
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyEmail()}>Envoyer
                             </button>
@@ -241,15 +229,13 @@ function Login() {
                         <div className="body">
                             <ToastContainer/>
                             <h3 className="text-light pt-5 mb-3">Verifier votre clé</h3>
-                            <div className="custom-float">
-                                {CreateInput(
-                                    'keys',
-                                    keys,
-                                    (e) => {changeFields(setKeys, e)},
-                                    "Inserer votre clé ici",
-                                    "number",
-                                    true)}
-                            </div>
+                            {CreateInput(
+                                'keys',
+                                keys,
+                                (e) => {changeFields(setKeys, e)},
+                                "Inserer votre clé ici",
+                                "number",
+                                true)}
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
                                     onClick={() => verifyKeysSubmit()}>Envoyer
                             </button>
@@ -260,7 +246,7 @@ function Login() {
 
             <div className="container-login">
                 <div className="absolute text-red ml-2" style={{zIndex: 99}}>
-                    <button className="icon-times-rectangle s-24 cursor-pointer text-primary border-0 transparent"
+                    <i className="icon icon-close s-24 mt-2 cursor-pointer text-primary border-0 transparent"
                        onClick={() => {
                            dispatch(setValueOfToastGlobal(true));
                            document.getElementsByClassName("close")[0].click()
@@ -280,8 +266,9 @@ function Login() {
                                onChange={(e) => {changeFields(setPassword, e)}}/>
                     </div>
 
-                    <button className="l-go btn btn-outline-success m-1 r-5"
-                            onClick={(e) => sendLoginCredentials(e)}>Connexion
+                    <button className="l-go btn btn-outline-success"
+                            onClick={(e) => sendLoginCredentials(e)}>
+                        Connexion
                     </button>
                     <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
                         Mot de passe oublié?

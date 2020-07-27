@@ -146,7 +146,9 @@ export const allRegex = {
     'VG': '[a-zA-Z0-9]{2}\s?([a-zA-Z0-9]{4}\s?){1}([0-9]{4}\s?){4}\s?',
 };
 
-export const RegisterValidation = (password, confirm_password) => {
+export const RegisterValidation = (password, confirm_password, rules) => {
+    if (!rules)
+        return {"error": true, message: "Veuillez accetper les conditions d'utilisations"};
     const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.%^(;'\"\|`~,)?/!@#$&*]).{8,}$");
     if (!re.test(password))
         return {"error": true, message: "Votre Mot de passe devrait contenir au moins un Majuscule, Minuscule, Chiffre, Caractère est au moins 8"};

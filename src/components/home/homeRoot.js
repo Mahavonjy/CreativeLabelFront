@@ -8,64 +8,38 @@ import "../../assets/css/app.css";
 import '../../assets/css/style/Home.css';
 import "../../assets/css/style/style.scss";
 import Conf from "../../config/tsconfig";
-import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
 import {CreateBeatsPlaylist, SideBars, SideBarsMain} from "../functionTools/createFields";
 import {
     addAllArtistTypes,
     addAllCountryAllowed,
     addAllEventsTypes,
     addAllMediaGenre,
-    addAllUSerBookingReservation,
-    addAllUserOptions,
-    addAllUserPrestation,
-    addAllUSerReservation,
     addBeatMakerBeats,
-    addBeats,
     addCarts,
     addOtherBeatMakerBeats,
     addOtherUserOptions,
     addOtherUserService,
-    addPaymentHistory,
     addPrefAllMediaGenre,
     addSimilarBeats,
     addTotalPrice,
     addUserCredentials,
-    addUserNote,
-    // beatsInitialisationPricing, // add if beatMaking is active
-    changeUserGenreSelected,
-    discoveryBeats,
-    islBeats,
-    latestBeats,
-    newBeatMaker,
-    // profileAddBeats, // add if beatMaking is active
-    profileInitialisationBanking,
-    profileInitialisationCondition,
-    // profileInitialisationContract, // add if beatMaking is active
-    profileInitialisationFollower,
-    profileInitialisationFollowing,
-    profileInitialisationInfo,
-    profileInitialisationRole,
-    topBeatMaker,
 } from "../functionTools/functionProps";
 import {LoadingHome, Login} from "../functionTools/popupFields";
-import {checkOnClickAwaySideBar, dispatchPayment, FillInCartProps} from "../functionTools/tools";
+import {checkOnClickAwaySideBar} from "../functionTools/tools";
+import OneBeat from "../modules/beatMaking/beats/allBeatsSuggestion/oneBeat";
 import IslPlayer from "../players/players";
-import "../../assets/css/style/style.scss";
+import {fetchUserData, insertUserData} from "./getAllCurrentUserData";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
-let headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': "*"
-};
 
 function HomeRoot() {
 
     let user_credentials;
     const history = useHistory();
     const dispatch = useDispatch();
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
     const toastGlobal = useSelector(state => state.Home.toastGlobal);
-    const ifUserGenreSelected = useSelector(state => state.Others.ifUserGenreSelected);
 
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -81,6 +55,14 @@ function HomeRoot() {
     const [logout_class, setLogoutClass] = useState("icon icon-users-1 s-24 mr-5 text-red");
     const [log_name, setLogName] = useState("Se Connecter");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
+    let _bg = lightModeOn
+        ? 'https://images.wallpaperscraft.com/image/texture_surface_dirty_138707_1920x1080.jpg'
+        : 'https://images.wallpaperscraft.com/image/stars_patterns_black_133520_3840x2400.jpg'
+    const [headers] = useState({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': "*",
+        'Isl-Token': Conf.configs.TokenVisitor
+    });
 
     HomeRoot.IncrementCart = (number) => {
         if (number)
@@ -104,27 +86,11 @@ function HomeRoot() {
             online();
         }).catch(() => {
             dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
-            headers['Isl-Token'] = Conf.configs.TokenVisitor;
-            notOnline();
+            HomeRoot.notOnline();
         });
     };
 
-    const addToPlaylist = async (index, type_, run, height_div, set_of_beats_name, states, state_value) => {
-        if (!isPlaying) {
-            await setIsPlaying(true);
-            CreateBeatsPlaylist.changeIndex(index);
-            if (height_div === "single")
-                OneBeat.PauseOrPlaySingle(index);
-        }
-        ifStopPlayer[key] = false;
-        if (!ifStopPlayer[key]) {
-            key = Math.floor(Math.random() * Math.floor(999999999));
-            ifStopPlayer[key] = true;
-        }
-        await IslPlayer.startPlayerComponent(index, type_, run, height_div, set_of_beats_name, states, state_value);
-    };
-
-    const ifConnectionError = (err, func) => {
+    HomeRoot.ifConnectionError = (err, func) => {
         setConnexionReloaded(connexion_reloaded + 1);
         try {
             if (err.response.data === "Connection error") {
@@ -149,6 +115,47 @@ function HomeRoot() {
             //
         }
     };
+
+    HomeRoot.notOnline = () => {
+        try {
+            let tmp_carts = JSON.parse(localStorage.getItem("MyCarts"));
+            setStateCartLength(tmp_carts.length);
+            let tmp = 0;
+            for (let cart in tmp_carts) tmp = tmp + tmp_carts[cart].price;
+            dispatch(addCarts(tmp_carts));
+            dispatch(addTotalPrice(Math.round(tmp * 100) / 100));
+        } catch (e) {
+            //
+        } finally {
+            Promise.all([
+                axios.get("api/medias/allMediaGenre").then(resp => {
+                    let tmp_arr = [];
+                    for (let row in resp.data) tmp_arr.push(resp.data[row].genre);
+                    dispatch(addAllMediaGenre(tmp_arr));
+                    dispatch(addPrefAllMediaGenre(resp.data));
+                }).catch(err => HomeRoot.ifConnectionError(err)),
+                axios.get("api/artist_types/all").then(resp => {
+                    dispatch(addAllArtistTypes(resp.data.artist_types));
+                    dispatch(addAllEventsTypes(resp.data.events));
+                }).catch(err => HomeRoot.ifConnectionError(err)),
+                axios.get("api/flags/check_country_and_city").then(resp => {
+                    dispatch(addAllCountryAllowed(resp.data));
+                }).catch(err => HomeRoot.ifConnectionError(err)),
+                // axios.get("api/beats/AllSuggestion").then(resp => {
+                //     new Promise(resolve => {
+                //         resolve(dispatch(addBeats(resp.data["random"])));
+                //         resolve(dispatch(newBeatMaker(resp.data["new_beatMaker"])));
+                //         resolve(dispatch(topBeatMaker(resp.data["top_beatmaker"])));
+                //         resolve(dispatch(latestBeats(resp.data["latest_beats"])));
+                //         resolve(dispatch(discoveryBeats(resp.data["discovery_beats"])));
+                //         resolve(dispatch(islBeats(resp.data["isl_playlist"])));
+                //     }).then(r => null);
+                // }).catch(err => HomeRoot.ifConnectionError(err))
+            ]).then(() => checkSpecialRoute()).catch(() => HomeRoot.notOnline());
+        }
+    };
+
+    HomeRoot.checkOpenSideBar = openSideBar;
 
     const checkSpecialRoute = () => {
         let firstRouteParsing = href[href.length - 1];
@@ -184,49 +191,25 @@ function HomeRoot() {
         } else setLoading(false);
     };
 
-    const notOnline = () => {
-        try {
-            let tmp_carts = JSON.parse(localStorage.getItem("MyCarts"));
-            setStateCartLength(tmp_carts.length);
-            let tmp = 0;
-            for (let cart in tmp_carts) tmp = tmp + tmp_carts[cart].price;
-            dispatch(addCarts(tmp_carts));
-            dispatch(addTotalPrice(Math.round(tmp * 100) / 100));
-        } catch (e) {
-            //
-        } finally {
-            Promise.all([
-                axios.get("api/medias/allMediaGenre").then(resp => {
-                    let tmp_arr = [];
-                    for (let row in resp.data) tmp_arr.push(resp.data[row].genre);
-                    dispatch(addAllMediaGenre(tmp_arr));
-                    dispatch(addPrefAllMediaGenre(resp.data));
-                }).catch(err => ifConnectionError(err)),
-                axios.get("api/artist_types/all").then(resp => {
-                    dispatch(addAllArtistTypes(resp.data.artist_types));
-                    dispatch(addAllEventsTypes(resp.data.events));
-                }).catch(err => ifConnectionError(err)),
-                axios.get("api/flags/check_country_and_city").then(resp => {
-                    dispatch(addAllCountryAllowed(resp.data));
-                }).catch(err => ifConnectionError(err)),
-                axios.get("api/beats/AllSuggestion").then(resp => {
-                    new Promise(resolve => {
-                        resolve(dispatch(addBeats(resp.data["random"])));
-                        resolve(dispatch(newBeatMaker(resp.data["new_beatMaker"])));
-                        resolve(dispatch(topBeatMaker(resp.data["top_beatmaker"])));
-                        resolve(dispatch(latestBeats(resp.data["latest_beats"])));
-                        resolve(dispatch(discoveryBeats(resp.data["discovery_beats"])));
-                        resolve(dispatch(islBeats(resp.data["isl_playlist"])));
-                    }).then(r => null);
-                }).catch(err => ifConnectionError(err))
-            ]).then(() => checkSpecialRoute()).catch(() => notOnline());
+    const addToPlaylist = async (index, type_, run, height_div, set_of_beats_name, states, state_value) => {
+        if (!isPlaying) {
+            await setIsPlaying(true);
+            CreateBeatsPlaylist.changeIndex(index);
+            if (height_div === "single")
+                OneBeat.PauseOrPlaySingle(index);
         }
+        ifStopPlayer[key] = false;
+        if (!ifStopPlayer[key]) {
+            key = Math.floor(Math.random() * Math.floor(999999999));
+            ifStopPlayer[key] = true;
+        }
+        await IslPlayer.startPlayerComponent(index, type_, run, height_div, set_of_beats_name, states, state_value);
     };
 
     const online = () => {
         try {
             setLogName("Se déconnecter");
-            setLogoutClass("icon icon-shutdown s-24 mr-5 text-red");
+            setLogoutClass("icon icon-sign-out s-24 mr-5 text-red");
             let routeParsed = href[href.length - 1];
             if (routeParsed === 'register') {
                 history.goBack();
@@ -234,72 +217,15 @@ function HomeRoot() {
                 return true
             } else {
                 axios.get("api/users/if_token_valide", {headers: headers}).then(() => {
-                    fetchUserData()
+                    fetchUserData(headers, user_credentials, dispatch)
                 }).catch(() => {
-                    notOnline()
+                    logout().then(r => null)
                 });
             }
         } catch (e) {
             headers['Isl-Token'] = Conf.configs.TokenVisitor;
-            notOnline(headers)
+            HomeRoot.notOnline()
         }
-    };
-
-    const insertUserData = (data) => {
-        new Promise(resolve => {
-            resolve(dispatch(addUserNote(data['notes'] || '')));
-            resolve(dispatch(addPaymentHistory(data['payment_history'] || [])));
-            resolve(dispatch(profileInitialisationInfo(data['my_profile'] || '')));
-            resolve(dispatch(profileInitialisationRole(data['role'] || '')));
-            resolve(dispatch(addAllUSerReservation(data['reservations_list'] || [])));
-            resolve(dispatch(addAllUSerBookingReservation(data['reservations_booking_list'] || [])));
-            resolve(dispatch(addAllUSerBookingReservation(data['reservations_booking_list'] || [])));
-            resolve(dispatch(profileInitialisationFollower(data['my_followers'] || '')));
-            resolve(dispatch(profileInitialisationFollowing(data['my_followings'] || '')));
-            resolve(dispatch(profileInitialisationCondition(data['conditions'] || {})));
-            resolve(dispatch(profileInitialisationBanking(data['banking'] || {})));
-        }).then(r => {
-            if (!data) {
-                dispatch(addAllUserOptions([]));
-                dispatch(addAllUserPrestation([]));
-            }
-        });
-    };
-
-    const fetchUserData = () => {
-        Promise.all([
-            axios.get("api/profiles/my_profile", {headers: headers}).then(resp => {
-                let payment_history = resp.data['payment_history'];
-                dispatchPayment(payment_history, dispatch);
-                insertUserData(resp.data);
-                // if (resp.data['role'] === "beatmaker") {
-                //     Promise.all([
-                //         axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-                //             dispatch(profileAddBeats(resp.data['beats']));
-                //         }).catch(err => ifConnectionError(err, fetchUserData)),
-                //         axios.get("api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
-                //             dispatch(profileInitialisationContract(resp.data));
-                //         }).catch(err => ifConnectionError(err, fetchUserData))
-                //     ]).then();
-                // }
-                FillInCartProps(headers, {
-                    addTotalPrice: addTotalPrice,
-                    addCarts: addCarts,
-                    dispatch: dispatch,
-                    user_credentials: user_credentials
-                }).then(() => null);
-            }).catch(err => ifConnectionError(err, fetchUserData)),
-            // axios.get("api/beats/pricing", {headers: headers}).then(resp => {
-            //     dispatch(beatsInitialisationPricing(resp.data));
-            // }).catch(err => ifConnectionError(err)),
-            axios.get("api/artist_services/my_services", {headers: headers}).then(resp => {
-                dispatch(addAllUserOptions(resp.data['user_options']));
-                dispatch(addAllUserPrestation(resp.data['user_services']));
-            }).catch(err => ifConnectionError(err))
-        ]).then(() => {
-            dispatch(changeUserGenreSelected());
-            notOnline()
-        }).catch(() => fetchUserData())
     };
 
     const logout = async () => {
@@ -310,17 +236,16 @@ function HomeRoot() {
         } catch (e) {
             //
         } finally {
-            setLogName("Se Connecter");
             await sessionService.deleteSession().then(async () => {
                 await sessionService.deleteUser().then(async () => {
-                    HomeRoot.beforeDataLoad().then(() => insertUserData());
-                }).catch(() => HomeRoot.beforeDataLoad().then(() => insertUserData()))
-            }).catch(() => HomeRoot.beforeDataLoad().then(() => insertUserData()));
+                    HomeRoot.beforeDataLoad().then(() => insertUserData(null, dispatch));
+                }).catch(() => HomeRoot.beforeDataLoad().then(() => insertUserData(null, dispatch)))
+            }).catch(() => HomeRoot.beforeDataLoad().then(() => insertUserData(null, dispatch)));
+            setLogName("Se Connecter");
+            headers['Isl-Token'] = Conf.configs.TokenVisitor
             setLogoutClass("icon icon-users-1 s-24 mr-5 text-red");
         }
     };
-
-    HomeRoot.checkOpenSideBar = openSideBar;
 
     useEffect(() => {
         HomeRoot.beforeDataLoad().then(() => null);
@@ -354,12 +279,14 @@ function HomeRoot() {
                                     history,
                                     headers,
                                     logout,
-                                    isPlaying,
-                                    ifUserGenreSelected,
-                                    openSideBar)}
+                                    isPlaying)}
                                 {/* End SideBars */}
                             </aside>
-                            <main>
+                            <main style={{
+                                // backgroundRepeat: "no-repeat",
+                                // backgroundSize: "cover",
+                                backgroundImage: 'url(' + _bg + ')'
+                            }}>
                                 {/* Main of SideBars */}
                                 {SideBarsMain(
                                     addToPlaylist,
@@ -378,7 +305,7 @@ function HomeRoot() {
                 <nav className="relative width-80 fixed fixed-top">
                     <a href="/#" data-toggle="push-menu"
                        onClick={() => openSideBar ? setOpenSideBar(false) : setOpenSideBar(true)}
-                       className="paper-nav-toggle pp-nav-toggle  ml-4"><i/>
+                       className="paper-nav-toggle pp-nav-toggle ml-4"><i/>
                     </a>
                 </nav>
                 {isPlaying && <IslPlayer key={key}/>}

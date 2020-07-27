@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {toast, ToastContainer} from 'react-toastify';
 import {CreateInput, smallSpinner} from "../../functionTools/createFields";
 import {profileInitialisationInfo, setValueOfToastGlobal} from "../../functionTools/functionProps";
-import {changeFields} from "../../functionTools/tools";
+import {changeFields, formatCreatedAt} from "../../functionTools/tools";
 import {checkErrorMessage} from "../../validators/validatiors";
 
 function EditProfile(props) {
@@ -47,6 +47,7 @@ function EditProfile(props) {
         bodyFormData.append('photo', profile_info.photo);
         axios.put("api/profiles/updateProfile", bodyFormData, {headers: props.headers}).then(resp => {
             let data = resp.data;
+            data['created_at'] = formatCreatedAt(data['created_at'])
             dispatch(profileInitialisationInfo(data));
             setLoading(false);
             dispatch(setValueOfToastGlobal(true));
@@ -166,8 +167,8 @@ function EditProfile(props) {
                                                 onChange={
                                                     (e) => changeFields(setGender, e)
                                                 }>
-                                            <option value="0">Femelle</option>
-                                            <option value="1">male</option>
+                                            <option value="0">Femme</option>
+                                            <option value="1">Homme</option>
                                         </select>
                                     </MDBCol>
                                 </MDBRow>
@@ -193,7 +194,9 @@ function EditProfile(props) {
                     </div>
                     <button className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3"
                             onClick={() => updateProfile()}
-                            disabled={disable}>{loading ? "Veuiller attendre ..." : "Mettre à Jour"}</button>
+                            disabled={disable}>
+                        {loading ? "Veuiller attendre ..." : "Mettre à Jour"}
+                    </button>
                 </div>
             </div>
         </Modal>

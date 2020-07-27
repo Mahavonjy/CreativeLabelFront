@@ -21,7 +21,7 @@ function CommandSuccess() {
             <div className="col-xl-12 mx-lg-auto">
                 <div className="pt-5 p-t-100 text-center">
                     <h1 className="text-success">Felicitation</h1>
-                    <p className="section-subtitle">{message}</p>
+                    <p className="section-subtitle text-red">{message}</p>
                     <p className="s-256"><i className="icon-success text-success s-256"/></p>
                     <button onClick={() => history.push("/kantobiz")}
                             className="btn btn-outline-success pl-5 pr-5 text-light font-weight-bold">Retour

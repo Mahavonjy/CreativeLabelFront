@@ -1,22 +1,22 @@
 import axios from "axios";
-import React, {memo, useEffect, useRef, useState} from "react";
+import React, {memo, useEffect, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast, ToastContainer} from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import {addMaterialsOfService, addTravelExpenses} from "../../functionTools/functionProps";
+import {addMaterialsOfService} from "../../functionTools/functionProps";
 import {
-    changeFields,
     createOrUpdatePrestation,
     deleteInObject,
     objectToFormData,
     resetPropsForm,
     updateAllOptions
 } from "../../functionTools/tools";
-import Calendar from "../../kantoBiz/calendar/calendar";
-import PrestationDetails from "../../kantoBiz/prestations/form/prestationDetails";
-import PrestationInformation from "../../kantoBiz/prestations/form/prestationInformation";
-import Thematics from "../../kantoBiz/prestations/form/thematics";
+import Calendar from "../../modules/kantoBiz/calendar/calendar";
+import PrestationDetails from "../../modules/kantoBiz/prestations/form/prestationDetails";
+import PrestationInformation from "../../modules/kantoBiz/prestations/form/prestationInformation";
+import Thematics from "../../modules/kantoBiz/prestations/form/thematics";
 import {checkErrorMessage} from "../../validators/validatiors";
+import TransportExpenses from "../category/section/myPrestations/transportExpenses";
 import RefundPolicy from "../category/section/refundPolicy";
 import Materials from "./materials";
 import Options from "./options";
@@ -48,7 +48,6 @@ function EditPrestation(props) {
     const props_materials = useSelector(state => state.KantoBizForm.materials);
 
     const isMounted = useRef(false);
-    const [travel_expenses, setTravelExpense] = useState(props_travel_expenses);
 
     const updateMaterials = () => {
         let tmp = {...props_materials};
@@ -88,7 +87,7 @@ function EditPrestation(props) {
                 PropsCountry,
                 refund_policy,
                 service_id,
-                travel_expenses,
+                props_travel_expenses,
                 "materials_id": props_materials.id,
                 user_id
             }, "update"
@@ -121,7 +120,7 @@ function EditPrestation(props) {
                 props_unit_time_of_service,
                 PropsCountry,
                 refund_policy,
-                travel_expenses,
+                props_travel_expenses,
             }
         ).then(resp => {
             if (resp.error) {
@@ -154,11 +153,11 @@ function EditPrestation(props) {
                aria-selected="false">
                 Matériels nécessaires
             </a>
-            <a className="nav-link" id="v-pills-options-gestion-tab" data-toggle="pill"
-               href="#v-pills-options-gestion" role="tab" aria-controls="v-pills-options-gestion"
-               aria-selected="false">
-                Gestion des options
-            </a>
+            {/*<a className="nav-link" id="v-pills-options-gestion-tab" data-toggle="pill"*/}
+            {/*   href="#v-pills-options-gestion" role="tab" aria-controls="v-pills-options-gestion"*/}
+            {/*   aria-selected="false">*/}
+            {/*    Gestion des options*/}
+            {/*</a>*/}
         </div>
     );
 
@@ -252,6 +251,7 @@ function EditPrestation(props) {
                         {tabList()}
                         <div className="ml-auto d-sm-none">
                             <a href="/#"
+                               className="text-red"
                                data-toggle="dropdown"
                                aria-haspopup="true"
                                aria-expanded="false">
@@ -293,33 +293,7 @@ function EditPrestation(props) {
                                          id="edit-travel-expenses"
                                          role="tabpanel">
                                         <div className="text-center">
-                                            <h4 className="text-light text-center bolder pt-3 pb-2">
-                                                Votre frais de déplacement pour cette prestation:
-                                            </h4>
-                                            <div className="col text-center pt-2 pb-3">
-                                                <h2 className="text-red">{travel_expenses} $&nbsp;
-                                                    <i className="icon icon-info text-red"
-                                                       data-tip data-for="global_price"/>
-                                                </h2>
-                                                <div className="custom-float">
-                                                    <div className="input-group-prepend d-inline-block center">
-                                                        <div className="input-group-text text-dark"><i
-                                                            className="icon-money"/>&nbsp;Modifier le prix ici *
-                                                        </div>
-                                                        <input className="form-control" type="number" id="global_price"
-                                                               name="global_price"
-                                                               onChange={
-                                                                   (e) =>
-                                                                       changeFields(
-                                                                           setTravelExpense,
-                                                                           e,
-                                                                           addTravelExpenses,
-                                                                           dispatch
-                                                                       )
-                                                               }/>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <TransportExpenses headers={props.headers} serviceEdit/>
                                         </div>
                                     </div>
                                     <div className="tab-pane" id="edit-refund-policy" role="tabpanel">

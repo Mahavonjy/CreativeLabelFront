@@ -1,10 +1,12 @@
-import {MDBCol, MDBRow} from "mdbreact";
-import React, {useState, useEffect, useRef} from "react";
+import {MDBCarousel, MDBCarouselInner, MDBCarouselItem, MDBCol, MDBRow, MDBView} from "mdbreact";
+import React, {useEffect, useRef, useState} from "react";
 import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, Route} from "react-router-dom";
 import ReactTooltip from "react-tooltip";
+import "../../assets/css/style/style.scss";
+import "../../assets/css/style/themeMode.scss";
 import firstBlockImg from "../../assets/images/backgrounds/dark.jpg";
 import thirdBlockImg from "../../assets/images/backgrounds/instru.jpg"
 import secondBlockImg from "../../assets/images/backgrounds/moon.jpg";
@@ -16,9 +18,9 @@ import Register from "../authentification/register/register";
 // import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
 // import Cart from "../cart/cart";
 import LegalNotices from "../home/legalNotices";
-import KantoBiz from "../kantoBiz/kantoBiz";
-import DisplayPrestation from "../kantoBiz/prestations/results/displayPrestation";
-import SearchBar from "../kantoBiz/searchBar";
+import KantoBiz from "../modules/kantoBiz/kantoBiz";
+import DisplayPrestation from "../modules/kantoBiz/prestations/results/displayPrestation";
+import SearchBar from "../modules/kantoBiz/searchBar";
 import IslPlayer from "../players/players";
 import OtherProfile from "../profile/otherProfile";
 import Profile from "../profile/profile";
@@ -27,8 +29,6 @@ import CommandSuccess from "../statusPage/commandStatus/success/commandSuccess";
 import {activeThemeLight, addNewPlayerList} from "./functionProps"
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
-import "../../assets/css/style/style.scss";
-import {MDBCarousel, MDBCarouselInner, MDBCarouselItem, MDBView} from "mdbreact";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {
@@ -405,13 +405,27 @@ export const SideBars = (
     history,
     headers,
     logout,
-    isPlaying,
-    ifUserGenreSelected,
+    isPlaying
 ) => {
     return (
         <div className="sidebar">
             <ul className="sidebar-menu">
-                <ReactTooltip className="special-color-dark" id='beats' aria-haspopup='true'/>
+                <ReactTooltip place="right" className="special-color-dark" id='i_kt' aria-haspopup='true'>
+                    Creative KantoBiz
+                </ReactTooltip>
+                <ReactTooltip place="right" className="special-color-dark" id='i_pr' aria-haspopup='true'>
+                    {headers['Isl-Token'] === Conf.configs.TokenVisitor
+                        ? "Connecter pour voir votre profil": "Voir votre profile"}
+                </ReactTooltip>
+                <ReactTooltip place="right" className="special-color-dark" id='i_ab' aria-haspopup='true'>
+                    A propos
+                </ReactTooltip>
+                <ReactTooltip place="right" className="special-color-dark" id='i_ml' aria-haspopup='true'>
+                    Les Mentions légales
+                </ReactTooltip>
+                <ReactTooltip place="right" className="special-color-dark" id='i_log' aria-haspopup='true'>
+                    {logout_class === "icon icon-users-1 s-24 mr-5 text-red" ? "Se Connecter" : " Se déconnecter"}
+                </ReactTooltip>
                 {/* BEATS */}
                 {/*<li style={{margin: "0 0 20px 10px"}}*/}
                 {/*    data-tip="Creative BeatMaking" onClick={() => {*/}
@@ -424,17 +438,17 @@ export const SideBars = (
                 {/*</li>*/}
 
                 {/* kantoBiz */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Creative KantoBiz" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip data-for="i_kt" onClick={() => {
                     location.pathname !== "/kantobiz" && history.push("/kantobiz")
                 }}><i className={
-                    location.pathname === "/kantobiz"
+                    location.pathname === "/kantobiz" || location.pathname === "/"
                         ? "icon icon-compact-disc-2 cursor-pointer text-red s-24"
                         : "icon icon-compact-disc-2 cursor-pointer s-24"}/>
                     <span className="ml-5">KantoBiz</span>
                 </li>
 
                 {/* PROFILE */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip="Profil" onClick={() => {
+                <li style={{margin: "0 0 20px 10px"}} data-tip data-for="i_pr" onClick={() => {
                     headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/profile"
                         ? document.getElementById("LoginRequire").click()
                         : history.push("/profile");
@@ -442,7 +456,7 @@ export const SideBars = (
                     location.pathname === "/profile"
                         ? "icon icon-user cursor-pointer text-red s-24"
                         : "icon icon-user cursor-pointer s-24"}/>
-                    <span className="ml-5">Profil</span>
+                    <span className="ml-5">Votre profil</span>
                 </li>
 
                 {/* CART */}
@@ -466,7 +480,7 @@ export const SideBars = (
                 {/*</li>*/}
 
                 {/* about */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="A propos de nous" onClick={() => {
+                <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ab" onClick={() => {
                     (location.pathname !== "/about") && history.push("/about")
                 }}><i className={
                     location.pathname === "/about"
@@ -476,7 +490,7 @@ export const SideBars = (
                 </li>
 
                 {/* Mention */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip="Les mentions légales">
+                <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ml" >
                     <i className="icon icon-flag s-24 cursor-pointer"
                        data-toggle="modal" data-target="#legaleNotices"/>
                     <span className="ml-5">Les mentions légales</span>
@@ -492,11 +506,8 @@ export const SideBars = (
                             ? {margin: "50px 0 20px 8px"}
                             : {margin: "50px 0 20px 12px"}
                     }
-                    data-tip={
-                        logout_class === "icon icon-users-1 s-24 mr-5 text-red"
-                            ? "Se Connecter"
-                            : " Se déconnecter"
-                    }>
+                    data-tip
+                    data-for="i_log">
                     <i className={logout_class + " cursor-pointer"}/> <span>{log_name}</span>
                 </li>
             </ul>
@@ -557,7 +568,7 @@ export const SideBarsMain = (
             {/*           />*/}
             {/*       }/>*/}
             <Route exact
-                   path="/Profile/isl_artist_profile/:id(\d+)"
+                   path="/profile/isl_artist_profile/:id(\d+)"
                    component={() =>
                        <OtherProfile
                            ToPlay={addToPlaylist}
@@ -566,7 +577,7 @@ export const SideBarsMain = (
                        />
                    }/>
             <Route exact
-                   path="/Profile"
+                   path="/profile"
                    component={() => {
                        return headers['Isl-Token'] === Conf.configs.TokenVisitor
                            ? history.goBack() : (<Profile ToPlay={addToPlaylist}/>)
@@ -588,7 +599,7 @@ export const SideBarsMain = (
             <Route exact
                    path="/register"
                    component={() => {
-                       return headers['Isl-Token'] !== Conf.configs.TokenVisitor ? history.goBack() : (<Register/>)
+                       return headers['Isl-Token'] === Conf.configs.TokenVisitor ? (<Register/>) : history.goBack()
                    }}/>
             <LegalNotices headers={headers}/>
             <LightModeToggle/>
@@ -634,7 +645,6 @@ export const LightModeToggle = () => {
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
     const [isLightOn, setIsLightOn] = useState(lightModeOn);
 
-
     useEffect(() => {
 
         document.documentElement.setAttribute("data-dark-mode", lightModeOn);
@@ -658,13 +668,27 @@ export const LightModeToggle = () => {
     });
 
     return (
-        <span className="dark-mode__icon fab-right-bottom-fixed" aria-pressed={isLightOn}
-              onClick={() => {
-                  setIsLightOn(!isLightOn)
-                  dispatch(activeThemeLight(!isLightOn))
-              }}
-              aria-hidden="true"/>
-
+        <div>
+            <ReactTooltip place="left" className="special-color-dark" id='light-if-is-on' aria-haspopup='true'>
+                {isLightOn
+                    ? <h5 className="text-center text-light">Thème clair activé</h5>
+                    : <h5 className="text-center text-light">Thème sombre activé</h5>}
+            </ReactTooltip>
+            <div className="fab-right-bottom-fixed" data-tip data-for="light-if-is-on">
+                <input type="checkbox" onClick={() => {
+                    setIsLightOn(!isLightOn)
+                    dispatch(activeThemeLight(!isLightOn))
+                }} checked={isLightOn} className="toggle" id="toggle"/>
+                <label htmlFor="toggle">
+                <span className="off text-secondary">
+                    <i className="icon icon-moon-o s-24"/>
+                </span>
+                    <span className="on text-yellow">
+                    <i className="icon icon-sun-o s-24"/>
+                </span>
+                </label>
+            </div>
+        </div>
     );
 };
 

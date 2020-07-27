@@ -85,7 +85,7 @@ function RefundPolicy(props) {
             {!props.edit &&
             <div className="d-flex flex-wrap justify-content-center">
                 <div className="col-lg-6">
-                    <h3 className="text-red">Si Flexible</h3>
+                    <h3 className="text-red">Flexible</h3>
                     <ol className="list-group-item text-center flexible row justify-content-center">
                         <li className="bolder list-group-item m-1">
                             Si l’utilisateur annule jusqu à 7 jours avant
@@ -97,7 +97,7 @@ function RefundPolicy(props) {
                     </ol>
                 </div>
                 <div className="col-lg-6">
-                    <h3 className="text-red">Si Stricte</h3>
+                    <h3 className="text-red">Stricte</h3>
                     <ol className="list-group-item text-center strict row justify-content-center">
                         <li className="bolder list-group-item m-1">
                             Si l’utilisateur annule jusqu’à 7 jours avant
