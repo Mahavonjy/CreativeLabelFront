@@ -2,7 +2,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {TextField} from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
 // import Calendar from "../../calendar/calendar";
-import {makeStyles, ThemeProvider} from '@material-ui/core/styles';
+import {ThemeProvider} from '@material-ui/core/styles';
 import AddLocation from '@material-ui/icons/AddLocation';
 import {DatePicker, KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import format from "date-fns/format";
@@ -63,6 +63,7 @@ function Reservation(props) {
 
     const paymentRef = useRef(null);
     const [event_date, setEventDate] = useState(null);
+    /* eslint-disable-next-line no-unused-vars */
     const [reservation, setReservation] = useState(reservations);
     const [code_postal, setCodePostal] = useState(reservation_code_postal);
     const [rue, setRue] = useState(reservation_rue);
@@ -74,25 +75,6 @@ function Reservation(props) {
     //const [val, setVal] = useState(0);
     //state for stepper
     const steps = getSteps();
-
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            width: '100%',
-        },
-        button: {
-            marginRight: theme.spacing(1),
-        },
-        backButton: {
-            marginRight: theme.spacing(1),
-        },
-        completed: {
-            display: 'inline-block',
-        },
-        instructions: {
-            marginTop: theme.spacing(1),
-            marginBottom: theme.spacing(1),
-        },
-    }));
 
     const onScrollViewSearch = () => {
         paymentRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -139,6 +121,7 @@ function Reservation(props) {
             toast.warn("Option supprimer avec succès");
         });
     };
+    /* eslint-disable-next-line no-unused-vars */
     const [date, changeDate] = useState(new Date());
 
     return (
@@ -419,7 +402,7 @@ function Reservation(props) {
                         <ul id="lightgallery">
                             {service_to_show.galleries.map((val, index) =>
                                 <li key={index} data-src={val}>
-                                    <a>
+                                    <a href="/#">
                                         <img alt="gallery" className="img-responsive"
                                              src={val}/>
                                         {(photoIndex === index) && (isOpen) && (

@@ -317,28 +317,28 @@ function MyPrestations(props) {
                                         className={lightModeOn ? "card-img-block theme-light" : "card-img-block theme-dark"}>
                                         <img className="card-img-top"
                                              src={val.galleries[0]}
-                                             alt="Card image cap"/>
+                                             alt={"Card-cap-" + index}/>
                                     </div>
                                     <div className="card-body pt-0">
                                         <h5 className="card-title">{val.title}</h5>
                                         <p>{val.price}$</p>
                                     </div>
                                     <ul className="follow-list">
-                                        <li className="first-list"><a><i className="fa fa-edit"
+                                        <li className="first-list"><a href="/#"><i className="fa fa-edit"
                                             data-tip="Modifier cette prestation"
                                             onClick={() => addToPropsToEdit(index)}/></a></li>
-                                        <li><a><i className="fa fa-trash-o"
+                                        <li><a href="/#"><i className="fa fa-trash-o"
                                             onClick={() => deletePrestations(index)}
                                             data-tip="supprimer cette prestation"/></a>
                                         </li>
-                                        <li><a><i className="fa fa-clone"
+                                        <li><a href="/#"><i className="fa fa-clone"
                                             onClick={() => addToPropsToEdit(index, true)}
                                             data-tip data-for="copy_edit"/></a></li>
-                                        <li><a><i className="fa fa-info-circle" onClick={() => displayService(index)}/>
+                                        <li><a href="/#"><i className="fa fa-info-circle" onClick={() => displayService(index)}/>
                                         </a></li>
                                         {val.hidden ?
                                             <li className="last-list">
-                                                <a>
+                                                <a href="/#">
                                                     <i className="fa fa-eye-slash"
                                                        onClick={() => onChangeHidden(index)}
                                                       data-tip="Cette prestation est caché,
@@ -347,7 +347,7 @@ function MyPrestations(props) {
                                                 </a>
                                             </li> :
                                             <li className="last-list">
-                                                <a>
+                                                <a href="/#">
                                                     <i className="fa fa-eye"
                                                        onClick={() => onChangeHidden(index)}
                                                        data-tip="Cette prestation est afficher,

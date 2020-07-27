@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomeRoot from "../home/homeRoot";
 import NotFound from "../statusPage/notFound/notFound";
-import PreviewScreen from "../previewScreen/previewScreen";
 import ConnexionError from "../statusPage/connexionError/connexionError";
 
 function Container() {

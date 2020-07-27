@@ -26,7 +26,6 @@ function PurchaseInformation(props) {
     const history = useHistory();
     const dispatch = useDispatch();
     const cart = useSelector(state => state.Carts.carts);
-    const profile_info = useSelector(state => state.profile.profile_info);
     const service_to_show = useSelector(state => state.KantobizSearch.service_to_show);
     const reservations_booking_list = useSelector(state => state.profile.reservations_booking_list);
     const date_to_search = useSelector(state => state.KantobizSearchInfo.date_to_search);
@@ -49,8 +48,6 @@ function PurchaseInformation(props) {
     const [card_number, setCardNumber] = useState("");
     const [expiration, setExpiration] = useState(new Date());
     const [payment_loading, setPaymentLoading] = useState(false);
-
-    const handleNext = () => {};
 
     const changeCardNumber = (e) => {
         let cardNumber = e.target.value;
@@ -251,7 +248,8 @@ function PurchaseInformation(props) {
                                     <div className="top">
                                         <div className="chip"/>
                                         <div className="cardType">
-                                            <img src="https://www.iconsdb.com/icons/preview/white/visa-xxl.png"/>
+                                            <img src="https://www.iconsdb.com/icons/preview/white/visa-xxl.png"
+                                                 alt="cardBank-icon"/>
                                         </div>
                                     </div>
                                     <div className="middle">

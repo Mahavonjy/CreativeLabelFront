@@ -1,41 +1,43 @@
-import axios from "axios";
 import React, {memo, useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import {CreateBeatsPlaylist, smallSpinner} from "../../functionTools/createFields";
+// import {CreateBeatsPlaylist, smallSpinner} from "../../functionTools/createFields";
 import {profileAddBeats} from "../../functionTools/functionProps";
 import {resetPropsForm} from "../../functionTools/tools";
 import Form from "../../kantoBiz/prestations/form/form";
 import AddSingle from "../addMedia/addSingle";
-import EditContractBeats from "../contractBeats/editContractBeats";
+// import EditContractBeats from "../contractBeats/editContractBeats";
 import EditSingle from "../edits/editSingle";
 import BankingDetails from "./section/bankingDetails";
 import CalendarManagement from "./section/calendarProfile/calendarManagement";
 import MyPrestations from "./section/myPrestations";
 import PaymentsAndReservations from "./section/paymentsAndReservations";
 import RefundPolicy from "./section/refundPolicy";
+import {smallSpinner} from "../../functionTools/createFields";
 
 function ProfileContent(props) {
 
     const dispatch = useDispatch();
     const props_prestation = useSelector(state => state.profilePrestations.prestations);
-
     const isMounted = useRef(false);
+    /* eslint-disable-next-line no-unused-vars */
     const [song, setSong] = useState("");
+    /* eslint-disable-next-line no-unused-vars */
     const [type_, setType_] = useState("");
-    const [tmp, setTmp] = useState(null);
-    const [index, setIndex] = useState(null);
+    // const [tmp, setTmp] = useState(null);
+    // const [index, setIndex] = useState(null);
+    /* eslint-disable-next-line no-unused-vars */
     const [loading, setLoading] = useState(false);
     const [allPrestation, setAllPrestation] = useState(props_prestation);
     const [popupAddSingle, setPopupAddSingle] = useState(false);
     const [popupAddEditSingle, setPopupAddEditSingle] = useState(-1);
 
-    const togglePopupEditSingle = async (index, type_) => {
-        await setType_(type_);
-        await setSong(props.user_beats[index]);
-        await setPopupAddEditSingle(index);
-    };
+    // const togglePopupEditSingle = async (index, type_) => {
+    //     await setType_(type_);
+    //     await setSong(props.user_beats[index]);
+    //     await setPopupAddEditSingle(index);
+    // };
 
     const togglePopupAddSingle = async (success, data) => {
         setPopupAddSingle(!popupAddSingle);
@@ -64,22 +66,22 @@ function ProfileContent(props) {
         await updateUserBeats(data, "Modification avec success", true);
     };
 
-    const remove = async (e, type_) => {
-        const id = e.target.id;
-        await document.getElementById(id).setAttribute("disabled", "disabled");
-        await setLoading(true);
-        axios.delete("api/" + type_ + "/delete/" + id, {headers: props.headers}).then(() => {
-            setLoading(false);
-            let new_beats_array = props.state_user_beats.filter((beat) => beat.id !== parseInt(id));
-            dispatch(profileAddBeats(new_beats_array));
-            props.setStateUserBeats(new_beats_array);
-            toast.success("Supprimé");
-        }).catch(err => {
-            setLoading(false);
-            document.getElementById(id).removeAttribute("disabled");
-            toast.error(err.response.data)
-        })
-    };
+    // const remove = async (e, type_) => {
+    //     const id = e.target.id;
+    //     await document.getElementById(id).setAttribute("disabled", "disabled");
+    //     await setLoading(true);
+    //     axios.delete("api/" + type_ + "/delete/" + id, {headers: props.headers}).then(() => {
+    //         setLoading(false);
+    //         let new_beats_array = props.state_user_beats.filter((beat) => beat.id !== parseInt(id));
+    //         dispatch(profileAddBeats(new_beats_array));
+    //         props.setStateUserBeats(new_beats_array);
+    //         toast.success("Supprimé");
+    //     }).catch(err => {
+    //         setLoading(false);
+    //         document.getElementById(id).removeAttribute("disabled");
+    //         toast.error(err.response.data)
+    //     })
+    // };
 
     const tabList = (
         <ul className="nav nav-tabs nav-material responsive-tab d-flex flex-wrap justify-content-center" role="tablist">
@@ -146,16 +148,16 @@ function ProfileContent(props) {
         </ul>
     );
 
-    let states = {
-        link: props.user_beats_link,
-        beats: props.state_user_beats,
-        togglePopupEditSong: togglePopupEditSingle,
-        index: index,
-        setIndex: setIndex,
-        tmp: tmp,
-        remove: remove,
-        setTmp: setTmp,
-    };
+    // let states = {
+    //     link: props.user_beats_link,
+    //     beats: props.state_user_beats,
+    //     togglePopupEditSong: togglePopupEditSingle,
+    //     index: index,
+    //     setIndex: setIndex,
+    //     tmp: tmp,
+    //     remove: remove,
+    //     setTmp: setTmp,
+    // };
 
     useEffect(() => {
 

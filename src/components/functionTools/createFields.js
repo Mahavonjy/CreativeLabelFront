@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, Route} from "react-router-dom";
-import {toast} from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import firstBlockImg from "../../assets/images/backgrounds/dark.jpg";
 import thirdBlockImg from "../../assets/images/backgrounds/instru.jpg"
@@ -13,26 +12,23 @@ import TestImg from "../../assets/images/demo/a2.jpg";
 import Conf from "../../config/tsconfig";
 import About from "../about/about";
 import Register from "../authentification/register/register";
-import Beats from "../beatMaking/beats/allBeatsSuggestion/beats";
-import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
-import Cart from "../cart/cart";
-import HomeRoot from "../home/homeRoot";
+// import Beats from "../beatMaking/beats/allBeatsSuggestion/beats";
+// import OneBeat from "../beatMaking/beats/allBeatsSuggestion/oneBeat";
+// import Cart from "../cart/cart";
 import LegalNotices from "../home/legalNotices";
 import KantoBiz from "../kantoBiz/kantoBiz";
 import DisplayPrestation from "../kantoBiz/prestations/results/displayPrestation";
 import SearchBar from "../kantoBiz/searchBar";
 import IslPlayer from "../players/players";
-import Preference from "../preference/preference";
 import OtherProfile from "../profile/otherProfile";
 import Profile from "../profile/profile";
 import CommandError from "../statusPage/commandStatus/error/commandError";
 import CommandSuccess from "../statusPage/commandStatus/success/commandSuccess";
-import {addAllUserOptions, activeThemeLight, addNewPlayerList} from "./functionProps"
+import {activeThemeLight, addNewPlayerList} from "./functionProps"
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
 import "../../assets/css/style/style.scss";
-import Carousel from "react-bootstrap/Carousel";
-import {MDBCarousel, MDBCarouselInner, MDBCarouselItem, MDBView, MDBContainer} from "mdbreact";
+import {MDBCarousel, MDBCarouselInner, MDBCarouselItem, MDBView} from "mdbreact";
 
 export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
     if (type === "text" || "password" || "email" || "number") {

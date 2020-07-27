@@ -38,21 +38,19 @@ function DisplayPrestation(props) {
     const isl_amounts = useSelector(state => state.KantoBizForm.isl_amount);
     const total_amounts = useSelector(state => state.KantoBizForm.total_amount);
     const activeStep = useSelector(state => state.KantoBizForm.activeStep);
-    const valeur = useSelector(state => state.KantoBizForm.val);
     const steps = getSteps();
 
     const paymentRef = useRef(null);
 
     const isMounted = useRef(false);
     const [event_date, setEventDate] = useState(null);
-    const [address, setAddress] = useState(reservation_address);
+    const [address] = useState(reservation_address);
     const [tva, setTva] = useState(tvas);
     const [ht_price, setHtPrice] = useState(ht_prices);
     /* eslint-disable-next-line no-unused-vars */
     const [isl_amount, setIslAmount] = useState(isl_amounts);
     const [total_amount, setTotalAmount] = useState(total_amounts);
     // const [rating, setRating] = useState(1);
-    const [val, setVal] = useState(valeur);
 
     const useStyles = makeStyles((theme) => ({
         root: {

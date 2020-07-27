@@ -8,8 +8,6 @@ import {profileInitialisationInfo} from "../../functionTools/functionProps";
 import Preference from "../../preference/preference";
 import {checkErrorMessage} from "../../validators/validatiors";
 import EditProfile from "../edits/editProfile";
-import { Fragment } from "react";
-import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
 
 function ProfileInformation(props) {
 

@@ -1,5 +1,4 @@
 import DateFnsUtils from "@date-io/date-fns";
-import red from '@material-ui/core/colors/red'
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
@@ -17,7 +16,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import ReactTooltip from 'react-tooltip';
 import {
-    addFilterPricing,
     addKantoBizSearchResults,
     addSearchLoading,
     changeCityToSearch,
@@ -31,7 +29,6 @@ import {
     funcToSpecifyValueForSpecialInput,
     generatePagination,
     onChangeListWithValueLabel,
-    shuffleArray,
 } from "../functionTools/tools";
 import {defaultMaterialTheme, defaultMaterialTheme1, MenuProps, useStyles} from "../functionTools/utilStyles";
 import {validatorSearch} from "../validators/validatiors"
@@ -291,7 +288,6 @@ function SearchBar(props) {
                         <ThemeProvider theme={defaultMaterialTheme}>
                             <Grid container justify="space-around">
                                 <KeyboardDatePicker
-                                    style={{headerColor: 'red'}}
                                     id="date-picker-dialog"
                                     label="Date"
                                     style={{textDecorationColor: 'white'}}
