@@ -1,4 +1,4 @@
-# NewCreativeFront
+# CreativeLabelFront
 
 1) ```git clone https://github.com/Mahavonjy/CreativeLabelFront.git```
 
