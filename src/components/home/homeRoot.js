@@ -247,17 +247,17 @@ function HomeRoot() {
 
     const insertUserData = (data) => {
         new Promise(resolve => {
-            resolve(dispatch(addUserNote(data ? data['notes'] : '')));
-            resolve(dispatch(addPaymentHistory(data ? data['payment_history'] : [])));
-            resolve(dispatch(profileInitialisationInfo(data ? data['my_profile'] : '')));
-            resolve(dispatch(profileInitialisationRole(data ? data['role'] : '')));
-            resolve(dispatch(addAllUSerReservation(data ? data['reservations_list'] : [])));
-            resolve(dispatch(addAllUSerBookingReservation(data ? data['reservations_booking_list'] : [])));
-            resolve(dispatch(addAllUSerBookingReservation(data ? data['reservations_booking_list'] : [])));
-            resolve(dispatch(profileInitialisationFollower(data ? data['my_followers'] : '')));
-            resolve(dispatch(profileInitialisationFollowing(data ? data['my_followings'] : '')));
-            resolve(dispatch(profileInitialisationCondition(data ? data['conditions'] : {})));
-            resolve(dispatch(profileInitialisationBanking(data ? data['banking'] : {})));
+            resolve(dispatch(addUserNote(data['notes'] || '')));
+            resolve(dispatch(addPaymentHistory(data['payment_history'] || [])));
+            resolve(dispatch(profileInitialisationInfo(data['my_profile'] || '')));
+            resolve(dispatch(profileInitialisationRole(data['role'] || '')));
+            resolve(dispatch(addAllUSerReservation(data['reservations_list'] || [])));
+            resolve(dispatch(addAllUSerBookingReservation(data['reservations_booking_list'] || [])));
+            resolve(dispatch(addAllUSerBookingReservation(data['reservations_booking_list'] || [])));
+            resolve(dispatch(profileInitialisationFollower(data['my_followers'] || '')));
+            resolve(dispatch(profileInitialisationFollowing(data['my_followings'] || '')));
+            resolve(dispatch(profileInitialisationCondition(data['conditions'] || {})));
+            resolve(dispatch(profileInitialisationBanking(data['banking'] || {})));
         }).then(r => {
             if (!data) {
                 dispatch(addAllUserOptions([]));
