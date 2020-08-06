@@ -156,7 +156,6 @@ a,
 
 .main {
   position: relative;
-  background-color: #fff;
   z-index: 1;
 }
 
@@ -215,13 +214,13 @@ a,
 .side-image {
   position: absolute;
   height: 100%;
+  background-image: url("../../images/screenshots/section-14.jpg");
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
 }
 
 .side-image-text {
-  background: #fff;
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
   padding: 140px 60px 140px;
@@ -914,7 +913,6 @@ blockquote {
 .module-subtitle {
   text-align: center;
   font-size: 16px;
-  color: #111;
   margin-bottom: 70px;
 }
 
@@ -1828,6 +1826,7 @@ Google map
 	Portfolio
 --------------------------------------------------------------*/
 /* Portfolio filter */
+
 .filter {
   text-align: center;
   list-style: none;
@@ -2026,6 +2025,10 @@ Google map
 --------------------------------------------------------------*/
 .testimonial:before {
   background: rgba(2, 2, 2, 0.4);
+}
+
+.testimonial {
+  background-image: url("../../images/screenshots/testimonial_bg.jpg");
 }
 
 .testimonials-slider {
@@ -2265,6 +2268,21 @@ Google map
 }
 
 /* Accordion */
+.panel{
+  background-color: #fffde7;
+  margin: 5px
+}
+
+.theme-light .panel{
+  background-color: #fffde7;
+  margin: 5px
+}
+
+.theme-dark .panel{
+  background-color: #bbdefb;
+  margin: 5px
+}
+
 .panel-title {
   font-size: 14px;
 }
