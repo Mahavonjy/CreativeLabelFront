@@ -4,7 +4,7 @@ import $ from 'jquery';
 import '../../assets/js/jquery.flexslider';
 import '../../assets/css/app.css';
 import '../../assets/css/style/about.css';
-import '../../assets/lib/et-line-font/et-line-font.css';
+import '../../assets/lib/et-line-font/style.css';
 import '../../assets/lib/components-font-awesome/css/font-awesome.min.css';
 import section14 from '../../assets/images/screenshots/section-14.jpg';
 import gridPortfolio1 from '../../assets/images/screenshots/grid-portfolio1.jpg';
@@ -20,15 +20,16 @@ import team4 from '../../assets/images/screenshots/team-4.jpg';
 
 function About() {
 
+
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
     const isMounted = useRef(false);
 
-    const sectionModule = (title, text) => {
+    const sectionModule = (icon, title, text) => {
         return (
             <div className="col-md-3 col-sm-6 col-xs-12">
                 <div className={lightModeOn ? "features-item text-dark" : "features-item text-white"}>
                     <div className="features-icon">
-                        <span className="icon-lifesaver">
+                        <span className={icon}>
                         </span>
                     </div>
                     <h3 className="features-title font-alt">
@@ -98,7 +99,7 @@ function About() {
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="module-icon">
-                                <span className="icon-quote">
+                                <span data-icon="&#xe057;">
                                 </span></div>
                         </div>
                     </div>
@@ -150,18 +151,22 @@ function About() {
                                     <div className="container">
                                         <div className="row multi-columns-row">
                                             {sectionModule(
+                                                'icon-lightbulb',
                                                 'Ideas and concepts',
                                                 'Careful attention to detail and clean, well structured code ensures a smooth user experience for all your visitors.'
                                             )}
                                             {sectionModule(
+                                                'icon-tools',
                                                 'Coding & development',
                                                 'Careful attention to detail and clean, well structured code ensures a smooth user experience for all your visitors.'
                                             )}
                                             {sectionModule(
+                                                'icon-tools-2',
                                                 'Ideas and concepts',
                                                 'Careful attention to detail and clean, well structured code ensures a smooth user experience for all your visitors.'
                                             )}
                                             {sectionModule(
+                                                ' icon-lifesaver',
                                                 'Dedicated support',
                                                 'Careful attention to detail and clean, well structured code ensures a smooth user experience for all your visitors.'
                                             )}
@@ -509,14 +514,14 @@ function About() {
                                             <div className="col-sm-4">
                                                 <div className="alt-features-item mt-0">
                                                     <div className="alt-features-icon">
-                                                        <span className="icon-megaphone">
+                                                        <span data-icon="&#xe021;">
                                                         </span></div>
                                                     <h3 className="alt-features-title font-alt">Where to meet</h3>Titan
                                                     Company<br/>23 Greate Street<br/>Los Angeles, 12345 LS
                                                 </div>
                                                 <div className="alt-features-item mt-xs-60">
                                                     <div className="alt-features-icon">
-                                                        <span className="icon-map">
+                                                        <span data-icon="&#xe025;">
                                                         </span></div>
                                                     <h3 className="alt-features-title font-alt">Say Hello</h3>Email:
                                                     somecompany@example.com<br/>Phone: +1 234 567 89 10

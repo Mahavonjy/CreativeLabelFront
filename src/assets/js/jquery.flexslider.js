@@ -8,9 +8,13 @@ import jQuery from 'jquery';
 
 (function ($) {
 
-  var focused = true;
+    let focused = true;
 
-  //FlexSlider: Object Instance
+
+    window.jQuery = window.$ = $;
+    require('flexslider');
+
+    //FlexSlider: Object Instance
   $.flexslider = function(el, options) {
     var slider = $(el);
 
@@ -179,8 +183,7 @@ import jQuery from 'jquery';
               el._slider = slider;
               slider.slides.each(function (){
                   var that = this;
-                  // eslint-disable-next-line no-undef
-                  that._gesture = new MSGesture();
+                  that._gesture = new window.MSGesture();
                   that._gesture.target = that;
                   that.addEventListener("MSPointerDown", function (e){
                       e.preventDefault();
@@ -484,8 +487,7 @@ import jQuery from 'jquery';
             el.addEventListener('touchstart', onTouchStart, false);
         }else{
             el.style.msTouchAction = "none";
-            // eslint-disable-next-line no-undef
-            el._gesture = new MSGesture();
+            el._gesture = new window.MSGesture();
             el._gesture.target = el;
             el.addEventListener("MSPointerDown", onMSPointerDown, false);
             el._slider = slider;
