@@ -8,34 +8,30 @@ import jQuery from 'jquery';
 
 (function ($) {
 
-    let focused = true;
+  var focused = true;
 
-
-    window.jQuery = window.$ = $;
-    require('flexslider');
-
-    //FlexSlider: Object Instance
+  //FlexSlider: Object Instance
   $.flexslider = function(el, options) {
-    var slider = $(el);
+      const slider = $(el);
 
-    // making variables public
+      // making variables public
     slider.vars = $.extend({}, $.flexslider.defaults, options);
 
-    var namespace = slider.vars.namespace,
-        msGesture = window.navigator && window.navigator.msPointerEnabled && window.MSGesture,
-        touch = (( "ontouchstart" in window ) || msGesture || window.DocumentTouch && document instanceof window.DocumentTouch) && slider.vars.touch,
-        // depricating this idea, as devices are being released with both of these events
-        eventType = "click touchend MSPointerUp keyup",
-        watchedEvent = "",
-        watchedEventClearTimer,
-        vertical = slider.vars.direction === "vertical",
-        reverse = slider.vars.reverse,
-        carousel = (slider.vars.itemWidth > 0),
-        fade = slider.vars.animation === "fade",
-        asNav = slider.vars.asNavFor !== "",
-        methods = {};
+      let namespace = slider.vars.namespace,
+          msGesture = window.navigator && window.navigator.msPointerEnabled && window.MSGesture,
+          touch = (("ontouchstart" in window) || msGesture || window.DocumentTouch && document instanceof window.DocumentTouch) && slider.vars.touch,
+          // depricating this idea, as devices are being released with both of these events
+          eventType = "click touchend MSPointerUp keyup",
+          watchedEvent = "",
+          watchedEventClearTimer,
+          vertical = slider.vars.direction === "vertical",
+          reverse = slider.vars.reverse,
+          carousel = (slider.vars.itemWidth > 0),
+          fade = slider.vars.animation === "fade",
+          asNav = slider.vars.asNavFor !== "",
+          methods = {};
 
-    // Store a reference to the slider object
+      // Store a reference to the slider object
     $.data(el, "flexslider", slider);
 
     // Private slider methods
@@ -65,9 +61,9 @@ import jQuery from 'jquery';
         slider.startTimeout = null;
         // TOUCH/USECSS:
         slider.transitions = !slider.vars.video && !fade && slider.vars.useCSS && (function() {
-          var obj = document.createElement('div'),
-              props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
-          for (var i in props) {
+            const obj = document.createElement('div'),
+                props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
+            for (const i in props) {
             if ( obj.style[ props[i] ] !== undefined ) {
               slider.pfx = props[i].replace('Perspective','').toLowerCase();
               slider.prop = "-" + slider.pfx + "-transform";
@@ -105,9 +101,9 @@ import jQuery from 'jquery';
         // KEYBOARD:
         if (slider.vars.keyboard && ($(slider.containerSelector).length === 1 || slider.vars.multipleKeyboard)) {
           $(document).bind('keyup', function(event) {
-            var keycode = event.keyCode;
+            let keycode = event.keyCode;
             if (!slider.animating && (keycode === 39 || keycode === 37)) {
-              var target = (keycode === 39) ? slider.getTarget('next') :
+              let target = (keycode === 39) ? slider.getTarget('next') :
                            (keycode === 37) ? slider.getTarget('prev') : false;
               slider.flexAnimate(target, slider.vars.pauseOnAction);
             }
@@ -169,9 +165,9 @@ import jQuery from 'jquery';
           if(!msGesture){
               slider.slides.on(eventType, function(e){
                 e.preventDefault();
-                var $slide = $(this),
-                    target = $slide.index();
-                var posFromLeft = $slide.offset().left - $(slider).scrollLeft(); // Find position of slide relative to left of slider container
+                  const $slide = $(this),
+                      target = $slide.index();
+                  const posFromLeft = $slide.offset().left - $(slider).scrollLeft(); // Find position of slide relative to left of slider container
                 if( posFromLeft <= 0 && $slide.hasClass( namespace + 'active-slide' ) ) {
                   slider.flexAnimate(slider.getTarget("prev"), true);
                 } else if (!$(slider.vars.asNavFor).data('flexslider').animating && !$slide.hasClass(namespace + "active-slide")) {
@@ -182,7 +178,7 @@ import jQuery from 'jquery';
           }else{
               el._slider = slider;
               slider.slides.each(function (){
-                  var that = this;
+                  const that = this;
                   that._gesture = new window.MSGesture();
                   that._gesture.target = that;
                   that.addEventListener("MSPointerDown", function (e){
@@ -193,7 +189,7 @@ import jQuery from 'jquery';
                   }, false);
                   that.addEventListener("MSGestureTap", function (e){
                       e.preventDefault();
-                      var $slide = $(this),
+                      const $slide = $(this),
                           target = $slide.index();
                       if (!$(slider.vars.asNavFor).data('flexslider').animating && !$slide.hasClass('active')) {
                           slider.direction = (slider.currentItem < target) ? "next" : "prev";
@@ -213,19 +209,19 @@ import jQuery from 'jquery';
           }
         },
         setupPaging: function() {
-          var type = (slider.vars.controlNav === "thumbnails") ? 'control-thumbs' : 'control-paging',
-              j = 1,
-              item,
-              slide;
+            let type = (slider.vars.controlNav === "thumbnails") ? 'control-thumbs' : 'control-paging',
+                j = 1,
+                item,
+                slide;
 
-          slider.controlNavScaffold = $('<ol class="'+ namespace + 'control-nav ' + namespace + type + '"></ol>');
+            slider.controlNavScaffold = $('<ol class="'+ namespace + 'control-nav ' + namespace + type + '"></ol>');
 
           if (slider.pagingCount > 1) {
-            for (var i = 0; i < slider.pagingCount; i++) {
+            for (let i = 0; i < slider.pagingCount; i++) {
               slide = slider.slides.eq(i);
               if ( undefined === slide.attr( 'data-thumb-alt' ) ) { slide.attr( 'data-thumb-alt', '' ); }
-              var altText = ( '' !== slide.attr( 'data-thumb-alt' ) ) ? altText = ' alt="' + slide.attr( 'data-thumb-alt' ) + '"' : '';
-              item = (slider.vars.controlNav === "thumbnails") ? '<img src="' + slide.attr( 'data-thumb' ) + '"' + altText + '/>' : '<a href="#">' + j + '</a>';
+                const altText = ('' !== slide.attr('data-thumb-alt')) ? altText = ' alt="' + slide.attr('data-thumb-alt') + '"' : '';
+                item = (slider.vars.controlNav === "thumbnails") ? '<img src="' + slide.attr( 'data-thumb' ) + '"' + altText + '/>' : '<a href="#">' + j + '</a>';
               if ( 'thumbnails' === slider.vars.controlNav && true === slider.vars.thumbCaptions ) {
                   const captn = slide.attr('data-thumbcaption');
                   if ( '' !== captn && undefined !== captn ) { item += '<span class="' + namespace + 'caption">' + captn + '</span>'; }
@@ -245,10 +241,10 @@ import jQuery from 'jquery';
             event.preventDefault();
 
             if (watchedEvent === "" || watchedEvent === event.type) {
-              var $this = $(this),
-                  target = slider.controlNav.index($this);
+                const $this = $(this),
+                    target = slider.controlNav.index($this);
 
-              if (!$this.hasClass(namespace + 'active')) {
+                if (!$this.hasClass(namespace + 'active')) {
                 slider.direction = (target > slider.currentSlide) ? "next" : "prev";
                 slider.flexAnimate(target, slider.vars.pauseOnAction);
               }
@@ -270,10 +266,10 @@ import jQuery from 'jquery';
             event.preventDefault();
 
             if (watchedEvent === "" || watchedEvent === event.type) {
-              var $this = $(this),
-                  target = slider.controlNav.index($this);
+                const $this = $(this),
+                    target = slider.controlNav.index($this);
 
-              if (!$this.hasClass(namespace + 'active')) {
+                if (!$this.hasClass(namespace + 'active')) {
                 (target > slider.currentSlide) ? slider.direction = "next" : slider.direction = "prev";
                 slider.flexAnimate(target, slider.vars.pauseOnAction);
               }
@@ -287,8 +283,8 @@ import jQuery from 'jquery';
           });
         },
         set: function() {
-          var selector = (slider.vars.controlNav === "thumbnails") ? 'img' : 'a';
-          slider.controlNav = $('.' + namespace + 'control-nav li ' + selector, (slider.controlsContainer) ? slider.controlsContainer : slider);
+            const selector = (slider.vars.controlNav === "thumbnails") ? 'img' : 'a';
+            slider.controlNav = $('.' + namespace + 'control-nav li ' + selector, (slider.controlsContainer) ? slider.controlsContainer : slider);
         },
         active: function() {
           slider.controlNav.removeClass(namespace + "active").eq(slider.animatingTo).addClass(namespace + "active");
@@ -307,9 +303,9 @@ import jQuery from 'jquery';
       },
       directionNav: {
         setup: function() {
-          var directionNavScaffold = $('<ul class="' + namespace + 'direction-nav"><li class="' + namespace + 'nav-prev"><a class="' + namespace + 'prev" href="#">' + slider.vars.prevText + '</a></li><li class="' + namespace + 'nav-next"><a class="' + namespace + 'next" href="#">' + slider.vars.nextText + '</a></li></ul>');
+            const directionNavScaffold = $('<ul class="' + namespace + 'direction-nav"><li class="' + namespace + 'nav-prev"><a class="' + namespace + 'prev" href="#">' + slider.vars.prevText + '</a></li><li class="' + namespace + 'nav-next"><a class="' + namespace + 'next" href="#">' + slider.vars.nextText + '</a></li></ul>');
 
-          // CUSTOM DIRECTION NAV:
+            // CUSTOM DIRECTION NAV:
           if (slider.customDirectionNav) {
             slider.directionNav = slider.customDirectionNav;
           // CONTROLSCONTAINER:
@@ -325,9 +321,9 @@ import jQuery from 'jquery';
 
           slider.directionNav.bind(eventType, function(event) {
             event.preventDefault();
-            var target;
+              let target;
 
-            if (watchedEvent === "" || watchedEvent === event.type) {
+              if (watchedEvent === "" || watchedEvent === event.type) {
               target = ($(this).hasClass(namespace + 'next')) ? slider.getTarget('next') : slider.getTarget('prev');
               slider.flexAnimate(target, slider.vars.pauseOnAction);
             }
@@ -340,8 +336,8 @@ import jQuery from 'jquery';
           });
         },
         update: function() {
-          var disabledClass = namespace + 'disabled';
-          if (slider.pagingCount === 1) {
+            const disabledClass = namespace + 'disabled';
+            if (slider.pagingCount === 1) {
             slider.directionNav.addClass(disabledClass).attr('tabindex', '-1');
           } else if (!slider.vars.animationLoop) {
             if (slider.animatingTo === 0) {
@@ -358,9 +354,9 @@ import jQuery from 'jquery';
       },
       pausePlay: {
         setup: function() {
-          var pausePlayScaffold = $('<div class="' + namespace + 'pauseplay"><a href="#"></a></div>');
+            const pausePlayScaffold = $('<div class="' + namespace + 'pauseplay"><a href="#"></a></div>');
 
-          // CONTROLSCONTAINER:
+            // CONTROLSCONTAINER:
           if (slider.controlsContainer) {
             slider.controlsContainer.append(pausePlayScaffold);
             slider.pausePlay = $('.' + namespace + 'pauseplay a', slider.controlsContainer);
@@ -398,21 +394,21 @@ import jQuery from 'jquery';
         }
       },
       touch: function() {
-        var startX,
-          startY,
-          offset,
-          cwidth,
-          dx,
-          startT,
-          onTouchStart,
-          onTouchMove,
-          onTouchEnd,
-          scrolling = false,
-          localX = 0,
-          localY = 0,
-          accDx = 0;
+          let startX,
+              startY,
+              offset,
+              cwidth,
+              dx,
+              startT,
+              onTouchStart,
+              onTouchMove,
+              onTouchEnd,
+              scrolling = false,
+              localX = 0,
+              localY = 0,
+              accDx = 0;
 
-        if(!msGesture){
+          if(!msGesture){
             onTouchStart = function(e) {
               if (slider.animating) {
                 e.preventDefault();
@@ -449,9 +445,9 @@ import jQuery from 'jquery';
               dx = (vertical) ? startX - localY : startX - localX;
               scrolling = (vertical) ? (Math.abs(dx) < Math.abs(localX - startY)) : (Math.abs(dx) < Math.abs(localY - startY));
 
-              var fxms = 500;
+                const fxms = 500;
 
-              if ( ! scrolling || Number( new Date() ) - startT > fxms ) {
+                if ( ! scrolling || Number( new Date() ) - startT > fxms ) {
                 e.preventDefault();
                 if (!fade && slider.transitions) {
                   if (!slider.vars.animationLoop) {
@@ -467,10 +463,10 @@ import jQuery from 'jquery';
               el.removeEventListener('touchmove', onTouchMove, false);
 
               if (slider.animatingTo === slider.currentSlide && !scrolling && !(dx === null)) {
-                var updateDx = (reverse) ? -dx : dx,
-                    target = (updateDx > 0) ? slider.getTarget('next') : slider.getTarget('prev');
+                  const updateDx = (reverse) ? -dx : dx,
+                      target = (updateDx > 0) ? slider.getTarget('next') : slider.getTarget('prev');
 
-                if (slider.canAdvance(target) && (Number(new Date()) - startT < 550 && Math.abs(updateDx) > 50 || Math.abs(updateDx) > cwidth/2)) {
+                  if (slider.canAdvance(target) && (Number(new Date()) - startT < 550 && Math.abs(updateDx) > 50 || Math.abs(updateDx) > cwidth/2)) {
                   slider.flexAnimate(target, slider.vars.pauseOnAction);
                 } else {
                   if (!fade) { slider.flexAnimate(slider.currentSlide, slider.vars.pauseOnAction, true); }
@@ -516,11 +512,11 @@ import jQuery from 'jquery';
 
             function onMSGestureChange(e) {
                 e.stopPropagation();
-                var slider = e.target._slider;
+                const slider = e.target._slider;
                 if(!slider){
                     return;
                 }
-                var transX = -e.translationX,
+                const transX = -e.translationX,
                     transY = -e.translationY;
 
                 //Accumulate translations.
@@ -1126,9 +1122,7 @@ import jQuery from 'jquery';
 
     // Primary Controls
     controlNav: true,               //Boolean: Create navigation for paging control of each slide? Note: Leave true for manualControls usage
-    directionNav: true,             //Boolean: Create navigation for previous/next navigation? (true/false)
-    prevText: "Previous",           //String: Set the text for the "previous" directionNav item
-    nextText: "Next",               //String: Set the text for the "next" directionNav item
+    directionNav: true,             //Boolean: Create navigation for previous/next navigation? (trgit 
 
     // Secondary Navigation
     keyboard: true,                 //Boolean: Allow slider navigating via keyboard left/right keys
