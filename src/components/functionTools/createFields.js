@@ -492,6 +492,7 @@ export const SideBars = (
                 {/* Mention */}
                 <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ml" >
                     <i className="icon icon-shield s-24 cursor-pointer"
+                       id="legaleNoticesbtn"
                        data-toggle="modal" data-target="#legaleNotices"/>
                     <span className="ml-5">Les mentions légales</span>
                 </li>

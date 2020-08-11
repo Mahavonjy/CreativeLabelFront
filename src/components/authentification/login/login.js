@@ -111,9 +111,9 @@ function Login() {
     const changeMyPassword = (e) => {
         e.preventDefault();
 
+        dispatch(setValueOfToastGlobal(false));
         if (password === confirm_password) {
             setLoading(true);
-            dispatch(setValueOfToastGlobal(false));
             let data = {email: email, password: password};
             axios.put("api/users/reset_password", data, {headers: headers}).then(() => {
                 setLoading(false);
@@ -124,11 +124,7 @@ function Login() {
                 setLoading(false);
                 if (data["password"].length < 8) {
                     toast.warn("password too short");
-                } else {
-                    let response = JSON.stringify(error.response.data);
-                    toast.warn(response.replace(/"/g, ''));
-                }
-                toast.warn(error.response.data);
+                } else toast.error(checkErrorMessage(error).message)
             })
         } else {
             setLoading(false);

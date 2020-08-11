@@ -80,7 +80,8 @@ function Register() {
                            onChange={() => setRules(!rules)}
                            checked={rules}/>
                     <label htmlFor="sw2"
-                           className="text-monospace border-bottom text-muted">
+                           className="text-monospace border-bottom cursor-pointer text-muted"
+                           onClick={() => document.getElementById("legaleNoticesbtn").click()}>
                         J'accepte les Conditions Générales d'Utilisation
                     </label>
                 </div>
@@ -242,8 +243,9 @@ function Register() {
                                         <div className="form-material">
                                             {/* Input */}
                                             <div className="body">
-                                                <h4 className="font-weight-lighter pb-4 text-center bolder">Formulaire
-                                                    d'inscription</h4>
+                                                <h4 className="font-weight-lighter pb-4 text-center bolder">
+                                                    Formulaire d'inscription
+                                                </h4>
                                                 {CreateInput(
                                                     'name',
                                                     name, (e) => changeFields(setName, e),

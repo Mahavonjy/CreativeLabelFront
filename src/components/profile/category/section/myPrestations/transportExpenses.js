@@ -2,7 +2,11 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import {addTravelExpenses, profileInitialisationCondition} from "../../../../functionTools/functionProps";
+import {
+    addTravelExpenses,
+    profileInitialisationCondition,
+    setValueOfToastGlobal
+} from "../../../../functionTools/functionProps";
 import {deleteInObject} from "../../../../functionTools/tools";
 
 function TransportExpenses(props) {

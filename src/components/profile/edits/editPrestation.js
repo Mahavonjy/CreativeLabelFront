@@ -314,12 +314,12 @@ function EditPrestation(props) {
                                  aria-labelledby="v-pills-materials-tab">
                                 <Materials headers={props.headers} edit/>
                             </div>
-                            <div className="tab-pane fade"
-                                 id="v-pills-options-gestion"
-                                 role="tabpanel"
-                                 aria-labelledby="v-pills-options-gestion-tab">
-                                <Options headers={props.headers} edit/>
-                            </div>
+                            {/*<div className="tab-pane fade"*/}
+                            {/*     id="v-pills-options-gestion"*/}
+                            {/*     role="tabpanel"*/}
+                            {/*     aria-labelledby="v-pills-options-gestion-tab">*/}
+                            {/*    <Options headers={props.headers} edit/>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 </div>

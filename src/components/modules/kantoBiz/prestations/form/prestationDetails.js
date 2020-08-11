@@ -96,7 +96,7 @@ function PrestationDetails(props) {
         <div className="Base">
             <ReactTooltip/>
             <div className="card-header transparent b-b">
-                <strong className="text-red">Préciser les détails de votre prestation</strong>
+                <strong className="text-red">Détails sur votre prestation</strong>
             </div>
             <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl"
                  style={{height: 300}}>
@@ -105,11 +105,15 @@ function PrestationDetails(props) {
                     <div className="form-group d-flex flex-wrap required">
                         <label className="col-sm-4 control-label bolder">
                             <i className="icon icon-warning text-red"
-                               data-tip="Définir les évènements pour lesquels vous souhaiter réaliser la prestation"/>&nbsp;Type(s)
-                            d'évènement(s)</label>
+                               data-tip="Définir les évènements pour lesquels vous souhaiter réaliser la prestation"/>
+                            &nbsp;Type(s) d'évènement(s)
+                        </label>
                         <div className="input-group-prepend col-sm-8 center">
-                            <MultiSelectTools funcToFillInProps={addEventSelected} tags={props_events_selected}
-                                              list={events_type} placeholder="Ajouter un ou plusieurs évènements"/>
+                            <MultiSelectTools
+                                funcToFillInProps={addEventSelected}
+                                tags={props_events_selected}
+                                list={events_type}
+                                placeholder="Ajouter un ou plusieurs évènements"/>
                         </div>
                     </div>
 
@@ -150,27 +154,70 @@ function PrestationDetails(props) {
                                    onChange={(e) => changeFields(setServiceTime, e, addServiceTime, dispatch)}
                                    className="form-control" type="number" placeholder="Durée d'execution"
                                    style={{width: "100%"}} required/>
-                            {createCheckBox("Jrs", "Votre preparation dure quelque jours ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "day", "bg-grey")}
-                            {createCheckBox("Hrs", "Votre preparation dure quelque Heures ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "hours", "bg-success")}
-                            {createCheckBox("Min", "Votre preparation dure quelque Minutes ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "min", "bg-info")}
-                            {createCheckBox("Sec", "Votre preparation dure quelque Secondes ?", "unit_time_of_service", unit_time_of_service, setUnitTimeOfService, "sec", "bg-warning")}
+                            {createCheckBox(
+                                "Jrs",
+                                "Votre preparation dure quelque jours ?",
+                                "unit_time_of_service", unit_time_of_service, setUnitTimeOfService,
+                                "day",
+                                "bg-grey")}
+                            {createCheckBox(
+                                "Hrs",
+                                "Votre preparation dure quelque Heures ?",
+                                "unit_time_of_service", unit_time_of_service, setUnitTimeOfService,
+                                "hours",
+                                "bg-success")}
+                            {createCheckBox(
+                                "Min",
+                                "Votre preparation dure quelque Minutes ?",
+                                "unit_time_of_service", unit_time_of_service, setUnitTimeOfService,
+                                "min",
+                                "bg-info")}
+                            {createCheckBox(
+                                "Sec",
+                                "Votre preparation dure quelque Secondes ?",
+                                "unit_time_of_service", unit_time_of_service, setUnitTimeOfService,
+                                "sec",
+                                "bg-warning")}
                         </div>
                     </div>
 
                     <div className="form-group d-flex flex-wrap required">
                         <label className="col-sm-4 control-label bolder">
                             <i className="icon icon-warning text-red"
-                               data-tip="Définir le temps de préparation nécessaire à la préparation de votre prestation"/>&nbsp;Temps
-                            de préparation</label>
+                               data-tip="Définir le temps de préparation nécessaire
+                                à la préparation de votre prestation"/>
+                            &nbsp;Temps de préparation
+                        </label>
                         <div className="input-group-prepend col-sm-8 center">
                             <input value={preparation_time} id="preparation_time" name="preparation_time"
-                                   onChange={(e) => changeFields(setPreparationTime, e, addPreparationTime, dispatch)}
+                                   onChange={(e) =>
+                                       changeFields(
+                                           setPreparationTime,
+                                           e,
+                                           addPreparationTime,
+                                           dispatch)}
                                    className="form-control" placeholder="Préparation" type="number"
                                    style={{width: "100%"}} required/>
-                            {createCheckBox("Jrs", "Votre temps de preparation dure quelque jours ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "day", "bg-grey")}
-                            {createCheckBox("Hrs", "Votre temps de preparation dure quelque Heures ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "hours", "bg-success")}
-                            {createCheckBox("Min", "Votre temps de preparation dure quelque Minutes ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "min", "bg-info")}
-                            {createCheckBox("Sec", "Votre temps de preparation dure quelque Secondes ?", "unit_time_of_preparation", unit_time_of_preparation, setUnitTimeOfPreparation, "sec", "bg-warning")}
+                            {createCheckBox(
+                                "Jrs", "Votre temps de preparation dure quelque jours ?",
+                                "unit_time_of_preparation", unit_time_of_preparation,
+                                setUnitTimeOfPreparation,
+                                "day", "bg-grey")}
+                            {createCheckBox(
+                                "Hrs", "Votre temps de preparation dure quelque Heures ?",
+                                "unit_time_of_preparation", unit_time_of_preparation,
+                                setUnitTimeOfPreparation,
+                                "hours", "bg-success")}
+                            {createCheckBox(
+                                "Min", "Votre temps de preparation dure quelque Minutes ?",
+                                "unit_time_of_preparation", unit_time_of_preparation,
+                                setUnitTimeOfPreparation,
+                                "min", "bg-info")}
+                            {createCheckBox(
+                                "Sec", "Votre temps de preparation dure quelque Secondes ?",
+                                "unit_time_of_preparation", unit_time_of_preparation,
+                                setUnitTimeOfPreparation,
+                                "sec", "bg-warning")}
                         </div>
                     </div>
 
