@@ -168,9 +168,6 @@ you can use the generic selector below, but it's slower:
 .icon-megaphone:before {
 	content: "\e021";
 }
-.icon-shield:before {
-	content: "\e022";
-}
 .icon-trophy:before {
 	content: "\e023";
 }

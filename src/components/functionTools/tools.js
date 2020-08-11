@@ -706,7 +706,7 @@ export const generatePagination = (_array, funcToDisplay) => {
                                         <FacebookProvider appId={Conf.configs.FacebookId} debug>
                                             <Feed link={"http://" + window.location.host + "/kantoBiz"}>
                                                 {({handleClick}) => (
-                                                    <i className="icon-facebook"
+                                                    <i className="icon-share-1 text-red"
                                                        onClick={handleClick}
                                                        data-tip="Partager Cette Prestation sur facebook"/>
                                                 )}

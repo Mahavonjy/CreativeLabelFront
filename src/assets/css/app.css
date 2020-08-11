@@ -22896,8 +22896,8 @@ select::-ms-expand {
     list-style: outside none none;
 }
 
-.demo-gallery > ul > li a {
-    border: 3px solid #FFF;
+.demo-gallery > ul > li div {
+    border: 1px solid #FFF;
     border-radius: 3px;
     display: block;
     overflow: hidden;
@@ -22905,7 +22905,7 @@ select::-ms-expand {
     float: left;
 }
 
-.demo-gallery > ul > li a > img {
+.demo-gallery > ul > li div > img {
     -webkit-transition: -webkit-transform 0.15s ease 0s;
     -moz-transition: -moz-transform 0.15s ease 0s;
     -o-transition: -o-transform 0.15s ease 0s;
@@ -22916,16 +22916,16 @@ select::-ms-expand {
     width: 200px;
 }
 
-.demo-gallery > ul > li a:hover > img {
+.demo-gallery > ul > li div:hover > img {
     -webkit-transform: scale3d(1.1, 1.1, 1.1);
     transform: scale3d(1.1, 1.1, 1.1);
 }
 
-.demo-gallery > ul > li a:hover .demo-gallery-poster > i {
+.demo-gallery > ul > li div:hover .demo-gallery-poster > i {
     opacity: 1;
 }
 
-.demo-gallery > ul > li a .demo-gallery-poster {
+.demo-gallery > ul > li div .demo-gallery-poster {
     background-color: rgba(0, 0, 0, 0.1);
     bottom: 0;
     left: 0;
@@ -22937,7 +22937,7 @@ select::-ms-expand {
     transition: background-color 0.15s ease 0s;
 }
 
-.demo-gallery > ul > li a .demo-gallery-poster > i {
+.demo-gallery > ul > li div .demo-gallery-poster > i {
     left: 50%;
     margin-left: -10px;
     margin-top: -10px;
@@ -22949,7 +22949,7 @@ select::-ms-expand {
     transition: opacity 0.3s ease 0s;
 }
 
-.demo-gallery > ul > li a:hover .demo-gallery-poster {
+.demo-gallery > ul > li div:hover .demo-gallery-poster {
     background-color: rgba(0, 0, 0, 0.5);
 }
 

@@ -418,7 +418,7 @@ export const SideBars = (
                         ? "Connecter pour voir votre profil": "Voir votre profile"}
                 </ReactTooltip>
                 <ReactTooltip place="right" className="special-color-dark" id='i_ab' aria-haspopup='true'>
-                    A propos
+                    A propos de Nous
                 </ReactTooltip>
                 <ReactTooltip place="right" className="special-color-dark" id='i_ml' aria-haspopup='true'>
                     Les Mentions légales
@@ -491,7 +491,7 @@ export const SideBars = (
 
                 {/* Mention */}
                 <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ml" >
-                    <i className="icon icon-flag s-24 cursor-pointer"
+                    <i className="icon icon-shield s-24 cursor-pointer"
                        data-toggle="modal" data-target="#legaleNotices"/>
                     <span className="ml-5">Les mentions légales</span>
                 </li>

@@ -212,7 +212,7 @@ function Results(props) {
                                                  onClick={() => filter_price["min"] && setPriceActive(true)}
                                                  data-tip={filter_price["min"]
                                                      ? "filtrer par prix ?"
-                                                     : "Commencer Votre recheche avant tout"}/>}
+                                                     : "Il faut trouver 2 prestations au moins"}/>}
                         </div>
 
                         {/*<div className="text-center text-red ml-5 mr-5">*/}

@@ -409,9 +409,8 @@ function Reservation(props) {
                         <ul id="lightgallery">
                             {service_to_show.galleries.map((val, index) =>
                                 <li key={index} data-src={val}>
-                                    <a href="#">
-                                        <img alt="gallery" className="img-responsive"
-                                             src={val}/>
+                                    <div>
+                                        <img alt="gallery" className="img-responsive" src={val}/>
                                         {(photoIndex === index) && (isOpen) && (
                                             <Lightbox
                                                 mainSrc={val}
@@ -437,7 +436,7 @@ function Reservation(props) {
                                         }}>
                                             <i className="icon icon-search-1 s-36 text-red"/>
                                         </div>
-                                    </a>
+                                    </div>
                                 </li>
                             )}
                         </ul>
