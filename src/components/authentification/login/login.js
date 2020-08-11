@@ -264,16 +264,16 @@ function Login() {
                            document.getElementsByClassName("close")[0].click()
                        }}/>
                 </div>
-                <div className="row l-form">
+                <div className="row l-form mt-4">
 
-                    <input className="l-usr" placeholder="email" name="email" id="login-email"
+                    <input className="l-usr mb-2" placeholder="email" name="email" id="login-email"
                            value={email}
                            onChange={(e) => {
                                 changeFields(setEmail, e)
                             }}
                            autoComplete="off"/>
 
-                    <div className="pass-wrap l-pass">
+                    <div className="pass-wrap l-pass  mb-2">
                         <input className="pass"
                                placeholder="Mot de passe"
                                type="password"
@@ -289,9 +289,9 @@ function Login() {
                             onClick={(e) => sendLoginCredentials(e)}>
                         Connexion
                     </button>
-                    <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
+                    <p className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
                         Mot de passe oublié?
-                    </small>
+                    </p>
                 </div>
                 {loading &&
                 <div className="absolute preloader-wrapper small active" style={{marginLeft: 400}}>
@@ -330,7 +330,7 @@ function Login() {
                 {/*    <LoginGoogle Label="Connecter avec google"/>*/}
                 {/*    <LoginFacebook Label="Connecter avec facebook"/>*/}
                 {/*</div>*/}
-                <small className="r-disc">Vous n'avez pas de compte ISL Creative ?</small>
+                <span className="r-disc">Vous n'avez pas de compte ISL Creative ?</span>
                 <button className="r-btn m-1 r-5"
                         onClick={() => {
                             document.getElementsByClassName("close")[0].click();

@@ -9,11 +9,11 @@
 }
 
 .container-login {
-    height: 300px;
-    width: 500px;
+    height: 400px;
+    width: 600px;
     background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #790d45, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
     position: absolute;
-    top:50%;
+    margin-top: 20%;
     left:50%;
     border-radius: 10px;
     transform: translate(-50%, -50%);
@@ -70,11 +70,11 @@
 }
 .r-overlay {
     filter: url(#gooeyness);
-    height: 300px;
-    width: 600px;
+    height: 500px;
+    width: 750px;
     /*background-color: #58585a;*/
     background-image: linear-gradient(to left, #1a171b, #47203c, #821b4b, #bd0344, #ed1c24);
-    transform: rotate(-31deg) translate(-50px, 116px);
+    transform: rotate(-31deg) translate(-50px, 155px);
     position: absolute;
     transition: transform 0.4s ease-in-out;
 }
@@ -113,7 +113,7 @@
 
 .r-btn , .l-btn {
     width: auto;
-    height: 30px;
+    height: 34px;
     border-radius: 50px;
     border: 2px solid white;
     color: white;
@@ -158,13 +158,13 @@ button:hover {
 }
 .l-form input {
     display: list-item;
-    border: 1px solid #58585a;
+    border: 1px solid #fff;
     background-color: transparent;
     border-radius: 10px;
-    height: 30px;
+    height: 40px;
     margin-bottom: 5px;
     color: white;
-    padding: 0 10px 0 10px;
+    padding: 5px 20px 5px 20px;
     box-shadow: 0 0 2px rgba(255,255,255,.5);
 }
 .l-form label {
@@ -175,7 +175,7 @@ button:hover {
     position: absolute;
 }
 .l-pass .pass {
-    height: 30px;
+    height: 40px;
     width: 250px !important;
 }
 .l-pass {
@@ -187,7 +187,7 @@ button:hover {
     border: 2px solid;
     border-radius: 10px;
     width: auto;
-    height: 30px;
+    height: 34px;
     position: absolute;
     display: inline-block;
     padding: 0.3rem 3rem;
@@ -280,6 +280,7 @@ button:hover {
 
 .f-p {
     color: #fff;
+    font-family: sans-serif;
     position: absolute;
     top: 150px;
     left: 15px;
@@ -289,6 +290,7 @@ button:hover {
 
 .r-disc {
     color: #fff;
+    font-family: sans-serif;
     position: absolute;
     bottom: 160px;
     right: 15px;
