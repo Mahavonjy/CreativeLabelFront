@@ -3,7 +3,7 @@ import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 // import {CreateBeatsPlaylist, smallSpinner} from "../../functionTools/createFields";
-import {profileAddBeats} from "../../functionTools/functionProps";
+import {profileAddBeats, setValueOfToastGlobal} from "../../functionTools/functionProps";
 import {resetPropsForm} from "../../functionTools/tools";
 import Form from "../../modules/kantoBiz/prestations/form/form";
 import AddSingle from "../addMedia/addSingle";
@@ -19,6 +19,7 @@ import {smallSpinner} from "../../functionTools/createFields";
 function ProfileContent(props) {
 
     const dispatch = useDispatch();
+    const toastGlobal = useSelector(state => state.Home.toastGlobal);
     const props_prestation = useSelector(state => state.profilePrestations.prestations);
     const isMounted = useRef(false);
     /* eslint-disable-next-line no-unused-vars */
@@ -161,6 +162,9 @@ function ProfileContent(props) {
 
     useEffect(() => {
 
+        if (!toastGlobal)
+            props.setAddNewPrestation(true)
+
         return () => {
             isMounted.current = true
         };
@@ -186,6 +190,7 @@ function ProfileContent(props) {
                 <div className="bg-dark scrollbar-isl overflow-auto">
                     <button className="ModalClose"
                             onClick={() => {
+                                dispatch(setValueOfToastGlobal(true));
                                 resetPropsForm(dispatch);
                                 props.addNewPrestation
                                     ? props.setAddNewPrestation(false)
@@ -201,8 +206,11 @@ function ProfileContent(props) {
                         allPrestation={allPrestation}
                         setAllPrestation={setAllPrestation}
                         setAddNewPrestation={props.setAddNewPrestation}
-                        close={() => toast.success("Ajouter avec succes")}
                         setAddNewPrestationForNewArtist={props.setAddNewPrestationForNewArtist}
+                        close={() => {
+                            dispatch(setValueOfToastGlobal(true));
+                            toast.success("Ajouter avec succes")}
+                        }
                     />}
                 </div>
             </Modal>
@@ -300,12 +308,11 @@ function ProfileContent(props) {
                                 {/*        Ajouter un beat&nbsp;*/}
                                 {/*        <i className="icon-plus-circle"/></button>*/}
                                 {/*</div>}*/}
-                                <div className="align-self-center">
-                                    <button className="btn btn-outline-danger"
-                                            onClick={() => {props.setAddNewPrestation(true)}}>
-                                        Créer une prestation &nbsp;
-                                        <i className="icon-plus-circle"/></button>
-                                </div>
+                                <button className="align-self-center btn btn-outline-danger"
+                                        onClick={() => dispatch(setValueOfToastGlobal(false))}>
+                                    Créer une prestation &nbsp;
+                                    <i className="icon-plus-circle"/>
+                                </button>
                             </div>
                         </div>}
                     </div>

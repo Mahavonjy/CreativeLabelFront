@@ -6,7 +6,7 @@ import {toast, ToastContainer} from "react-toastify";
 import "../../../../../assets/css/style/Form.css"
 import Register from "../../../../authentification/register/register";
 import {smallSpinner} from "../../../../functionTools/createFields";
-import {addStepsIndex} from "../../../../functionTools/functionProps"
+import {addStepsIndex, setValueOfToastGlobal} from "../../../../functionTools/functionProps"
 import {createOrUpdatePrestation} from "../../../../functionTools/tools";
 import HomeRoot from "../../../../home/homeRoot";
 import {checkErrorMessage} from "../../../../validators/validatiors";
@@ -96,7 +96,7 @@ function Form(props) {
         })
     };
 
-    const Next = async () => {
+    const next = async () => {
         let resp = component_steps[state_steps_index].validation();
         if (resp.error) toast.error(resp.message);
         else {
@@ -107,7 +107,7 @@ function Form(props) {
         }
     };
 
-    const Prev = async () => {
+    const prev = async () => {
         let step_tmp = await state_steps_index - 1;
         await setStepsIndex(step_tmp);
         await dispatch(addStepsIndex(step_tmp));
@@ -139,31 +139,40 @@ function Form(props) {
                 <div className="mdl-card__supporting-text">
                     <div className="mdl-stepper-horizontal-alternative">
                         <div
-                            className={state_steps_index === 0 ? "mdl-stepper-step active-step" : "mdl-stepper-step success-step"}>
+                            className={state_steps_index === 0
+                                ? "mdl-stepper-step active-step"
+                                : "mdl-stepper-step success-step"}>
                             <div className="mdl-stepper-circle"><span>1</span></div>
-                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Définir
-                                une thématique</small></div>
+                            <div className="mdl-stepper-title text-light">
+                                <small className="d-none d-lg-block">Définir une thématique</small>
+                            </div>
                             <div className="mdl-stepper-bar-left"/>
                             <div className="mdl-stepper-bar-right"/>
                         </div>
                         <div
-                            className={(state_steps_index === 1 && "mdl-stepper-step active-step") || (state_steps_index < 1 && "mdl-stepper-step") || (state_steps_index > 1 && "mdl-stepper-step success-step")}>
+                            className={(state_steps_index === 1 && "mdl-stepper-step active-step")
+                            || (state_steps_index < 1 && "mdl-stepper-step")
+                            || (state_steps_index > 1 && "mdl-stepper-step success-step")}>
                             <div className="mdl-stepper-circle"><span>2</span></div>
-                            <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Informations
-                                sur la prestation</small></div>
+                            <div className="mdl-stepper-title text-light">
+                                <small className="d-none d-lg-block">Informations sur la prestation</small>
+                            </div>
                             <div className="mdl-stepper-bar-left"/>
                             <div className="mdl-stepper-bar-right"/>
                         </div>
                         <div
-                            className={(state_steps_index === 2 && "mdl-stepper-step active-step") || (state_steps_index < 2 && "mdl-stepper-step") || (state_steps_index > 2 && "mdl-stepper-step success-step")}>
+                            className={(state_steps_index === 2 && "mdl-stepper-step active-step")
+                            || (state_steps_index < 2 && "mdl-stepper-step")
+                            || (state_steps_index > 2 && "mdl-stepper-step success-step")}>
                             <div className="mdl-stepper-circle"><span>3</span></div>
                             <div className="mdl-stepper-title text-light"><small className="d-none d-lg-block">Détails
                                 de la prestation</small></div>
                             <div className="mdl-stepper-bar-left"/>
                             <div className="mdl-stepper-bar-right"/>
                         </div>
-                        <div
-                            className={(state_steps_index === 3 && "mdl-stepper-step active-step") || (state_steps_index < 3 && "mdl-stepper-step") || (state_steps_index > 3 && "mdl-stepper-step success-step")}>
+                        <div className={(state_steps_index === 3 && "mdl-stepper-step active-step")
+                        || (state_steps_index < 3 && "mdl-stepper-step")
+                        || (state_steps_index > 3 && "mdl-stepper-step success-step")}>
                             <div className="mdl-stepper-circle"><span>4</span></div>
                             <div className="mdl-stepper-title text-light d-none d-lg-block"><small
                                 className="d-none d-lg-block">Récaputilatif</small></div>
@@ -174,7 +183,7 @@ function Form(props) {
                 </div>
             </div>
             {(props.register || props.artistType === "professional_auditor") &&
-            <h2 className="text-red text-center">Créer votre première prestaion pour devenir artiste sur ISL</h2>}
+            <h4 className="text-red mt-4 text-center">Créer votre première prestaion pour devenir artiste sur ISL</h4>}
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             {state_steps_index !== component_steps.length - 1 &&
             <div className="text-center mt-4">
@@ -186,15 +195,17 @@ function Form(props) {
                     <button className="btn btn-outline-success center pl-5 pr-5"
                             onClick={() => props.artistType === "professional_auditor" ? auditorToArtist() : addNewPrestation()}>
                         {props.artistType === "professional_auditor" ? "Devenir Artiste" : "Enregister"}</button>}
-                </div> : <div className="text-center">{smallSpinner("relative", "0")}</div>}
+                </div> : <div className="text-center">
+                    {smallSpinner("relative", "0")}
+                </div>}
             <div className="NextOrPrevPageStepper mt-4 pb-5">
                 {state_steps_index !== 0 &&
                 <button className="btn-custom btn-outline-light pr-2 mb-3 bolder float-left border-bottom-0 border-right-0"
-                        onClick={() => Prev()}><i
+                        onClick={() => prev()}><i
                     className="icon icon-long-arrow-left ml-5 s-24 align-middle"/>Precedent</button>}
                 {state_steps_index !== component_steps.length - 1 &&
                 <button className="btn-custom btn-outline-light pl-2 mb-3 bolder float-right border-bottom-0 border-left-0"
-                        onClick={() => Next()}>Suivant&nbsp;<i
+                        onClick={() => next()}>Suivant&nbsp;<i
                     className="icon icon-long-arrow-right mr-5 s-24 align-middle"/></button>}
                 {state_steps_index === component_steps.length - 1 && props.register &&
                 <button className="btn btn-outline-success pl-5 mb-3 bolder float-right border-bottom-0 border-left-0"

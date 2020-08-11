@@ -29,7 +29,7 @@ import {
     addUnitTimeOfPreparation,
     addUnitTimeOfService,
     addUserId,
-    changeStatusOfService,
+    changeStatusOfService, setValueOfToastGlobal,
 } from "../../../../functionTools/functionProps";
 import {checkUnitKey, objectToFormData, resetPropsForm} from "../../../../functionTools/tools";
 import EditPrestation from "../../../edits/editPrestation";
@@ -168,6 +168,7 @@ function MyPrestations(props) {
                    effect="fadeInUp">
                 <div className="bg-dark" style={{height: "100%"}}>
                     <button className="ModalClose float-left" onClick={() => {
+                        dispatch(setValueOfToastGlobal(true))
                         setEditPrestation(false);
                         resetPropsForm(dispatch);
                         setCopyEdit(false)
@@ -196,93 +197,6 @@ function MyPrestations(props) {
 
                 <div className={props.read ? "col-lg-12" : "col-lg-12"}>
                     <div className="row justify-content-center scrollbar-isl">
-                        {/*{allPrestation.map((val, index) =>*/}
-                        {/*    <div className={!props.profile && "card_kanto"} key={index}>*/}
-                        {/*        <div className={!props.profile && "additional"}>*/}
-                        {/*            {!props.profile &&*/}
-                        {/*            <div className="more-info">*/}
-                        {/*                <h1 className="pt-2">Artist Name</h1>*/}
-                        {/*                <div className="row justify-content-center text-center" data-tip="Cliquer Moi">*/}
-                        {/*                    <div className="col text-light d-none d-sm-block">*/}
-                        {/*                        <h4 className="text-light bolder">Genre</h4>*/}
-                        {/*                        <ul className="bg-transparent scrollbar-isl kanto-list m-1">*/}
-                        {/*                            {val.thematics.map((v, i) => <li key={i}>{v}</li>)}*/}
-                        {/*                        </ul>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="col text-light d-none d-sm-block">*/}
-                        {/*                        <h4 className="text-light bolder">Ville</h4>*/}
-                        {/*                        <ul className="bg-transparent scrollbar-isl kanto-list m-1">*/}
-                        {/*                            <li>{val.reference_city}</li>*/}
-                        {/*                            {val.others_city.map((v, i) => <li key={i}>{v}</li>)}*/}
-                        {/*                        </ul>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="col ml-auto d-sm-none">*/}
-                        {/*                        <h4 className="text-red">Evenements</h4>*/}
-                        {/*                        <p className="events scrollbar-isl">*/}
-                        {/*                            {val.events.map((v) => v + " ,")}*/}
-                        {/*                        </p>*/}
-                        {/*                        <div className="row ml-2 mr-3">*/}
-                        {/*                            <div className="col">*/}
-                        {/*                                <small className="text-red">Ville</small>*/}
-                        {/*                                <ul className="small-kanto-list">*/}
-                        {/*                                    <ul className="bg-transparent scrollbar-isl kanto-list m-1">*/}
-                        {/*                                        <li>{val.reference_city}</li>*/}
-                        {/*                                        {val.others_city.map(*/}
-                        {/*                                            (v, i) => <li key={i}>{v}</li>*/}
-                        {/*                                        )}*/}
-                        {/*                                    </ul>*/}
-                        {/*                                </ul>*/}
-                        {/*                            </div>*/}
-                        {/*                            <div className="col">*/}
-                        {/*                                <div className="text-center"*/}
-                        {/*                                     style={{marginTop: 10, marginLeft: 10}}>*/}
-                        {/*                                    <img src='https://zupimages.net/up/19/18/3ltf.png' alt=''/>*/}
-                        {/*                                </div>*/}
-                        {/*                            </div>*/}
-                        {/*                            <div className="col">*/}
-                        {/*                                <small className="text-red">Genre</small>*/}
-                        {/*                                <ul className="small-kanto-list scrollbar-isl">*/}
-                        {/*                                    {val.thematics.map((v, i) => <li key={i}>{v}</li>)}*/}
-                        {/*                                </ul>*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className="stats">*/}
-                        {/*                    <div data-tip="Le nombre d'artiste dans le groupe">*/}
-                        {/*                        <i className="icon icon-adjust"/>*/}
-                        {/*                        <div className="value">{val.number_of_artists}</div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div data-tip="La durée de la preparation">*/}
-                        {/*                        <i className="icon icon-clock-1"/>*/}
-                        {/*                        <div className="value">*/}
-                        {/*                            {val.duration_of_the_service}{val.unit_duration_of_the_service}*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div data-tip="La durée de la preparation">*/}
-                        {/*                        <i className="icon icon-clock-o"/>*/}
-                        {/*                        <div className="value">*/}
-                        {/*                            {val.preparation_time}{val.unit_of_the_preparation_time}*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div data-tip="Le prix de la prestation">*/}
-                        {/*                        <i className="icon icon-money"/>*/}
-                        {/*                        <div className="value">{val.price}$</div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*            </div>}*/}
-                        {/*        </div>*/}
-                        {/*        <div className={!props.profile && "general d-none d-sm-block"}>*/}
-                        {/*            {!props.profile && <img alt="" src={val.galleries[0]} width="100%" height="100%"/>}*/}
-                        {/*            {!props.profile && <h1 className="pt-2 ml-2 bolder text-red">Artist Name</h1>}*/}
-                        {/*            {!props.profile &&*/}
-                        {/*            <p className="text-dark ml-2 font-weight-bold">{val.description}</p>}*/}
-                        {/*            {!props.profile &&*/}
-                        {/*            <small className="more-genre scrollbar-isl pl-2 text-black">*/}
-                        {/*                {val.thematics.map((v) => v)}</small>}*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
                         {allPrestation.map((val, index) =>
                             <div className="col-md-4 mt-4">
                                 {props.profile

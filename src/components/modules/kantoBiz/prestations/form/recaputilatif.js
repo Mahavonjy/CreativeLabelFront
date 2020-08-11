@@ -17,7 +17,7 @@ function Recaputilatif(props) {
     const props_unit_time_of_preparation = useSelector(state => state.KantoBizForm.unit_time_of_preparation);
     const props_unit_time_of_service = useSelector(state => state.KantoBizForm.unit_time_of_service);
     const props_service_time = useSelector(state => state.KantoBizForm.service_time);
-    const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected);
+    const props_thematics_options_selected = useSelector(state => state.KantoBizForm.thematics_options_selected)
 
     const isMounted = useRef(false);
     const [imageToDisplay, setImageToDisplay] = useState('');
@@ -35,7 +35,7 @@ function Recaputilatif(props) {
             <div className="custom-float">
                 <div className="input-group-prepend d-inline-block center" style={{width: "100%"}}>
                     <div className="input-group-text text-dark">
-                        <i className={icon}/>&nbsp; {Title}</div>
+                        <i className={icon}/>&nbsp; <small>{Title}</small></div>
                     <input value={values} id={Title} name={Title} className="form-control" type="text" disabled/>
                 </div>
             </div>
@@ -71,7 +71,7 @@ function Recaputilatif(props) {
                 <img alt="show" src={imageToDisplay} width="auto" height="auto" style={{borderRadius: 4}}/>
             </Modal>
             <div className="relative">
-                <h3 className="mb-2 text-primary">Le récapitulatif de votre prestation</h3>
+                <h3 className="mb-2 text-primary">Récapitulatif</h3>
             </div>
             <div className="row rounded border bg-grey justify-content-center overflow-auto scrollbar-isl"
                  style={{height: 300}}>
@@ -79,47 +79,69 @@ function Recaputilatif(props) {
                     <div className="col">
                         <div className="form-group d-flex flex-wrap">
                             <div className="col-sm-6">
-                                {createBigForm("Type d'artiste", props.var.artistType !== "professional_auditor" ? props.var.artistType : tmpArtistTypeSelected, "icon-user")}
+                                {createBigForm(
+                                    "Type d'artiste",
+                                    props.var.artistType !== "professional_auditor"
+                                        ? props.var.artistType
+                                        : tmpArtistTypeSelected, "icon-user")}
                             </div>
                             <div className="col-sm-6">
-                                {createBigForm("Thématique", props_thematics_options_selected.join(', '), "icon-neuter")}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="form-group d-flex flex-wrap">
-                            <div className="col-sm-6">
-                                {createBigForm("Titre de votre prestation", PropsTitle, "icon-text-width")}
-                            </div>
-                            <div className="col-sm-6">
-                                {createBigForm("Prix", props_price_of_service + "euros", "icon-money")}
+                                {createBigForm(
+                                    "Thématique", props_thematics_options_selected.join(', '),
+                                    "icon-neuter")}
                             </div>
                         </div>
                     </div>
                     <div className="col">
                         <div className="form-group d-flex flex-wrap">
                             <div className="col-sm-6">
-                                {createBigForm("Nombre d'artiste", props_number_of_artist, "icon-view")}
+                                {createBigForm(
+                                    "Titre", PropsTitle,
+                                    "icon-text-width")}
                             </div>
                             <div className="col-sm-6">
-                                {createBigForm("Type(s) d'evenement(s) sélectionné(s)", props_events_selected.join(', '), "icon-bitbucket-square")}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col">
-                        <div className="form-group d-flex flex-wrap">
-                            <div className="col-sm-6">
-                                {createBigForm("Temps de préparation", props_preparation_time + ' ' + unit_time_of_preparation, "icon-alarm-clock-1")}
-                            </div>
-                            <div className="col-sm-6">
-                                {createBigForm("Durée de la prestation", props_service_time + ' ' + unit_time_of_service, "icon-clock")}
+                                {createBigForm(
+                                    "Prix", props_price_of_service + "euros",
+                                    "icon-money")}
                             </div>
                         </div>
                     </div>
                     <div className="col">
                         <div className="form-group d-flex flex-wrap">
                             <div className="col-sm-6">
-                                {createBigForm("Les villes annexes pour votre prestation", allCity, "icon-map-marker")}
+                                {createBigForm(
+                                    "Nombre d'artiste", props_number_of_artist,
+                                    "icon-view")}
+                            </div>
+                            <div className="col-sm-6">
+                                {createBigForm(
+                                    "Evenements", props_events_selected.join(', '),
+                                    "icon-bitbucket-square")}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm(
+                                    "Temps de préparation",
+                                    props_preparation_time + ' ' + unit_time_of_preparation,
+                                    "icon-alarm-clock-1")}
+                            </div>
+                            <div className="col-sm-6">
+                                {createBigForm(
+                                    "Durée",
+                                    props_service_time + ' ' + unit_time_of_service,
+                                    "con-alarm-clock-1")}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group d-flex flex-wrap">
+                            <div className="col-sm-6">
+                                {createBigForm(
+                                    "Villes annexes", allCity,
+                                    "icon-map-marker")}
                             </div>
                             <div className="col-sm-6">
                                 <div className="custom-float">
@@ -127,8 +149,12 @@ function Recaputilatif(props) {
                                         <div className="input-group-text text-dark">
                                             <i className="icon-text-width"/>&nbsp; Description
                                         </div>
-                                        <textarea value={PropsDescription} id="Description de votre prestation"
-                                                  name="Description de votre prestation" className="form-control" disabled/>
+                                        <textarea
+                                            value={PropsDescription}
+                                            id="Description de votre prestation"
+                                            name="Description de votre prestation"
+                                            className="form-control"
+                                            disabled/>
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +162,7 @@ function Recaputilatif(props) {
                     </div>
                 </div>
                 <div className="col-md-6">
-                    <p className="text-red text-center">Les images de votre prestation</p>
+                    <p className="text-red text-center">Galleries</p>
                     <div id="islCreativeCarousel" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner" style={{height: 250, width: "100%", borderRadius: 5}}>
                             {PropsFiles.map((photo, index) =>
@@ -148,10 +174,18 @@ function Recaputilatif(props) {
                                 </div>
                             )}
                         </div>
-                        <a className="carousel-control-prev bg-dark" href="#islCreativeCarousel" role="button"
-                           data-slide="prev">précédent</a>
-                        <a className="carousel-control-next bg-dark" href="#islCreativeCarousel" role="button"
-                           data-slide="next">Suivant</a>
+                        <a className="carousel-control-prev bg-dark"
+                           href="#islCreativeCarousel"
+                           role="button"
+                           data-slide="prev">
+                            précédent
+                        </a>
+                        <a className="carousel-control-next bg-dark"
+                           href="#islCreativeCarousel"
+                           role="button"
+                           data-slide="next">
+                            Suivant
+                        </a>
                     </div>
                 </div>
             </div>
