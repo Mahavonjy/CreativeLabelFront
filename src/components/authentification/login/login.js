@@ -137,7 +137,9 @@ function Login() {
     };
 
     return (
-        <div tabIndex="0" onKeyDown={(e) => {e.key === "Enter" && sendLoginCredentials(e)}}>
+        <div tabIndex="0" onKeyDown={(e) => {
+            e.key === "Enter" && sendLoginCredentials(e)
+        }}>
             {!changePass && !resetPassword && !visibility && !visible && <ToastContainer/>}
             <Modal visible={changePass} width="400" height="auto" animationType='slide'>
                 {loading && smallSpinner("absolute", "0")}
@@ -151,13 +153,17 @@ function Login() {
                             {CreateInput(
                                 'password',
                                 password,
-                                (e) => {changeFields(setPassword, e)},
+                                (e) => {
+                                    changeFields(setPassword, e)
+                                },
                                 "Au moins 8 caractères", "password", true)}
 
                             {CreateInput(
                                 'confirm_password',
                                 confirm_password,
-                                (e) => {changeFields(setConfirmPassword, e)},
+                                (e) => {
+                                    changeFields(setConfirmPassword, e)
+                                },
                                 "Entrez le mot de passe à nouveau",
                                 "password",
                                 true)}
@@ -182,7 +188,9 @@ function Login() {
                             {CreateInput(
                                 'keys',
                                 keys,
-                                (e) => {changeFields(setKeys, e)},
+                                (e) => {
+                                    changeFields(setKeys, e)
+                                },
                                 "Inserer votre clé ici",
                                 "number",
                                 true)}
@@ -209,7 +217,9 @@ function Login() {
                             {CreateInput(
                                 'email',
                                 email,
-                                (e) => {changeFields(setEmail, e)},
+                                (e) => {
+                                    changeFields(setEmail, e)
+                                },
                                 "E-mail",
                                 "email",
                                 true)}
@@ -232,7 +242,9 @@ function Login() {
                             {CreateInput(
                                 'keys',
                                 keys,
-                                (e) => {changeFields(setKeys, e)},
+                                (e) => {
+                                    changeFields(setKeys, e)
+                                },
                                 "Inserer votre clé ici",
                                 "number",
                                 true)}
@@ -255,7 +267,11 @@ function Login() {
                 <div className="row l-form">
 
                     <input className="l-usr" placeholder="email" name="email" id="login-email"
-                           value={email} onChange={(e) => {changeFields(setEmail, e)}}/>
+                           value={email}
+                           onChange={(e) => {
+                                changeFields(setEmail, e)
+                            }}
+                           autoComplete="off"/>
 
                     <div className="pass-wrap l-pass">
                         <input className="pass"
@@ -263,10 +279,13 @@ function Login() {
                                type="password"
                                id="login-password"
                                name="password" value={password}
-                               onChange={(e) => {changeFields(setPassword, e)}}/>
+                               onChange={(e) => {
+                                   changeFields(setPassword, e)
+                               }}
+                               autoComplete="off"/>
                     </div>
 
-                    <button className="l-go btn btn-outline-success"
+                    <button className="l-go"
                             onClick={(e) => sendLoginCredentials(e)}>
                         Connexion
                     </button>
@@ -312,7 +331,7 @@ function Login() {
                 {/*    <LoginFacebook Label="Connecter avec facebook"/>*/}
                 {/*</div>*/}
                 <small className="r-disc">Vous n'avez pas de compte ISL Creative ?</small>
-                <button className="r-btn btn btn-outline-danger m-1 r-5"
+                <button className="r-btn m-1 r-5"
                         onClick={() => {
                             document.getElementsByClassName("close")[0].click();
                             history.push('/register');
