@@ -21,12 +21,27 @@
     box-shadow: 5px 5px #111;
     z-index: 2;
 }
-@media only screen and (max-width: 600px) {
+
+@media only screen and (max-width: 1046px) {
     .container-login {
-        zoom: 0.7;
-        -moz-transform: scale(0.7);
+        margin-top: 5%;
+        left: 24%;
+        zoom: 0.8;
+        -moz-transform: scale(0.9);
+        -webkit-transform: scale(0.9);
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .container-login {
+        margin-top: 5%;
+        left: 1%;
+        zoom: 0.8;
+        -moz-transform: scale(0.9);
+        -webkit-transform: scale(0.9);
+    }
+}
+
 .l-overlay {
     filter: url(#gooeyness);
     height: 300px;
