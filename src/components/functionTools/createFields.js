@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from "react";
 import "react-datepicker/dist/react-datepicker.css"
 import {FacebookProvider, Feed} from "react-facebook";
 import {useDispatch, useSelector} from "react-redux";
-import {Link, Route} from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import "../../assets/css/style/style.scss";
 import "../../assets/css/style/themeMode.scss";
@@ -26,6 +26,7 @@ import OtherProfile from "../profile/otherProfile";
 import Profile from "../profile/profile";
 import CommandError from "../statusPage/commandStatus/error/commandError";
 import CommandSuccess from "../statusPage/commandStatus/success/commandSuccess";
+import NotFound from "../statusPage/notFound/notFound";
 import {activeThemeLight, addNewPlayerList} from "./functionProps"
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
@@ -204,7 +205,7 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     {height_div !== "user_profile" ?
                                         <FacebookProvider appId={Conf.configs.FacebookId} debug>
                                             <Feed link={
-                                                "http://" + window.location.host + '/beats/CheckThisBeat/' + val.id
+                                                "http://" + window.history.location.host + '/beats/CheckThisBeat/' + val.id
                                             }>
                                                 {({handleClick}) => (
                                                     <div className="ml-auto transparent border-0">
@@ -393,217 +394,6 @@ export const CreativeHeaders = (Title, Description, headers, setStateResult, nex
                           displayOne={displayOne}
                           setStateResult={setStateResult}
             />}
-        </div>
-    )
-};
-
-export const SideBars = (
-    state_cart,
-    log_name,
-    logout_class,
-    location,
-    history,
-    headers,
-    logout,
-    isPlaying
-) => {
-    return (
-        <div className="sidebar">
-            <ul className="sidebar-menu">
-                <ReactTooltip place="right" className="special-color-dark" id='i_kt' aria-haspopup='true'>
-                    Creative KantoBiz
-                </ReactTooltip>
-                <ReactTooltip place="right" className="special-color-dark" id='i_pr' aria-haspopup='true'>
-                    {headers['Isl-Token'] === Conf.configs.TokenVisitor
-                        ? "Connecter pour voir votre profil": "Voir votre profile"}
-                </ReactTooltip>
-                <ReactTooltip place="right" className="special-color-dark" id='i_ab' aria-haspopup='true'>
-                    A propos de Nous
-                </ReactTooltip>
-                <ReactTooltip place="right" className="special-color-dark" id='i_ml' aria-haspopup='true'>
-                    Les Mentions légales
-                </ReactTooltip>
-                <ReactTooltip place="right" className="special-color-dark" id='i_log' aria-haspopup='true'>
-                    {logout_class === "icon icon-users-1 s-24 mr-5 text-red" ? "Se Connecter" : " Se déconnecter"}
-                </ReactTooltip>
-                {/* BEATS */}
-                {/*<li style={{margin: "0 0 20px 10px"}}*/}
-                {/*    data-tip="Creative BeatMaking" onClick={() => {*/}
-                {/*    (location.pathname !== "/beats") && history.push("/beats")*/}
-                {/*}}><i className={*/}
-                {/*    location.pathname === "/beats"*/}
-                {/*        ? "icon icon-heartbeat cursor-pointer text-red s-24"*/}
-                {/*        : "icon icon-heartbeat cursor-pointer s-24"}/>*/}
-                {/*    <span className="ml-5">BeatMaking</span>*/}
-                {/*</li>*/}
-
-                {/* kantoBiz */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip data-for="i_kt" onClick={() => {
-                    location.pathname !== "/kantobiz" && history.push("/kantobiz")
-                }}><i className={
-                    location.pathname === "/kantobiz" || location.pathname === "/"
-                        ? "icon icon-compact-disc-2 cursor-pointer text-red s-24"
-                        : "icon icon-compact-disc-2 cursor-pointer s-24"}/>
-                    <span className="ml-5">KantoBiz</span>
-                </li>
-
-                {/* PROFILE */}
-                <li style={{margin: "0 0 20px 10px"}} data-tip data-for="i_pr" onClick={() => {
-                    headers['Isl-Token'] === Conf.configs.TokenVisitor && location.pathname !== "/profile"
-                        ? document.getElementById("LoginRequire").click()
-                        : history.push("/profile");
-                }}><i className={
-                    location.pathname === "/profile"
-                        ? "icon icon-user cursor-pointer text-red s-24"
-                        : "icon icon-user cursor-pointer s-24"}/>
-                    <span className="ml-5">Votre profil</span>
-                </li>
-
-                {/* CART */}
-                {/*<li style={{margin: "0 0 20px 10px"}} data-tip="Votre Panier" onClick={() => {*/}
-                {/*    ((state_cart > 0)*/}
-                {/*        && (location.pathname !== "/cart"))*/}
-                {/*        ? history.push("/cart")*/}
-                {/*        : toast.warn("Veuillez remplir votre panier avant")*/}
-                {/*}}>*/}
-                {/*    <div id="CartBadge">*/}
-                {/*            <span className="p1 " data-count={state_cart}>*/}
-                {/*                <i data-count="4b"*/}
-                {/*                   className={*/}
-                {/*                       location.pathname === "/cart"*/}
-                {/*                           ? "icon icon-cart-plus cursor-pointer text-red s-24 mr-5"*/}
-                {/*                           : "icon icon-cart-plus cursor-pointer s-24 mr-5"*/}
-                {/*                   }*/}
-                {/*                /> Panier*/}
-                {/*            </span>*/}
-                {/*    </div>*/}
-                {/*</li>*/}
-
-                {/* about */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ab" onClick={() => {
-                    (location.pathname !== "/about") && history.push("/about")
-                }}><i className={
-                    location.pathname === "/about"
-                        ? "icon text-red cursor-pointer icon-info-circle s-24"
-                        : "icon icon-info-circle cursor-pointer s-24"}/>
-                    <span className="ml-5">À propos de nous</span>
-                </li>
-
-                {/* Mention */}
-                <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ml" >
-                    <i className="icon icon-shield s-24 cursor-pointer"
-                       id="legaleNoticesbtn"
-                       data-toggle="modal" data-target="#legaleNotices"/>
-                    <span className="ml-5">Les mentions légales</span>
-                </li>
-
-                {/* LOGOUT OR LOGIN */}
-                <li onClick={() =>
-                    headers['Isl-Token'] === Conf.configs.TokenVisitor
-                        ? document.getElementById("LoginRequire").click()
-                        : logout()}
-                    style={
-                        logout_class === "icon icon-users-1 s-24 mr-5 text-red"
-                            ? {margin: "50px 0 20px 8px"}
-                            : {margin: "50px 0 20px 12px"}
-                    }
-                    data-tip
-                    data-for="i_log">
-                    <i className={logout_class + " cursor-pointer"}/> <span>{log_name}</span>
-                </li>
-            </ul>
-            {!isPlaying &&
-            <a href="/">
-                <img alt="Logo"
-                     className="absolute"
-                     style={{bottom: 0}}
-                     src="https://zupimages.net/up/19/18/3ltf.png"/>
-            </a>}
-        </div>
-    )
-};
-
-export const SideBarsMain = (
-    addToPlaylist,
-    single_beat,
-    beats_similar,
-    profile_checked,
-    user_data,
-    headers,
-    location,
-    history
-) => {
-    return (
-        <div>
-            <Route exact
-                   path="/about"
-                   component={() => <About/>}
-            />
-            <Route exact
-                   path="/CommandError"
-                   component={() => <CommandError/>}
-            />
-            <Route exact
-                   path="/CommandSuccess"
-                   component={() => <CommandSuccess/>}
-            />
-            {/*<Route exact*/}
-            {/*       path="/Cart"*/}
-            {/*       component={() => <Cart ToPlay={addToPlaylist}/>}*/}
-            {/*/>*/}
-            {/*<Route exact*/}
-            {/*       path="/beats"*/}
-            {/*       component={() => <Beats ToPlay={addToPlaylist}/>}*/}
-            {/*/>*/}
-            <Route exact
-                   path="/(|kantobiz)"
-                   component={() => <KantoBiz headers={headers}/>}
-            />
-            {/*<Route exact*/}
-            {/*       path="/beats/CheckThisBeat/:id(\d+)"*/}
-            {/*       component={() =>*/}
-            {/*           <OneBeat*/}
-            {/*               ToPlay={addToPlaylist}*/}
-            {/*               SingleBeat={single_beat}*/}
-            {/*               SimilarBeats={beats_similar}*/}
-            {/*           />*/}
-            {/*       }/>*/}
-            <Route exact
-                   path="/profile/isl_artist_profile/:id(\d+)"
-                   component={() =>
-                       <OtherProfile
-                           ToPlay={addToPlaylist}
-                           ProfileChecked={profile_checked}
-                           UserData={user_data}
-                       />
-                   }/>
-            <Route exact
-                   path="/profile"
-                   component={() => {
-                       return headers['Isl-Token'] === Conf.configs.TokenVisitor
-                           ? history.goBack() : (<Profile ToPlay={addToPlaylist}/>)
-                   }}/>
-            {/*<Route exact*/}
-            {/*       path="/preference"*/}
-            {/*       component={() => {*/}
-            {/*           return headers['Isl-Token'] === Conf.configs.TokenVisitor*/}
-            {/*               ? history.goBack() : (<Preference/>)*/}
-            {/*       }}/>*/}
-            <Route exact
-                   path="/show-service/:id"
-                   component={() => <DisplayPrestation headers={headers}/>
-                   }/>
-            <Route exact
-                   path="/show-service-read"
-                   component={() => <DisplayPrestation headers={headers} read/>
-                   }/>
-            <Route exact
-                   path="/register"
-                   component={() => {
-                       return headers['Isl-Token'] === Conf.configs.TokenVisitor ? (<Register/>) : history.goBack()
-                   }}/>
-            <LegalNotices headers={headers}/>
-            <LightModeToggle/>
         </div>
     )
 };

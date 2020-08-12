@@ -1,14 +1,15 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {BrowserRouter as Router, Route, useHistory} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import {sessionService} from 'redux-react-session';
 import "../../assets/css/app.css";
 import '../../assets/css/style/Home.css';
 import "../../assets/css/style/style.scss";
 import Conf from "../../config/tsconfig";
-import {CreateBeatsPlaylist, SideBars, SideBarsMain} from "../functionTools/createFields";
+import Container from "../container/container";
+import {CreateBeatsPlaylist, LightModeToggle, SideBars} from "../functionTools/createFields";
 import {
     addAllArtistTypes,
     addAllCountryAllowed,
@@ -29,6 +30,7 @@ import {checkOnClickAwaySideBar} from "../functionTools/tools";
 import OneBeat from "../modules/beatMaking/beats/allBeatsSuggestion/oneBeat";
 import IslPlayer from "../players/players";
 import {fetchUserData, insertUserData} from "./getAllCurrentUserData";
+import LegalNotices from "./legalNotices";
 
 let key = Math.floor(Math.random() * Math.floor(999999999));
 let ifStopPlayer = {};
@@ -38,7 +40,6 @@ function HomeRoot() {
     let user_credentials;
     const history = useHistory();
     const dispatch = useDispatch();
-    const lightModeOn = useSelector(state => state.Home.lightModeOn);
     const toastGlobal = useSelector(state => state.Home.toastGlobal);
 
     const isMounted = useRef(false);
@@ -55,9 +56,6 @@ function HomeRoot() {
     const [logout_class, setLogoutClass] = useState("icon icon-users-1 s-24 mr-5 text-red");
     const [log_name, setLogName] = useState("Se Connecter");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
-    let _bg = lightModeOn
-        ? 'https://www.designbolts.com/wp-content/uploads/2013/02/crafted-paper-pattern-Grey-Seamless-Pattern-For-Website-Background.jpg'
-        : 'https://images.wallpaperscraft.com/image/stars_patterns_black_133520_3840x2400.jpg'
     const [headers] = useState({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': "*",
@@ -72,22 +70,6 @@ function HomeRoot() {
 
     HomeRoot.Decrement = () => {
         setStateCartLength(state_cart_length - 1)
-    };
-
-    HomeRoot.beforeDataLoad = async () => {
-        setLoading(true);
-        await sessionService.loadSession().then((currentSession) => {
-            sessionService.loadUser().then((data) => {
-                let user_data = {name: data.name, email: data.email, token: currentSession.token};
-                dispatch(addUserCredentials(user_data));
-                user_credentials = user_data;
-            });
-            headers['Isl-Token'] = currentSession.token;
-            online();
-        }).catch(() => {
-            dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
-            HomeRoot.notOnline();
-        });
     };
 
     HomeRoot.ifConnectionError = (err, func) => {
@@ -156,6 +138,22 @@ function HomeRoot() {
     };
 
     HomeRoot.checkOpenSideBar = openSideBar;
+
+    HomeRoot.beforeDataLoad = async () => {
+        setLoading(true);
+        await sessionService.loadSession().then((currentSession) => {
+            sessionService.loadUser().then((data) => {
+                let user_data = {name: data.name, email: data.email, token: currentSession.token};
+                dispatch(addUserCredentials(user_data));
+                user_credentials = user_data;
+                headers['Isl-Token'] = currentSession.token;
+                online();
+            });
+        }).catch(() => {
+            dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
+            HomeRoot.notOnline();
+        });
+    };
 
     const checkSpecialRoute = () => {
         let firstRouteParsing = href[href.length - 1];
@@ -263,45 +261,30 @@ function HomeRoot() {
         return (
             <div>
                 {toastGlobal && <ToastContainer style={{zIndex: 999}}/>}
+
                 {/* Popup login */}
                 {Login()}
                 {/* End of Popup */}
-                <Router>
-                    <Route render={({location, history}) => (
-                        <React.Fragment>
-                            <aside className="main-sidebar fixed offcanvas shadow" data-toggle="offcanvas">
-                                {/* SideBars with ICON */}
-                                {SideBars(
-                                    state_cart_length,
-                                    log_name,
-                                    logout_class,
-                                    location,
-                                    history,
-                                    headers,
-                                    logout,
-                                    isPlaying)}
-                                {/* End SideBars */}
-                            </aside>
-                            <main style={{
-                                // backgroundRepeat: "no-repeat",
-                                // backgroundSize: "cover",
-                                backgroundImage: 'url(' + _bg + ')'
-                            }}>
-                                {/* Main of SideBars */}
-                                {SideBarsMain(
-                                    addToPlaylist,
-                                    single_beat,
-                                    beats_similar,
-                                    profile_checked,
-                                    user_data,
-                                    headers,
-                                    location,
-                                    history)}
-                                {/* End main of SideBars */}
-                            </main>
-                        </React.Fragment>)}
-                    />
-                </Router>
+
+                {/* Main */}
+                <Container
+                    headers={headers}
+                    isPlaying={isPlaying}
+                    state_cart_length={state_cart_length}
+                    log_name={log_name}
+                    logout_class={logout_class}
+                    addToPlaylist={addToPlaylist}
+                    logout={logout}
+                    single_beat={single_beat}
+                    beats_similar={beats_similar}
+                    profile_checked={profile_checked}
+                    user_data={user_data}
+                />
+                {/*End  Main */}
+
+                <LegalNotices headers={headers}/>
+                <LightModeToggle/>
+
                 <nav className="relative width-80 fixed fixed-top">
                     <a href="/#" data-toggle="push-menu"
                        onClick={() => openSideBar ? setOpenSideBar(false) : setOpenSideBar(true)}
