@@ -269,7 +269,7 @@ function Login() {
                             }}
                            autoComplete="off"/>
 
-                    <div className="pass-wrap l-pass  mb-2">
+                    <div className="pass-wrap l-pass mb-2">
                         <input className="pass"
                                placeholder="Mot de passe"
                                type="password"
@@ -285,9 +285,9 @@ function Login() {
                             onClick={(e) => sendLoginCredentials(e)}>
                         Connexion
                     </button>
-                    <p className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
+                    <small className="f-p cursor-pointer" onClick={() => setVisibility(true)}>
                         Mot de passe oublié?
-                    </p>
+                    </small>
                 </div>
                 {loading &&
                 <div className="absolute preloader-wrapper small active" style={{marginLeft: 400}}>
@@ -326,7 +326,7 @@ function Login() {
                 {/*    <LoginGoogle Label="Connecter avec google"/>*/}
                 {/*    <LoginFacebook Label="Connecter avec facebook"/>*/}
                 {/*</div>*/}
-                <span className="r-disc">Vous n'avez pas de compte ISL Creative ?</span>
+                <small className="r-disc">Vous n'avez pas de compte ?</small>
                 <button className="r-btn m-1 r-5"
                         onClick={() => {
                             document.getElementsByClassName("close")[0].click();
