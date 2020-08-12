@@ -293,8 +293,8 @@ button:hover {
     font-family: sans-serif;
     position: absolute;
     top: 130px;
-    left: 5px;
-    width: 150px;
+    text-align: center;
+    width: 250px;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
 }
 

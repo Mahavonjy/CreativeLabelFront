@@ -237,7 +237,9 @@ function Results(props) {
                     </div>
                 </fieldset>
 
-                <h4 className="text-red text-center m-5">Résultat(s) de votre recente recherche</h4>
+                <h4 className="text-red text-center m-5"  ref={searchRef}>
+                    Résultat(s) de votre recente recherche
+                </h4>
 
                 {!loading ?
                     <div className="row justify-content-center">
@@ -247,7 +249,7 @@ function Results(props) {
                 }
 
                 {!loading &&
-                <div className="text-center pt-4" ref={searchRef}>
+                <div className="text-center pt-4">
                     {thisComponentResults.length !== 0 ?
                         (thisComponentFilter.length !== 0 ?
                             <Pagination items={thisComponentFilter} onChangePage={onChangePage} initialPage={1}/> :
