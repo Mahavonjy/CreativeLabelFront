@@ -12,11 +12,12 @@
     height: 400px;
     width: 600px;
     background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #790d45, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
-    position: absolute;
-    margin-top: 20%;
-    left:50%;
     border-radius: 10px;
+    position: absolute;
+    left: 50%;
+    right: 50%;
     transform: translate(-50%, -50%);
+    margin-top: 100px;
     overflow: hidden;
     box-shadow: 5px 5px #111;
     z-index: 2;
@@ -24,21 +25,13 @@
 
 @media only screen and (max-width: 1046px) {
     .container-login {
-        margin-top: 5%;
-        left: 24%;
-        zoom: 0.8;
-        -moz-transform: scale(0.9);
-        -webkit-transform: scale(0.9);
+        zoom: 0.86;
     }
 }
 
 @media only screen and (max-width: 600px) {
     .container-login {
-        margin-top: 5%;
-        left: 1%;
-        zoom: 0.8;
-        -moz-transform: scale(0.9);
-        -webkit-transform: scale(0.9);
+        zoom: 0.67;
     }
 }
 
