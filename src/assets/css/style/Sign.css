@@ -168,7 +168,7 @@ button:hover {
     display: list-item;
     border: 1px solid #fff;
     background-color: transparent;
-    border-radius: 10px;
+    border-radius: 5px;
     height: 40px;
     margin-bottom: 5px;
     color: white;
@@ -195,7 +195,7 @@ button:hover {
 .l-go {
     background-color: #358600;
     border: 2px solid;
-    border-radius: 10px;
+    border-radius: 5px;
     width: 250px;
     height: 34px;
     position: absolute;
