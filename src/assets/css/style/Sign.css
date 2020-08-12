@@ -3,14 +3,14 @@
 }
 .filter {
     position: absolute;
-    top:50%;
+    top:30%;
     left:50%;
     transform: translate(-50%, -50%);
 }
 
 .container-login {
-    height: 400px;
-    width: 600px;
+    height: 300px;
+    width: 500px;
     background-image: linear-gradient(to right top, #ed1c24, #ca003f, #a0114a, #790d45, #47203c, #361e33, #271b28, #1a171b, #1a171b, #1a171b, #1a171b, #1a171b);
     border-radius: 10px;
     position: absolute;
@@ -120,7 +120,7 @@
 }
 
 .r-btn , .l-btn {
-    width: auto;
+    width: 220px;
     height: 34px;
     border-radius: 50px;
     border: 2px solid white;
@@ -132,7 +132,7 @@
 .r-btn {
     background-color: transparent;
     padding: 0.3rem 2rem;
-    bottom: 120px;
+    bottom: 10px;
     right: 10px;
     display: block;
     transition: all 150ms ease-in-out;
@@ -179,27 +179,29 @@ button:hover {
     color: white;
 }
 .l-usr {
+    height: 35px !important;
+    top: -20px;
     width: 250px;
     position: absolute;
 }
 .l-pass .pass {
-    height: 40px;
+    height: 35px;
     width: 250px !important;
 }
 .l-pass {
     position: absolute;
-    top: 50px;
+    top: 30px;
 }
 .l-go {
     background-color: #358600;
     border: 2px solid;
     border-radius: 10px;
-    width: auto;
+    width: 250px;
     height: 34px;
     position: absolute;
     display: inline-block;
     padding: 0.3rem 3rem;
-    top: 105px;
+    top: 80px;
     color: white;
     box-shadow: 0 0 2px rgba(255,255,255,.5);
     transition: transform 150ms ease-in-out;
@@ -290,9 +292,9 @@ button:hover {
     color: #fff;
     font-family: sans-serif;
     position: absolute;
-    top: 150px;
-    left: 15px;
-    width: 100px;
+    top: 130px;
+    left: 5px;
+    width: 150px;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -300,8 +302,8 @@ button:hover {
     color: #fff;
     font-family: sans-serif;
     position: absolute;
-    bottom: 160px;
-    right: 15px;
+    bottom: 60px;
+    right: 35px;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.1);
 }
 
