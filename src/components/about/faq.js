@@ -26,12 +26,14 @@ function Faq() {
     const generateExpertise = (expertiseTitle) => {
         return (
             <div>
-                <h6 className="font-alt mb-2">
+                <h6 className={lightModeOn ? "font-alt mb-2 text-black" :
+                    "font-alt mb-2 text-white"}>
                     {expertiseTitle}
                 </h6>
-                <div className="progress mb-3">
-                    <div className="progress-bar pb-dark" aria-valuenow="60"
-                         role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <div className={lightModeOn ? "progress progress-dark mb-3" :
+                    "progress progress-light mb-3"}>
+                    <div className={lightModeOn ? "progress-bar pb-dark" :
+                        "progress-bar pb-light"} aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
                         <span className="font-alt"/>
                     </div>
                 </div>
@@ -51,7 +53,8 @@ function Faq() {
             <div className="container">
                 <div className="row">
                     <div className="col-sm-6">
-                        <h4 className="font-alt mb-30">FAQ (Question fréquement poser)</h4>
+                        <h4 className={lightModeOn ? "font-alt mb-30 text-black" :
+                            "font-alt mb-30 text-white"}>FAQ (Question fréquement poser)</h4>
                         <div className="panel-group" id="accordion">
                             {generateQuest(
                                 0,
@@ -66,7 +69,8 @@ function Faq() {
                         </div>
                     </div>
                     <div className="col-sm-6">
-                        <h4 className="font-alt mb-30">Notre Expertise</h4>
+                        <h4 className={lightModeOn ? "font-alt mb-30 text-black" :
+                            "font-alt mb-30 text-white"}>Notre Expertise</h4>
                         {generateExpertise("Marketing")}
                         {generateExpertise("Dedication")}
                     </div>

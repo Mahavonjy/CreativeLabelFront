@@ -2162,7 +2162,7 @@ Google map
 	Widgets
 --------------------------------------------------------------*/
 /* Progress bars */
-.progress {
+.progress, .progress-light, .progress-dark {
   overflow: visible;
   height: 4px;
 }
@@ -2171,7 +2171,7 @@ Google map
   position: relative;
 }
 
-.progress-bar.pb-dark {
+.progress-bar .pb-dark {
   background: #111;
 }
 

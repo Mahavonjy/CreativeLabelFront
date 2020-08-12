@@ -56,7 +56,7 @@ function PersonalInformation(props) {
 
     return (
         <div className="col-lg-5 center">
-            <div className={lightModeOn ? "card shadow" : "card shadow2"}>
+            <div className={lightModeOn ? "card shadow1" : "card shadow2"}>
                 <div className="card-header transparent">
                     {profile_info.name ?
                         <h4 className="text-red"><strong>Informations personnelles</strong></h4>

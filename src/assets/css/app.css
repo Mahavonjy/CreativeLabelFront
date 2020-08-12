@@ -3948,16 +3948,36 @@ a.badge-dark.focus,a.badge-dark:focus{
     background-color:#e9ecef;
     border-radius:.25rem
 }
+
+.progress-light {
+    display:flex;
+    height:1rem;
+    overflow:hidden;
+    font-size:.75rem;
+    background-color:#e9ecef;
+    border-radius:.25rem
+}
+
+.progress-dark {
+    display:flex;
+    height:1rem;
+    overflow:hidden;
+    font-size:.75rem;
+    background-color:#111;
+    border-radius:.25rem
+}
+
 .progress-bar{
     display:flex;
     flex-direction:column;
     justify-content:center;
-    color:#fff;
+    color:#111;
     text-align:center;
     white-space:nowrap;
     background-color:#ff1744;
     transition:width .6s ease
 }
+
 @media (prefers-reduced-motion:reduce){
     .progress-bar{
         transition:none

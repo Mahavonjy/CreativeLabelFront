@@ -45,6 +45,7 @@ function Results(props) {
     const loading = useSelector(state => state.KantobizSearch.loading);
     const results = useSelector(state => state.KantobizSearch.results);
     const filter_price = useSelector(state => state.KantobizSearch.filter_price);
+    const lightModeOn = useSelector(state => state.Home.lightModeOn);
     // const initialized = useSelector(state => state.KantobizSearchInfo.initialized);
     const filter_events_selected = useSelector(state => state.KantobizSearch.filter_events_selected);
 
@@ -175,7 +176,7 @@ function Results(props) {
                         <div className="text-center m-auto">
                             <ThemeProvider theme={defaultResultTheme}>
                                 <FormControl style={{width: 200}} >
-                                    <InputLabel id="demo-multiple-chip-label">Évènement</InputLabel>
+                                    <InputLabel className={lightModeOn ? "text-dark" : "text-white"} id="demo-multiple-chip-label">Évènement</InputLabel>
                                     <Select
                                         labelId="demo-mutiple-name-label"
                                         id="demo-mutiple-name"

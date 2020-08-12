@@ -197,7 +197,8 @@ function SearchBar(props) {
                 ? " text-black" : " text-white")}>
                 <ThemeProvider theme={lightModeOn ? defaultMaterialTheme1 : defaultMaterialTheme}>
                     <FormControl style={{width: 200}} className={classes.formControl}>
-                        <InputLabel id="demo-dialog-select-label">Choisir un Pays</InputLabel>
+                        <InputLabel className={lightModeOn ? "text-black" : "text-white"}
+                                    id="demo-dialog-select-label">Choisir un Pays</InputLabel>
                         <NativeSelect
                             style={{borderButtomColor: 'red'}}
                             value={countryAllowed.value}
@@ -218,7 +219,8 @@ function SearchBar(props) {
                         </NativeSelect>
                     </FormControl>
                     <FormControl style={{width: 200}} className={classes.formControl}>
-                        <InputLabel id="demo-dialog-select-label">Choisir une Ville</InputLabel>
+                        <InputLabel className={lightModeOn ? "text-black" : "text-white"}
+                            id="demo-dialog-select-label">Choisir une Ville</InputLabel>
                         <NativeSelect
                             value={listOfCity.value}
                             onChange={obj => updateCity(obj)}
@@ -238,7 +240,8 @@ function SearchBar(props) {
                         </NativeSelect>
                     </FormControl>
                     <FormControl style={{width: 200}} className={classes.formControl}>
-                        <InputLabel id="demo-multiple-chip-label">Thematique(s)</InputLabel>
+                        <InputLabel className={lightModeOn ? "text-black" : "text-white"}
+                            id="demo-multiple-chip-label">Thematique(s)</InputLabel>
                         <Select
                             labelId="demo-mutiple-name-label"
                             id="demo-mutiple-name"
@@ -258,7 +261,8 @@ function SearchBar(props) {
                         </Select>
                     </FormControl>
                     <FormControl style={{width: 200}} className={classes.formControl}>
-                        <InputLabel id="demo-dialog-select-label">Evenements</InputLabel>
+                        <InputLabel className={lightModeOn ? "text-black" : "text-white"}
+                            id="demo-dialog-select-label">Evenements</InputLabel>
                         <NativeSelect
                             value={listOfEvents.value}
                             placeholder="Choisir un pays"

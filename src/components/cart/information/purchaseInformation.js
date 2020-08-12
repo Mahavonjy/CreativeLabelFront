@@ -344,7 +344,8 @@ function PurchaseInformation(props) {
                                     <input id="unlimited" name="unlimited" type="checkbox"
                                            onChange={() => setRules(!rules)} autoComplete="off" required/>
                                     <label htmlFor="sw2"
-                                           className="text-red text-monospace text-muted"> J'accepte les
+                                           className="text-red text-monospace cursor-pointer text-muted"
+                                           onClick={() => document.getElementById("legaleNoticesbtn").click()}> J'accepte les
                                         Conditions Générales d'Utilisation</label>
                                 </div>
                                 <button className="submit" onClick={() => {

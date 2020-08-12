@@ -56,7 +56,7 @@ function HomeRoot() {
     const [log_name, setLogName] = useState("Se Connecter");
     const [connexion_reloaded, setConnexionReloaded] = useState(0);
     let _bg = lightModeOn
-        ? 'https://images.wallpaperscraft.com/image/texture_surface_dirty_138707_1920x1080.jpg'
+        ? 'https://www.designbolts.com/wp-content/uploads/2013/02/crafted-paper-pattern-Grey-Seamless-Pattern-For-Website-Background.jpg'
         : 'https://images.wallpaperscraft.com/image/stars_patterns_black_133520_3840x2400.jpg'
     const [headers] = useState({
         'Content-Type': 'application/json',

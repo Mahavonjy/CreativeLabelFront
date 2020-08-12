@@ -52,7 +52,7 @@ function OtherProfile(props) {
     return (
         <div className="Base">
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
-                <div className="card no-b shadow no-r">
+                <div className="card no-b shadow1 no-r">
                     <div className="row no-gutters">
                         <div className="col-md-4">
                             <div className="text-center p-5 mt-2">

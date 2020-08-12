@@ -204,7 +204,7 @@ function DisplayPrestation(props) {
                                                  {
                                                      backgroundColor: "#f4f6f9",
                                                      borderRadius: "10px",
-                                                     boxShadow: "0 0 6px rgba(0,0,0,.1)"
+                                                     boxShadow: "0 0 6px rgba(0,0,0,.5)"
                                                  } : {
                                                      backgroundColor: "#f4f6f9",
                                                      borderRadius: "10px",
