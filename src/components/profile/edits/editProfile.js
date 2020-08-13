@@ -18,6 +18,7 @@ function EditProfile(props) {
     const [loading, setLoading] = useState(false);
     const [disable, setDisable] = useState(false);
     const [name, setName] = useState(profile_info.name);
+    const [artist_name, setArtistName] = useState(profile_info.artist_name);
     /* eslint-disable-next-line no-unused-vars */
     const [email, setEmail] = useState(profile_info.email);
     const [gender, setGender] = useState(profile_info.gender);
@@ -40,6 +41,7 @@ function EditProfile(props) {
         bodyFormData.append('gender', gender);
         bodyFormData.append('address', address);
         bodyFormData.append('country', country);
+        bodyFormData.append('artist_name', artist_name);
         bodyFormData.append('description', description);
         bodyFormData.append('phone', phone ? phone : 0);
         bodyFormData.append('birth', birth ? birth : "1998-03-12");
@@ -92,6 +94,19 @@ function EditProfile(props) {
                                 )}
                             </div>
                         </div>
+                        <div className="form-material d-flex flex-wrap required">
+                        <label className="col-sm-3 mt-2 control-label">Nom d'artiste</label>
+                        <div className="col-sm-9">
+                            {CreateInput(
+                                'artist_name',
+                                artist_name !== "null" ? artist_name : "",
+                                (e) => changeFields(setArtistName, e),
+                                "Votre nom d'artist",
+                                "text",
+                                true
+                            )}
+                        </div>
+                    </div>
                         <div className="form-material d-flex flex-wrap">
                             <label className="col-sm-3 mt-2 control-label">Date de naissance</label>
                             <div className="col-sm-9">

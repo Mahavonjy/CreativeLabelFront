@@ -1,4 +1,4 @@
-import {FormControl, Input, InputLabel, MenuItem, Modal, Select} from '@material-ui/core';
+import {FormControl, Input, InputLabel, MenuItem, Select} from '@material-ui/core';
 import {ThemeProvider, useTheme} from "@material-ui/core/styles";
 import React, {useEffect, useRef, useState} from "react";
 import InputRange from "react-input-range";
@@ -175,8 +175,9 @@ function Results(props) {
                     <div className="row-cols-6 justify-content-center">
                         <div className="text-center m-auto">
                             <ThemeProvider theme={defaultResultTheme}>
-                                <FormControl style={{width: 200}} >
-                                    <InputLabel className={lightModeOn ? "text-dark" : "text-white"} id="demo-multiple-chip-label">Évènement</InputLabel>
+                                <FormControl style={{width: 200}}>
+                                    <InputLabel className={lightModeOn ? "text-dark" : "text-white"}
+                                                id="demo-multiple-chip-label">Évènement</InputLabel>
                                     <Select
                                         labelId="demo-mutiple-name-label"
                                         id="demo-mutiple-name"
@@ -209,11 +210,11 @@ function Results(props) {
                                             step={10}
                                             onChangeComplete={value => setPrice(value)}
                                             value={price}/>
-                                            : <i className="icon icon-plus ml-2 text-red s-18"
-                                                 onClick={() => filter_price["min"] && setPriceActive(true)}
-                                                 data-tip={filter_price["min"]
-                                                     ? "filtrer par prix ?"
-                                                     : "Il faut trouver 2 prestations au moins"}/>}
+                                : <i className="icon icon-plus ml-2 text-red s-18"
+                                     onClick={() => filter_price["min"] && setPriceActive(true)}
+                                     data-tip={filter_price["min"]
+                                         ? "filtrer par prix ?"
+                                         : "Il faut trouver 2 prestations au moins"}/>}
                         </div>
 
                         {/*<div className="text-center text-red ml-5 mr-5">*/}
@@ -238,7 +239,7 @@ function Results(props) {
                     </div>
                 </fieldset>
 
-                <h4 className="text-red text-center m-5"  ref={searchRef}>
+                <h4 className="text-red text-center m-5">
                     Résultat(s) de votre recente recherche
                 </h4>
 
@@ -250,7 +251,7 @@ function Results(props) {
                 }
 
                 {!loading &&
-                <div className="text-center pt-4">
+                <div className="text-center pt-4" ref={searchRef}>
                     {thisComponentResults.length !== 0 ?
                         (thisComponentFilter.length !== 0 ?
                             <Pagination items={thisComponentFilter} onChangePage={onChangePage} initialPage={1}/> :

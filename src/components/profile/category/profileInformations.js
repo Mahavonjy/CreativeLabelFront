@@ -13,11 +13,12 @@ function ProfileInformation(props) {
 
     const dispatch = useDispatch();
     const notes = useSelector(state => state.profile.notes);
-    const profile_info = useSelector(state => state.profile.profile_info);
+    const _profile_info = useSelector(state => state.profile.profile_info);
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
 
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
+    const [profile_info, setProfileInfo] = useState(_profile_info);
     const [loadingPhoto, setLoadingPhoto] = useState(false);
     const [preference, setPreference] = useState(false);
     const cover_style = {
@@ -53,6 +54,7 @@ function ProfileInformation(props) {
         bodyFormData.append('photo', photo ? photo : profile_info.photo);
         axios.put("api/profiles/updateProfile", bodyFormData, {headers: props.headers}).then(resp => {
             dispatch(profileInitialisationInfo(resp.data));
+            setProfileInfo(resp.data)
             toast.success("photo " + message + " mis a jour");
             setLoadingPhoto(false);
         }).catch(error => {
@@ -63,10 +65,12 @@ function ProfileInformation(props) {
 
     useEffect(() => {
 
+        props.profileToRead && setProfileInfo(props.profileToRead)
+
         return () => {
             isMounted.current = true
         };
-    }, [profile_info]);
+    }, [_profile_info]);
 
     return (
         <div className="container-fluid relative animatedParent animateOnce p-lg-3">
@@ -89,29 +93,6 @@ function ProfileInformation(props) {
             <div className="card no-b shadow no-r">
                 <div className="row no-gutters">
                     <div className={lightModeOn ? "col-md-4" : "col-md-4"}>
-                        {props.user_role === "professional_auditor" &&
-                        <div className="dropdown" style={{position: "absolute", paddingTop: "10px"}}>
-                            <button className="btn btn-outline-danger btn-sm pt-3 pb-3 r-5 zIndex99" type="button"
-                                    data-tip="Plus d'options"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                <i className="icon-more-1 s-12"/>
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                {/*{props.user_role === "professional_auditor" &&*/}
-                                <div>
-                                    <p className="dropdown-item text-red"
-                                       onClick={() => props.setChoiceArtistTypeToChange(true)}>
-                                        <i className="icon-user-plus mr-3"/>Voulez vous devenir artiste sur ISL ?</p>
-                                </div>
-                                {/*}*/}
-                                {/*<div>*/}
-                                {/*    <p className="dropdown-item text-red"*/}
-                                {/*       onClick={() => setPreference(true)}>*/}
-                                {/*        <i className="icon-music-genre mr-3"/>Selectionner vos genres de musique</p>*/}
-                                {/*</div>*/}
-                            </div>
-                        </div>}
                         {!loadingPhoto ?
                             <div className="text-center border border-light border-1" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
@@ -174,11 +155,11 @@ function ProfileInformation(props) {
                                     {profile_info.name}
                                 </h4>
                                 <p className={lightModeOn
-                                    ? "text-dark text-justify bg-transparent text-center pt-1"
-                                    : "text-light text-justify bg-transparent text-center pt-1"}
-                                   >
-                                    {profile_info.description === null
-                                        ? "Vous n'avez pas de description ou de Biographie"
+                                    ? "text-dark text-justify bg-transparent text-center pt-3"
+                                    : "text-light text-justify bg-transparent text-center pt-3"}
+                                >
+                                    {!profile_info.description || (profile_info.description === "null")
+                                        ? "Description ou Biographie vide"
                                         : profile_info.description}
                                 </p>
                             </div>
@@ -193,7 +174,7 @@ function ProfileInformation(props) {
                             </div> : null}
                     </div>
                     <div className="col-md-8">
-
+                        {!props.profileToRead &&
                         <div className="text-center">
                             <button type="button"
                                     className="btn btn-outline-danger dropdown-toggle"
@@ -205,19 +186,25 @@ function ProfileInformation(props) {
                             <div className="dropdown-menu">
                                 <ul>
                                     <li className="dropdown-item" onClick={() => setEdit(true)}>
-                                        <span className={lightModeOn ? "text-black" : "text-white"}>
+                                        <span className={lightModeOn ? "text-black" : ""}>
                                             Modifier le profile
                                         </span>
                                     </li>
-                                    <li className="dropdown-item" >
-                                        <span className={lightModeOn ? "text-black" : "text-light"}>
+                                    <li className="dropdown-item"
+                                        onClick={() => props.setChoiceArtistTypeToChange(true)}>
+                                        <span className={lightModeOn ? "text-black" : ""}>
+                                            Voulez vous devenir artiste sur ISL ?
+                                        </span>
+                                    </li>
+                                    <li className="dropdown-item">
+                                        <span className={lightModeOn ? "text-black" : ""}>
                                             Changer de mot de passe
                                         </span>
 
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div>}
 
                         <div className="text-center">
                             <div className="mt-3">
@@ -229,17 +216,18 @@ function ProfileInformation(props) {
                                     ['gender', 'Genre'],
                                     ['birth', 'Anniversaire'],
                                     ['country', 'Pays'],
-                                    ['address', 'Adresse'],
-                                    ['city', 'Ville'],
-                                    ['phone', 'Téléphone'],
-                                    ['email', 'Email'],
-                                    ['created_at', 'Compte crée le']
+                                    ['artist_name', "nom d'artist"],
+                                    // props.profileToRead && ['created_at', 'Compte crée le'],
+                                    !props.profileToRead && ['address', 'Adresse'],
+                                    !props.profileToRead && ['city', 'Ville'],
+                                    !props.profileToRead && ['phone', 'Téléphone'],
+                                    !props.profileToRead && ['email', 'Email'],
                                 ].map((val, index) =>
-                                    <div className="col-md-4" key={index}>
-                                        <div className="p-4">
-                                            <h5 className="text-red">{val[1]}</h5>
-                                            {
-                                                val[0] === "gender" ?
+                                    (val[0] && val[1]) ?
+                                        <div className="col-md-4" key={index}>
+                                            <div className="p-4">
+                                                <h5 className="text-red">{val[1]}</h5>
+                                                {val[0] === "gender" ?
                                                     <span>
                                                         {profile_info[val[0]] ?
                                                             (parseInt(profile_info[val[0]])
@@ -250,10 +238,9 @@ function ProfileInformation(props) {
                                                         {profile_info[val[0]] ?
                                                             profile_info[val[0]]
                                                             : "Votre " + val[1]}
-                                                    </span>
-                                            }
-                                        </div>
-                                    </div>)}
+                                                    </span>}
+                                            </div>
+                                        </div> : null)}
                             </div>
                         </div>
                     </div>

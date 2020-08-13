@@ -26,7 +26,7 @@ import {
     addUserCredentials,
 } from "../functionTools/functionProps";
 import {LoadingHome, Login} from "../functionTools/popupFields";
-import {checkOnClickAwaySideBar} from "../functionTools/tools";
+import {checkOnClickAwaySideBar, formatCreatedAt} from "../functionTools/tools";
 import OneBeat from "../modules/beatMaking/beats/allBeatsSuggestion/oneBeat";
 import IslPlayer from "../players/players";
 import {fetchUserData, insertUserData} from "./getAllCurrentUserData";
@@ -110,7 +110,7 @@ function HomeRoot() {
             //
         } finally {
             Promise.all([
-                axios.get("api/medias/allMediaGenre").then(resp => {
+                axios.get("api/beats/allMediaGenre").then(resp => {
                     let tmp_arr = [];
                     for (let row in resp.data) tmp_arr.push(resp.data[row].genre);
                     dispatch(addAllMediaGenre(tmp_arr));
@@ -141,18 +141,21 @@ function HomeRoot() {
 
     HomeRoot.beforeDataLoad = async () => {
         setLoading(true);
-        await sessionService.loadSession().then((currentSession) => {
-            sessionService.loadUser().then((data) => {
-                let user_data = {name: data.name, email: data.email, token: currentSession.token};
-                dispatch(addUserCredentials(user_data));
-                user_credentials = user_data;
-                headers['Isl-Token'] = currentSession.token;
-                online();
+        await axios.get("http://geolocation-db.com/json/").then(async resp => {
+            headers["Country"] = resp.data["country_name"]
+            await sessionService.loadSession().then((currentSession) => {
+                sessionService.loadUser().then((data) => {
+                    let user_data = {name: data.name, email: data.email, token: currentSession.token};
+                    dispatch(addUserCredentials(user_data));
+                    user_credentials = user_data;
+                    headers['Isl-Token'] = currentSession.token;
+                    online();
+                });
+            }).catch(() => {
+                dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
+                HomeRoot.notOnline();
             });
-        }).catch(() => {
-            dispatch(addUserCredentials({token: Conf.configs.TokenVisitor}));
-            HomeRoot.notOnline();
-        });
+        })
     };
 
     const checkSpecialRoute = () => {
@@ -169,21 +172,27 @@ function HomeRoot() {
                 setLoading(false);
             })
         } else if (secondRouteParsing === "isl_artist_profile") {
-            axios.get("api/profiles/check_other_profile/" + firstRouteParsing,
-                {headers: headers}).then(resp => {
+            axios.get("api/profiles/check_other_profile/" + firstRouteParsing, {headers: headers}
+            ).then(resp => {
+                resp.data['profile_checked']['created_at'] = formatCreatedAt(resp.data['profile_checked']['created_at'])
                 dispatch(addOtherBeatMakerBeats(resp.data['user_beats']));
                 dispatch(addOtherUserOptions(resp.data['user_options']));
                 dispatch(addOtherUserService(resp.data['user_services']));
                 setProfileChecked(resp.data['profile_checked']);
                 setUserData(resp.data['user_data']);
                 setLoading(false);
-            }).catch(() => {
+            }).catch((e) => {
                 history.push("/ArtistNotFound");
                 setLoading(false);
             })
         } else if (firstRouteParsing === 'Cart') {
             if (!state_cart_length) {
                 history.push("/beats");
+                setLoading(false);
+            } else setLoading(false);
+        } else if (firstRouteParsing === 'profile') {
+            if (headers['Isl-Token'] === Conf.configs.TokenVisitor) {
+                history.goBack();
                 setLoading(false);
             } else setLoading(false);
         } else setLoading(false);

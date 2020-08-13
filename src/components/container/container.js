@@ -182,15 +182,12 @@ function Container(props) {
                                    ToPlay={props.addToPlaylist}
                                    ProfileChecked={props.profile_checked}
                                    UserData={props.user_data}
+                                   headers={props.headers}
                                />
                            }/>
                     <Route exact
                            path="/profile"
-                           component={() => {
-                               return props.headers['Isl-Token'] === Conf.configs.TokenVisitor
-                                   ? history.goBack()
-                                   : (<Profile ToPlay={props.addToPlaylist}/>)
-                           }}/>
+                           component={() => <Profile ToPlay={props.addToPlaylist} headers={props.headers}/>}/>
                     <Route exact
                            path="/show-service/:id"
                            component={() => <DisplayPrestation headers={props.headers}/>
@@ -203,7 +200,8 @@ function Container(props) {
                            path="/register"
                            component={() => {
                                return props.headers['Isl-Token'] !== Conf.configs.TokenVisitor
-                                   ? history.goBack() : (<Register/>)
+                                   ? history.goBack()
+                                   : (<Register/>)
                            }}/>
                     {/*<Route exact*/}
                     {/*       path="/beats/CheckThisBeat/:id(\d+)"*/}

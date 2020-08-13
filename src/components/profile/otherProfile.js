@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import * as CreateFields from "../functionTools/createFields";
 import { getMediaLink } from "../functionTools/tools";
 import * as BeatsProps from "../functionTools/functionProps";
+import ProfileInformation from "./category/profileInformations";
 import MyPrestations from "./category/section/myPrestations/myPrestations";
 
 function OtherProfile(props) {
@@ -41,7 +42,13 @@ function OtherProfile(props) {
 
     useEffect(() => {
         if (other_beat_maker_beats.length !== 0)
-            getMediaLink(setLinkAllOtherArtistBeats, link_all_other_artist_beats, other_beat_maker_beats, BeatsProps.updateOtherBeatMakerBeats, dispatch).then(() => null);
+            getMediaLink(
+                setLinkAllOtherArtistBeats,
+                link_all_other_artist_beats,
+                other_beat_maker_beats,
+                BeatsProps.updateOtherBeatMakerBeats,
+                dispatch
+            ).then(() => null);
 
         return () => {
             isMounted.current = true
@@ -51,75 +58,12 @@ function OtherProfile(props) {
 
     return (
         <div className="Base">
-            <div className="container-fluid relative animatedParent animateOnce p-lg-3">
-                <div className="card no-b shadow1 no-r">
-                    <div className="row no-gutters">
-                        <div className="col-md-4">
-                            <div className="text-center p-5 mt-2">
-                                <figure className="avatar avatar-xl">
-                                    <img
-                                        src={props.ProfileChecked.photo || "https://zupimages.net/up/19/18/3ltf.png"}
-                                        alt="profile"/>
-                                </figure>
-                                <div>
-                                    <h4 className="p-t-10">{props.ProfileChecked.name || "Name"}</h4>
-                                    <button className="btn btn-outline-primary btn-sm  mt-3 pl-4 pr-4"
-                                            onClick={() => {
-                                                Tools.LikeOrFollow("follow", props.UserData.user_id);
-                                            }}>
-                                        Followers {props.UserData.followers + followed}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-8">
-                            <div className="p5 b-b">
-                                <div className="pl-8 mt-4">
-                                    <h3>Informations officielles </h3>
-                                </div>
-                                <div className="row">
-                                    <div className="col-md-4">
-                                        <div className="p-4">
-                                            <h5>Âge</h5>
-                                            <span>{props.ProfileChecked.age || "Age"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="p-4">
-                                            <h5>Genre</h5>
-                                            <span>{props.ProfileChecked.gender || "Gender"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="p-4">
-                                            <h5>Anniversaire</h5>
-                                            <span>{props.ProfileChecked.birth || "0000-00-00"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="p-4">
-                                            <h5>Biographie</h5>
-                                            <span>{props.ProfileChecked.description || "no biography"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="p-4">
-                                            <h5>Nom de l'artiste</h5>
-                                            <span>{props.ProfileChecked.artist_name || "no artist name"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <div className="p-4">
-                                            <h5>Pays</h5>
-                                            <span>{"Country"}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ProfileInformation
+                profileToRead={props.ProfileChecked}
+                headers={null}
+                user_role={props.UserData["role"]}
+                setChoiceArtistTypeToChange={null}
+            />
 
             <div className="container-fluid relative animatedParent animateOnce p-lg-3">
                 <div className="row row-eq-height">
