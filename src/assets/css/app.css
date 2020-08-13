@@ -23129,3 +23129,12 @@ ul.follow-list li:last-child a {
 .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover {
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
+
+/****  condition ****/
+.condition {
+    display: flex;
+}
+
+.condition-label {
+    font-size: 12px;
+}

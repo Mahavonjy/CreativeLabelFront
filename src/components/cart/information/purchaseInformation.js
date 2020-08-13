@@ -256,7 +256,7 @@ function PurchaseInformation(props) {
                                     </div>
                                     <div className="middle">
                                         <div className="cd-number">
-                                            <p><span className="num-1">#### #### #### ####</span></p>
+                                            <p><span className="num-1">#### #### #### ####</span></p>
                                         </div>
                                     </div>
                                     <div className="bottom">
@@ -316,7 +316,7 @@ function PurchaseInformation(props) {
                                 <div className="cd-validate">
                                     <div className="expiration">
                                         <div className="field">
-                                            <label htmlFor="month">Month</label>
+                                            <label htmlFor="month">Date d'expiration</label>
                                             <DatePicker
                                                 dateFormat="MM/yy"
                                                 showPopperArrow={false}
@@ -340,11 +340,11 @@ function PurchaseInformation(props) {
                                                required/>
                                     </div>
                                 </div>
-                                <div className="material-switch m-t-50">
-                                    <input id="unlimited" name="unlimited" type="checkbox"
+                                <div className="material-switch m-t-50 condition">
+                                    <input className="ml-3" id="unlimited" name="unlimited" type="checkbox"
                                            onChange={() => setRules(!rules)} autoComplete="off" required/>
                                     <label htmlFor="sw2"
-                                           className="text-red text-monospace cursor-pointer text-muted"
+                                           className="condition-label text-red text-monospace cursor-pointer text-muted border-bottom"
                                            onClick={() => document.getElementById("legaleNoticesbtn").click()}> J'accepte les
                                         Conditions Générales d'Utilisation</label>
                                 </div>

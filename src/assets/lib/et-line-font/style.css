@@ -117,9 +117,7 @@ you can use the generic selector below, but it's slower:
 .icon-video:before {
 	content: "\e011";
 }
-.icon-camera:before {
-	content: "\e012";
-}
+
 .icon-printer:before {
 	content: "\e013";
 }

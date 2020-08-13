@@ -652,9 +652,13 @@ h3{
     border-radius: 5px;
     outline: 0;
     border: none;
-    transition: 0.15s ease-in-out;
+    transition: transform 0.15s ease-in-out;
     &:hover {
-      background: darken(#2b8Fd9, 2.5%)
+      background: darken(#2b8Fd9, 2.5%);
+      transform: scale(1.02);
+    }
+    &:active {
+      transform: scale(1.07);
     }
     //padding
   }
@@ -676,14 +680,16 @@ h3{
       display: flex;
       justify-content: space-between;
       .field:last-child {
-        margin-left: 10px;
+        margin-left: 5px;
       }
 
     }
     .cvc {
-      text-align: right;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
       input#cvc {
-        width: 50px
+        width: 150px
       }
     }
     label {

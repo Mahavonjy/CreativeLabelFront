@@ -72,10 +72,10 @@ export const inputControl = () => {
 
         if ($(this).hasClass("1")) {
             let inputVal = $(this).val();
-            if (!inputVal.length === 0) {
+            if (!inputVal.length == 0) {
                 $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text(inputVal);
             } else {
-                $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
+                $(".cardCredit").find(".front").find(".cd-number").find("span.num-1").text("#### #### #### ####");
             }
         }
 
@@ -84,7 +84,7 @@ export const inputControl = () => {
         let inputValCdHolder = $(this).val();
 
         $(".cardCredit").removeClass("flip");
-        if (!inputValCdHolder.length === 0 && inputValCdHolder.length < 19) {
+        if (!inputValCdHolder.length == 0 && inputValCdHolder.length < 19) {
             $(".cardCredit").find(".front").find(".bottom").find(".cardholder").find("span.holder").text(inputValCdHolder);
         }
         switch(inputValCdHolder.length) {
@@ -100,7 +100,7 @@ export const inputControl = () => {
     });
     $(".form").find(".cd-validate").find(".cvc").find('input').on('keyup change', function (e) {
         let inputCvcVal = $(this).val();
-        if (!inputCvcVal.length === 0) {
+        if (!inputCvcVal.length == 0) {
             $(".cardCredit").addClass("flip").find(".cvc").find("p").text(inputCvcVal);
         } else if (inputCvcVal.length === 0) {
             $(".cardCredit").removeClass("flip");
@@ -109,7 +109,7 @@ export const inputControl = () => {
     $(".form").find(".cd-validate").find(".expiration").find('select#month').on('keyup change', function () {
 
         $(".cardCredit").removeClass("flip");
-        if (!$(this).val().length === 0) {
+        if (!$(this).val().length == 0) {
             $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.month").text($(this).val())
         }
 
@@ -117,7 +117,7 @@ export const inputControl = () => {
     $(".form").find(".cd-validate").find(".expiration").find('select#year').on('keyup change', function () {
 
         $(".cardCredit").removeClass("flip");
-        if (!$(this).val().length === 0) {
+        if (!$(this).val().length == 0) {
             $(".cardCredit").find('.bottom').find('.expires').find("span").find("span.year").text($(this).val())
         }
 
