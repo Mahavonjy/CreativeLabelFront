@@ -170,16 +170,6 @@ export const checkErrorMessage = (error) => {
     }
 };
 
-export const validatorSearch = (thematics, startDate, country) => {
-    if (!country)
-        return {"error": true, message: "veuillez choisir pays"};
-    if (thematics.length === 0)
-        return {"error": true, message: "veuillez choisir la thematique"};
-    if (formatDate(startDate) === formatDate(new Date()))
-        return {"error": true, message: "veuillez choisir une autre date"};
-    return {"error": false}
-};
-
 export const validatorBanking = (props, rules) => {
     if (!props.rules)
         return {"error": true, message: "Veuillez accepter les termes et conditions"};

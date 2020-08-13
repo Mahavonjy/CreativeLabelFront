@@ -192,7 +192,7 @@ function Form(props) {
             {checkProps() && !loading ?
                 <div className="text-center">
                     {state_steps_index === component_steps.length - 1 && !props.register &&
-                    <button className="btn btn-outline-success center pl-5 pr-5"
+                    <button className="btn btn-outline-success center pl-5 mt-3 pr-5"
                             onClick={() => props.artistType === "professional_auditor" ? auditorToArtist() : addNewPrestation()}>
                         {props.artistType === "professional_auditor" ? "Devenir Artiste" : "Enregister"}</button>}
                 </div> : <div className="text-center">

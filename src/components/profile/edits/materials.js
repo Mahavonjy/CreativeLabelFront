@@ -101,7 +101,8 @@ function Materials(props) {
                     Afficher la fiche technique de cette prestation
                 </a>
             </div>}
-            <div className="tag-editor">
+            <div className="row justify-content-center">
+            <div className="tag-editor m-4">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">
                         <h1 className="text-light">Matériels nécessaires&nbsp;<i className="icon icon-info s-18"/></h1>
@@ -128,10 +129,10 @@ function Materials(props) {
                 </span>
             </div>
             {!props.noExemple &&
-            <div className="tag-editor">
+            <div className="tag-editor m-4">
                 <span className="tag-editor-inner">
                     <div className="tag-editor-title text-center">
-                        <h1 className="text-light">Quelques exemples de materiels&nbsp;
+                        <h1 className="text-light">Exemples de materiels&nbsp;
                             <i className="icon icon-info s-18"/>
                         </h1>
                     </div>
@@ -151,6 +152,7 @@ function Materials(props) {
                     </div>
                 </span>
             </div>}
+            </div>
             <input type="file"
                    className="input-file sheet"
                    accept="application/pdf"

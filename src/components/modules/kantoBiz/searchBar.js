@@ -82,30 +82,26 @@ function SearchBar(props) {
     };
 
     const Search = async () => {
-        let if_errors = validatorSearch(state_thematics, startDate, country);
-        if (if_errors['error']) {
-            toast.error(if_errors['message'])
-        } else {
-            await dispatch(addSearchLoading(true));
-            // await dispatch(changeInitialized(false));
-            await axios.post("api/service_search/moment", {
-                "country": country,
-                "city": city,
-                "event_date": startDate.toISOString(),
-                "event": state_events,
-                "thematics": state_thematics,
-            }, {headers: props.headers}).then(async (resp) => {
-                let data = resp.data || [];
-                if (data.length >= 2) data = await checkMinMax(dispatch, resp, data);
+        console.log(props.headers)
+        await dispatch(addSearchLoading(true));
+        // await dispatch(changeInitialized(false));
+        await axios.post("api/service_search/moment", {
+            "country": country,
+            "city": city,
+            "event_date": startDate.toISOString(),
+            "event": state_events,
+            "thematics": state_thematics,
+        }, {headers: props.headers}).then(async (resp) => {
+            let data = resp.data || [];
+            if (data.length >= 2) data = await checkMinMax(dispatch, resp, data);
 
-                await props.setStateResult(generatePagination(data, props.displayOne));
-                await dispatch(addKantoBizSearchResults(data));
-                await dispatch(addSearchLoading(false));
-                if (data.length === 0) {
-                    toast.warn("Pas de prestations trouvées");
-                } else await Results.onScrollViewSearch();
-            })
-        }
+            await props.setStateResult(generatePagination(data, props.displayOne));
+            await dispatch(addKantoBizSearchResults(data));
+            await dispatch(addSearchLoading(false));
+            if (data.length === 0) {
+                toast.warn("Pas de prestations trouvées");
+            } else await Results.onScrollViewSearch();
+        })
     };
 
     const changelistOfCity = async (value) => {

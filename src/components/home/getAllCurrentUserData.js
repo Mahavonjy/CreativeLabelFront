@@ -16,12 +16,10 @@ import {
     profileInitialisationInfo,
     profileInitialisationRole
 } from "../functionTools/functionProps";
-import {dispatchPayment, FillInCartProps, formatCreatedAt} from "../functionTools/tools";
+import {dispatchPayment, FillInCartProps} from "../functionTools/tools";
 import HomeRoot from "./homeRoot";
 
 export const insertUserData = (data, dispatch) => {
-    if (data)
-        data['my_profile']['created_at'] = formatCreatedAt(data['my_profile']['created_at'])
 
     new Promise(resolve => {
         resolve(dispatch(addUserNote(data ? data['notes'] : '')));
