@@ -23152,35 +23152,12 @@ ul.follow-list li:last-child a {
     height: 300px
 }
 
-@media screen and (max-width: 562px) {
-    .NextOrPrevPageStepper {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        margin: 0;
-        left: 0;
-        padding: 0;
-        z-index: 100;
-    }
-}
-
 @media screen and (max-width: 767px) {
-    .step-progress {
-        overflow: auto;
-        display: flex;
-        flex-flow: column wrap-reverse;
-        justify-content: space-between;
-    }
-    .NextOrPrevPageStepper {
-        z-index: 100;
-    }
-
     .card-prestation {
         display: flex;
         align-items: flex-start;
         margin-left: auto;
         margin-right: auto;
-        height: 700px;
         width: 300px
     }
     .icon-more-2-prestation {

@@ -56,7 +56,7 @@ function Thematics(props) {
             </div>
             <ReactTooltip/>
             <div className="row justify-content-center overflow-auto scrollbar-isl card-prestation">
-                <div className="col-md-4 border" style={{borderRadius: 10, background: "#58585a", height: 250}}>
+                <div className="col-md-4 border card-thematique" style={{borderRadius: 10, background: "#58585a", height: 250}}>
                     <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>
                         Choisir parmi les options&nbsp;
                         <i className="icon icon-info text-red"
@@ -73,7 +73,7 @@ function Thematics(props) {
                     </div>
                 </div>
                 <i className="icon icon-more-2 s-36 text-red m-2 icon-more-2-prestation"/>
-                <div className="col-md-4 border" style={{borderRadius: 10, background: "#58585a", height: 250}}>
+                <div className="col-md-4 border card-thematique" style={{borderRadius: 10, background: "#58585a", height: 250}}>
                     <h4 className="text-red" style={{borderBottom: "2px solid black"}}>Mes choix&nbsp;
                         <i className="icon icon-info text-red"
                            data-tip="La liste des spécialités que vous avez choisi en accord avec la thématique"/>
