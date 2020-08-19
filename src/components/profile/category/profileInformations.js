@@ -115,7 +115,6 @@ function ProfileInformation(props) {
                         {!loadingPhoto ?
                             <div className="text-center border border-light border-1" style={cover_style}>
                                 <div className="cursor-pointer absolute ml-5">
-
                                     <input id="cover_area_file"
                                            type="file"
                                            accept="image/png, image/jpeg"
@@ -128,12 +127,11 @@ function ProfileInformation(props) {
                                                )
                                            }}
                                     />
-
-                                    <i className="icon icon-camera-retro text-red s-36 mt-3 ml-5"
-                                       onClick={() => document.getElementById("cover_area_file").click()}
-                                       data-tip="modifier la photo de couverture"/>
                                 </div>
-                                <figure className="avatar avatar-xxl border border-light border-1 mt-5">
+                                <i className="icon icon-camera-retro text-red s-36 relative float-right mr-3 mt-3"
+                                   onClick={() => document.getElementById("cover_area_file").click()}
+                                   data-tip="modifier la photo de couverture"/>
+                                <figure className="avatar avatar-xxl border border-light border-1 mt-5 ml-5">
                                     <div className="hovereffect" style={{borderRadius: "100%"}}>
                                         <img alt="profile"
                                              src={profile_info.photo || "https://zupimages.net/up/19/18/3ltf.png"}

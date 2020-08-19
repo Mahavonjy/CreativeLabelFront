@@ -50,12 +50,12 @@ function Thematics(props) {
     }, []);
 
     return (
-        <div className="Base card mb-3">
+        <div className="Base card mb-3 modal-prestation">
             <div className="card-header transparent b-b">
                 <strong className="text-red">Quelques sous-catégories pour ma thématique</strong>
             </div>
             <ReactTooltip/>
-            <div className="row justify-content-center overflow-auto scrollbar-isl" style={{height: 300}}>
+            <div className="row justify-content-center overflow-auto scrollbar-isl card-prestation">
                 <div className="col-md-4 border" style={{borderRadius: 10, background: "#58585a", height: 250}}>
                     <h4 className="text-red pt-3" style={{borderBottom: "2px solid black"}}>
                         Choisir parmi les options&nbsp;
@@ -72,7 +72,7 @@ function Thematics(props) {
                         )}
                     </div>
                 </div>
-                <i className="icon icon-more-2 s-36 text-red ml-2 mr-2 d-none d-sm-block" style={{paddingTop: 120}}/>
+                <i className="icon icon-more-2 s-36 text-red m-2 icon-more-2-prestation"/>
                 <div className="col-md-4 border" style={{borderRadius: 10, background: "#58585a", height: 250}}>
                     <h4 className="text-red" style={{borderBottom: "2px solid black"}}>Mes choix&nbsp;
                         <i className="icon icon-info text-red"
