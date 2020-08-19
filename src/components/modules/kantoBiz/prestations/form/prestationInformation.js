@@ -125,7 +125,7 @@ function PrestationInformation(props) {
                 <strong className="text-red">Informations générales sur votre prestation</strong>
             </div>
             <div className="row rounded border pt-5 bg-grey justify-content-center overflow-auto scrollbar-isl"
-                 style={{height: 300}}>
+                 style={{height: 270}}>
                 <div className="col-lg-8">
                     <div className="row">
                         <div className="col-md-6 form-material">

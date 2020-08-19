@@ -183,10 +183,10 @@ function Form(props) {
                 </div>
             </div>
             {(props.register || props.artistType === "professional_auditor") &&
-            <h4 className="text-red mt-4 text-center">Créer votre première prestaion pour devenir artiste sur ISL</h4>}
+            <h4 className="text-red mt-5 text-center">Créer votre première prestaion pour devenir artiste sur ISL</h4>}
             <StepZilla steps={steps} showSteps={false} showNavigation={false} startAtStep={state_steps_index}/>
             {state_steps_index !== component_steps.length - 1 &&
-            <div className="text-center mt-4">
+            <div className="text-center mt-5">
                 <small className="text-center">Cliquer sur suivant pour passer à l'étape suivante</small>
             </div>}
             {checkProps() && !loading ?

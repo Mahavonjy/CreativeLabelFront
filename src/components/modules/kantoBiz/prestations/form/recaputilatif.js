@@ -74,7 +74,7 @@ function Recaputilatif(props) {
                 <h3 className="mb-2 text-primary">Récapitulatif</h3>
             </div>
             <div className="row rounded border bg-grey justify-content-center overflow-auto scrollbar-isl"
-                 style={{height: 300}}>
+                 style={{height: 270}}>
                 <div className="col-md-6">
                     <div className="col">
                         <div className="form-group d-flex flex-wrap">
