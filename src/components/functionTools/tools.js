@@ -38,6 +38,22 @@ import {
 import $ from "jquery";
 import 'jquery-mask-plugin';
 import {makeStyles} from "@material-ui/core/styles";
+import {applyMiddleware, combineReducers, compose, createStore} from "redux";
+import Others from "../../reducer/Others/Others";
+import {sessionReducer, sessionService} from "redux-react-session";
+import beatsReducer from "../../reducer/Beats";
+import profileReducer from "../../reducer/Profile/Profile";
+import profilePrestations from "../../reducer/Profile/Prestation";
+import PlaylistHomeReducer from "../../reducer/Home";
+import playersReducer from "../../reducer/Players";
+import cartsReducer from "../../reducer/Carts";
+import kantoBizForm from "../../reducer/KantoBiz/Form";
+import CommandSuccess from "../../reducer/CommandSuccess/success";
+import KantoBizSearchResults from "../../reducer/KantoBiz/SearchResult";
+import KantoBizSearch from "../../reducer/Search/KantoSearch";
+import thunkMiddleware from "redux-thunk";
+import {render} from "@testing-library/react";
+import {Provider} from "react-redux";
 
 export const funcToSpecifyValueForSpecialInput = (country_allowed, setTo) => {
     let tmp = [];
@@ -62,6 +78,32 @@ export const changeFields = (setState, e, up_props, dispatch, key, props) => {
         } else dispatch(up_props(value))
     }
 };
+
+const Reducers = combineReducers({
+    "Others": Others,
+    session: sessionReducer,
+    "beats": beatsReducer,
+    "profile": profileReducer,
+    "profilePrestations": profilePrestations,
+    "Home": PlaylistHomeReducer,
+    "Player": playersReducer,
+    "Carts": cartsReducer,
+    "KantoBizForm": kantoBizForm,
+    "CommandSuccess": CommandSuccess,
+    "KantobizSearch": KantoBizSearchResults,
+    "KantobizSearchInfo": KantoBizSearch
+});
+
+const store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)));
+sessionService.initSessionService(store, {driver: 'COOKIES'});
+
+export const renderWithRedux = (component,
+                         {initialState,
+                             store = createStore(Reducers, undefined, compose(applyMiddleware(thunkMiddleware)))} = {}) => {
+    return {
+        ...render(<Provider store={store}>{component}</Provider>)
+    }
+}
 
 export const inputControl = () => {
     $(".form").find(".cd-numbers").find(".fields").find("input").on('keyup change', function (e) {

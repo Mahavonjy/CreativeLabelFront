@@ -7,6 +7,21 @@ import ReactTooltip from "react-tooltip";
 import SignInOrUp from "../authentification/login/login";
 import {addTmpArtistSelected, displayBecomeArtistForm} from "./functionProps";
 import {AddToCart} from "./tools";
+import {applyMiddleware, combineReducers, compose, createStore} from "redux";
+import Others from "../../reducer/Others/Others";
+import {sessionReducer, sessionService} from "redux-react-session";
+import beatsReducer from "../../reducer/Beats";
+import profileReducer from "../../reducer/Profile/Profile";
+import profilePrestations from "../../reducer/Profile/Prestation";
+import PlaylistHomeReducer from "../../reducer/Home";
+import playersReducer from "../../reducer/Players";
+import cartsReducer from "../../reducer/Carts";
+import kantoBizForm from "../../reducer/KantoBiz/Form";
+import CommandSuccess from "../../reducer/CommandSuccess/success";
+import KantoBizSearchResults from "../../reducer/KantoBiz/SearchResult";
+import KantoBizSearch from "../../reducer/Search/KantoSearch";
+import thunkMiddleware from "redux-thunk";
+import {Provider} from 'react-redux';
 
 export const DifferentArtist = (dispatch, setChoiceArtistType, listOfArtistTypes, setAddNewPrestation) => {
 
@@ -199,24 +214,47 @@ export const ForAddToCard = (val, set_of_beats_name, props) => {
 };
 
 export const Login = () => {
+
+    const Reducers = combineReducers({
+        "Others": Others,
+        session: sessionReducer,
+        "beats": beatsReducer,
+        "profile": profileReducer,
+        "profilePrestations": profilePrestations,
+        "Home": PlaylistHomeReducer,
+        "Player": playersReducer,
+        "Carts": cartsReducer,
+        "KantoBizForm": kantoBizForm,
+        "CommandSuccess": CommandSuccess,
+        "KantobizSearch": KantoBizSearchResults,
+        "KantobizSearchInfo": KantoBizSearch
+    });
+
+    const store = createStore(Reducers);
+
+
     return (
-        <div>
-            <button type="button" id="LoginRequire" className="btn btn-primary LoginRequire zIndex1" data-toggle="modal"
-                    data-target="#exampleModal" hidden={true}/>
-            <div aria-disabled={"false"} className="modal fade p-t-b-50" id="exampleModal" tabIndex={-1} role="dialog"
-                 aria-labelledby="exampleModalLabel">
-                <div className="modal-dialog p-t-100" role="document">
-                    <div className="modal-content border-0 bg-transparent">
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" hidden={true}>x</span>
-                        </button>
-                        <div className="modal-body">
-                            <SignInOrUp/>
+        <Provider store={store}>
+            <div>
+                <button type="button" id="LoginRequire" className="btn btn-primary LoginRequire zIndex1"
+                        data-toggle="modal"
+                        data-target="#exampleModal" hidden={true}/>
+                <div aria-disabled={"false"} className="modal fade p-t-b-50" id="exampleModal" tabIndex={-1}
+                     role="dialog"
+                     aria-labelledby="exampleModalLabel">
+                    <div className="modal-dialog p-t-100" role="document">
+                        <div className="modal-content border-0 bg-transparent">
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" hidden={true}>x</span>
+                            </button>
+                            <div className="modal-body">
+                                <SignInOrUp/>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Provider>
     )
 };
 
@@ -224,7 +262,7 @@ export const LoadingHome = () => {
     return (
         <div className="center-center">
             <div className="m-3">
-                <Loader type="Puff" height={150} width={150}color="#ED1C24"/>
+                <Loader type="Puff" height={150} width={150} color="#ED1C24"/>
             </div>
             <Fade bottom>
                 <h4 className="text-red">Independance Sound Label</h4>

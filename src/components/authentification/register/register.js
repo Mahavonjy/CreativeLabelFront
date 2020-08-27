@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import LoadingOverlay from 'react-loading-overlay';
 import {useDispatch, useSelector} from "react-redux";
@@ -60,6 +60,15 @@ function Register() {
         dispatch(displayBecomeArtistForm(false));
     };
 
+    const handleClick = useCallback(
+        () => {
+            console.log(document.getElementById("legaleNoticesbtn"))
+            document.getElementById("legaleNoticesbtn").click()
+        }, [],
+    )
+
+
+
     const verifyKeysSubmit = () => {
         axios.post("api/users/get_if_keys_validate", {email, keys}).then(async (resp) => {
             await sessionService.saveSession({token: user_credentials.token}).then(() => {
@@ -76,16 +85,19 @@ function Register() {
                 <div className="material-switch m-2">
                     <input id="unlimited"
                            name="unlimited"
+                           data-testid="checkBox"
                            type="checkbox"
                            onChange={() => setRules(!rules)}
                            checked={rules}/>
                     <label htmlFor="sw2"
                            className="text-monospace border-bottom cursor-pointer text-muted"
-                           onClick={() => document.getElementById("legaleNoticesbtn").click()}>
+                           data-testid="condition"
+                           onClick={handleClick}>
                         J'accepte les Conditions Générales d'Utilisation
                     </label>
                 </div>
                 <button type="submit" id="register" disabled={disable}
+                        data-testid="auditeurPro"
                         className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
                         onClick={(e) =>
                             toAuditor
@@ -95,6 +107,7 @@ function Register() {
                     Créer votre compte Auditeur Pro
                 </button>
                 <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
+                        data-testid="compteArtiste"
                         onClick={(e) => Register.sendUserInfoToSingUp(e, true)}>
                     Créer votre compte Artiste
                 </button>
@@ -243,7 +256,7 @@ function Register() {
                                         <div className="form-material">
                                             {/* Input */}
                                             <div className="body">
-                                                <h4 className="font-weight-lighter pb-4 text-center bolder">
+                                                <h4 className="font-weight-lighter pb-4 text-center bolder" data-testid="formulaire">
                                                     Formulaire d'inscription
                                                 </h4>
                                                 {CreateInput(
@@ -281,9 +294,10 @@ function Register() {
                                         </div>
                                     </div>
                                     <div className="col-md-5 pt-5 text-center">
-                                        <h4 className="font-weight-lighter bolder">Vous possédez déjà un compte?</h4>
+                                        <h4 className="font-weight-lighter bolder" data-testid="questionLabel">Vous possédez déjà un compte?</h4>
                                         <div className="text-center">
                                             <button className="btn btn-outline-primary m-3 pl-5 pr-5"
+                                                    data-testid="identify"
                                                     onClick={() => {
                                                         history.goBack();
                                                         document.getElementsByClassName(

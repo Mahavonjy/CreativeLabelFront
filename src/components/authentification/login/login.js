@@ -220,6 +220,7 @@ function Login() {
                                 "email",
                                 true)}
                             <button className="btn btn-outline-success btn-sm pl-4 pr-4"
+                                    data-testid="verify-email"
                                     onClick={() => verifyEmail()}>Envoyer
                             </button>
                         </div>
