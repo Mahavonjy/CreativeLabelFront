@@ -62,12 +62,9 @@ function Register() {
 
     const handleClick = useCallback(
         () => {
-            console.log(document.getElementById("legaleNoticesbtn"))
             document.getElementById("legaleNoticesbtn").click()
         }, [],
     )
-
-
 
     const verifyKeysSubmit = () => {
         axios.post("api/users/get_if_keys_validate", {email, keys}).then(async (resp) => {
@@ -99,11 +96,11 @@ function Register() {
                 <button type="submit" id="register" disabled={disable}
                         data-testid="auditeurPro"
                         className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
-                        onClick={(e) =>
+                        onClick={(e) => {
                             toAuditor
                                 ? HomeRoot.beforeDataLoad().then(() => null)
-                                : Register.sendUserInfoToSingUp(e)
-                        }>
+                                : Register.sendUserInfoToSingUp(e);
+                        }}>
                     Créer votre compte Auditeur Pro
                 </button>
                 <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
@@ -255,7 +252,7 @@ function Register() {
                                     >
                                         <div className="form-material">
                                             {/* Input */}
-                                            <div className="body">
+                                            <div className="body" onSubmit={() => {Register.registerButton()}}>
                                                 <h4 className="font-weight-lighter pb-4 text-center bolder" data-testid="formulaire">
                                                     Formulaire d'inscription
                                                 </h4>
@@ -264,7 +261,8 @@ function Register() {
                                                     name, (e) => changeFields(setName, e),
                                                     "Votre nom",
                                                     "text",
-                                                    true
+                                                    true,
+                                                    "nom"
                                                 )}
                                                 {CreateInput(
                                                     'email',
@@ -272,21 +270,24 @@ function Register() {
                                                     (e) => changeFields(setEmail, e),
                                                     "Email valide",
                                                     "email",
-                                                    true
+                                                    true,
+                                                    "email"
                                                 )}
                                                 {CreateInput(
                                                     'password',
                                                     password, (e) => changeFields(setPassword, e),
                                                     "Mot de passe (au moins 8 caractères)",
                                                     "password",
-                                                    true
+                                                    true,
+                                                    "password"
                                                 )}
                                                 {CreateInput(
                                                     'confirm_password', confirm_password,
                                                     (e) => changeFields(setConfirmPassword, e),
                                                     "Entrez le mot de passe à nouveau",
                                                     "password",
-                                                    true
+                                                    true,
+                                                    "confirm_password"
                                                 )}
                                                 {Register.registerButton()}
                                             </div>

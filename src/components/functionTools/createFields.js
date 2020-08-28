@@ -31,7 +31,7 @@ import {activeThemeLight, addNewPlayerList} from "./functionProps"
 import {ForAddToCard} from "./popupFields"
 import {changeFields, LikeOrFollow} from "./tools";
 
-export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required) => {
+export const CreateInput = (state_name, value, functionToOnchange, placeholder, type, required, dataTestId) => {
     if (type === "text" || "password" || "email" || "number") {
         return (
             <MDBRow>
@@ -40,6 +40,7 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
                            value={value}
                            id={state_name}
                            className="form-control"
+                           data-testid={dataTestId}
                            placeholder={placeholder}
                            onChange={functionToOnchange} required={required} autoComplete="off"/>
                 </MDBCol>

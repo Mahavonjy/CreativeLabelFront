@@ -1,5 +1,5 @@
 import React from 'react'
-import { cleanup, fireEvent, waitFor } from "@testing-library/react"
+import {cleanup, fireEvent, waitFor} from "@testing-library/react"
 import '@testing-library/jest-dom';
 import Register from '../components/authentification/register/register';
 import { renderWithRedux } from "../components/functionTools/tools";
@@ -98,5 +98,56 @@ describe('Testing register component', () => {
         })
     });
 
+    {/*** simuler onClick du bouton 'Créer votre compte Artiste'***/}
+    it("simulate button 'Identifiez-vous' onClick", async () => {
+        const handleClick = jest.fn();
+
+        const { getByTestId } = renderWithRedux(<button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
+                                                        data-testid="compteArtiste"
+                                                        onClick={handleClick}>Créer votre compte Artiste</button>);
+
+        fireEvent.click(getByTestId("compteArtiste"));
+
+        waitFor(() => getByTestId("compteArtiste")).then(el => {
+            expect(handleClick).toHaveBeenCalled();
+            expect(el).toHaveTextContent("Créer votre compte Artiste")
+        })
+    });
+
+    {/*** simuler un envoie de formulaire de register ---> compteArtiste'***/}
+    it("simulate register form", async () => {
+        const handleClick = jest.fn();
+
+        const handleSubmit = (handleClick) => {
+            return (
+                <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
+                        data-testid="compteArtiste"
+                        onClick={handleClick}>
+                    Créer votre compte Artiste
+                </button>
+            )
+        }
+
+        const { getByTestId } = renderWithRedux(<Register onSubmit={() => {handleSubmit(handleClick)}}/>);
+
+
+
+        fireEvent.change(getByTestId("nom"), {target: {value: "MOISE Rajesearison"}})
+        fireEvent.change(getByTestId("email"), {target: {value: "moiseraidjy@gmail.com"}})
+        fireEvent.change(getByTestId("password"), {target: {value: "kyle781227&&"}})
+        fireEvent.change(getByTestId("confirm_password"), {target: {value: "kyle781227&&"}})
+        fireEvent.click(getByTestId("auditeurPro"));
+
+
+        expect(getByTestId("nom").value).toBe("MOISE Rajesearison");
+        expect(getByTestId("email").value).toBe("moiseraidjy@gmail.com");
+        expect(getByTestId("password").value).toBe("kyle781227&&");
+        expect(getByTestId("confirm_password").value).toBe("kyle781227&&");
+
+        waitFor(() => getByTestId("auditeurPro")).then(el => {
+            expect(el).not.toBeDisabled();
+        })
+
+    });
 });
 
