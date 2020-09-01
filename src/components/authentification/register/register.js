@@ -262,7 +262,7 @@ function Register() {
                                                     "Votre nom",
                                                     "text",
                                                     true,
-                                                    "nom"
+                                                    "register-nom"
                                                 )}
                                                 {CreateInput(
                                                     'email',
@@ -271,7 +271,7 @@ function Register() {
                                                     "Email valide",
                                                     "email",
                                                     true,
-                                                    "email"
+                                                    "register-email"
                                                 )}
                                                 {CreateInput(
                                                     'password',
@@ -279,7 +279,7 @@ function Register() {
                                                     "Mot de passe (au moins 8 caractères)",
                                                     "password",
                                                     true,
-                                                    "password"
+                                                    "register-password"
                                                 )}
                                                 {CreateInput(
                                                     'confirm_password', confirm_password,
@@ -287,7 +287,7 @@ function Register() {
                                                     "Entrez le mot de passe à nouveau",
                                                     "password",
                                                     true,
-                                                    "confirm_password"
+                                                    "register-confirm_password"
                                                 )}
                                                 {Register.registerButton()}
                                             </div>

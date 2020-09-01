@@ -1,8 +1,9 @@
 import React from 'react'
-import {cleanup, fireEvent, waitFor} from "@testing-library/react"
+import {cleanup, screen, fireEvent, waitFor} from "@testing-library/react"
 import '@testing-library/jest-dom';
 import Register from '../components/authentification/register/register';
 import { renderWithRedux } from "../components/functionTools/tools";
+
 
 
 describe('Testing register component', () => {
@@ -114,40 +115,45 @@ describe('Testing register component', () => {
         })
     });
 
+
+
     {/*** simuler un envoie de formulaire de register ---> compteArtiste'***/}
-    it("simulate register form", async () => {
-        const handleClick = jest.fn();
+    it("verify if email exist", async () => {
 
-        const handleSubmit = (handleClick) => {
-            return (
-                <button className="btn btn-outline-primary btn-fab-md m-2 pl-4 pr-4"
-                        data-testid="compteArtiste"
-                        onClick={handleClick}>
-                    Créer votre compte Artiste
-                </button>
-            )
-        }
+        const { getByTestId,getByRole } = renderWithRedux(<Register />);
 
-        const { getByTestId } = renderWithRedux(<Register onSubmit={() => {handleSubmit(handleClick)}}/>);
+        fireEvent.change(getByTestId("register-nom"), {target: {value: "MOISE Rajesearison"}})
+        fireEvent.change(getByTestId("register-email"), {target: {value: "moiseraidjy@gmail.com"}})
+        fireEvent.change(getByTestId("register-password"), {target: {value: "Kyle781227&&"}})
+        fireEvent.change(getByTestId("register-confirm_password"), {target: {value: "Kyle781227&&"}})
+        fireEvent.click(getByTestId("checkBox"))
 
-
-
-        fireEvent.change(getByTestId("nom"), {target: {value: "MOISE Rajesearison"}})
-        fireEvent.change(getByTestId("email"), {target: {value: "moiseraidjy@gmail.com"}})
-        fireEvent.change(getByTestId("password"), {target: {value: "kyle781227&&"}})
-        fireEvent.change(getByTestId("confirm_password"), {target: {value: "kyle781227&&"}})
         fireEvent.click(getByTestId("auditeurPro"));
 
-
-        expect(getByTestId("nom").value).toBe("MOISE Rajesearison");
-        expect(getByTestId("email").value).toBe("moiseraidjy@gmail.com");
-        expect(getByTestId("password").value).toBe("kyle781227&&");
-        expect(getByTestId("confirm_password").value).toBe("kyle781227&&");
-
-        waitFor(() => getByTestId("auditeurPro")).then(el => {
-            expect(el).not.toBeDisabled();
-        })
-
+        await waitFor(() => {
+            expect(getByRole("alert")).toBeInTheDocument();
+            screen.debug();
+        });
     });
+
+    {/*** simuler un envoie de formulaire de register ---> compteArtiste'***/}
+    it("verify if okey", async () => {
+
+        const { getByTestId,getByRole } = renderWithRedux(<Register />);
+
+        fireEvent.change(getByTestId("register-nom"), {target: {value: "Miora Fenohasina"}})
+        fireEvent.change(getByTestId("register-email"), {target: {value: "miorafenohasina@yahoo.fr"}})
+        fireEvent.change(getByTestId("register-password"), {target: {value: "Miora781228&&"}})
+        fireEvent.change(getByTestId("register-confirm_password"), {target: {value: "Miora781228&&"}})
+        fireEvent.click(getByTestId("checkBox"))
+
+        fireEvent.click(getByTestId("auditeurPro"));
+
+        await waitFor(() => {
+            expect(getByRole("alert")).toBeInTheDocument();
+            screen.debug();
+        });
+    });
+
 });
 
