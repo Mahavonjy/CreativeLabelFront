@@ -37,14 +37,14 @@ function Login() {
     const sendLoginCredentials = (e) => {
         e.preventDefault();
 
-        dispatch(setValueOfToastGlobal(false));
+        setValueOfToastGlobal(false);
         if (!email || !password) {
             toast.warn("email et/ou mot de passe non remplis")
         } else {
             let data = {email, password};
             setLoading(true);
             axios.post("api/users/login", data, {headers: headers}).then(async response => {
-                dispatch(setValueOfToastGlobal(true));
+                setValueOfToastGlobal(true);
                 const {token} = response.data;
                 setLoading(false);
                 document.getElementsByClassName("close")[0].click();
@@ -257,7 +257,7 @@ function Login() {
                 <div className="absolute text-red ml-2" style={{zIndex: 99}}>
                     <i className="icon icon-close s-24 mt-2 cursor-pointer text-primary border-0 transparent"
                        onClick={() => {
-                           dispatch(setValueOfToastGlobal(true));
+                           setValueOfToastGlobal(true);
                            document.getElementsByClassName("close")[0].click()
                        }}/>
                 </div>
@@ -265,6 +265,7 @@ function Login() {
 
                     <input className="l-usr mb-2" placeholder="email" name="email" id="login-email"
                            value={email}
+                           data-testid="login-email"
                            onChange={(e) => {
                                 changeFields(setEmail, e)
                             }}
@@ -273,6 +274,7 @@ function Login() {
                     <div className="pass-wrap l-pass mb-2">
                         <input className="pass"
                                placeholder="Mot de passe"
+                               data-testid="login-password"
                                type="password"
                                id="login-password"
                                name="password" value={password}
@@ -282,7 +284,7 @@ function Login() {
                                autoComplete="off"/>
                     </div>
 
-                    <button className="l-go"
+                    <button className="l-go" data-testid="login-button"
                             onClick={(e) => sendLoginCredentials(e)}>
                         Connexion
                     </button>

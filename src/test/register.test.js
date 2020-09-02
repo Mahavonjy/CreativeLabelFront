@@ -132,7 +132,6 @@ describe('Testing register component', () => {
 
         await waitFor(() => {
             expect(getByRole("alert")).toBeInTheDocument();
-            screen.debug();
         });
     });
 
@@ -151,7 +150,6 @@ describe('Testing register component', () => {
 
         await waitFor(() => {
             expect(getByRole("alert")).toBeInTheDocument();
-            screen.debug();
         });
     });
 
