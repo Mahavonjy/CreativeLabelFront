@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
@@ -33,6 +33,12 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirm_password, setConfirmPassword] = useState('');
+
+    const handleClick = () => {
+        document.getElementsByClassName("close")[0].click();
+        history.push('/register');
+        HomeRoot.beforeDataLoad().then(() => null);
+    }
 
     const sendLoginCredentials = (e) => {
         e.preventDefault();
@@ -267,8 +273,8 @@ function Login() {
                            value={email}
                            data-testid="login-email"
                            onChange={(e) => {
-                                changeFields(setEmail, e)
-                            }}
+                               changeFields(setEmail, e)
+                           }}
                            autoComplete="off"/>
 
                     <div className="pass-wrap l-pass mb-2">
@@ -330,12 +336,8 @@ function Login() {
                 {/*    <LoginFacebook Label="Connecter avec facebook"/>*/}
                 {/*</div>*/}
                 <small className="r-disc">Vous n'avez pas de compte ?</small>
-                <button className="r-btn m-1 r-5"
-                        onClick={() => {
-                            document.getElementsByClassName("close")[0].click();
-                            history.push('/register');
-                            HomeRoot.beforeDataLoad().then(() => null);
-                        }}>Créer un compte
+                <button className="r-btn m-1 r-5" data-testid="login-creerCompte"
+                        onClick={handleClick}>Créer un compte
                 </button>
             </div>
         </div>

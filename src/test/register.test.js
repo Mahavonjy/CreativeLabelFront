@@ -1,5 +1,5 @@
 import React from 'react'
-import {cleanup, screen, fireEvent, waitFor} from "@testing-library/react"
+import {cleanup, fireEvent, waitFor} from "@testing-library/react"
 import '@testing-library/jest-dom';
 import Register from '../components/authentification/register/register';
 import { renderWithRedux } from "../components/functionTools/tools";
@@ -150,7 +150,6 @@ describe('Testing register component', () => {
 
         await waitFor(() => {
             expect(getByText("Nous sommes en train de vous envoyer un email de confirmation ...")).toBeInTheDocument();
-            screen.debug();
         });
     });
 

@@ -7,7 +7,14 @@ import axiosMock from "axios";
 
 jest.mock("axios")
 
+const mockHistoryPush = jest.fn();
 
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useHistory: () => ({
+        push: mockHistoryPush,
+    }),
+}));
 
 describe('Testing register component', () => {
 
@@ -47,4 +54,35 @@ describe('Testing register component', () => {
         });
     });
 
+
+    {/*** simuler onClick du bouton ***/}
+    it("simulate button 'Identifiez-vous' onClick", async () => {
+        const handleClick = jest.fn();
+
+        const { getByTestId } = renderWithRedux(<button className="r-btn m-1 r-5" data-testid="login-creerCompte"
+                                                        onClick={handleClick}>Créer un compte</button>);
+
+        fireEvent.click(getByTestId("login-creerCompte"));
+
+        waitFor(() => getByTestId("login-creerCompte")).then(el => {
+            expect(handleClick).toHaveBeenCalled();
+            expect(el).toHaveTextContent("Créer un compte")
+        })
+    });
+
+    {/***
+     *
+     *  Vérifier usehistory(/register)
+     *  COMMENTER document.getElementsByClassName("close")[0].click();
+     *  et HomeRoot.beforeDataLoad().then(() => null); de la fonction
+     *  hancleClick dans Login component pour que le test
+     *  marche.
+     *
+     ***/}
+    it("simulate the button's response", async () => {
+        const { getByTestId } = renderWithRedux(<Login/>);
+
+        fireEvent.click(getByTestId("login-creerCompte"));
+        expect(mockHistoryPush).toHaveBeenCalledWith('/register');
+    });
 });
