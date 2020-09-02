@@ -133,7 +133,7 @@ function Register() {
                 bodyFormData.append('email', email);
                 bodyFormData.append('password', password);
                 if (tmpArtistTypeSelected) {
-                    dispatch(displayBecomeArtistForm(false));
+                    displayBecomeArtistForm(false);
                     generateBodyFormOfGallery(bodyFormData, PropsFiles);
                     bodyFormData.append('user_type', tmpArtistTypeSelected);
                     bodyFormData.append('services', JSON.stringify({
@@ -156,11 +156,11 @@ function Register() {
                         "unit_of_the_preparation_time": checkUnit(props_unit_time_of_preparation),
                     }));
                 }
-                axios.post("api/users/register", bodyFormData, {headers: headers}).then(response => {
+                axios.post("api/users/register", bodyFormData, {headers: headers}).then(async response => {
                     toast.success("Un email vous a eté envoyé");
                     setIsActive(false);
                     setVisible(true);
-                    setUserCredentials(response.data)
+                    await setUserCredentials(response.data)
                 }).catch(error => {
                     setDisable(false);
                     setIsActive(false);

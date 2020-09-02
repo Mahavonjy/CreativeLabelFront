@@ -138,7 +138,7 @@ describe('Testing register component', () => {
     {/*** simuler un envoie de formulaire de register ---> compteArtiste'***/}
     it("verify if okey", async () => {
 
-        const { getByTestId,getByRole } = renderWithRedux(<Register />);
+        const { getByTestId,getByText } = renderWithRedux(<Register />);
 
         fireEvent.change(getByTestId("register-nom"), {target: {value: "Miora Fenohasina"}})
         fireEvent.change(getByTestId("register-email"), {target: {value: "miorafenohasina@yahoo.fr"}})
@@ -149,7 +149,8 @@ describe('Testing register component', () => {
         fireEvent.click(getByTestId("auditeurPro"));
 
         await waitFor(() => {
-            expect(getByRole("alert")).toBeInTheDocument();
+            expect(getByText("Nous sommes en train de vous envoyer un email de confirmation ...")).toBeInTheDocument();
+            screen.debug();
         });
     });
 
