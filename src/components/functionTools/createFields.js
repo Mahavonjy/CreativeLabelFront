@@ -37,7 +37,7 @@ export const CreateInput = (state_name, value, functionToOnchange, placeholder, 
             <MDBRow>
                 <MDBCol className='mb-3'>
                     <input type={type}
-                           value={value}
+                           value={value || ''}
                            id={state_name}
                            className="form-control"
                            data-testid={dataTestId}

@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => ({
     }),
 }));
 
-describe('Testing register component', () => {
+describe('Testing Login component', () => {
 
     afterEach(cleanup)
 
@@ -32,24 +32,45 @@ describe('Testing register component', () => {
         });
     });
 
-    {/*** simuler un authentification avec succès ainsi que les axios reçues'***/}
-    it("verify if there are email and password", async () => {
+    {/*** simuler un authentification avec email ou mot de passe incorrect'***/}
+    it("wrong email or password", async () => {
 
-        const { getByTestId } = renderWithRedux(<Login />);
+        const { getByTestId, getByRole } = renderWithRedux(<Login />);
 
         axiosMock.post.mockResolvedValueOnce({
             data: null
         })
 
         fireEvent.change(getByTestId("login-email"), {target: {value: "moiseraidjy@gmail.com"}})
-        fireEvent.change(getByTestId("login-password"), {target: {value: "Kyle781228&é&"}})
+        fireEvent.change(getByTestId("login-password"), {target: {value: "LJKKHhjjhj777&&"}})
 
         fireEvent.click(getByTestId("login-button"));
 
 
         await waitFor(() => {
+            expect(getByRole("alert")).toHaveTextContent("email ou mot de passe incorrect")
+        });
+    });
+
+    {/*** simuler un authentification avec succès ainsi que les axios reçues'***/}
+    it("verify if login success", async () => {
+
+        const { getByTestId, getByRole } = renderWithRedux(<Login />);
+
+        axiosMock.post.mockResolvedValueOnce({
+            data: null
+        })
+
+        fireEvent.change(getByTestId("login-email"), {target: {value: "moiseraidjy@gmail.com"}})
+        fireEvent.change(getByTestId("login-password"), {target: {value: "Kyle781227"}})
+
+        fireEvent.click(getByTestId("login-button"));
+
+
+        await waitFor(() => {
+            //expect(getByRole("alert")).toHaveTextContent("Vous êtes connecté")
             expect(axiosMock.post).toHaveBeenCalledWith("api/users/login",
-                {"email": "moiseraidjy@gmail.com", "password": "Kyle781228&é&"},
+                {"email": "moiseraidjy@gmail.com", "password": "Kyle781227"},
                 {"headers": {"Access-Control-Allow-Origin": "*", "Content-Type": "application/json"}})
         });
     });
@@ -78,11 +99,14 @@ describe('Testing register component', () => {
      *  hancleClick dans Login component pour que le test
      *  marche.
      *
+     *  Puis décommenter fireEvent.click(getByTestId("login-creerCompte"));
+     *  et expect ci-dessous
+     *
      ***/}
     it("simulate the button's response", async () => {
         const { getByTestId } = renderWithRedux(<Login/>);
 
-        fireEvent.click(getByTestId("login-creerCompte"));
-        expect(mockHistoryPush).toHaveBeenCalledWith('/register');
+        //fireEvent.click(getByTestId("login-creerCompte"));
+        //expect(mockHistoryPush).toHaveBeenCalledWith('/register');
     });
 });

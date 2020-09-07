@@ -87,7 +87,8 @@ function EditProfile(props) {
                                     (e) => changeFields(setName, e),
                                     "Votre nom",
                                     "text",
-                                    true
+                                    true,
+                                    "editProfile-name"
                                 )}
                             </div>
                         </div>
@@ -100,7 +101,8 @@ function EditProfile(props) {
                                     (e) => changeFields(setBirth, e),
                                     "Date de naissance",
                                     "date",
-                                    false
+                                    false,
+                                    "editProfile-birth"
                                 )}
                             </div>
                         </div>
@@ -113,7 +115,8 @@ function EditProfile(props) {
                                     (e) => changeFields(setPhone, e),
                                     "votre telephone",
                                     "number",
-                                    false
+                                    false,
+                                    "editProfile-phone"
                                 )}
                             </div>
                         </div>
@@ -126,7 +129,8 @@ function EditProfile(props) {
                                     (e) => changeFields(setAddress, e),
                                     "Votre adresse",
                                     "text",
-                                    false
+                                    false,
+                                    "editProfile-address"
                                 )}
                             </div>
                         </div>
@@ -139,7 +143,8 @@ function EditProfile(props) {
                                     (e) => changeFields(setCountry, e),
                                     "Votre Pays",
                                     "text",
-                                    false
+                                    false,
+                                    "editProfile-country"
                                 )}
                             </div>
                         </div>
@@ -151,7 +156,8 @@ function EditProfile(props) {
                                     city !== "null" ? city : "",
                                     (e) => changeFields(setCity, e),
                                     "Votre ville", "text",
-                                    false
+                                    false,
+                                    "editProfile-city"
                                 )}
                             </div>
                         </div>
@@ -164,6 +170,7 @@ function EditProfile(props) {
                                                 id="gender"
                                                 name="gender"
                                                 value={gender}
+                                                data-testid="editProfile-gender"
                                                 onChange={
                                                     (e) => changeFields(setGender, e)
                                                 }>
@@ -184,6 +191,7 @@ function EditProfile(props) {
                                            name="desc"
                                            className="form-control"
                                            placeholder="Decrivez vous en quelque mots"
+                                           data-testid="editProfile-desc"
                                            onChange={
                                                (e) => changeFields(setDescription, e)
                                            }/>
@@ -194,6 +202,7 @@ function EditProfile(props) {
                     </div>
                     <button className="btn btn-outline-success btn-sm pl-4 pr-4 mb-3"
                             onClick={() => updateProfile()}
+                            data-testid="editProfile-button"
                             disabled={disable}>
                         {loading ? "Veuiller attendre ..." : "Mettre à Jour"}
                     </button>
