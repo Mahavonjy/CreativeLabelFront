@@ -1,20 +1,20 @@
+import axios from "axios";
 import React, {memo, useEffect, useRef, useState} from "react";
 import Modal from "react-awesome-modal";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-// import {CreateBeatsPlaylist, smallSpinner} from "../../functionTools/createFields";
 import {profileAddBeats, setValueOfToastGlobal} from "../../functionTools/functionProps";
 import {resetPropsForm} from "../../functionTools/tools";
 import Form from "../../modules/kantoBiz/prestations/form/form";
 import AddSingle from "../addMedia/addSingle";
-// import EditContractBeats from "../contractBeats/editContractBeats";
+import EditContractBeats from "../contractBeats/editContractBeats";
 import EditSingle from "../edits/editSingle";
 import BankingDetails from "./section/bankingDetails";
 import CalendarManagement from "./section/calendarProfile/calendarManagement";
 import MyPrestations from "./section/myPrestations/myPrestations";
 import PaymentsAndReservations from "./section/paymentsAndReservations";
 import RefundPolicy from "./section/refundPolicy";
-import {smallSpinner} from "../../functionTools/createFields";
+import {CreateBeatsPlaylist, smallSpinner} from "../../functionTools/createFields";
 
 function ProfileContent(props) {
 
@@ -26,19 +26,19 @@ function ProfileContent(props) {
     const [song, setSong] = useState("");
     /* eslint-disable-next-line no-unused-vars */
     const [type_, setType_] = useState("");
-    // const [tmp, setTmp] = useState(null);
-    // const [index, setIndex] = useState(null);
+    const [tmp, setTmp] = useState(null);
+    const [index, setIndex] = useState(null);
     /* eslint-disable-next-line no-unused-vars */
     const [loading, setLoading] = useState(false);
     const [allPrestation, setAllPrestation] = useState(props_prestation);
     const [popupAddSingle, setPopupAddSingle] = useState(false);
     const [popupAddEditSingle, setPopupAddEditSingle] = useState(-1);
 
-    // const togglePopupEditSingle = async (index, type_) => {
-    //     await setType_(type_);
-    //     await setSong(props.user_beats[index]);
-    //     await setPopupAddEditSingle(index);
-    // };
+    const togglePopupEditSingle = async (index, type_) => {
+        await setType_(type_);
+        await setSong(props.user_beats[index]);
+        await setPopupAddEditSingle(index);
+    };
 
     const togglePopupAddSingle = async (success, data) => {
         setPopupAddSingle(!popupAddSingle);
@@ -67,22 +67,22 @@ function ProfileContent(props) {
         await updateUserBeats(data, "Modification avec success", true);
     };
 
-    // const remove = async (e, type_) => {
-    //     const id = e.target.id;
-    //     await document.getElementById(id).setAttribute("disabled", "disabled");
-    //     await setLoading(true);
-    //     axios.delete("api/" + type_ + "/delete/" + id, {headers: props.headers}).then(() => {
-    //         setLoading(false);
-    //         let new_beats_array = props.state_user_beats.filter((beat) => beat.id !== parseInt(id));
-    //         dispatch(profileAddBeats(new_beats_array));
-    //         props.setStateUserBeats(new_beats_array);
-    //         toast.success("Supprimé");
-    //     }).catch(err => {
-    //         setLoading(false);
-    //         document.getElementById(id).removeAttribute("disabled");
-    //         toast.error(err.response.data)
-    //     })
-    // };
+    const remove = async (e, type_) => {
+        const id = e.target.id;
+        await document.getElementById(id).setAttribute("disabled", "disabled");
+        await setLoading(true);
+        axios.delete("api/" + type_ + "/delete/" + id, {headers: props.headers}).then(() => {
+            setLoading(false);
+            let new_beats_array = props.state_user_beats.filter((beat) => beat.id !== parseInt(id));
+            dispatch(profileAddBeats(new_beats_array));
+            props.setStateUserBeats(new_beats_array);
+            toast.success("Supprimé");
+        }).catch(err => {
+            setLoading(false);
+            document.getElementById(id).removeAttribute("disabled");
+            toast.error(err.response.data)
+        })
+    };
 
     const tabList = (
         <ul className="nav nav-tabs nav-material responsive-tab d-flex flex-wrap justify-content-center" role="tablist">
@@ -96,16 +96,16 @@ function ProfileContent(props) {
                     Gestion de Calendrier
                 </a>
             </li>}
-            {/*{props.user_role === "beatmaker" &&*/}
-            {/*<li className="nav-item">*/}
-            {/*    <a className="nav-link"*/}
-            {/*       data-toggle="tab"*/}
-            {/*       href="#beats-tab"*/}
-            {/*       role="tab"*/}
-            {/*       aria-selected="true">*/}
-            {/*        Beats & contrats*/}
-            {/*    </a>*/}
-            {/*</li>}*/}
+            {props.user_role === "beatmaker" &&
+            <li className="nav-item">
+                <a className="nav-link"
+                   data-toggle="tab"
+                   href="#beats-tab"
+                   role="tab"
+                   aria-selected="true">
+                    Beats & contrats
+                </a>
+            </li>}
             {props.user_role !== "professional_auditor" &&
             <li className="nav-item">
                 <a className="nav-link"
@@ -149,16 +149,16 @@ function ProfileContent(props) {
         </ul>
     );
 
-    // let states = {
-    //     link: props.user_beats_link,
-    //     beats: props.state_user_beats,
-    //     togglePopupEditSong: togglePopupEditSingle,
-    //     index: index,
-    //     setIndex: setIndex,
-    //     tmp: tmp,
-    //     remove: remove,
-    //     setTmp: setTmp,
-    // };
+    let states = {
+        link: props.user_beats_link,
+        beats: props.state_user_beats,
+        togglePopupEditSong: togglePopupEditSingle,
+        index: index,
+        setIndex: setIndex,
+        tmp: tmp,
+        remove: remove,
+        setTmp: setTmp,
+    };
 
     useEffect(() => {
 
@@ -254,24 +254,24 @@ function ProfileContent(props) {
                                 <div className="tab-pane fade show active" id="Calendar-Management" role="tabpanel">
                                     <CalendarManagement headers={props.headers}/>
                                 </div>}
-                                {/*{props.user_role === "beatmaker" &&*/}
-                                {/*<div className="tab-pane fade" id="beats-tab" role="tabpanel">*/}
-                                {/*    {props.state_user_beats.length !== 0 ?*/}
-                                {/*        <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl"*/}
-                                {/*             style={{height: 320}}>*/}
-                                {/*            {CreateBeatsPlaylist(*/}
-                                {/*                "user_profile",*/}
-                                {/*                "user_profile",*/}
-                                {/*                props,*/}
-                                {/*                states,*/}
-                                {/*                "user_profile"*/}
-                                {/*            )}*/}
-                                {/*        </div> :*/}
-                                {/*        <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>*/}
-                                {/*            <p className="text-center pt-5 text-red">Pas de beat</p>*/}
-                                {/*        </div>}*/}
-                                {/*        <EditContractBeats headers={props.headers}/>*/}
-                                {/*</div>}*/}
+                                {props.user_role === "beatmaker" &&
+                                <div className="tab-pane fade" id="beats-tab" role="tabpanel">
+                                    {props.state_user_beats.length !== 0 ?
+                                        <div className="playlist bg-dark pl-lg-3 pr-lg-3 scrollbar-isl"
+                                             style={{height: 320}}>
+                                            {CreateBeatsPlaylist(
+                                                "user_profile",
+                                                "user_profile",
+                                                props,
+                                                states,
+                                                "user_profile"
+                                            )}
+                                        </div> :
+                                        <div className="playlist pl-lg-3 pr-lg-3" style={{height: 320}}>
+                                            <p className="text-center pt-5 text-red">Pas de beat</p>
+                                        </div>}
+                                        <EditContractBeats headers={props.headers}/>
+                                </div>}
                                 {props.user_role !== "professional_auditor" &&
                                 <div className="tab-pane fade" id="Prestations" role="tabpanel">
                                     <MyPrestations profile
@@ -301,13 +301,13 @@ function ProfileContent(props) {
                         {props.user_role !== "professional_auditor" &&
                         <div className="card-footer pb-2">
                             <div className="d-flex justify-content-between">
-                                {/*{props.user_role === "beatmaker" &&*/}
-                                {/*<div className="align-self-center">*/}
-                                {/*    <button className="btn btn-outline-danger"*/}
-                                {/*            onClick={() => togglePopupAddSingle(0)}>*/}
-                                {/*        Ajouter un beat&nbsp;*/}
-                                {/*        <i className="icon-plus-circle"/></button>*/}
-                                {/*</div>}*/}
+                                {props.user_role === "beatmaker" &&
+                                <div className="align-self-center">
+                                    <button className="btn btn-outline-danger"
+                                            onClick={() => togglePopupAddSingle(0)}>
+                                        Ajouter un beat&nbsp;
+                                        <i className="icon-plus-circle"/></button>
+                                </div>}
                                 <button className="align-self-center btn btn-outline-danger"
                                         onClick={() => dispatch(setValueOfToastGlobal(false))}>
                                     Créer une prestation &nbsp;

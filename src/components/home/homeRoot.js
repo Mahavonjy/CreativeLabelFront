@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Route, Switch, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import {sessionService} from 'redux-react-session';
 import "../../assets/css/app.css";
@@ -9,13 +9,13 @@ import '../../assets/css/style/Home.css';
 import "../../assets/css/style/style.scss";
 import Conf from "../../config/tsconfig";
 import Container from "../container/container";
-import {CreateBeatsPlaylist, LightModeToggle, SideBars} from "../functionTools/createFields";
+import {CreateBeatsPlaylist, LightModeToggle} from "../functionTools/createFields";
 import {
     addAllArtistTypes,
     addAllCountryAllowed,
     addAllEventsTypes,
     addAllMediaGenre,
-    addBeatMakerBeats,
+    addBeatMakerBeats, addBeats,
     addCarts,
     addOtherBeatMakerBeats,
     addOtherUserOptions,
@@ -23,7 +23,7 @@ import {
     addPrefAllMediaGenre,
     addSimilarBeats,
     addTotalPrice,
-    addUserCredentials,
+    addUserCredentials, discoveryBeats, newBeatMaker, topBeatMaker,
 } from "../functionTools/functionProps";
 import {LoadingHome, Login} from "../functionTools/popupFields";
 import {checkOnClickAwaySideBar, formatCreatedAt} from "../functionTools/tools";
@@ -123,16 +123,15 @@ function HomeRoot() {
                 axios.get("api/flags/check_country_and_city").then(resp => {
                     dispatch(addAllCountryAllowed(resp.data));
                 }).catch(err => HomeRoot.ifConnectionError(err)),
-                // axios.get("api/beats/AllSuggestion").then(resp => {
-                //     new Promise(resolve => {
-                //         resolve(dispatch(addBeats(resp.data["random"])));
-                //         resolve(dispatch(newBeatMaker(resp.data["new_beatMaker"])));
-                //         resolve(dispatch(topBeatMaker(resp.data["top_beatmaker"])));
-                //         resolve(dispatch(latestBeats(resp.data["latest_beats"])));
-                //         resolve(dispatch(discoveryBeats(resp.data["discovery_beats"])));
-                //         resolve(dispatch(islBeats(resp.data["isl_playlist"])));
-                //     }).then(r => null);
-                // }).catch(err => HomeRoot.ifConnectionError(err))
+                axios.get("api/beats_suggestions/all").then(resp => {
+                    new Promise(resolve => {
+                        // resolve(dispatch(latestBeats(resp.data["latest_beats"])));
+                        resolve(dispatch(topBeatMaker(resp.data["top_beatmaker"])));
+                        resolve(dispatch(addBeats(resp.data["random"])));
+                        resolve(dispatch(newBeatMaker(resp.data["new_beatMaker"])));
+                        resolve(dispatch(discoveryBeats(resp.data["discovery_beats"])));
+                    }).then(r => null);
+                }).catch(err => HomeRoot.ifConnectionError(err))
             ]).then(() => checkSpecialRoute()).catch(() => HomeRoot.notOnline());
         }
     };

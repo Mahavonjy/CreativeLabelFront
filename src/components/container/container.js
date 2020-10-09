@@ -5,6 +5,7 @@ import ReactTooltip from "react-tooltip";
 import Conf from "../../config/tsconfig.json";
 import About from "../about/about";
 import Register from "../authentification/register/register";
+import Beats from "../modules/beatMaking/beats/allBeatsSuggestion/beats";
 import KantoBiz from "../modules/kantoBiz/kantoBiz";
 import DisplayPrestation from "../modules/kantoBiz/prestations/results/displayPrestation";
 import OtherProfile from "../profile/otherProfile";
@@ -17,7 +18,7 @@ function Container(props) {
 
     const history = useHistory();
     const lightModeOn = useSelector(state => state.Home.lightModeOn);
-    const [iconColor, setIconColor] = useState({"kantoBiz": true, "about": false});
+    const [iconColor, setIconColor] = useState({"kantoBiz": true, "beats": false, "about": false});
 
     const isMounted = useRef(false);
     let _bg = lightModeOn
@@ -54,27 +55,29 @@ function Container(props) {
                                 ? "Se Connecter"
                                 : " Se déconnecter"}
                         </ReactTooltip>
-                        {/* BEATS */}
-                        {/*<li style={{margin: "0 0 20px 10px"}}*/}
-                        {/*    data-tip="Creative BeatMaking" onClick={() => {*/}
-                        {/*    (history.location.pathname !== "/beats") && history.push("/beats")*/}
-                        {/*}}><i className={*/}
-                        {/*    history.location.pathname === "/beats"*/}
-                        {/*        ? "icon icon-heartbeat cursor-pointer text-red s-24"*/}
-                        {/*        : "icon icon-heartbeat cursor-pointer s-24"}/>*/}
-                        {/*    <span className="ml-5">BeatMaking</span>*/}
-                        {/*</li>*/}
 
                         {/* kantoBiz */}
                         <li style={{margin: "0 0 20px 10px"}} data-tip data-for="i_kt" onClick={() => {
                             history.location.pathname !== "/kantobiz" && history.push("/kantobiz")
-                            setIconColor({"kantoBiz": true, "about": false})
+                            setIconColor({"kantoBiz": true, "about": false, "beats": false})
                         }}>
                             <i className={
                                 "icon icon-compact-disc-2 cursor-pointer s-24"
                                 + (iconColor["kantoBiz"] ? " text-red" : "")
                             }/>
                             <span className="ml-5">KantoBiz</span>
+                        </li>
+
+                        {/* BEATS */}
+                        <li style={{margin: "0 0 20px 10px"}}
+                            data-tip="Creative BeatMaking" onClick={() => {
+                            (history.location.pathname !== "/beats") && history.push("/beats")
+                            setIconColor({"kantoBiz": false, "about": false, "beats": true})
+                        }}><i className={
+                            history.location.pathname === "/beats"
+                                ? "icon icon-heartbeat cursor-pointer text-red s-24"
+                                : "icon icon-heartbeat cursor-pointer s-24"}/>
+                            <span className="ml-5">BeatMaking</span>
                         </li>
 
                         {/* PROFILE */}
@@ -111,7 +114,7 @@ function Container(props) {
                         {/* about */}
                         <li style={{margin: "0 0 20px 11px"}} data-tip data-for="i_ab" onClick={() => {
                             (history.location.pathname !== "/about") && history.push("/about")
-                            setIconColor({"kantoBiz": false, "about": true})
+                            setIconColor({"kantoBiz": false, "about": true, "beats": false})
                         }}>
                             <i className={
                                 "icon cursor-pointer icon-info-circle s-24"
@@ -160,20 +163,12 @@ function Container(props) {
                 {/* Main of SideBars */}
                 <Switch>
                     <Route exact
-                           path="/about"
-                           component={() => <About/>}
-                    />
-                    <Route exact
-                           path="/CommandError"
-                           component={() => <CommandError/>}
-                    />
-                    <Route exact
-                           path="/CommandSuccess"
-                           component={() => <CommandSuccess/>}
-                    />
-                    <Route exact
                            path="/(|kantobiz)"
                            component={() => <KantoBiz headers={props.headers}/>}
+                    />
+                    <Route exact
+                           path="/beats"
+                           component={() => <Beats ToPlay={props.addToPlaylist}/>}
                     />
                     <Route exact
                            path="/profile/isl_artist_profile/:id(\d+)"
@@ -203,6 +198,18 @@ function Container(props) {
                                    ? history.goBack()
                                    : (<Register/>)
                            }}/>
+                    <Route exact
+                           path="/about"
+                           component={() => <About/>}
+                    />
+                    <Route exact
+                           path="/CommandError"
+                           component={() => <CommandError/>}
+                    />
+                    <Route exact
+                           path="/CommandSuccess"
+                           component={() => <CommandSuccess/>}
+                    />
                     {/*<Route exact*/}
                     {/*       path="/beats/CheckThisBeat/:id(\d+)"*/}
                     {/*       component={() =>*/}
@@ -215,10 +222,6 @@ function Container(props) {
                     {/*<Route exact*/}
                     {/*       path="/Cart"*/}
                     {/*       component={() => <Cart ToPlay={props.addToPlaylist}/>}*/}
-                    {/*/>*/}
-                    {/*<Route exact*/}
-                    {/*       path="/beats"*/}
-                    {/*       component={() => <Beats ToPlay={props.addToPlaylist}/>}*/}
                     {/*/>*/}
                     {/* NOT FOUND */}
                     <Route component={NotFound}/>

@@ -8,6 +8,7 @@ import {profileInitialisationInfo} from "../../functionTools/functionProps";
 import Preference from "../../preference/preference";
 import {checkErrorMessage} from "../../validators/validatiors";
 import EditProfile from "../edits/editProfile";
+import UpdatePassWord from "./updatePassword";
 
 function ProfileInformation(props) {
 
@@ -18,6 +19,7 @@ function ProfileInformation(props) {
 
     const isMounted = useRef(false);
     const [edit, setEdit] = useState(false);
+    const [updatePass, setUpdatePass] = useState(false);
     const [profile_info, setProfileInfo] = useState(_profile_info);
     const [loadingPhoto, setLoadingPhoto] = useState(false);
     const [preference, setPreference] = useState(false);
@@ -87,6 +89,16 @@ function ProfileInformation(props) {
                             <Preference headers={props.headers} setPreference={setPreference}/>
                         </div>
                     </div>
+                </div>
+            </Modal>}
+
+            {updatePass &&
+            <Modal visible={true} width="40%" animationType='slide'>
+                <div className="form-material bg-dark" style={{height: "100%", borderRadius: "5px"}}>
+                    <button className="ModalClose" onClick={() => setUpdatePass(false)}>
+                        <i className="icon-close s-24" style={{color: "orange"}}/>
+                    </button>
+                    <UpdatePassWord headers={props.headers} setUpdatePass={setUpdatePass}/>
                 </div>
             </Modal>}
 
@@ -175,7 +187,7 @@ function ProfileInformation(props) {
                     </div>
                     <div className="col-md-8">
                         {!props.profileToRead &&
-                        <div className="text-center">
+                        <div className="text-center mt-2">
                             <button type="button"
                                     className="btn btn-outline-danger dropdown-toggle"
                                     data-toggle="dropdown"
@@ -197,7 +209,9 @@ function ProfileInformation(props) {
                                         </span>
                                     </li>
                                     <li className="dropdown-item">
-                                        <span className={lightModeOn ? "text-black" : ""}>
+                                        <span
+                                            onClick={() => setUpdatePass(true)}
+                                            className={lightModeOn ? "text-black" : ""}>
                                             Changer de mot de passe
                                         </span>
 

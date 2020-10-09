@@ -7,10 +7,10 @@ import {
     addCarts,
     addPaymentHistory,
     addTotalPrice,
-    addUserNote,
-    changeUserGenreSelected,
+    addUserNote, beatsInitialisationPricing,
+    changeUserGenreSelected, profileAddBeats,
     profileInitialisationBanking,
-    profileInitialisationCondition,
+    profileInitialisationCondition, profileInitialisationContract,
     profileInitialisationFollower,
     profileInitialisationFollowing,
     profileInitialisationInfo,
@@ -47,16 +47,16 @@ export const fetchUserData = (headers, user_credentials, dispatch,) => {
             let payment_history = resp.data['payment_history'];
             dispatchPayment(payment_history, dispatch);
             insertUserData(resp.data, dispatch);
-            // if (resp.data['role'] === "beatmaker") {
-            //     Promise.all([
-            //         axios.get("api/medias/all_user_songs_and_albums", {headers: headers}).then(resp => {
-            //             dispatch(profileAddBeats(resp.data['beats']));
-            //         }).catch(err => ifConnectionError(err, fetchUserData)),
-            //         axios.get("api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
-            //             dispatch(profileInitialisationContract(resp.data));
-            //         }).catch(err => ifConnectionError(err, fetchUserData))
-            //     ]).then();
-            // }
+            if (resp.data['role'] === "beatmaker") {
+                Promise.all([
+                    axios.get("api/beats/my_beats", {headers: headers}).then(resp => {
+                        dispatch(profileAddBeats(resp.data['beats']));
+                    }).catch(err => HomeRoot.ifConnectionError(err, fetchUserData)),
+                    axios.get("api/beats/contract/user_artist_contract", {headers: headers}).then(resp => {
+                        dispatch(profileInitialisationContract(resp.data));
+                    }).catch(err => HomeRoot.ifConnectionError(err, fetchUserData))
+                ]).then();
+            }
             FillInCartProps(headers, {
                 addTotalPrice: addTotalPrice,
                 addCarts: addCarts,
@@ -64,9 +64,9 @@ export const fetchUserData = (headers, user_credentials, dispatch,) => {
                 user_credentials: user_credentials
             }).then(() => null);
         }).catch(err => HomeRoot.ifConnectionError(err, fetchUserData)),
-        // axios.get("api/beats/pricing", {headers: headers}).then(resp => {
-        //     dispatch(beatsInitialisationPricing(resp.data));
-        // }).catch(err => ifConnectionError(err)),
+        axios.get("api/beats/pricing", {headers: headers}).then(resp => {
+            dispatch(beatsInitialisationPricing(resp.data));
+        }).catch(err => HomeRoot.ifConnectionError(err)),
         axios.get("api/artist_services/my_services", {headers: headers}).then(resp => {
             dispatch(addAllUserOptions(resp.data['user_options']));
             dispatch(addAllUserPrestation(resp.data['user_services']));
