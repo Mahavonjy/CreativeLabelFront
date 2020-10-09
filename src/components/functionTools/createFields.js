@@ -204,15 +204,15 @@ export const CreateBeatsPlaylist = (height_div, set_of_beats_name, props, states
                                     <small className="ml-auto">{val.bpm}/bpm</small>
                                     {height_div !== "user_profile" ?
                                         <FacebookProvider appId={Conf.configs.FacebookId} debug>
-                                            <Feed link={
-                                                "http://" + window.history.location.host + '/beats/CheckThisBeat/' + val.id
-                                            }>
-                                                {({handleClick}) => (
-                                                    <div className="ml-auto transparent border-0">
-                                                        <i className="icon-share-1 text-red" onClick={handleClick}/>
-                                                    </div>
-                                                )}
-                                            </Feed>
+                                            {/*<Feed link={*/}
+                                            {/*    "http://" + window.history.location.host + '/beats/CheckThisBeat/' + val.id*/}
+                                            {/*}>*/}
+                                            {/*    {({handleClick}) => (*/}
+                                            {/*        <div className="ml-auto transparent border-0">*/}
+                                            {/*            <i className="icon-share-1 text-red" onClick={handleClick}/>*/}
+                                            {/*        </div>*/}
+                                            {/*    )}*/}
+                                            {/*</Feed>*/}
                                         </FacebookProvider> :
                                         <div className="ml-auto">
                                             <small className="ml-auto">Ecouté(e) {val.number_play} fois</small>
